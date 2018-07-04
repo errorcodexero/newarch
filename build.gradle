@@ -30,27 +30,13 @@ model {
             architecture "x86_64"
         }
     }
-    toolChains {
-        gcc(Gcc) {
-            eachPlatform {
-                cppCompiler.withArguments { args ->
-                    args << "-g"
-                }
-                cppCompiler.withArguments { args ->
-                    args << "-std=c++11"
-                }
-                cppCompiler.withArguments { args ->
-                    args << "-Wall"
-                }
-                cppCompiler.withArguments { args ->
-                    args << "-Wextra"
-                }
-            }
-        }
-    }
+	
     components {
 	    xerobase(NativeLibrarySpec) {
 		    targetPlatform 'roborio'
+			binaries.all {
+		        cppCompiler.args "-Wall", "-std=c++11", "-g"
+			}
 			sources.cpp {
 			    source {
 				    srcDirs = ['xerobase']
@@ -70,8 +56,10 @@ model {
 
 		
         frcUserProgram(NativeExecutableSpec) {
-            // Target the RoboRIO (arm-frc-linux-gnueabihf)
             targetPlatform 'roborio'
+			binaries.all {
+		        cppCompiler.args "-Wall", "-std=c++11", "-g"
+			}
             sources.cpp {
                 // This is where our source files are located (src/cpp for C++ files, src/include for headers)
                 source {
@@ -94,6 +82,9 @@ model {
 
 	    xerobasesim(NativeLibrarySpec) {
             targetPlatform 'x86_64'
+			binaries.all {
+		        cppCompiler.args "-Wall", "-std=c++11", "-g"
+			}
 			sources.cpp {
 			    source {
 				    srcDirs = ['xerobase']
@@ -124,7 +115,9 @@ model {
 
         frcUserProgramSim(NativeExecutableSpec) {
             targetPlatform 'x86_64'            
-            // Target the RoboRIO (arm-frc-linux-gnueabihf)
+			binaries.all {
+		        cppCompiler.args "-Wall", "-std=c++11", "-g"
+			}
             sources.cpp {
                 // This is where our source files are located (src/cpp for C++ files, src/include for headers)
                 source {

@@ -9,21 +9,25 @@ INSTALL:
 
 CLONE:
 ------
-1. In a cygwin window, clone the robot dev project
+1. In a cygwin window, clone the newarch respository.  This will copy the code from
+   github to your local disk.  You must have internet access for this step to work.
+   (git clone https://github.com/errorcodexero/newarch.git)
 
 
 CONFIGURE:
 ----------
 
-1. Open the folder containing the newarch project
+1. Start Visual Studio Code
 
-2. Update the Debug Configuration
+2. Open the folder containing the newarch project
+
+3. Update the Debug Configuration
    a. Select Debug/Open Configurations from the menu
    b. Find thr eentry that says miDebuggerPath and change the path to match
       your installation of cygwin (most will say C:\\cygwin64\\bin\\gdb.exe)
    c. Save the file
 
-3. Update the your terminal settings to use cygwin
+4. Update the your terminal settings to use cygwin
    a. Select File/Preferences/Settings
    b. Copy the following into the User Settings window on the right
       {
@@ -40,9 +44,20 @@ CONFIGURE:
       }
    c. Save the settings file
 
+4. From a cygwin command line, you must run the following to install tools
+   ./gradlew installToolchain
 
-Now Visual Studio code is setup to work fairly well with gradle, cygwin, and gcc.
 
-BUILDING:
----------
+Using gradle from the command line
+---------------------------------
+Build everything:			./gradlew build
+Build the robot code:		./gradlew frcUserProgramExecutable
+Deploy robot code to robot: ./gradlew deploy
+Build the simulator:		./gradlew frcUserProgramSimExecutable
 
+
+Using VSCODE
+------------
+To Build Robot Code: Select Menu Item 'Tasks/Run Build Task...' select 'Build RobotCode'
+To Build Simulator: Select Menu Item 'Tasks/Run Build Task...' select 'Build Simulator'
+Tp Debug Simulator: Select 'Debug/Start Debugging'
