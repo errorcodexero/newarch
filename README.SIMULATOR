@@ -1,0 +1,17 @@
+This file describes the robot simulator.  The simulator is a simple and ideal
+simulator that allows you to write robot code without a robot.  The simulator is
+used by linking your robot code against the simualtor version of the WPILIB instead
+of the roborio version.
+
+With the simualtor, when you run you robot code, you can supply command line
+arguments.  The following command line arguments are defined.
+
+--start time - the amount of time to delay before beginning the autonomous period
+--auto time - the length of the autonomous period
+--oper time - the length of the teleop period
+--simtime time - the length of time between position reports from the simulator
+--show - if present, print messages about the simulator transitions between modes
+
+
+
+
