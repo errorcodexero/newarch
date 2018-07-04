@@ -1,0 +1,48 @@
+To use visual studio code, you must tailor your environment.
+
+INSTALL:
+--------
+1. Install Visual Studio Code (https://code.visualstudio.com/download)
+
+2. Install Cygwin (https://www.cygwin.com)
+   - Be sure to install the Develop category.  This installs git plus gcc.
+
+CLONE:
+------
+1. In a cygwin window, clone the robot dev project
+
+
+CONFIGURE:
+----------
+
+1. Open the folder containing the newarch project
+
+2. Update the Debug Configuration
+   a. Select Debug/Open Configurations from the menu
+   b. Find thr eentry that says miDebuggerPath and change the path to match
+      your installation of cygwin (most will say C:\\cygwin64\\bin\\gdb.exe)
+   c. Save the file
+
+3. Update the your terminal settings to use cygwin
+   a. Select File/Preferences/Settings
+   b. Copy the following into the User Settings window on the right
+      {
+          // start bash, not the mintty, or you'll get a new window
+          "terminal.integrated.shell.windows": "D:\\cygwin\\bin\\bash.exe",
+          // Use this to keep bash from doing a 'cd ${HOME}'
+          "terminal.integrated.env.windows": {
+              "CHERE_INVOKING": "1"
+          },
+          // Make it a login shell
+          "terminal.integrated.shellArgs.windows": [
+              "-l"
+          ],
+      }
+   c. Save the settings file
+
+
+Now Visual Studio code is setup to work fairly well with gradle, cygwin, and gcc.
+
+BUILDING:
+---------
+

@@ -1,0 +1,149 @@
+plugins {
+    id "cpp"
+    id "visual-studio"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.01.22"
+}
+
+def TEAM = 1425
+
+// Define my targets (RoboRIO) and artifacts (deployable files)
+// This is added by GradleRIO's backing project EmbeddedTools.
+deploy {
+    targets {
+        target("roborio", jaci.openrio.gradle.frc.RoboRIO) {
+            team = TEAM
+        }
+    }
+    artifacts {
+        artifact('frcNative', jaci.openrio.gradle.frc.FRCNativeArtifact) {
+            targets << "roborio"
+            component = 'frcUserProgram'
+        }
+    }
+}
+
+// Defining my C++ project. In this case, it is called 'frcUserProgram',
+// and is of the language C++.
+model {
+    platforms {
+        x86_64 {
+            architecture "x86_64"
+        }
+    }
+    toolChains {
+        gcc(Gcc) {
+            eachPlatform {
+                cppCompiler.withArguments { args ->
+                    args << "-g"
+                }
+                cppCompiler.withArguments { args ->
+                    args << "-std=c++11"
+                }
+                cppCompiler.withArguments { args ->
+                    args << "-Wall"
+                }
+                cppCompiler.withArguments { args ->
+                    args << "-Wextra"
+                }
+            }
+        }
+    }
+    components {
+	    xerobase(NativeLibrarySpec) {
+		    targetPlatform 'roborio'
+			sources.cpp {
+			    source {
+				    srcDirs = ['xerobase']
+					include '*.cpp'
+				}
+				exportedHeaders {
+				    srcDirs = ['xerobase']
+					include '*.h'
+				}
+
+            	lib library: "wpilib"
+            	lib library: "ctre"
+            	lib library: "navx"
+				lib library: "openrio.powerup.matchData"
+			}
+		}
+
+		
+        frcUserProgram(NativeExecutableSpec) {
+            // Target the RoboRIO (arm-frc-linux-gnueabihf)
+            targetPlatform 'roborio'
+            sources.cpp {
+                // This is where our source files are located (src/cpp for C++ files, src/include for headers)
+                source {
+                    srcDirs = ['phoenix']
+                    include '*.cpp'
+                }
+                exportedHeaders{
+                    srcDirs = ['phoenix']
+                    include '*.h'
+                }
+
+                // Define my dependencies. In this case, WPILib (+ friends), CTRE Phoenix (Talon SRX) and NavX.
+				lib library: "xerobase", linkage: "static"
+                lib library: "wpilib"
+                lib library: "ctre"
+                lib library: "navx"
+                lib library: "openrio.powerup.matchData"
+            }
+        }
+
+	    xerobasesim(NativeLibrarySpec) {
+            targetPlatform 'x86_64'
+			sources.cpp {
+			    source {
+				    srcDirs = ['xerobase']
+					include '*.cpp'
+				}
+				exportedHeaders {
+				    srcDirs = ['xerobase']
+					include '*.h'
+				}
+				lib library: "xerobasesim", linkage: "static"
+                lib library: "wpilibsim", linkage: "static"
+			}
+		}
+
+		wpilibsim(NativeLibrarySpec) {
+            targetPlatform 'x86_64'            
+			sources.cpp {
+			    source {
+				    srcDirs = ['wpilibsim']
+					include '*.cpp'
+				}
+				exportedHeaders {
+				    srcDirs = ['wpilibsim']
+					include '*.h'
+				}
+			}
+		}
+
+        frcUserProgramSim(NativeExecutableSpec) {
+            targetPlatform 'x86_64'            
+            // Target the RoboRIO (arm-frc-linux-gnueabihf)
+            sources.cpp {
+                // This is where our source files are located (src/cpp for C++ files, src/include for headers)
+                source {
+                    srcDirs = ['phoenix']
+                    include '*.cpp'
+                }
+                exportedHeaders{
+                    srcDirs = ['phoenix']
+                    include '*.h'
+                }
+
+                // Define my dependencies. In this case, WPILib (+ friends), CTRE Phoenix (Talon SRX) and NavX.
+				lib library: "xerobasesim", linkage: "static"
+                lib library: "wpilibsim", linkage: "static"
+            }
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.4'
+}
