@@ -58,7 +58,7 @@ model {
         frcUserProgram(NativeExecutableSpec) {
             targetPlatform 'roborio'
 			binaries.all {
-		        cppCompiler.args "-Wall", "-std=c++11", "-g"
+		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
 			}
             sources.cpp {
                 // This is where our source files are located (src/cpp for C++ files, src/include for headers)
@@ -101,6 +101,9 @@ model {
 
 		wpilibsim(NativeLibrarySpec) {
             targetPlatform 'x86_64'            
+			binaries.all {
+		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
+			}
 			sources.cpp {
 			    source {
 				    srcDirs = ['wpilibsim']
@@ -116,8 +119,10 @@ model {
         frcUserProgramSim(NativeExecutableSpec) {
             targetPlatform 'x86_64'            
 			binaries.all {
-		        cppCompiler.args "-Wall", "-std=c++11", "-g"
+		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
+				linker.args "-lpthread"
 			}
+			
             sources.cpp {
                 // This is where our source files are located (src/cpp for C++ files, src/include for headers)
                 source {
