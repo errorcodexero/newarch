@@ -83,7 +83,7 @@ model {
 	    xerobasesim(NativeLibrarySpec) {
             targetPlatform 'x86_64'
 			binaries.all {
-		        cppCompiler.args "-Wall", "-std=c++11", "-g"
+		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-fPIC"
 			}
 			sources.cpp {
 			    source {
@@ -102,7 +102,7 @@ model {
 		wpilibsim(NativeLibrarySpec) {
             targetPlatform 'x86_64'            
 			binaries.all {
-		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
+		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC"
 			}
 			sources.cpp {
 			    source {
