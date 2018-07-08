@@ -11,10 +11,7 @@ namespace xero {
 			// This is where the subsystems for the robot get created
 			//
 			std::shared_ptr<Drivebase> db_p = std::make_shared<Drivebase>(*this) ;
-
-			//
-			// QUESTION: how do we add this drivebase to the robot????
-			//
+			addSubsystem(db_p) ;
 
 			//
 			// This is where we would add the other subsystems for the robot

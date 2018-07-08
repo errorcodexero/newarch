@@ -1,0 +1,151 @@
+Questions
+---------
+1. If we aggregrate subsystems, how do we ask lower level subsystem to do something. If we don't aggregrate subsytems, 
+   how does one subsystem have another subsystem perform an action.
+
+Statements
+----------
+1. Objects in the system are created with make_shared<>, and passed around as a shared_ptr<>.
+2. Subsystems may have a set of primitive directives.  These are set with the setDirective() call.  Directives passed
+   to subsystems must all be derived from a directive class defined by the subsytem.
+3. Steps are the basic building block of a sequence of actions.  One type of step is a step that executes a primitive
+   directive on a subsystem.  Other types of steps include delays, conditionals, sequences, and parallel executtion.
+   A StepListStep is single object that stores a sequence of steps.  The base class for all steps is Step.
+4. Subsystems may have a set of named sequences stored as StepListStep objects that the subsystem can execute.  This allows the subsystem to
+   execute sequences of operations made from other steps, including execution of primitive directives.  These are stored
+   as std::map<std::string,std::Step> m_sequences.
+
+Code To Write
+-------------
+Message Logger
+- Message Types: Debug, Info, Warning, Error
+- Message Sinks: cout, console, logfile
+- Message Filters (per Message Sink)
+- Should be a member of the Robot class
+
+Parameter File Object
+- Find C++ YAML file parser
+- Should be a member of the Robot class
+
+Robot
+- Attach Message Logger (see above)
+- Attach Parameter File Object (see above)
+
+Step Base Class
+- start()
+- run()
+- isDone()
+- end()
+
+StepListStep : Step
+- start()
+- run()
+- isDone()
+- end()
+- addStep(std::shared_ptr<Step> step_p)
+
+Drivebase Subsystem
+- Add CAN indexes to constructor
+- Create and store: motors
+- Create and store: NavX 
+- Create and store: encoders
+- Create and store: shifter solenoid
+- Calculate Status: left and right distance
+- Calculate Status: robot angle
+- Create directive: turn on motors to fixed voltage (can be canceled)
+- Create directive: turn on motors for fixed amount of time (can be canceled)
+- Create directive: drive straight for a fixed distance (can be canceled)
+- Create directive: rotate a fixed angle (can be canceled)
+- Null   directive: stationary
+
+Wings Subsystem
+- Create and store: wings solenoid
+- Calculate status: deployed
+- Create directive: deploy
+- Null   directive: do nothing
+
+Lifter Subsystem
+- Create and store: motors
+- Create and store: shifter solenoid
+- Create and stoer: brake solenoid
+- Create and store: encoder
+- Calculate Status: is height valid
+- Calculate Status: height
+- Create directive: go to height (can be canceled)
+- Create directive: go to preset (can be canceled)
+- Create directive: go to low gear
+- Create directive: go to encoder value (can be canceled)
+- Create directive: hold position
+- Create directive: go up, go down
+- Null   directive: brake on, hold current position
+- Presets         : Floor, Vault, Drive, Switch, Scale, Scale2
+
+Grabber Subsystem
+- Create and store motors
+- Create and store encoder
+- Calculate status: current arm angle
+- Create directive: go to angle (can be canceled)
+- Create directive: go to preset (can be canceled)
+- Create directive: hold cube (can be canceled)
+- Null   directive: motors off
+- Presets         : Collect, Hold, Climb
+
+Intake Subsystem
+- Create and store motor
+- Create directive: run value (can be canceled)
+- Create directive: run preset (can be canceled)
+- Create directive: timed run value (can be canceled)
+- Create directive: timed run preset (can be canceled)
+- Create directive: hold, pulses intake at a fixed time interval at a fixed voltage (can be canceled)
+- Null   directive: motors off
+- Presets         : Collect
+
+Collector Subsystem
+- Aggregrate      : Grabber and Intake Subsystems
+- Create and store: cube detector sensor
+- Calculate status: has cube
+- Create directive: go to collect state
+- Create directive: go to hold cube state
+- Create directive: timed eject value
+- Create directive: timed eject preset
+- Create directive: sensor eject value
+- Create directive: sensor eject preset
+- Null   directive: lifter null, grabber null
+- Presets         : Drop, Slow, Fast
+
+LiftingCollector Subsystem
+- Aggregrate      : Collector and Lifter Subsystems
+- Calculate status: cube collected (more than just the cube detector sensor)
+- Create directive: Collect (can be canceled)
+                    o  Collector directive - go to collect state
+                    o  WaitFor Collector.hasCube
+                    o  Intake to timed run preset (collect)
+                    o  Grabber to preset (hold)
+                    o  WaitFor Intake.directive done
+                    o  Intake to hold directive
+                    o  Lifter to Drive preset
+- Create directive: MasterCollect (can be canceled)
+                    o  Lifter to floor height
+                    o  Run Collect directive
+- Create directive: Eject Scale
+- Create directive: Eject 
+- Create directive: Eject Switch
+
+DriverGunner Subsystem
+- Create and store driverstation
+- 
+
+Teleop Controller
+- To be defined
+
+Autonomous Controller (and associated classes)
+- Must be able to ask the DriverGunner Subsystem for the teleop switch value
+- Executes a single Step object, fairly light weight class
+- The Step object can be a StepList to get sequences
+- Associated Classes: StepListStep
+- Associated Classes: DelayStep
+- Associated Classes: DirectiveStep (applies directive to subsystem)
+- Associated Classes: NamedSequenceStep (applies named sequence to subsystem)
+
+Test Controller
+- To be defined
