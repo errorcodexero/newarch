@@ -1,0 +1,12 @@
+Select File, Preferences, Settings
+
+Put the following between the braces on the right side windows
+
+    "terminal.integrated.shell.windows": "C:\\cygwin64\\bin\\bash.exe",
+    "terminal.integrated.env.windows": {
+        "CHERE_INVOKING": "1"
+      },    
+      "terminal.integrated.shellArgs.windows": [
+        "--login",
+        "-i"
+    ],  
