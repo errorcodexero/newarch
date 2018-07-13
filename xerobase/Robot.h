@@ -1,8 +1,10 @@
 #pragma once
 
-#include <WPILib.h>
 #include <memory>
 #include <list>
+
+#include "WPILib.h"
+#include "message_logger.h"
 
 namespace xero {
 	namespace base {
@@ -35,6 +37,9 @@ namespace xero {
 
 			/// \brief run the disabled mode (doing nothing)
 			virtual void Disabled() ;
+
+			/// \brief Return reference to the one message logger
+			messageLogger& getMessageLogger();
 
 		protected:
 			//
@@ -85,6 +90,9 @@ namespace xero {
 
 			// The list of subsystem that belong to the robot
 			SubsystemList subsystems_;
+
+			// Message logger instance
+			messageLogger message_logger;
 		} ;
 	}
 }

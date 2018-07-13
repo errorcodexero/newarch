@@ -3,7 +3,6 @@
 #include <sstream>
 #include <iostream>
 
-messageLogger *messageLogger::mTheOneLogger = nullptr ;
 
 messageLogger::messageLogger()
 {
@@ -11,14 +10,6 @@ messageLogger::messageLogger()
     mCurrentMessage = "";
 	mInMessage = false ;
 	mSubsystemsEnabled = 0 ;
-}
-
-messageLogger &messageLogger::get()
-{
-    if (mTheOneLogger == nullptr)
-		mTheOneLogger = new messageLogger() ;
-
-    return *mTheOneLogger ;
 }
 
 void messageLogger::enableType(const messageType &type)

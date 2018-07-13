@@ -79,5 +79,9 @@ namespace xero {
 			while (IsDisabled())
 				frc::Wait(target_loop_time_) ;
 		}
+
+		messageLogger& Robot::getMessageLogger() {
+			return message_logger;
+		}
 	}
 }
