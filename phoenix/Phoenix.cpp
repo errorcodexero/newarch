@@ -1,12 +1,27 @@
 #include "Phoenix.h"
 #include <Drivebase.h>
 
+#include "MessageGroups.h"
+#include "message_logger.h"
+#include "message_dest_seq_file.h"
+#include "message_dest_stream.h"
+
+#ifndef SIM
+#include "message_dest_DS.h"
+#endif
+
+
 using namespace xero::base ;
 
 namespace xero {
 	namespace phoenix {
 		
 		void Phoenix::RobotInit() {
+			//
+			// Initialize message logger
+			//
+			initializeMessageLogger();
+			
 			//
 			// This is where the subsystems for the robot get created
 			//
@@ -37,6 +52,63 @@ namespace xero {
 			// This is where the test controller is created
 			//
 			return nullptr ;
+		}
+
+		void Phoenix::initializeMessageLogger() {
+                messageLogger& logger = getMessageLogger();
+
+				//
+				// Enable message of all severities
+				//
+                logger.enableType(messageLogger::messageType::error);
+                logger.enableType(messageLogger::messageType::warning);
+                logger.enableType(messageLogger::messageType::info);
+                logger.enableType(messageLogger::messageType::debug);
+
+                //
+                // Decide what message groups (incl. subsystems) you want to see
+                //
+                logger.enableSubsystem(MSG_GROUP_DRIVEBASE);
+
+				// Set up message logger destination(s)
+                std::shared_ptr<messageLoggerDest> dest_p ;
+
+#ifdef SIM
+                //
+                // We only want printouts on COUT when we are debugging
+                // In competition mode, this information goes to a log file on
+                // the USB stick.
+                //
+                dest_p = std::make_shared<messageDestStream>(std::cout) ;
+                logger.addDestination(dest_p) ;
+#endif
+
+                //
+                // This is where the roborio places the first USB flash drive it
+                // finds.  Other drives are placed at /V, /W, /X.  The devices are
+                // actually mounted at /media/sd*, and a symbolic link is created
+                // to /U.
+                //
+#ifndef SIM
+                std::string flashdrive("/u/") ;
+                std::string logname("logfile_") ;
+                dest_p = std::make_shared<messageDestSeqFile>(flashdrive, logname) ;
+                logger.addDestination(dest_p) ;
+#endif
+
+                //
+                // Send warnings and errors to the driver station
+                //
+#ifndef SIM
+                dest_p = std::make_shared<messageDestDS>() ;
+                logger.addDestination(dest_p) ;
+#endif
+
+#if 0
+				logger.startMessage(messageLogger::messageType::error, MSG_GROUP_DRIVEBASE);
+				logger << "Test message\n";
+				logger.endMessage();
+#endif
 		}
 	}
 }
