@@ -6,4 +6,4 @@ html
 rtf
 build
 .gradle
-
+*.swp

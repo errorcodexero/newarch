@@ -1,5 +1,6 @@
+#include <memory>
 #include "Phoenix.h"
-#include <Drivebase.h>
+#include <TankDrive.h>
 
 using namespace xero::base ;
 
@@ -10,7 +11,7 @@ namespace xero {
 			//
 			// This is where the subsystems for the robot get created
 			//
-			std::shared_ptr<Drivebase> db_p = std::make_shared<Drivebase>(*this) ;
+			std::shared_ptr<TankDrive> db_p = std::make_shared<TankDrive>(*this, std::list<int>{1, 2, 3}, std::list<int>{4, 5, 6}) ;
 			addSubsystem(db_p) ;
 
 			//

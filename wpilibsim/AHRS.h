@@ -1,8 +1,11 @@
 #pragma once
+
+#include "SPI.h"
+
 class AHRS
 {
 public:
-	AHRS(const char *port_p);
+	AHRS(frc::SPI::Port port);
 	virtual ~AHRS();
 
 	bool IsConnected()

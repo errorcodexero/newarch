@@ -1,4 +1,5 @@
 #include "Drivebase.h"
+#include <SPI.h>
 
 namespace xero {
 	namespace base {
@@ -32,13 +33,17 @@ namespace xero {
 		//
 		//////////////////////////////////////////////////////////////////
 
-		Drivebase::Drivebase(Robot &robot) : Subsystem(robot, "drivebase") {
+		Drivebase::Drivebase(Robot &robot) : Subsystem(robot, "drivebase"), navx_(frc::SPI::Port::kMXP) {
+		}
+
+		void Drivebase::computeState() {
+			angle_ = navx_.GetYaw();
 		}
 
 		/// \brief set a new directive for the drivebase
 		bool Drivebase::setDirective(std::shared_ptr<Subsystem::Directive> directive) {
 			//
-			// Cast the directive to a drive base directive to be sure it is valid
+			// Cast the directive to a drivebase directive to be sure it is valid
 			//
 			std::shared_ptr<DrivebaseDirective> direct_p = std::dynamic_pointer_cast<DrivebaseDirective>(directive) ;
 			if (direct_p == nullptr) {

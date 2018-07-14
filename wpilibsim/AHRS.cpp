@@ -1,7 +1,7 @@
 #include "AHRS.h"
 #include "RobotSimulator.h"
 
-AHRS::AHRS(const char *port_p)
+AHRS::AHRS(frc::SPI::Port port)
 {
 }
 
