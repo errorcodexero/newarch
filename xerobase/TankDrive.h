@@ -35,9 +35,9 @@ namespace xero {
 			}
 
 			/// \brief compute the current state of the robot.
-            /// This method generally reads the input sensors associated with the drivebase and
-            /// calculates the current state of the drivebase including the distance traveled, the
-            /// the speed and acceleration of the robot.  This method is generally called once per
+			/// This method generally reads the input sensors associated with the drivebase and
+			/// calculates the current state of the drivebase including the distance traveled, the
+			/// the speed and acceleration of the robot.  This method is generally called once per
 			/// robot loop before any robot controller gets a chance to run.
 			void computeState();
 
