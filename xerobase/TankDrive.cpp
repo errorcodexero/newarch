@@ -21,6 +21,21 @@ namespace xero {
 			}
 		}
 
+		void TankDrive::invertMotors(std::list<int> left_motor_ids, std::list<int> right_motor_ids) {
+			for(int id : left_motor_ids) {
+				for(TalonPtr talon : left_motors_) {
+					if(talon->GetDeviceID() == id)
+						talon->SetInverted(true);
+				}
+			}
+			for(int id : right_motor_ids) {
+				for(TalonPtr talon : right_motors_) {
+					if(talon->GetDeviceID() == id)
+						talon->SetInverted(true);
+				}
+			}
+		}
+
 		void TankDrive::computeState() {
 			Drivebase::computeState();
 

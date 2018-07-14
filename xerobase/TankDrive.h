@@ -14,8 +14,10 @@ namespace xero {
 		public:
 			/// \brief create a new tank drive object
 			/// \param robot the robot that contains this tank drive subsystem
-			/// \param left_motor_ids a list of TalonSRX ids for the left side of the robot
-			/// \param right_motor_ids a list of TalonSRX ids for the right side of the robot
+			/// \param left_motor_ids a list of TalonSRX ids for the left side of the robot, the first
+			/// being the master and the rest being followers
+			/// \param right_motor_ids a list of TalonSRX ids for the right side of the robot, the first
+			/// being the master and the rest being followers
 			TankDrive(Robot& robot, std::list<int> left_motor_ids, std::list<int> right_motor_ids);
 
 			/// \brief returns the net distance travelled in inches by the left wheels on the robot
@@ -33,6 +35,11 @@ namespace xero {
 			double getDistR() const {
 				return dist_r_ ;
 			}
+
+			/// \brief inverts all of the selected motors
+			/// \param left_motor_ids a list of ids of TalonSRXs on the left side to invert
+			/// \param right_motor_ids a list of ids of TalonSRXs on the right side to invert
+			void invertMotors(std::list<int> left_motor_ids, std::list<int> right_motor_ids);
 
 			/// \brief compute the current state of the robot.
 			/// This method generally reads the input sensors associated with the drivebase and
