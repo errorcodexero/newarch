@@ -88,6 +88,7 @@ model {
 		wpilibsim(NativeLibrarySpec) {
             targetPlatform 'x86_64'            
 			binaries.all {
+				toolChain = toolChains['gcc'] 
 		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC"
 			}
 			sources.cpp {
@@ -105,7 +106,8 @@ model {
 	    xerobasesim(NativeLibrarySpec) {
             targetPlatform 'x86_64'
 			binaries.all {
-		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-fPIC"
+				toolChain = toolChains['gcc'] 
+		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC"
 			}
 			sources.cpp {
 			    source {
@@ -123,7 +125,8 @@ model {
         frcUserProgramSim(NativeExecutableSpec) {
             targetPlatform 'x86_64'            
 			binaries.all {
-		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
+				toolChain = toolChains['gcc'] 
+		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DSIM"
 				linker.args "-lpthread"
 			}
 			
