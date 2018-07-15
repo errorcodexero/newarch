@@ -39,11 +39,11 @@ model {
 			}
 			sources.cpp {
 			    source {
-				    srcDirs = ['xerobase', 'xerobase/utils']
+				    srcDirs = ['xerobase', 'xerobase/logger']
 					include '*.cpp'
 				}
 				exportedHeaders {
-				    srcDirs = ['xerobase']
+				    srcDirs = ['xerobase', 'xerobase/logger']
 					include '*.h'
 				}
 
@@ -88,11 +88,11 @@ model {
 			}
 			sources.cpp {
 			    source {
-				    srcDirs = ['xerobase']
+				    srcDirs = ['xerobase', 'xerobase/logger']
 					include '*.cpp'
 				}
 				exportedHeaders {
-				    srcDirs = ['xerobase']
+				    srcDirs = ['xerobase', 'xerobase/logger']
 					include '*.h'
 				}
 				lib library: "xerobasesim", linkage: "static"
