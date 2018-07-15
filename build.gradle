@@ -39,7 +39,7 @@ model {
 			}
 			sources.cpp {
 			    source {
-				    srcDirs = ['xerobase']
+				    srcDirs = ['xerobase', 'xerobase/utils']
 					include '*.cpp'
 				}
 				exportedHeaders {

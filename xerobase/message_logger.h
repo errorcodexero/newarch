@@ -15,10 +15,10 @@ public:
 	
     /// \brief the type of a message being logged
     enum class messageType {
-	debug,			///< the message is a debug message
-	info,			///< the message is informational
-	warning,		///< the message is a warning
-	error			///< the message is an error message
+    	debug,			///< the message is a debug message
+    	info,			///< the message is informational
+    	warning,		///< the message is a warning
+    	error			///< the message is an error message
     };
     
 public:

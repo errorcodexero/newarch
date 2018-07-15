@@ -92,7 +92,7 @@ namespace xero {
 			SubsystemList subsystems_;
 
 			// Message logger instance
-			messageLogger message_logger;
+			messageLogger message_logger_;
 		} ;
 	}
 }
