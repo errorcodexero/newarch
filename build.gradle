@@ -39,11 +39,11 @@ model {
 			}
 			sources.cpp {
 			    source {
-				    srcDirs = ['xerobase']
+				    srcDirs = ['xerobase', 'xerobase/logger']
 					include '*.cpp'
 				}
 				exportedHeaders {
-				    srcDirs = ['xerobase']
+				    srcDirs = ['xerobase', 'xerobase/logger']
 					include '*.h'
 				}
 
@@ -88,11 +88,11 @@ model {
 			}
 			sources.cpp {
 			    source {
-				    srcDirs = ['xerobase']
+				    srcDirs = ['xerobase', 'xerobase/logger']
 					include '*.cpp'
 				}
 				exportedHeaders {
-				    srcDirs = ['xerobase']
+				    srcDirs = ['xerobase', 'xerobase/logger']
 					include '*.h'
 				}
 				lib library: "xerobasesim", linkage: "static"
@@ -122,7 +122,7 @@ model {
             targetPlatform 'x86_64'            
 			binaries.all {
 				toolChain = toolChains['gcc'] 
-		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
+		        cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DSIM"
 				linker.args "-lpthread"
 			}
 			

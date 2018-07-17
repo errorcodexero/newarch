@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <string>
 #include <list>
@@ -14,19 +15,15 @@ public:
 	
     /// \brief the type of a message being logged
     enum class messageType {
-	debug,			///< the message is a debug message
-	info,			///< the message is informational
-	warning,		///< the message is a warning
-	error			///< the message is an error message
+    	debug,			///< the message is a debug message
+    	info,			///< the message is informational
+    	warning,		///< the message is a warning
+    	error			///< the message is an error message
     };
     
 public:
     /// \brief create a new message logger object
     messageLogger();
-
-    /// \brief get the single message logger
-    /// \returns the single message logger
-    static messageLogger &get() ;
 
     /// \brief returns true if a given message type is active
     /// \param the type of message to check for active
@@ -106,9 +103,7 @@ public:
 	}
 
 private:
-    // The single message logger
-    static messageLogger *mTheOneLogger ;
-	
+ 	
     // The modes currently enabled
     std::list<messageType> mEnabledModes ;
 
