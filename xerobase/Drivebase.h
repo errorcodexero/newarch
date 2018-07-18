@@ -16,7 +16,7 @@ namespace xero {
 			class DriveStraightDirective : public DrivebaseDirective {
 			public:
 				/// \brief Create a new DriveStraightDirective for the given distance
-				/// \param target_distance The distance to drive (meters)
+				/// \param target_distance The distance to drive in inches
 				DriveStraightDirective(double target_distance);
 
 				virtual void start() ;
@@ -39,7 +39,7 @@ namespace xero {
 				return angle_ ;
 			}
 
-			/// \brief Compute the current state of the robot
+			/// \brief Compute the current state of the drivebase
 			/// This method generally reads the input sensors associated with the drivebase and
 			/// calculates the current state of the drivebase, namely the angle of the robot.
 			/// This method is generally called once per robot loop before any robot controller gets a chance
