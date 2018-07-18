@@ -8,7 +8,7 @@ namespace xero {
 		/// \brief the drivebase for the robot
 		class Drivebase : public Subsystem {
 			/// \brief This is a directive for the drivebase.  All directives for the drivebase should be derived form this class.
-			class DrivebaseDirective : public Subsystem::Directive {
+			class DrivebaseDirective : public Action {
 			} ;
 
 			/// \brief This is directive meant for the drivebase to drive straight a given distance
@@ -81,7 +81,7 @@ namespace xero {
 			}
 
 			/// \brief set the directive for the drivebase
-			virtual bool setDirective(std::shared_ptr<Subsystem::Directive> directive) ;
+			virtual bool setDirective(std::shared_ptr<Action> directive) ;
 
 
 		private:

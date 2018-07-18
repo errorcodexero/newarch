@@ -36,7 +36,7 @@ namespace xero {
 		}
 
 		/// \brief set a new directive for the drivebase
-		bool Drivebase::setDirective(std::shared_ptr<Subsystem::Directive> directive) {
+		bool Drivebase::setDirective(std::shared_ptr<Action> directive) {
 			//
 			// Cast the directive to a drive base directive to be sure it is valid
 			//
