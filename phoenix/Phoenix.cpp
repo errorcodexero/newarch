@@ -3,12 +3,12 @@
 #include <TankDrive.h>
 
 #include "MessageGroups.h"
-#include "message_logger.h"
-#include "message_dest_seq_file.h"
-#include "message_dest_stream.h"
+#include "logger/message_logger.h"
+#include "logger/message_dest_seq_file.h"
+#include "logger/message_dest_stream.h"
 
 #ifndef SIM
-#include "message_dest_DS.h"
+#include "logger/message_dest_DS.h"
 #endif
 
 

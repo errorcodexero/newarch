@@ -4,7 +4,7 @@
 #include <list>
 
 #include "WPILib.h"
-#include "message_logger.h"
+#include "logger/message_logger.h"
 
 namespace xero {
 	namespace base {
@@ -92,7 +92,7 @@ namespace xero {
 			SubsystemList subsystems_;
 
 			// Message logger instance
-			messageLogger message_logger;
+			messageLogger message_logger_;
 		} ;
 	}
 }

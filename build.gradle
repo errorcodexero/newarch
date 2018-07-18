@@ -7,7 +7,7 @@ plugins {
 def TEAM = 1425
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
-// This is added by GradleRIO's backing project EmbeddedTools.
+// This is added by GradleRIO"s backing project EmbeddedTools.
 deploy {
 	targets {
 		target("roborio", jaci.openrio.gradle.frc.RoboRIO) {
@@ -15,14 +15,14 @@ deploy {
 		}
 	}
 	artifacts {
-		artifact('frcNative', jaci.openrio.gradle.frc.FRCNativeArtifact) {
+		artifact("frcNative", jaci.openrio.gradle.frc.FRCNativeArtifact) {
 			targets << "roborio"
-			component = 'frcUserProgram'
+			component = "frcUserProgram"
 		}
 	}
 }
 
-// Defining my C++ project. In this case, it is called 'frcUserProgram',
+// Defining my C++ project. In this case, it is called "frcUserProgram",
 // and is of the language C++.
 model {
 	platforms {
@@ -33,22 +33,22 @@ model {
 
 	components {
 		xerobase(NativeLibrarySpec) {
-			targetPlatform 'roborio'
+			targetPlatform "roborio"
 			binaries.all {
 				cppCompiler.args "-Wall", "-std=c++11", "-g", "-fPIC"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
-				//Don't build a shared library for xerobase because it uses static libraries and we only need the static version anyway
+				//Don"t build a shared library for xerobase because it uses static libraries and we only need the static version anyway
 				buildable = false
 			}
 			sources.cpp {
 				source {
-					srcDirs = ['xerobase']
-					include '**/*.cpp'
+					srcDirs = ["xerobase"]
+					include "**/*.cpp"
 				}
 				exportedHeaders {
-					srcDirs = ['xerobase']
-					include '**/*.h'
+					srcDirs = ["xerobase"]
+					include "**/*.h"
 				}
 
 				lib library: "wpilib"
@@ -59,19 +59,19 @@ model {
 		}
 
 		frcUserProgram(NativeExecutableSpec) {
-			targetPlatform 'roborio'
+			targetPlatform "roborio"
 			binaries.all {
 				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
 			}
 			sources.cpp {
 				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
 				source {
-					srcDirs = ['phoenix']
-					include '**/*.cpp'
+					srcDirs = ["phoenix"]
+					include "**/*.cpp"
 				}
 				exportedHeaders{
-					srcDirs = ['phoenix']
-					include '**/*.h'
+					srcDirs = ["phoenix"]
+					include "**/*.h"
 				}
 
 				// Define my dependencies. In this case, WPILib (+ friends), CTRE Phoenix (Talon SRX) and NavX.
@@ -84,37 +84,37 @@ model {
 		}
 
 		wpilibsim(NativeLibrarySpec) {
-			targetPlatform 'x86_64'
+			targetPlatform "x86_64"
 			binaries.all {
-				toolChain = toolChains['gcc']
+				toolChain = toolChains["gcc"]
 				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC"
 			}
 			sources.cpp {
 				source {
-					srcDirs = ['wpilibsim']
-					include '**/*.cpp'
+					srcDirs = ["wpilibsim"]
+					include "**/*.cpp"
 				}
 				exportedHeaders {
-					srcDirs = ['wpilibsim']
-					include '**/*.h'
+					srcDirs = ["wpilibsim"]
+					include "**/*.h"
 				}
 			}
 		}
 
 		xerobasesim(NativeLibrarySpec) {
-			targetPlatform 'x86_64'
+			targetPlatform "x86_64"
 			binaries.all {
-				toolChain = toolChains['gcc']
+				toolChain = toolChains["gcc"]
 				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC"
 			}
 			sources.cpp {
 				source {
-					srcDirs = ['xerobase']
-					include '**/*.cpp'
+					srcDirs = ["xerobase"]
+					include "**/*.cpp"
 				}
 				exportedHeaders {
-					srcDirs = ['xerobase']
-					include '**/*.h'
+					srcDirs = ["xerobase"]
+					include "**/*.h"
 				}
 
 				lib library: "wpilibsim", linkage: "static"
@@ -122,20 +122,20 @@ model {
 		}
 
 		frcUserProgramSim(NativeExecutableSpec) {
-			targetPlatform 'x86_64'
+			targetPlatform "x86_64"
 			binaries.all {
-				toolChain = toolChains['gcc']
+				toolChain = toolChains["gcc"]
 				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DSIM"
 				linker.args "-lpthread"
 			}
 			sources.cpp {
 				source {
-					srcDirs = ['phoenix']
-					include '**/*.cpp'
+					srcDirs = ["phoenix"]
+					include "**/*.cpp"
 				}
 				exportedHeaders{
-					srcDirs = ['phoenix']
-					include '**/*.h'
+					srcDirs = ["phoenix"]
+					include "**/*.h"
 				}
 
 				lib library: "xerobasesim", linkage: "static"
@@ -146,5 +146,5 @@ model {
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '4.4'
+	gradleVersion = "4.4"
 }
