@@ -40,7 +40,6 @@ namespace xero {
 			angle_ = navx_.GetYaw();
 		}
 
-		/// \brief set a new directive for the drivebase
 		bool Drivebase::setDirective(std::shared_ptr<Action> directive) {
 			//
 			// Cast the directive to a drivebase directive to be sure it is valid
