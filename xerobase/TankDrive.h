@@ -10,6 +10,14 @@ namespace xero {
 	namespace base {
 		typedef std::shared_ptr<TalonSRX> TalonPtr;
 
+		class DriveStraightDirective : public Drivebase::DriveStraightDirective {
+			void start();
+			void run();
+			void end();
+			bool cancel();
+			bool isDone();
+		};
+
 		class TankDrive : public Drivebase {
 		public:
 			/// \brief Create a new tank drive object

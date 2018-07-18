@@ -19,11 +19,11 @@ namespace xero {
 				/// \param target_distance The distance to drive in inches
 				DriveStraightDirective(double target_distance);
 
-				virtual void start() ;
-				virtual void run() ;
-				virtual void end() ;
-				virtual bool cancel() ;
-				virtual bool isDone() const ;
+				virtual void start() = 0;
+				virtual void run() = 0;
+				virtual void end() = 0;
+				virtual bool cancel() = 0;
+				virtual bool isDone() = 0;
 
 			private:
 				double target_distance_;

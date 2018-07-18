@@ -21,7 +21,6 @@ namespace xero {
 			/// \brief Return true if the directive is complete
 			/// \returns True if the directive is complete
             virtual bool isDone() const = 0 ;
-        private:
         } ;
     }
 }

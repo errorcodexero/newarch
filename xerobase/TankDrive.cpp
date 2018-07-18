@@ -4,6 +4,36 @@
 
 namespace xero {
 	namespace base {
+
+		//////////////////////////////////////////////////////////////////
+		//
+		// DriveStraightDirective
+		//
+		//////////////////////////////////////////////////////////////////
+
+		void TankDrive::DriveStraightDirective::start() {
+		}
+
+		void TankDrive::DriveStraightDirective::run() {
+		}
+
+		void TankDrive::DriveStraightDirective::end() {
+		}
+
+		bool TankDrive::DriveStraightDirective::cancel() {
+			return true;
+		}
+
+		bool TankDrive::DriveStraightDirective::isDone() {
+			return true;
+		}
+
+		//////////////////////////////////////////////////////////////////
+		//
+		// Drivebase
+		//
+		//////////////////////////////////////////////////////////////////
+
 		void initTalonList(std::list<int>& ids, std::list<TalonPtr>& talons) {
 			//Assuming first id will be master
 			for(int id : ids) {

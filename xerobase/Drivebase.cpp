@@ -10,19 +10,6 @@ namespace xero {
 		//
 		//////////////////////////////////////////////////////////////////
 
-		void Drivebase::DriveStraightDirective::start()  {
-		}
-		
-		void Drivebase::DriveStraightDirective::run() {
-		}
-		
-		bool Drivebase::DriveStraightDirective::isDone() const {
-			return true;
-		}
-		
-		void Drivebase::DriveStraightDirective::end() {
-		}
-		
 		Drivebase::DriveStraightDirective::DriveStraightDirective(double target_distance) {
 			target_distance_ = target_distance;
 		}
@@ -40,7 +27,7 @@ namespace xero {
 			angle_ = navx_.GetYaw();
 		}
 
-		bool Drivebase::setDirective(std::shared_ptr<Action> directive) {
+		bool Drivebase::setDirective(std::shared_ptr<DrivebaseDirective> directive) {
 			//
 			// Cast the directive to a drivebase directive to be sure it is valid
 			//
