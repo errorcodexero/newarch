@@ -1,4 +1,7 @@
 #pragma once
+#include <memory>
+#include <vector>
+#include <Timer.h>
 
 namespace xero {
     namespace base {
@@ -9,7 +12,9 @@ namespace xero {
             virtual void run() = 0 ;
             virtual bool isDone() = 0 ;
             virtual bool cancel() = 0 ;
-        private:
+			bool block_;
+		private:
         } ;
+		
     }
 }
