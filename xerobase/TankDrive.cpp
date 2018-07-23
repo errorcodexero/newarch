@@ -7,24 +7,55 @@ namespace xero {
 
 		//////////////////////////////////////////////////////////////////
 		//
+		// VelocityDirective
+		//
+		//////////////////////////////////////////////////////////////////
+
+		TankDrive::VelocityDirective::VelocityDirective(double target_velocity) {
+			target_velocity_ = target_velocity;
+		}
+
+		void TankDrive::VelocityDirective::start() {
+		}
+
+		void TankDrive::VelocityDirective::run() {
+		}
+
+		void TankDrive::VelocityDirective::end() {
+		}
+
+		bool TankDrive::VelocityDirective::cancel() {
+			return true;
+		}
+
+		bool TankDrive::VelocityDirective::isDone() const {
+			return true;
+		}
+
+		//////////////////////////////////////////////////////////////////
+		//
 		// DriveStraightDirective
 		//
 		//////////////////////////////////////////////////////////////////
 
-		void TankDrive::DriveStraightDirective::start() {
+		TankDrive::DistanceDirective::DistanceDirective(double target_distance) {
+			target_distance_ = target_distance;
 		}
 
-		void TankDrive::DriveStraightDirective::run() {
+		void TankDrive::DistanceDirective::start() {
 		}
 
-		void TankDrive::DriveStraightDirective::end() {
+		void TankDrive::DistanceDirective::run() {
 		}
 
-		bool TankDrive::DriveStraightDirective::cancel() {
+		void TankDrive::DistanceDirective::end() {
+		}
+
+		bool TankDrive::DistanceDirective::cancel() {
 			return true;
 		}
 
-		bool TankDrive::DriveStraightDirective::isDone() {
+		bool TankDrive::DistanceDirective::isDone() const {
 			return true;
 		}
 

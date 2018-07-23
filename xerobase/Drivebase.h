@@ -9,25 +9,13 @@ namespace xero {
 		class Drivebase : public Subsystem {
 		public:
 			/// \brief A directive for the drivebase.  All directives for the drivebase should be derived from this class.
-			class DrivebaseDirective : public Action {
-			} ;
+			class DrivebaseDirective : public Action {} ;
+
+			/// \brief Drives the drivebase at the given velocity
+			class VelocityDirective : public DrivebaseDirective {};
 
 			/// \brief Drives the drivebase straight for a given distance
-			class DriveStraightDirective : public DrivebaseDirective {
-			public:
-				/// \brief Create a new DriveStraightDirective for the given distance
-				/// \param target_distance The distance to drive in inches
-				DriveStraightDirective(double target_distance);
-
-				virtual void start() = 0;
-				virtual void run() = 0;
-				virtual void end() = 0;
-				virtual bool cancel() = 0;
-				virtual bool isDone() = 0;
-
-			private:
-				double target_distance_;
-			} ;
+			class DistanceDirective : public DrivebaseDirective {};
 
 			/// \brief Create a new drivebase object
 			/// \param robot The robot that contains this drivebase subsystem

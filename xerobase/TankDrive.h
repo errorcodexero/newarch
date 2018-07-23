@@ -8,18 +8,42 @@ typedef ctre::phoenix::motorcontrol::can::TalonSRX TalonSRX;
 
 namespace xero {
 	namespace base {
-		typedef std::shared_ptr<TalonSRX> TalonPtr;
-
-		class DriveStraightDirective : public Drivebase::DriveStraightDirective {
-			void start();
-			void run();
-			void end();
-			bool cancel();
-			bool isDone();
-		};
+		typedef std::shared_ptr<TalonSRX> TalonPtr;	
 
 		class TankDrive : public Drivebase {
 		public:
+			class VelocityDirective : public Drivebase::VelocityDirective {
+			public:
+				/// \brief Create a new VelocityDirective for the given velocity
+                /// \param target_velocity The velocity to drive at in inches / second
+				VelocityDirective(double target_velocity);
+
+				void start();
+				void run();
+				void end();
+				bool cancel();
+				bool isDone() const;
+
+			private:
+				double target_velocity_;
+			};
+
+			class DistanceDirective : public Drivebase::DistanceDirective {
+			public:
+				/// \brief Create a new DistanceDirective for the given distance
+                /// \param target_distance The distance to drive in inches
+				DistanceDirective(double target_distance);
+
+				void start();
+				void run();
+				void end();
+				bool cancel();
+				bool isDone() const;
+
+			private:
+				double target_distance_;
+			};
+
 			/// \brief Create a new tank drive object
 			/// \param robot The robot that contains this tank drive subsystem
 			/// \param left_motor_ids A list of TalonSRX ids for the left side of the drivebase, the first
