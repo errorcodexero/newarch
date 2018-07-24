@@ -6,4 +6,5 @@ html
 rtf
 build
 .gradle
-
+*test/*.o
+*test/*.exe
