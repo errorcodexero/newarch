@@ -1,18 +1,14 @@
 #pragma once
+#include "SimulatedObject.h"
 #include <iostream>
 
 namespace frc {
-    class Solenoid {
+    class Solenoid : public xero::sim::SimulatedObject {
     public:      
         Solenoid(int channel) ;
         virtual ~Solenoid() ;
 
-        virtual void Set(bool v) {
-            state_ = v ;
-            std::cout << "Solenoid " << channel_ ;
-            std::cout << ": set to state " << (v ? "on" : "off") ; 
-            std::cout << std::endl ;
-        }
+        virtual void Set(bool v)  ;
 
         virtual bool Get() const {
             return state_ ;
@@ -27,6 +23,10 @@ namespace frc {
         }
 
         void StartPulse() {
+        }
+
+        int SimulatorGetChannel() const {
+            return channel_ ;
         }
 
     private:

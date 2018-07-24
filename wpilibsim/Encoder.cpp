@@ -1,27 +1,40 @@
 #include "Encoder.h"
-#include "RobotSimulator.h"
+#include "RobotSimBase.h"
+
+using namespace xero::sim;
 
 namespace frc
 {
-	Encoder::Encoder(int first, int second)
-	{
-		m_first = first;
-		m_second = second;
-	}
+Encoder::Encoder(int first, int second)
+{
+    first_ = first;
+    second_ = second;
+    value_ = 0;
 
-	Encoder::~Encoder()
-	{
-	}
-
-	void Encoder::Reset()
-	{
-		frc::RobotSimulator &robot = frc::RobotSimulator::get();
-		robot.resetEncoder(m_first, m_second);
-	}
-
-	int32_t Encoder::Get()
-	{
-		frc::RobotSimulator &robot = frc::RobotSimulator::get();
-		return robot.getEncoder(m_first, m_second);
-	}
+    RobotSimBase &sim = RobotSimBase::getRobotSimulator();
+    sim.connect(this);
 }
+
+Encoder::~Encoder()
+{
+    RobotSimBase &sim = RobotSimBase::getRobotSimulator();
+    sim.disconnect(this);
+}
+
+int Encoder::Get()
+{
+    std::lock_guard<std::mutex> lock(getLockMutex());
+    return value_;
+}
+
+void Encoder::SimulatorSetValue(int value) {
+    std::lock_guard<std::mutex> lock(getLockMutex());
+    value_ = value ;
+}
+
+void Encoder::Reset()
+{
+    value_ = 0;
+    changed();
+}
+} // namespace frc

@@ -1,7 +1,8 @@
 #include "SampleRobot.h"
-#include "RobotSimulator.h"
+#include "RobotSimBase.h"
 #include <stdexcept>
 
+using namespace xero::sim ;
 
 namespace frc
 {
@@ -149,23 +150,9 @@ namespace frc
 				}
 				index++;
 			}		
-			else if (m_args[index] == "--simtime")
-			{
-				double value ;
-
-				index++;
-				if (!ParseDoubleArg(index, value, "--simtime"))
-				{
-					ret = false ;
-					break ;
-				}
-				index++;
-
-				RobotSimulator &sim = RobotSimulator::get() ;
-				sim.setTimeInterval(value) ;
-			}
 			else if (m_args[index] == "--show") {
-				m_print_state = true ;
+				RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;				
+				sim.setPrinting(true) ;
 				index++ ;
 			}
 			else
@@ -194,6 +181,12 @@ namespace frc
 			return;
 
 		//
+		// Start the robot simulator
+		//
+		RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
+		sim.start() ;
+
+		//
 		// Initialize the robot hardware
 		//
 		RobotInit();
@@ -213,6 +206,7 @@ namespace frc
 		// we ask the robot to handle specific modes
 		//
 		if (!m_robotMainOverridden) {
+			bool first = true ;
 			m_running = true;
 			while (m_running) {
 				if (IsDisabled()) {
@@ -228,13 +222,22 @@ namespace frc
 					Test();
 					while (IsTest() && IsEnabled());
 				}
-				else {
+				else if (IsOperatorControl()) {
 					OperatorControl();
 					while (IsOperatorControl() && IsEnabled());
 				}
+				else if (m_mode == RobotMode::Finished) {
+					if (first) {
+						std::cout << "Waiting for robot simulator to shut down" << std::endl ;
+						first = false ;
+					}
+				}
+				else {
+					std::cout << "BadState" << std::endl ;
+				}
 			}
 
-			RobotSimulator::stop();
+			sim.stop() ;			
 			std::cout << "\r\n ************ Robot program ending ***********" << std::endl;
 		}
 	}
