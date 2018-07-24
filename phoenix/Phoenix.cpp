@@ -2,16 +2,21 @@
 #include <Drivebase.h>
 
 #include "MessageGroups.h"
-#include "message_logger.h"
-#include "message_dest_seq_file.h"
-#include "message_dest_stream.h"
+#include "messageLogger.h"
+#include "messageDestSeqFile.h"
+#include "messageDestStream.h"
 
-#ifndef SIM
-#include "message_dest_DS.h"
+#ifdef SIM
+#include <PhoenixSimulator.h>
 #endif
 
+#ifndef SIM
+#include "messageDestDS.h"
+#endif
 
+using namespace xero::misc ;
 using namespace xero::base ;
+
 
 namespace xero {
 	namespace phoenix {
@@ -112,6 +117,10 @@ namespace xero {
 		}
 	}
 }
+
+#ifdef SIM
+xero::sim::phoenix::PhoenixSimulator sim ;
+#endif
 
 //
 // This macro call is defined by the WPI library.  It is the call that connects

@@ -1,0 +1,37 @@
+#include "TalonSRX.h"
+#include "RobotSimBase.h"
+
+using namespace xero::sim;
+
+namespace ctre
+{
+namespace phoenix
+{
+namespace motorcontrol
+{
+namespace can
+{
+
+TalonSRX::TalonSRX(int index)
+{
+	index_ = index;
+
+	RobotSimBase &sim = RobotSimBase::getRobotSimulator();
+	sim.connect(this);
+}
+
+TalonSRX::~TalonSRX()
+{
+	RobotSimBase &sim = RobotSimBase::getRobotSimulator();
+	sim.disconnect(this);
+}
+
+void TalonSRX::Set(double v)
+{
+	value_ = v;
+	changed() ;
+}
+} // namespace can
+} // namespace motorcontrol
+} // namespace phoenix
+} // namespace ctre

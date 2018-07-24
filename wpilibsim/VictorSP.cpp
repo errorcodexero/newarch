@@ -1,23 +1,23 @@
-#include "Solenoid.h"
+#include "VictorSP.h"
 #include "RobotSimBase.h"
 
 using namespace xero::sim ;
 
 namespace frc {
-    Solenoid::Solenoid(int channel) {
-        channel_ = channel ;
+    VictorSP::VictorSP(int which) {
+        which_ = which ;
 
         RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
         sim.connect(this) ;
     }
 
-    Solenoid::~Solenoid() {
+    VictorSP::~VictorSP() {
         RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
         sim.disconnect(this) ;        
     }
 
-    void Solenoid::Set(bool v) {
-        state_ = v ;
+    void VictorSP::Set(double v) {
+        value_ = v ;
         changed() ;
     }
 }
