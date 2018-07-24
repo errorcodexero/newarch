@@ -2,7 +2,18 @@
 #
 #
 
-all: xeromisctest
+TESTDIRS=xeromisctest
+OPENPAREN=(
+CLOSEPAREN=)
+SEMICOLON=;
+SPACE=
+SPACE+= 
+RUNCMD=$(subst _,$(SPACE),$(addsuffix _$(SEMICOLON)_make_runtest$(CLOSEPAREN)_$(SEMICOLON)_,$(addprefix $(OPENPAREN)cd_,$(TESTDIRS))))
+
+all: runtests
+
+runtests: $(TESTDIRS)
+	($(RUNCMD))
 
 xeromisctest:
 	(cd xeromisctest ; make)
