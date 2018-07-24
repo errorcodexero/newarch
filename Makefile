@@ -22,5 +22,7 @@ googletest:
 	mkdir -p external/build/googletest
 	(cd external/build/googletest ; cmake -G "Unix Makefiles" ../../googletest/googletest ; make)
 
+clean:
+	rm -rf *test/*.o *test/*.exe
 
 .PHONY: xeromisctest
