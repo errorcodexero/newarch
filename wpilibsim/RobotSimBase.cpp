@@ -13,7 +13,7 @@ namespace xero {
         }
 
         RobotSimBase::RobotSimBase() {
-
+            output_ = &std::cerr ;
         }
 
         RobotSimBase::~RobotSimBase() {            
@@ -38,19 +38,15 @@ namespace xero {
             return current_time_ ;
         }
 
-        double RobotSimBase::getTimeNoLock() {
-            return current_time_ ;
-        }
-
         void RobotSimBase::wait(double secs) {
             std::chrono::microseconds delay(100) ;            
-            double now = getTime() ;
+            double now = current_time_ ;
 
             //
             // The simulator thread moves time forward, pause until it
             // has moved forward the length of the desired delay
             //
-            while (getTime() < now + secs)
+            while (current_time_ < now + secs)
                 std::this_thread::sleep_for(delay) ;
         }
 
@@ -66,11 +62,23 @@ namespace xero {
         }
 
         void RobotSimBase::printOutput() {
-            std::cout << "Time: " << current_time_  << std::endl; 
+            (*output_) << "Time: " << current_time_  << std::endl; 
             for(auto model : models_) {
-                std::cout << "    " << model->toString() << std::endl ;
+                (*output_) << "    " << model->toString() << std::endl ;
             }
-            std::cout << std::endl ;
+            (*output_) << std::endl ;
+        }
+
+        bool RobotSimBase::setProperty(const std::string &str) {
+            size_t pos = str.find('=') ;
+            if (pos == std::string::npos)
+                return false ;
+
+            std::string name = str.substr(0, pos) ;
+            std::string value = str.substr(pos + 1) ;
+            properties_[name] = value ;
+
+            return true ;
         }
 
         //

@@ -28,6 +28,9 @@ namespace xero
             virtual void addNavX(AHRS *navx);
 
           private:
+            void updatePosition(double dx, double dy, double angle) ;
+
+          private:
             double left_;
             double right_;
             double angle_;
@@ -41,6 +44,9 @@ namespace xero
             double left_rps_per_volt_per_time_;
             double time_interval_;
             double last_output_;
+
+            double xpos_ ;
+            double ypos_ ;
 
             std::vector<ctre::phoenix::motorcontrol::can::TalonSRX *> left_motors_;
             std::vector<ctre::phoenix::motorcontrol::can::TalonSRX *> right_motors_;

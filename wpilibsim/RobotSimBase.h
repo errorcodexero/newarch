@@ -12,6 +12,8 @@
 #include <thread>
 #include <chrono>
 #include <mutex>
+#include <string>
+#include <map>
 
 namespace xero {
     namespace sim {
@@ -28,11 +30,12 @@ namespace xero {
                 printing_ = p ;
             }
 
+            bool setProperty(const std::string &prop)  ;
+
             virtual void start() ;
             virtual void stop() ;
 
             virtual double getTime() ;
-            virtual double getTimeNoLock() ;
             virtual void wait(double secs) ;
 
             virtual void connect(xero::sim::SimulatedObject *device) ;
@@ -69,6 +72,10 @@ namespace xero {
             double sim_time_step_ ;
 
             bool printing_ ;
+
+            std::ostream *output_ ;
+
+            std::map<std::string, std::string> properties_ ;
         } ;
     }
 }

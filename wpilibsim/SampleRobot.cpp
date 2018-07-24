@@ -14,7 +14,6 @@ namespace frc
 		m_start_delay = 0.25;
 		m_auto_period = 30;
 		m_teleop_period = 0;
-		m_print_state = false ;
 	}
 
 	SampleRobot::~SampleRobot()
@@ -39,11 +38,7 @@ namespace frc
 		m_auto_done = false;
 		double now ;
 		std::chrono::microseconds delay(100) ;
-		m_print_state = true ;
 		RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;				
-
-		if (m_print_state)
-			std::cout << "Set Robot Mode Disabled, time " << frc::Timer::GetFPGATimestamp() << std::endl; 
 
 		setEnabled(false);
 		setRobotMode(SampleRobot::RobotMode::Autonomous);
@@ -52,25 +47,16 @@ namespace frc
 		while (frc::Timer::GetFPGATimestamp() < now + m_start_delay)
 			std::this_thread::sleep_for(delay) ;
 
-		if (m_print_state)
-			std::cout << "Set Robot Mode Autonomous, time " << frc::Timer::GetFPGATimestamp() << std::endl; 
-			
 		setEnabled(true);
 
 		now = frc::Timer::GetFPGATimestamp() ;
 		while (frc::Timer::GetFPGATimestamp() < now + m_auto_period && !m_auto_done)
 			std::this_thread::sleep_for(delay) ;
 
-		if (m_print_state)
-			std::cout << "Set Robot Mode Disabled (before Teleop), time " << frc::Timer::GetFPGATimestamp() << std::endl; 
-
 		setEnabled(false);
 		now = frc::Timer::GetFPGATimestamp() ;		
 		while (frc::Timer::GetFPGATimestamp() < now + 1)
 			std::this_thread::sleep_for(delay) ;
-
-		if (m_print_state)
-			std::cout << "Set Robot Mode Teleop, time " << frc::Timer::GetFPGATimestamp() << std::endl; 
 
 		setRobotMode(SampleRobot::RobotMode::Operator);
 		setEnabled(true);
@@ -79,18 +65,12 @@ namespace frc
 		while (frc::Timer::GetFPGATimestamp() < now + m_teleop_period)
 			std::this_thread::sleep_for(delay) ;
 
-		if (m_print_state)
-			std::cout << "Set Robot Mode Disabled, time " << frc::Timer::GetFPGATimestamp() << std::endl; 
-
 		setRobotMode(SampleRobot::RobotMode::Finished) ;
 		setEnabled(true);
 		
 		now = frc::Timer::GetFPGATimestamp() ;
 		while (frc::Timer::GetFPGATimestamp() < now + 1)
 			std::this_thread::sleep_for(delay) ;
-
-		if (m_print_state)
-			std::cout << "Set Robot Mode Finished, time " << frc::Timer::GetFPGATimestamp() << std::endl; 
 
 		m_running = false;
 	}
@@ -134,6 +114,10 @@ namespace frc
 			if (m_args[index] == "--start")
 			{
 				index++;
+				if (index == m_args.size()) {
+					std::cerr << "--start flag requires additional argument" << std::endl ;
+					exit(1) ;
+				}
 				if (!ParseDoubleArg(index, m_start_delay, "--start"))
 				{
 					ret = false ;
@@ -144,6 +128,10 @@ namespace frc
 			else if (m_args[index] == "--auto")
 			{
 				index++;
+				if (index == m_args.size()) {
+					std::cerr << "--auto flag requires additional argument" << std::endl ;
+					exit(1) ;
+				}				
 				if (!ParseDoubleArg(index, m_auto_period, "--auto"))
 				{
 					ret = false ;
@@ -154,6 +142,10 @@ namespace frc
 			else if (m_args[index] == "--oper")
 			{
 				index++;
+				if (index == m_args.size()) {
+					std::cerr << "--oper flag requires additional argument" << std::endl ;
+					exit(1) ;
+				}					
 				if (!ParseDoubleArg(index, m_teleop_period, "--oper"))
 				{
 					ret = false ;
@@ -161,14 +153,23 @@ namespace frc
 				}
 				index++;
 			}		
-			else if (m_args[index] == "--show") {
+			else if (m_args[index] == "--showsim") {
 				RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;				
 				sim.setPrinting(true) ;
 				index++ ;
 			}
-			else if (m_args[index] == "--state") {
-				m_print_state = true ;
+			else if (m_args[index] == "--simprop") {
 				index++ ;
+				if (index == m_args.size()) {
+					std::cerr << "--simprop flag requires additional argument" << std::endl ;
+					exit(1) ;
+				}					
+				RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
+				if (!sim.setProperty(m_args[index])) {
+					std::cerr << "--simprop flag, additional argument was invalid" << std::endl ;
+					exit(1) ;					
+				}
+				index++ ;				
 			}
 			else
 			{
@@ -178,6 +179,7 @@ namespace frc
 				std::cout << "  --start NUMBER" << std::endl;
 				std::cout << "  --auto NUMBER" << std::endl;
 				std::cout << "  --oper NUMBER" << std::endl;
+				std::cout << "  --showsim" << std::endl ;
 				ret = false;
 				break;
 			}
