@@ -9,7 +9,7 @@ xeromisctest:
 
 googletest:
 	mkdir -p external/build/googletest
-	(cd external/build/googletest/googletest ; cmake -G "Unix Makefiles" ../../googletest/googletest ; make)
+	(cd external/build/googletest ; cmake -G "Unix Makefiles" ../../googletest/googletest ; make)
 
 
 .PHONY: xeromisctest
