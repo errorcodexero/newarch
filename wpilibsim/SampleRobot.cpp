@@ -37,49 +37,60 @@ namespace frc
 	{
 		int ms;
 		m_auto_done = false;
+		double now ;
+		std::chrono::microseconds delay(100) ;
+		m_print_state = true ;
+		RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;				
 
 		if (m_print_state)
-			std::cout << "Set Robot Mode Disabled" << std::endl ;
+			std::cout << "Set Robot Mode Disabled, time " << frc::Timer::GetFPGATimestamp() << std::endl; 
 
 		setEnabled(false);
 		setRobotMode(SampleRobot::RobotMode::Autonomous);
-		ms = static_cast<int>(m_start_delay * 1000);
-		std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+
+		now = frc::Timer::GetFPGATimestamp() ;
+		while (frc::Timer::GetFPGATimestamp() < now + m_start_delay)
+			std::this_thread::sleep_for(delay) ;
 
 		if (m_print_state)
-			std::cout << "Set Robot Mode Autonomous" << std::endl ;
+			std::cout << "Set Robot Mode Autonomous, time " << frc::Timer::GetFPGATimestamp() << std::endl; 
+			
 		setEnabled(true);
-		ms = static_cast<int>(m_auto_period * 1000);
-		while (ms > 0 && !m_auto_done)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
-			ms -= 100;
-		}
+
+		now = frc::Timer::GetFPGATimestamp() ;
+		while (frc::Timer::GetFPGATimestamp() < now + m_auto_period && !m_auto_done)
+			std::this_thread::sleep_for(delay) ;
 
 		if (m_print_state)
-			std::cout << "Set Robot Mode Disabled (before Teleop)" << std::endl ;
+			std::cout << "Set Robot Mode Disabled (before Teleop), time " << frc::Timer::GetFPGATimestamp() << std::endl; 
 
 		setEnabled(false);
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		now = frc::Timer::GetFPGATimestamp() ;		
+		while (frc::Timer::GetFPGATimestamp() < now + 1)
+			std::this_thread::sleep_for(delay) ;
 
 		if (m_print_state)
-			std::cout << "Set Robot Mode Teleop" << std::endl ;
+			std::cout << "Set Robot Mode Teleop, time " << frc::Timer::GetFPGATimestamp() << std::endl; 
 
 		setRobotMode(SampleRobot::RobotMode::Operator);
 		setEnabled(true);
 
-		ms = static_cast<int>(m_teleop_period * 1000);
-		std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+		now = frc::Timer::GetFPGATimestamp() ;
+		while (frc::Timer::GetFPGATimestamp() < now + m_teleop_period)
+			std::this_thread::sleep_for(delay) ;
 
 		if (m_print_state)
-			std::cout << "Set Robot Mode Disabled" << std::endl ;
+			std::cout << "Set Robot Mode Disabled, time " << frc::Timer::GetFPGATimestamp() << std::endl; 
 
 		setRobotMode(SampleRobot::RobotMode::Finished) ;
 		setEnabled(true);
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		
+		now = frc::Timer::GetFPGATimestamp() ;
+		while (frc::Timer::GetFPGATimestamp() < now + 1)
+			std::this_thread::sleep_for(delay) ;
 
 		if (m_print_state)
-			std::cout << "Set Robot Mode Finished" << std::endl ;
+			std::cout << "Set Robot Mode Finished, time " << frc::Timer::GetFPGATimestamp() << std::endl; 
 
 		m_running = false;
 	}
@@ -153,6 +164,10 @@ namespace frc
 			else if (m_args[index] == "--show") {
 				RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;				
 				sim.setPrinting(true) ;
+				index++ ;
+			}
+			else if (m_args[index] == "--state") {
+				m_print_state = true ;
 				index++ ;
 			}
 			else

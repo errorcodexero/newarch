@@ -32,6 +32,7 @@ namespace xero {
             virtual void stop() ;
 
             virtual double getTime() ;
+            virtual double getTimeNoLock() ;
             virtual void wait(double secs) ;
 
             virtual void connect(xero::sim::SimulatedObject *device) ;

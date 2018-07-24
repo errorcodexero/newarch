@@ -38,15 +38,19 @@ namespace xero {
             return current_time_ ;
         }
 
+        double RobotSimBase::getTimeNoLock() {
+            return current_time_ ;
+        }
+
         void RobotSimBase::wait(double secs) {
             std::chrono::microseconds delay(100) ;            
-            double now = current_time_ ;
+            double now = getTime() ;
 
             //
             // The simulator thread moves time forward, pause until it
             // has moved forward the length of the desired delay
             //
-            while (current_time_ < now + secs)
+            while (getTime() < now + secs)
                 std::this_thread::sleep_for(delay) ;
         }
 
