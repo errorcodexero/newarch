@@ -116,7 +116,6 @@ namespace xero {
 				return false ;
 			}
 
-
 		private:
 			//
 			// A reference to the robot object that contains this subsystem

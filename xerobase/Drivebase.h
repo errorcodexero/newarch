@@ -10,35 +10,13 @@ namespace xero {
 			/// \brief This is a directive for the drivebase.  All directives for the drivebase should be derived form this class.
 			class DrivebaseDirective : public Action {
 			} ;
-
-			/// \brief This is directive meant for the drivebase to drive straight a given distance
-			class DriveStraightDirective : public DrivebaseDirective {
-			public:
-				/// \brief create a new DriveStraightDirective for the distance given
-				/// \param target_distance the distance to drive
-				DriveStraightDirective(double target_distance);
-
-				/// \brief start the directive, called once per directive
-				virtual void start() ;
-
-				/// \brief manages the directive, called each time through the robot loop
-				virtual void run() ;
-
-				/// \brief called to determine if the directive is complete
-				virtual bool isDone() const ;
-
-				/// \brief called when the directive is complete
-				// QUESTION: who calls this method ????
-				virtual void end() ;
-
-			private:
-				double target_distance_;
-			} ;
-
 		public:
 			/// \brief create a new drive base object
 			/// \param robot the robot that contains this drivebase subsystem
 			Drivebase(Robot& robot);
+
+			/// \brief destroy the drivebase
+			virtual ~Drivebase() ;
 			
 			/// \brief returns the net distance travled in inches by the left wheels on the robot
 			/// If the robot travels forward and then back by the same distance, the net distance
@@ -79,10 +57,6 @@ namespace xero {
 			// QUESTION: Is there not a better name than run() ????
 			virtual void run() {
 			}
-
-			/// \brief set the directive for the drivebase
-			virtual bool setDirective(std::shared_ptr<Action> directive) ;
-
 
 		private:
 			double dist_l_, dist_r_;
