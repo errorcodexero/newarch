@@ -111,8 +111,6 @@ namespace frc
 		double m_auto_period;
 		double m_teleop_period;
 
-		bool m_print_state ;
-
 		bool m_auto_done;
 	};
 }

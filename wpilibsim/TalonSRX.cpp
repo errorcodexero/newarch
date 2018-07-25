@@ -26,7 +26,7 @@ TalonSRX::~TalonSRX()
 	sim.disconnect(this);
 }
 
-void TalonSRX::Set(double v)
+void TalonSRX::Set(ControlMode mode, double v)
 {
 	value_ = v;
 	changed() ;
