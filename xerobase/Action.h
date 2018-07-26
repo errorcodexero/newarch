@@ -3,6 +3,9 @@
 #include <vector>
 #include <Timer.h>
 
+#include <memory>
+#include <string>
+
 namespace xero {
     namespace base {
         class Action {
@@ -12,9 +15,10 @@ namespace xero {
             virtual void run() = 0 ;
             virtual bool isDone() = 0 ;
             virtual bool cancel() = 0 ;
-			bool block_;
-		private:
-        } ;
-		
+            virtual std::string toString() = 0 ;
+        private:
+        };
+
+        typedef std::shared_ptr<Action> ActionPtr ;
     }
 }

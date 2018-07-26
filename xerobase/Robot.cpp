@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cassert>
 
+using namespace xero::misc ;
+
 namespace xero {
 	namespace base {
 		
