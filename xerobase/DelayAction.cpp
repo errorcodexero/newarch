@@ -2,7 +2,6 @@
 using namespace xero::base;
 
 DelayAction::DelayAction() {
-	block_ = true;
 }
 
 void DelayAction::setDelayTime(double delayTime) {

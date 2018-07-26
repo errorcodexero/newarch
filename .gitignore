@@ -8,3 +8,4 @@ build
 .gradle
 *test/*.o
 *test/*.exe
+.vs/

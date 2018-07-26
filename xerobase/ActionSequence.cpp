@@ -3,11 +3,11 @@
 using namespace xero::base;
 
 
-ActionSequence::ActionSequence(bool block) {
-	block_ = block;
+ActionSequence::ActionSequence() {
+	isDone_ = false;
 }
 
-void ActionSequence::pushAction(std::shared_ptr<Action> action) {
+void ActionSequence::pushAction(ActionPtr action) {
 	actionSequence_.push_back(action);
 }
 
@@ -15,14 +15,23 @@ void ActionSequence::start() {
 	index_ = actionSequence_.begin();
 }
 
+bool ActionSequence::performActionForIsDoneStatus(ActionPtr action) {
+	action->start();
+	action->run();
+	return action->isDone();
+}
+
 void ActionSequence::run() {
-	while ((index_ != actionSequence_.end()) && ((*index_)->isDone() || (!(*index_)->block_))) {
+	while ((index_ != actionSequence_.end()) && performActionForIsDoneStatus(*index_)) {
 		index_++;
-		if (index_!=actionSequence_.end())
-		(*index_)->run();
 	}
 }
 
 bool ActionSequence::isDone() {
-	return (index_ == actionSequence_.end());
+	return isDone || (index_ == actionSequence_.end());
+}
+
+bool ActionSequence::cancel() {
+	isDone_ = true;
+	return (*index_)->cancel();
 }
