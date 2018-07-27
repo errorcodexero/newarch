@@ -25,8 +25,7 @@ namespace xero {
 				virtual void start();
 				virtual void run();
 				virtual bool isDone() ;
-				virtual void end();
-				virtual bool cancel() ;
+				virtual void cancel() ;
 				virtual std::string toString() ;
 
 			private:

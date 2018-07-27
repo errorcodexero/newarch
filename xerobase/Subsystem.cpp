@@ -25,12 +25,8 @@ namespace xero {
             return action_->isDone() ;
         }
 
-        void Subsystem::ExecuteNamedSequence::end() {
-            return action_->end() ;
-        }
-
-        bool Subsystem::ExecuteNamedSequence::cancel() {
-            return action_->cancel() ;
+        void Subsystem::ExecuteNamedSequence::cancel() {
+            action_->cancel() ;
         }
 
         std::string Subsystem::ExecuteNamedSequence::toString() {
@@ -41,8 +37,6 @@ namespace xero {
 		}
 
         Subsystem::~Subsystem() {
-            if (action_ != nullptr && !action_->isDone())
-                action_->cancel() ;
         }
 
         void Subsystem::run() {
@@ -56,11 +50,8 @@ namespace xero {
         }
 
         bool Subsystem::cancelAction() {
-            if (action_ != nullptr) {
-                if (!action_->cancel())
-                    return false ;
-            }
-            return true ;
+            if (action_ != nullptr)
+                action_->cancel() ;
         }
 
         bool Subsystem::executeNamedSequence(const std::string &name) {

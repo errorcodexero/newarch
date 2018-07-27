@@ -19,10 +19,7 @@ bool DispatchAction::isDone() {
 	return denied_ || !block_ || subsystem_->isDone();
 }
 
-void DispatchAction::end() {
-}
-
-bool DispatchAction::cancel() {
+void DispatchAction::cancel() {
 	if (block_) {
 		action_->cancel() ;
 		subsystem_->setAction(nullptr) ;

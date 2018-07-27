@@ -23,11 +23,6 @@ namespace xero {
             virtual void start() {                
             }
 
-            /// \brief called after the action is complete
-            /// For this WingsDepolyAction this method does nothing
-            virtual void end() {                
-            }
-
             /// \brief called during the robot loop to execute this action
             /// This method reaches into the Wings subsystem and sets the solenoid that
             /// deploys the wings.
@@ -50,9 +45,8 @@ namespace xero {
             /// to cancel.  If the wings are deployed already, we cannot do anything about
             /// it.  If the wings are not deployed, they will not be deployed after cancel
             /// is called.
-            virtual bool cancel() {
+            virtual void cancel() {
                 is_done_ = true ;
-                return true ;
             }
 
             /// \brief return a name to this action.

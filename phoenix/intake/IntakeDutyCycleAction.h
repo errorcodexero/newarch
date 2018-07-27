@@ -21,9 +21,6 @@ namespace xero {
             /// motor duty cycles.
             virtual void start() ;
 
-            /// \brief End the duty cycle action.  This method does nothing.
-            virtual void end() ;
-
             /// \brief Run the duty cycle action.  This method does nothing.            
             virtual void run() ;
 
@@ -31,7 +28,7 @@ namespace xero {
             virtual bool isDone() ;
 
             /// \brief Canel the current action, stops the motors and returns true
-            virtual bool cancel() ;
+            virtual void cancel() ;
 
             /// \brief Returns a human readable string for the action
             virtual std::string toString() ;

@@ -16,9 +16,6 @@ namespace xero {
                 getIntake().motor2_->Set(duty_cycle_) ;
             }
 
-            void IntakeDutyCycleAction::end() {
-            }
-
             void IntakeDutyCycleAction::run() {
             }
 
@@ -26,11 +23,9 @@ namespace xero {
                 return true ;
             }
 
-            bool IntakeDutyCycleAction::cancel() {
+            void IntakeDutyCycleAction::cancel() {
                 getIntake().motor1_->Set(0.0) ;
                 getIntake().motor2_->Set(0.0) ;
-
-                return true ;
             }
 
             std::string IntakeDutyCycleAction::toString() {

@@ -58,10 +58,10 @@ bool ActionSequence::isDone()
 	return isDone_ ;
 }
 
-bool ActionSequence::cancel()
+void ActionSequence::cancel()
 {
 	isDone_ = true;
-	return (actionSequence_[index_])->cancel();
+	actionSequence_[index_]->cancel() ;
 }
 
 std::string ActionSequence::toString()
@@ -76,10 +76,6 @@ std::string ActionSequence::toString()
 	}
 	
 	return result ;
-}
-
-void ActionSequence::end()
-{
 }
 
 void ActionSequence::pushSubActionPair(SubsystemPtr subsystem, ActionPtr action, bool block)

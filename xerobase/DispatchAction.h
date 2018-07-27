@@ -16,9 +16,6 @@ namespace xero {
 			/// \brief start this wrapper action which just assigns the stored action to the subsystem
 			void start();
 
-			/// \brief called when this action is complete
-			void end();
-
 			/// \brief if this operation is blocking checks the subsystem to see if the assigned action is complete
 			void run();
 
@@ -26,7 +23,7 @@ namespace xero {
 			bool isDone();
 
 			/// \brief if the operation is blocking, cancels the operation on the subsystem
-			bool cancel();
+			void cancel();
 
 			/// \brief returns a human readable string representing this wrapped action
 			std::string toString();

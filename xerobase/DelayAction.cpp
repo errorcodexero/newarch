@@ -1,43 +1,38 @@
 #include "DelayAction.h"
-using namespace xero::base;
 
-DelayAction::DelayAction() {
-}
+namespace xero {
+	namespace base {
 
-void DelayAction::setDelayTime(double delayTime) {
-	delayTime_ = delayTime;
-}
+		DelayAction::DelayAction(double delay) {
+			delayTime_ = delay ;
+		}
 
-void DelayAction::start() {
-	startTime_ = frc::Timer::GetFPGATimestamp();
-	isDone_ = false;
-	//timer_.Reset();
-}
+		void DelayAction::start() {
+			startTime_ = frc::Timer::GetFPGATimestamp();
+			isDone_ = false;
+		}
 
-void DelayAction::run() {
-	//timer_.Start();
-}
+		void DelayAction::run() {
+		}
 
-bool DelayAction::isDone() {
-	double elapsed = (frc::Timer::GetFPGATimestamp()-startTime_)*1000.0;
-	if (elapsed >= delayTime_) {
-		isDone_ = true;
+		bool DelayAction::isDone() {
+			double elapsed = (frc::Timer::GetFPGATimestamp()-startTime_)*1000.0;
+			if (elapsed >= delayTime_) {
+				isDone_ = true;
+			}
+			return isDone_;
+		}
+
+		void DelayAction::cancel() {
+			isDone_ = true;
+		}
+
+		std::string DelayAction::toString() {
+			std::string result ;
+
+			result += "DelayAction " ;
+			result += std::to_string(delayTime_) ;
+			return result ;
+		}
 	}
-	return isDone_;
 }
-
-void DelayAction::end() {
-
-}
-
-bool DelayAction::cancel() {
-	isDone_ = true;
-	return true;
-}
-
-std::string DelayAction::toString() {
-
-}
-
-
-

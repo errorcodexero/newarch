@@ -20,9 +20,6 @@ namespace xero {
 			/// \brief start this sequence of actions
 			void start();
 
-			/// \brief called when this sequence of action is complete, does nothing
-			void end();
-
 			/// \brief called each time through the robot loop to execute the next block of work for the sequence.
 			/// This method calls run on the currently active action in the action sequence.
 			void run();
@@ -35,7 +32,7 @@ namespace xero {
 			/// This method calls cancel on the currently active action, then sets the internal state of this 
 			/// sequence such that it appears this sequence is complete.  None of the remaining actions will be
 			/// processed.
-			bool cancel();
+			void cancel();
 
 			/// \brief push a new action to the end of the action sequence
 			/// \param the action to add to the sequence
