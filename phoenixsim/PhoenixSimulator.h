@@ -32,11 +32,12 @@ namespace xero
 
 			private:
 				static constexpr double PI = 3.141592;
-				std::shared_ptr<xero::sim::TankDriveModel> TankDrive_ ;
+				std::shared_ptr<xero::sim::TankDriveModel> tankdrive_ ;
 				std::shared_ptr<xero::sim::phoenix::LifterModel> lifter_ ;
 				std::shared_ptr<xero::sim::phoenix::WingsModel> wings_ ;
 				std::shared_ptr<xero::sim::phoenix::GrabberModel> grabber_ ;
 				std::shared_ptr<xero::sim::phoenix::CubeSensorModel> ballsensor_ ;
+				std::shared_ptr<xero::sim::phoenix::IntakeModel> intake_ ;
 			};
 		} // namespace phoenix
 	} // namespace sim
