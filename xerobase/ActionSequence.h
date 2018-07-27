@@ -1,5 +1,4 @@
 #pragma once
-
 #include <vector>
 #include "Action.h"
 #include "DispatchAction.h"
@@ -15,9 +14,8 @@ namespace xero {
 			bool isDone();
 			bool cancel();
 			void pushAction(ActionPtr action);
-			void pushSubActionPair(SubsystemPtr subsystem, ActionPtr action) {
-				pushAction(std::make_shared<DispatchAction>(subsystem, action));
-			}
+			void pushSubActionPair(SubsystemPtr subsystem, ActionPtr action, bool block);
+			std::string toString();
 		private:
 			bool isDone_;
 			std::vector<ActionPtr> actionSequence_;

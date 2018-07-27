@@ -12,6 +12,7 @@ namespace xero {
 			void run();
 			bool isDone();
 			bool cancel();
+			std::string toString();
 		private:
 			std::shared_ptr<Subsystem> subsystem_;
 			std::shared_ptr<Action> action_;

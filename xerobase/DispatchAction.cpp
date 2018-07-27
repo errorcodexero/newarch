@@ -25,3 +25,7 @@ void DispatchAction::end() {
 bool DispatchAction::cancel() {
 
 }
+
+std::string DispatchAction::toString() {
+
+}

@@ -49,3 +49,12 @@ bool ActionSequence::cancel() {
 	isDone_ = true;
 	return (actionSequence_[index_])->cancel();
 }
+
+std::string ActionSequence::toString() {
+
+}
+
+void ActionSequence::pushSubActionPair(SubsystemPtr subsystem, ActionPtr action, bool block) {
+	auto p = std::make_shared<DispatchAction>(subsystem, action, block);
+	pushAction(p);
+}
