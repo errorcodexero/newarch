@@ -3,10 +3,11 @@
 using namespace xero::base;
 
 DispatchAction::DispatchAction(SubsystemPtr subsystem, ActionPtr action, bool block) : subsystem_(subsystem), action_(action), block_(block) {
+	denied_ = false;
 }
 
 void DispatchAction::start() {
-	subsystem_->setAction(action_);
+	if (!subsystem_->setAction(action_)) denied_ = true;
 }
 
 void DispatchAction::run() {

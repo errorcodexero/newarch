@@ -21,7 +21,8 @@ namespace xero {
 		private:
 			bool isDone_;
 			std::vector<ActionPtr> actionSequence_;
-			std::vector<ActionPtr>::iterator index_;
+			void startNextAction();
+			int index_;
 			bool performActionForIsDoneStatus(ActionPtr action);
 		};
 	}

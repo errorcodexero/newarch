@@ -12,26 +12,40 @@ void ActionSequence::pushAction(ActionPtr action) {
 }
 
 void ActionSequence::start() {
-	index_ = actionSequence_.begin();
+	index_ = -1;
 }
 
 bool ActionSequence::performActionForIsDoneStatus(ActionPtr action) {
-	action->start();
 	action->run();
 	return action->isDone();
 }
+void ActionSequence::startNextAction() {
+	index_++;
+	if (index_ < actionSequence_.size()) {
+		actionSequence_[index_]->start();
+	}
+};
 
 void ActionSequence::run() {
-	while ((index_ != actionSequence_.end()) && performActionForIsDoneStatus(*index_)) {
-		index_++;
+	while (1) {
+		if (index_ == -1 || actionSequence_[index_]->isDone()) {
+			startNextAction();
+			if (index_ >= actionSequence_.size())
+				break;
+
+		};
+		actionSequence_[index_]->run();
+		if (!actionSequence_[index_]->isDone()) {
+			break;
+		}
 	}
 }
 
 bool ActionSequence::isDone() {
-	return isDone || (index_ == actionSequence_.end());
+	return (index_ >= actionSequence_.size());
 }
 
 bool ActionSequence::cancel() {
 	isDone_ = true;
-	return (*index_)->cancel();
+	return (actionSequence_[index_])->cancel();
 }
