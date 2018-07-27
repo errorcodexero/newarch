@@ -4,7 +4,7 @@
 #include <list>
 
 #include "WPILib.h"
-#include "logger/message_logger.h"
+#include "messageLogger.h"
 
 namespace xero {
 	namespace base {
@@ -39,7 +39,7 @@ namespace xero {
 			virtual void Disabled() ;
 
 			/// \brief Return reference to the one message logger
-			messageLogger& getMessageLogger();
+			xero::misc::messageLogger& getMessageLogger();
 
 		protected:
 			//
@@ -92,7 +92,7 @@ namespace xero {
 			SubsystemList subsystems_;
 
 			// Message logger instance
-			messageLogger message_logger_;
+			xero::misc::messageLogger message_logger_;
 		} ;
 	}
 }

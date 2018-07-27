@@ -1,9 +1,10 @@
 #pragma once
-#include <chrono>
+
+#include "SimulatedObject.h"
 
 namespace frc
 {
-	class Timer
+	class Timer : public xero::sim::SimulatedObject
 	{
 	public:
 		Timer();
@@ -12,7 +13,6 @@ namespace frc
 		static double GetFPGATimestamp();
 
 	private:
-		static std::chrono::steady_clock::time_point m_start;
 	};
 
 	void Wait(double secs);

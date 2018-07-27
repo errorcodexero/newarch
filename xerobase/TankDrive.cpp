@@ -1,6 +1,11 @@
 #include "TankDrive.h"
 #include <cassert>
+
+#ifdef SIM
+#include <SensorCollection.h>
+#else
 #include <ctre/phoenix/MotorControl/SensorCollection.h>
+#endif
 
 namespace xero {
 	namespace base {

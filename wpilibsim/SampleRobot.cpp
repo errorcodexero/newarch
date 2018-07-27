@@ -1,7 +1,8 @@
 #include "SampleRobot.h"
-#include "RobotSimulator.h"
+#include "RobotSimBase.h"
 #include <stdexcept>
 
+using namespace xero::sim ;
 
 namespace frc
 {
@@ -13,7 +14,6 @@ namespace frc
 		m_start_delay = 0.25;
 		m_auto_period = 30;
 		m_teleop_period = 0;
-		m_print_state = false ;
 	}
 
 	SampleRobot::~SampleRobot()
@@ -36,49 +36,41 @@ namespace frc
 	{
 		int ms;
 		m_auto_done = false;
-
-		if (m_print_state)
-			std::cout << "Set Robot Mode Disabled" << std::endl ;
+		double now ;
+		std::chrono::microseconds delay(100) ;
+		RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;				
 
 		setEnabled(false);
 		setRobotMode(SampleRobot::RobotMode::Autonomous);
-		ms = static_cast<int>(m_start_delay * 1000);
-		std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 
-		if (m_print_state)
-			std::cout << "Set Robot Mode Autonomous" << std::endl ;
+		now = frc::Timer::GetFPGATimestamp() ;
+		while (frc::Timer::GetFPGATimestamp() < now + m_start_delay)
+			std::this_thread::sleep_for(delay) ;
+
 		setEnabled(true);
-		ms = static_cast<int>(m_auto_period * 1000);
-		while (ms > 0 && !m_auto_done)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
-			ms -= 100;
-		}
 
-		if (m_print_state)
-			std::cout << "Set Robot Mode Disabled (before Teleop)" << std::endl ;
+		now = frc::Timer::GetFPGATimestamp() ;
+		while (frc::Timer::GetFPGATimestamp() < now + m_auto_period && !m_auto_done)
+			std::this_thread::sleep_for(delay) ;
 
 		setEnabled(false);
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
-		if (m_print_state)
-			std::cout << "Set Robot Mode Teleop" << std::endl ;
+		now = frc::Timer::GetFPGATimestamp() ;		
+		while (frc::Timer::GetFPGATimestamp() < now + 1)
+			std::this_thread::sleep_for(delay) ;
 
 		setRobotMode(SampleRobot::RobotMode::Operator);
 		setEnabled(true);
 
-		ms = static_cast<int>(m_teleop_period * 1000);
-		std::this_thread::sleep_for(std::chrono::milliseconds(ms));
-
-		if (m_print_state)
-			std::cout << "Set Robot Mode Disabled" << std::endl ;
+		now = frc::Timer::GetFPGATimestamp() ;
+		while (frc::Timer::GetFPGATimestamp() < now + m_teleop_period)
+			std::this_thread::sleep_for(delay) ;
 
 		setRobotMode(SampleRobot::RobotMode::Finished) ;
 		setEnabled(true);
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
-		if (m_print_state)
-			std::cout << "Set Robot Mode Finished" << std::endl ;
+		
+		now = frc::Timer::GetFPGATimestamp() ;
+		while (frc::Timer::GetFPGATimestamp() < now + 1)
+			std::this_thread::sleep_for(delay) ;
 
 		m_running = false;
 	}
@@ -122,6 +114,10 @@ namespace frc
 			if (m_args[index] == "--start")
 			{
 				index++;
+				if (index == m_args.size()) {
+					std::cerr << "--start flag requires additional argument" << std::endl ;
+					exit(1) ;
+				}
 				if (!ParseDoubleArg(index, m_start_delay, "--start"))
 				{
 					ret = false ;
@@ -132,6 +128,10 @@ namespace frc
 			else if (m_args[index] == "--auto")
 			{
 				index++;
+				if (index == m_args.size()) {
+					std::cerr << "--auto flag requires additional argument" << std::endl ;
+					exit(1) ;
+				}				
 				if (!ParseDoubleArg(index, m_auto_period, "--auto"))
 				{
 					ret = false ;
@@ -142,6 +142,10 @@ namespace frc
 			else if (m_args[index] == "--oper")
 			{
 				index++;
+				if (index == m_args.size()) {
+					std::cerr << "--oper flag requires additional argument" << std::endl ;
+					exit(1) ;
+				}					
 				if (!ParseDoubleArg(index, m_teleop_period, "--oper"))
 				{
 					ret = false ;
@@ -149,24 +153,23 @@ namespace frc
 				}
 				index++;
 			}		
-			else if (m_args[index] == "--simtime")
-			{
-				double value ;
-
-				index++;
-				if (!ParseDoubleArg(index, value, "--simtime"))
-				{
-					ret = false ;
-					break ;
-				}
-				index++;
-
-				RobotSimulator &sim = RobotSimulator::get() ;
-				sim.setTimeInterval(value) ;
-			}
-			else if (m_args[index] == "--show") {
-				m_print_state = true ;
+			else if (m_args[index] == "--showsim") {
+				RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;				
+				sim.setPrinting(true) ;
 				index++ ;
+			}
+			else if (m_args[index] == "--simprop") {
+				index++ ;
+				if (index == m_args.size()) {
+					std::cerr << "--simprop flag requires additional argument" << std::endl ;
+					exit(1) ;
+				}					
+				RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
+				if (!sim.setProperty(m_args[index])) {
+					std::cerr << "--simprop flag, additional argument was invalid" << std::endl ;
+					exit(1) ;					
+				}
+				index++ ;				
 			}
 			else
 			{
@@ -176,6 +179,7 @@ namespace frc
 				std::cout << "  --start NUMBER" << std::endl;
 				std::cout << "  --auto NUMBER" << std::endl;
 				std::cout << "  --oper NUMBER" << std::endl;
+				std::cout << "  --showsim" << std::endl ;
 				ret = false;
 				break;
 			}
@@ -192,6 +196,12 @@ namespace frc
 		//
 		if (!ProcessCmdLineArgs())
 			return;
+
+		//
+		// Start the robot simulator
+		//
+		RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
+		sim.start() ;
 
 		//
 		// Initialize the robot hardware
@@ -213,6 +223,7 @@ namespace frc
 		// we ask the robot to handle specific modes
 		//
 		if (!m_robotMainOverridden) {
+			bool first = true ;
 			m_running = true;
 			while (m_running) {
 				if (IsDisabled()) {
@@ -228,13 +239,22 @@ namespace frc
 					Test();
 					while (IsTest() && IsEnabled());
 				}
-				else {
+				else if (IsOperatorControl()) {
 					OperatorControl();
 					while (IsOperatorControl() && IsEnabled());
 				}
+				else if (m_mode == RobotMode::Finished) {
+					if (first) {
+						std::cout << "Waiting for robot simulator to shut down" << std::endl ;
+						first = false ;
+					}
+				}
+				else {
+					std::cout << "BadState" << std::endl ;
+				}
 			}
 
-			RobotSimulator::stop();
+			sim.stop() ;			
 			std::cout << "\r\n ************ Robot program ending ***********" << std::endl;
 		}
 	}

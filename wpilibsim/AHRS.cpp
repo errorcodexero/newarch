@@ -1,21 +1,30 @@
 #include "AHRS.h"
-#include "RobotSimulator.h"
+#include "RobotSimBase.h"
+
+using namespace xero::sim ;
 
 AHRS::AHRS(frc::SPI::Port port)
 {
+	port_ = port ;
+
+	RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
+	sim.connect(this) ;	
 }
 
 AHRS::~AHRS()
 {
+	RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
+	sim.disconnect(this) ;		
 }
 
 double AHRS::GetYaw()
 {
-	frc::RobotSimulator &robot = frc::RobotSimulator::get();
-	return robot.getYaw();
+	std::lock_guard<std::mutex> lock(getLockMutex()) ;
+	return yaw_ ;
 }
+
 void AHRS::ZeroYaw()
 {
-	frc::RobotSimulator &robot = frc::RobotSimulator::get();
-	return robot.zeroYaw();
+	yaw_ = 0 ;
+	changed() ;
 }

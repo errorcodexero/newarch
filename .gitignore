@@ -7,3 +7,5 @@ rtf
 build
 .gradle
 *.swp
+*test/*.o
+*test/*.exe

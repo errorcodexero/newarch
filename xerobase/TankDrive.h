@@ -1,7 +1,13 @@
 #pragma once
 
 #include <list>
+
+#ifdef SIM
+#include <TalonSRX.h>
+#else
 #include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
+#endif
+
 #include "Drivebase.h"
 
 typedef ctre::phoenix::motorcontrol::can::TalonSRX TalonSRX;
