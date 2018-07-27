@@ -14,12 +14,15 @@ typedef ctre::phoenix::motorcontrol::can::TalonSRX TalonSRX;
 
 namespace xero {
 	namespace base {
-		typedef std::shared_ptr<TalonSRX> TalonPtr;	
+		typedef std::shared_ptr<TalonSRX> TalonPtr;
 
 		class TankDrive : public Drivebase {
 		public:
+			/// \brief This is a directive for the drivebase.  All directives for the drivebase should be derived from this class.
+			class TankDriveDirective : public Action {};
+
 			/// \brief Drives the drivebase at the given velocity
-			class VelocityDirective : public DrivebaseDirective {
+			class VelocityDirective : public TankDriveDirective {
 			public:
 				/// \brief Create a new VelocityDirective for the given velocity
                 /// \param target_velocity The velocity to drive at in inches / second
@@ -29,14 +32,15 @@ namespace xero {
 				void run();
 				void end();
 				bool cancel();
-				bool isDone() const;
+				bool isDone();
+				std::string toString();
 
 			private:
 				double target_velocity_;
 			};
 
 			/// \brief Drives the drivebase straight for a given distance
-			class DistanceDirective : public DrivebaseDirective {
+			class DistanceDirective : public TankDriveDirective {
 			public:
 				/// \brief Create a new DistanceDirective for the given distance
                 /// \param target_distance The distance to drive in inches
@@ -46,7 +50,8 @@ namespace xero {
 				void run();
 				void end();
 				bool cancel();
-				bool isDone() const;
+				bool isDone();
+				std::string toString();
 
 			private:
 				double target_distance_;

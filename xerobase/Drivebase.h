@@ -7,9 +7,6 @@ namespace xero {
 	namespace base {
 		/// \brief The drivebase for the robot
 		class Drivebase : public Subsystem {
-			/// \brief This is a directive for the drivebase.  All directives for the drivebase should be derived form this class.
-			class DrivebaseDirective : public Action {
-			} ;
 		public:
 			/// \brief create a new drive base object
 			/// \param robot the robot that contains this drivebase subsystem

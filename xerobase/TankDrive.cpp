@@ -33,8 +33,12 @@ namespace xero {
 			return true;
 		}
 
-		bool TankDrive::VelocityDirective::isDone() const {
+		bool TankDrive::VelocityDirective::isDone() {
 			return true;
+		}
+
+		std::string TankDrive::VelocityDirective::toString() {
+			return "TankDrive::VelocityDirective " + std::to_string(target_velocity_);
 		}
 
 		//////////////////////////////////////////////////////////////////
@@ -60,8 +64,12 @@ namespace xero {
 			return true;
 		}
 
-		bool TankDrive::DistanceDirective::isDone() const {
+		bool TankDrive::DistanceDirective::isDone() {
 			return true;
+		}
+
+		std::string TankDrive::DistanceDirective::toString() {
+			return "TankDrive::DistanceDirective " + std::to_string(target_distance_);
 		}
 
 		//////////////////////////////////////////////////////////////////

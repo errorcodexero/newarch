@@ -10,9 +10,6 @@ namespace xero {
 			angle_ = navx_.GetYaw();
 		}
 
-		Drivebase::Drivebase(Robot &robot) : Subsystem(robot, "drivebase") {
-		}
-
 		Drivebase::~Drivebase() {
 		}
 	}

@@ -23,7 +23,7 @@ namespace xero {
 
 			/// \brief Return true if the directive is complete
 			/// \returns True if the directive is complete
-            virtual bool isDone() const = 0 ;
+            virtual bool isDone() = 0 ;
 
             virtual std::string toString() = 0 ;
         private:

@@ -178,6 +178,7 @@ model {
 				toolChain = toolChains["gcc"]
 				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DSIM"
 			}
+			binaries
 			sources.cpp {
 				source {
 					srcDirs = ["phoenixsim"]

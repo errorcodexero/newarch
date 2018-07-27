@@ -34,7 +34,7 @@ namespace xero {
 			std::shared_ptr<TankDrive> db_p = std::make_shared<TankDrive>(*this, std::list<int>{1, 2, 3}, std::list<int>{4, 5, 6}) ;
 			addSubsystem(db_p) ;
 
-			db_p->setDirective(std::make_shared<TankDrive::DistanceDirective>(0.0));
+			db_p->setAction(std::make_shared<TankDrive::DistanceDirective>(0.0));
 
 			//
 			// This is where we would add the other subsystems for the robot
