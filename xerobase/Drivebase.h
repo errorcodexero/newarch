@@ -7,19 +7,16 @@ namespace xero {
 	namespace base {
 		/// \brief The drivebase for the robot
 		class Drivebase : public Subsystem {
+			/// \brief This is a directive for the drivebase.  All directives for the drivebase should be derived form this class.
+			class DrivebaseDirective : public Action {
+			} ;
 		public:
-			/// \brief A directive for the drivebase.  All directives for the drivebase should be derived from this class.
-			class DrivebaseDirective : public Action {} ;
-
-			/// \brief Drives the drivebase at the given velocity
-			class VelocityDirective : public DrivebaseDirective {};
-
-			/// \brief Drives the drivebase straight for a given distance
-			class DistanceDirective : public DrivebaseDirective {};
-
-			/// \brief Create a new drivebase object
-			/// \param robot The robot that contains this drivebase subsystem
+			/// \brief create a new drive base object
+			/// \param robot the robot that contains this drivebase subsystem
 			Drivebase(Robot& robot);
+
+			/// \brief destroy the drivebase
+			virtual ~Drivebase() ;
 			
 			/// \brief Return the current angle of the robot relative to its starting angle
 			/// \returns The current angle of the robot
@@ -42,11 +39,6 @@ namespace xero {
 			// QUESTION: Is there not a better name than run() ????
 			virtual void run() {
 			}
-
-			/// \brief Set the directive for the drivebase
-			/// \param directive The new directive for the drivebase
-			/// \returns QUESTION: What should this return?
-			virtual bool setDirective(std::shared_ptr<DrivebaseDirective> directive) ;
 
 		private:
 			AHRS navx_;

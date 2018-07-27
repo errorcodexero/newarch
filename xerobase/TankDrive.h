@@ -18,7 +18,8 @@ namespace xero {
 
 		class TankDrive : public Drivebase {
 		public:
-			class VelocityDirective : public Drivebase::VelocityDirective {
+			/// \brief Drives the drivebase at the given velocity
+			class VelocityDirective : public DrivebaseDirective {
 			public:
 				/// \brief Create a new VelocityDirective for the given velocity
                 /// \param target_velocity The velocity to drive at in inches / second
@@ -34,7 +35,8 @@ namespace xero {
 				double target_velocity_;
 			};
 
-			class DistanceDirective : public Drivebase::DistanceDirective {
+			/// \brief Drives the drivebase straight for a given distance
+			class DistanceDirective : public DrivebaseDirective {
 			public:
 				/// \brief Create a new DistanceDirective for the given distance
                 /// \param target_distance The distance to drive in inches
