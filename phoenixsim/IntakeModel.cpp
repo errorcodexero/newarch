@@ -16,8 +16,8 @@ namespace xero {
             std::string IntakeModel::toString() {
                 std::string result("intake: ") ;
 
-                result += "voltage1 " + std::to_string(voltage1_) ;
-                result += ", voltage2 " + std::to_string(voltage2_) ;
+                result += "duty_cycle_1 " + std::to_string(voltage1_) ;
+                result += ", duty_cycle_2 " + std::to_string(voltage2_) ;
 
                 return result ;
             }
