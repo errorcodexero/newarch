@@ -14,6 +14,11 @@ namespace xero {
             /// \param duty the duty cycle to set the motors to
             IntakeDutyCycleAction(Intake &intake, double duty) ;
 
+            /// \brief Create a new action object
+            /// \param intake the subsystem this action effects
+            /// \param name the name of a paramter that is the value
+            IntakeDutyCycleAction(Intake &intake, const std::string &name) ;
+
             /// \brief Destroy the action object
             virtual ~IntakeDutyCycleAction() ;
 

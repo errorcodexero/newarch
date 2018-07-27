@@ -1,5 +1,6 @@
 #include "IntakeDutyCycleAction.h"
 #include "Intake.h"
+#include <cassert>
 
 using namespace xero::base;
 
@@ -8,6 +9,14 @@ namespace xero {
             IntakeDutyCycleAction::IntakeDutyCycleAction(Intake &intake, double v) : IntakeAction(intake) {
                 duty_cycle_ = v ;
             }
+
+            IntakeDutyCycleAction::IntakeDutyCycleAction(Intake &intake, const std::string &name) : IntakeAction(intake) {
+                //
+                // Add implementation for parameter file when the parameter file is available
+                //
+                assert(false) ;
+            }
+
             IntakeDutyCycleAction::~IntakeDutyCycleAction() {
 
             }
