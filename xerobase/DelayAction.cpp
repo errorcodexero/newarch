@@ -9,23 +9,34 @@ void DelayAction::setDelayTime(double delayTime) {
 }
 
 void DelayAction::start() {
-	timer_.Reset();
+	startTime_ = frc::Timer::GetFPGATimestamp();
+	isDone_ = false;
+	//timer_.Reset();
 }
 
 void DelayAction::run() {
-	timer_.Start();
+	//timer_.Start();
 }
 
 bool DelayAction::isDone() {
-	double elapsed = timer_.Get()*1000.0;
+	double elapsed = (frc::Timer::GetFPGATimestamp()-startTime_)*1000.0;
 	if (elapsed >= delayTime_) {
-		return true;
+		isDone_ = true;
 	}
-	return false;
+	return isDone_;
 }
 
 void DelayAction::end() {
-	timer_.Stop();
+
+}
+
+bool DelayAction::cancel() {
+	isDone_ = true;
+	return true;
+}
+
+std::string DelayAction::toString() {
+
 }
 
 

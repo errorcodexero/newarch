@@ -14,9 +14,11 @@ namespace xero {
 			bool isDone();
 			bool cancel();
 			void setDelayTime(double delayTime);
+			std::string toString();
 		private:
-			frc::Timer timer_;
+			double startTime_;
 			double delayTime_;
+			bool isDone_;
 		};
 	}
 }

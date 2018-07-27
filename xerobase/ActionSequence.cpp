@@ -51,6 +51,10 @@ bool ActionSequence::cancel() {
 }
 
 std::string ActionSequence::toString() {
+	return "";
+}
+
+void ActionSequence::end() {
 
 }
 
