@@ -1,6 +1,7 @@
 #pragma once
-
 #include <memory>
+#include <vector>
+#include <Timer.h>
 #include <string>
 
 namespace xero {
@@ -14,7 +15,7 @@ namespace xero {
             virtual bool cancel() = 0 ;
             virtual std::string toString() = 0 ;
         private:
-        } ;
+        };
 
         typedef std::shared_ptr<Action> ActionPtr ;
     }
