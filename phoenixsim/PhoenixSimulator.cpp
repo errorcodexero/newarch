@@ -4,6 +4,7 @@
 #include "WingsModel.h"
 #include "GrabberModel.h"
 #include "CubeSensorModel.h"
+#include "IntakeModel.h"
 #include <cassert>
 #include <iostream>
 
@@ -22,8 +23,11 @@ namespace xero
 				assert(xero::sim::RobotSimBase::theOne == nullptr) ;
 				xero::sim::RobotSimBase::theOne = this ;
 
-				TankDrive_ = std::make_shared<TankDriveModel>() ;
-				addModel(TankDrive_) ;
+				tankdrive_ = std::make_shared<TankDriveModel>() ;
+				addModel(tankdrive_) ;
+
+				intake_ = std::make_shared<IntakeModel>() ;
+				addModel(intake_) ;				
 
 				lifter_ = std::make_shared<LifterModel>() ;
 				addModel(lifter_) ;

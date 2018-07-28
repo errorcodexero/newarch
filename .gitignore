@@ -9,3 +9,4 @@ build
 *.swp
 *test/*.o
 *test/*.exe
+.vs/

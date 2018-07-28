@@ -25,8 +25,7 @@ namespace xero {
 				virtual void start();
 				virtual void run();
 				virtual bool isDone() ;
-				virtual void end();
-				virtual bool cancel() ;
+				virtual void cancel() ;
 				virtual std::string toString() ;
 
 			private:
@@ -75,8 +74,7 @@ namespace xero {
 
 			/// \brief cancel the current action for this subsystem
 			/// It also cancels the actions for any children subsystems
-			/// \returns true if the action was canceled, false if it could not be
-			virtual bool cancelAction() ;
+			virtual void cancelAction() ;
 
 			/// \brief asks a subsystem to execute a named sequence
 			/// \param the name of the sequence to execute

@@ -30,8 +30,7 @@ namespace xero {
 
 				void start();
 				void run();
-				void end();
-				bool cancel();
+				void cancel();
 				bool isDone();
 				std::string toString();
 
@@ -48,8 +47,7 @@ namespace xero {
 
 				void start();
 				void run();
-				void end();
-				bool cancel();
+				void cancel();
 				bool isDone();
 				std::string toString();
 

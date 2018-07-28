@@ -26,11 +26,7 @@ namespace xero {
 		void TankDrive::VelocityDirective::run() {
 		}
 
-		void TankDrive::VelocityDirective::end() {
-		}
-
-		bool TankDrive::VelocityDirective::cancel() {
-			return true;
+		void TankDrive::VelocityDirective::cancel() {
 		}
 
 		bool TankDrive::VelocityDirective::isDone() {
@@ -57,11 +53,7 @@ namespace xero {
 		void TankDrive::DistanceDirective::run() {
 		}
 
-		void TankDrive::DistanceDirective::end() {
-		}
-
-		bool TankDrive::DistanceDirective::cancel() {
-			return true;
+		void TankDrive::DistanceDirective::cancel() {
 		}
 
 		bool TankDrive::DistanceDirective::isDone() {
