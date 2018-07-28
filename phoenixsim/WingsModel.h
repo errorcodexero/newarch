@@ -7,7 +7,7 @@ namespace xero  {
         namespace phoenix {
             class WingsModel : public SubsystemModel {
             public:
-                WingsModel() ;
+                WingsModel(RobotSimBase &simbase) ;
                 virtual ~WingsModel() ;
 
                 virtual std::string toString() ;
@@ -15,9 +15,14 @@ namespace xero  {
                 virtual void inputChanged(SimulatedObject *obj) ;
                 virtual void addSolenoid(frc::Solenoid *solenoid) ;
 
+                bool getWings() {
+                    return wings_solenoid_state ;
+                }
+
             private:
                 bool wings_solenoid_state ;
                 bool wings_state_ ;
+                int sol_channel_ ;
                 frc::Solenoid *wings_ ;
             } ;
         }

@@ -3,7 +3,8 @@
 
 namespace xero {
     namespace sim {
-        SubsystemModel::SubsystemModel() {            
+        SubsystemModel::SubsystemModel(RobotSimBase &simbase, const std::string &name) : simbase_(simbase) {
+            name_ = name ;
         }
 
         SubsystemModel::~SubsystemModel() {

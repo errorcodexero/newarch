@@ -1,16 +1,24 @@
 #include "GrabberModel.h"
+#include <RobotSimBase.h>
 
 using namespace frc ;
 
 namespace xero {
     namespace sim {
         namespace phoenix {
-            GrabberModel::GrabberModel() {
+            GrabberModel::GrabberModel(RobotSimBase &simbase) : SubsystemModel(simbase, "grabber") {
                 angle_ = 45.0 ;
-                degrees_per_second_ = (98.0 - 45.0) / 2.0 ;
-                degrees_per_tick_ = 0.625 ;
-                encoder_base_ = 123 ;
-                cube_angle_ = -3.0 ;
+                degrees_per_second_ = simbase.getSettingsParser().getDouble("grabber:sim:degrees_per_second") ;
+                degrees_per_tick_ = simbase.getSettingsParser().getDouble("grabber:sim:degrees_per_tick") ;
+                cube_angle_ = simbase.getSettingsParser().getDouble("grabber:sim:cube_angle") ;
+                encoder_base_ = 0 ;
+
+                motor_channel_ = simbase.getSettingsParser().getInteger("hw:grabber:motor") ;
+                encoder_input_1_ = simbase.getSettingsParser().getInteger("hw:grabber:encoder1") ;
+                encoder_input_2_ = simbase.getSettingsParser().getInteger("hw:grabber:encoder2") ;
+
+                enc_ = nullptr ;
+                voltage_ = 0.0 ;
             }
 
             GrabberModel::~GrabberModel() {
@@ -44,7 +52,7 @@ namespace xero {
             }
 
 	        void GrabberModel::addVictorSP(frc::VictorSP *motor) {
-                if (motor->GetChannel() == 2) {
+                if (motor->GetChannel() == motor_channel_) {
                     motor_ = motor ;
                     motor_->addModel(this) ;
                 }
@@ -54,7 +62,7 @@ namespace xero {
                 int first, second ;
 
                 encoder->SimulatorGetDigitalIOs(first, second) ;
-                if (first == 6 && second == 7) {
+                if (first == encoder_input_1_ && second == encoder_input_2_ || first == encoder_input_2_ && second == encoder_input_1_) {
                     enc_ = encoder ;
                     enc_->addModel(this) ;
                     enc_->SimulatorSetValue(encoder_base_) ;

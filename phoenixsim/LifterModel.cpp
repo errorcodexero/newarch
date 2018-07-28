@@ -1,19 +1,34 @@
 #include "LifterModel.h"
-
+#include <RobotSimBase.h>
 using namespace frc ;
 
 namespace xero {
     namespace sim {
         namespace phoenix {
-            LifterModel::LifterModel() {
-                height_ = 11.375 ;
-                bottom_height_ = 11.375 ;
+            LifterModel::LifterModel(RobotSimBase &simbase) : SubsystemModel(simbase, "lifter") {
+                bottom_limit_height_ = simbase.getSettingsParser().getDouble("lifter:sim:bottom_limit_height") ;
+                top_limit_height_ = simbase.getSettingsParser().getDouble("lifter:sim:top_limit_height") ;
+                height_ = bottom_limit_height_ ;
+
+                in_per_tick_ = simbase.getSettingsParser().getDouble("lifter:sim:inches_per_tick") ;
+
                 brake_value_ = true ;
                 highgear_ = true ;
-                in_per_tick_ = 0.08327 ;
 
-                inch_per_sec_per_volt = 78.0 / 2.0 ;
-                encoder_base_ = 1111 ;
+                inch_per_sec_per_volt_ = simbase.getSettingsParser().getDouble("lifter:sim:inches_per_sec_per_volt") ;
+                encoder_base_ = 0  ;
+
+                int encoder_1_ = simbase.getSettingsParser().getInteger("hw:lifter:encoder1") ;
+                int encoder_2_ = simbase.getSettingsParser().getInteger("hw:lifter:encoder2") ;
+                int bottom_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:bottom") ;
+                int top_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:top") ;
+                int motor_1_ = simbase.getSettingsParser().getInteger("hw:lifter:motor1") ;
+                int motor_2_ = simbase.getSettingsParser().getInteger("hw:lifter:motor2") ;
+                int brake_sol_ = simbase.getSettingsParser().getInteger("hw:lifter:brake") ;
+                int gear_sol_ = simbase.getSettingsParser().getInteger("hw:lifter:shifter") ;
+
+                top_limit_ = nullptr ;
+                bottom_limit_ = nullptr ;
             }
 
             LifterModel::~LifterModel() {
@@ -44,11 +59,11 @@ namespace xero {
 
             void LifterModel::run(double dt) {
                 if (!brake_value_) {
-                    double dh = voltage_ * inch_per_sec_per_volt * dt ;
+                    double dh = voltage_ * inch_per_sec_per_volt_ * dt ;
                     height_ += dh ;
 
-                    if (height_ <= 11.375) {
-                        height_ = 11.375 ;
+                    if (height_ <= bottom_limit_height_) {
+                        height_ = bottom_limit_height_ ;
                         if (bottom_limit_ != nullptr)
                             bottom_limit_->SimulatorSetValue(false) ;
                     }
@@ -57,8 +72,8 @@ namespace xero {
                             bottom_limit_->SimulatorSetValue(true) ;
                     }
 
-                    if (height_ >= 88.6) {
-                        height_ = 88.6 ;
+                    if (height_ >= top_limit_height_) {
+                        height_ = top_limit_height_ ;
                         if (top_limit_ != nullptr)
                             top_limit_->SimulatorSetValue(false) ;
                     }
@@ -67,7 +82,7 @@ namespace xero {
                             top_limit_->SimulatorSetValue(true) ;
                     }
 
-                    int encval = static_cast<int>((height_ - bottom_height_) / in_per_tick_) + encoder_base_ ;
+                    int encval = static_cast<int>((height_ - bottom_limit_height_) / in_per_tick_) + encoder_base_ ;
                     enc_->SimulatorSetValue(encval) ;
                 }
             }
@@ -92,11 +107,11 @@ namespace xero {
             }
 
 	        void LifterModel::addVictorSP(frc::VictorSP *motor) {
-                if (motor->GetChannel() == 0) {
+                if (motor->GetChannel() == motor_1_) {
                     motor1_ = motor ;
                     motor1_->addModel(this) ;
                 }
-                else if (motor->GetChannel() == 1) {
+                else if (motor->GetChannel() == motor_2_) {
                     motor2_ = motor ;
                     motor2_->addModel(this) ;
                 }
@@ -106,7 +121,7 @@ namespace xero {
                 int first, second ;
 
                 encoder->SimulatorGetDigitalIOs(first, second) ;
-                if (first == 4 && second == 5) {
+                if (first == encoder_1_ && second == encoder_2_ || first == encoder_2_ && second == encoder_1_) {
                     enc_ = encoder ;
                     enc_->addModel(this) ;
                     enc_->SimulatorSetValue(encoder_base_) ;
@@ -114,13 +129,13 @@ namespace xero {
             }
 
             void LifterModel::addDigitalInput(frc::DigitalInput *input)  {
-                if (input->GetChannel() == 8) {
+                if (input->GetChannel() == top_limit_channel_) {
                     top_limit_ = input ;
                     top_limit_->addModel(this) ;
                     top_limit_->SimulatorSetValue(true) ;
                 }
 
-                if (input->GetChannel() == 9) {
+                if (input->GetChannel() == bottom_limit_channel_) {
                     bottom_limit_ = input ;
                     bottom_limit_->addModel(this) ;
                     bottom_limit_->SimulatorSetValue(true) ;
@@ -128,12 +143,12 @@ namespace xero {
             }
 
             void LifterModel::addSolenoid(frc::Solenoid *solenoid) {
-                if (solenoid->SimulatorGetChannel() == 1) {
+                if (solenoid->SimulatorGetChannel() == gear_sol_) {
                     gear_ = solenoid ;
                     gear_->addModel(this) ;
                 }
 
-                if (solenoid->SimulatorGetChannel() == 3) {
+                if (solenoid->SimulatorGetChannel() == brake_sol_) {
                     brake_ = solenoid ;
                     brake_->addModel(this) ;
                 }

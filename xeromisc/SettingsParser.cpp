@@ -51,6 +51,7 @@ bool SettingsParser::readLine(const std::string &line, std::string &key, std::st
 		}
 	}
 
+
 	// Check for unterminated string
 	if(in_string) {
 		logger_.startMessage(messageLogger::messageType::warning, msggroup_);
@@ -58,6 +59,11 @@ bool SettingsParser::readLine(const std::string &line, std::string &key, std::st
 		logger_.endMessage();
 		return false;
 	}
+
+	//
+	// If we fall out of the loop, there is not white space after the value, 
+	//
+	value = buffer.str() ;	
 
 	return true;
 }
@@ -98,7 +104,6 @@ bool SettingsParser::readFile(const std::string &filename) {
 			}
 		}
 	}
-
 	return true;
 }
 

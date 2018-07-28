@@ -1,6 +1,7 @@
 #include "Robot.h"
 #include "Subsystem.h"
 #include "ControllerBase.h"
+#include "basegroups.h"
 #include <iostream>
 #include <cassert>
 
@@ -14,6 +15,16 @@ namespace xero {
 			// Set the robot loop time to 50 ms
 			//
 			target_loop_time_ = 0.05 ;
+
+			parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;
+		}
+
+		Robot::~Robot() {
+			delete parser_ ;
+		}
+
+		bool Robot::readParamsFile(const std::string &filename) {
+			return parser_->readFile(filename) ;
 		}
 		
 		void Robot::robotLoop() {

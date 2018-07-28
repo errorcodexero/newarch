@@ -3,28 +3,32 @@
 
 using namespace xero::sim ;
 
-AHRS::AHRS(frc::SPI::Port port)
+AHRS::AHRS(const char *port_p)
 {
-	port_ = port ;
+    RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
+    sim.connect(this) ;	
+}
 
-	RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
-	sim.connect(this) ;	
+AHRS::AHRS(frc::SPI::Port p) 
+{
+    RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
+    sim.connect(this) ;	    
 }
 
 AHRS::~AHRS()
 {
-	RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
-	sim.disconnect(this) ;		
+    RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
+    sim.disconnect(this) ;		
 }
 
 double AHRS::GetYaw()
 {
-	std::lock_guard<std::mutex> lock(getLockMutex()) ;
+    std::lock_guard<std::mutex> lock(getLockMutex()) ;
 	return yaw_ ;
 }
 
 void AHRS::ZeroYaw()
 {
 	yaw_ = 0 ;
-	changed() ;
+    changed() ;
 }

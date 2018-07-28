@@ -5,6 +5,7 @@
 
 #include "WPILib.h"
 #include "messageLogger.h"
+#include "SettingsParser.h"
 
 namespace xero {
 	namespace base {
@@ -20,6 +21,9 @@ namespace xero {
 		public:
 			/// \brief create the base robot.
 			Robot() ;
+
+			/// \brief destroy the robot object
+			virtual ~Robot() ;
 
 			/// \brief called to initialize the robot.
 			/// This method will be overridden by the derived class that is a
@@ -41,6 +45,11 @@ namespace xero {
 			/// \brief Return reference to the one message logger
 			xero::misc::messageLogger& getMessageLogger();
 
+			/// \brief Return the settings parser
+			xero::misc::SettingsParser& getSettingsParser() {
+				return *parser_ ;
+			}
+
 		protected:
 			//
 			// Useful types, moved these into the class so we don't
@@ -55,6 +64,15 @@ namespace xero {
 			
 			/// \brief this method runs one loop for the robot.
 			virtual void robotLoop();
+
+			/// \brief add a subsystem to the robot
+			/// \param sub the subsystem to add to the robot
+			void addSubsystem(SubsystemPtr sub) {
+				subsystems_.push_back(sub) ;
+			}			
+
+			/// \brief this method reads the parameters file for the robot
+			bool readParamsFile(const std::string &filename) ;
 
 			//
 			// These methods are overridden by the actual robot class because
@@ -73,11 +91,6 @@ namespace xero {
 			/// This method will be defined by a concrete derived robot object
 			virtual std::shared_ptr<ControllerBase> createTestController() = 0 ;
 
-			/// \brief add a subsystem to the robot
-			/// \param sub the subsystem to add to the robot
-			void addSubsystem(SubsystemPtr sub) {
-				subsystems_.push_back(sub) ;
-			}
 
 		private:
 			// The time per robot loop in seconds
@@ -93,6 +106,9 @@ namespace xero {
 
 			// Message logger instance
 			xero::misc::messageLogger message_logger_;
+
+			// The settings parser
+			xero::misc::SettingsParser *parser_ ;
 		} ;
 	}
 }

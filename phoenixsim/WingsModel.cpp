@@ -1,12 +1,14 @@
 #include "WingsModel.h"
+#include <RobotSimBase.h>
 
 using namespace frc ;
 
 namespace xero {
     namespace sim {
         namespace phoenix {
-            WingsModel::WingsModel() {
+            WingsModel::WingsModel(RobotSimBase &simbase) : SubsystemModel(simbase, "wings") {
                 wings_state_ = false ;
+                sol_channel_ = simbase.getSettingsParser().getInteger("hw:wings:solenoid") ;
             }
 
             WingsModel::~WingsModel() {                
@@ -34,7 +36,7 @@ namespace xero {
             }
 
             void WingsModel::addSolenoid(frc::Solenoid *sol) {
-                if (sol->SimulatorGetChannel() == 1) {
+                if (sol->SimulatorGetChannel() == sol_channel_) {
                     wings_ = sol ;
                     wings_->addModel(this) ;
                 }

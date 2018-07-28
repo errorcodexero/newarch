@@ -16,6 +16,9 @@
     {																		         \
         std::cerr << "exception caught from robot - " << ex.what() << std::endl ;    \
     }                                                                                \
+	catch (const std::system_error &ex) {                                            \
+		std::cerr << "system_error exception caught from robot - " << ex.what() << std::endl ; \
+	}                                                                                \
 	try {																			 \
 		delete robot ;																 \
 	}                                                                                \
@@ -23,6 +26,7 @@
 	{                                                                                \
 		std::cerr << "exception caught deleting robot - " << ex.what() << std::endl; \
 	}                                                                                \
+	exit(0) ;																		 \
     return 0;                                                                        \
   }
 

@@ -1,0 +1,141 @@
+##############################################################
+#
+# Describe the hardware of the robot
+#
+##############################################################
+hw:tankdrive:leftmotor1             1
+hw:tankdrive:leftmotor2             2
+hw:tankdrive:leftmotor3             3
+hw:tankdrive:rightmotor1            14
+hw:tankdrive:rightmotor2            15
+hw:tankdrive:rightmotor3            16
+hw:tankdrive:shifter                0
+hw:tankdrive:leftencoder1           0
+hw:tankdrive:leftencoder2           1
+hw:tankdrive:rightencoder1          2
+hw:tankdrive:rightencoder2          3
+
+hw:lifter:motor1                    0
+hw:lifter:motor2                    1
+hw:lifter:encoder1                  4
+hw:lifter:encoder2                  5
+hw:lifter:limit:bottom              9
+hw:lifter:limit:top                 8
+hw:lifter:shifter                   1
+hw:lifter:brake                     3
+
+hw:intake:leftmotor                 3
+hw:intake:rightmotor                4
+
+hw:grabber:motor                    2
+hw:grabber:encoder1                 6
+hw:grabber:encoder2                 7
+
+hw:collector:cubesensor             12
+
+hw:wings:solenoid                   1
+
+hw:driverstation:hid:oi             3
+hw:driverstation:hid:gunner         2
+hw:driverstation:hid:driver         1
+
+##############################################################
+#
+# The constants that go with each of the subsystems
+#
+##############################################################
+
+#
+# Grabber Subsystem constants
+#
+grabber:degrees_per_tick            0.625
+grabber:calibrate:count             5
+grabber:calibrate:value             -0.4
+grabber:calibrate:diff              2
+grabber:p                           0.015
+grabber:i                           0.0
+grabber:d                           0.0
+grabber:f                           0.0
+grabber:min                         -0.4
+grabber:max                         0.4
+grabber:imax                        1e21
+grabber:hold                        -0.4
+grabber:clamp                       -0.9
+grabber:angle:stowed                98.0
+grabber:angle:minimum               -20.0
+grabber:angle:maximum               98.0
+grabber:angle:collector             45.0
+
+#
+# Lifter subsystem constants
+#
+lifter:base							11.375
+lifter:inches_per_tick              0.08327
+lifter:max_height                   86.0
+lifter:min_height                   11.375
+lifter:goto:distance_threshold      1.0
+lifter:goto:speed_threshold         1.0
+lifter:goto:p                       0.1
+lifter:goto:i                       0.0
+lifter:goto:d                       0.0001
+lifter:goto:f                       0.0
+lifter:goto:max                     1.0
+lifter:goto:min                     -1.0
+lifter:goto:imax                    6.0
+lifter:height:floor                 11.375
+lifter:height:exchange              14.5
+lifter:height:switch                36.0
+lifter:height:scale                 74.0
+
+#
+# Intake subsystem constants
+#
+
+#
+# Collector subsystem constants
+#
+collector:cubesensor:h2ldelay       0.1
+collector:cubesensor:l2hdelay       0.1
+collector:grab_time                 0.25
+
+#
+# LiftingCollector subsystem constants
+#
+
+#
+# TankDrive subsystem constants
+#
+tankdrive:inches_per_tick           0.07854
+tankdrive:straight:maxa             20.0
+tankdrive:straight:maxd             -20.0
+tankdrive:straight:maxv             20
+tankdrive:straight:recalc           2.0
+tankdrive:straight:navxadj          0.2
+tankdrive:straight:threshold        2.0
+tankdrive:straight:p                0.0
+tankdrive:straight:i                0.0
+tankdrive:straight:d                0.0
+tankdrive:straight:f                0.0045
+tankdrive:straight:max              1.0
+tankdrive:straight:min              -1.0
+tankdrive:straight:imax             6.0
+tankdrive:rotate:maxa               19.0
+tankdrive:rotate:maxd               -19.0
+tankdrive:rotate:maxv               19
+tankdrive:rotate:recalc             4.0
+tankdrive:rotate:threshold          4.0
+tankdrive:rotate:p                  0.0
+tankdrive:rotate:i                  0.0
+tankdrive:rotate:d                  0.0
+tankdrive:rotate:f                  0.06
+tankdrive:rotate:max                1.0
+tankdrive:rotate:min                -1.0
+tankdrive:rotate:imax               6.0
+
+#
+# Wings subsystem constants
+#
+
+#
+# DriverStation subsystem constants
+#

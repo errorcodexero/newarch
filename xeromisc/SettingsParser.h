@@ -10,7 +10,7 @@ namespace xero {
 		public:
 			SettingsParser(messageLogger &logger, uint64_t msggroup);
 			~SettingsParser();
-			
+
 			bool readFile(const std::string &filename);
 
 			bool isDefined(const std::string &key);

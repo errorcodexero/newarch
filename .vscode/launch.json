@@ -9,13 +9,13 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/exe/frcUserProgramSim/frcUserProgramSim.exe",
-            "args": ["--start","0.5","--auto","2","--oper","2","--show"],
+            "args": ["--start","0.1","--auto","14","--oper","2"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "D:\\cygwin\\bin\\gdb.exe",
+            "miDebuggerPath": "C:\\cygwin64\\bin\\gdb.exe",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",

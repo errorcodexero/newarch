@@ -1,11 +1,14 @@
 #include "IntakeModel.h"
+#include <RobotSimBase.h>
 
 using namespace frc ;
 
 namespace xero {
     namespace sim {
         namespace phoenix {
-            IntakeModel::IntakeModel() {
+            IntakeModel::IntakeModel(RobotSimBase &simbase) : SubsystemModel(simbase, "intake") {
+                motor_channel_1_ = simbase.getSettingsParser().getInteger("hw:intake:leftmotor") ;
+                motor_channel_2_ = simbase.getSettingsParser().getInteger("hw:intake:rightmotor") ;
                 voltage1_ = 0.0 ;
                 voltage2_ = 0.0 ;
             }
@@ -37,11 +40,11 @@ namespace xero {
             }    
 
             void IntakeModel::addVictorSP(frc::VictorSP *motor) {
-                if (motor->GetChannel() == 3) {
+                if (motor->GetChannel() == motor_channel_1_) {
                     motor1_ = motor ;
                     motor1_->addModel(this) ;
                 }
-                else if (motor->GetChannel() == 4) {
+                else if (motor->GetChannel() == motor_channel_2_) {
                     motor2_ = motor ;
                     motor2_->addModel(this) ;
                 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <iostream>
 
 namespace xero {
 	namespace misc {
@@ -45,7 +46,10 @@ namespace xero {
 			}
 
 			int getInteger() {
-				assert(type_ == Type::Integer);
+				if (type_ != Type::Integer) {
+					std::cout << "BAD TYPE" << std::endl ;
+				}
+				assert(type_ == Type::Integer) ;
 
 				return int_;
 			}

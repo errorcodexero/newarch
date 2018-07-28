@@ -5,6 +5,9 @@
 #include "GrabberModel.h"
 #include "CubeSensorModel.h"
 #include "IntakeModel.h"
+#ifdef XEROSCREEN
+#include "PhoenixScreenVisualizer.h"
+#endif
 #include <cassert>
 #include <iostream>
 
@@ -18,35 +21,48 @@ namespace xero
 	{
 		namespace phoenix
 		{
-			PhoenixSimulator::PhoenixSimulator()
+			PhoenixSimulator::PhoenixSimulator(const std::string &paramfile) : RobotSimBase(paramfile)
 			{
-				assert(xero::sim::RobotSimBase::theOne == nullptr) ;
-				xero::sim::RobotSimBase::theOne = this ;
+				TankDrive_ = std::make_shared<TankDriveModel>(*this) ;
+				addModel(TankDrive_) ;
 
-				tankdrive_ = std::make_shared<TankDriveModel>() ;
-				addModel(tankdrive_) ;
-
-				intake_ = std::make_shared<IntakeModel>() ;
-				addModel(intake_) ;				
-
-				lifter_ = std::make_shared<LifterModel>() ;
+				lifter_ = std::make_shared<LifterModel>(*this) ;
 				addModel(lifter_) ;
 
-				wings_ = std::make_shared<WingsModel>() ;
+				wings_ = std::make_shared<WingsModel>(*this) ;
 				addModel(wings_) ;
 
-				grabber_ = std::make_shared<GrabberModel>() ;
+				grabber_ = std::make_shared<GrabberModel>(*this) ;
 				addModel(grabber_) ;
 
-				ballsensor_ = std::make_shared<CubeSensorModel>() ;
+				ballsensor_ = std::make_shared<CubeSensorModel>(*this) ;
 				addModel(ballsensor_) ;
+
+				intake_ = std::make_shared<IntakeModel>(*this) ;
+				addModel(intake_) ;
+
+				visualizer_ = false ;
 			}
 
-			PhoenixSimulator::~PhoenixSimulator()
-			{
+			PhoenixSimulator::~PhoenixSimulator() {
+			}
+
+			void PhoenixSimulator::enableScreen() {
+#ifdef XEROSCREEN
+				visualizer_ = true ;
+
+#endif
 			}
 
 			void PhoenixSimulator::connect(SimulatedObject *device) {
+#ifdef XEROSCREEN
+				if (visualizer_) {
+					auto vis = std::make_shared<PhoenixScreenVisualizer>() ;
+					addVisualizer(vis) ;					
+					visualizer_ = false ;
+				}
+#endif
+
 				TalonSRX *talon = dynamic_cast<TalonSRX *>(device) ;
 				if (talon != nullptr) {
 					for(auto model : getModels())
@@ -85,9 +101,6 @@ namespace xero
 			}
 
 			void PhoenixSimulator::disconnect(SimulatedObject *device) {
-				//
-				// TODO
-				//
 			}
 		}
 	}
