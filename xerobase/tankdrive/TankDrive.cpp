@@ -9,67 +9,6 @@
 
 namespace xero {
 	namespace base {
-
-		//////////////////////////////////////////////////////////////////
-		//
-		// VelocityDirective
-		//
-		//////////////////////////////////////////////////////////////////
-
-		TankDrive::VelocityDirective::VelocityDirective(double target_velocity) {
-			target_velocity_ = target_velocity;
-		}
-
-		void TankDrive::VelocityDirective::start() {
-		}
-
-		void TankDrive::VelocityDirective::run() {
-		}
-
-		void TankDrive::VelocityDirective::cancel() {
-		}
-
-		bool TankDrive::VelocityDirective::isDone() {
-			return true;
-		}
-
-		std::string TankDrive::VelocityDirective::toString() {
-			return "TankDrive::VelocityDirective " + std::to_string(target_velocity_);
-		}
-
-		//////////////////////////////////////////////////////////////////
-		//
-		// DriveStraightDirective
-		//
-		//////////////////////////////////////////////////////////////////
-
-		TankDrive::DistanceDirective::DistanceDirective(double target_distance) {
-			target_distance_ = target_distance;
-		}
-
-		void TankDrive::DistanceDirective::start() {
-		}
-
-		void TankDrive::DistanceDirective::run() {
-		}
-
-		void TankDrive::DistanceDirective::cancel() {
-		}
-
-		bool TankDrive::DistanceDirective::isDone() {
-			return true;
-		}
-
-		std::string TankDrive::DistanceDirective::toString() {
-			return "TankDrive::DistanceDirective " + std::to_string(target_distance_);
-		}
-
-		//////////////////////////////////////////////////////////////////
-		//
-		// Drivebase
-		//
-		//////////////////////////////////////////////////////////////////
-
 		void initTalonList(std::list<int>& ids, std::list<TalonPtr>& talons) {
 			//Assuming first id will be master
 			for(int id : ids) {

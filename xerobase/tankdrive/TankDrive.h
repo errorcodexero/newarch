@@ -18,43 +18,6 @@ namespace xero {
 
 		class TankDrive : public Drivebase {
 		public:
-			/// \brief This is a directive for the drivebase.  All directives for the drivebase should be derived from this class.
-			class TankDriveDirective : public Action {};
-
-			/// \brief Drives the drivebase at the given velocity
-			class VelocityDirective : public TankDriveDirective {
-			public:
-				/// \brief Create a new VelocityDirective for the given velocity
-                /// \param target_velocity The velocity to drive at in inches / second
-				VelocityDirective(double target_velocity);
-
-				void start();
-				void run();
-				void cancel();
-				bool isDone();
-				std::string toString();
-
-			private:
-				double target_velocity_;
-			};
-
-			/// \brief Drives the drivebase straight for a given distance
-			class DistanceDirective : public TankDriveDirective {
-			public:
-				/// \brief Create a new DistanceDirective for the given distance
-                /// \param target_distance The distance to drive in inches
-				DistanceDirective(double target_distance);
-
-				void start();
-				void run();
-				void cancel();
-				bool isDone();
-				std::string toString();
-
-			private:
-				double target_distance_;
-			};
-
 			/// \brief Create a new tank drive object
 			/// \param robot The robot that contains this tank drive subsystem
 			/// \param left_motor_ids A list of TalonSRX ids for the left side of the drivebase, the first
