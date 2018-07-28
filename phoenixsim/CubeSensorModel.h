@@ -8,7 +8,7 @@ namespace xero  {
         namespace phoenix {
             class CubeSensorModel : public SubsystemModel {
             public:
-                CubeSensorModel() ;
+                CubeSensorModel(RobotSimBase &simbase) ;
                 virtual ~CubeSensorModel() ;
 
                 virtual std::string toString() ;
@@ -16,9 +16,14 @@ namespace xero  {
                 virtual void inputChanged(SimulatedObject *obj) ;
                 virtual void addDigitalInput(frc::DigitalInput *input) ;
 
+                bool getCubeSensed() {
+                    return cube_sensed_ ;
+                }
+
             private:       
                 frc::DigitalInput *input_ ;
                 bool cube_sensed_ ;
+                int cube_sensor_input_ ;
             } ;
         }
     }

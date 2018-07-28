@@ -9,14 +9,14 @@
 namespace xero {
 	namespace base {
 		//
-		// Forward declaraion of the robot class.
+		// Forward declaration of the robot class.
 		//
 		class Robot ;
 		class Subsystem ;
 
 		typedef std::shared_ptr<Subsystem> SubsystemPtr ;
 		
-		/// \brief This is the base class for any subsystem in the system.
+		/// \brief The base class for any subsystem in the system.
 		class Subsystem {
 		public:	
 			class ExecuteNamedSequence : public Action {
@@ -39,8 +39,8 @@ namespace xero {
 			/// \brief destroy a new subsystem
 			virtual ~Subsystem() ;
 
-			/// \brief returns the name of the subsystem
-			/// \returns the name of the subsystem
+			/// \brief Returns the name of the subsystem
+			/// \returns The name of the subsystem
 			const std::string &getName() const {
 				return name_ ;
 			}
@@ -74,8 +74,7 @@ namespace xero {
 
 			/// \brief cancel the current action for this subsystem
 			/// It also cancels the actions for any children subsystems
-			/// \returns true if the action was canceled, false if it could not be
-			virtual bool cancelAction() ;
+			virtual void cancelAction() ;
 
 			/// \brief asks a subsystem to execute a named sequence
 			/// \param the name of the sequence to execute
@@ -85,7 +84,7 @@ namespace xero {
 			virtual void createNamedSequences(SubsystemPtr ptr) {				
 			}
 
-			/// \brief set output actuators associated with the subsystem
+			/// \brief Set output actuators associated with the subsystem
 			/// The output actuators are set to achieve the currently active
 			/// Action based on the current state of the subsystem.
 			virtual void run() ;

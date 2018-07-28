@@ -49,7 +49,7 @@ namespace xero {
                 sub->computeState() ;            
         }
 
-        bool Subsystem::cancelAction() {
+        void Subsystem::cancelAction() {
             if (action_ != nullptr)
                 action_->cancel() ;
         }
@@ -74,11 +74,9 @@ namespace xero {
 
             if (action_ != nullptr && !action_->isDone()) {
                 //
-                // The current Action is still running, see if it can be
-                // interrupted
+                // The current Action is still running, interrupt it
                 //
-                if (!cancelAction())
-                    return false ;
+                cancelAction();
 
                 action_ = nullptr ;
             }

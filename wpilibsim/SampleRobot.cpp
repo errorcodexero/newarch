@@ -34,7 +34,6 @@ namespace frc
 
 	void SampleRobot::InternalControl()
 	{
-		int ms;
 		m_auto_done = false;
 		double now ;
 		std::chrono::microseconds delay(100) ;
@@ -152,10 +151,50 @@ namespace frc
 					break ;
 				}
 				index++;
-			}		
-			else if (m_args[index] == "--showsim") {
+			}	
+			else if (m_args[index] == "--speed")
+			{
+				double speed ;
+
+				index++;
+				if (index == m_args.size()) {
+					std::cerr << "--speed flag requires additional argument" << std::endl ;
+					exit(1) ;
+				}					
+				if (!ParseDoubleArg(index, speed, "--speed"))
+				{
+					ret = false ;
+					break ;
+				}
+
+				if (speed < 0.5 || speed > 100.0) {
+					std::cerr << "invalid value for --speed flag, expected 0.5 to 100.0" << std::endl ;
+					std::cerr << "   value parsed was " << speed ;
+					exit(1) ;
+				}
+
+				RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
+				sim.setSpeed(speed) ;				
+				index++;
+			}				
+			else if (m_args[index] == "--simprint") {
 				RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;				
-				sim.setPrinting(true) ;
+				sim.enablePrinting() ;
+				index++ ;
+			}
+			else if (m_args[index] == "--simfile") {
+				index++;
+				if (index == m_args.size()) {
+					std::cerr << "--simfile flag requires additional argument" << std::endl ;
+					exit(1) ;
+				}					
+				RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
+				sim.enablePrinting(m_args[index]) ;
+				index++ ;
+			}
+			else if (m_args[index] == "--simscreen") {
+				RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;				
+				sim.enableScreen() ;
 				index++ ;
 			}
 			else if (m_args[index] == "--simprop") {
@@ -179,7 +218,10 @@ namespace frc
 				std::cout << "  --start NUMBER" << std::endl;
 				std::cout << "  --auto NUMBER" << std::endl;
 				std::cout << "  --oper NUMBER" << std::endl;
-				std::cout << "  --showsim" << std::endl ;
+				std::cout << "  --simprint" << std::endl ;
+				std::cout << "  --simfile file" << std::endl ;
+				std::cout << "  --simscreen" << std::endl ;								
+				std::cout << "  --simprop property" << std::endl ;
 				ret = false;
 				break;
 			}
@@ -245,7 +287,6 @@ namespace frc
 				}
 				else if (m_mode == RobotMode::Finished) {
 					if (first) {
-						std::cout << "Waiting for robot simulator to shut down" << std::endl ;
 						first = false ;
 					}
 				}
@@ -255,7 +296,6 @@ namespace frc
 			}
 
 			sim.stop() ;			
-			std::cout << "\r\n ************ Robot program ending ***********" << std::endl;
 		}
 	}
 

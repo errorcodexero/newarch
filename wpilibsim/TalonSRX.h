@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SimulatedObject.h"
+#include "SensorCollection.h"
 
 namespace ctre {
 namespace phoenix {
@@ -35,9 +36,18 @@ namespace can {
 			return index_ ;
 		}
 
+		void SetInverted(bool inverted) {
+			inverted_ = inverted ;
+		}
+
+		SensorCollection& GetSensorCollection() ;
+
+		void Follow(TalonSRX& master) {};
+
 	private:
 		int index_ ;
 		double value_ ;
+		bool inverted_ ;
 	};
 }
 }

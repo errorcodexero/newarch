@@ -10,13 +10,15 @@ namespace xero
 {
     namespace sim
     {
+        class RobotSimBase ;
+
         class TankDriveModel : public SubsystemModel
         {
           private:
             static constexpr double PI = 3.14159265359;
 
           public:
-            TankDriveModel();
+            TankDriveModel(RobotSimBase &);
             virtual ~TankDriveModel();
 
             virtual void run(double dt);
@@ -26,6 +28,18 @@ namespace xero
             virtual void addTalon(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
             virtual void addEncoder(frc::Encoder *encoder);
             virtual void addNavX(AHRS *navx);
+
+            double getXPos() { 
+              return xpos_ ;
+            }
+
+            double getYPos() {
+              return ypos_ ;
+            }
+
+            double getAngle() {
+              return angle_ ;
+            }
 
           private:
             void updatePosition(double dx, double dy, double angle) ;
@@ -47,6 +61,9 @@ namespace xero
 
             double xpos_ ;
             double ypos_ ;
+
+            int left_enc_value_ ;
+            int right_enc_value_ ;
 
             std::vector<ctre::phoenix::motorcontrol::can::TalonSRX *> left_motors_;
             std::vector<ctre::phoenix::motorcontrol::can::TalonSRX *> right_motors_;

@@ -6,6 +6,7 @@ html
 rtf
 build
 .gradle
+*.swp
 *test/*.o
 *test/*.exe
 .vs/

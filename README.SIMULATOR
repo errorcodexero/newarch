@@ -3,7 +3,7 @@ simulator that allows you to write robot code without a robot.  The simulator is
 used by linking your robot code against the simualtor version of the WPILIB instead
 of the roborio version.
 
-With the simualtor, when you run you robot code, you can supply command line
+With the simulator, when you run you robot code, you can supply command line
 arguments.  The following command line arguments are defined.
 
 --start time - the amount of time to delay before beginning the autonomous period

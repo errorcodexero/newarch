@@ -1,28 +1,48 @@
 #include "TankDriveModel.h"
+#include <RobotSimBase.h>
+#include <xeromath.h>
 #include <algorithm>
 #include <cmath>
+#include <random>
 
 using namespace frc ;
+using namespace xero::misc ;
 using namespace ctre::phoenix::motorcontrol::can ;
 
 namespace xero {
     namespace sim {
-        TankDriveModel::TankDriveModel() {
+        TankDriveModel::TankDriveModel(RobotSimBase &simbase) : SubsystemModel(simbase, "tankdrive") {
             left_ = 0.0;
             right_ = 0.0;
             angle_ = 0.0;
-            ticks_per_rev_ = 200;
-            diameter_ = 5.0;
             left_volts_ = 0.0;
             right_volts_ = 0.0;
-            scrub_ = 1.0;
-            width_ = 24.0;
-            right_rps_per_volt_per_time_ = 7.63 ;
-            left_rps_per_volt_per_time_ = 7.63 ;
         	time_interval_ = 100000.0;
 	        last_output_ = 0.0;            
 			xpos_ = 0.0 ;
-			ypos_ = 0.0 ;           
+			ypos_ = 0.0 ; 
+
+            ticks_per_rev_ = simbase.getSettingsParser().getInteger("tankdrive:sim:ticks_per_rev") ;
+            diameter_ = simbase.getSettingsParser().getDouble("tankdrive:sim:diameter") ;
+            scrub_ = simbase.getSettingsParser().getDouble("tankdrive:sim:scrub") ;
+            width_ = simbase.getSettingsParser().getDouble("tankdrive:sim:width") ;
+
+			double rps_per_volt = simbase.getSettingsParser().getDouble("tankdrive:sim:rps_per_volt_per_second") ;
+			double err = simbase.getSettingsParser().getDouble("tankdrive:sim:error_per_side") ;
+			if (err > 1e-6) {
+				std::uniform_real_distribution<double> unif(0.95, 1.05) ;
+				std::default_random_engine re ;
+				right_rps_per_volt_per_time_ = rps_per_volt * unif(re) ;
+				left_rps_per_volt_per_time_ = rps_per_volt * unif(re) ;
+			}
+			else {
+            	right_rps_per_volt_per_time_ = rps_per_volt  ;
+            	left_rps_per_volt_per_time_ = rps_per_volt ;
+			}
+
+            left_enc_ = nullptr ;
+            right_enc_ = nullptr ;
+            navx_ = nullptr ;
         }
 
         TankDriveModel::~TankDriveModel() {
@@ -34,8 +54,10 @@ namespace xero {
 			result += "left " + std::to_string(left_) ;
 			result += ", right " + std::to_string(right_) ;
 			result += ", angle " + std::to_string(angle_) ;
-			result += ", xpos " + std::to_string(xpos_) ;
-			result += ", ypos " + std::to_string(ypos_) ;
+			result += ", leftenc " + std::to_string(left_enc_value_) ;
+			result += ", rightenc " + std::to_string(right_enc_value_) ;
+			result += ", xpos " + std::to_string(xpos_ ) ;
+			result += ", ypos " + std::to_string(ypos_ ) ;
 
 			return result ;
 		}
@@ -55,14 +77,19 @@ namespace xero {
 			updatePosition(dleft, dright, angle_) ;
 			angle_ += (dv * 2.0) / width_;
 
+			left_enc_value_ = static_cast<int32_t>(lrevs * ticks_per_rev_) ;
+			right_enc_value_ = static_cast<int32_t>(rrevs * ticks_per_rev_) ;
+
 			if (left_enc_ != nullptr)
-				left_enc_->SimulatorSetValue(static_cast<int32_t>(lrevs * ticks_per_rev_));
+				left_enc_->SimulatorSetValue(left_enc_value_) ;
 
 			if (right_enc_ != nullptr)
-				right_enc_->SimulatorSetValue(static_cast<int32_t>(rrevs * ticks_per_rev_));			
+				right_enc_->SimulatorSetValue(right_enc_value_) ;
 
-			if (navx_ != nullptr)
-				navx_->SimulatorSetYaw(angle_) ;			
+			if (navx_ != nullptr) {
+				double deg = rad2deg(angle_) ;
+				navx_->SimulatorSetYaw(deg) ;
+			}
         }
 
 		void TankDriveModel::inputChanged(SimulatedObject *obj) {
@@ -112,7 +139,7 @@ namespace xero {
 				left_enc_ = encoder ;
 				left_enc_->addModel(this) ;
 			}
-			else if (first == 2 && second == 2) {
+			else if (first == 2 && second == 3) {
 				right_enc_ = encoder ;
 				right_enc_->addModel(this) ;
 			}

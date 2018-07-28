@@ -31,6 +31,12 @@ void TalonSRX::Set(ControlMode mode, double v)
 	value_ = v;
 	changed() ;
 }
+
+SensorCollection& TalonSRX::GetSensorCollection() {
+		SensorCollection sensor_collection;
+		return sensor_collection;
+}
+
 } // namespace can
 } // namespace motorcontrol
 } // namespace phoenix

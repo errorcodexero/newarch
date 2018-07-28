@@ -9,12 +9,15 @@
 #include "Timer.h"
 #include "AHRS.h"
 #include <mutex>
+#include <map>
 
 namespace xero {
     namespace sim {
+        class RobotSimBase ;
+
         class SubsystemModel {
         public:
-            SubsystemModel() ;
+            SubsystemModel(RobotSimBase &simbase, const std::string &name) ;
             virtual ~SubsystemModel() ;
 
             virtual void run(double dt) = 0 ;
@@ -45,9 +48,15 @@ namespace xero {
             virtual void addNavX(AHRS *navx) {                
             }
 
-            std::mutex &getLockMutex() ;            
+            std::mutex &getLockMutex() ;
+
+            const std::string &getName() const {
+                return name_ ;
+            }
 
         private:
+            std::string name_ ;
+            RobotSimBase &simbase_ ;
         } ;
     }
 }

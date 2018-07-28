@@ -10,9 +10,7 @@ namespace xero {
         // Create the wings subsystem object
         //
         Wings::Wings(xero::base::Robot &robot) : xero::base::Subsystem(robot, "wings") {
-            // int sol = robot.getParams().getValue("hw:wings:solenoid").getInteger() ;
-
-            int sol = 1 ;       // Replace with line above when we get the param parser updated
+            int sol = robot.getSettingsParser().getInteger("hw:wings:solenoid") ;
 
             //
             // Create the hardware object for the solenoid, the frc::Solenoid object is from the

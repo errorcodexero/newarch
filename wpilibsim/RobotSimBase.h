@@ -7,6 +7,7 @@
 #include "VictorSP.h"
 #include "AHRS.h"
 #include "Timer.h"
+#include <SettingsParser.h>
 #include <list>
 #include <memory>
 #include <thread>
@@ -14,20 +15,23 @@
 #include <mutex>
 #include <string>
 #include <map>
+#include <fstream>
 
 namespace xero {
     namespace sim {
         class SubsystemModel ;
+        class Visualizer ;
 
         class RobotSimBase {
         public:
             static RobotSimBase &getRobotSimulator() ;
 
-            RobotSimBase() ;
+            RobotSimBase(const std::string &paramfile) ;
             virtual ~RobotSimBase() ;
 
-            void setPrinting(bool p) {
-                printing_ = p ;
+            virtual void enablePrinting() ;
+            virtual void enablePrinting(const std::string &name) ;
+            virtual void enableScreen() {                
             }
 
             bool setProperty(const std::string &prop)  ;
@@ -45,6 +49,14 @@ namespace xero {
                 return mutlock_ ;
             }
 
+            xero::misc::SettingsParser &getSettingsParser() {
+                return *parser_ ;
+            }
+
+            void setSpeed(double s) {
+                speed_ = s ;
+            }
+
         protected:
             void addModel(std::shared_ptr<SubsystemModel> model) {
                 models_.push_back(model) ;
@@ -54,10 +66,13 @@ namespace xero {
                 return models_ ;
             }
 
+            void addVisualizer(std::shared_ptr<Visualizer> vis) {
+                visualizers_.push_back(vis) ;
+            }
+
         private:
             void simLoop() ;
             void incrCurrentTime(double incr) ;
-            void printOutput() ;
 
         protected:
             static RobotSimBase *theOne ;
@@ -66,6 +81,7 @@ namespace xero {
 
             std::thread model_thread_ ;
             bool running_ ;
+            bool waiting_ ;
             std::mutex mutlock_ ;
 
             double current_time_ ;
@@ -73,9 +89,15 @@ namespace xero {
 
             bool printing_ ;
 
-            std::ostream *output_ ;
-
             std::map<std::string, std::string> properties_ ;
+
+            xero::misc::SettingsParser *parser_ ;
+
+            std::list<std::shared_ptr<Visualizer>> visualizers_ ;
+
+            std::ofstream *filestrm_ ;
+
+            double speed_ ;
         } ;
     }
 }

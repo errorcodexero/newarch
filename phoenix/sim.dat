@@ -1,0 +1,119 @@
+#
+# This section describes the hardware for the simulated subsystems
+#
+hw:tankdrive:leftmotor1             1
+hw:tankdrive:leftmotor2             2
+hw:tankdrive:leftmotor3             3
+hw:tankdrive:rightmotor1            14
+hw:tankdrive:rightmotor2            15
+hw:tankdrive:rightmotor3            16
+hw:tankdrive:shifter                0
+hw:tankdrive:leftencoder1           0
+hw:tankdrive:leftencoder2           1
+hw:tankdrive:rightencoder1          2
+hw:tankdrive:rightencoder2          3
+
+hw:lifter:motor1                    0
+hw:lifter:motor2                    1
+hw:lifter:encoder1                  4
+hw:lifter:encoder2                  5
+hw:lifter:limit:bottom              9
+hw:lifter:limit:top                 8
+hw:lifter:shifter                   1
+hw:lifter:brake                     3
+
+hw:intake:leftmotor                 3
+hw:intake:rightmotor                4
+
+hw:grabber:motor                    2
+hw:grabber:encoder1                 6
+hw:grabber:encoder2                 7
+
+hw:collector:cubesensor             12
+
+hw:wings:solenoid                   1
+
+#
+# These parameter control how the drive base simulation model
+# behaves
+#
+
+#
+# The revolutions per second per volt on the motors.  This
+# equates to a max speed of about 15 ft per second width
+# five inch diameter wheels
+#
+tankdrive:sim:rps_per_volt_per_second               11.459
+
+#
+# The maximum random error applied to the left and right
+# side motors on the drivebase.  If this is .05, there can
+# be up to 5% delta applied per side randomly to the
+# rps_per_volt_per_second value above
+#
+tankdrive:sim:error_per_side                        0.0
+
+#
+# The number of ticks per revolution of the wheel for the 
+# encoders
+#
+tankdrive:sim:ticks_per_rev                         200
+
+#
+# The diameter of the robot wheel
+#
+tankdrive:sim:diameter                              5.0
+
+#
+# The percent of the angle that is applied to the robot based on the
+# distance the wheels travel vs an ideal case were the wheels are
+# frictionless
+#
+tankdrive:sim:scrub                                 1.0
+
+#
+# The width of the drivebase for the robot
+#
+tankdrive:sim:width                                24.0
+
+#
+# The number of degrees per second per volt the grabber moves
+#
+grabber:sim:degrees_per_second                     26.5
+
+#
+# The encoders tick per degree for the grabber
+#
+grabber:sim:degrees_per_tick                       0.625
+
+#
+# Assuming that the zero degree angle is when the grabbers
+# point straight out from the robot, the angle where the
+# grabber will stop when holding a cube.
+#
+grabber:sim:cube_angle                             -3.0
+
+#
+# The height of the lifter at its bottom most point
+#
+lifter:sim:floor_height                            11.375
+
+#
+# The height when the bottom limit switch will turn on
+#
+lifter:sim:bottom_limit_height                     11.375
+
+#
+# The height where the top limit switch will turn on
+#
+lifter:sim:top_limit_height                        89.0
+
+#
+# The encoder ticks per inch of travel for the lifter
+#
+lifter:sim:inches_per_tick                         0.08327
+
+#
+# The number of inches per volt per second the lift will travel
+#
+lifter:sim:inches_per_sec_per_volt                 39.0

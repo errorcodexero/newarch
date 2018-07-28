@@ -1,12 +1,14 @@
 #include "CubeSensorModel.h"
+#include <RobotSimBase.h>
 
 using namespace frc ;
 
 namespace xero {
     namespace sim {
         namespace phoenix {
-            CubeSensorModel::CubeSensorModel() {
+            CubeSensorModel::CubeSensorModel(RobotSimBase &simbase) : SubsystemModel(simbase, "cubesensor") {
                 cube_sensed_ = false ;
+                cube_sensor_input_ = simbase.getSettingsParser().getInteger("hw:collector:cubesensor") ;
             }
 
             CubeSensorModel::~CubeSensorModel() {                
@@ -28,7 +30,7 @@ namespace xero {
             }
 
             void CubeSensorModel::addDigitalInput(frc::DigitalInput *input) {
-                if (input->GetChannel() == 12) {
+                if (input->GetChannel() == cube_sensor_input_) {
                     input_ = input ;
                     input_->SimulatorSetValue(false) ;
                     input_->addModel(this) ;

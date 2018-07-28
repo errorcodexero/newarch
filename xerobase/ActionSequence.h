@@ -64,7 +64,7 @@ namespace xero {
 			std::vector<ActionPtr> actionSequence_;
 
 			// the index of the current action
-			int index_;
+			unsigned index_;
 
 		};
 	}
