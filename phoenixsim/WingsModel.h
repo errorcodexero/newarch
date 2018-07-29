@@ -16,12 +16,11 @@ namespace xero  {
                 virtual void addSolenoid(frc::Solenoid *solenoid) ;
 
                 bool getWings() {
-                    return wings_solenoid_state ;
+                    return wings_solenoid_state_ ;
                 }
 
             private:
-                bool wings_solenoid_state ;
-                bool wings_state_ ;
+                bool wings_solenoid_state_ ;
                 int sol_channel_ ;
                 frc::Solenoid *wings_ ;
             } ;

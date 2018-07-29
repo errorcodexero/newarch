@@ -1,6 +1,7 @@
 #include "DispatchAction.h"
 
-using namespace xero::base;
+namespace xero {
+namespace base {
 
 DispatchAction::DispatchAction(SubsystemPtr subsystem, ActionPtr action, bool block) : subsystem_(subsystem), action_(action), block_(block) {
 	denied_ = false;
@@ -12,7 +13,6 @@ void DispatchAction::start() {
 }
 
 void DispatchAction::run() {
-	subsystem_->run();
 }
 
 bool DispatchAction::isDone() {
@@ -33,4 +33,7 @@ std::string DispatchAction::toString() {
 	result += subsystem_->getName() + "," + action_->toString() ;
 	result += ")" ;
 	return result ;
+}
+
+}
 }
