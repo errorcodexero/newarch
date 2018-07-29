@@ -245,7 +245,7 @@ namespace frc
 		// Start the robot simulator
 		//
 		RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
-		sim.start() ;
+		sim.start(this) ;
 
 		//
 		// Initialize the robot hardware

@@ -18,17 +18,19 @@ namespace xero {
                 inch_per_sec_per_volt_ = simbase.getSettingsParser().getDouble("lifter:sim:inches_per_sec_per_volt") ;
                 encoder_base_ = 0  ;
 
-                int encoder_1_ = simbase.getSettingsParser().getInteger("hw:lifter:encoder1") ;
-                int encoder_2_ = simbase.getSettingsParser().getInteger("hw:lifter:encoder2") ;
-                int bottom_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:bottom") ;
-                int top_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:top") ;
-                int motor_1_ = simbase.getSettingsParser().getInteger("hw:lifter:motor1") ;
-                int motor_2_ = simbase.getSettingsParser().getInteger("hw:lifter:motor2") ;
-                int brake_sol_ = simbase.getSettingsParser().getInteger("hw:lifter:brake") ;
-                int gear_sol_ = simbase.getSettingsParser().getInteger("hw:lifter:shifter") ;
+                encoder_1_ = simbase.getSettingsParser().getInteger("hw:lifter:encoder1") ;
+                encoder_2_ = simbase.getSettingsParser().getInteger("hw:lifter:encoder2") ;
+                bottom_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:bottom") ;
+                top_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:top") ;
+                motor_1_ = simbase.getSettingsParser().getInteger("hw:lifter:motor1") ;
+                motor_2_ = simbase.getSettingsParser().getInteger("hw:lifter:motor2") ;
+                brake_sol_ = simbase.getSettingsParser().getInteger("hw:lifter:brake") ;
+                gear_sol_ = simbase.getSettingsParser().getInteger("hw:lifter:shifter") ;
 
                 top_limit_ = nullptr ;
                 bottom_limit_ = nullptr ;
+
+                voltage_ = 0.0 ;
             }
 
             LifterModel::~LifterModel() {

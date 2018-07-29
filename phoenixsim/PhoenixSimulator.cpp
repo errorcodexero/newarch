@@ -57,7 +57,7 @@ namespace xero
 			void PhoenixSimulator::connect(SimulatedObject *device) {
 #ifdef XEROSCREEN
 				if (visualizer_) {
-					auto vis = std::make_shared<PhoenixScreenVisualizer>() ;
+					auto vis = std::make_shared<PhoenixScreenVisualizer>(*this) ;
 					addVisualizer(vis) ;					
 					visualizer_ = false ;
 				}

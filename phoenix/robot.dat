@@ -52,7 +52,7 @@ grabber:degrees_per_tick            0.625
 grabber:calibrate:count             5
 grabber:calibrate:value             -0.4
 grabber:calibrate:diff              2
-grabber:p                           0.015
+grabber:p                           0.1
 grabber:i                           0.0
 grabber:d                           0.0
 grabber:f                           0.0
@@ -65,6 +65,9 @@ grabber:angle:stowed                98.0
 grabber:angle:minimum               -20.0
 grabber:angle:maximum               98.0
 grabber:angle:collector             45.0
+grabber:angle:eject                 45.0
+grabber:threshold                   5.0
+
 
 #
 # Lifter subsystem constants
@@ -90,6 +93,9 @@ lifter:height:scale                 74.0
 #
 # Intake subsystem constants
 #
+intake:eject:fast                   -1.0
+intake:eject:middle                 -0.5
+intake:eject:slow                   -0.2
 
 #
 # Collector subsystem constants
@@ -106,28 +112,28 @@ collector:grab_time                 0.25
 # TankDrive subsystem constants
 #
 tankdrive:inches_per_tick           0.07854
-tankdrive:straight:maxa             20.0
-tankdrive:straight:maxd             -20.0
-tankdrive:straight:maxv             20
+tankdrive:straight:maxa             180.0
+tankdrive:straight:maxd             -180.0
+tankdrive:straight:maxv             180
 tankdrive:straight:recalc           2.0
 tankdrive:straight:navxadj          0.2
 tankdrive:straight:threshold        2.0
 tankdrive:straight:p                0.0
 tankdrive:straight:i                0.0
 tankdrive:straight:d                0.0
-tankdrive:straight:f                0.0045
+tankdrive:straight:f                0.00080001
 tankdrive:straight:max              1.0
 tankdrive:straight:min              -1.0
 tankdrive:straight:imax             6.0
-tankdrive:rotate:maxa               19.0
-tankdrive:rotate:maxd               -19.0
-tankdrive:rotate:maxv               19
+tankdrive:rotate:maxa               100.0
+tankdrive:rotate:maxd               -100.0
+tankdrive:rotate:maxv               100
 tankdrive:rotate:recalc             4.0
 tankdrive:rotate:threshold          4.0
 tankdrive:rotate:p                  0.0
 tankdrive:rotate:i                  0.0
 tankdrive:rotate:d                  0.0
-tankdrive:rotate:f                  0.06
+tankdrive:rotate:f                  0.00018
 tankdrive:rotate:max                1.0
 tankdrive:rotate:min                -1.0
 tankdrive:rotate:imax               6.0

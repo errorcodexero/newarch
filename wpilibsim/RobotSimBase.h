@@ -17,6 +17,10 @@
 #include <map>
 #include <fstream>
 
+namespace frc {
+    class SampleRobot ;
+}
+
 namespace xero {
     namespace sim {
         class SubsystemModel ;
@@ -29,6 +33,10 @@ namespace xero {
             RobotSimBase(const std::string &paramfile) ;
             virtual ~RobotSimBase() ;
 
+            frc::SampleRobot *getRobot() {
+                return robot_ ;
+            }
+
             virtual void enablePrinting() ;
             virtual void enablePrinting(const std::string &name) ;
             virtual void enableScreen() {                
@@ -36,7 +44,7 @@ namespace xero {
 
             bool setProperty(const std::string &prop)  ;
 
-            virtual void start() ;
+            virtual void start(frc::SampleRobot *robot) ;
             virtual void stop() ;
 
             virtual double getTime() ;
@@ -101,6 +109,8 @@ namespace xero {
             std::ofstream *filestrm_ ;
 
             double speed_ ;
+
+            frc::SampleRobot *robot_ ;
         } ;
     }
 }

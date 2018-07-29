@@ -41,7 +41,7 @@ namespace xero {
         }
 
         void RobotSimBase::enablePrinting() {
-            std::shared_ptr<PrintVisualizer> vis = std::make_shared<PrintVisualizer>(std::cerr) ;
+            std::shared_ptr<PrintVisualizer> vis = std::make_shared<PrintVisualizer>(*this, std::cerr) ;
             visualizers_.push_back(vis) ;
         }
 
@@ -53,11 +53,12 @@ namespace xero {
                 return ;
             }
 
-            std::shared_ptr<PrintVisualizer> vis = std::make_shared<PrintVisualizer>(*filestrm_) ;
+            std::shared_ptr<PrintVisualizer> vis = std::make_shared<PrintVisualizer>(*this, *filestrm_) ;
             visualizers_.push_back(vis) ;
         }
 
-        void RobotSimBase::start() {
+        void RobotSimBase::start(frc::SampleRobot *robot) {
+            robot_ = robot ;
             current_time_ = 0.0 ;
             sim_time_step_ = 0.01 ;
             model_thread_ = std::thread(&RobotSimBase::simLoop, this) ;
@@ -73,6 +74,8 @@ namespace xero {
 
             if (model_thread_.joinable())
                 model_thread_.join() ;
+
+            robot_ = nullptr ;
         }
 
         double RobotSimBase::getTime() {
@@ -116,6 +119,7 @@ namespace xero {
             return true ;
         }
 
+
         bool RobotSimBase::hasProperty(const std::string &name) {
             auto it = properties_.find(name) ;
             return it != properties_.end() ;
@@ -124,7 +128,7 @@ namespace xero {
         const std::string &RobotSimBase::getProperty(const std::string &name) {
             auto it = properties_.find(name) ;
             return it->second ;
-        }
+        }        
 
         //
         // This method is run from the simulator thread and not from

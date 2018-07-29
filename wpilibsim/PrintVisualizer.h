@@ -7,7 +7,7 @@ namespace xero {
     namespace sim {
         class PrintVisualizer : public Visualizer {
         public:
-            PrintVisualizer(std::ostream &strm) ;
+            PrintVisualizer(RobotSimBase &sim, std::ostream &strm) ;
             virtual ~PrintVisualizer() ;
 
             virtual void beginCycle(double time) ;

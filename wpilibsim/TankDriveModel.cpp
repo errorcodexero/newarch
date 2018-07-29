@@ -20,7 +20,11 @@ namespace xero {
         	time_interval_ = 100000.0;
 	        last_output_ = 0.0;            
 			xpos_ = 0.0 ;
-			ypos_ = 0.0 ; 
+			ypos_ = 0.0 ;
+			last_xpos_ = 0.0 ;
+			last_ypos_ = 0.0 ;
+			speed_ = 0.0 ; 
+			max_speed_ = 0.0 ;
 
             ticks_per_rev_ = simbase.getSettingsParser().getInteger("tankdrive:sim:ticks_per_rev") ;
             diameter_ = simbase.getSettingsParser().getDouble("tankdrive:sim:diameter") ;
@@ -76,6 +80,15 @@ namespace xero {
 
 			updatePosition(dleft, dright, angle_) ;
 			angle_ += (dv * 2.0) / width_;
+
+			double dist = std::sqrt((xpos_ - last_xpos_) * (xpos_ - last_xpos_) + (ypos_ - last_ypos_) * (ypos_ - last_ypos_)) ;
+			speed_ = dist / dt ;
+
+			if (speed_ > max_speed_)
+				max_speed_ = speed_ ;
+
+			last_xpos_ = xpos_ ;
+			last_ypos_ = ypos_ ;
 
 			left_enc_value_ = static_cast<int32_t>(lrevs * ticks_per_rev_) ;
 			right_enc_value_ = static_cast<int32_t>(rrevs * ticks_per_rev_) ;

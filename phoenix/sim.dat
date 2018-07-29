@@ -43,7 +43,7 @@ hw:wings:solenoid                   1
 # equates to a max speed of about 15 ft per second width
 # five inch diameter wheels
 #
-tankdrive:sim:rps_per_volt_per_second               11.459
+tankdrive:sim:rps_per_volt_per_second               300
 
 #
 # The maximum random error applied to the left and right
@@ -79,7 +79,7 @@ tankdrive:sim:width                                24.0
 #
 # The number of degrees per second per volt the grabber moves
 #
-grabber:sim:degrees_per_second                     26.5
+grabber:sim:degrees_per_second                     90
 
 #
 # The encoders tick per degree for the grabber
@@ -117,3 +117,9 @@ lifter:sim:inches_per_tick                         0.08327
 # The number of inches per volt per second the lift will travel
 #
 lifter:sim:inches_per_sec_per_volt                 39.0
+
+#
+# The length of time the intake must run out before we consider
+# a cube ejected
+#
+collector:eject_duration                            0.25

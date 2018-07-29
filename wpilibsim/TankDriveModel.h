@@ -41,6 +41,14 @@ namespace xero
               return angle_ ;
             }
 
+            double getSpeed() {
+              return speed_ ;
+            }
+
+            double getMaxSpeed() {
+              return max_speed_ ;
+            }
+
           private:
             void updatePosition(double dx, double dy, double angle) ;
 
@@ -58,9 +66,14 @@ namespace xero
             double left_rps_per_volt_per_time_;
             double time_interval_;
             double last_output_;
+            double speed_ ;
+            double max_speed_ ;
 
             double xpos_ ;
             double ypos_ ;
+
+            double last_xpos_ ;
+            double last_ypos_ ;
 
             int left_enc_value_ ;
             int right_enc_value_ ;

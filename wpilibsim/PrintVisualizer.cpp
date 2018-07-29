@@ -3,7 +3,7 @@
 
 namespace xero {
     namespace sim {
-        PrintVisualizer::PrintVisualizer(std::ostream &strm) : stream_(strm) {            
+        PrintVisualizer::PrintVisualizer(RobotSimBase &sim, std::ostream &strm) : stream_(strm), Visualizer(sim) {
         }
 
         PrintVisualizer::~PrintVisualizer() {            

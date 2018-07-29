@@ -15,7 +15,7 @@ namespace xero {
         namespace phoenix {
             class PhoenixScreenVisualizer : public Visualizer {
             public:
-                PhoenixScreenVisualizer() ;
+                PhoenixScreenVisualizer(RobotSimBase &sim) ;
                 virtual ~PhoenixScreenVisualizer() ;
 
                 virtual void beginCycle(double time) ;
@@ -27,13 +27,18 @@ namespace xero {
             private:
                 static const int RightSideWidth = 40 ;
                 static const int TimeRow = 1 ;
-                static const int TankDriveRow = 3 ;
-                static const int LifterRow = 7 ;
-                static const int IntakeRow = 14 ;
-                static const int GrabberRow = 18 ;
-                static const int WingsRow = 22 ;
-                static const int CubeSensorRow = 25 ;
-                static const int MinimumHeight = 27 ;
+                static const int TankDriveRow = 4 ;
+                static const int LifterRow = 10 ;
+                static const int IntakeRow = 17 ;
+                static const int GrabberRow = 21 ;
+                static const int WingsRow = 25 ;
+                static const int CubeSensorRow = 28 ;
+                static const int MinimumHeight = 30 ;
+
+                static const char *rotate_chars_ ;
+
+                static const char moving = '@' ;
+                static const char stationary = '$' ;
 
             private:
                 void initScreen() ;
@@ -50,7 +55,7 @@ namespace xero {
                 void displayWings(std::shared_ptr<WingsModel> subsystem_p) ;
                 void displayCubeSensor(std::shared_ptr<CubeSensorModel> subsystem_p) ;
 
-                void plotRobot(double x, double y) ;
+                void plotRobot(double x, double y, double angle) ;
 
             private:
                 bool inited_ ;
@@ -62,6 +67,14 @@ namespace xero {
                 double min_y_ ;
                 double max_x_ ;
                 double max_y_  ;
+
+                int last_row_ ;
+                int last_col_ ;
+
+                double last_angle_ ;
+
+                size_t same_count_ ;
+                size_t rotate_index_ ;
             } ;
         }
     }

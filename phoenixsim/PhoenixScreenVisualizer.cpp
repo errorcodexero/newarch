@@ -1,4 +1,6 @@
 #include "PhoenixScreenVisualizer.h"
+#include "SampleRobot.h"
+#include "RobotSimBase.h"
 #include "xeromath.h"
 
 #include <cassert>
@@ -21,7 +23,7 @@ void handleWindowChangeSignal(int v) {
 namespace xero {
     namespace sim {
         namespace phoenix {
-            PhoenixScreenVisualizer::PhoenixScreenVisualizer() {
+            PhoenixScreenVisualizer::PhoenixScreenVisualizer(RobotSimBase &sim) : Visualizer(sim) {
                 assert(theOne == nullptr) ;
                 theOne = this ;
                 inited_ = false ;
@@ -30,6 +32,9 @@ namespace xero {
                 min_y_ = 0.0 ;
                 max_x_ = 650.0 ;
                 max_y_ = 320.0 ;
+
+                last_row_ = -1 ;
+                last_col_ = -1 ;
             }
 
             PhoenixScreenVisualizer::~PhoenixScreenVisualizer() {
@@ -43,10 +48,26 @@ namespace xero {
                     doLayout() ;
                 }
 
+                std::string str ;
+                int fieldwidth = width_ - right_side_ - 2;   
+
                 move (TimeRow, right_side_) ;
-                printw("Time: ") ;
-                std::string str = std::to_string(time) ;
-                printw(str.substr(0, 30).c_str()) ;
+                str = "Time: " ;
+                str += std::to_string(time) ;
+                printw(str.substr(0, fieldwidth).c_str()) ;
+
+                move(TimeRow + 1, right_side_) ;
+                str = "Mode: " ;
+                if (getSimulator().getRobot()->IsDisabled())
+                    str += "Disabled" ;
+                else if (getSimulator().getRobot()->IsAutonomous())
+                    str += "Autonomous" ;
+                else if (getSimulator().getRobot()->IsOperatorControl())
+                    str += "Teleop" ;
+                else if (getSimulator().getRobot()->IsTest())
+                    str += "Test" ;
+                printw(str.substr(0, fieldwidth).c_str()) ;
+                clrtoeol() ;
             }
 
             void PhoenixScreenVisualizer::visualizeSubsystem(std::shared_ptr<SubsystemModel> subsystem_p) {
@@ -102,7 +123,7 @@ namespace xero {
                 str += ", Bottom " ;
                 str += (subsystem_p->getBottomLimit() ? "ON" : "OFF") ;
                 printw(str.substr(0, fieldwidth).c_str()) ;
-                clrtoeol() ;     
+                clrtoeol() ;
             }
 
             void PhoenixScreenVisualizer::displayIntake(std::shared_ptr<IntakeModel> subsystem_p) {
@@ -142,7 +163,19 @@ namespace xero {
                 printw(str.substr(0, fieldwidth).c_str()) ;
                 clrtoeol() ;
 
-                plotRobot(subsystem_p->getXPos(), subsystem_p->getYPos()) ;
+                move(TankDriveRow + 3, right_side_) ;
+                str = "  Speed: " ;
+                str += std::to_string(subsystem_p->getSpeed()) ;
+                printw(str.substr(0, fieldwidth).c_str()) ;
+                clrtoeol() ;    
+
+                move(TankDriveRow + 4, right_side_) ;
+                str = "  Max Speed: " ;
+                str += std::to_string(subsystem_p->getMaxSpeed()) ;
+                printw(str.substr(0, fieldwidth).c_str()) ;
+                clrtoeol() ;                              
+
+                plotRobot(subsystem_p->getXPos(), subsystem_p->getYPos(), subsystem_p->getAngle()) ;
             }
 
             void PhoenixScreenVisualizer::displayWings(std::shared_ptr<WingsModel> subsystem_p) {
@@ -234,7 +267,9 @@ namespace xero {
                 endwin() ;
             }
 
-            void PhoenixScreenVisualizer::plotRobot(double x, double y) {
+            const char *PhoenixScreenVisualizer::rotate_chars_ = "|/-\\|/-\\" ;
+
+            void PhoenixScreenVisualizer::plotRobot(double x, double y, double angle) {
                 int top = 1 ;
                 int left = 1 ;
                 int bottom = height_ - 2 ;
@@ -243,10 +278,54 @@ namespace xero {
                 if (x < min_x_ || x > max_x_ || y < min_y_ || y > max_y_)
                     return ;
 
-                int px = static_cast<int>((x - min_x_) / (max_x_ - min_x_) * (right - left + 1)) + left ;
-                int py = bottom - static_cast<int>((y - min_y_) / (max_y_ - min_y_) * (bottom - top + 1)) ;
+                int col = static_cast<int>((x - min_x_) / (max_x_ - min_x_) * (right - left + 1)) + left ;
+                int row = bottom - static_cast<int>((y - min_y_) / (max_y_ - min_y_) * (bottom - top + 1)) ;
 
-                mvaddch(py, px, '@') ;
+                if (col == last_col_ && row == last_row_) {
+                    same_count_++ ;
+
+                    //
+                    // Same location as last time
+                    //
+                    if (angle != last_angle_) {
+                        //
+                        // Rotating
+                        //
+                        rotate_index_ = (rotate_index_ + 1) % 8 ;
+                        mvaddch(row, col, rotate_chars_[rotate_index_]) ;
+                    }
+                    else {                        
+                        //
+                        // Stationary
+                        //
+                        if (same_count_ > 10)
+                            mvaddch(row, col, stationary) ;                        
+                        else
+                            mvaddch(row, col, moving) ;
+                    }
+                
+                }
+                else {
+                    //
+                    // New location
+                    //
+                    same_count_ = 0 ;
+
+                    //
+                    // First clear the old location
+                    //
+                    if (last_row_ != -1 && last_col_ != -1)
+                        mvaddch(last_row_, last_col_, ' ') ;
+
+                    //
+                    // And put the moving character into the plot
+                    //
+                    mvaddch(row, col, moving) ;
+                }
+
+                last_row_ = row ;
+                last_col_ = col ;
+                last_angle_ = angle ;
             }
         }
     }
