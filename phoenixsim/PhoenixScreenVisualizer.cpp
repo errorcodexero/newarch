@@ -1,4 +1,5 @@
 #include "PhoenixScreenVisualizer.h"
+#include "xeromath.h"
 
 #include <cassert>
 #include <csignal>
@@ -24,6 +25,11 @@ namespace xero {
                 assert(theOne == nullptr) ;
                 theOne = this ;
                 inited_ = false ;
+
+                min_x_ = 0.0 ;
+                min_y_ = 0.0 ;
+                max_x_ = 650.0 ;
+                max_y_ = 320.0 ;
             }
 
             PhoenixScreenVisualizer::~PhoenixScreenVisualizer() {
@@ -132,9 +138,11 @@ namespace xero {
 
                 move(TankDriveRow + 2, right_side_) ;
                 str = "  Angle: " ;
-                str += std::to_string(subsystem_p->getAngle()) ;
+                str += std::to_string(xero::misc::rad2deg(subsystem_p->getAngle())) ;
                 printw(str.substr(0, fieldwidth).c_str()) ;
-                clrtoeol() ;         
+                clrtoeol() ;
+
+                plotRobot(subsystem_p->getXPos(), subsystem_p->getYPos()) ;
             }
 
             void PhoenixScreenVisualizer::displayWings(std::shared_ptr<WingsModel> subsystem_p) {
@@ -176,9 +184,14 @@ namespace xero {
                 move(CubeSensorRow, right_side_) ;
                 printw("Cube Sensor") ;
 
+                bool cube = subsystem_p->getCubeSensed() ;
+
                 move(CubeSensorRow + 1, right_side_) ;
                 str = "  Present: " ;
-                str += (subsystem_p->getCubeSensed() ? "YES" : "NO") ;
+                if (cube)
+                    str += "YES" ;
+                else
+                    str += "NO" ;
                 printw(str.substr(0, fieldwidth).c_str()) ;
                 clrtoeol() ;                   
             }
@@ -219,6 +232,21 @@ namespace xero {
             void PhoenixScreenVisualizer::deinitScreen() {
                 while (getch() == ERR) ;
                 endwin() ;
+            }
+
+            void PhoenixScreenVisualizer::plotRobot(double x, double y) {
+                int top = 1 ;
+                int left = 1 ;
+                int bottom = height_ - 2 ;
+                int right = width_ = right_side_ - 2 ;
+
+                if (x < min_x_ || x > max_x_ || y < min_y_ || y > max_y_)
+                    return ;
+
+                int px = static_cast<int>((x - min_x_) / (max_x_ - min_x_) * (right - left + 1)) + left ;
+                int py = bottom - static_cast<int>((y - min_y_) / (max_y_ - min_y_) * (bottom - top + 1)) ;
+
+                mvaddch(py, px, '@') ;
             }
         }
     }

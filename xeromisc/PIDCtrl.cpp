@@ -1,4 +1,5 @@
 #include "PIDCtrl.h"
+#include "xeromath.h"
 #include <iostream>
 #include <limits>
 
@@ -69,18 +70,8 @@ namespace xero {
 			if (fv != nullptr)
 				*fv = PIDConsts.f ;
 			
-			double output = pOut + iOut + dOut + PIDConsts.f;
+			double output = pOut + iOut + dOut + PIDConsts.f * target ;
 
-		#ifdef PRINT_PID_INTERNALS
-			std::cout << "integral " << integral ;
-			std::cout << ", pOut " << pOut ;
-			std::cout << ", iOut " << iOut ;
-			std::cout << ", dOut " << dOut ;
-			std::cout << ", error " << error;
-			std::cout << ", derivative " << derivative;
-			std::cout << std::endl ;
-		#endif
-			
 			if (output <= PIDConsts.floor)
 				output = PIDConsts.floor;
 			
@@ -92,15 +83,12 @@ namespace xero {
 
 		double PIDCtrl::calcError(double target, double current)
 		{
-			double error = target - current ;
+			double error  ;
+			
 			if (mIsAngle)
-			{
-				while (error > 180)
-					error -= 360 ;
-
-				while (error < -180)
-					error += 360 ;
-			}
+				error = angleDifference(target, current) ;
+			else
+				error = target - current ;
 
 			return error ;
 		}

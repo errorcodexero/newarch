@@ -116,6 +116,16 @@ namespace xero {
             return true ;
         }
 
+        bool RobotSimBase::hasProperty(const std::string &name) {
+            auto it = properties_.find(name) ;
+            return it != properties_.end() ;
+        }
+
+        const std::string &RobotSimBase::getProperty(const std::string &name) {
+            auto it = properties_.find(name) ;
+            return it->second ;
+        }
+
         //
         // This method is run from the simulator thread and not from
         // the robot thread.

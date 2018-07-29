@@ -54,6 +54,10 @@ namespace xero {
                 return name_ ;
             }
 
+            RobotSimBase &getSimulator() {
+                return simbase_ ;
+            }
+
         private:
             std::string name_ ;
             RobotSimBase &simbase_ ;

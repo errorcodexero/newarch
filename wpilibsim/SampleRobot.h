@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <thread>
+#include <cassert>
 
 #define START_ROBOT_CLASS(_ClassName_)                                               \
   int main(int ac, char **av) {                                                      \
@@ -84,6 +85,10 @@ namespace frc
 			m_enabled = en;
 		}
 
+		bool isScreen() const {
+			return screen_ ;
+		}
+
 
 	private:
 		bool ParseDoubleArg(size_t index, double &value, const char *flag_p) ;
@@ -116,6 +121,7 @@ namespace frc
 		double m_teleop_period;
 
 		bool m_auto_done;
+		bool screen_ ;
 	};
 }
 

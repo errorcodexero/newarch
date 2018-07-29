@@ -10,5 +10,8 @@
 // here
 //
 
+/// \brief the message logger group ID for the grabber subsystem
 #define MSG_GROUP_GRABBER                   (1ull << 32)
+
+/// \brief the message logger group ID for the lifter subsystem
 #define MSG_GROUP_LIFTER                    (1ull << 33)

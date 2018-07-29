@@ -14,6 +14,7 @@ namespace frc
 		m_start_delay = 0.25;
 		m_auto_period = 30;
 		m_teleop_period = 0;
+		screen_ = false ;
 	}
 
 	SampleRobot::~SampleRobot()
@@ -196,6 +197,7 @@ namespace frc
 				RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;				
 				sim.enableScreen() ;
 				index++ ;
+				screen_ = true ;
 			}
 			else if (m_args[index] == "--simprop") {
 				index++ ;

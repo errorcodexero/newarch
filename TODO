@@ -1,24 +1,7 @@
 Code To Write
 -------------
-Parameter File Object
-- Create a Value type to return the value from the parameter file
-  o Types should be Integer, Real, or String
-- Parser should detect strings based on quotes
-- For numbers, parser should try to parse integer first, if it suceeds
-  the type is integer.  If it fails, try to parse a double.  If it succeeds
-  the type is real.  Otherwise, there is a parse error, print a message on 
-  the message logger and return a failure status.
 
-Robot
-- Attach Parameter File Object (see above)
-
-ActionList (Vi)
-- Finish and merge into master
-
-DispatchAction (Vi)
-- Rename from Subsystem Action, merge into master
-
-Drivebase Subsystem
+Drivebase Subsystem (Matthew)
 - Extract CAN indices, encoder indices, solenoid indices from paramter file
 - Create and store: motors
 - Create and store: NavX 
@@ -48,46 +31,44 @@ Lifter Subsystem
 - Create directive: apply raw PWM percentage to motors
 - Create directive: climb hold position
 
-Grabber Subsystem
+Grabber Subsystem (Meg)
 - Extract motor indices and encoder indices from the parameter file
 - Create and store motors
 - Create and store encoder
-- Calculate status: current arm angle
+- Calculate status : current arm angle
 - Run: the grabber itself should enforce a limit on the angle not allowing the angle to get to negative
        and allowing the grabber arms to close in out themselves
-- Create directive: calibrate (squeeze grabber until it stops for a given number of samples, reset encoder)
-- Create directive: go to angle (constructor can take number or parameter name)
-                    note, isDone is true once we reach the name, but the directive can stay around an hold the angle
-- Create directive: hold cube, isDone is true immediately, but can stay around an continue to hold the cube
-                    note
-- Create directive: run motors at raw percent value (number or parameter name)
+- Create directive : calibrate (squeeze grabber until it stops for a given number of samples, reset encoder)
+- Create directive : go to angle (constructor can take number or parameter name)
+                     note, isDone is true once we reach the name, but the directive can stay around an hold the angle
+- Create directive : hold cube, isDone is true immediately, but can stay around an continue to hold the cube
+                     note
+- Create directive : run motors at raw percent value (number or parameter name)
 
-Intake Subsystem
-- Extract motor indices from parameter file
-- Create and store motor
-- Create directive: run at raw percent value (number or parameter name)
-- Create directive: timed run raw percent value (number of parameter name)
-
-Collector Subsystem
+Collector Subsystem (Nicole)
 - Extract cube detect sensor from parameter file
-- Aggregrate      : Grabber and Intake Subsystems
-- Create and store: cube detector sensor
-- Calculate status: has cube (more than just sensor status, has time window with hystersis)
-- Create directive: collect cube
-- Create directive: timed eject cube (speed is argument, can be a parameter)
-- Create directive: sensor eject cube (speed is argument, can be a parameter)
+- Aggregrate       : Grabber and Intake Subsystems
+- Create and store : cube detector sensor
+- Calculate status : has cube (more than just sensor status, has time window with hystersis)
+- Create directive : collect cube
+- Create directive : timed eject cube (speed is argument, can be a parameter)
+- Create directive : sensor eject cube (speed is argument, can be a parameter)
 
 LiftingCollector Subsystem
-- Aggregrate      : Collector and Lifter Subsystems
-- Create directive: CollectCube
-                    o  Lifter action - go to floor
-                    o  Collector action - go to collect state
-                    o  WaitFor Collector.hasCube
-                    o  Intake to timed run preset (collect)
-                    o  Grabber to preset (hold)
-                    o  WaitFor Intake.directive done
-                    o  Intake to hold directive
-                    o  Lifter to Drive preset
+- Aggregrate       : Collector and Lifter Subsystems
+- Create directive : CollectCube
+                     o  Lifter action - go to floor
+                     o  Collector action - go to collect state
+                     o  WaitFor Collector.hasCube
+                     o  Intake to timed run preset (collect)
+                     o  Grabber to preset (hold)
+                     o  WaitFor Intake.directive done
+                     o  Intake to hold directive
+                     o  Lifter to Drive preset
+
+PhoenixRobot Subsystem
+- Aggregrate      : LiftingCollector and TankDrive Subsystems
+- Actions         :
 
 Autonomous Controller (and associated classes)
 - Must be able to ask the DriverGunner Subsystem for the teleop switch value
@@ -98,3 +79,32 @@ Telop Controller
 
 Test Controller
 - To be defined
+
+
+--------------------------------------------------------------------------------------------------------------
+COMPLETED
+--------------------------------------------------------------------------------------------------------------
+Parameter File Object (Matthew)
+- Create a Value type to return the value from the parameter file
+  o Types should be Integer, Real, or String
+- Parser should detect strings based on quotes
+- For numbers, parser should try to parse integer first, if it suceeds
+  the type is integer.  If it fails, try to parse a double.  If it succeeds
+  the type is real.  Otherwise, there is a parse error, print a message on 
+  the message logger and return a failure status.
+
+Robot
+- Attach Parameter File Object (see above)
+
+ActionSequence (Vi)
+- Finish and merge into master
+
+DispatchAction (Vi)
+- Rename from Subsystem Action, merge into master
+
+Intake Subsystem (Meg)
+- Extract motor indices from parameter file
+- Create and store motor
+- Create directive: run at raw percent value (number or parameter name)
+- Create directive: timed run raw percent value (number of parameter name)
+

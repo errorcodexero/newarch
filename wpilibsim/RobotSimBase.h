@@ -57,6 +57,9 @@ namespace xero {
                 speed_ = s ;
             }
 
+            bool hasProperty(const std::string &name) ;
+            const std::string &getProperty(const std::string &name) ;
+
         protected:
             void addModel(std::shared_ptr<SubsystemModel> model) {
                 models_.push_back(model) ;

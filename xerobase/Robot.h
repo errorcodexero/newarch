@@ -17,6 +17,29 @@ namespace xero {
 		class ControllerBase ;
 
 		/// \brief the base robot class for Error Code Xero robots
+		/// This class manages the operation of the robot.  The robot for a specific
+		/// year is derived from this class.  The derived class is responsible for creating
+		/// the subsystems for the robot and this class is responsible for managing the
+		/// operation of the robot.
+		/// <br>
+		/// This main function here is the robot loop.  The robot loop is run in a fixed
+		/// time schedule.  This time schedule defaults to 50 ms but can be changed by the
+		/// derived class by calling setRobotLoopTime().  The robot loop performs the following
+		/// actions:
+		/// <br>
+		/// First, the robot calls each of the subsystems to compute their state.  Each subsystem reads
+		/// any sensors associated with the subsystem and computes a state that is meaningful
+		/// to the robot has a whole.  For instance, for a drivebase, the state might be the total
+		/// distance traveled, the x and y position of the robot, and the current direction the robot
+		/// is facing.
+		/// <br>
+		/// Second, the robot calls the controller for the robot.  For each robot mode (autonomous, 
+		/// operator, or test), there is a controller.  It is the responsibility of the derived class to
+		/// create the controller (see createAutoController(), createTeleopController(), and createTestController).
+		/// This controller processes the state of the subsystems and directs subsystems to perform Actions.
+		/// <br>
+		/// Finally, the robot calls each of the subsytems to execute on any assigned directives.
+		///
 		class Robot : public frc::SampleRobot {
 		public:
 			/// \brief create the base robot.
@@ -60,10 +83,14 @@ namespace xero {
 			//
 			typedef std::shared_ptr<Subsystem> SubsystemPtr;
 			typedef std::list<SubsystemPtr> SubsystemList;
-
 			
 			/// \brief this method runs one loop for the robot.
 			virtual void robotLoop();
+
+			/// \brief this method allows a derived class to change the robot loop time
+			void setRobotLoopTime(double time) {
+				target_loop_time_ = time ;
+			}			
 
 			/// \brief add a subsystem to the robot
 			/// \param sub the subsystem to add to the robot
@@ -95,7 +122,6 @@ namespace xero {
 		private:
 			// The time per robot loop in seconds
 			double target_loop_time_;
-
 
 			// The controller that provides control during the
 			// robot loop

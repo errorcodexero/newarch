@@ -21,11 +21,11 @@ class messageDestDS : public messageLoggerDest
 	/// \brief display a message to the driver station if it is an error or warning message
 	void displayMessage(const messageLogger::messageType &type, uint64_t subs, const std::string &msg)
 	{
-		frc::DriverStation &ds = DriverStation::GetInstance();
+		frc::DriverStation &ds = frc::DriverStation::GetInstance();
 		if (type == messageLogger::messageType::error)
-			ds.ReportError(msg);
+			ds.ReportError(msg.c_str());
 		else if (type == messageLogger::messageType::warning)
-			ds.ReportError(msg);
+			ds.ReportError(msg.c_str());
 	};
 };
 } // namespace misc

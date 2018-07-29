@@ -1,4 +1,5 @@
 TESTFILES = \
-	PIDCtrlTest.cpp
+	PIDCtrlTest.cpp\
+	xeromathtest.cpp
 
 include ../makefiles/test.mk

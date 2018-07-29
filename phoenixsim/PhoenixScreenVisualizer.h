@@ -50,11 +50,18 @@ namespace xero {
                 void displayWings(std::shared_ptr<WingsModel> subsystem_p) ;
                 void displayCubeSensor(std::shared_ptr<CubeSensorModel> subsystem_p) ;
 
+                void plotRobot(double x, double y) ;
+
             private:
                 bool inited_ ;
                 int width_ ;
                 int height_ ;
                 int right_side_ ;
+
+                double min_x_ ;
+                double min_y_ ;
+                double max_x_ ;
+                double max_y_  ;
             } ;
         }
     }

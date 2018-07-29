@@ -35,7 +35,7 @@ namespace xero {
 			void cancel();
 
 			/// \brief push a new action to the end of the action sequence
-			/// \param the action to add to the sequence
+			/// \param action the action to add to the sequence
 			void pushAction(ActionPtr action);
 
 			/// \brief push a new subsystem action pair to the end of the sequence

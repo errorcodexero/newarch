@@ -21,6 +21,7 @@ namespace xero {
 			/// \returns True if the directive is complete
             virtual bool isDone() = 0 ;
 
+            /// \brief return a human readable string representing the action
             virtual std::string toString() = 0 ;
         private:
         };

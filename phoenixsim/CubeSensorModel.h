@@ -2,6 +2,7 @@
 
 #include <DigitalInput.h>
 #include <SubsystemModel.h>
+#include <vector>
 
 namespace xero  {
     namespace sim {
@@ -20,10 +21,26 @@ namespace xero  {
                     return cube_sensed_ ;
                 }
 
+            private:
+                struct OnTime {
+                    OnTime(double s) {
+                        start = s ;
+                    }
+                    double start ;
+                } ;
+
+            private:
+                void initModel() ;
+                std::vector<std::string> split(const std::string &line) ;
+
             private:       
                 frc::DigitalInput *input_ ;
+                bool inited_ ;
                 bool cube_sensed_ ;
                 int cube_sensor_input_ ;
+                double last_time_ ;
+
+                std::list<OnTime> ontimes_ ;
             } ;
         }
     }

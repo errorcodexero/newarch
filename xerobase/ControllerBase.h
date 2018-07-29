@@ -4,7 +4,8 @@ namespace xero {
 	namespace base {
 		class Robot ;
 		
-		/// \brief This is the base class for all robot controllers
+		/// \brief This is the base class for all robot controllers.
+		/// See Robot for more information about controllers
 		class ControllerBase {
 		public:
 			/// \brief create a new controller base
