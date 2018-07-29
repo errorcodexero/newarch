@@ -15,6 +15,7 @@ namespace xero {
 			// Set the robot loop time to 50 ms
 			//
 			target_loop_time_ = 0.05 ;
+			last_time_ = frc::Timer::GetFPGATimestamp() ;
 
 			parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;
 		}
@@ -29,6 +30,8 @@ namespace xero {
 		
 		void Robot::robotLoop() {
 			double initial_time = frc::Timer::GetFPGATimestamp();
+
+			delta_time_ = initial_time - last_time_ ;
 
 			for (SubsystemPtr& subsystem : subsystems_) {
 				subsystem->computeState();
@@ -50,6 +53,8 @@ namespace xero {
 				message_logger_ << "Loop time: " << elapsed_time << "\n";
 				message_logger_.endMessage() ;
 			}
+
+			last_time_ = initial_time ;
 		}
 
 		void Robot::RobotInit() {
@@ -65,7 +70,7 @@ namespace xero {
 
 		void Robot::Autonomous() {
 			message_logger_.startMessage(messageLogger::messageType::info) ;
-			message_logger_ << "Starting Autonomous mode" ;
+			message_logger_ << "Entering Autonomous mode" ;
 			message_logger_.endMessage() ;
 
 			controller_ = createAutoController() ;
@@ -74,6 +79,10 @@ namespace xero {
 				robotLoop();
 
 			controller_ = nullptr ;
+
+			message_logger_.startMessage(messageLogger::messageType::info) ;
+			message_logger_ << "Leaving Autonomous mode" ;
+			message_logger_.endMessage() ;
 		}
 
 		void Robot::OperatorControl() {
@@ -87,6 +96,10 @@ namespace xero {
 				robotLoop();
 
 			controller_ = nullptr ;
+
+			message_logger_.startMessage(messageLogger::messageType::info) ;
+			message_logger_ << "Leaving Teleop mode" ;
+			message_logger_.endMessage() ;			
 		}
 
 		void Robot::Test() {
@@ -100,11 +113,15 @@ namespace xero {
 				robotLoop();
 
 			controller_ = nullptr ;
+
+			message_logger_.startMessage(messageLogger::messageType::info) ;
+			message_logger_ << "Leaving Test mode" ;
+			message_logger_.endMessage() ;			
 		}
 
 		void Robot::Disabled() {
 			message_logger_.startMessage(messageLogger::messageType::info) ;
-			message_logger_ << "Starting Disables mode" ;
+			message_logger_ << "Robot Disabled" ;
 			message_logger_.endMessage() ;
 
 			while (IsDisabled())

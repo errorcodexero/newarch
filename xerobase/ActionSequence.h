@@ -48,7 +48,7 @@ namespace xero {
 			/// \param subsystem the subsystem that will receive the action
 			/// \param action the action that is assigned to the subsystem
 			/// \param block if true the sequence waits for the subsystem to complete the action
-			void pushSubActionPair(SubsystemPtr subsystem, ActionPtr action, bool block);
+			void pushSubActionPair(SubsystemPtr subsystem, ActionPtr action, bool block = true);
 
 			/// \brief create a human readable string representing this action sequence
 			std::string toString();
@@ -64,7 +64,7 @@ namespace xero {
 			std::vector<ActionPtr> actionSequence_;
 
 			// the index of the current action
-			unsigned index_;
+			size_t index_;
 
 		};
 	}

@@ -68,6 +68,15 @@ namespace xero {
 			/// \brief Return reference to the one message logger
 			xero::misc::messageLogger& getMessageLogger();
 
+			/// \brief Return the time difference between the last robot loop and thie one
+			double getDeltaTime()  {
+				return delta_time_ ;
+			}
+
+			double getTime() {
+				return frc::Timer::GetFPGATimestamp() ;
+			}
+
 			/// \brief Return the settings parser
 			xero::misc::SettingsParser& getSettingsParser() {
 				return *parser_ ;
@@ -132,6 +141,12 @@ namespace xero {
 
 			// Message logger instance
 			xero::misc::messageLogger message_logger_;
+
+			// The time the last time through the robot loop
+			double last_time_ ;
+
+			// The time between the last robot lo
+			double delta_time_ ;
 
 			// The settings parser
 			xero::misc::SettingsParser *parser_ ;
