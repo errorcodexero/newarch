@@ -42,12 +42,16 @@ namespace xero
 			void init(double p, double i, double d, double f, bool is_angle = false);
 
 			/// \brief Initialize the PID controller from constants in the settings
+			///
+			/// Used settings: double :p, double :i, double :d, double :f
 			/// \param parser the settings parser
 			/// \param prefix the prefix under which to find the PID constants in the settings file
 			/// \param is_angle if true the values are angles that wrap at +/- 180
 			void initFromSettings(SettingsParser &parser, const std::string &prefix, bool is_angle = false);
 
 			/// \brief Initialize the PID controller from constants in the settings with additional PID options (namely the min, max, and imax)
+			///
+			/// Used settings: double :p, double :i, double :d, double :f, double :min, double :max, double :imax
 			/// \param parser the settings parser
 			/// \param prefix the prefix under which to find the PID constants in the settings file
 			/// \param is_angle if true the values are angles that wrap at +/- 180
