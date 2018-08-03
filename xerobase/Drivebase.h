@@ -38,6 +38,7 @@ namespace xero {
 			}
 
 		protected:
+			/// \brief The navx on the robot
 			AHRS navx_;
 
 		private:

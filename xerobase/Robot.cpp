@@ -48,7 +48,7 @@ namespace xero {
 			if (elapsed_time < target_loop_time_) {
 				frc::Wait(target_loop_time_ - elapsed_time);
 			} else if (elapsed_time > target_loop_time_) {
-				message_logger_.startMessage(messageLogger::messageType::warning) ;
+				message_logger_.startMessage(MessageLogger::MessageType::warning) ;
 				message_logger_ << "Robot loop exceeded target loop time\n";
 				message_logger_ << "Loop time: " << elapsed_time << "\n";
 				message_logger_.endMessage() ;
@@ -69,7 +69,7 @@ namespace xero {
 		}
 
 		void Robot::Autonomous() {
-			message_logger_.startMessage(messageLogger::messageType::info) ;
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Entering Autonomous mode" ;
 			message_logger_.endMessage() ;
 
@@ -80,13 +80,13 @@ namespace xero {
 
 			controller_ = nullptr ;
 
-			message_logger_.startMessage(messageLogger::messageType::info) ;
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Leaving Autonomous mode" ;
 			message_logger_.endMessage() ;
 		}
 
 		void Robot::OperatorControl() {
-			message_logger_.startMessage(messageLogger::messageType::info) ;
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Starting Teleop mode" ;
 			message_logger_.endMessage() ;
 
@@ -97,13 +97,13 @@ namespace xero {
 
 			controller_ = nullptr ;
 
-			message_logger_.startMessage(messageLogger::messageType::info) ;
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Leaving Teleop mode" ;
 			message_logger_.endMessage() ;			
 		}
 
 		void Robot::Test() {
-			message_logger_.startMessage(messageLogger::messageType::info) ;
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Starting Test mode" ;
 			message_logger_.endMessage() ;
 
@@ -114,13 +114,13 @@ namespace xero {
 
 			controller_ = nullptr ;
 
-			message_logger_.startMessage(messageLogger::messageType::info) ;
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Leaving Test mode" ;
 			message_logger_.endMessage() ;			
 		}
 
 		void Robot::Disabled() {
-			message_logger_.startMessage(messageLogger::messageType::info) ;
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Robot Disabled" ;
 			message_logger_.endMessage() ;
 
@@ -128,7 +128,7 @@ namespace xero {
 				frc::Wait(target_loop_time_) ;
 		}
 
-		messageLogger& Robot::getMessageLogger() {
+		MessageLogger& Robot::getMessageLogger() {
 			return message_logger_;
 		}
 	}

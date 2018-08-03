@@ -4,7 +4,7 @@
 #include <list>
 
 #include "WPILib.h"
-#include "messageLogger.h"
+#include "MessageLogger.h"
 #include "SettingsParser.h"
 
 namespace xero {
@@ -67,7 +67,7 @@ namespace xero {
 
 			/// \brief Return a reference to the one message logger
 			/// \returns a reference to the one message logger
-			xero::misc::messageLogger& getMessageLogger();
+			xero::misc::MessageLogger& getMessageLogger();
 
 			/// \brief Return the time difference between the last robot loop and the current one in seconds
 			/// \returns the time difference between the last robot loop and the current one in seconds
@@ -145,7 +145,7 @@ namespace xero {
 			SubsystemList subsystems_;
 
 			// Message logger instance
-			xero::misc::messageLogger message_logger_;
+			xero::misc::MessageLogger message_logger_;
 
 			// The time the last time through the robot loop
 			double last_time_ ;

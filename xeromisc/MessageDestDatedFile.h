@@ -12,7 +12,7 @@ class messageDestDatedFile : public messageDestFile
 {
   public:
   	/// \brief create the message destination file in the given base directory
-	/// \param the base directory for the message destination file
+	/// \param basedir the base directory for the message destination file
 	messageDestDatedFile(const std::string &basedir)
 	{
 		std::array<char, 64> buffer;

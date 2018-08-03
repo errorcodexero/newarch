@@ -6,6 +6,7 @@ namespace xero
 {
 	namespace misc
 	{
+		/// \brief A PID controller
 		class PIDCtrl
 		{
   		public:
@@ -20,6 +21,7 @@ namespace xero
 			/// \param floor the lowest possible value for the output
 			/// \param ceil the highest possible value for the output
 			/// \param integralCeil the largest magnitude for the stored integral sum
+			/// \param is_angle if true the values are angles that wrap at +/- 180
 			PIDCtrl(double p, double i, double d, double f, double floor, double ceil, double integralCeil, bool is_angle = false);
 
 			/// \brief Initialize the PID controller with a new set of constants
@@ -60,7 +62,12 @@ namespace xero
 			/// \brief Return the output given a target, the current value, and the time that has passed
 			/// \param target the target value we are trying to reach
 			/// \param current the current value for system
-			/// \param the time that has passed since the last time this was called
+			/// \param timeDifference the time that has passed since the last time this was called
+			/// \param pv the calculated p component
+			/// \param iv the calculated i component
+			/// \param dv the calculated d component
+			/// \param fv the calculated f component
+			/// \returns the calculated output value
 			double getOutput(double target, double current, double timeDifference,
 							double *pv = nullptr, double *iv = nullptr, double *dv = nullptr, double *fv = nullptr);
 

@@ -5,6 +5,7 @@
 namespace xero {
 namespace misc {
 
+/// \brief Monitors a stream of values to check if they cease to change beyond a specified threshold
 class StallMonitor {
 public:
 	/// \brief Create a stall monitor
@@ -28,7 +29,7 @@ public:
 	void initFromSettings(SettingsParser parser, std::string prefix);
 
 	/// \brief Add a sample to the history
-	/// \param samepl the sample to add to the history
+	/// \param sample the sample to add to the history
 	void addSample(double sample);
 
 	/// \brief Return whether the monitored value has stopped changing

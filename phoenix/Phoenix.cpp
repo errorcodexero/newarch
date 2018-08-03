@@ -5,21 +5,20 @@
 #include "intake/Intake.h"
 
 #include "MessageGroups.h"
-#include "messageLogger.h"
-#include "messageDestSeqFile.h"
-#include "messageDestStream.h"
+#include "MessageLogger.h"
+#include "MessageDestSeqFile.h"
+#include "MessageDestStream.h"
 
 #ifdef SIM
 #include <PhoenixSimulator.h>
 #endif
 
 #ifndef SIM
-#include "messageDestDS.h"
+#include "MessageDestDS.h"
 #endif
 
 using namespace xero::misc ;
 using namespace xero::base ;
-
 
 namespace xero {
 	namespace phoenix {
@@ -77,15 +76,15 @@ namespace xero {
 		}
 
 		void Phoenix::initializeMessageLogger() {
-            messageLogger& logger = getMessageLogger();
+            MessageLogger& logger = getMessageLogger();
 
 			//
 			// Enable message of all severities
 			//
-            logger.enableType(messageLogger::messageType::error);
-            logger.enableType(messageLogger::messageType::warning);
-            logger.enableType(messageLogger::messageType::info);
-            logger.enableType(messageLogger::messageType::debug);
+            logger.enableType(MessageLogger::MessageType::error);
+            logger.enableType(MessageLogger::MessageType::warning);
+            logger.enableType(MessageLogger::MessageType::info);
+            logger.enableType(MessageLogger::MessageType::debug);
 
             //
             // Decide what message groups (incl. subsystems) you want to see
@@ -93,7 +92,7 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_DRIVEBASE);
 
 			// Set up message logger destination(s)
-            std::shared_ptr<messageLoggerDest> dest_p ;
+            std::shared_ptr<MessageLoggerDest> dest_p ;
 
 #if defined(SIM) && !defined(XEROSCREEN)
 			//
@@ -101,7 +100,7 @@ namespace xero {
 			// In competition mode, this information goes to a log file on
 			// the USB stick.
 			//
-			dest_p = std::make_shared<messageDestStream>(std::cout) ;
+			dest_p = std::make_shared<MessageDestStream>(std::cout) ;
 			logger.addDestination(dest_p) ;
 #endif
 
@@ -114,7 +113,7 @@ namespace xero {
 #ifndef SIM
 			std::string flashdrive("/u/") ;
 			std::string logname("logfile_") ;
-			dest_p = std::make_shared<messageDestSeqFile>(flashdrive, logname) ;
+			dest_p = std::make_shared<MessageDestSeqFile>(flashdrive, logname) ;
 			logger.addDestination(dest_p) ;
 #endif
 
@@ -122,7 +121,7 @@ namespace xero {
 			// Send warnings and errors to the driver station
 			//
 #ifndef SIM
-			dest_p = std::make_shared<messageDestDS>() ;
+			dest_p = std::make_shared<MessageDestDS>() ;
 			logger.addDestination(dest_p) ;
 #endif
 

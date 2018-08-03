@@ -2,7 +2,7 @@
 #include "Action.h"
 #include "Robot.h"
 #include "basegroups.h"
-#include <messageLogger.h>
+#include <MessageLogger.h>
 
 using namespace xero::misc ;
 
@@ -57,8 +57,8 @@ namespace xero {
         bool Subsystem::executeNamedSequence(const std::string &name) {
             auto it = sequences_.find(name) ;
             if (it == sequences_.end()) {
-                messageLogger &logger = getRobot().getMessageLogger() ;
-                logger.startMessage(messageLogger::messageType::error, MSG_GROUP_SUBSYSTEMS) ;
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_SUBSYSTEMS) ;
                 logger << "subsystem '" << name_ << "'" ;
                 logger << " was requested to execute unknown named sequence '" ;
                 logger << name << "'" ;

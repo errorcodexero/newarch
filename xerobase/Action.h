@@ -6,6 +6,7 @@
 
 namespace xero {
     namespace base {
+		/// \brief A class capable of doing work
         class Action {
         public:
 			/// \brief Start the directive; called once per directive when it starts
