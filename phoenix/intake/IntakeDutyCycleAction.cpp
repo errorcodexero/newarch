@@ -33,8 +33,6 @@ namespace xero {
             }
 
             void IntakeDutyCycleAction::cancel() {
-                getIntake().motor1_->Set(0.0) ;
-                getIntake().motor2_->Set(0.0) ;
             }
 
             std::string IntakeDutyCycleAction::toString() {
