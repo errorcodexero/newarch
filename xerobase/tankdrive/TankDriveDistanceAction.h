@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PIDCtrl.h>
+#include <StallMonitor.h>
 
 #include "TankDriveAction.h"
 #include "TankDrive.h"
@@ -22,12 +23,13 @@ namespace xero {
 			std::string toString();
 
 		private:
-			double initial_dist_;
-
 			xero::misc::PIDCtrl distance_pid_, angle_pid_;
+			xero::misc::StallMonitor stall_monitor_;
 
+			bool has_stalled_;
+
+			double initial_dist_;
 			double distance_threshold_;
-
 			double target_distance_;
 			bool is_done_;
 		};
