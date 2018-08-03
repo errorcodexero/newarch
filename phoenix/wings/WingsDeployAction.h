@@ -11,7 +11,8 @@ namespace xero {
         public:
             /// \brief Create the wings deploy action
             /// \param wings a reference to the Wings subsystem
-            WingsDeployAction(Wings &wings) : WingsAction(wings) {                
+            WingsDeployAction(Wings &wings) : WingsAction(wings) { 
+                is_done_ = false;               
             }
 
             /// \brief Destroys a wings deploy action object
