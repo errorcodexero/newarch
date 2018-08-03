@@ -47,5 +47,10 @@ namespace xero {
 			dist_l_ = left_motors_.front()->GetSensorCollection().GetQuadraturePosition();
 			dist_r_ = right_motors_.front()->GetSensorCollection().GetQuadraturePosition();
 		}
+
+		void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
+			left_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent);
+			right_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
+		}
 	}
 }

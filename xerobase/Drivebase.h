@@ -37,9 +37,10 @@ namespace xero {
 			virtual void run() {
 			}
 
-		private:
+		protected:
 			AHRS navx_;
 
+		private:
 			double angle_;
 		} ;
 	}

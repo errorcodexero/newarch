@@ -65,19 +65,24 @@ namespace xero {
 			/// \brief run the disabled mode (doing nothing)
 			virtual void Disabled() ;
 
-			/// \brief Return reference to the one message logger
+			/// \brief Return a reference to the one message logger
+			/// \returns a reference to the one message logger
 			xero::misc::messageLogger& getMessageLogger();
 
-			/// \brief Return the time difference between the last robot loop and thie one
+			/// \brief Return the time difference between the last robot loop and the current one in seconds
+			/// \returns the time difference between the last robot loop and the current one in seconds
 			double getDeltaTime()  {
 				return delta_time_ ;
 			}
 
+			/// \brief Return the current time in seconds
+			/// \returns the current time in seconds
 			double getTime() {
 				return frc::Timer::GetFPGATimestamp() ;
 			}
 
-			/// \brief Return the settings parser
+			/// \brief Return a reference to the one settings parser
+			/// \return a reference to the one settings parser
 			xero::misc::SettingsParser& getSettingsParser() {
 				return *parser_ ;
 			}

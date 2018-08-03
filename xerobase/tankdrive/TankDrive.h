@@ -17,6 +17,9 @@ namespace xero {
 		typedef std::shared_ptr<TalonSRX> TalonPtr;
 
 		class TankDrive : public Drivebase {
+			friend class TankDriveDistanceAction;
+			friend class TankDriveVelocityAction;
+
 		public:
 			/// \brief Create a new tank drive object
 			/// \param robot The robot that contains this tank drive subsystem
@@ -42,6 +45,12 @@ namespace xero {
 				return dist_r_ ;
 			}
 
+			/// \brief Return the average net distanced travelled by the two sides of the drivebase.
+			/// \returns The average net distance travelled by the two sides to the drivebase
+			double getDist() const {
+				return (dist_r_ + dist_l_) / 2.0;
+			}
+
 			/// \brief Invert the output of all of the selected motors
 			/// \param left_motor_ids A list of ids of TalonSRXs on the left side to invert
 			/// \param right_motor_ids A list of ids of TalonSRXs on the right side to invert
@@ -55,6 +64,11 @@ namespace xero {
 			void computeState();
 
 		private:
+			/// \brief Set the motors to output at the given percentages
+			/// \param left_percent the percent output for the left motors
+			/// \param right_percent the percent output for the right motors
+			void setMotorsToPercents(double left_percent, double right_percent);
+
 			std::list<TalonPtr> left_motors_, right_motors_;
 
 			double dist_l_, dist_r_;
