@@ -2,6 +2,7 @@
 #include "Subsystem.h"
 #include "ControllerBase.h"
 #include "basegroups.h"
+#include <MessageDestStream.h>
 #include <iostream>
 #include <cassert>
 
@@ -18,11 +19,29 @@ namespace xero {
 			last_time_ = frc::Timer::GetFPGATimestamp() ;
 
 			parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;
+			output_stream_ = nullptr ;
 		}
 
 		Robot::~Robot() {
 			delete parser_ ;
+			message_logger_.clear() ;
+			if (output_stream_ != nullptr)
+				delete output_stream_ ;
 		}
+
+		void Robot::setupRobotOutputFile(const std::string &file) {
+			if (file.length() > 0) {
+				output_stream_ = new std::ofstream(file) ;
+				if (output_stream_->fail() || output_stream_->bad()) {
+					delete output_stream_ ;
+					output_stream_ = nullptr ;
+				}
+				else {
+					auto dest = std::make_shared<MessageDestStream>(*output_stream_) ;
+					message_logger_.addDestination(dest) ;
+				}
+			}
+		}		
 
 		bool Robot::readParamsFile(const std::string &filename) {
 			return parser_->readFile(filename) ;
@@ -126,10 +145,6 @@ namespace xero {
 
 			while (IsDisabled())
 				frc::Wait(target_loop_time_) ;
-		}
-
-		MessageLogger& Robot::getMessageLogger() {
-			return message_logger_;
 		}
 	}
 }

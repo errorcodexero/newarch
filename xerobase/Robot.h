@@ -1,11 +1,13 @@
 #pragma once
 
-#include <memory>
-#include <list>
-
+#include "Subsystem.h"
+#include <WPILib.h>
 #include "WPILib.h"
 #include "MessageLogger.h"
 #include "SettingsParser.h"
+#include <memory>
+#include <list>
+#include <fstream>
 
 namespace xero {
 	namespace base {
@@ -67,7 +69,10 @@ namespace xero {
 
 			/// \brief Return a reference to the one message logger
 			/// \returns a reference to the one message logger
-			xero::misc::MessageLogger& getMessageLogger();
+			/// \brief Return reference to the one message logger
+			xero::misc::MessageLogger& getMessageLogger() {
+				return message_logger_ ;
+			}
 
 			/// \brief Return the time difference between the last robot loop and the current one in seconds
 			/// \returns the time difference between the last robot loop and the current one in seconds
@@ -88,15 +93,6 @@ namespace xero {
 			}
 
 		protected:
-			//
-			// Useful types, moved these into the class so we don't
-			// pollute the global name space
-			//
-			// COMMENT - moved these into the class so they do not pollute
-			//           the global namespace
-			//
-			typedef std::shared_ptr<Subsystem> SubsystemPtr;
-			typedef std::list<SubsystemPtr> SubsystemList;
 			
 			/// \brief this method runs one loop for the robot.
 			virtual void robotLoop();
@@ -132,6 +128,9 @@ namespace xero {
 			/// This method will be defined by a concrete derived robot object
 			virtual std::shared_ptr<ControllerBase> createTestController() = 0 ;
 
+			/// \brief setup a message logger to send output to a file
+			/// \param file the name of the file for the output
+			void setupRobotOutputFile(const std::string &file) ;
 
 		private:
 			// The time per robot loop in seconds
@@ -142,7 +141,7 @@ namespace xero {
 			std::shared_ptr<ControllerBase> controller_;
 
 			// The list of subsystem that belong to the robot
-			SubsystemList subsystems_;
+			std::list<std::shared_ptr<Subsystem>> subsystems_;
 
 			// Message logger instance
 			xero::misc::MessageLogger message_logger_;
@@ -155,6 +154,12 @@ namespace xero {
 
 			// The settings parser
 			xero::misc::SettingsParser *parser_ ;
+
+			// The name of an output file for the robot output
+			std::string output_file_name_ ;
+
+			// The stream for the robot output
+			std::ofstream *output_stream_ ;
 		} ;
 	}
 }

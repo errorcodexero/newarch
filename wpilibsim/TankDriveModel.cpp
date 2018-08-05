@@ -80,6 +80,11 @@ namespace xero {
 
 			updatePosition(dleft, dright, angle_) ;
 			angle_ += (dv * 2.0) / width_;
+			while (angle_ > PI)
+				angle_ -= PI ;
+			while (angle_ < -PI)
+				angle_ += PI ;
+
 
 			double dist = std::sqrt((xpos_ - last_xpos_) * (xpos_ - last_xpos_) + (ypos_ - last_ypos_) * (ypos_ - last_ypos_)) ;
 			speed_ = dist / dt ;
@@ -100,7 +105,7 @@ namespace xero {
 				right_enc_->SimulatorSetValue(right_enc_value_) ;
 
 			if (navx_ != nullptr) {
-				double deg = rad2deg(angle_) ;
+				double deg = -rad2deg(angle_) ;
 				navx_->SimulatorSetYaw(deg) ;
 			}
         }

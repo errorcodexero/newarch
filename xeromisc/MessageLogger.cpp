@@ -16,6 +16,11 @@ MessageLogger::MessageLogger()
     subsystems_enabled_ = 0;
 }
 
+void MessageLogger::clear() 
+{
+	destinations_.clear() ;
+}
+
 void MessageLogger::enableType(const MessageType &type)
 {
     enabled_modes_.push_back(type);

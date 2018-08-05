@@ -3,6 +3,7 @@
 #include <vector>
 #include <Timer.h>
 #include <string>
+#include <memory>
 
 namespace xero {
     namespace base {

@@ -22,6 +22,7 @@ namespace xero {
             /// \brief called to start the action.  
             /// For this WingsDepolyAction this method does nothing
             virtual void start() {                
+                is_done_ = false ;
             }
 
             /// \brief called during the robot loop to execute this action

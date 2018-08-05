@@ -72,6 +72,7 @@ namespace xero {
 			/// \returns the string value associated with the given key
 			std::string getString(const std::string &key);
 
+
 		private:
 			bool parseBoolean(const std::string &value, bool &result);
 			bool parseInteger(const std::string &value, int &result);
@@ -80,6 +81,9 @@ namespace xero {
 
 			bool readLine(const std::string &line, std::string &key, std::string &value, bool &is_string, const std::string &filename, int line_num);
 
+		private:
+			static const std::string var_prefix_ ;
+			
 			MessageLogger &logger_;
 			uint64_t msggroup_;
 			

@@ -79,6 +79,7 @@ namespace xero {
 
 			/// \brief cancel the current action for this subsystem
 			/// It also cancels the actions for any children subsystems
+			/// \returns true if the action was canceled, false if it could not be
 			virtual void cancelAction() ;
 
 			/// \brief asks a subsystem to execute a named sequence
@@ -98,6 +99,9 @@ namespace xero {
 			/// \brief returns true if the subsystem is done with the current Action
 			/// \returns true if the subsystem is done with the current Action
 			virtual bool isDone() const {
+				if (action_ == nullptr)
+					return true ;
+					
 				return action_->isDone() ;
 			}
 
@@ -121,6 +125,7 @@ namespace xero {
 			virtual bool canAcceptAction(ActionPtr Action) {
 				return false ;
 			}
+
 
 		private:
 			//

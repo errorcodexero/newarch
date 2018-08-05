@@ -43,7 +43,7 @@ hw:wings:solenoid                   1
 # equates to a max speed of about 15 ft per second width
 # five inch diameter wheels
 #
-tankdrive:sim:rps_per_volt_per_second               300
+tankdrive:sim:rps_per_volt_per_second               11.45916
 
 #
 # The maximum random error applied to the left and right

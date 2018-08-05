@@ -10,3 +10,5 @@ build
 *test/*.o
 *test/*.exe
 .vs/
+ROBOT
+SIMULATOR

@@ -37,8 +37,8 @@ namespace xero {
 
                 static const char *rotate_chars_ ;
 
-                static const char moving = '@' ;
-                static const char stationary = '$' ;
+                static const char withcube = '@' ;
+                static const char withoutcube = '$' ;
 
             private:
                 void initScreen() ;
@@ -75,6 +75,8 @@ namespace xero {
 
                 size_t same_count_ ;
                 size_t rotate_index_ ;
+
+		bool cube_ ;
             } ;
         }
     }

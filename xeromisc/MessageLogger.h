@@ -31,6 +31,9 @@ class MessageLogger
     /// \brief create a new message logger object
     MessageLogger();
 
+	/// \brief clear all message destinations
+	void clear() ;
+
     /// \brief returns true if a given message type is active
     /// \param type the type of message to check for active
     /// \returns true if the message type is active, otherwise false

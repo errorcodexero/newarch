@@ -20,6 +20,9 @@ namespace xero {
             /// \brief destroy the intake subsystem
             virtual ~Intake();
 
+            /// \brief returns true if this action is valid for this subsystem
+            virtual bool canAcceptAction(xero::base::ActionPtr action) ;
+
         private:
             /// The first motor
             std::shared_ptr<frc::VictorSP> motor1_;

@@ -8,3 +8,7 @@
 #define MSG_GROUP_PARSER                (1ull << 0)
 #define MSG_GROUP_SUBSYSTEMS            (1ull << 1)
 #define MSG_GROUP_TANKDRIVE             (1ull << 2)
+#define MSG_GROUP_OI                    (1ull << 3)
+#define MSG_GROUP_ACTION_SEQ            (1ull << 4)
+
+#define MSG_GROUP_ALL                   (0xffffffffffffffffull)

@@ -10,7 +10,7 @@ namespace xero {
 		/// the derived classs generally creates the auto program for a given
 		/// robot, automode selector, and set of field conditions.
 		class AutoController : public ControllerBase {
-			public:
+		public:
 			virtual void run(){
 				if (actionptr != nullptr){
 					actionptr_ ->start();
@@ -18,13 +18,14 @@ namespace xero {
 				}
 			}
 			
-			protected:
+		protected:
 			/// \brief sets the reference to the action that will be run when run() is called
 			/// \param action run for a controller
 			void setAction(ActionPtr action){
 				actionptr_ = action;
 			}
-			private:
+			
+		private:
 			ActionPtr actionptr_;
 		} ;
 		
