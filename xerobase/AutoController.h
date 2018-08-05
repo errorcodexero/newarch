@@ -13,8 +13,10 @@ namespace xero {
 		public:
 			virtual void run(){
 				if (actionptr != nullptr){
-					actionptr_ ->start();
 					actionptr_ ->run();
+
+					if (actionptr_->isDone())
+						actionptr_ = nullptr ;
 				}
 			}
 			
@@ -23,12 +25,12 @@ namespace xero {
 			/// \param action run for a controller
 			void setAction(ActionPtr action){
 				actionptr_ = action;
+				if (actionptr_ = nullptr)
+					actionptr_->start() ;
 			}
-			
+
 		private:
 			ActionPtr actionptr_;
 		} ;
-		
-
 	}
 }
