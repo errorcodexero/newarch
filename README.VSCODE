@@ -30,18 +30,24 @@ CONFIGURE:
 4. Update the your terminal settings to use cygwin
    a. Select File/Preferences/Settings
    b. Copy the following into the User Settings window on the right
-      {
-          // start bash, not the mintty, or you'll get a new window
-          "terminal.integrated.shell.windows": "D:\\cygwin\\bin\\bash.exe",
-          // Use this to keep bash from doing a 'cd ${HOME}'
-          "terminal.integrated.env.windows": {
-              "CHERE_INVOKING": "1"
-          },
-          // Make it a login shell
-          "terminal.integrated.shellArgs.windows": [
-              "-l"
-          ],
-      }
+      	{
+        	// start bash, not the mintty, or you'll get a new window
+        	"terminal.integrated.shell.windows": "D:\\cygwin\\bin\\bash.exe",
+
+          	// Use this to keep bash from doing a 'cd ${HOME}'
+        	"terminal.integrated.env.windows": {
+            	"CHERE_INVOKING": "1"
+        	},
+        	// Make it a login shell
+        	"terminal.integrated.shellArgs.windows": [
+            	"-l"
+        	],
+
+			// Explicitly control indettation, spaces and tabs
+        	"editor.detectIndentation": false,
+	    	"editor.tabSize": 4,	
+    		"editor.insertSpaces": false,		  
+      	}
    c. Save the settings file
 
 4. From a cygwin command line, you must run the following to install tools

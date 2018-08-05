@@ -91,7 +91,6 @@ namespace xero
 			bool is_angle_;
 			double target_;
 			double current_;
-			double time_difference_;
 			double integral_;
 		};
 	} // namespace base

@@ -66,7 +66,7 @@ namespace xero {
 		{
 			double error = calcError(target, current) ;
 			double pOut = pid_consts_.p*error;
-			double derivative = (current - current_) / time_difference_;
+			double derivative = (current - current_) / timeDifference;
 			double dOut = pid_consts_.d*derivative;
 			
 			integral_ += error*timeDifference;
