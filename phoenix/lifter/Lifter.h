@@ -5,6 +5,7 @@
 #include <Solenoid.h>
 #include "VictorSP.h"
 #include "DigitalInput.h"
+#include "Encoder.h"
 #include "LifterAction.h"
 
 namespace xero {
@@ -39,6 +40,7 @@ namespace xero {
 			void calibrate();
 
 			std::vector<std::shared_ptr<frc::VictorSP>> motors_;
+			std::shared_ptr<frc::Encoder> encoder_;
 			std::shared_ptr<frc::Solenoid> brake_solenoid_, gear_solenoid_;
 			std::shared_ptr<frc::DigitalInput> upper_limit_sensor_;
 			std::shared_ptr<frc::DigitalInput> lower_limit_sensor_;
