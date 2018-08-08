@@ -35,6 +35,8 @@ namespace xero {
 
                 last_row_ = -1 ;
                 last_col_ = -1 ;
+
+		cube_ = false ;
             }
 
             PhoenixScreenVisualizer::~PhoenixScreenVisualizer() {
@@ -217,11 +219,11 @@ namespace xero {
                 move(CubeSensorRow, right_side_) ;
                 printw("Cube Sensor") ;
 
-                bool cube = subsystem_p->getCubeSensed() ;
+                cube_ = subsystem_p->getCubeSensed() ;
 
                 move(CubeSensorRow + 1, right_side_) ;
                 str = "  Present: " ;
-                if (cube)
+                if (cube_)
                     str += "YES" ;
                 else
                     str += "NO" ;
@@ -294,14 +296,11 @@ namespace xero {
                         rotate_index_ = (rotate_index_ + 1) % 8 ;
                         mvaddch(row, col, rotate_chars_[rotate_index_]) ;
                     }
-                    else {                        
-                        //
-                        // Stationary
-                        //
-                        if (same_count_ > 10)
-                            mvaddch(row, col, stationary) ;                        
+                    else {
+			if (cube_)
+                            mvaddch(row, col, withcube) ;
                         else
-                            mvaddch(row, col, moving) ;
+                            mvaddch(row, col, withoutcube) ;
                     }
                 
                 }
@@ -320,7 +319,10 @@ namespace xero {
                     //
                     // And put the moving character into the plot
                     //
-                    mvaddch(row, col, moving) ;
+			if (cube_)
+                            mvaddch(row, col, withcube) ;
+                        else
+                            mvaddch(row, col, withoutcube) ;
                 }
 
                 last_row_ = row ;

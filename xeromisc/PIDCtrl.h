@@ -1,9 +1,12 @@
 #pragma once
 
+#include "SettingsParser.h"
+
 namespace xero
 {
 	namespace misc
 	{
+		/// \brief A PID controller
 		class PIDCtrl
 		{
   		public:
@@ -18,7 +21,8 @@ namespace xero
 			/// \param floor the lowest possible value for the output
 			/// \param ceil the highest possible value for the output
 			/// \param integralCeil the largest magnitude for the stored integral sum
-			PIDCtrl(double p, double i, double d, double f, double floor, double ceil, double integralCeil, bool isangle = false);
+			/// \param is_angle if true the values are angles that wrap at +/- 180
+			PIDCtrl(double p, double i, double d, double f, double floor, double ceil, double integralCeil, bool is_angle = false);
 
 			/// \brief Initialize the PID controller with a new set of constants
 			/// \param p the P constant (proportional)
@@ -28,28 +32,49 @@ namespace xero
 			/// \param floor the lowest possible value for the output
 			/// \param ceil the highest possible value for the output
 			/// \param integralCeil the largest magnitude for the stored integral sum
-			/// \param isangle if true the values are angles that wrap at +/- 180
-			void Init(double p, double i, double d, double f, double floor, double ceil, double integralCeil, bool isangle = false);
+			/// \param is_angle if true the values are angles that wrap at +/- 180
+			void init(double p, double i, double d, double f, double floor, double ceil, double integralCeil, bool is_angle = false);
 
 			/// \brief Initialize the PID controller with a new set of constants
 			/// \param p the P constant (proportional)
 			/// \param i the I constant (integral)
 			/// \param d the D constant (difference)
 			/// \param f the F constant (feed forward)
-			/// \param isangle if true the values are angles that wrap at +/- 180
-			void Init(double p, double i, double d, double f, bool isangle = false);
+			/// \param is_angle if true the values are angles that wrap at +/- 180
+			void init(double p, double i, double d, double f, bool is_angle = false);
+
+			/// \brief Initialize the PID controller from constants in the settings
+			///
+			/// Used settings: double :p, double :i, double :d, double :f
+			/// \param parser the settings parser
+			/// \param prefix the prefix under which to find the PID constants in the settings file
+			/// \param is_angle if true the values are angles that wrap at +/- 180
+			void initFromSettings(SettingsParser &parser, const std::string &prefix, bool is_angle = false);
+
+			/// \brief Initialize the PID controller from constants in the settings with additional PID options (namely the min, max, and imax)
+			///
+			/// Used settings: double :p, double :i, double :d, double :f, double :min, double :max, double :imax
+			/// \param parser the settings parser
+			/// \param prefix the prefix under which to find the PID constants in the settings file
+			/// \param is_angle if true the values are angles that wrap at +/- 180
+			void initFromSettingsExtended(SettingsParser &parser, const std::string &prefix, bool is_angle = false);
 
 			/// \brief Return the output given a target, the current value, and the time that has passed
 			/// \param target the target value we are trying to reach
 			/// \param current the current value for system
-			/// \param the time that has passed since the last time this was called
+			/// \param timeDifference the time that has passed since the last time this was called
+			/// \param pv the calculated p component
+			/// \param iv the calculated i component
+			/// \param dv the calculated d component
+			/// \param fv the calculated f component
+			/// \returns the calculated output value
 			double getOutput(double target, double current, double timeDifference,
 							double *pv = nullptr, double *iv = nullptr, double *dv = nullptr, double *fv = nullptr);
 
 			/// \brief return the internally stored sum
 			double getInternalSum() const
 			{
-				return integral;
+				return integral_;
 			}
 
 		private:
@@ -61,13 +86,12 @@ namespace xero
 				double p, i, d, f;
 				double floor, ceil;
 				double integralCeil;
-			} PIDConsts;
+			} pid_consts_;
 
-			bool mIsAngle;
-			double target;
-			double current;
-			double timeDifference;
-			double integral;
+			bool is_angle_;
+			double target_;
+			double current_;
+			double integral_;
 		};
 	} // namespace base
 } // namespace xero

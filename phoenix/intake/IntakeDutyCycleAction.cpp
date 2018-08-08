@@ -1,6 +1,6 @@
 #include "IntakeDutyCycleAction.h"
 #include "Intake.h"
-#include <cassert>
+#include <Robot.h>
 
 using namespace xero::base;
 
@@ -11,10 +11,7 @@ namespace xero {
             }
 
             IntakeDutyCycleAction::IntakeDutyCycleAction(Intake &intake, const std::string &name) : IntakeAction(intake) {
-                //
-                // Add implementation for parameter file when the parameter file is available
-                //
-                assert(false) ;
+                duty_cycle_ = intake.getRobot().getSettingsParser().getDouble(name) ;
             }
 
             IntakeDutyCycleAction::~IntakeDutyCycleAction() {
@@ -33,8 +30,6 @@ namespace xero {
             }
 
             void IntakeDutyCycleAction::cancel() {
-                getIntake().motor1_->Set(0.0) ;
-                getIntake().motor2_->Set(0.0) ;
             }
 
             std::string IntakeDutyCycleAction::toString() {

@@ -1,10 +1,16 @@
 #include "SettingsParser.h"
 #include <sstream>
 #include <fstream>
+#include <cctype>
 
-using namespace xero::misc;
+namespace xero
+{
+namespace misc 
+{
 
-SettingsParser::SettingsParser(messageLogger &logger, uint64_t msggroup) : logger_(logger) {
+const std::string SettingsParser::var_prefix_("var:") ;
+
+SettingsParser::SettingsParser(MessageLogger &logger, uint64_t msggroup) : logger_(logger) {
 	msggroup_ = msggroup;
 }
 
@@ -54,7 +60,7 @@ bool SettingsParser::readLine(const std::string &line, std::string &key, std::st
 
 	// Check for unterminated string
 	if(in_string) {
-		logger_.startMessage(messageLogger::messageType::warning, msggroup_);
+		logger_.startMessage(MessageLogger::MessageType::warning, msggroup_);
 		logger_ << filename << ": line " << line_num << ": Unterminated string";
 		logger_.endMessage();
 		return false;
@@ -98,7 +104,7 @@ bool SettingsParser::readFile(const std::string &filename) {
 			else if(is_string && parseString(value, string_output))
 				set(key, string_output);
 			else {
-				logger_.startMessage(messageLogger::messageType::warning, msggroup_);
+				logger_.startMessage(MessageLogger::MessageType::warning, msggroup_);
 				logger_ << filename << ": " << line_num << ": Unable to parse value '" << value << "'";
 				logger_.endMessage();
 			}
@@ -165,18 +171,43 @@ bool SettingsParser::isDefined(const std::string &key) {
 }
 
 void SettingsParser::set(const std::string &key, bool value) {
+	if (key.length() > var_prefix_.length() && key.substr(0, var_prefix_.length()) == var_prefix_) {
+		logger_.startMessage(MessageLogger::MessageType::debug) ;
+		logger_ << "SettingsParser: variable '" << key << "' set to value " ;
+		logger_ << (value ? "true" : "false") ;
+		logger_.endMessage() ;
+	}
+
 	settings_[key] = Setting(value);
 }
 
 void SettingsParser::set(const std::string &key, int value) {
+	if (key.length() > var_prefix_.length() && key.substr(0, var_prefix_.length()) == var_prefix_) {
+		logger_.startMessage(MessageLogger::MessageType::debug) ;
+		logger_ << "SettingsParser: variable '" << key << "' set to value " ;
+		logger_ << value ;
+		logger_.endMessage() ;
+	}	
 	settings_[key] = Setting(value);
 }
 
 void SettingsParser::set(const std::string &key, double value) {
+	if (key.length() > var_prefix_.length() && key.substr(0, var_prefix_.length()) == var_prefix_) {
+		logger_.startMessage(MessageLogger::MessageType::debug) ;
+		logger_ << "SettingsParser: variable '" << key << "' set to value " ;
+		logger_ << value ;
+		logger_.endMessage() ;
+	}		
 	settings_[key] = Setting(value);
 }
 
 void SettingsParser::set(const std::string &key, const std::string &value) {
+	if (key.length() > var_prefix_.length() && key.substr(0, var_prefix_.length()) == var_prefix_) {
+		logger_.startMessage(MessageLogger::MessageType::debug) ;
+		logger_ << "SettingsParser: variable '" << key << "' set to value " ;
+		logger_ << value ;
+		logger_.endMessage() ;
+	}	
 	settings_[key] = Setting(value);
 }
 
@@ -194,4 +225,7 @@ double SettingsParser::getDouble(const std::string &key) {
 
 std::string SettingsParser::getString(const std::string &key) {
 	return settings_[key].getString();
+}
+
+}
 }

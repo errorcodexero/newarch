@@ -12,6 +12,8 @@ namespace xero {
 			/// \param robot the robot this controller controls
 			ControllerBase(Robot &robot) ;
 
+			virtual ~ControllerBase() ;
+
 			/// \brief run the controller, called once per robot loop.
 			/// This method is abstract and will be defined by a derived controller
 			/// class.

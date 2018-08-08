@@ -37,9 +37,11 @@ namespace xero {
 			virtual void run() {
 			}
 
-		private:
+		protected:
+			/// \brief The navx on the robot
 			AHRS navx_;
 
+		private:
 			double angle_;
 		} ;
 	}

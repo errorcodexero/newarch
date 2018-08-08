@@ -1,19 +1,20 @@
 #pragma once
 
-#include "messageDestFile.h"
+#include "MessageDestFile.h"
 #include <ctime>
+#include <array>
 
 namespace xero
 {
 namespace misc
 {
 /// \brief This class represents a message destination that is a file annotated with the current date and time
-class messageDestDatedFile : public messageDestFile
+class MessageDestDatedFile : public MessageDestFile
 {
   public:
   	/// \brief create the message destination file in the given base directory
-	/// \param the base directory for the message destination file
-	messageDestDatedFile(const std::string &basedir)
+	/// \param basedir the base directory for the message destination file
+	MessageDestDatedFile(const std::string &basedir)
 	{
 		std::array<char, 64> buffer;
 		time_t now;

@@ -19,9 +19,12 @@ namespace xero {
 		/// \brief The base class for any subsystem in the system.
 		class Subsystem {
 		public:	
+			/// \brief An action capable of executing a named sequence of actions
 			class ExecuteNamedSequence : public Action {
 			public:
+				/// \brief Create a new action capable of executing a named sequence of actions
 				ExecuteNamedSequence(ActionPtr action_p) ;
+
 				virtual void start();
 				virtual void run();
 				virtual bool isDone() ;
@@ -34,6 +37,8 @@ namespace xero {
 
 		public:
 			/// \brief create a new subsystem
+			/// \param robot the robot
+			/// \param name the name of the subsystem
 			Subsystem(Robot &robot, const std::string &name) ;
 
 			/// \brief destroy a new subsystem
@@ -74,10 +79,12 @@ namespace xero {
 
 			/// \brief cancel the current action for this subsystem
 			/// It also cancels the actions for any children subsystems
+			/// \returns true if the action was canceled, false if it could not be
 			virtual void cancelAction() ;
 
 			/// \brief asks a subsystem to execute a named sequence
-			/// \param the name of the sequence to execute
+			/// \param name the name of the sequence to execute
+			/// \return true if the named sequence able to be executed
 			bool executeNamedSequence(const std::string &name) ;
 
 			/// \brief asks a subsystem to create any named sequences
@@ -92,10 +99,14 @@ namespace xero {
 			/// \brief returns true if the subsystem is done with the current Action
 			/// \returns true if the subsystem is done with the current Action
 			virtual bool isDone() const {
+				if (action_ == nullptr)
+					return true ;
+					
 				return action_->isDone() ;
 			}
 
 			/// \brief return the main robot object
+			/// \returns the main robot object
 			Robot &getRobot() {
 				return robot_ ;
 			}			
@@ -103,16 +114,18 @@ namespace xero {
 		protected:
 			/// \brief add a named sequence to a subsystem
 			/// \param name the name of the sequence to define
-			/// \param the step to execute for this sequence
+			/// \param sequence_p the step to execute for this sequence
 			void defineNamedSequence(const std::string &name, ActionPtr sequence_p) {
 				sequences_[name] = sequence_p ;
 			}
 
 			/// \brief check that a Action is valid for a subsystem
 			/// \param Action the Action to check for a subsystem
+			/// \return true if the action is valid for a subsystem
 			virtual bool canAcceptAction(ActionPtr Action) {
 				return false ;
 			}
+
 
 		private:
 			//

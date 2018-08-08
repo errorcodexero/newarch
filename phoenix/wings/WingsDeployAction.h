@@ -11,7 +11,8 @@ namespace xero {
         public:
             /// \brief Create the wings deploy action
             /// \param wings a reference to the Wings subsystem
-            WingsDeployAction(Wings &wings) : WingsAction(wings) {                
+            WingsDeployAction(Wings &wings) : WingsAction(wings) { 
+                is_done_ = false;               
             }
 
             /// \brief Destroys a wings deploy action object
@@ -21,6 +22,7 @@ namespace xero {
             /// \brief called to start the action.  
             /// For this WingsDepolyAction this method does nothing
             virtual void start() {                
+                is_done_ = false ;
             }
 
             /// \brief called during the robot loop to execute this action

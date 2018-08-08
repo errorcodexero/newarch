@@ -19,6 +19,8 @@ namespace frc
         double GetStickAxis(int which, int i) ;
         int GetStickButtonCount(int which) ;
         bool GetStickButton(int which, int i) ;
+        int GetStickPOVCount(int which) ;
+        int GetStickPOV(int which, int i) ;
 		void ReportError(const char *msg) ;
 
     private:
