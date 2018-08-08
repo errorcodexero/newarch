@@ -15,6 +15,6 @@ namespace xero {
                 }
             private:
                 Grabber &grabber_ ;
-        }
+        };
     }
 }

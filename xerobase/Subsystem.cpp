@@ -42,6 +42,10 @@ namespace xero {
         void Subsystem::run() {
             for(auto sub: children_)
                 sub->run() ;
+
+            if (action_ != nullptr)
+                action_->run();
+            
         }
 
         void Subsystem::computeState() {

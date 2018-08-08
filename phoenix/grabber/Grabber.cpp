@@ -29,8 +29,5 @@ namespace xero {
                 angle_ = encoder_ticks_*degrees_per_tick_;
             }
         }
-        void Grabber::run(){
-
-        }
     }
 }

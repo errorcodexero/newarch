@@ -13,7 +13,6 @@ namespace xero {
             Grabber(xero::base::Robot & robot);
             virtual ~Grabber(); 
             virtual void computeState();
-            virtual void run();
 
             int getEncoderTicks() const {
                 return encoder_ticks_;
@@ -25,6 +24,12 @@ namespace xero {
             }
 
         private:
+            void calibrate(){
+                encoder_->Reset();
+                calibrated_ = true;
+            }
+
+        private:
             std::shared_ptr<frc::VictorSP> motor_;
             std::shared_ptr<frc::Encoder> encoder_;
             double min_angle_;
@@ -33,6 +38,6 @@ namespace xero {
             int encoder_ticks_;
             bool calibrated_;
             double angle_;
-        }
+        };
     }
 }

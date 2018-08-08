@@ -31,6 +31,7 @@ namespace xero {
             int count_;
             int diff_;
             std::list<int> ticks_;
+            bool isdone_;
         };
     }
 }
