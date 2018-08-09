@@ -16,6 +16,7 @@ namespace xero {
 	namespace base {
 		typedef std::shared_ptr<TalonSRX> TalonPtr;
 
+		/// \brief a tank-style drivebase
 		class TankDrive : public Drivebase {
 			friend class TankDriveDistanceAction;
 			friend class TankDriveVelocityAction;
