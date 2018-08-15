@@ -1,6 +1,10 @@
 #pragma once
 
 #include <Robot.h>
+#include <tankdrive/TankDrive.h>
+#include "wings/Wings.h"
+#include "intake/Intake.h"
+
 
 namespace xero {
 	namespace phoenix {
@@ -25,6 +29,7 @@ namespace xero {
 
 		private:
 			void initializeMessageLogger();
+			std::shared_ptr<xero::phoenix::Intake> intake_;
 		} ;
 	}
 }

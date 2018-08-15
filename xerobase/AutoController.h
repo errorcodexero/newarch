@@ -11,8 +11,10 @@ namespace xero {
 		/// robot, automode selector, and set of field conditions.
 		class AutoController : public ControllerBase {
 		public:
+			AutoController(Robot &robot){}
 			virtual void run(){
-				if (actionptr != nullptr){
+				if (actionptr_ != nullptr){
+					actionptr_ ->start();
 					actionptr_ ->run();
 
 					if (actionptr_->isDone())
