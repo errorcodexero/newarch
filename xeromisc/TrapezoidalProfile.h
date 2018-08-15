@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "SettingsParser.h"
 
 namespace xero {
     namespace misc {
@@ -11,6 +12,9 @@ namespace xero {
         class TrapezoidalProfile {
         public:
 			/// \brief Create a new trapazoidal velocity profile.
+			TrapezoidalProfile();
+
+			/// \brief Create a new trapazoidal velocity profile.
 			/// \param max_accel the maximum acceleration in inches / second / second
 			/// \param max_decel the maximum deceleration in inches / second / second
 			/// \param max_velocity the maximum velocity in inches / second
@@ -18,6 +22,19 @@ namespace xero {
 
 			/// \brief Destroy the velocity profile.
             virtual ~TrapezoidalProfile() ;
+
+			/// \brief Initialize the profile.
+			/// \param max_accel the maximum acceleration in inches / second / second
+			/// \param max_decel the maximum deceleration in inches / second / second
+			/// \param max_velocity the maximum velocity in inches / second
+			void init(double max_accel, double max_decel, double max_velocity);
+
+			/// \brief Initialize the profile from constants in the settings.
+            ///
+            /// Used settings: double :max_a, double :max_d, double max_v
+            /// \param parser the settings parser
+            /// \param prefix the prefix under which to find the profile constants in the settings file
+			void initFromSettings(SettingsParser &settings, const std::string &prefix);
 
 			/// \brief Update the profile based on the current distance travelled and velocity
 			/// and target end velocity.

@@ -4,15 +4,30 @@
 
 namespace xero {
     namespace misc {
-        TrapezoidalProfile::TrapezoidalProfile(double maxaccel, double maxdecel, double maxvel) {
-            max_accel_ = maxaccel ;
-            max_decel_ = maxdecel ;
-            max_velocity_ = maxvel ;
-            isneg_ = false ;
+		TrapezoidalProfile::TrapezoidalProfile() {
+			init(0.0, 0.0, 0.0);
+		}
+
+        TrapezoidalProfile::TrapezoidalProfile(double max_accel, double max_decel, double max_velocity) {
+			init(max_accel, max_decel, max_velocity);
         }
 
         TrapezoidalProfile::~TrapezoidalProfile() {
         }
+
+		void TrapezoidalProfile::init(double max_accel, double max_decel, double max_velocity) {
+			max_accel_ = max_accel;
+			max_decel_ = max_decel;
+			max_velocity_ = max_velocity;
+            isneg_ = false ;
+		}
+
+		void TrapezoidalProfile::initFromSettings(SettingsParser &settings, const std::string &prefix) {
+			double max_accel = settings.getDouble(prefix + ":max_a");
+			double max_decel = settings.getDouble(prefix + ":max_d");
+			double max_velocity = settings.getDouble(prefix + ":max_v");
+			init(max_accel, max_decel, max_velocity);
+		}
 		
         double TrapezoidalProfile::intspeed(double t) {
             double ret ;
