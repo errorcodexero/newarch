@@ -18,9 +18,12 @@ namespace xero {
 			friend class LifterMaintainHeightAction;
 			friend class LifterChangeGearAction;
 		public:
+			enum class LIFTER_GEAR {LOW, HIGH};
 			Lifter(xero::base::Robot& robot);
 			virtual ~Lifter();
 			virtual void run();
+			double getCurrentHeight();
+			double getCurrentVelocity();
 			virtual void computeState() ;
 		protected:
 			/// \brief Determine if the Lifter subsystem can accept the given action.
@@ -33,12 +36,16 @@ namespace xero {
 		private:
 			int encoder_ticks_;
 			double height_; //Inches
-			bool low_gear_;
-			bool calibrated_;
+			double previous_height_; //Inches			//Height in the previous robot loop
+			double velocity_;
+			LIFTER_GEAR current_gear_;
+			bool calibrate_flag_;
+			enum class CALIBRATED_STATUS {UNCALIBRATED, CALIBRATED, DECALIBRATED};
+			CALIBRATED_STATUS calibrated_;
 			bool brake_applied_;
-
 			void calibrate();
-
+			void setBrake(bool value);
+			void setMotorsDutyCycle(double value);
 			std::vector<std::shared_ptr<frc::VictorSP>> motors_;
 			std::shared_ptr<frc::Encoder> encoder_;
 			std::shared_ptr<frc::Solenoid> brake_solenoid_, gear_solenoid_;

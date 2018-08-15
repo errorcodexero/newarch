@@ -69,7 +69,8 @@
         "xstddef": "cpp",
         "xstring": "cpp",
         "xtree": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "xfunctional": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false
 }

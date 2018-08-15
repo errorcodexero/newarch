@@ -1,6 +1,8 @@
 #include "LifterCalibrateAction.h"
+#include "Robot.h"
+#include <cassert>
 
-const double BOTTOM_HEIGHT = 11.375;
+//const double BOTTOM_HEIGHT = 11.375;
 
 namespace xero {
     namespace phoenix {
@@ -8,13 +10,10 @@ namespace xero {
 
         }
         void LifterCalibrateAction::run() {
-            getLifter().encoder_->Reset();
-            getLifter().encoder_ticks_ = 0;
-            getLifter().height_ = BOTTOM_HEIGHT;
+            getLifter().calibrate();
         }
         bool LifterCalibrateAction::isDone() {
             return true;
-
         }
         void LifterCalibrateAction::cancel() {
 

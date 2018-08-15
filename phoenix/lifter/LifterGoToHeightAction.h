@@ -1,13 +1,12 @@
 #pragma once
 #include "LifterAction.h"
+#include "PIDCtrl.h"
 
 namespace xero {
     namespace phoenix {
         class LifterGoToHeightAction : public LifterAction {
         public:
-            LifterGoToHeightAction(Lifter& lifter) : LifterAction(lifter) {
-
-            };
+            LifterGoToHeightAction(Lifter& lifter, double target_height);
             virtual void start();
             virtual void run();
             virtual bool isDone();
@@ -15,6 +14,9 @@ namespace xero {
             virtual std::string toString();
         private:
             bool is_done_;
+            double target_height_;
+            double current_height_;
+            xero::misc::PIDCtrl PID_controller_;
             static const std::string action_name_;
         };
     };
