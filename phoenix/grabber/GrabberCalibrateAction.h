@@ -6,10 +6,10 @@
 
 namespace xero {
     namespace phoenix {
-         class GrabberCalibrateAction : public xero::base::GrabberAction {
+         class GrabberCalibrateAction : public GrabberAction {
          public:
             GrabberCalibrateAction(Grabber &grabber);
-            virtual ~GrabberCalibrateActon(); 
+            virtual ~GrabberCalibrateAction(); 
 
             /// \brief Start the calibrate action.
             virtual void start() ;
@@ -28,7 +28,7 @@ namespace xero {
 
         private:
             double calibratepower_;
-            int count_;
+            size_t count_;
             int diff_;
             std::list<int> ticks_;
             bool isdone_;

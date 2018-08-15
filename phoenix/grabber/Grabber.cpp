@@ -5,7 +5,7 @@ using namespace xero::base;
 
 namespace xero {
     namespace phoenix {
-        Grabber::Grabber(xero::base::Robot & robot){
+        Grabber::Grabber(xero::base::Robot & robot) :Subsystem(robot,"grabber"){
             int motor=robot.getSettingsParser().getInteger("hw:grabber:motor");
             int enc1=robot.getSettingsParser().getInteger("hw:grabber:encoder1");
             int enc2=robot.getSettingsParser().getInteger("hw:grabber:encoder2");

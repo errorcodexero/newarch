@@ -5,9 +5,9 @@
 
 namespace xero {
     namespace phoenix {
-         class GrabberToAngleAction : public xero::base::GrabberAction {
-            public:
-            GrabberToAngleAction(Grabber &grabber);
+         class GrabberToAngleAction : public GrabberAction {
+        public:
+            GrabberToAngleAction(Grabber &grabber, double angle);
             virtual ~GrabberToAngleAction(); 
 
             /// \brief Start the calibrate action.
@@ -25,9 +25,10 @@ namespace xero {
             /// \brief Returns a human readable string for the action
             virtual std::string toString() ;
 
-            private:
-            PIDCtrl angle_controller_;
-
+        private:
+            xero::misc::PIDCtrl angle_controller_;
+            double angle_;
+            double threshold_;
 
         };
     }

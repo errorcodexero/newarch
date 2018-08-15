@@ -5,8 +5,10 @@
 
 namespace xero {
 	namespace misc {
+		/// \brief A single setting item, capable of holding a boolean, integer, double, or string value
 		class Setting {
 		public:
+			/// \brief The type of value held by the setting
 			enum class Type {
 				Invalid,
 				Boolean,
@@ -15,36 +17,49 @@ namespace xero {
 				String
 			};
 
+			/// \brief Create a new setting with unset type
 			Setting() {
 				type_ = Type::Invalid;
 			}
 
+			/// \brief Create a new setting holding the given boolean value
+			/// \param b the boolean value to store
 			Setting(bool b) {
 				type_ = Type::Boolean;
 				bool_ = b;
 			}
 
+			/// \brief Create a new setting holding the given integer value
+			/// \param i the integer value to store
 			Setting(int i) {
 				type_ = Type::Integer;
 				int_ = i;
 			}
 
+			/// \brief Create a new setting holding the given double value
+			/// \param d the double value to store
 			Setting(double d) {
 				type_ = Type::Double;
 				double_ = d;
 			}
 
+			/// \brief Create a new setting holding the given string value
+			/// \param s the string value to store
 			Setting(std::string s) {
 				type_ = Type::String;
 				string_ = s;
 			}
 
+			/// \brief Return the boolean value held by the setting
+			/// \returns the boolean value held by the setting
 			bool getBoolean() {
 				assert(type_ == Type::Boolean);
 
 				return bool_;
 			}
 
+			/// \brief Return the integer value held by the setting
+			/// \returns the integer value held by the setting
 			int getInteger() {
 				if (type_ != Type::Integer) {
 					std::cout << "BAD TYPE" << std::endl ;
@@ -54,6 +69,8 @@ namespace xero {
 				return int_;
 			}
 
+			/// \brief Return the double value held by the setting
+			/// \returns the double value held by the setting
 			double getDouble() {
 				assert(type_ == Type::Double || type_ == Type::Integer);
 				
@@ -62,6 +79,8 @@ namespace xero {
 				return double_;
 			}
 
+			/// \brief Return the string value held by the setting
+			/// \returns the string value held by the setting
 			std::string getString() {
 				assert(type_ == Type::String);
 

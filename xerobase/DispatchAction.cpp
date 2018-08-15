@@ -1,4 +1,10 @@
 #include "DispatchAction.h"
+#include "basegroups.h"
+#include "Subsystem.h"
+#include "Robot.h"
+#include <MessageLogger.h>
+
+using namespace xero::misc ;
 
 namespace xero {
 namespace base {
@@ -8,8 +14,14 @@ DispatchAction::DispatchAction(SubsystemPtr subsystem, ActionPtr action, bool bl
 }
 
 void DispatchAction::start() {
-	if (!subsystem_->setAction(action_)) 
+	if (!subsystem_->setAction(action_)) {
+		MessageLogger &logger = subsystem_->getRobot().getMessageLogger() ;
+		logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTION_SEQ) ;
+		logger << "subsystem '" << subsystem_->getName() << "' rejected action '" ;
+		logger << action_->toString() << "'" ;
+		logger.endMessage() ;
 		denied_ = true;
+	}
 }
 
 void DispatchAction::run() {
@@ -31,6 +43,8 @@ std::string DispatchAction::toString() {
 
 	result = "DispatchAction(" ;
 	result += subsystem_->getName() + "," + action_->toString() ;
+	result += ", " ;
+	result += block_ ? "BLOCK" : "NONBLOCKING" ;
 	result += ")" ;
 	return result ;
 }

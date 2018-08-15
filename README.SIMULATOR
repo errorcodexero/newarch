@@ -9,8 +9,13 @@ arguments.  The following command line arguments are defined.
 --start time - the amount of time to delay before beginning the autonomous period
 --auto time - the length of the autonomous period
 --oper time - the length of the teleop period
---simtime time - the length of time between position reports from the simulator
---show - if present, print messages about the simulator transitions between modes
+--speed factor - the ratio or real time to simulation time, 2.0 means twice as slow as real time
+--simprint - print the simualtor output on the standard error stream
+--simfile file - print the simulator output to a file given by 'file'
+--simscreen - run the full screen simulator mode
+--simprop propstring - set a property for the simulator (only one property is used now)
+  cube=time,time,time - this causes the cube detect sensor model to detect at each time given
+  
 
 
 

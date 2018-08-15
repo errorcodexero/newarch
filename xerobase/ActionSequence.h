@@ -2,6 +2,7 @@
 #include <vector>
 #include "Action.h"
 #include "DispatchAction.h"
+#include <MessageLogger.h>
 
 namespace xero {
 	namespace base {
@@ -15,7 +16,7 @@ namespace xero {
 		class ActionSequence : public Action {
 		public:
 			/// \brief create an empty action sequence 
-			ActionSequence();
+			ActionSequence(xero::misc::MessageLogger &logger);
 
 			/// \brief start this sequence of actions
 			void start();
@@ -64,7 +65,13 @@ namespace xero {
 			std::vector<ActionPtr> actionSequence_;
 
 			// the index of the current action
-			size_t index_;
+			int index_;
+
+			// The message group for the message logger
+			int group_ ;
+
+			// The message logger
+			xero::misc::MessageLogger &logger_ ;
 
 		};
 	}

@@ -4,7 +4,7 @@
 
 namespace xero {
     namespace phoenix {
-        class GrabberHoldCubeAction : public xero::base::GrabberAction {
+        class GrabberHoldCubeAction : public xero::phoenix::GrabberAction {
         public:
             GrabberHoldCubeAction(Grabber &grabber);
             virtual ~GrabberHoldCubeAction(); 

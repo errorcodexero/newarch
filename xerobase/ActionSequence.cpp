@@ -1,13 +1,17 @@
 #include "ActionSequence.h"
+#include "basegroups.h"
+
+using namespace xero::misc ;
 
 namespace xero
 {
 namespace base
 {
 
-ActionSequence::ActionSequence()
+ActionSequence::ActionSequence(xero::misc::MessageLogger &logger) : logger_(logger)
 {
 	isDone_ = false;
+	group_ = MSG_GROUP_ACTION_SEQ ;
 }
 
 void ActionSequence::pushAction(ActionPtr action)
@@ -17,7 +21,7 @@ void ActionSequence::pushAction(ActionPtr action)
 
 void ActionSequence::start()
 {
-	index_ = -1;
+	index_ = -1 ;
 }
 
 void ActionSequence::startNextAction()
@@ -25,6 +29,10 @@ void ActionSequence::startNextAction()
 	index_++;
 	if (index_ < actionSequence_.size())
 	{
+		logger_.startMessage(MessageLogger::MessageType::debug, group_) ;
+		logger_ << "starting action " << index_ << " of " << actionSequence_.size() - 1 ;
+		logger_ << " '" << actionSequence_[index_]->toString() << "'" ;
+		logger_.endMessage() ;
 		actionSequence_[index_]->start();
 	}
 	else {

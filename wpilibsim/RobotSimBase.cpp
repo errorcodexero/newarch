@@ -1,7 +1,7 @@
 #include "RobotSimBase.h"
 #include "SubsystemModel.h"
 #include "PrintVisualizer.h"
-#include <messageLogger.h>
+#include <MessageLogger.h>
 #include <cassert>
 #include <chrono>
 #include <fstream>
@@ -24,7 +24,7 @@ namespace xero {
             
             speed_ = 1.0 ;
 
-            messageLogger logger ;
+            MessageLogger logger ;
             parser_ = new SettingsParser(logger, 1) ;
             if (!parser_->readFile(paramfile)) {
                 std::cerr << "Simulator cannot read parameter file '" << paramfile << "'" << std::endl ;

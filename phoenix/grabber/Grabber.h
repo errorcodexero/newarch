@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Subsystem.h" 
-#include <Encoders.h>
+#include <Encoder.h>
 #include <VictorSP.h>
 #include <cassert>
 #include <memory>
@@ -9,6 +9,10 @@
 namespace xero {
     namespace phoenix {
         class Grabber : public xero::base::Subsystem {
+            friend class GrabberCalibrateAction;
+            friend class GrabberDutyCycleAction;
+            friend class GrabberHoldCubeAction;
+            friend class GrabberToAngleAction;
         public:
             Grabber(xero::base::Robot & robot);
             virtual ~Grabber(); 

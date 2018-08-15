@@ -6,30 +6,30 @@ using namespace xero::base;
 
 namespace xero {
     namespace phoenix {
-            GrabberHoldCubeAction(Grabber &grabber){
-                double hold_value_=robot.getSettingsParser().getDouble("grabber:hold");
+            GrabberHoldCubeAction::GrabberHoldCubeAction(Grabber &grabber):GrabberAction(grabber){
+                double hold_value_=getGrabber().getRobot().getSettingsParser().getDouble("grabber:hold");
             }
-            ~GrabberHoldCubeAction(){
+            GrabberHoldCubeAction::~GrabberHoldCubeAction(){
 
             }
 
-            void start(){
+            void GrabberHoldCubeAction::start(){
                 getGrabber().motor_->Set(hold_value_);
             }
           
-            void run(){
+            void GrabberHoldCubeAction::run(){
 
             }
 
-            bool isDone(){
+            bool GrabberHoldCubeAction::isDone(){
                 return true;
             }
 
-            void cancel(){
+            void GrabberHoldCubeAction::cancel(){
                 
             }
 
-            std::string toString(){
+            std::string GrabberHoldCubeAction::toString(){
 
             }
     }

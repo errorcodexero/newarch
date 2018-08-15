@@ -1,4 +1,5 @@
 #include "Intake.h"
+#include "IntakeAction.h"
 #include <Robot.h>
 
 using namespace xero::base;
@@ -14,7 +15,11 @@ namespace xero {
         }
 
         Intake::~Intake(){
-            
+        }
+
+        bool Intake::canAcceptAction(ActionPtr action) {
+            auto coll = std::dynamic_pointer_cast<IntakeAction>(action) ;
+            return coll != nullptr ;
         }
     }
 }

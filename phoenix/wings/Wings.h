@@ -29,11 +29,6 @@ namespace xero {
             /// \brief destroy the wings subsystem
             virtual ~Wings() ;
 
-            /// \brief Perform any per robot loop action needed by the wings subsystem.
-            /// This implementation just checks for any assigned action and gives the
-            /// action a chance to run.
-            virtual void run() ;
-
             /// \brief Compute the state of the wings subsystem.
             /// The state of this subsystem is found by seeing if the solenoid is ever
             /// set.  This causes the deployed state to be set to true.  Note, that

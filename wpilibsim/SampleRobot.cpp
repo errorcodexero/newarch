@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 using namespace xero::sim ;
+using namespace xero::misc ;
 
 namespace frc
 {
@@ -193,6 +194,15 @@ namespace frc
 				sim.enablePrinting(m_args[index]) ;
 				index++ ;
 			}
+			else if (m_args[index] == "--robotfile") {
+				index++;
+				if (index == m_args.size()) {
+					std::cerr << "--robotfile flag requires additional argument" << std::endl ;
+					exit(1) ;
+				}					
+				output_file_name_ = m_args[index] ;
+				index++ ;
+			}
 			else if (m_args[index] == "--simscreen") {
 				RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;				
 				sim.enableScreen() ;
@@ -331,4 +341,5 @@ namespace frc
 	{
 		return m_mode == RobotMode::Operator;
 	}
+
 }

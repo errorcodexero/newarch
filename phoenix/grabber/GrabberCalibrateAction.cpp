@@ -8,12 +8,12 @@ using namespace xero::base;
 
 namespace xero {
     namespace phoenix {
-            GrabberCalibrateAction::GrabberCalibrateAction(Grabber &grabber){
+            GrabberCalibrateAction::GrabberCalibrateAction(Grabber &grabber) : GrabberAction(grabber){
                 calibratepower_ = grabber.getRobot().getSettingsParser().getDouble("grabber:calibrate:value");
-                count_ = grabber.getRobot().getSettingsParser().getInteger("grabber:calibrate:count");
+                count_ = static_cast<size_t>(grabber.getRobot().getSettingsParser().getInteger("grabber:calibrate:count"));
                 diff_ = grabber.getRobot().getSettingsParser().getInteger("grabber:calibrate:diff");
             }
-            GrabberCalibrateAction::~GrabberCalibrateActon(){
+            GrabberCalibrateAction::~GrabberCalibrateAction(){
 
             }
 
@@ -30,9 +30,9 @@ namespace xero {
                     ticks_.pop_front();
                 }
 
-                if(tick_.size()== count_){
-                   auto miniter = std::min_element(ticks_.start(),ticks_.end());
-                    auto maxiter = std::max_element(ticks_.start(),ticks_.end());
+                if(ticks_.size()== count_){
+                   auto miniter = std::min_element(ticks_.begin(),ticks_.end());
+                    auto maxiter = std::max_element(ticks_.begin(),ticks_.end());
                     auto minval = *miniter;
                     auto maxval = *maxiter;
                     if(maxval-minval<diff_){

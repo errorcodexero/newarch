@@ -31,6 +31,16 @@ namespace frc {
         return false ;
     }
 
+    int DriverStation::GetStickPOVCount(int which) {
+        std::lock_guard<std::mutex> lock(getLockMutex()) ;        
+        return 0 ;
+    }   
+
+    int DriverStation::GetStickPOV(int which, int i) {
+        std::lock_guard<std::mutex> lock(getLockMutex()) ;        
+        return -1 ;
+    }         
+
 	void DriverStation::ReportError(const char *msg) {
 		std::cout << msg << std::endl ;
 	}

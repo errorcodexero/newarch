@@ -49,22 +49,5 @@ namespace xero {
             std::shared_ptr<WingsAction> action_p = std::dynamic_pointer_cast<WingsAction>(action) ;
             return action_p != nullptr ;
         }
-
-        void Wings::run() {
-            //
-            // This does nothing for now for a simple subsystem.  If this is a more complex
-            // subsystem, this method calls run() on each of the child subsystems.  It should always
-            // be called incase we add more to the run method of the base class Subsystem.
-            //
-            Subsystem::run() ;
-
-            //
-            // Get the currently assigned action for this subsytem, and if it exists (is not nullptr)
-            // the run the action for this subsystem.
-            //
-            ActionPtr action = getAction() ;
-            if (action != nullptr)
-                action->run() ;
-        }
     }
 }

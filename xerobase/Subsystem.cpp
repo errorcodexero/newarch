@@ -2,7 +2,7 @@
 #include "Action.h"
 #include "Robot.h"
 #include "basegroups.h"
-#include <messageLogger.h>
+#include <MessageLogger.h>
 
 using namespace xero::misc ;
 
@@ -42,10 +42,9 @@ namespace xero {
         void Subsystem::run() {
             for(auto sub: children_)
                 sub->run() ;
-
-            if (action_ != nullptr)
-                action_->run();
             
+            if (action_ != nullptr)
+                action_->run() ;
         }
 
         void Subsystem::computeState() {
@@ -53,16 +52,11 @@ namespace xero {
                 sub->computeState() ;            
         }
 
-        void Subsystem::cancelAction() {
-            if (action_ != nullptr)
-                action_->cancel() ;
-        }
-
         bool Subsystem::executeNamedSequence(const std::string &name) {
             auto it = sequences_.find(name) ;
             if (it == sequences_.end()) {
-                messageLogger &logger = getRobot().getMessageLogger() ;
-                logger.startMessage(messageLogger::messageType::error, MSG_GROUP_SUBSYSTEMS) ;
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_SUBSYSTEMS) ;
                 logger << "subsystem '" << name_ << "'" ;
                 logger << " was requested to execute unknown named sequence '" ;
                 logger << name << "'" ;
@@ -74,6 +68,13 @@ namespace xero {
             return setAction(seqdir_p) ;
         }
 
+		void Subsystem::cancelAction() {
+			if (action_ != nullptr)
+				action_->cancel() ;
+
+			action_ = nullptr ;
+		}
+
         bool Subsystem::setAction(ActionPtr action) {
 
             if (action_ != nullptr && !action_->isDone()) {
@@ -81,18 +82,22 @@ namespace xero {
                 // The current Action is still running, interrupt it
                 //
                 cancelAction();
-
-                action_ = nullptr ;
             }
 
-            if (!canAcceptAction(action))
+            if (action != nullptr && !canAcceptAction(action)) {
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTION_SEQ) ;
+                logger << "subsystem '" << getName() << "' rejected action '" << action->toString() << "'" ;
+                logger.endMessage() ;
                 return false ;
+            }
 
 			//
 			// And now start the Action
 			//
             action_ = action ;
-            action_->start() ;
+            if (action_ != nullptr)
+                action_->start() ;
 			return true ;
         }
     }

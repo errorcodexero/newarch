@@ -108,6 +108,11 @@ namespace frc
 		{
 			m_mode = m;
 		}
+
+		const std::string getRobotOutputFile() {
+			return output_file_name_ ;
+		}
+
 	private:
 		bool m_running;
 		bool m_enabled;
@@ -122,6 +127,8 @@ namespace frc
 
 		bool m_auto_done;
 		bool screen_ ;
+
+		std::string output_file_name_ ;
 	};
 }
 
