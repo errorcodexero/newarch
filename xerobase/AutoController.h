@@ -27,8 +27,6 @@ namespace xero {
 			/// \param action run for a controller
 			void setAction(ActionPtr action){
 				actionptr_ = action;
-				if (actionptr_ = nullptr)
-					actionptr_->start() ;
 			}
 
 		private:
