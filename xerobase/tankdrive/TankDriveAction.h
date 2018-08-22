@@ -10,10 +10,11 @@ namespace xero {
 		class TankDriveAction : public Action {
 		public:
 			/// \brief Create a new TankDriveAction
-			/// \param parent the parent subsystem
+			/// \param tank_drive the tank drive subsystem
 			TankDriveAction(TankDrive &tank_drive) : tank_drive_(tank_drive) {}
 
 		protected:
+			/// \brief The tank drive subsystem
 			TankDrive &tank_drive_;
 		};
 	}

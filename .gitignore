@@ -2,8 +2,7 @@ xerobase/Debug
 xerobase/Release
 phoenix/Debug
 phoenix/Release
-html
-rtf
+doc/out
 build
 .gradle
 *.swp
