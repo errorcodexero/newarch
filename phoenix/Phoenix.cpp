@@ -58,8 +58,8 @@ namespace xero {
 			//
 			// This is where the autonomous controller is created
 			//
-			auto intakedutyaction_p = std::make_shared<IntakeDutyCycleAction>(intake_.get(), .5) ;
-			auto phoenixauto_p = std::make_shared<PhoenixAutoController>(intakedutyaction_p);
+			auto intakedutyaction_p = std::make_shared<IntakeDutyCycleAction>(*intake_.get(), .5) ;
+			auto phoenixauto_p = std::make_shared<PhoenixAutoController>(intakedutyaction_p, *this);
 			return phoenixauto_p;
 		}
 		

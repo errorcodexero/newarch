@@ -11,7 +11,8 @@ namespace xero {
 		/// robot, automode selector, and set of field conditions.
 		class PhoenixAutoController : public AutoController
 		{
-			PhoenixAutoController(ActionPtr action){
+			public:
+			PhoenixAutoController(ActionPtr action, Robot &robot):AutoController(robot){
 				setAction(action);
 			}
 		};
