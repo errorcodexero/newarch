@@ -1,6 +1,8 @@
+#include <math.h>
+
 #include "GrabberToAngleAction.h"
 #include "Grabber.h"
-#include <Robot.h>
+#include "Robot.h"
 
 using namespace xero::base;
 
@@ -18,7 +20,7 @@ namespace xero {
             }
 
             void GrabberToAngleAction::start(){
-
+                isdone_ = false;
             }
 
             void GrabberToAngleAction::run(){
@@ -26,14 +28,17 @@ namespace xero {
                 double current = getGrabber().getAngle();
                 double output = angle_controller_.getOutput(angle_, current, dt);
                 getGrabber().motor_->Set(output);
+                if (fabs(angle_-current) < threshold_) {
+                    isdone_ = true;
+                }
             }
 
             bool GrabberToAngleAction::isDone(){
-
+                return isdone_;
             }
 
             void GrabberToAngleAction::cancel(){
-
+                isdone_ = true;
             }
 
            std::string GrabberToAngleAction::toString(){

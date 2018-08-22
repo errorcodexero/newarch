@@ -29,6 +29,7 @@ namespace xero {
             xero::misc::PIDCtrl angle_controller_;
             double angle_;
             double threshold_;
+            bool isdone_;
 
         };
     }
