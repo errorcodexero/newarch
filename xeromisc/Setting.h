@@ -61,9 +61,6 @@ namespace xero {
 			/// \brief Return the integer value held by the setting
 			/// \returns the integer value held by the setting
 			int getInteger() {
-				if (type_ != Type::Integer) {
-					std::cout << "BAD TYPE" << std::endl ;
-				}
 				assert(type_ == Type::Integer) ;
 
 				return int_;

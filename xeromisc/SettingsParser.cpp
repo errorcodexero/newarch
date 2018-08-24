@@ -26,21 +26,32 @@ bool SettingsParser::readLine(const std::string &line, std::string &key, std::st
 		// Check for comment start
 		if(line[i] == '#') {
 			// If the key hasn't been found, the line is invalid
-			if(key.length() == 0)
+			if(key.length() == 0) {
+				logger_.startMessage(MessageLogger::MessageType::warning, msggroup_);
+				logger_ << filename << ": line " << line_num << ": Comment started without finding key";
+				logger_.endMessage();
 				return false;
+			}
+
 			// If the key has been found but not the value, the line is invalid
-			else if(value.length() == 0)
+			else if(value.length() == 0) {
+				logger_.startMessage(MessageLogger::MessageType::warning, msggroup_);
+				logger_ << filename << ": line " << line_num << ": Comment started without finding value";
+				logger_.endMessage();
 				return false;
+			}
 
 			// Otherwise, set the value to what's come so far and finish
 			value = buffer.str();
 			return true;
+
 		// Check for string start
 		} else if(line[i] == '"') {
 			in_string = !in_string;
 			if(key.length() > 0)
 				is_string = true;
 			continue;
+
 		// Check for separating space if not in a string
 		} else if(!in_string && std::isspace(line[i])) {
 			if(key.length() == 0) {
@@ -51,6 +62,7 @@ bool SettingsParser::readLine(const std::string &line, std::string &key, std::st
 				value = buffer.str();
 				return true;
 			}
+
 		// If the character is none of these, add it to the buffer
 		} else {
 			buffer.put(line[i]);
@@ -66,10 +78,24 @@ bool SettingsParser::readLine(const std::string &line, std::string &key, std::st
 		return false;
 	}
 
-	//
-	// If we fall out of the loop, there is not white space after the value, 
-	//
-	value = buffer.str() ;	
+	// If the key hasn't been found, the line is invalid
+	if(key.length() == 0) {
+		logger_.startMessage(MessageLogger::MessageType::warning, msggroup_);
+		logger_ << filename << ": line " << line_num << ": Line ended without finding key";
+		logger_.endMessage();
+		return false;
+	}
+	
+	// Make the value what was found up to the end of the line
+	value = buffer.str();
+
+	// If there was nothing between the key and the end of the line, the line is invalid
+	if(value.length() == 0) {
+		logger_.startMessage(MessageLogger::MessageType::warning, msggroup_);
+		logger_ << filename << ": line " << line_num << ": Line ended without finding value";
+		logger_.endMessage();
+		return false;
+	}
 
 	return true;
 }
@@ -170,10 +196,20 @@ bool SettingsParser::isDefined(const std::string &key) {
 	return settings_.find(key) != settings_.end();
 }
 
+bool SettingsParser::isDefinedOnGet(const std::string &key, const std::string &type) {
+	if(!isDefined(key)) {
+		logger_.startMessage(MessageLogger::MessageType::error, msggroup_);
+		logger_ << "Tried to get " << type << " at " << key << " but no such value is defined.";
+		logger_.endMessage();
+		return false;
+	}
+	return true;
+}
+
 void SettingsParser::set(const std::string &key, bool value) {
 	if (key.length() > var_prefix_.length() && key.substr(0, var_prefix_.length()) == var_prefix_) {
-		logger_.startMessage(MessageLogger::MessageType::debug) ;
-		logger_ << "SettingsParser: variable '" << key << "' set to value " ;
+		logger_.startMessage(MessageLogger::MessageType::debug, msggroup_) ;
+		logger_ << "Variable '" << key << "' set to value " ;
 		logger_ << (value ? "true" : "false") ;
 		logger_.endMessage() ;
 	}
@@ -183,8 +219,8 @@ void SettingsParser::set(const std::string &key, bool value) {
 
 void SettingsParser::set(const std::string &key, int value) {
 	if (key.length() > var_prefix_.length() && key.substr(0, var_prefix_.length()) == var_prefix_) {
-		logger_.startMessage(MessageLogger::MessageType::debug) ;
-		logger_ << "SettingsParser: variable '" << key << "' set to value " ;
+		logger_.startMessage(MessageLogger::MessageType::debug, msggroup_) ;
+		logger_ << "Variable '" << key << "' set to value " ;
 		logger_ << value ;
 		logger_.endMessage() ;
 	}	
@@ -193,8 +229,8 @@ void SettingsParser::set(const std::string &key, int value) {
 
 void SettingsParser::set(const std::string &key, double value) {
 	if (key.length() > var_prefix_.length() && key.substr(0, var_prefix_.length()) == var_prefix_) {
-		logger_.startMessage(MessageLogger::MessageType::debug) ;
-		logger_ << "SettingsParser: variable '" << key << "' set to value " ;
+		logger_.startMessage(MessageLogger::MessageType::debug, msggroup_) ;
+		logger_ << "Variable '" << key << "' set to value " ;
 		logger_ << value ;
 		logger_.endMessage() ;
 	}		
@@ -203,8 +239,8 @@ void SettingsParser::set(const std::string &key, double value) {
 
 void SettingsParser::set(const std::string &key, const std::string &value) {
 	if (key.length() > var_prefix_.length() && key.substr(0, var_prefix_.length()) == var_prefix_) {
-		logger_.startMessage(MessageLogger::MessageType::debug) ;
-		logger_ << "SettingsParser: variable '" << key << "' set to value " ;
+		logger_.startMessage(MessageLogger::MessageType::debug, msggroup_) ;
+		logger_ << "Variable '" << key << "' set to value " ;
 		logger_ << value ;
 		logger_.endMessage() ;
 	}	
@@ -212,19 +248,39 @@ void SettingsParser::set(const std::string &key, const std::string &value) {
 }
 
 bool SettingsParser::getBoolean(const std::string &key) {
+	assert(isDefinedOnGet(key, "boolean"));
 	return settings_[key].getBoolean();
 }
 
+bool SettingsParser::getBoolean(const std::string &key, const bool &default_value) {
+	return isDefinedOnGet(key, "boolean") ? settings_[key].getBoolean() : default_value;
+}
+
 int SettingsParser::getInteger(const std::string &key) {
+	assert(isDefinedOnGet(key, "integer"));
 	return settings_[key].getInteger();
 }
 
+int SettingsParser::getInteger(const std::string &key, const int &default_value) {
+	return isDefinedOnGet(key, "integer") ? settings_[key].getInteger() : default_value;
+}
+
 double SettingsParser::getDouble(const std::string &key) {
+	assert(isDefinedOnGet(key, "double"));
 	return settings_[key].getDouble();
 }
 
+double SettingsParser::getDouble(const std::string &key, const double &default_value) {
+	return isDefinedOnGet(key, "double") ? settings_[key].getDouble() : default_value;
+}
+
 std::string SettingsParser::getString(const std::string &key) {
+	assert(isDefinedOnGet(key, "string"));
 	return settings_[key].getString();
+}
+
+std::string SettingsParser::getString(const std::string &key, const std::string &default_value) {
+	return isDefinedOnGet(key, "string") ? settings_[key].getString() : default_value;
 }
 
 }
