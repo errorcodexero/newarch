@@ -63,30 +63,30 @@ namespace xero {
                 if (!brake_value_) {
                     double dh = voltage_ * inch_per_sec_per_volt_ * dt ;
                     height_ += dh ;
+				}
+				
+				if (height_ <= bottom_limit_height_) {
+					height_ = bottom_limit_height_ ;
+					if (bottom_limit_ != nullptr)
+						bottom_limit_->SimulatorSetValue(false) ;
+				}
+				else {
+					if (bottom_limit_ != nullptr)
+						bottom_limit_->SimulatorSetValue(true) ;
+				}
 
-                    if (height_ <= bottom_limit_height_) {
-                        height_ = bottom_limit_height_ ;
-                        if (bottom_limit_ != nullptr)
-                            bottom_limit_->SimulatorSetValue(false) ;
-                    }
-                    else {
-                        if (bottom_limit_ != nullptr)
-                            bottom_limit_->SimulatorSetValue(true) ;
-                    }
+				if (height_ >= top_limit_height_) {
+					height_ = top_limit_height_ ;
+					if (top_limit_ != nullptr)
+						top_limit_->SimulatorSetValue(false) ;
+				}
+				else {
+					if (top_limit_ != nullptr)
+						top_limit_->SimulatorSetValue(true) ;
+				}
 
-                    if (height_ >= top_limit_height_) {
-                        height_ = top_limit_height_ ;
-                        if (top_limit_ != nullptr)
-                            top_limit_->SimulatorSetValue(false) ;
-                    }
-                    else {
-                        if (top_limit_ != nullptr)
-                            top_limit_->SimulatorSetValue(true) ;
-                    }
-
-                    int encval = static_cast<int>((height_ - bottom_limit_height_) / in_per_tick_) + encoder_base_ ;
-                    enc_->SimulatorSetValue(encval) ;
-                }
+				int encval = static_cast<int>((height_ - bottom_limit_height_) / in_per_tick_) + encoder_base_ ;
+				enc_->SimulatorSetValue(encval) ;
             }
 
 	        void LifterModel::inputChanged(SimulatedObject *obj) {

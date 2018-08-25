@@ -10,6 +10,7 @@
 #include "AHRS.h"
 #include <mutex>
 #include <map>
+#include <vector>
 
 namespace xero {
     namespace sim {
@@ -21,6 +22,7 @@ namespace xero {
             virtual ~SubsystemModel() ;
 
             virtual void run(double dt) = 0 ;
+			virtual void init() = 0 ;
             virtual void inputChanged(SimulatedObject *obj) = 0 ;
             virtual std::string toString() = 0 ;
 
@@ -57,6 +59,10 @@ namespace xero {
             RobotSimBase &getSimulator() {
                 return simbase_ ;
             }
+
+		protected:
+			bool parseDoubleList(const std::string &list, std::vector<double> &values) ;
+			bool parseDouble (const std::string &prop, double &value) ;
 
         private:
             std::string name_ ;
