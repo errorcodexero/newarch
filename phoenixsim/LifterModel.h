@@ -27,6 +27,10 @@ namespace xero  {
 				/// \param obj the input object which changed state
 	            virtual void inputChanged(SimulatedObject *obj);
 
+				/// \brief one time initialization at the start of a simulation
+				virtual void init() {					
+				}
+
 				/// \brief Add a Victor SP to the model.
 				/// \param motor the Victor SP to add
 	            virtual void addVictorSP(frc::VictorSP *motor);

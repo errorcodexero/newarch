@@ -46,6 +46,11 @@ hw:wings:solenoid                   1
 tankdrive:sim:rps_per_volt_per_second               11.45916
 
 #
+# The maximum amount of change per second of the RPS of a motor.
+#
+tankdrive:sim:change_per_second						11.45196
+
+#
 # The maximum random error applied to the left and right
 # side motors on the drivebase.  If this is .05, there can
 # be up to 5% delta applied per side randomly to the

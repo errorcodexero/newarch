@@ -29,6 +29,9 @@ namespace xero  {
 				/// \param obj the input object which changed state
                 virtual void inputChanged(SimulatedObject *obj) ;
 
+				/// \brief one time initialization of the model at the start of the simulation
+                void init() ;
+
 				/// \brief Add a digital input to the model.
 				/// \param input the digital input to all
                 virtual void addDigitalInput(frc::DigitalInput *input) ;
@@ -52,13 +55,11 @@ namespace xero  {
                 } ;
 
             private:
-                void initModel() ;
                 void evalSensor() ;
                 std::vector<std::string> split(const std::string &line) ;
 
             private:       
                 frc::DigitalInput *input_ ;
-                bool inited_ ;
                 bool cube_sensed_ ;
                 int cube_sensor_input_ ;
                 double last_time_ ;

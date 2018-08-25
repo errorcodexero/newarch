@@ -12,7 +12,6 @@ namespace xero {
                 motor_channel_1_ = simbase.getSettingsParser().getInteger("hw:intake:leftmotor") ;
                 motor_channel_2_ = simbase.getSettingsParser().getInteger("hw:intake:rightmotor") ;         
                 eject_duration_ = simbase.getSettingsParser().getDouble("collector:eject_duration") ;       
-                inited_ = false ;
                 last_time_ = 0.0 ;
                 input_ = nullptr ;
                 running_ = false ;
@@ -30,37 +29,17 @@ namespace xero {
                 return result ;
             }
 
-            std::vector<std::string> CubeSensorModel::split(const std::string &line) {
-                size_t index = 0 ;
-                std::string word ;
-                std::vector<std::string> result ;
 
-                while (index < line.length()) {
-                    if (line[index] == ',') {
-                        result.push_back(word) ;
-                        word.clear() ;
-                        index++ ;
-                    }
-                    else {
-                        word += line[index++] ;
-                    }
-                }
-
-                if (word.length() > 0)
-                    result.push_back(word) ;
-
-                return result ;
-            }
-
-            void CubeSensorModel::initModel() {
+            void CubeSensorModel::init() {
                 if (getSimulator().hasProperty("cube")) {
+					std::vector<double> values ;
                     const std::string &prop = getSimulator().getProperty("cube") ;
-                    std::vector<std::string> words = split(prop) ;
-                    for(const std::string &word: words) {
-                        double t = std::stod(word) ;
-                        OnTime tm(t) ;
-                        ontimes_.push_back(tm) ;
-                    }
+                    if (parseDoubleList(prop, values)) {
+						for(double t : values) {
+                        	OnTime tm(t) ;
+                        	ontimes_.push_back(tm) ;
+                    	}
+					}
                 }
             }
 
@@ -85,10 +64,6 @@ namespace xero {
             }
 
             void CubeSensorModel::run(double dt) {
-                if (!inited_) {
-                    initModel() ;
-                    inited_ = true ;
-                }
 
                 evalSensor() ;
 

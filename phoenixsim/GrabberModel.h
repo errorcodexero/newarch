@@ -23,6 +23,9 @@ namespace xero  {
 				/// \param dt the time difference since the last code loop
                 virtual void run(double dt) ;
 
+				// \brief one time initialization of the model at the start of a simulation
+				virtual void init()  ;			
+
 				/// \brief Update the state of the model.  Called when one of its inputs changes.
 				/// \param obj the input object which changed state
                 virtual void inputChanged(SimulatedObject *obj) ;

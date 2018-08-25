@@ -78,3 +78,4 @@ if [ $4 = "teleop" ]; then
 fi
 
 build/exe/frcUserProgramSim/frcUserProgramSim --simfile SIM --robotfile ROBOT --start 0 --auto $autotime --oper $teleoptime --simscreen --simprop cube=$cubes --simprop pos=$pos --simprop gamedata=$2
+
