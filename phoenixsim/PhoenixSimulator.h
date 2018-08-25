@@ -21,15 +21,26 @@ namespace xero
 			class GrabberModel ;
 			class CubeSensorModel ;
 
+			/// \brief A simulator for Phoenix.
 			class PhoenixSimulator : public xero::sim::RobotSimBase
 			{
 			public:
+				/// \brief Create a simulator for Phoenix.
+				/// \param paramfile the filename of the robot's parameter file
 				PhoenixSimulator(const std::string &paramfile);
+
+				/// \brief Destroy the simulator.
 				virtual ~PhoenixSimulator();
 
+				/// \brief Connect a simulated hardware object to the simulator
+				/// \param device the simulated hardware object to connect
 				virtual void connect(xero::sim::SimulatedObject *device) ;
+
+				/// \brief Disconnect a simulated hardware object from the simulator
+				/// \param device the simulated hardware object to disconnect
 				virtual void disconnect(xero::sim::SimulatedObject *device) ;
 
+				/// \brief Enable the simulation visualizer.
 				virtual void enableScreen() ;
 
 			private:

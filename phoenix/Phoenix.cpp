@@ -1,13 +1,12 @@
 #include <memory>
 #include "Phoenix.h"
-#include <tankdrive/TankDrive.h>
-#include "wings/Wings.h"
-#include "intake/Intake.h"
 
 #include "MessageGroups.h"
 #include "MessageLogger.h"
 #include "MessageDestSeqFile.h"
 #include "MessageDestStream.h"
+#include "PhoenixAutoController.h"
+#include "intake/IntakeDutyCycleAction.h"
 
 #ifdef SIM
 #include <PhoenixSimulator.h>
@@ -47,6 +46,7 @@ namespace xero {
 			// Add in the intake subsystem
 			//
 			auto intake_p = std::make_shared<Intake>(*this) ;
+			intake_ = intake_p; 
 			addSubsystem(intake_p) ;
 
 			//
@@ -58,7 +58,9 @@ namespace xero {
 			//
 			// This is where the autonomous controller is created
 			//
-			return nullptr ;
+			auto intakedutyaction_p = std::make_shared<IntakeDutyCycleAction>(*intake_.get(), .5) ;
+			auto phoenixauto_p = std::make_shared<PhoenixAutoController>(intakedutyaction_p, *this);
+			return phoenixauto_p;
 		}
 		
 		std::shared_ptr<ControllerBase> Phoenix::createTeleopController() {
