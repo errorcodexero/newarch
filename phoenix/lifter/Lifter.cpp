@@ -64,8 +64,14 @@ namespace xero {
 		}
 
 
-		bool Lifter::canAcceptAction(xero::base::ActionPtr Action) {
+		bool Lifter::canAcceptAction(xero::base::ActionPtr action) {
+			std::shared_ptr<LifterAction> act_p = std::dynamic_pointer_cast<LifterAction>(action) ;
+			if (act_p == nullptr)
+				return false ;
 
+			// TODO: reject LifterGoToHeightAction if not calibreated
+
+			return true ;
 		}
 
 		void Lifter::calibrate() {

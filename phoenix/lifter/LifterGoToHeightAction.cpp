@@ -9,7 +9,7 @@ namespace xero {
         }
 
         void LifterGoToHeightAction::start() {
-            PID_controller_.initFromSettings(getLifter().getRobot().getSettingsParser(), "lifter:goto:");
+            PID_controller_.initFromSettings(getLifter().getRobot().getSettingsParser(), "lifter:goto");
             getLifter().setBrake(false);
         }
 
@@ -40,9 +40,9 @@ namespace xero {
         }
 
         std::string LifterGoToHeightAction::toString() {
-            return action_name_;
+			std::string ret("GoToHeight ") ;
+			ret += std::to_string(target_height_) ;
+            return ret ;
         }
-
-        const std::string LifterGoToHeightAction::action_name_("LifterGoToHeight");
     }
 }

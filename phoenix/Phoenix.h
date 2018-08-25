@@ -4,7 +4,8 @@
 #include <tankdrive/TankDrive.h>
 #include "wings/Wings.h"
 #include "intake/Intake.h"
-
+#include "lifter/Lifter.h"
+#include "grabber/Grabber.h"
 
 namespace xero {
 	namespace phoenix {
@@ -29,7 +30,6 @@ namespace xero {
 
 		private:
 			void initializeMessageLogger();
-			std::shared_ptr<xero::phoenix::Intake> intake_;
 		} ;
 	}
 }

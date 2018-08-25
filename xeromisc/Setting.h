@@ -52,7 +52,7 @@ namespace xero {
 
 			/// \brief Return the boolean value held by the setting
 			/// \returns the boolean value held by the setting
-			bool getBoolean() {
+			bool getBoolean() const {
 				assert(type_ == Type::Boolean);
 
 				return bool_;
@@ -60,7 +60,7 @@ namespace xero {
 
 			/// \brief Return the integer value held by the setting
 			/// \returns the integer value held by the setting
-			int getInteger() {
+			int getInteger() const {
 				if (type_ != Type::Integer) {
 					std::cout << "BAD TYPE" << std::endl ;
 				}
@@ -71,7 +71,7 @@ namespace xero {
 
 			/// \brief Return the double value held by the setting
 			/// \returns the double value held by the setting
-			double getDouble() {
+			double getDouble() const {
 				assert(type_ == Type::Double || type_ == Type::Integer);
 				
 				if (type_ == Type::Integer)
@@ -81,7 +81,7 @@ namespace xero {
 
 			/// \brief Return the string value held by the setting
 			/// \returns the string value held by the setting
-			std::string getString() {
+			const std::string &getString() const {
 				assert(type_ == Type::String);
 
 				return string_;

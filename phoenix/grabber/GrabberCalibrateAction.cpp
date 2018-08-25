@@ -13,8 +13,8 @@ namespace xero {
                 count_ = static_cast<size_t>(grabber.getRobot().getSettingsParser().getInteger("grabber:calibrate:count"));
                 diff_ = grabber.getRobot().getSettingsParser().getInteger("grabber:calibrate:diff");
             }
-            GrabberCalibrateAction::~GrabberCalibrateAction(){
 
+            GrabberCalibrateAction::~GrabberCalibrateAction() {
             }
 
             /// \brief Start the calibrate action.
@@ -54,8 +54,8 @@ namespace xero {
             }
 
             /// \brief Returns a human readable string for the action
-            std::string GrabberCalibrateAction::toString(){
-
+            std::string GrabberCalibrateAction::toString() {
+				return std::string("GrabberCalibrationAction") ;
             }
 
     }

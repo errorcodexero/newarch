@@ -15,9 +15,10 @@ namespace xero {
         bool LifterCalibrateAction::isDone() {
             return true;
         }
-        void LifterCalibrateAction::cancel() {
 
+        void LifterCalibrateAction::cancel() {
         }
+		
         std::string LifterCalibrateAction::toString() {
             return action_name_;
         }
