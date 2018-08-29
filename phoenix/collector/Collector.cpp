@@ -10,7 +10,6 @@ namespace xero {
 
             double h2ldelay=robot.getSettingsParser().getDouble("collector:cubesensor:h2ldelay");
             double l2hdelay=robot.getSettingsParser().getDouble("collector:cubesensor:l2hdelay");
-            double grab_time=robot.getSettingsParser().getDouble("collector:grab_time");
             double fast=robot.getSettingsParser().getDouble("collector:eject:fast");
             double slow=robot.getSettingsParser().getDouble("collector:eject:slow");
             double eject_time=robot.getSettingsParser().getDouble("collector:eject_time");
