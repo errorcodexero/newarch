@@ -31,7 +31,7 @@ namespace xero {
 			
 		}
 		void Lifter::run() {
-
+			Subsystem::run() ;
 		}
 
 		double Lifter::getCurrentHeight() {

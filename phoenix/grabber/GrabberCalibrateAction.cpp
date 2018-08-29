@@ -21,6 +21,7 @@ namespace xero {
             void GrabberCalibrateAction::start(){
                 ticks_.clear();
                 isdone_ = false;
+                getGrabber().motor_->Set(calibratepower_) ;
             }
 
             /// \brief Run the duty cycle action.  This method does nothing.            
