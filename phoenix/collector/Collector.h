@@ -17,6 +17,7 @@ namespace xero {
         public:
             Collector(xero::base::Robot & robot);
             virtual ~Collector(); 
+            virtual void computeState();
             virtual bool hasCube(){
                 return has_cube_;
             }
