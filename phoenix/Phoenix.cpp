@@ -60,11 +60,6 @@ namespace xero {
 			auto wings_p = std::make_shared<Wings>(*this) ;
 			addSubsystem(wings_p) ;
 
-			//
-			// Add in the intake subsystem
-			//
-			auto intake_p = std::make_shared<Intake>(*this) ;
-			addSubsystem(intake_p) ;
 
 			auto lifter_p = std::make_shared<Lifter>(*this) ;
 			addSubsystem(lifter_p) ;
