@@ -32,6 +32,10 @@ namespace xero {
 			/// \param Action the Action to check for a subsystem
 			/// \return true if the action is valid for a subsystem
 			virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
+            
+            void setMotorVoltage(double motorVoltage){
+                motor_->Set(motorVoltage);
+            }
 
         private:
             void calibrate(){

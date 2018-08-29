@@ -105,6 +105,9 @@ intake:speed:collect                1.0
 collector:cubesensor:h2ldelay       0.1
 collector:cubesensor:l2hdelay       0.1
 collector:grab_time                 0.25
+collector:eject:fast                -1
+collector:eject:slow                -0.1
+collector:eject_time                0.75
 
 #
 # LiftingCollector subsystem constants
