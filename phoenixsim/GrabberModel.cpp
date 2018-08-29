@@ -7,7 +7,7 @@ namespace xero {
     namespace sim {
         namespace phoenix {
             GrabberModel::GrabberModel(RobotSimBase &simbase) : SubsystemModel(simbase, "grabber") {
-                angle_ = 45.0 ;
+                angle_ = 0.0 ;
                 degrees_per_second_ = simbase.getSettingsParser().getDouble("grabber:sim:degrees_per_second") ;
                 degrees_per_tick_ = simbase.getSettingsParser().getDouble("grabber:sim:degrees_per_tick") ;
                 cube_angle_ = simbase.getSettingsParser().getDouble("grabber:sim:cube_angle") ;

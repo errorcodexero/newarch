@@ -60,6 +60,7 @@ namespace xero  {
 
             private:       
                 frc::DigitalInput *input_ ;
+                bool inited_ ;
                 bool cube_sensed_ ;
                 int cube_sensor_input_ ;
                 double last_time_ ;

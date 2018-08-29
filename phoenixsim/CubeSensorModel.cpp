@@ -12,6 +12,7 @@ namespace xero {
                 motor_channel_1_ = simbase.getSettingsParser().getInteger("hw:intake:leftmotor") ;
                 motor_channel_2_ = simbase.getSettingsParser().getInteger("hw:intake:rightmotor") ;         
                 eject_duration_ = simbase.getSettingsParser().getDouble("collector:eject_duration") ;       
+                inited_ = false ;
                 last_time_ = 0.0 ;
                 input_ = nullptr ;
                 running_ = false ;
@@ -64,7 +65,6 @@ namespace xero {
             }
 
             void CubeSensorModel::run(double dt) {
-
                 evalSensor() ;
 
                 double now = getSimulator().getTime() ;
