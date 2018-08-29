@@ -51,7 +51,7 @@ namespace xero {
 			//
 			// This is where the subsystems for the robot get created
 			//
-			std::shared_ptr<TankDrive> db_p = std::make_shared<TankDrive>(*this, std::list<int>{1, 2, 3}, std::list<int>{4, 5, 6}) ;
+			auto db_p = std::make_shared<TankDrive>(*this, std::list<int>{1, 2, 3}, std::list<int>{4, 5, 6}) ;
 			addSubsystem(db_p) ;
 
 			//
@@ -60,8 +60,17 @@ namespace xero {
 			auto wings_p = std::make_shared<Wings>(*this) ;
 			addSubsystem(wings_p) ;
 
+			//
+			// Add in the collector
+			//
 			auto collector_p = std::make_shared<Collector>(*this) ;
 			addSubsystem(collector_p) ;
+
+			//
+			// Add in the lifter
+			//
+			auto lifter_p = std::make_shared<Lifter>(*this) ;
+			addSubsystem(lifter_p) ;
 		}
 
 		std::shared_ptr<ControllerBase> Phoenix::createAutoController() {
