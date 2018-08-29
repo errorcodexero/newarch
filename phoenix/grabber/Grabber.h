@@ -27,6 +27,10 @@ namespace xero {
                 return angle_;
             }
 
+            void setMotorVoltage(double motorVoltage){
+                motor_->Set(motorVoltage);
+            }
+
         private:
             void calibrate(){
                 encoder_->Reset();
