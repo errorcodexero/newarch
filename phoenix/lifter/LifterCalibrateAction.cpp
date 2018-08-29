@@ -7,11 +7,12 @@
 namespace xero {
     namespace phoenix {
         void LifterCalibrateAction::start() {
-
-        }
-        void LifterCalibrateAction::run() {
             getLifter().calibrate();
         }
+
+        void LifterCalibrateAction::run() {
+        }
+
         bool LifterCalibrateAction::isDone() {
             return true;
         }

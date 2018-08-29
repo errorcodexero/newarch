@@ -47,7 +47,7 @@ namespace xero {
 		void Lifter::setMotorsDutyCycle(double value) {
 			double effective_value = value;
 			if ((upper_limit_sensor_->Get() && (value > 0)) || (lower_limit_sensor_->Get() && (value < 0))) {
-				effective_value = 0;
+				// effective_value = 0;
 			}
 			for (auto motor : motors_) {
 				motor->Set(effective_value);
@@ -83,7 +83,9 @@ namespace xero {
 		}
 
 		void Lifter::setBrake(bool value) {
-			brake_solenoid_->Set(value);
+			auto brake_solenoid_debug_ = brake_solenoid_->Get();
+			brake_solenoid_->Set(!value);
+			brake_solenoid_debug_ = brake_solenoid_->Get();
 		}
 	}
 }

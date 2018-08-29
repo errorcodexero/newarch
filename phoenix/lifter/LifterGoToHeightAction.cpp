@@ -9,7 +9,7 @@ namespace xero {
         }
 
         void LifterGoToHeightAction::start() {
-            PID_controller_.initFromSettings(getLifter().getRobot().getSettingsParser(), "lifter:goto");
+            PID_controller_.initFromSettingsExtended(getLifter().getRobot().getSettingsParser(), "lifter:goto");
             getLifter().setBrake(false);
         }
 
@@ -19,7 +19,6 @@ namespace xero {
                 double PID_output = PID_controller_.getOutput(target_height_, current_height_, getLifter().getRobot().getDeltaTime());
                 getLifter().setMotorsDutyCycle(PID_output);
             }
-
         }
 
         bool LifterGoToHeightAction::isDone() {
