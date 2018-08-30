@@ -17,13 +17,13 @@ namespace xero {
 		Lifter::Lifter(xero::base::Robot& robot) : xero::base::Subsystem(robot, "lifter") {
 			height_ = getRobot().getSettingsParser().getDouble("lifter:base");
 			previous_height_ = height_;
-			encoder_ = std::make_shared<frc::Encoder>(ENCODER_A_CHANNEL,ENCODER_B_CHANNEL);
-			brake_solenoid_ = std::make_shared<frc::Solenoid>(BRAKE_SOLENOID_CHANNEL);
-			upper_limit_sensor_ = std::make_shared<frc::DigitalInput>(UPPER_LIMIT_SENSOR_CHANNEL);
-			lower_limit_sensor_ = std::make_shared<frc::DigitalInput>(LOWER_LIMIT_SENSOR_CHANNEL);
-			motors_.push_back(std::make_shared<frc::VictorSP>(0));
-			motors_.push_back(std::make_shared<frc::VictorSP>(1));
-			gear_solenoid_ = std::make_shared<frc::Solenoid>(1);
+			encoder_ = std::make_shared<frc::Encoder>(getRobot().getSettingsParser().getInteger("hw:lifter:encoder1"), getRobot().getSettingsParser().getInteger("hw:lifter:encoder2")) ;
+			brake_solenoid_ = std::make_shared<frc::Solenoid>(getRobot().getSettingsParser().getInteger("hw:lifter:brake")) ;
+			upper_limit_sensor_ = std::make_shared<frc::DigitalInput>(getRobot().getSettingsParser().getInteger("hw:lifter:limit:top")) ;
+			lower_limit_sensor_ = std::make_shared<frc::DigitalInput>(getRobot().getSettingsParser().getInteger("hw:lifter:limit:bottom")) ;
+			motors_.push_back(std::make_shared<frc::VictorSP>(getRobot().getSettingsParser().getInteger("hw:lifter:motor1"))) ;
+			motors_.push_back(std::make_shared<frc::VictorSP>(getRobot().getSettingsParser().getInteger("hw:lifter:motor2"))) ;
+			gear_solenoid_ = std::make_shared<frc::Solenoid>(getRobot().getSettingsParser().getInteger("hw:lifter:shifter")) ;
 			calibrate_flag_ = false;
 
 		}
