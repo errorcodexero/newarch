@@ -1,6 +1,22 @@
 Code To Write
 -------------
 
+xerobase
+--------
+HIDDevice
+OIDevice - HIDDevice
+DriverGamepad - HIDDevice
+OIAxisScale
+OIAxisSwitch
+OIButton
+CondAction - Action
+ComputeAction - Acttion
+TeleopController - ControllerBase
+TestController - ControllerBase
+AutoMode
+
+phoenix
+-------
 Drivebase Subsystem (Matthew)
 - Extract CAN indices, encoder indices, solenoid indices from paramter file
 - Create and store: motors
@@ -16,34 +32,8 @@ Drivebase Subsystem (Matthew)
 - Create directive: path follower
 
 Lifter Subsystem
-- Extract motor indices, encoder indices, limit switch from parameter file
-- Create and store: motors
-- Create and store: shifter solenoid
-- Create and stoer: brake solenoid
-- Create and store: encoder
-- Create and store: limit switches (top and bottom)
-- ComputeState: is calibrated and height
-- Run: the lifter itself should enfore the limit switches
-- Create directive: calibrate (just reset encoder value)
-- Create directive: go to height (constructor can take number or parameter name)
 - Create directive: go to low gear
-- Create directive: go to encoder value (constructor can take number of parameter name)
-- Create directive: apply raw PWM percentage to motors
 - Create directive: climb hold position
-
-Grabber Subsystem (Meg)
-- Extract motor indices and encoder indices from the parameter file
-- Create and store motors
-- Create and store encoder
-- Calculate status : current arm angle
-- Run: the grabber itself should enforce a limit on the angle not allowing the angle to get to negative
-       and allowing the grabber arms to close in out themselves
-- Create directive : calibrate (squeeze grabber until it stops for a given number of samples, reset encoder)
-- Create directive : go to angle (constructor can take number or parameter name)
-                     note, isDone is true once we reach the name, but the directive can stay around an hold the angle
-- Create directive : hold cube, isDone is true immediately, but can stay around an continue to hold the cube
-                     note
-- Create directive : run motors at raw percent value (number or parameter name)
 
 Collector Subsystem (Nicole)
 - Extract cube detect sensor from parameter file
@@ -66,16 +56,16 @@ LiftingCollector Subsystem
                      o  Intake to hold directive
                      o  Lifter to Drive preset
 
+PhoenixOISubsystem
+PhoenixOIDevice - OIDevice
+
 PhoenixRobot Subsystem
 - Aggregrate      : LiftingCollector and TankDrive Subsystems
-- Actions         :
+- Actions         
 
-Autonomous Controller (and associated classes)
-- Must be able to ask the DriverGunner Subsystem for the teleop switch value
-- Assigns a single step to the robot subsystem (most likely an action list)
+PhoenixTeleopController - TeleopController
 
-Telop Controller
-- to be defined
+PhoenixAutoController - AutoController
 
 Test Controller
 - To be defined
