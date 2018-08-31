@@ -32,6 +32,31 @@ model {
 	}	
 
 	components {
+
+		xeromath(NativeLibrarySpec) {
+			targetPlatform "roborio"
+			binaries.all {
+				cppCompiler.args "-Wall", "-std=c++11", "-g"
+			}
+			binaries.withType(SharedLibraryBinarySpec) {
+				buildable = false
+			}
+			sources.cpp {
+			    source {
+				    srcDirs = ["xeromath"]
+					include "**/*.cpp"
+				}
+				exportedHeaders {
+				    srcDirs = ["xeromath"]
+					include "**/*.h"
+				}
+
+				lib library: "wpilib"
+				lib library: "ctre"
+				lib library: "navx"
+			}
+		}
+
 		xeromisc(NativeLibrarySpec) {
 			targetPlatform "roborio"
 			binaries.all {
@@ -50,10 +75,10 @@ model {
 					include "**/*.h"
 				}
 
+				lib library: "xeromath", linkage: "static"
 				lib library: "wpilib"
 				lib library: "ctre"
 				lib library: "navx"
-				lib library: "openrio.powerup.matchData"
 			}
 		}
 
@@ -76,11 +101,11 @@ model {
 					include "**/*.h"
 				}
 
+				lib library: "xeromath", linkage: "static"
 				lib library: "xeromisc", linkage: "static"
 				lib library: "wpilib"
 				lib library: "ctre"
 				lib library: "navx"
-				lib library: "openrio.powerup.matchData"
 			}
 		}
 
@@ -101,12 +126,12 @@ model {
 				}
 
 				// Define my dependencies. In this case, WPILib (+ friends), CTRE Phoenix (Talon SRX) and NavX.
+				lib library: "xeromath", linkage: "static"				
 				lib library: "xeromisc", linkage: "static"
 				lib library: "xerobase", linkage: "static"
 				lib library: "wpilib"
 				lib library: "ctre"
 				lib library: "navx"
-				lib library: "openrio.powerup.matchData"
 			}
 		}
 
@@ -130,8 +155,32 @@ model {
 				}
 				
 				lib library: "xeromiscsim", linkage: "static"
+				lib library: "xeromathsim", linkage: "static"				
 			}
 		}
+
+		xeromathsim(NativeLibrarySpec) {
+			targetPlatform "x86_64"
+			binaries.all {
+				toolChain = toolChains["gcc"]
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-DSIM"
+			}
+			binaries.withType(SharedLibraryBinarySpec) {
+				buildable = false
+			}
+			sources.cpp {
+				source {
+					srcDirs = ["xeromath"]
+					include "**/*.cpp"
+				}
+				exportedHeaders {
+					srcDirs = ["xeromath"]
+					include "**/*.h"
+				}
+
+				lib library: "wpilibsim", linkage: "static"
+			}
+		}		
 
 		xeromiscsim(NativeLibrarySpec) {
 			targetPlatform "x86_64"
@@ -152,6 +201,7 @@ model {
 					include "**/*.h"
 				}
 
+				lib library: "xeromathsim", linkage: "static"
 				lib library: "wpilibsim", linkage: "static"
 			}
 		}
@@ -175,8 +225,9 @@ model {
 					include "**/*.h"
 				}
 
-				lib library: "wpilibsim", linkage: "static"
+				lib library: "xeromathsim", linkage: "static"				
 				lib library: "xeromiscsim", linkage: "static"
+				lib library: "wpilibsim", linkage: "static"				
 			}
 		}
 
@@ -199,8 +250,9 @@ model {
 					include "**/*.h"
 				}
 
-				lib library: "wpilibsim", linkage: "static"
 				lib library: "xeromiscsim", linkage: "static"
+				lib library: "xeromathsim", linkage: "static"				
+				lib library: "wpilibsim", linkage: "static"				
 			}
 		}
 
@@ -209,7 +261,7 @@ model {
 			binaries.all {
 				toolChain = toolChains["gcc"]
 				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DSIM", "-DDEBUG", "-DXEROSCREEN"
-				linker.args "-lpthread", "-lncurses"
+				linker.args "-lpthread", "-lncurses", "external/dinput/dxguid.lib", "external/dinput/dinput8.lib"
 			}
 			sources.cpp {
 				source {
@@ -221,9 +273,10 @@ model {
 					include "**/*.h"
 				}
 
-				lib library: "xeromiscsim", linkage: "static"
+				lib library: "phoenixsim", linkage: "static"				
 				lib library: "xerobasesim", linkage: "static"
-				lib library: "phoenixsim", linkage: "static"
+				lib library: "xeromiscsim", linkage: "static"
+				lib library: "xeromathsim", linkage: "static"				
 				lib library: "wpilibsim", linkage: "static"
 			}
 		}

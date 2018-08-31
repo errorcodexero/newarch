@@ -20,6 +20,7 @@ namespace xero
 			class IntakeModel ;
 			class GrabberModel ;
 			class CubeSensorModel ;
+			class OIModel ;
 
 			/// \brief A simulator for Phoenix.
 			class PhoenixSimulator : public xero::sim::RobotSimBase
@@ -45,12 +46,13 @@ namespace xero
 
 			private:
 				static constexpr double PI = 3.14159265359;
-				std::shared_ptr<xero::sim::TankDriveModel> TankDrive_ ;
+				std::shared_ptr<xero::sim::TankDriveModel> tankdrive_ ;
 				std::shared_ptr<xero::sim::phoenix::LifterModel> lifter_ ;
 				std::shared_ptr<xero::sim::phoenix::WingsModel> wings_ ;
 				std::shared_ptr<xero::sim::phoenix::GrabberModel> grabber_ ;
 				std::shared_ptr<xero::sim::phoenix::CubeSensorModel> ballsensor_ ;
 				std::shared_ptr<xero::sim::phoenix::IntakeModel> intake_ ;
+				std::shared_ptr<xero::sim::phoenix::OIModel> oi_ ;
 
 				bool visualizer_ ;
 			};

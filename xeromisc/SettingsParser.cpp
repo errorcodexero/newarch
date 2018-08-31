@@ -3,10 +3,8 @@
 #include <fstream>
 #include <cctype>
 
-namespace xero
-{
-namespace misc 
-{
+namespace xero {
+namespace misc {
 
 const std::string SettingsParser::var_prefix_("var:") ;
 
@@ -69,7 +67,6 @@ bool SettingsParser::readLine(const std::string &line, std::string &key, std::st
 		}
 	}
 
-
 	// Check for unterminated string
 	if(in_string) {
 		logger_.startMessage(MessageLogger::MessageType::warning, msggroup_);
@@ -85,7 +82,7 @@ bool SettingsParser::readLine(const std::string &line, std::string &key, std::st
 		logger_.endMessage();
 		return false;
 	}
-	
+
 	// Make the value what was found up to the end of the line
 	value = buffer.str();
 
@@ -192,11 +189,11 @@ bool SettingsParser::parseString(const std::string &value, std::string &result) 
 	return true;
 }
 
-bool SettingsParser::isDefined(const std::string &key) {
+bool SettingsParser::isDefined(const std::string &key) const {
 	return settings_.find(key) != settings_.end();
 }
 
-bool SettingsParser::isDefinedOnGet(const std::string &key, const std::string &type) {
+bool SettingsParser::isDefinedOnGet(const std::string &key, const std::string &type) const {
 	if(!isDefined(key)) {
 		logger_.startMessage(MessageLogger::MessageType::error, msggroup_);
 		logger_ << "Tried to get " << type << " at " << key << " but no such value is defined.";
@@ -213,7 +210,6 @@ void SettingsParser::set(const std::string &key, bool value) {
 		logger_ << (value ? "true" : "false") ;
 		logger_.endMessage() ;
 	}
-
 	settings_[key] = Setting(value);
 }
 
@@ -247,41 +243,46 @@ void SettingsParser::set(const std::string &key, const std::string &value) {
 	settings_[key] = Setting(value);
 }
 
-bool SettingsParser::getBoolean(const std::string &key) {
-	assert(isDefinedOnGet(key, "boolean"));
-	return settings_[key].getBoolean();
+bool SettingsParser::getBoolean(const std::string &key) const {
+	return getSetting(key, "boolean").getBoolean();
 }
 
-bool SettingsParser::getBoolean(const std::string &key, const bool &default_value) {
-	return isDefinedOnGet(key, "boolean") ? settings_[key].getBoolean() : default_value;
+bool SettingsParser::getBoolean(const std::string &key, const bool &default_value) const {
+	return getSetting(key, Setting(default_value), "boolean").getBoolean();
 }
 
-int SettingsParser::getInteger(const std::string &key) {
-	assert(isDefinedOnGet(key, "integer"));
-	return settings_[key].getInteger();
+int SettingsParser::getInteger(const std::string &key) const {
+	return getSetting(key, "integer").getInteger();
 }
 
-int SettingsParser::getInteger(const std::string &key, const int &default_value) {
-	return isDefinedOnGet(key, "integer") ? settings_[key].getInteger() : default_value;
+int SettingsParser::getInteger(const std::string &key, const int &default_value) const {
+	return getSetting(key, Setting(default_value), "integer").getInteger();
 }
 
-double SettingsParser::getDouble(const std::string &key) {
-	assert(isDefinedOnGet(key, "double"));
-	return settings_[key].getDouble();
+double SettingsParser::getDouble(const std::string &key) const {
+	return getSetting(key, "double").getDouble();
 }
 
-double SettingsParser::getDouble(const std::string &key, const double &default_value) {
-	return isDefinedOnGet(key, "double") ? settings_[key].getDouble() : default_value;
+double SettingsParser::getDouble(const std::string &key, const double &default_value) const {
+	return getSetting(key, Setting(default_value), "double").getDouble();
 }
 
-std::string SettingsParser::getString(const std::string &key) {
-	assert(isDefinedOnGet(key, "string"));
-	return settings_[key].getString();
+const std::string &SettingsParser::getString(const std::string &key) const {
+	return getSetting(key, "string").getString();
 }
 
-std::string SettingsParser::getString(const std::string &key, const std::string &default_value) {
-	return isDefinedOnGet(key, "string") ? settings_[key].getString() : default_value;
+const std::string &SettingsParser::getString(const std::string &key, const std::string &default_value) const {
+	return getSetting(key, Setting(default_value), "string").getString();
 }
 
+const Setting &SettingsParser::getSetting(const std::string &key, const std::string &type) const {
+	assert(isDefinedOnGet(key, type));
+	return settings_.find(key)->second;
 }
+
+const Setting &SettingsParser::getSetting(const std::string &key, const Setting &default_value, const std::string &type) const {
+	return isDefinedOnGet(key, type) ? settings_.find(key)->second : default_value;
 }
+
+} // namespace misc
+} // namespace xero

@@ -11,7 +11,7 @@ namespace base
 ActionSequence::ActionSequence(xero::misc::MessageLogger &logger) : logger_(logger)
 {
 	isDone_ = false;
-	group_ = MSG_GROUP_ACTION_SEQ ;
+	group_ = MSG_GROUP_ACTIONS ;
 }
 
 void ActionSequence::pushAction(ActionPtr action)

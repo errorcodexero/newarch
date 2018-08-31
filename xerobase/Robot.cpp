@@ -29,6 +29,15 @@ namespace xero {
 				delete output_stream_ ;
 		}
 
+		SubsystemPtr Robot::getSubsystemByName(const std::string &name) {
+			for(auto sub: subsystems_) {
+				if (sub->getName() == name)
+					return sub ;
+			}
+
+			return nullptr ;
+		}
+
 		void Robot::setupRobotOutputFile(const std::string &file) {
 			if (file.length() > 0) {
 				output_stream_ = new std::ofstream(file) ;

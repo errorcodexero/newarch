@@ -30,13 +30,13 @@ namespace xero {
 			/// \brief this method returns true if a value with the given name is present
 			/// \param key the name of the value of interest
 			/// \returns true if a value with the given name is found
-			bool isDefined(const std::string &key);
+			bool isDefined(const std::string &key) const;
 
 			/// \brief returns true if a value with the given name is present; logs an error otherwise
 			/// \param key the name of the value of interest
 			/// \param type the type of value being gotten
 			/// \returns true if a value with the given name is found
-			bool isDefinedOnGet(const std::string &key, const std::string &type);
+			bool isDefinedOnGet(const std::string &key, const std::string &type) const;
 
 			/// \brief associate the given key with the given boolean value
 			/// \param key the name to associate with the value
@@ -61,48 +61,51 @@ namespace xero {
 			/// \brief get the boolean value associated with the given key; assert if there is no such value
 			/// \param key the key for which to get the associated value
 			/// \returns the boolean value associated with the given key
-			bool getBoolean(const std::string &key);
+			bool getBoolean(const std::string &key) const;
 
 			/// \brief get the boolean value associated with the given key, or a default if there is no such value
 			/// \param key the key for which to get the associated value
 			/// \param default_value the value to return if there is no value associated with the given key
 			/// \returns the boolean value associated with the given key, or the default if none exists
-			bool getBoolean(const std::string &key, const bool &default_value);
+			bool getBoolean(const std::string &key, const bool &default_value) const;
 
 			/// \brief get the integer value associated with the given key; assert if there is no such value
 			/// \param key the key for which to get the associated value
 			/// \returns the integer value associated with the given key
-			int getInteger(const std::string &key);
+			int getInteger(const std::string &key) const;
 
 			/// \brief get the integer value associated with the given key, or a default if there is no such value
 			/// \param key the key for which to get the associated value
 			/// \param default_value the value to return if there is no value associated with the given key
 			/// \returns the integer value associated with the given key, or the default if none exists
-			int getInteger(const std::string &key, const int &default_value);
+			int getInteger(const std::string &key, const int &default_value) const;
 
 			/// \brief get the double value associated with the given key; assert if there is no such value
 			/// \param key the key for which to get the associated value
 			/// \returns the double value associated with the given key
-			double getDouble(const std::string &key);
+			double getDouble(const std::string &key) const;
 
 			/// \brief get the double value associated with the given key, or a default if there is no such value
 			/// \param key the key for which to get the associated value
 			/// \param default_value the value to return if there is no value associated with the given key
 			/// \returns the double value associated with the given key, or the default if none exists
-			double getDouble(const std::string &key, const double &default_value);
+			double getDouble(const std::string &key, const double &default_value) const;
 
 			/// \brief get the string value associated with the given key; assert if there is no such value
 			/// \param key the key for which to get the associated value
 			/// \returns the string value associated with the given key
-			std::string getString(const std::string &key);
+			const std::string &getString(const std::string &key) const;
 
 			/// \brief get the string value associated with the given key, or a default if there is no such value
 			/// \param key the key for which to get the associated value
 			/// \param default_value the value to return if there is no value associated with the given key
 			/// \returns the string value associated with the given key, or the default if none exists
-			std::string getString(const std::string &key, const std::string &default_value);
+			const std::string &getString(const std::string &key, const std::string &default_value) const;
 
 		private:
+			const Setting &getSetting(const std::string &key, const std::string &type) const;
+			const Setting &getSetting(const std::string &key, const Setting &default_value, const std::string &type) const;
+
 			bool parseBoolean(const std::string &value, bool &result);
 			bool parseInteger(const std::string &value, int &result);
 			bool parseDouble(const std::string &value, double &result);

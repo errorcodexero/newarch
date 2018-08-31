@@ -86,7 +86,7 @@ namespace xero {
 
             if (action != nullptr && !canAcceptAction(action)) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
-                logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTION_SEQ) ;
+                logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
                 logger << "subsystem '" << getName() << "' rejected action '" << action->toString() << "'" ;
                 logger.endMessage() ;
                 return false ;

@@ -1,21 +1,26 @@
-#include <memory>
-#include "Phoenix.h"
-#include <tankdrive/TankDrive.h>
-#include "wings/Wings.h"
-#include "intake/Intake.h"
 
-#include "MessageGroups.h"
-#include "MessageLogger.h"
-#include "MessageDestSeqFile.h"
-#include "MessageDestStream.h"
+#include "Phoenix.h"
+#include "phoenixgroups.h"
+#include "PhoenixAutoController.h"
+#include "intake/IntakeDutyCycleAction.h"
+#include "grabber/GrabberToAngleAction.h"
+#include "grabber/GrabberCalibrateAction.h"
+#include "lifter/LifterGoToHeightAction.h"
+#include "lifter/LifterCalibrateAction.h"
+#include "collector/Collector.h"
+#include <ActionSequence.h>
+#include <basegroups.h>
+#include <MessageDestDS.h>
+#include <MessageLogger.h>
+#include <MessageDestSeqFile.h>
+#include <MessageDestStream.h>
 
 #ifdef SIM
 #include <PhoenixSimulator.h>
 #endif
 
-#ifndef SIM
-#include "MessageDestDS.h"
-#endif
+#include <memory>
+#include <cassert>
 
 using namespace xero::misc ;
 using namespace xero::base ;
@@ -24,17 +29,29 @@ namespace xero {
 	namespace phoenix {
 		
 		void Phoenix::RobotInit() {
+			std::string filename ;
+
 			//
 			// Initialize message logger
 			//
 			initializeMessageLogger();
 
-			readParamsFile("phoenix/robot.dat") ;
+#ifdef SIM
+			filename = "phoenix/robot.dat" ;
+#else
+			filename = "/home/lvuser/robot.dat" ;
+#endif
+
+			if (!readParamsFile(filename)) {
+				std::cerr << "Rboto Initialization failed - could not read robot data file '" ;
+				std::cerr << filename << "'" << std::endl ;
+				assert(false) ;
+			}
 			
 			//
 			// This is where the subsystems for the robot get created
 			//
-			std::shared_ptr<TankDrive> db_p = std::make_shared<TankDrive>(*this, std::list<int>{1, 2, 3}, std::list<int>{4, 5, 6}) ;
+			auto db_p = std::make_shared<TankDrive>(*this, std::list<int>{1, 2, 3}, std::list<int>{4, 5, 6}) ;
 			addSubsystem(db_p) ;
 
 			//
@@ -44,21 +61,40 @@ namespace xero {
 			addSubsystem(wings_p) ;
 
 			//
-			// Add in the intake subsystem
+			// Add in the collector
 			//
-			auto intake_p = std::make_shared<Intake>(*this) ;
-			addSubsystem(intake_p) ;
+			auto collector_p = std::make_shared<Collector>(*this) ;
+			addSubsystem(collector_p) ;
 
 			//
-			// This is where we would add the other subsystems for the robot
+			// Add in the lifter
 			//
+			auto lifter_p = std::make_shared<Lifter>(*this) ;
+			addSubsystem(lifter_p) ;
 		}
 
 		std::shared_ptr<ControllerBase> Phoenix::createAutoController() {
+			SubsystemPtr sub_p ;
+
 			//
 			// This is where the autonomous controller is created
 			//
-			return nullptr ;
+			auto actlist_p = std::make_shared<ActionSequence>(getMessageLogger()) ;				
+
+			sub_p = getSubsystemByName("Collector") ;
+			auto collector_p = std::dynamic_pointer_cast<Collector>(sub_p) ;
+
+			sub_p = getSubsystemByName("lifter") ;
+			auto lifter_p = std::dynamic_pointer_cast<Lifter>(sub_p) ;
+
+			actlist_p->pushSubActionPair(collector_p->getGrabber(), std::make_shared<GrabberCalibrateAction>(*collector_p->getGrabber())) ;
+			actlist_p->pushSubActionPair(lifter_p, std::make_shared<LifterCalibrateAction>(*lifter_p)) ;
+			actlist_p->pushSubActionPair(lifter_p, std::make_shared<LifterGoToHeightAction>(*lifter_p, 36.0), false) ;
+			actlist_p->pushSubActionPair(collector_p->getGrabber(), std::make_shared<GrabberToAngleAction>(*collector_p->getGrabber(), 45.0), false) ;			
+			actlist_p->pushSubActionPair(collector_p->getIntake(), std::make_shared<IntakeDutyCycleAction>(*collector_p->getIntake(), 0.5), false) ;
+
+			auto phoenixauto_p = std::make_shared<PhoenixAutoController>(actlist_p, *this);
+			return phoenixauto_p;
 		}
 		
 		std::shared_ptr<ControllerBase> Phoenix::createTeleopController() {
@@ -89,20 +125,30 @@ namespace xero {
             //
             // Decide what message groups (incl. subsystems) you want to see
             //
-            logger.enableSubsystem(MSG_GROUP_DRIVEBASE);
+			// logger.enableSubsystem(MSG_GROUP_PATHFOLLOWER) ;
+			logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
+			logger.enableSubsystem(MSG_GROUP_LIFTER);
+			logger.enableSubsystem(MSG_GROUP_GRABBER);
+			logger.enableSubsystem(MSG_GROUP_COLLECTOR) ;
+			logger.enableSubsystem(MSG_GROUP_ACTIONS);
+			logger.enableSubsystem(MSG_GROUP_PARSER) ;
+
 
 			// Set up message logger destination(s)
             std::shared_ptr<MessageLoggerDest> dest_p ;
 
-#if defined(SIM) && !defined(XEROSCREEN)
-			//
-			// We only want printouts on COUT when we are debugging
-			// In competition mode, this information goes to a log file on
-			// the USB stick.
-			//
-			dest_p = std::make_shared<MessageDestStream>(std::cout) ;
-			logger.addDestination(dest_p) ;
-#endif
+#if defined(SIM)
+			if (!isScreen())
+			{
+				dest_p = std::make_shared<MessageDestStream>(std::cout);
+				logger.addDestination(dest_p);
+			}
+
+			const std::string outfile = getRobotOutputFile();
+			if (outfile.length() > 0)
+				setupRobotOutputFile(outfile);
+
+#else
 
 			//
 			// This is where the roborio places the first USB flash drive it
@@ -110,21 +156,25 @@ namespace xero {
 			// actually mounted at /media/sd*, and a symbolic link is created
 			// to /U.
 			//
-#ifndef SIM
-			std::string flashdrive("/u/") ;
-			std::string logname("logfile_") ;
-			dest_p = std::make_shared<MessageDestSeqFile>(flashdrive, logname) ;
-			logger.addDestination(dest_p) ;
+			std::string flashdrive("/u/");
+			std::string logname("logfile_");
+			dest_p = std::make_shared<MessageDestSeqFile>(flashdrive, logname);
+			logger.addDestination(dest_p);
+
+#ifdef DEBUG
+			dest_p = std::make_shared<MessageDestStream>(std::cout);
+			logger.addDestination(dest_p);
 #endif
 
+#endif
+
+#ifndef SIM
 			//
 			// Send warnings and errors to the driver station
 			//
-#ifndef SIM
-			dest_p = std::make_shared<MessageDestDS>() ;
-			logger.addDestination(dest_p) ;
-#endif
-
+			dest_p = std::make_shared<MessageDestDS>();
+			logger.addDestination(dest_p);
+#endif			
 		}
 	}
 }

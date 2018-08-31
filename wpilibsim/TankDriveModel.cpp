@@ -4,14 +4,18 @@
 #include <algorithm>
 #include <cmath>
 #include <random>
+#include <iostream>
 
 using namespace frc ;
 using namespace xero::misc ;
+using namespace xero::math ;
 using namespace ctre::phoenix::motorcontrol::can ;
 
 namespace xero {
     namespace sim {
         TankDriveModel::TankDriveModel(RobotSimBase &simbase) : SubsystemModel(simbase, "tankdrive") {
+			inited_ = false ;
+
             left_ = 0.0;
             right_ = 0.0;
             angle_ = 0.0;
@@ -30,6 +34,7 @@ namespace xero {
             diameter_ = simbase.getSettingsParser().getDouble("tankdrive:sim:diameter") ;
             scrub_ = simbase.getSettingsParser().getDouble("tankdrive:sim:scrub") ;
             width_ = simbase.getSettingsParser().getDouble("tankdrive:sim:width") ;
+			max_change_ = simbase.getSettingsParser().getDouble("tankdrive:sim:change_per_second") ;
 
 			double rps_per_volt = simbase.getSettingsParser().getDouble("tankdrive:sim:rps_per_volt_per_second") ;
 			double err = simbase.getSettingsParser().getDouble("tankdrive:sim:error_per_side") ;
@@ -66,9 +71,65 @@ namespace xero {
 			return result ;
 		}
 
+		void TankDriveModel::init() {
+            if (getSimulator().hasProperty("pos")) {
+				std::vector<double> values ;
+                const std::string &prop = getSimulator().getProperty("pos") ;
+
+				if (parseDoubleList(prop, values) && values.size() == 2) {
+					xpos_ = values[0] ;
+					ypos_ = values[1] ;
+					last_xpos_ = xpos_ ;
+					last_ypos_ = ypos_ ;
+				}
+			}
+		}
+
+		double TankDriveModel::capValue(double prev, double target, double maxchange) {
+			double ret ;
+
+			if (target > prev) {
+				if (target > prev + maxchange)
+					ret = prev + maxchange ;
+				else
+					ret = target ;
+			}
+			else {
+				if (target < prev - maxchange)
+					ret = prev - maxchange ;
+				else
+					ret = target ;
+			}
+
+			return ret ;
+		}
+
         void TankDriveModel::run(double dt) {
-			double dleft = left_volts_ * left_rps_per_volt_per_time_ * dt * diameter_ * PI;
-			double dright = right_volts_ * right_rps_per_volt_per_time_ * dt * diameter_ * PI;
+			int x = 1 ;
+			if (left_volts_ > 0.1 && right_volts_ > 0.1)
+				x = 2 ;
+
+			//
+			// Calculate the new desired revolutions per second (RPS)
+			//
+			double desired_left_rps = left_volts_ * left_rps_per_volt_per_time_ ;
+			double desired_right_rps = right_volts_ * right_rps_per_volt_per_time_ ;
+
+			//
+			// Now, see how much our RPS can actually changes
+			//
+			current_left_rps_ = capValue(current_left_rps_, desired_left_rps, max_change_) ;
+			current_right_rps_ = capValue(current_right_rps_, desired_right_rps, max_change_) ;
+
+			//
+			// Now, calculate distance each wheel moved based on the actual RPS
+			//
+			double dleft = current_left_rps_* dt * diameter_ * PI;
+			double dright = current_right_rps_ * dt * diameter_ * PI;
+
+			//
+			// And add to the total distance so far
+			//
 
 			left_ += dleft;
 			right_ += dright;
@@ -79,12 +140,7 @@ namespace xero {
 			double rrevs = right_ / (PI * diameter_) ;
 
 			updatePosition(dleft, dright, angle_) ;
-			angle_ += (dv * 2.0) / width_;
-			while (angle_ > PI)
-				angle_ -= PI ;
-			while (angle_ < -PI)
-				angle_ += PI ;
-
+			angle_ = normalizeAngleRadians(angle_ + (dv * 2.0) / width_) ;
 
 			double dist = std::sqrt((xpos_ - last_xpos_) * (xpos_ - last_xpos_) + (ypos_ - last_ypos_) * (ypos_ - last_ypos_)) ;
 			speed_ = dist / dt ;
@@ -169,6 +225,7 @@ namespace xero {
 		}
 
 		void TankDriveModel::updatePosition(double dl, double dr, double angle) {
+			// std::cout << "TankDriveModel " << dr << " , " << dl << " , " << angle << std::endl ;
 			if (std::fabs(dl - dr) < 1e-6) {
 				// Straight line
 				xpos_ += dl * std::cos(angle) ;
