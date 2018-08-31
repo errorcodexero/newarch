@@ -10,4 +10,4 @@ build
 *test/*.exe
 .vs/
 ROBOT
-SIMULATOR
+SIM

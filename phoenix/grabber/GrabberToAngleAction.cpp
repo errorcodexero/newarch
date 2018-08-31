@@ -33,16 +33,18 @@ namespace xero {
                 }
             }
 
-            bool GrabberToAngleAction::isDone(){
+            bool GrabberToAngleAction::isDone() {
                 return isdone_;
             }
 
-            void GrabberToAngleAction::cancel(){
+            void GrabberToAngleAction::cancel() {
                 isdone_ = true;
             }
 
-           std::string GrabberToAngleAction::toString(){
-
+           std::string GrabberToAngleAction::toString() {
+			   std::string ret("GoToAngle ") ;
+			   ret += std::to_string(angle_) ;
+			   return ret ;
            }
     }
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Subsystem.h" 
+#include <Subsystem.h>
 #include <Encoder.h>
 #include <VictorSP.h>
 #include <cassert>
@@ -25,6 +25,16 @@ namespace xero {
             double getAngle() const{
                 assert(calibrated_);
                 return angle_;
+            }
+
+		protected:
+			/// \brief check that a Action is valid for a subsystem
+			/// \param Action the Action to check for a subsystem
+			/// \return true if the action is valid for a subsystem
+			virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
+            
+            void setMotorVoltage(double motorVoltage){
+                motor_->Set(motorVoltage);
             }
 
         private:

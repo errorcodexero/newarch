@@ -55,22 +55,27 @@ namespace xero {
 			/// \brief get the boolean value associated with the given key
 			/// \param key the key for which to get the associated value
 			/// \returns the boolean value associated with the given key
-			bool getBoolean(const std::string &key);
+			bool getBoolean(const std::string &key) const;
 
 			/// \brief get the integer value associated with the given key
 			/// \param key the key for which to get the associated value
 			/// \returns the integer value associated with the given key
-			int getInteger(const std::string &key);
+			int getInteger(const std::string &key) const;
 
 			/// \brief get the double value associated with the given key
 			/// \param key the key for which to get the associated value
 			/// \returns the double value associated with the given key
-			double getDouble(const std::string &key);
+			double getDouble(const std::string &key) const;
 
 			/// \brief get the string value associated with the given key
 			/// \param key the key for which to get the associated value
 			/// \returns the string value associated with the given key
-			std::string getString(const std::string &key);
+			const std::string &getString(const std::string &key) const ;
+
+			/// \brief get the settings value with the assocaited key
+			/// \param key the key to get the value for
+			/// \returns the settings value for the key
+			const Setting &getSetting(const std::string &key) const ;
 
 
 		private:

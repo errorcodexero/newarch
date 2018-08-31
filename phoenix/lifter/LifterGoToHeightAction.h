@@ -17,7 +17,6 @@ namespace xero {
             double target_height_;
             double current_height_;
             xero::misc::PIDCtrl PID_controller_;
-            static const std::string action_name_;
         };
     };
 }
