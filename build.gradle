@@ -63,9 +63,6 @@ model {
 				cppCompiler.args "-Wall", "-std=c++11", "-g"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
 				//Don"t build a shared library for xerobase because it uses static libraries and we only need the static version anyway
 				buildable = false
 			}
