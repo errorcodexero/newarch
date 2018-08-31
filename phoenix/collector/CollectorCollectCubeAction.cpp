@@ -3,6 +3,8 @@
 #include "Robot.h"
 #include "intake/Intake.h"
 #include "intake/IntakeDutyCycleAction.h"
+#include "grabber/Grabber.h"
+#include "grabber/GrabberToAngleAction.h"
 
 using namespace xero::base;
 
@@ -23,11 +25,22 @@ namespace xero {
             }
           
             void CollectorCollectCubeAction::run() {
+                // Get references to subsystems
+                Intake& intake = *(getCollector().getIntake());
+                Grabber& grabber = *(getCollector().getGrabber());
+
                 if (state_ == State::reset){
                     state_ = State::open_grabber;
+
+                    // Set action to run intake
                     double intake_speed = getCollector().getRobot().getSettingsParser().getDouble("intake:speed:collect");
-                    auto intake_action = std::make_shared<IntakeDutyCycleAction>(getCollector().getIntake()->Get(), intake_speed);
-                    intake_->setAction(intake_action);
+                    auto intake_action = std::make_shared<IntakeDutyCycleAction>(intake, intake_speed);
+                    intake.setAction(intake_action);
+
+                    // Set action to open grabber
+                    double grabber_angle = getCollector().getRobot().getSettingsParser().getDouble("grabber:angle:collect");
+                    auto grabber_action = std::make_shared<GrabberToAngleAction>(grabber, grabber_angle);
+                    grabber.setAction(grabber_action);
                 }
 
             }
