@@ -29,8 +29,10 @@ namespace xero {
         private:
             enum class State {
                 reset, //not doing anything
-                started, //running intake to aquire cube
-                grabbing,  //aquiring a cube
+                open_grabber, //opens up grabber and starts running intake
+                wait_for_cube,
+                secure_cube, //after collecting cube, wait to make sure it's secure 
+                close_grabber, //quickly close grabber on cube
                 hold  //holding onto a cube
 
             };
@@ -39,11 +41,13 @@ namespace xero {
 
             double grab_time_;
 
-            virtual std::string toString(State state){
+            virtual std::string stateToString(State state){
                 switch(state){
                     case State::reset: return "reset";
-                    case State::started: return "started";
-                    case State::grabbing: return "grabbing";
+                    case State::open_grabber: return "open grabber";
+                    case State::wait_for_cube: return "wait for cube";
+                    case State::secure_cube: return "secure cube";
+                    case State::close_grabber: return "close grabber";
                     case State::hold: return "hold";
                     default: return "";
                 }
