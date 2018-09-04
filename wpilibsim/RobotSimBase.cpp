@@ -1,6 +1,7 @@
 #include "RobotSimBase.h"
 #include "SubsystemModel.h"
 #include "PrintVisualizer.h"
+#include "JoystickManager.h"
 #include "DIJoystickManager.h"
 #include <MessageLogger.h>
 #include <cassert>
@@ -46,7 +47,8 @@ namespace xero {
                 delete filestrm_ ;
 
             delete parser_ ;
-			delete joysticks_ ;
+			if (joysticks_ != nullptr)
+				delete joysticks_ ;
         }
 
 		std::shared_ptr<SubsystemModel> RobotSimBase::getModelByName(const std::string &name) {

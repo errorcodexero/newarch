@@ -1,10 +1,12 @@
 #include "ScreenVisualizer.h"
 #include "TankDriveModel.h"
 #include "RobotSimBase.h"
+#include "SmartDashboard/SmartDashboard.h"
 #include <xeromath.h>
 #include <cassert>
 #include <string>
 #include <cmath>
+#include <algorithm>
 
 using namespace xero::misc ;
 using namespace xero::math ;
@@ -14,15 +16,6 @@ using namespace xero::math ;
 // size change signal
 //
 xero::sim::ScreenVisualizer *theOne = nullptr ;
-
-extern "C" 
-{
-    void handleWindowChangeSignal() ;
-}
-
-void handleWindowChangeSignal(int v) {
-    theOne->windowSizeChanged() ;
-}
 
 namespace xero {
 	namespace sim {
@@ -45,11 +38,52 @@ namespace xero {
 			robot_window_ = nullptr ;
 			oi_window_ = nullptr ;
 			field_window_ = nullptr ;
+			smart_window_ = nullptr ;
 		}
 
 		ScreenVisualizer::~ScreenVisualizer() {
 			deinitScreen() ;
 			theOne = nullptr ;
+		}
+
+		std::string ScreenVisualizer::getSmartDashboardKeyValue(const std::string &key) {
+			std::string ret ;
+
+			unsigned int flags = frc::SmartDashboard::GetFlags(key) ;
+			if (flags & NT_BOOLEAN) {
+				if (frc::SmartDashboard::GetBoolean(key, false))
+					ret = "TRUE" ;
+				else
+					ret = "FALSE" ;
+			}
+			else if (flags & NT_DOUBLE) {
+				ret = std::to_string(frc::SmartDashboard::GetNumber(key, 0.0)) ;
+			}
+			else if (flags & NT_STRING) {
+				ret = frc::SmartDashboard::GetString(key, "") ;
+			}
+			else {
+				ret = "BadWolf" ;
+			}
+
+			return ret ;
+		}
+
+		void ScreenVisualizer::updateSmartDashboard() {
+			std::vector<std::string> keys ;
+			keys = frc::SmartDashboard::GetKeys() ;
+			std::sort(keys.begin(), keys.end()) ;
+			
+			int row = 0 ;
+			wmove(smart_window_, row++, 0) ;
+			waddstr(smart_window_, "Smart Dashboard") ;
+			wmove(smart_window_, row++, 0) ;
+			waddstr(smart_window_, "---------------") ;
+			for(const std::string &key : keys) {
+				wmove(smart_window_, row++, 0) ;
+				std::string line = key + " " + getSmartDashboardKeyValue(key) ;
+				waddstr(smart_window_, line.c_str()) ;
+			}
 		}
 
 		void ScreenVisualizer::windowSizeChanged() {
@@ -61,7 +95,9 @@ namespace xero {
                 initScreen() ;
                 doLayout() ;
 				inited_ = true ;
-            }			
+            }
+
+			updateSmartDashboard() ;
 
 			std::string str ;
 
@@ -84,6 +120,7 @@ namespace xero {
 			wrefresh(field_window_) ;
 			wrefresh(robot_window_) ;
 			wrefresh(oi_window_) ;
+			wrefresh(smart_window_) ;
 		}
 
         void ScreenVisualizer::drawField() {
@@ -156,14 +193,12 @@ namespace xero {
 		}		
 
 		void ScreenVisualizer::initScreen() {
-			signal(SIGWINCH, handleWindowChangeSignal) ;
 			initscr() ;
 			noecho() ;
 			cbreak() ;
 		}
 
 		void ScreenVisualizer::deinitScreen() {
-			while (getch() == ERR) ;
 			endwin() ;
 			curs_set(1) ;
 		}		
@@ -201,9 +236,13 @@ namespace xero {
 			//
 			// Create the window for the OI information
 			//
-			oi_window_ = newwin(height_, width_ - field_width - RobotWindowWidth, 0, field_width + RobotWindowWidth + 3) ;
+			oi_window_ = newwin(height_ / 2, width_ - field_width - RobotWindowWidth, 0, field_width + RobotWindowWidth + 3) ;
 			nodelay(oi_window_, true) ;
 
+			//
+			// Create the smart dashboard window
+			//
+			smart_window_ = newwin(height_ /2, width_ - field_width - RobotWindowWidth, height_ / 2, field_width + RobotWindowWidth + 3) ;
 
 			//
 			// Calculate the size of the robot
@@ -287,7 +326,6 @@ namespace xero {
 				mvwaddch(field_window_, ry + robot_height_ - 1, rx + robot_width_ /2 , ACS_TTEE) ;
 				break ;
 			}
-
 
 			last_x_ = rx ;
 			last_y_ = ry ;

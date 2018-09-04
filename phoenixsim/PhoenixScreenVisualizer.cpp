@@ -99,6 +99,7 @@ namespace xero {
 
 			void PhoenixScreenVisualizer::displayOI(std::shared_ptr<OIModel> subsystem_p) {
 				int ch ;
+				int oi = 2 ;
 
 				WINDOW *win = getOIWindow() ;
 				int width = getOIWindowWidth() ;
@@ -110,33 +111,33 @@ namespace xero {
 
 				ch = wgetch(win) ;
 				if (ch == 'f')
-					subsystem_p->setButton(3, 0, !subsystem_p->getButton(3, 0)) ;
+					subsystem_p->setButton(oi, 1, !subsystem_p->getButton(oi, 1)) ;
 				else if (ch == 'x')
-					subsystem_p->setButton(3, 1, !subsystem_p->getButton(3, 1)) ;
+					subsystem_p->setButton(oi, 2, !subsystem_p->getButton(oi, 2)) ;
 				else if (ch == 's')
-					subsystem_p->setButton(3, 3, !subsystem_p->getButton(3, 3)) ;				
+					subsystem_p->setButton(oi, 4, !subsystem_p->getButton(oi, 4)) ;				
 				else if (ch == 'w')
-					subsystem_p->setButton(3, 2, !subsystem_p->getButton(3, 2)) ;
+					subsystem_p->setButton(oi, 3, !subsystem_p->getButton(oi, 3)) ;
 				else if (ch == 'c')
-					subsystem_p->setButton(3, 7, !subsystem_p->getButton(3, 7)) ;		
+					subsystem_p->setButton(oi, 8, !subsystem_p->getButton(oi, 8)) ;		
 				else if (ch == 'C')
-					subsystem_p->setButton(3, 4, !subsystem_p->getButton(3, 4)) ;	
+					subsystem_p->setButton(oi, 5, !subsystem_p->getButton(oi, 5)) ;	
 				else if (ch == 'E')
-					subsystem_p->setButton(3, 5, !subsystem_p->getButton(3, 5)) ;
+					subsystem_p->setButton(oi, 6, !subsystem_p->getButton(oi, 6)) ;
 				else if (ch == 'D')
-					subsystem_p->setButton(3, 6, !subsystem_p->getButton(3, 6)) ;	
+					subsystem_p->setButton(oi, 7, !subsystem_p->getButton(oi, 7)) ;	
 				else if (ch == 'L')
-					subsystem_p->setButton(3, 14, !subsystem_p->getButton(3, 14)) ;
+					subsystem_p->setButton(oi, 15, !subsystem_p->getButton(oi, 15)) ;
 				else if (ch == 'W')
-					subsystem_p->setButton(3, 8, !subsystem_p->getButton(3, 8)) ;	
+					subsystem_p->setButton(oi, 9, !subsystem_p->getButton(oi, 9)) ;	
 				else if (ch == 'S')
-					subsystem_p->setButton(3, 9, !subsystem_p->getButton(3, 9)) ;
+					subsystem_p->setButton(oi, 10, !subsystem_p->getButton(oi, 10)) ;
 				else if (ch == 'u')
-					subsystem_p->setButton(3, 12, !subsystem_p->getButton(3, 12)) ;
+					subsystem_p->setButton(oi, 13, !subsystem_p->getButton(oi, 13)) ;
 				else if (ch == 'd')
-					subsystem_p->setButton(3, 13, !subsystem_p->getButton(3, 13)) ;
+					subsystem_p->setButton(oi, 14, !subsystem_p->getButton(oi, 14)) ;
 				else if (ch == 'p')
-					subsystem_p->setButton(3, 15, !subsystem_p->getButton(3, 15)) ;
+					subsystem_p->setButton(oi, 16, !subsystem_p->getButton(oi, 16)) ;
 				else if (ch == KEY_UP) {
 					if (subsystem_p->getPOV(1, 0) == 0)
 						subsystem_p->setPOV(1, 0, -1) ;
@@ -168,88 +169,88 @@ namespace xero {
 
 				wmove(win, top++, 0) ;	
 				str = "Floor[f]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(0) ?  "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(1) ?  "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;
 				wclrtoeol(win) ;
 
 				wmove(win, top++, 0) ;
 				str = "Exchange[x]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(1) ? "true" : "false") ;
-				waddstr(win, str.substr(0, width).c_str()) ;				
-				wclrtoeol(win) ;
-
-				wmove(win, top++, 0) ;
-				str = "Switch[w]: " ;
 				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(2) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;
 
 				wmove(win, top++, 0) ;
-				str = "Scale[s]: " ;
+				str = "Switch[w]: " ;
 				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(3) ? "true" : "false") ;
+				waddstr(win, str.substr(0, width).c_str()) ;				
+				wclrtoeol(win) ;
+
+				wmove(win, top++, 0) ;
+				str = "Scale[s]: " ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(4) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;									
 
 				wmove(win, top++, 0) ;
 				str = "Climb[c]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(7) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(8) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;
 				top++ ;		
 
 				wmove(win, top++, 0) ;
 				str = "Collect[C]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(4) ? "true" : "false") ;
-				waddstr(win, str.substr(0, width).c_str()) ;				
-				wclrtoeol(win) ;
-
-				wmove(win, top++, 0) ;
-				str = "Eject[E]: " ;
 				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(5) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;
 
 				wmove(win, top++, 0) ;
-				str = "Drop[D]: " ;
+				str = "Eject[E]: " ;
 				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(6) ? "true" : "false") ;
+				waddstr(win, str.substr(0, width).c_str()) ;				
+				wclrtoeol(win) ;
+
+				wmove(win, top++, 0) ;
+				str = "Drop[D]: " ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(7) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;	
 
 				wmove(win, top++, 0) ;
 				str = "EjectSlow[S]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(9) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(10) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;	
 
 				top++ ;
 				wmove(win, top++, 0) ;
 				str = "LifterUp[u]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(12) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(13) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win)  ;
 
 				wmove(win, top++, 0) ;
 				str = "Lifter Down[d]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(13) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(14) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) 	;
 
 				wmove(win, top++, 0) ;
 				str = "Lifter Power[p]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(15) ? "high" : "low") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(16) ? "high" : "low") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) 	;															
 
 				top++ ;	
 				wmove(win, top++, 0) ;
 				str = "ClimbDisabled[L]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(14) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(15) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;		
 
 				wmove(win, top++, 0) ;
 				str = "Wings[W]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(8) ? "deploy" : "nop") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(9) ? "deploy" : "nop") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;
 

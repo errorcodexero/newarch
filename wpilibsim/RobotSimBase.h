@@ -7,6 +7,7 @@
 #include "VictorSP.h"
 #include "AHRS.h"
 #include "Timer.h"
+#include "JoystickManager.h"
 #include <SettingsParser.h>
 #include <list>
 #include <memory>
@@ -25,7 +26,6 @@ namespace xero {
     namespace sim {
         class SubsystemModel ;
         class Visualizer ;
-		class JoystickManager ;
 
         class RobotSimBase {
         public:

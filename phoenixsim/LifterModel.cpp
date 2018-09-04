@@ -86,7 +86,8 @@ namespace xero {
 				}
 
 				int encval = static_cast<int>((height_ - bottom_limit_height_) / in_per_tick_) + encoder_base_ ;
-				enc_->SimulatorSetValue(encval) ;
+				if (enc_ != nullptr)
+					enc_->SimulatorSetValue(encval) ;
             }
 
 	        void LifterModel::inputChanged(SimulatedObject *obj) {

@@ -37,7 +37,7 @@ namespace xero {
 				//
 				// The climb diabled button is true to start, disabling climb
 				//
-				stick.setButtonValue(14, true) ;
+				stick.setButtonValue(15, false) ;
             }     
 
 			void OIModel::setButton(int which, int button, bool value) {

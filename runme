@@ -1,13 +1,13 @@
 #!/bin/bash
 
 if [ "$#" -ne 4 ]; then
-	echo "Invalid number of arguments, expected 4"
-	echo "usage: runme start gamedata secondcube mode"
-	echo "  start: L R C"
-	echo "  gamedata: LLL LRL RRR RLR"
-	echo "  secondcube: time in seconds"
-	echo "  mode: auto teleop"
-	exit 1
+    echo "Invalid number of arguments, expected 4"
+    echo "usage: runme start gamedata secondcube mode"
+    echo "  start: L R C"
+    echo "  gamedata: LLL LRL RRR RLR"
+    echo "  secondcube: time in seconds"
+    echo "  mode: auto teleop"
+    exit 1
 fi
 
 pos=17.0,115.0
@@ -16,15 +16,15 @@ pos=17.0,115.0
 # Set the starting position
 #
 if [ $1 = "C" ]; then
-	pos=17.0,115.0
+    pos=17.0,115.0
 fi
 
 if [ $1 = "L" ]; then
-	pos=17.0,48.0
+    pos=17.0,48.0
 fi
 
 if [ $1 = "R" ]; then
-	pos=17.0,288.0
+    pos=17.0,288.0
 fi
 
 #
@@ -32,50 +32,58 @@ fi
 #
 gameset=false
 if [ $2 = "RRR" ]; then
-	gameset=true
+    gameset=true
 fi
 
 if [ $2 = "RLR" ]; then
-	gameset=true
+    gameset=true
 fi
 
 if [ $2 = "LLL" ]; then
-	gameset=true
+    gameset=true
 fi
 
 if [ $2 = "LRL" ]; then
-	gameset=true
+    gameset=true
 fi
 
 if [ $gameset = "false" ]; then
-	echo "second argument should be LLL, LRL, RRR, or RLR"
-	exit 1
+    echo "second argument should be LLL, LRL, RRR, or RLR"
+    exit 1
 fi
 
 cubeset=false
 if [ $3 = "quick" ]; then
-	cubes=0.25,6.5
-	cubeset=true
+    cubes=0.25,6.5
+    cubeset=true
 fi
 
 if [ $3 = "cross" ]; then
-	cubes=0.25,12.5
-	cubeset=true
+    cubes=0.25,12.5
+    cubeset=true
 fi
 
 if [ $cubeset = "false" ]; then
-	cubes=$3
+    cubes=$3
 fi
 
 if [ $4 = "auto" ]; then
-	autotime=25.0
-	teleoptime=0.0
+    autotime=25.0
+    teleoptime=0.0
+    testtime=0.0
 fi
 
 if [ $4 = "teleop" ]; then
-	autotime=0.0
-	teleoptime=300.0
+    autotime=0.0
+    teleoptime=300.0
+    testtime=0.0
 fi
 
-build/exe/frcUserProgramSim/frcUserProgramSim --simfile SIM --robotfile ROBOT --start 0 --auto $autotime --oper $teleoptime --simscreen --simprop cube=$cubes --simprop pos=$pos --simprop gamedata=$2
+if [ $4 = "test" ]; then
+    autotime=0.0
+    teleoptime=0.0
+    testtime=300.0
+fi    
+
+build/exe/frcUserProgramSim/frcUserProgramSim --simfile SIM --robotfile ROBOT --test $testtime --start 0 --auto $autotime --oper $teleoptime --simscreen --simprop cube=$cubes --simprop pos=$pos --simprop gamedata=$2
 
