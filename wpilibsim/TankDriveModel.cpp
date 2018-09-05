@@ -105,10 +105,6 @@ namespace xero {
 		}
 
         void TankDriveModel::run(double dt) {
-			int x = 1 ;
-			if (left_volts_ > 0.1 && right_volts_ > 0.1)
-				x = 2 ;
-
 			//
 			// Calculate the new desired revolutions per second (RPS)
 			//

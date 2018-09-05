@@ -40,7 +40,6 @@ namespace frc
 		m_auto_done = false;
 		double now ;
 		std::chrono::microseconds delay(100) ;
-		RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
 
 		if (m_test_period > 0.0) {
 			setRobotMode(SampleRobot::RobotMode::Test) ;
