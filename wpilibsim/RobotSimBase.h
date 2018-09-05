@@ -25,6 +25,7 @@ namespace xero {
     namespace sim {
         class SubsystemModel ;
         class Visualizer ;
+		class JoystickManager ;
 
         class RobotSimBase {
         public:
@@ -68,6 +69,8 @@ namespace xero {
             bool hasProperty(const std::string &name) ;
             const std::string &getProperty(const std::string &name) ;
 
+			std::shared_ptr<SubsystemModel> getModelByName(const std::string &name) ;
+
         protected:
             void addModel(std::shared_ptr<SubsystemModel> model) {
                 models_.push_back(model) ;
@@ -81,11 +84,13 @@ namespace xero {
                 visualizers_.push_back(vis) ;
             }
 
+			void readJoysticks() ;
+
         private:
             void simLoop() ;
             void incrCurrentTime(double incr) ;
 
-        protected:
+        private:
             static RobotSimBase *theOne ;
 
             std::list<std::shared_ptr<SubsystemModel>> models_ ;
@@ -111,6 +116,8 @@ namespace xero {
             double speed_ ;
 
             frc::SampleRobot *robot_ ;
+
+			JoystickManager *joysticks_ ;
         } ;
     }
 }

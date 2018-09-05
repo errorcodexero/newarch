@@ -132,6 +132,9 @@ namespace xero {
 			/// \param file the name of the file for the output
 			void setupRobotOutputFile(const std::string &file) ;
 
+			/// \brief get a subsystem by name
+			SubsystemPtr getSubsystemByName(const std::string &name) ;
+
 		private:
 			// The time per robot loop in seconds
 			double target_loop_time_;

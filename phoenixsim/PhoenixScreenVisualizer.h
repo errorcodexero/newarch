@@ -1,85 +1,59 @@
-#include <Visualizer.h>
-
-#ifdef XEROSCREEN
+#pragma once
+#include <ScreenVisualizer.h>
 #include <TankDriveModel.h>
 #include "LifterModel.h"
 #include "IntakeModel.h"
 #include "GrabberModel.h"
 #include "WingsModel.h"
 #include "CubeSensorModel.h"
+#include "OIModel.h"
 
 #include <ncurses.h>
 
 namespace xero {
     namespace sim {
         namespace phoenix {
-            class PhoenixScreenVisualizer : public Visualizer {
+            class PhoenixScreenVisualizer : public ScreenVisualizer {
             public:
                 PhoenixScreenVisualizer(RobotSimBase &sim) ;
                 virtual ~PhoenixScreenVisualizer() ;
 
-                virtual void beginCycle(double time) ;
+				virtual void beginCycle(double t) ;
                 virtual void visualizeSubsystem(std::shared_ptr<SubsystemModel> subsystem_p) ;
-                virtual void endCycle() ;
 
-                void windowSizeChanged() ;
+			protected:
+				virtual char getRobotChar() {
+					return cube_ ? '#' : ' ' ;
+				}
 
-            private:
-                static const int RightSideWidth = 40 ;
-                static const int TimeRow = 1 ;
-                static const int TankDriveRow = 4 ;
-                static const int LifterRow = 10 ;
-                static const int IntakeRow = 17 ;
-                static const int GrabberRow = 21 ;
-                static const int WingsRow = 25 ;
-                static const int CubeSensorRow = 28 ;
-                static const int MinimumHeight = 30 ;
+				virtual std::string getModeString() ;
 
-                static const char *rotate_chars_ ;
+				virtual void drawGameSpecificField(WINDOW *win)  ;
 
-                static const char withcube = '@' ;
-                static const char withoutcube = '$' ;
 
             private:
-                void initScreen() ;
-                void deinitScreen() ;
-                void doLayout() ;
-
-                void drawField() ;
-                void drawTextField() ;
-
                 void displayTankDrive(std::shared_ptr<xero::sim::TankDriveModel> subsystem_p) ;
                 void displayLifter(std::shared_ptr<LifterModel> subsystem_p) ;
                 void displayGrabber(std::shared_ptr<GrabberModel> subsystem_p) ;
                 void displayIntake(std::shared_ptr<IntakeModel> subsystem_p) ;
                 void displayWings(std::shared_ptr<WingsModel> subsystem_p) ;
                 void displayCubeSensor(std::shared_ptr<CubeSensorModel> subsystem_p) ;
+				void displayOI(std::shared_ptr<OIModel> subsystem_p) ;
 
-                void plotRobot(double x, double y, double angle) ;
+				int displayBaseOI(WINDOW *win, std::shared_ptr<OIModel> subsystem_p, int stick, int top, int width) ;
+				int displayDriver(WINDOW *win, std::shared_ptr<OIModel> subsystem_p, int stick, int top, int width) ;
+				int displayGunner(WINDOW *win, std::shared_ptr<OIModel> subsystem_p, int stick, int top, int width) ;
 
             private:
-                bool inited_ ;
-                int width_ ;
-                int height_ ;
-                int right_side_ ;
-
-                double min_x_ ;
-                double min_y_ ;
-                double max_x_ ;
-                double max_y_  ;
-
-                int last_row_ ;
-                int last_col_ ;
-
-                double last_angle_ ;
-
-                size_t same_count_ ;
-                size_t rotate_index_ ;
-
-		bool cube_ ;
+				int gamedata_row_ ;
+				int tankdrive_row_ ;
+				int lifter_row_ ;
+				int intake_row_ ;
+				int grabber_row_ ;
+				int wings_row_ ;
+				int cubesensor_row_ ;
+				bool cube_ ;
             } ;
         }
     }
 }
-
-#endif

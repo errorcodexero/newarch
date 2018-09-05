@@ -106,7 +106,7 @@ namespace xero {
 			double error ;
 			
 			if (is_angle_)
-				error = angleDifference(target, current) ;
+				error = xero::math::normalizeAngleDegrees(target - current) ;
 			else
 				error = target - current ;
 

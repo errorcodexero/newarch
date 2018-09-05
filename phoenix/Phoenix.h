@@ -1,6 +1,11 @@
 #pragma once
 
 #include <Robot.h>
+#include <tankdrive/TankDrive.h>
+#include "wings/Wings.h"
+#include "intake/Intake.h"
+#include "lifter/Lifter.h"
+#include "grabber/Grabber.h"
 
 namespace xero {
 	namespace phoenix {

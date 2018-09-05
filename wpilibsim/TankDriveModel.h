@@ -24,6 +24,7 @@ namespace xero
             virtual void run(double dt);
             virtual void inputChanged(SimulatedObject *obj);
             virtual std::string toString()  ;
+			virtual void init() ;			
 
             virtual void addTalon(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
             virtual void addEncoder(frc::Encoder *encoder);
@@ -52,7 +53,11 @@ namespace xero
           private:
             void updatePosition(double dx, double dy, double angle) ;
 
+			double capValue(double prev, double desired, double maxchange) ;
+
           private:
+			bool inited_ ;
+
             double left_;
             double right_;
             double angle_;
@@ -68,6 +73,9 @@ namespace xero
             double last_output_;
             double speed_ ;
             double max_speed_ ;
+			double max_change_ ;
+			double current_left_rps_ ;
+			double current_right_rps_ ;
 
             double xpos_ ;
             double ypos_ ;
