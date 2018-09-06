@@ -8,6 +8,7 @@
 #include "AHRS.h"
 #include "Timer.h"
 #include "JoystickManager.h"
+#include "TankDriveModel.h"
 #include <SettingsParser.h>
 #include <list>
 #include <memory>
@@ -71,9 +72,27 @@ namespace xero {
 
 			std::shared_ptr<SubsystemModel> getModelByName(const std::string &name) ;
 
+			double getRobotXPos() {
+				if (tank_drive_model_ == nullptr)
+					return 0.0 ;
+
+				return tank_drive_model_->getXPos() ;
+			}
+
+			double getRobotYPos() {
+				if (tank_drive_model_ == nullptr)
+					return 0.0 ;
+
+				return tank_drive_model_->getYPos() ;
+			}			
+
         protected:
             void addModel(std::shared_ptr<SubsystemModel> model) {
                 models_.push_back(model) ;
+
+				auto tank = std::dynamic_pointer_cast<TankDriveModel>(model) ;
+				if (tank != nullptr)
+					tank_drive_model_ = tank ;
             }
 
             std::list<std::shared_ptr<SubsystemModel>> &getModels() {
@@ -94,6 +113,8 @@ namespace xero {
             static RobotSimBase *theOne ;
 
             std::list<std::shared_ptr<SubsystemModel>> models_ ;
+
+			std::shared_ptr<TankDriveModel> tank_drive_model_ ;
 
             std::thread model_thread_ ;
             bool running_ ;

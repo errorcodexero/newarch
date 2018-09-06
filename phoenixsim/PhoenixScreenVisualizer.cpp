@@ -1,6 +1,6 @@
 #include "PhoenixScreenVisualizer.h"
 #include "SampleRobot.h"
-#include "RobotSimBase.h"
+#include "PhoenixSimulator.h"
 #include <xeromath.h>
 #include <DriverStation.h>
 #include <cassert>
@@ -49,6 +49,8 @@ namespace xero {
 				x1 = edgeToSwitchHorizontal + switchWidth + switchToScale + scaleWidth + switchToScale ;
 				y1 = edgeToSwitchVertical ;
 				drawFieldRectangle(win, x1, y1, switchWidth, switchHeight) ;
+
+				drawCubes(win) ;			
 			}
 
 			void PhoenixScreenVisualizer::beginCycle(double dt) {
@@ -169,88 +171,88 @@ namespace xero {
 
 				wmove(win, top++, 0) ;	
 				str = "Floor[f]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(1) ?  "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(0) ?  "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;
 				wclrtoeol(win) ;
 
 				wmove(win, top++, 0) ;
 				str = "Exchange[x]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(2) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(1) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;
 
 				wmove(win, top++, 0) ;
 				str = "Switch[w]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(3) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(2) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;
 
 				wmove(win, top++, 0) ;
 				str = "Scale[s]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(4) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(3) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;									
 
 				wmove(win, top++, 0) ;
 				str = "Climb[c]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(8) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(7) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;
 				top++ ;		
 
 				wmove(win, top++, 0) ;
 				str = "Collect[C]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(5) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(4) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;
 
 				wmove(win, top++, 0) ;
 				str = "Eject[E]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(6) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(5) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;
 
 				wmove(win, top++, 0) ;
 				str = "Drop[D]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(7) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(6) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;	
 
 				wmove(win, top++, 0) ;
 				str = "EjectSlow[S]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(10) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(9) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;	
 
 				top++ ;
 				wmove(win, top++, 0) ;
 				str = "LifterUp[u]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(13) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(12) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win)  ;
 
 				wmove(win, top++, 0) ;
 				str = "Lifter Down[d]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(14) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(13) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) 	;
 
 				wmove(win, top++, 0) ;
 				str = "Lifter Power[p]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(16) ? "high" : "low") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(15) ? "high" : "low") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) 	;															
 
 				top++ ;	
 				wmove(win, top++, 0) ;
 				str = "ClimbDisabled[L]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(15) ? "true" : "false") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(14) ? "true" : "false") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;		
 
 				wmove(win, top++, 0) ;
 				str = "Wings[W]: " ;
-				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(9) ? "deploy" : "nop") ;
+				str += (subsystem_p->getDS()->getStick(stick).getButtonValue(8) ? "deploy" : "nop") ;
 				waddstr(win, str.substr(0, width).c_str()) ;				
 				wclrtoeol(win) ;
 
@@ -427,6 +429,15 @@ namespace xero {
                 waddstr(getRobotWindow(),str.substr(0, fieldwidth).c_str()) ;
                 wclrtoeol(getRobotWindow()) ;                   
             }
+
+			void PhoenixScreenVisualizer::drawCubes(WINDOW *win) {
+				auto &sim = getSimulator() ;
+				PhoenixSimulator &phoenix = dynamic_cast<PhoenixSimulator &>(sim) ;
+
+				for(const Cube &cube : phoenix.getCubes()) {
+					drawFieldRectangle(win, cube.getX() - CubeWidthHeight / 2.0, cube.getY() - CubeWidthHeight / 2.0, CubeWidthHeight, CubeWidthHeight) ;
+				}
+			}
         }
     }
 }

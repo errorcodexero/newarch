@@ -13,9 +13,9 @@ namespace frc
 		m_mode = RobotMode::Autonomous;
 		m_robotMainOverridden = false;
 		m_start_delay = 0;
-		m_auto_period = 15;
-		m_teleop_period = 135;
-		m_test_period = 0 ;
+		m_auto_period = 0;
+		m_teleop_period = 0;
+		m_test_period = 120 ;
 		screen_ = false ;
 	}
 
@@ -40,6 +40,7 @@ namespace frc
 		m_auto_done = false;
 		double now ;
 		std::chrono::microseconds delay(100) ;
+		RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
 
 		if (m_test_period > 0.0) {
 			setRobotMode(SampleRobot::RobotMode::Test) ;

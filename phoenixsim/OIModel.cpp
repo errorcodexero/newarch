@@ -14,6 +14,16 @@ namespace xero {
 			OIModel::~OIModel() {				
 			}
 
+			void OIModel::init() {
+                if (getSimulator().hasProperty("autovalue")) {
+					std::vector<double> values ;
+                    const std::string &prop = getSimulator().getProperty("autovalue") ;
+                    if (parseDoubleList(prop, values)) {
+						autovalue_ = values[0] ;
+					}
+                }				
+			}
+
             std::string OIModel::toString() {
                 std::string result("OI: ") ;
                 return result ;
@@ -33,6 +43,11 @@ namespace xero {
 				// Axis used to detect the OI
 				//
 				stick.setAxisValue(9, 1.0) ;
+
+				//
+				// Axis used to control the automode switch
+				//
+				stick.setAxisValue(6, autovalue_) ;
 
 				//
 				// The climb diabled button is true to start, disabling climb

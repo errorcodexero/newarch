@@ -1,5 +1,5 @@
 #include "CubeSensorModel.h"
-#include <RobotSimBase.h>
+#include "PhoenixSimulator.h"
 
 using namespace frc ;
 
@@ -65,15 +65,30 @@ namespace xero {
             }
 
             void CubeSensorModel::run(double dt) {
+				auto &phoenix = dynamic_cast<PhoenixSimulator &>(getSimulator()) ;
+
                 evalSensor() ;
 
-                double now = getSimulator().getTime() ;
+                double now = phoenix.getTime() ;
 
                 if (cube_sensed_ == false) {
+					//
+					// Cubes based on time
+					//
                     for(const auto &entry: ontimes_) {
                         if (entry.start > last_time_ && entry.start <= now)
                             cube_sensed_ = true ;
                     }
+
+					//
+					// Cubes based on position
+					//
+					double x = phoenix.getRobotXPos() ;
+					double y = phoenix.getRobotYPos() ;
+					if (phoenix.isCubeAtPosition(x, y)) {
+						phoenix.removeCube(x, y) ;
+						cube_sensed_ = true ;
+					}
                 }
 
                 if (input_ != nullptr)
