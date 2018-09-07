@@ -29,6 +29,8 @@ namespace xero {
 			last_ypos_ = 0.0 ;
 			speed_ = 0.0 ; 
 			max_speed_ = 0.0 ;
+			current_left_rps_ = 0.0 ;
+			current_right_rps_ = 0.0 ;
 
             ticks_per_rev_ = simbase.getSettingsParser().getInteger("tankdrive:sim:ticks_per_rev") ;
             diameter_ = simbase.getSettingsParser().getDouble("tankdrive:sim:diameter") ;
@@ -257,7 +259,6 @@ namespace xero {
 		}
 
 		void TankDriveModel::updatePosition(double dl, double dr, double angle) {
-			// std::cout << "TankDriveModel " << dr << " , " << dl << " , " << angle << std::endl ;
 			if (std::fabs(dl - dr) < 1e-6) {
 				// Straight line
 				xpos_ += dl * std::cos(angle) ;

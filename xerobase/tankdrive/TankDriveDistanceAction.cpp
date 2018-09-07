@@ -16,6 +16,15 @@ TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, double t
 	is_done_ = false;
 
 	has_stalled_ = false;
+	double maxa = tank_drive.getRobot().getSettingsParser().getDouble("tankdrive:straight:maxa") ;
+	double maxd = tank_drive.getRobot().getSettingsParser().getDouble("tankdrive:straight:maxd") ;
+	double maxv = tank_drive.getRobot().getSettingsParser().getDouble("tankdrive:straight:maxv") ;		
+	profile_ = new TrapezoidalProfile(maxa, maxd, maxv) ;
+}
+
+TankDriveDistanceAction::~TankDriveDistanceAction() {
+	if (profile_ != nullptr)
+		delete profile_ ;
 }
 
 void TankDriveDistanceAction::start() {
@@ -27,7 +36,6 @@ void TankDriveDistanceAction::start() {
 	angle_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:angle_pid", true);
 
 	stall_monitor_.initFromSettings(parser, "tankdrive:distance_action:stall_monitor");
-	profile_.initFromSettings(parser, "tankdrive:distance_action:profile");
 
 	distance_threshold_ = parser.getDouble("tankdrive:distanceaction:distance_threshold");
 	profile_outdated_error_ = parser.getDouble("tankdrive:distanceaction:profile_outdated_error");
@@ -65,20 +73,20 @@ void TankDriveDistanceAction::run() {
 			}
 
 			double delta_time = tank_drive_.getRobot().getDeltaTime();
-			double target_distance = profile_.getDistance(delta_time);
+			double target_distance = profile_->getDistance(delta_time);
 			double profile_error = std::fabs(target_distance - distance_travelled);
 
 			double current_velocity = tank_drive_.getVelocity();
 
 			if (profile_error > profile_outdated_error_) {
-				profile_.update(remaining_distance, current_velocity, 0.0);
+				profile_->update(remaining_distance, current_velocity, 0.0);
 
 				logger.startMessage(MessageLogger::MessageType::debug, msg_group_);
 				logger << "Fell behind velocity profile, updating profile";
 				logger.endMessage();
 			}
 
-			double target_velocity = profile_.getSpeed(delta_time);
+			double target_velocity = profile_->getSpeed(delta_time);
 
 			double base_power = velocity_pid_.getOutput(target_velocity, current_velocity, delta_time);
 

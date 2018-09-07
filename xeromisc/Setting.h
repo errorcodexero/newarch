@@ -50,6 +50,29 @@ namespace xero {
 				string_ = s;
 			}
 
+			/// \brief Create a new setting holding the given string value
+			/// \param s the string value to store
+			Setting(const char *s) {
+				type_ = Type::String ;
+				string_ = s ;
+			}
+
+			bool isBoolean() const {
+				return type_ == Type::Boolean ;
+			}
+
+			bool isDouble() const {
+				return type_ == Type::Double ;
+			}
+
+			bool isInteger() const {
+				return type_ == Type::Integer ;
+			}
+
+			bool isString() const {
+				return type_ == Type::String ;
+			}
+			
 			/// \brief Return the boolean value held by the setting
 			/// \returns the boolean value held by the setting
 			bool getBoolean() const {
@@ -82,6 +105,38 @@ namespace xero {
 				assert(type_ == Type::String);
 
 				return string_;
+			}
+
+			/// \brief The == operator for the setting object
+			/// \returns true if the objects are the same type and value
+			bool operator==(const Setting &s) const  {
+				bool ret = true ;
+
+				if (type_ != s.type_)
+					return false ;
+
+				switch(type_) {
+				case Type::Boolean:
+					ret = (bool_ == s.bool_) ;
+					break ;
+
+				case Type::Integer:
+					ret = (int_ == s.int_) ;
+					break ;
+
+				case Type::Double:
+					ret = (double_ == s.double_) ;
+					break ;
+
+				case Type::String:
+					ret = (string_ == s.string_) ;
+					break ;
+
+				case Type::Invalid:
+					ret = true ;
+				}
+
+				return ret ;
 			}
 
 		private:

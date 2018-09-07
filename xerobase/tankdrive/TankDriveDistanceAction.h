@@ -16,6 +16,7 @@ namespace xero {
 			/// \param tank_drive the tank drive subsystem
 			/// \param target_distance The distance to drive in inches
 			TankDriveDistanceAction(TankDrive &tank_drive, double target_distance);
+			virtual ~TankDriveDistanceAction() ;
 
 			void start();
 			void run();
@@ -26,7 +27,7 @@ namespace xero {
 		private:
 			xero::misc::PIDCtrl velocity_pid_, angle_pid_;
 			xero::misc::StallMonitor stall_monitor_;
-			xero::misc::TrapezoidalProfile profile_;
+			xero::misc::TrapezoidalProfile *profile_;
 
 			bool has_stalled_;
 

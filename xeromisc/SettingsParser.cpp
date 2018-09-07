@@ -23,6 +23,13 @@ bool SettingsParser::readLine(const std::string &line, std::string &key, std::st
 	for(unsigned i = 0; i < line.length(); i++) {
 		// Check for comment start
 		if(line[i] == '#') {
+			if (key.length() == 0 && value.length() == 0) {
+				//
+				// This is a comment only line, it is ok
+				//
+				return true ;
+			}
+
 			// If the key hasn't been found, the line is invalid
 			if(key.length() == 0) {
 				logger_.startMessage(MessageLogger::MessageType::warning, msggroup_);
@@ -67,12 +74,20 @@ bool SettingsParser::readLine(const std::string &line, std::string &key, std::st
 		}
 	}
 
+
 	// Check for unterminated string
 	if(in_string) {
 		logger_.startMessage(MessageLogger::MessageType::warning, msggroup_);
 		logger_ << filename << ": line " << line_num << ": Unterminated string";
 		logger_.endMessage();
 		return false;
+	}
+
+	if (key.length() == 0 && value.length() == 0) {
+		//
+		// This is an empty line
+		//
+		return true ;
 	}
 
 	// If the key hasn't been found, the line is invalid
@@ -210,6 +225,7 @@ void SettingsParser::set(const std::string &key, bool value) {
 		logger_ << (value ? "true" : "false") ;
 		logger_.endMessage() ;
 	}
+
 	settings_[key] = Setting(value);
 }
 

@@ -48,7 +48,7 @@ namespace xero {
 		}
 
 		PointAngle PointAngle::rotate(double ang) const {
-			return PointAngle(getX(), getY(), angle_ + ang) ;
+			return PointAngle(getX(), getY(), xero::math::normalizeAngleRadians(angle_ + ang)) ;
 		}
 
 		PointAngle PointAngle::perpendicular() const {

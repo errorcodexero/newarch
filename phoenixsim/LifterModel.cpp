@@ -31,6 +31,10 @@ namespace xero {
                 bottom_limit_ = nullptr ;
 
                 voltage_ = 0.0 ;
+
+                enc_ = nullptr ;
+                bottom_limit_ = nullptr ;
+                top_limit_ = nullptr ;
             }
 
             LifterModel::~LifterModel() {
