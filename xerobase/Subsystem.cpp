@@ -49,7 +49,7 @@ namespace xero {
 
         void Subsystem::computeState() {
             for(auto sub: children_)
-                sub->computeState() ;            
+                sub->computeState() ;     
         }
 
         bool Subsystem::executeNamedSequence(const std::string &name) {
