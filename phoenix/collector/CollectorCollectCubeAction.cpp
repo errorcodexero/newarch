@@ -62,9 +62,9 @@ namespace xero {
                         if(!getCollector().hasCube()){
                             start();
                         }
-                        else if(getCollector().getRobot().getTime()-start_grab_>grab_time_){
+                        else if(getCollector().getRobot().getTime()-start_grab_ > grab_time_){
                             intake.setAction(intake_off_);
-                            state_=State::hold;
+                            state_ = State::hold;
                         }
                     break;
 

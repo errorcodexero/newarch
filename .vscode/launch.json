@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/exe/frcUserProgramSim/frcUserProgramSim.exe",
-            "args": ["--start","0","--auto","25","--oper","0", "--test", "0", "--simprop", "pos=17.0,115.0", "--simprop","gamedata=LLL","--simfile","SIM","--robotfile","ROBOT"],
+            "args": ["--start","0","--auto","25","--oper","0", "--test", "0", "--simprop", "cube=3.0", "--simprop", "pos=17.0,115.0", "--simprop","gamedata=LLL","--simfile","SIM","--robotfile","ROBOT"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
