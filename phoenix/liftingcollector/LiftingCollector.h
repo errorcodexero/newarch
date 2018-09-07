@@ -2,10 +2,6 @@
 
 #include <Subsystem.h>
 #include <memory>
-#include <Solenoid.h>
-#include "VictorSP.h"
-#include "DigitalInput.h"
-#include "Encoder.h"
 #include "LiftingCollectorAction.h"
 #include "collector/Collector.h"
 #include "lifter/Lifter.h"
