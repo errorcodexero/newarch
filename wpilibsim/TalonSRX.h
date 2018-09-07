@@ -48,6 +48,7 @@ namespace can {
 		int index_ ;
 		double value_ ;
 		bool inverted_ ;
+		SensorCollection sensors_ ;
 	};
 }
 }

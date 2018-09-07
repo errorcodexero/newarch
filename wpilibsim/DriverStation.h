@@ -80,7 +80,7 @@ namespace frc
 		std::string GetGameSpecificMessage() const ;
 
 		Stick &getStick(int which) {
-			return sticks_[which - 1] ;
+			return sticks_[which] ;
 		}
 
 		size_t getStickCount() {

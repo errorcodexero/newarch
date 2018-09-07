@@ -13,8 +13,7 @@ namespace xero  {
 
 				virtual void run(double dt) ;
                 virtual std::string toString() ;
-				virtual void init() {					
-				}
+				virtual void init()  ;			
 
             	virtual void addDriverStation(frc::DriverStation *station) ;
                 virtual void inputChanged(SimulatedObject *obj) ;
@@ -36,6 +35,7 @@ namespace xero  {
 
 			private:
 				frc::DriverStation *ds_ ;
+				double autovalue_ ;
 			} ;
 		}
 	}

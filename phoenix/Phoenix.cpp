@@ -7,7 +7,8 @@
 #include "grabber/GrabberCalibrateAction.h"
 #include "lifter/LifterGoToHeightAction.h"
 #include "lifter/LifterCalibrateAction.h"
-
+#include "collector/Collector.h"
+#include "collector/CollectorCollectCubeAction.h"
 #include <ActionSequence.h>
 #include <basegroups.h>
 #include <MessageDestDS.h>
@@ -51,7 +52,7 @@ namespace xero {
 			//
 			// This is where the subsystems for the robot get created
 			//
-			std::shared_ptr<TankDrive> db_p = std::make_shared<TankDrive>(*this, std::list<int>{1, 2, 3}, std::list<int>{4, 5, 6}) ;
+			auto db_p = std::make_shared<TankDrive>(*this, std::list<int>{1, 2, 3}, std::list<int>{4, 5, 6}) ;
 			addSubsystem(db_p) ;
 
 			//
@@ -60,12 +61,17 @@ namespace xero {
 			auto wings_p = std::make_shared<Wings>(*this) ;
 			addSubsystem(wings_p) ;
 
+			//
+			// Add in the collector
+			//
+			auto collector_p = std::make_shared<Collector>(*this) ;
+			addSubsystem(collector_p) ;
 
+			//
+			// Add in the lifter
+			//
 			auto lifter_p = std::make_shared<Lifter>(*this) ;
 			addSubsystem(lifter_p) ;
-
-			auto grabber_p = std::make_shared<Grabber>(*this) ;
-			addSubsystem(grabber_p) ;
 		}
 
 		std::shared_ptr<ControllerBase> Phoenix::createAutoController() {
@@ -76,20 +82,16 @@ namespace xero {
 			//
 			auto actlist_p = std::make_shared<ActionSequence>(getMessageLogger()) ;				
 
-			sub_p = getSubsystemByName("grabber") ;
-			auto grabber_p = std::dynamic_pointer_cast<Grabber>(sub_p) ;
-
-			sub_p = getSubsystemByName("intake") ;
-			auto intake_p = std::dynamic_pointer_cast<Intake>(sub_p) ;
+			sub_p = getSubsystemByName("Collector") ;
+			auto collector_p = std::dynamic_pointer_cast<Collector>(sub_p) ;
 
 			sub_p = getSubsystemByName("lifter") ;
 			auto lifter_p = std::dynamic_pointer_cast<Lifter>(sub_p) ;
 
-			actlist_p->pushSubActionPair(grabber_p, std::make_shared<GrabberCalibrateAction>(*grabber_p)) ;
+			actlist_p->pushSubActionPair(collector_p->getGrabber(), std::make_shared<GrabberCalibrateAction>(*collector_p->getGrabber())) ;
 			actlist_p->pushSubActionPair(lifter_p, std::make_shared<LifterCalibrateAction>(*lifter_p)) ;
-			actlist_p->pushSubActionPair(lifter_p, std::make_shared<LifterGoToHeightAction>(*lifter_p, 36.0), false) ;
-			actlist_p->pushSubActionPair(grabber_p, std::make_shared<GrabberToAngleAction>(*grabber_p, 45.0), false) ;			
-			actlist_p->pushSubActionPair(intake_p, std::make_shared<IntakeDutyCycleAction>(*intake_p, 0.5), false) ;
+			actlist_p->pushSubActionPair(lifter_p, std::make_shared<LifterGoToHeightAction>(*lifter_p, 11.5), false) ;
+			actlist_p->pushSubActionPair(collector_p, std::make_shared<CollectorCollectCubeAction>(*collector_p)) ;
 
 			auto phoenixauto_p = std::make_shared<PhoenixAutoController>(actlist_p, *this);
 			return phoenixauto_p;

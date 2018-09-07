@@ -1,6 +1,6 @@
 #include "PhoenixScreenVisualizer.h"
 #include "SampleRobot.h"
-#include "RobotSimBase.h"
+#include "PhoenixSimulator.h"
 #include <xeromath.h>
 #include <DriverStation.h>
 #include <cassert>
@@ -49,6 +49,8 @@ namespace xero {
 				x1 = edgeToSwitchHorizontal + switchWidth + switchToScale + scaleWidth + switchToScale ;
 				y1 = edgeToSwitchVertical ;
 				drawFieldRectangle(win, x1, y1, switchWidth, switchHeight) ;
+
+				drawCubes(win) ;			
 			}
 
 			void PhoenixScreenVisualizer::beginCycle(double dt) {
@@ -99,6 +101,7 @@ namespace xero {
 
 			void PhoenixScreenVisualizer::displayOI(std::shared_ptr<OIModel> subsystem_p) {
 				int ch ;
+				int oi = 2 ;
 
 				WINDOW *win = getOIWindow() ;
 				int width = getOIWindowWidth() ;
@@ -110,33 +113,33 @@ namespace xero {
 
 				ch = wgetch(win) ;
 				if (ch == 'f')
-					subsystem_p->setButton(3, 0, !subsystem_p->getButton(3, 0)) ;
+					subsystem_p->setButton(oi, 1, !subsystem_p->getButton(oi, 1)) ;
 				else if (ch == 'x')
-					subsystem_p->setButton(3, 1, !subsystem_p->getButton(3, 1)) ;
+					subsystem_p->setButton(oi, 2, !subsystem_p->getButton(oi, 2)) ;
 				else if (ch == 's')
-					subsystem_p->setButton(3, 3, !subsystem_p->getButton(3, 3)) ;				
+					subsystem_p->setButton(oi, 4, !subsystem_p->getButton(oi, 4)) ;				
 				else if (ch == 'w')
-					subsystem_p->setButton(3, 2, !subsystem_p->getButton(3, 2)) ;
+					subsystem_p->setButton(oi, 3, !subsystem_p->getButton(oi, 3)) ;
 				else if (ch == 'c')
-					subsystem_p->setButton(3, 7, !subsystem_p->getButton(3, 7)) ;		
+					subsystem_p->setButton(oi, 8, !subsystem_p->getButton(oi, 8)) ;		
 				else if (ch == 'C')
-					subsystem_p->setButton(3, 4, !subsystem_p->getButton(3, 4)) ;	
+					subsystem_p->setButton(oi, 5, !subsystem_p->getButton(oi, 5)) ;	
 				else if (ch == 'E')
-					subsystem_p->setButton(3, 5, !subsystem_p->getButton(3, 5)) ;
+					subsystem_p->setButton(oi, 6, !subsystem_p->getButton(oi, 6)) ;
 				else if (ch == 'D')
-					subsystem_p->setButton(3, 6, !subsystem_p->getButton(3, 6)) ;	
+					subsystem_p->setButton(oi, 7, !subsystem_p->getButton(oi, 7)) ;	
 				else if (ch == 'L')
-					subsystem_p->setButton(3, 14, !subsystem_p->getButton(3, 14)) ;
+					subsystem_p->setButton(oi, 15, !subsystem_p->getButton(oi, 15)) ;
 				else if (ch == 'W')
-					subsystem_p->setButton(3, 8, !subsystem_p->getButton(3, 8)) ;	
+					subsystem_p->setButton(oi, 9, !subsystem_p->getButton(oi, 9)) ;	
 				else if (ch == 'S')
-					subsystem_p->setButton(3, 9, !subsystem_p->getButton(3, 9)) ;
+					subsystem_p->setButton(oi, 10, !subsystem_p->getButton(oi, 10)) ;
 				else if (ch == 'u')
-					subsystem_p->setButton(3, 12, !subsystem_p->getButton(3, 12)) ;
+					subsystem_p->setButton(oi, 13, !subsystem_p->getButton(oi, 13)) ;
 				else if (ch == 'd')
-					subsystem_p->setButton(3, 13, !subsystem_p->getButton(3, 13)) ;
+					subsystem_p->setButton(oi, 14, !subsystem_p->getButton(oi, 14)) ;
 				else if (ch == 'p')
-					subsystem_p->setButton(3, 15, !subsystem_p->getButton(3, 15)) ;
+					subsystem_p->setButton(oi, 16, !subsystem_p->getButton(oi, 16)) ;
 				else if (ch == KEY_UP) {
 					if (subsystem_p->getPOV(1, 0) == 0)
 						subsystem_p->setPOV(1, 0, -1) ;
@@ -426,6 +429,15 @@ namespace xero {
                 waddstr(getRobotWindow(),str.substr(0, fieldwidth).c_str()) ;
                 wclrtoeol(getRobotWindow()) ;                   
             }
+
+			void PhoenixScreenVisualizer::drawCubes(WINDOW *win) {
+				auto &sim = getSimulator() ;
+				PhoenixSimulator &phoenix = dynamic_cast<PhoenixSimulator &>(sim) ;
+
+				for(const Cube &cube : phoenix.getCubes()) {
+					drawFieldRectangle(win, cube.getX() - CubeWidthHeight / 2.0, cube.getY() - CubeWidthHeight / 2.0, CubeWidthHeight, CubeWidthHeight) ;
+				}
+			}
         }
     }
 }

@@ -1,5 +1,5 @@
 #include "CubeSensorModel.h"
-#include <RobotSimBase.h>
+#include "PhoenixSimulator.h"
 
 using namespace frc ;
 
@@ -12,6 +12,7 @@ namespace xero {
                 motor_channel_1_ = simbase.getSettingsParser().getInteger("hw:intake:leftmotor") ;
                 motor_channel_2_ = simbase.getSettingsParser().getInteger("hw:intake:rightmotor") ;         
                 eject_duration_ = simbase.getSettingsParser().getDouble("collector:eject_duration") ;       
+                inited_ = false ;
                 last_time_ = 0.0 ;
                 input_ = nullptr ;
                 running_ = false ;
@@ -64,16 +65,30 @@ namespace xero {
             }
 
             void CubeSensorModel::run(double dt) {
+				auto &phoenix = dynamic_cast<PhoenixSimulator &>(getSimulator()) ;
 
                 evalSensor() ;
 
-                double now = getSimulator().getTime() ;
+                double now = phoenix.getTime() ;
 
                 if (cube_sensed_ == false) {
+					//
+					// Cubes based on time
+					//
                     for(const auto &entry: ontimes_) {
                         if (entry.start > last_time_ && entry.start <= now)
                             cube_sensed_ = true ;
                     }
+
+					//
+					// Cubes based on position
+					//
+					double x = phoenix.getRobotXPos() ;
+					double y = phoenix.getRobotYPos() ;
+					if (phoenix.isCubeAtPosition(x, y)) {
+						phoenix.removeCube(x, y) ;
+						cube_sensed_ = true ;
+					}
                 }
 
                 if (input_ != nullptr)

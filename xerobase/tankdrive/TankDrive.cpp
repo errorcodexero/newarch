@@ -1,4 +1,5 @@
 #include "TankDrive.h"
+#include "Robot.h"
 #include <cassert>
 
 #ifdef SIM
@@ -13,7 +14,7 @@ namespace xero {
 			//Assuming first id will be master
 			for(int id : ids) {
 				talons.push_back(std::make_shared<TalonSRX>(id));
-				if(talons.size() > 0)
+				if(talons.size() > 1)
 					talons.back()->Follow(*talons.front());
 			}
 		}
@@ -24,6 +25,8 @@ namespace xero {
 
 			initTalonList(left_motor_ids, left_motors_);
 			initTalonList(right_motor_ids, right_motors_);
+
+			last_dist_ = 0.0;
 		}
 
 		void TankDrive::invertMotors(std::list<int> left_motor_ids, std::list<int> right_motor_ids) {
@@ -46,6 +49,10 @@ namespace xero {
 
 			dist_l_ = left_motors_.front()->GetSensorCollection().GetQuadraturePosition();
 			dist_r_ = right_motors_.front()->GetSensorCollection().GetQuadraturePosition();
+
+			double current_dist = getDist();
+			velocity_ = (current_dist - last_dist_) / getRobot().getDeltaTime();
+			last_dist_ = current_dist;
 		}
 
 		void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {

@@ -1,11 +1,13 @@
 #pragma once
 
 #include "RobotSimBase.h"
+#include "Cube.h"
 #include <cstdint>
 #include <thread>
 #include <mutex>
 #include <fstream>
 #include <string>
+#include <vector>
 
 namespace xero
 {
@@ -44,6 +46,22 @@ namespace xero
 				/// \brief Enable the simulation visualizer.
 				virtual void enableScreen() ;
 
+				/// \brief add a cube to the simulation
+				void addCubeLocation(double x, double y) {
+					cubes_.push_back(Cube(x, y)) ;
+				}
+
+				/// \brief get the list of cubes
+				const std::vector<Cube> &getCubes() const {
+					return cubes_ ;
+				}
+
+				bool isCubeAtPosition(double x, double y) ;
+				void removeCube(double x, double y) ;
+
+			private:
+				size_t findCubeIndexByPos(double x, double y) ;
+
 			private:
 				static constexpr double PI = 3.14159265359;
 				std::shared_ptr<xero::sim::TankDriveModel> tankdrive_ ;
@@ -55,6 +73,8 @@ namespace xero
 				std::shared_ptr<xero::sim::phoenix::OIModel> oi_ ;
 
 				bool visualizer_ ;
+
+				std::vector<Cube> cubes_ ;
 			};
 		} // namespace phoenix
 	} // namespace sim

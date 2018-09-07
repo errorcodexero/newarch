@@ -1,8 +1,5 @@
 #pragma once
 
-#ifdef __CYGWIN__
-
-
 #include <cstdlib>
 
 namespace xero {
@@ -26,5 +23,3 @@ namespace xero {
 		} ;
 	}
 }
-
-#endif
