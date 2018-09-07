@@ -16,7 +16,7 @@ namespace xero {
 		}
 
 		bool DelayAction::isDone() {
-			double elapsed = (frc::Timer::GetFPGATimestamp()-startTime_)*1000.0;
+			double elapsed = frc::Timer::GetFPGATimestamp()-startTime_;
 			if (elapsed >= delayTime_) {
 				isDone_ = true;
 			}

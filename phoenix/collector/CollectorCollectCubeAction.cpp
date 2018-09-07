@@ -78,7 +78,7 @@ namespace xero {
             }
 
             bool CollectorCollectCubeAction::isDone() {
-                return true;
+                return state_ == State::hold ;
             }
 
             void CollectorCollectCubeAction::cancel() {
