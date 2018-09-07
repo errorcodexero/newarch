@@ -18,9 +18,7 @@ namespace xero {
             Collector(xero::base::Robot & robot);
             virtual ~Collector(); 
             virtual void computeState();
-            virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
-
-            bool hasCube(){
+            virtual bool hasCube(){
                 return has_cube_;
             }
             std::shared_ptr<Intake> getIntake(){
