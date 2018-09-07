@@ -15,15 +15,5 @@ namespace xero {
 
 		LiftingCollector::~LiftingCollector(){
 		}
-
-		bool LiftingCollector::canAcceptAction(xero::base::ActionPtr action) {
-			std::shared_ptr<LiftingCollectorAction> act_p = std::dynamic_pointer_cast<LiftingCollectorAction>(action) ;
-			if (act_p == nullptr)
-				return false ;
-
-			// TODO: reject LiftingCollectorGoToHeightAction if not calibreated
-
-			return true ;
-		}
 	}
 }
