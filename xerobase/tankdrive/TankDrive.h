@@ -52,6 +52,10 @@ namespace xero {
 				return (dist_r_ + dist_l_) / 2.0;
 			}
 
+			double getVelocity() const {
+				return velocity_;
+			}
+
 			/// \brief Invert the output of all of the selected motors
 			/// \param left_motor_ids A list of ids of TalonSRXs on the left side to invert
 			/// \param right_motor_ids A list of ids of TalonSRXs on the right side to invert
@@ -73,6 +77,8 @@ namespace xero {
 			std::list<TalonPtr> left_motors_, right_motors_;
 
 			double dist_l_, dist_r_;
+			double last_dist_;
+			double velocity_;
 		};
 	}
 }

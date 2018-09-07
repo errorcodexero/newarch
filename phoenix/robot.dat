@@ -108,6 +108,8 @@ collector:grab_time                 0.25
 collector:eject:fast                -1
 collector:eject:slow                -0.1
 collector:eject_time                0.75
+collector:collect_angle             45.0
+collector:intake_duty_cycle         1.0
 
 #
 # LiftingCollector subsystem constants

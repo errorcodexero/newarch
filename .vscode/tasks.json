@@ -28,6 +28,18 @@
             ]
         },
         {
+            "label": "Build All",
+            "type": "shell",
+            "command": "./gradlew build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
             "label": "Deploy Robot Code",
             "type": "shell",
             "command": "./gradlew deploy",

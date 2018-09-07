@@ -9,12 +9,18 @@ using namespace xero::base;
 namespace xero {
     namespace phoenix {
 
-            GrabberToAngleAction::GrabberToAngleAction(Grabber &grabber, double angle) : GrabberAction(grabber){
+            GrabberToAngleAction::GrabberToAngleAction(Grabber &grabber,  double angle) : GrabberAction(grabber){
                 angle_ = angle;
                 angle_controller_.initFromSettingsExtended(getGrabber().getRobot().getSettingsParser(),"grabber");
                 threshold_=getGrabber().getRobot().getSettingsParser().getDouble("grabber:threshold");
             }
             
+            GrabberToAngleAction::GrabberToAngleAction(Grabber &grabber, const std::string &name) : GrabberAction(grabber){
+                angle_ =getGrabber().getRobot().getSettingsParser().getDouble(name);
+                angle_controller_.initFromSettingsExtended(getGrabber().getRobot().getSettingsParser(),"grabber");
+                threshold_=getGrabber().getRobot().getSettingsParser().getDouble("grabber:threshold");
+            }
+
             GrabberToAngleAction::~GrabberToAngleAction(){
 
             }

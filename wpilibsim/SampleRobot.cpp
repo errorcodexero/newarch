@@ -12,9 +12,10 @@ namespace frc
 		m_enabled = false;
 		m_mode = RobotMode::Autonomous;
 		m_robotMainOverridden = false;
-		m_start_delay = 0.25;
-		m_auto_period = 30;
+		m_start_delay = 0;
+		m_auto_period = 0;
 		m_teleop_period = 0;
+		m_test_period = 120 ;
 		screen_ = false ;
 	}
 
@@ -39,32 +40,42 @@ namespace frc
 		m_auto_done = false;
 		double now ;
 		std::chrono::microseconds delay(100) ;
-		RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;				
+		RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
 
-		setEnabled(false);
-		setRobotMode(SampleRobot::RobotMode::Autonomous);
+		if (m_test_period > 0.0) {
+			setRobotMode(SampleRobot::RobotMode::Test) ;
+			setEnabled(true) ;
 
-		now = frc::Timer::GetFPGATimestamp() ;
-		while (frc::Timer::GetFPGATimestamp() < now + m_start_delay)
-			std::this_thread::sleep_for(delay) ;
+			now = frc::Timer::GetFPGATimestamp() ;
+			while (frc::Timer::GetFPGATimestamp() < now + m_test_period)
+				std::this_thread::sleep_for(delay) ;			
+		}
+		else {
+			setEnabled(false);
+			setRobotMode(SampleRobot::RobotMode::Autonomous);
 
-		setEnabled(true);
+			now = frc::Timer::GetFPGATimestamp() ;
+			while (frc::Timer::GetFPGATimestamp() < now + m_start_delay)
+				std::this_thread::sleep_for(delay) ;
 
-		now = frc::Timer::GetFPGATimestamp() ;
-		while (frc::Timer::GetFPGATimestamp() < now + m_auto_period && !m_auto_done)
-			std::this_thread::sleep_for(delay) ;
+			setEnabled(true);
 
-		setEnabled(false);
-		now = frc::Timer::GetFPGATimestamp() ;		
-		while (frc::Timer::GetFPGATimestamp() < now + 1)
-			std::this_thread::sleep_for(delay) ;
+			now = frc::Timer::GetFPGATimestamp() ;
+			while (frc::Timer::GetFPGATimestamp() < now + m_auto_period && !m_auto_done)
+				std::this_thread::sleep_for(delay) ;
 
-		setRobotMode(SampleRobot::RobotMode::Operator);
-		setEnabled(true);
+			setEnabled(false);
+			now = frc::Timer::GetFPGATimestamp() ;		
+			while (frc::Timer::GetFPGATimestamp() < now + 1)
+				std::this_thread::sleep_for(delay) ;
 
-		now = frc::Timer::GetFPGATimestamp() ;
-		while (frc::Timer::GetFPGATimestamp() < now + m_teleop_period)
-			std::this_thread::sleep_for(delay) ;
+			setRobotMode(SampleRobot::RobotMode::Operator);
+			setEnabled(true);
+
+			now = frc::Timer::GetFPGATimestamp() ;
+			while (frc::Timer::GetFPGATimestamp() < now + m_teleop_period)
+				std::this_thread::sleep_for(delay) ;
+		}
 
 		setRobotMode(SampleRobot::RobotMode::Finished) ;
 		setEnabled(true);
@@ -154,6 +165,20 @@ namespace frc
 				}
 				index++;
 			}	
+			else if (m_args[index] == "--test")
+			{
+				index++;
+				if (index == m_args.size()) {
+					std::cerr << "--test flag requires additional argument" << std::endl ;
+					exit(1) ;
+				}					
+				if (!ParseDoubleArg(index, m_test_period, "--test"))
+				{
+					ret = false ;
+					break ;
+				}
+				index++;
+			}				
 			else if (m_args[index] == "--speed")
 			{
 				double speed ;

@@ -1,6 +1,7 @@
 #include "RobotSimBase.h"
 #include "SubsystemModel.h"
 #include "PrintVisualizer.h"
+#include "JoystickManager.h"
 #include "DIJoystickManager.h"
 #include <MessageLogger.h>
 #include <cassert>
@@ -46,7 +47,8 @@ namespace xero {
                 delete filestrm_ ;
 
             delete parser_ ;
-			delete joysticks_ ;
+			if (joysticks_ != nullptr)
+				delete joysticks_ ;
         }
 
 		std::shared_ptr<SubsystemModel> RobotSimBase::getModelByName(const std::string &name) {
@@ -198,11 +200,11 @@ namespace xero {
 				if (i >= ds.getStickCount())
 					continue ;
 
-				auto &stick = ds.getStick(i + 1) ;
+				auto &stick = ds.getStick(i) ;
 
 				for(size_t j = 0 ; j < joysticks_->getButtonCount(i) ; j++) {
 					bool v = joysticks_->getButtonValue(i, j) ;
-					stick.setButtonValue(j, v) ;
+					stick.setButtonValue(j + 1, v) ;
 				}
 
 				for(size_t j = 0 ; j < joysticks_->getPOVCount(i) ; j++) {
