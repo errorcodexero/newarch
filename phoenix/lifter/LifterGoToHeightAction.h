@@ -7,6 +7,7 @@ namespace xero {
         class LifterGoToHeightAction : public LifterAction {
         public:
             LifterGoToHeightAction(Lifter& lifter, double target_height);
+			LifterGoToHeightAction(Lifter &lifter, const std::string &name) ;
             virtual void start();
             virtual void run();
             virtual bool isDone();

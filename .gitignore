@@ -11,3 +11,5 @@ build
 .vs/
 ROBOT
 SIM
+*/*.o
+*/*.a

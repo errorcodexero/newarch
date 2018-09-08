@@ -9,18 +9,27 @@ using namespace xero::base;
 namespace xero {
     namespace phoenix {
         
-        CollectorEjectCubeAction::CollectorEjectCubeAction(Collector &collector) : CollectorAction(collector){
+        CollectorEjectCubeAction::CollectorEjectCubeAction(Collector &collector, double value) : CollectorAction(collector){
 
             Intake& intake = *(getCollector().getIntake());
 
             outrun_time_ = getCollector().getRobot().getSettingsParser().getDouble("collector:outrun_time");
 
-            intake_out_ = std::make_shared<IntakeDutyCycleAction>(intake, "collector:eject_duty_cycle");
+            intake_out_ = std::make_shared<IntakeDutyCycleAction>(intake, value);
             intake_off_ = std::make_shared<IntakeDutyCycleAction>(intake, 0);
-
         }
-        CollectorEjectCubeAction::~CollectorEjectCubeAction(){
 
+        CollectorEjectCubeAction::CollectorEjectCubeAction(Collector &collector, const std::string &name) : CollectorAction(collector){
+
+            Intake& intake = *(getCollector().getIntake());
+
+            outrun_time_ = getCollector().getRobot().getSettingsParser().getDouble("collector:outrun_time");
+
+            intake_out_ = std::make_shared<IntakeDutyCycleAction>(intake, name);
+            intake_off_ = std::make_shared<IntakeDutyCycleAction>(intake, 0);
+        }		
+
+        CollectorEjectCubeAction::~CollectorEjectCubeAction(){
         }
         
         void CollectorEjectCubeAction::start() {

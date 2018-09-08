@@ -6,7 +6,13 @@ namespace xero {
     namespace phoenix {
         LifterGoToHeightAction::LifterGoToHeightAction(Lifter& lifter, double target_height) : LifterAction(lifter) {
             target_height_ = target_height;
+            PID_controller_.initFromSettingsExtended(getLifter().getRobot().getSettingsParser(), "lifter:goto");			
         }
+
+        LifterGoToHeightAction::LifterGoToHeightAction(Lifter& lifter, const std::string &name) : LifterAction(lifter) {
+            target_height_ = getLifter().getRobot().getSettingsParser().getDouble(name) ;
+            PID_controller_.initFromSettingsExtended(getLifter().getRobot().getSettingsParser(), "lifter:goto");			
+        }		
 
         void LifterGoToHeightAction::start() {
             PID_controller_.initFromSettingsExtended(getLifter().getRobot().getSettingsParser(), "lifter:goto");
