@@ -1,0 +1,6 @@
+The gopigo3 code is based on make.  If you type
+
+make gopigo
+
+It should build the simple robot.
+
