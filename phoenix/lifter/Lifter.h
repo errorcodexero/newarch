@@ -45,6 +45,7 @@ namespace xero {
 			bool brake_applied_;
 			void calibrate();
 			void setBrake(bool value);
+			void setGear(LIFTER_GEAR value);
 			void setMotorsDutyCycle(double value);
 			std::vector<std::shared_ptr<frc::VictorSP>> motors_;
 			std::shared_ptr<frc::Encoder> encoder_;

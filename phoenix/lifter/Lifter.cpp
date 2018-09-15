@@ -87,5 +87,9 @@ namespace xero {
 			brake_solenoid_->Set(!value);
 			brake_solenoid_debug_ = brake_solenoid_->Get();
 		}
+
+		void Lifter::setGear(LIFTER_GEAR value) {
+			gear_solenoid_->Set((value == LIFTER_GEAR::HIGH) ? false : true);  // TODO: Double-check solenoid polaritys
+		}
 	}
 }
