@@ -41,6 +41,7 @@ clean:
 gopigo:
 	(cd gopigo3hw ; make)
 	(cd gopigo3frc ; make)
+	(cd gopigo3navx ; make)
 	(cd gopigo3simple ; make)
 
 .PHONY: $(TESTDIRS) build gopigo

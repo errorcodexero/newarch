@@ -6,8 +6,9 @@ SOURCES = \
 	myrobot.cpp
 
 PILIBS = \
+	../gopigo3navx/gopigo3navx.a\
 	../gopigo3frc/gopigo3frc.a\
-	../gopigo3hw/gopigo3hw.a
+	../gopigo3hw/gopigo3hw.a\
 
 TARGET=robot
 
