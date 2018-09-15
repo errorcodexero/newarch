@@ -2,6 +2,7 @@
 
 #include "PWMSpeedController.h"
 #include <cstdint>
+#include <iostream>
 
 namespace frc
 {
@@ -16,9 +17,19 @@ namespace frc
 		virtual void Disable();
 		virtual void StopMotor();
 
+		int GetDeviceID() const {
+			return static_cast<int>(m_channel) ;
+		}
+
+		void SetInverted(bool value) {
+			std::cout << "Set inverted called " << m_channel << std::endl ;
+			inverted_ = value ;
+		}
+
 	private:
 		uint32_t m_channel;
 		uint8_t m_hw_channel;
+		bool inverted_ ;
 	};
 }
 

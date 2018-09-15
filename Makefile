@@ -10,8 +10,7 @@ SPACE=
 SPACE+= 
 RUNCMD=$(subst _,$(SPACE),$(addsuffix _$(SEMICOLON)_make_runtest$(CLOSEPAREN)_$(SEMICOLON)_,$(addprefix $(OPENPAREN)cd_,$(TESTDIRS))))
 
-all:
-	@echo Use either 'make unittests' or 'make gopigo'
+all: unittests
 
 unittests: build runtests
 
@@ -38,11 +37,5 @@ clean:
 	rm -rf *test/*.o *test/*.exe
 
 
-gopigo:
-	(cd gopigo3hw ; make)
-	(cd gopigo3frc ; make)
-	(cd gopigo3navx ; make)
-	(cd gopigo3simple ; make)
-
-.PHONY: $(TESTDIRS) build gopigo
+.PHONY: $(TESTDIRS) build
 

@@ -1,0 +1,25 @@
+The gopigo3 specific code if found under the gopigo3 directory.  This includes both the NAVX library,
+the hardware support library, and the FRC emulation library.  In addition, the gopigo3 specific robots
+are there as well.
+
+The gopigo3simple robot is a very simple robot that just runs the motors on the drive base for a fixed
+amount of time.  It also prints the start and end time for the auto modes.
+
+The gopigo3xero robot is a robot that uses the current new robot architecture.
+
+The makefiles have been moved into the robot directories (e.g. gopigo3simple and gopigo3xero).  In each
+of these directories, the following targets are valid:
+
+all
+Builds the robot executable.
+
+deploy
+Copies the robot executable to the PI.  This assumes that the environment variable GOPIGOIP is set.  for
+instance export GOPIGOIP=192.168.1.86.  This target builds and then copies the robot executable to the
+home directory of the pi user on the robot.  You will be prompted for a password unless the robot if setup
+with the right authorized keys for SSH to work without passwords.
+
+run
+Runs the robot executable on the PI.  For now, this only runs the auto mode for 15 seconds.  (Note there is some
+kind of bug which causes the robot to keep running but in the disabled state after auto mode is complete.  Hitting
+Control-C for now will stop it.)

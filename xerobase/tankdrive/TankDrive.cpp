@@ -1,4 +1,11 @@
-#include "TankDrive.h"
+		void initTalonList(std::list<int>& ids, std::list<TalonPtr>& talons) {
+			//Assuming first id will be master
+			for(int id : ids) {
+				talons.push_back(std::make_shared<TalonSRX>(id));
+				if(talons.size() > 1)
+					talons.back()->Follow(*talons.front());
+			}
+		}#include "TankDrive.h"
 #include "Robot.h"
 #include <cassert>
 
@@ -10,14 +17,6 @@
 
 namespace xero {
 	namespace base {
-		void initTalonList(std::list<int>& ids, std::list<TalonPtr>& talons) {
-			//Assuming first id will be master
-			for(int id : ids) {
-				talons.push_back(std::make_shared<TalonSRX>(id));
-				if(talons.size() > 1)
-					talons.back()->Follow(*talons.front());
-			}
-		}
 
 		TankDrive::TankDrive(Robot& robot, std::list<int> left_motor_ids, std::list<int> right_motor_ids) : Drivebase(robot) {
 			//The two sides should always have the same number of motors and at least one motor each

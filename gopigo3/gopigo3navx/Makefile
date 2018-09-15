@@ -1,7 +1,3 @@
-CXX = arm-linux-gnueabihf-g++
-
-CXXFLAGS=-I../gopigo3hw -I.
-
 SOURCES = \
 	AHRS.cpp\
 	ContinuousAngleTracker.cpp\
@@ -13,7 +9,6 @@ SOURCES = \
 
 TARGET=gopigo3navx
 
-OBJECTS = $(SOURCES:.cpp=.o)
+LOCAL_CFLAGS=-I.
 
-$(TARGET).a : $(OBJECTS)
-	$(AR) rvs $@ $(OBJECTS)
+include ../../makefiles/gopilib.mk

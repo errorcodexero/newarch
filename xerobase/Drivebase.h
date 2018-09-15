@@ -39,7 +39,7 @@ namespace xero {
 
 		protected:
 			/// \brief The navx on the robot
-			AHRS navx_;
+			AHRS *navx_;
 
 		private:
 			double angle_;

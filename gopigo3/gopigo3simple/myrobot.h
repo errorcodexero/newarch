@@ -1,7 +1,8 @@
 #pragma once
 
 #include <SampleRobot.h>
-#include <GPG3MotorController.h>
+#include <Encoder.h>
+#include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
 
 class MyRobot: public frc::SampleRobot {
 public:
@@ -12,6 +13,9 @@ public:
 	virtual void Test();
 	
 private:
-	frc::GPG3MotorController *left_p ;
-	frc::GPG3MotorController *right_p ;
+	ctre::phoenix::motorcontrol::can::TalonSRX *left_p ;
+	ctre::phoenix::motorcontrol::can::TalonSRX *right_p ;
+
+	frc::Encoder *left_enc_p ;
+	frc::Encoder *right_enc_p ;
 } ;

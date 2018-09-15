@@ -2,20 +2,22 @@
 #include "GoPiGo3Robot.h"
 #include "RobotBase.h"
 #include <stdexcept>
+#include <iostream>
 
 namespace frc
 {
 	GPG3MotorController::GPG3MotorController(uint32_t channel)
 	{
+		inverted_ = false ;
 		m_channel = channel;
 
-		if (m_channel == 0)
+		if (m_channel == 1)
 			m_hw_channel = gopigo3::GoPiGo3Robot::MOTOR_LEFT;
-		else if (m_channel == 1)
+		else if (m_channel == 2)
 			m_hw_channel = gopigo3::GoPiGo3Robot::MOTOR_RIGHT;
 		else
 		{
-			std::runtime_error err("illegal GPG3MotorController channel, only 0 (left) and 1 (right) supported");
+			std::runtime_error err("illegal GPG3MotorController channel, only 1 (left) and 2 (right) supported");
 			throw err;
 		}
 	}
@@ -28,7 +30,31 @@ namespace frc
 	{
 		gopigo3::GoPiGo3Robot &hw = RobotBase::getRobotHardware();
 
+		//
+		// The GOPIGO3 auto inverts the values to the two sides of the robot.  So this
+		// conditional inverts the right side back so that the left and right sides, given the
+		// same values, will move the robot in opposite directions.  This is because this is how
+		// the robot will likely work in the real world.
+		//
+		if (m_channel == 2)
+			value = -value ;
+
+		//
+		// This conditional implements the default SetInverted() method for the FRC motor controllers.
+		// If SetInverted(true) is called, then inverted_ will be true.
+		//
+		if (inverted_)
+			value = -value ;
+
 		hw.setMotorPower(m_hw_channel, static_cast<int8_t>(value * 100.0f));
+
+		if (m_channel == 2)
+			std::cout << "RIGHT: " ;
+		else
+			std::cout << "LEFT: " ;
+		std::cout << "inverted " << (inverted_ ? "true" : "false") ;
+		std::cout << ", value " << value ;
+		std::cout << std::endl ;
 	}
 
 	double GPG3MotorController::Get()

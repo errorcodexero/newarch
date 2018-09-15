@@ -1,7 +1,3 @@
-CXX = arm-linux-gnueabihf-g++
-
-CXXFLAGS=-I../gopigo3hw
-
 SOURCES = \
 	DriverStation.cpp\
 	Encoder.cpp\
@@ -13,11 +9,11 @@ SOURCES = \
 	SampleRobot.cpp\
 	SerialPort.cpp\
 	Servo.cpp\
-	Timer.cpp
+	Timer.cpp\
+	ctre/phoenix/MotorControl/CAN/TalonSRX.cpp
 
 TARGET=gopigo3frc
 
-OBJECTS = $(SOURCES:.cpp=.o)
+LOCAL_CFLAGS=-I../gopigo3hw -I.
 
-$(TARGET).a : $(OBJECTS)
-	$(AR) rvs $@ $(OBJECTS)
+include ../../makefiles/gopilib.mk

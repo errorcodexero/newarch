@@ -315,6 +315,11 @@ namespace frc
 			return 12.0;
 		}
 
+		void ReportError(const char *msg_p)
+		{
+			std::cout << msg_p ;
+		}
+
 	protected:
 		void waitForConnection();
 

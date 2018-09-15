@@ -42,7 +42,7 @@ void TankDriveDistanceAction::start() {
 
 	start_time_ = tank_drive_.getRobot().getTime();
 
-	tank_drive_.navx_.ZeroYaw();
+	tank_drive_.navx_->ZeroYaw();
 }
 
 void TankDriveDistanceAction::run() {
