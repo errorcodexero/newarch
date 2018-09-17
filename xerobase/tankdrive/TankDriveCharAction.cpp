@@ -1,4 +1,5 @@
 #include "TankDriveCharAction.h"
+#include <iostream>
 
 namespace xero {
 	namespace base {
