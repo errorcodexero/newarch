@@ -13,7 +13,7 @@ namespace frc
 		void setPosition(float angle);
 
 	private:
-		static const float PULSE_WIDTH_RANGE ;
+		static constexpr float PULSE_WIDTH_RANGE = 1850.0f ;
 
 	private:
 		uint8_t m_hw_channel;

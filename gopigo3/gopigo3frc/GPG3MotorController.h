@@ -22,7 +22,6 @@ namespace frc
 		}
 
 		void SetInverted(bool value) {
-			std::cout << "Set inverted called " << m_channel << std::endl ;
 			inverted_ = value ;
 		}
 

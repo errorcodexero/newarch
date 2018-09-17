@@ -5,8 +5,6 @@
 
 namespace frc
 {
-	const float Servo::PULSE_WIDTH_RANGE = 1850.0f;
-
 	Servo::Servo(uint8_t which)
 	{
 		if (which == 0)

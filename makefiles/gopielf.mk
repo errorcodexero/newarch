@@ -12,7 +12,7 @@ CXXINCS += \
 	-I../../xerobase
 endif
 
-CXXFLAGS = -g $(LOCAL_CFLAGS) -Wno-psabi -DGOPIGO $(CXXINCS)
+CXXFLAGS = -g $(LOCAL_CFLAGS) -Wno-psabi -DGOPIGO $(CXXINCS) -DDEBUG
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
@@ -34,9 +34,11 @@ PILIBS += \
 $(TARGET) : $(PILIBS) $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(PILIBS) -lwiringPI -lpthread
 
+DEPLOYFILES = $(TARGET) $(DEPLOY_EXTRA)
+
 deploy: $(TARGET)
 ifdef GOPIGOIP
-	scp $(TARGET) pi@$(GOPIGOIP):/home/pi
+	scp $(DEPLOYFILES) pi@$(GOPIGOIP):/home/pi
 else
 	echo GOPIGOIP is not defined
 endif

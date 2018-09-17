@@ -8,7 +8,8 @@ SOURCES = \
 	Subsystem.cpp\
 	tankdrive/TankDrive.cpp\
 	tankdrive/TankDriveDistanceAction.cpp\
-	tankdrive/TankDriveVelocityAction.cpp
+	tankdrive/TankDriveVelocityAction.cpp\
+	tankdrive/TankDriveCharAction.cpp
 
 TARGET=gopigo3xerobase
 

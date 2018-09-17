@@ -47,14 +47,6 @@ namespace frc
 			value = -value ;
 
 		hw.setMotorPower(m_hw_channel, static_cast<int8_t>(value * 100.0f));
-
-		if (m_channel == 2)
-			std::cout << "RIGHT: " ;
-		else
-			std::cout << "LEFT: " ;
-		std::cout << "inverted " << (inverted_ ? "true" : "false") ;
-		std::cout << ", value " << value ;
-		std::cout << std::endl ;
 	}
 
 	double GPG3MotorController::Get()

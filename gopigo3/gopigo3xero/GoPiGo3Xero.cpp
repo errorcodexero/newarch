@@ -1,7 +1,8 @@
 
 #include "GoPiGo3Xero.h"
 #include "gopigo3groups.h"
-#include <tankdrive/TankDrive.h>
+#include "GoPiGo3AutoModeController.h"
+#include "GoPiGo3Subsystem.h"
 #include <ActionSequence.h>
 #include <basegroups.h>
 #include <DelayAction.h>
@@ -18,6 +19,11 @@ using namespace xero::base ;
 
 namespace xero {
 	namespace gopigo {
+
+		std::shared_ptr<GoPiGo3Subsystem> GoPiGo3Xero::getRobotSubsystem() {
+			auto sub = getSubsystemByName("gopigo") ;
+			return std::dynamic_pointer_cast<GoPiGo3Subsystem>(sub) ;
+		}
 		
 		void GoPiGo3Xero::RobotInit() {
 			std::string filename ;
@@ -39,14 +45,14 @@ namespace xero {
 			}
 			
 			//
-			// This is where the subsystems for the robot get created
+			// Create the subsystem for the robot
 			//
-			auto db_p = std::make_shared<TankDrive>(*this, std::list<int>{1}, std::list<int>{2}) ;
-			addSubsystem(db_p) ;
+			auto sub = std::make_shared<GoPiGo3Subsystem>(*this) ;
+			addSubsystem(sub) ;
 		}
 
 		std::shared_ptr<ControllerBase> GoPiGo3Xero::createAutoController() {
-			return nullptr ;
+			return std::make_shared<GoPiGo3AutoModeController>(*this) ;
 		}
 		
 		std::shared_ptr<ControllerBase> GoPiGo3Xero::createTeleopController() {
@@ -78,6 +84,7 @@ namespace xero {
             // Decide what message groups (incl. subsystems) you want to see
             //
 			logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
+			logger.enableSubsystem(MSG_GROUP_ACTIONS) ;
 
 			// Set up message logger destination(s)
             std::shared_ptr<MessageLoggerDest> dest_p ;
