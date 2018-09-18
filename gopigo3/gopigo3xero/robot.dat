@@ -18,3 +18,9 @@ hw:tankdrive:rightenc:2			3
 #
 tankdrive:inches_per_tick				0.01142366
 tankdrive:straight:maxa					1.0
+
+
+#
+# The duration of the characterization run
+#
+tankdrive:char:duration					3.0

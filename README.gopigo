@@ -5,7 +5,15 @@ are there as well.
 The gopigo3simple robot is a very simple robot that just runs the motors on the drive base for a fixed
 amount of time.  It also prints the start and end time for the auto modes.
 
-The gopigo3xero robot is a robot that uses the current new robot architecture.
+The gopigo3xero robot is a robot that uses the current new robot architecture.  This robot includes addition
+subsystem for the servo.
+
+The build method assumes cygwin (like all things under windows for team 1425).  It is best if the 64 bit version
+of cygwin is installed (versus the 32 bit version).
+
+To build these robots you need the Raspberry PI cross compiler.  The cross compiler can be found at 
+http://gnutoolchains.com/raspberry/.  This must be installed on your machine and must by in your cygwin 
+path.
 
 The makefiles have been moved into the robot directories (e.g. gopigo3simple and gopigo3xero).  In each
 of these directories, the following targets are valid:

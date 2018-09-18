@@ -9,6 +9,7 @@ namespace xero {
 		class TankDriveCharAction : public TankDriveAction {
 		public:
 			TankDriveCharAction(TankDrive &subsystem, double duration) ;
+			TankDriveCharAction(TankDrive &subsystem, const std::string &name) ;			
 			virtual ~TankDriveCharAction() ;
 
 			void start();

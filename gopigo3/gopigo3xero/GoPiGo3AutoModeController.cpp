@@ -46,7 +46,7 @@ namespace xero {
 			seq->pushSubActionPair(servo, action) ;
 #endif
 
-			action = std::make_shared<TankDriveCharAction>(*tankdrive, 5.0) ;
+			action = std::make_shared<TankDriveCharAction>(*tankdrive,"tankdrive:char:duration") ;
 			seq->pushSubActionPair(tankdrive, action) ;
 
 			return seq ;

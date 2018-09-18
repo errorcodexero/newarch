@@ -9,10 +9,12 @@
 #include <ctre/phoenix/MotorControl/SensorCollection.h>
 #endif
 
+using namespace xero::misc ;
+
 namespace xero {
 	namespace base {
 
-		TankDrive::TankDrive(Robot& robot, std::list<int> left_motor_ids, std::list<int> right_motor_ids) : Drivebase(robot) {
+		TankDrive::TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids) : Subsystem(robot, "tankdrive") {
 			//The two sides should always have the same number of motors and at least one motor each
 			assert((left_motor_ids.size() == right_motor_ids.size()) && (left_motor_ids.size() > 0));
 
@@ -20,6 +22,19 @@ namespace xero {
 			initTalonList(right_motor_ids, right_motors_);
 
 			last_dist_ = 0.0;
+
+#ifdef GOPIGO
+			navx_ = new AHRS("/dev/ttyACM0") ;	
+#else
+			navx_ = new AHRS(frc::SPI::Port::kMXP) ;		
+#endif			
+
+			if (!navx_->IsConnected()) {
+				delete navx_ ;
+				navx_ = nullptr ;
+				kin_ = new Kinematics(4.6063, 0.95) ;
+				angle_ = 0.0 ;
+			}
 		}
 
 		TankDrive::~TankDrive() {			
@@ -39,9 +54,12 @@ namespace xero {
 			right_enc_ = std::make_shared<frc::Encoder>(r1, r2) ;
 
 			inches_per_tick_ = getRobot().getSettingsParser().getDouble("tankdrive:inches_per_tick") ;
+
+			left_enc_->Reset() ;
+			right_enc_->Reset() ;
   		}
 
-		void TankDrive::initTalonList(std::list<int>& ids, std::list<TalonPtr>& talons) {
+		void TankDrive::initTalonList(const std::list<int>& ids, std::list<TalonPtr>& talons) {
 			//Assuming first id will be master
 			for(int id : ids) {
 				talons.push_back(std::make_shared<TalonSRX>(id));
@@ -61,7 +79,6 @@ namespace xero {
 		}		
 
 		void TankDrive::computeState() {
-			Drivebase::computeState();
 
 			if (left_enc_ != nullptr) {
 				assert(right_enc_ != nullptr) ;
@@ -74,9 +91,20 @@ namespace xero {
 				dist_r_ = right_motors_.front()->GetSensorCollection().GetQuadraturePosition();
 			}
 
+			if (navx_ != nullptr) {
+				angle_ = navx_->GetYaw();			
+			}
+			else {
+				kin_->move(dist_l_ - last_dist_l_, dist_r_ - last_dist_r_) ;
+				angle_ = kin_->getAngle() ;
+			}
+
 			double current_dist = getDist();
 			velocity_ = (current_dist - last_dist_) / getRobot().getDeltaTime();
-			last_dist_ = current_dist;			
+			last_dist_ = current_dist;		
+
+			last_dist_l_ = dist_l_ ;
+			last_dist_r_ = dist_r_ ;	
 		}
 
 		void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {

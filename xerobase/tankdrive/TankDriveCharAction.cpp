@@ -1,4 +1,6 @@
 #include "TankDriveCharAction.h"
+#include "TankDrive.h"
+#include <Robot.h>
 #include <iostream>
 
 namespace xero {
@@ -6,6 +8,10 @@ namespace xero {
 		TankDriveCharAction::TankDriveCharAction(TankDrive &drive, double duration) : TankDriveAction(drive) {
 			duration_ = duration ;
 		}
+
+		TankDriveCharAction::TankDriveCharAction(TankDrive &drive, const std::string &name) : TankDriveAction(drive) {
+			duration_ = tank_drive_.getRobot().getSettingsParser().getDouble(name) ;
+		}		
 		
 		TankDriveCharAction::~TankDriveCharAction() {			
 		}

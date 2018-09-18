@@ -127,8 +127,8 @@ model {
 
 				// Define my dependencies. In this case, WPILib (+ friends), CTRE Phoenix (Talon SRX) and NavX.
 				lib library: "xeromath", linkage: "static"				
-				lib library: "xeromisc", linkage: "static"
 				lib library: "xerobase", linkage: "static"
+				lib library: "xeromisc", linkage: "static"				
 				lib library: "wpilib"
 				lib library: "ctre"
 				lib library: "navx"
