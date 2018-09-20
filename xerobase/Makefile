@@ -3,7 +3,6 @@ SOURCES = \
 	ControllerBase.cpp\
 	DelayAction.cpp\
 	DispatchAction.cpp\
-	Drivebase.cpp\
 	Robot.cpp\
 	Subsystem.cpp\
 	tankdrive/TankDrive.cpp\
