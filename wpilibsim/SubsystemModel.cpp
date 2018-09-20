@@ -83,7 +83,6 @@ namespace xero {
 					index++ ;
 				}
 			}
-
 			return true ;
 		}
     }

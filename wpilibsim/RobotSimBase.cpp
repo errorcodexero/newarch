@@ -200,11 +200,11 @@ namespace xero {
 				if (i >= ds.getStickCount())
 					continue ;
 
-				auto &stick = ds.getStick(i + 1) ;
+				auto &stick = ds.getStick(i) ;
 
 				for(size_t j = 0 ; j < joysticks_->getButtonCount(i) ; j++) {
 					bool v = joysticks_->getButtonValue(i, j) ;
-					stick.setButtonValue(j, v) ;
+					stick.setButtonValue(j + 1, v) ;
 				}
 
 				for(size_t j = 0 ; j < joysticks_->getPOVCount(i) ; j++) {

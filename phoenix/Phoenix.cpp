@@ -8,8 +8,11 @@
 #include "lifter/LifterGoToHeightAction.h"
 #include "lifter/LifterCalibrateAction.h"
 #include "collector/Collector.h"
+#include "collector/CollectorCollectCubeAction.h"
+#include "collector/CollectorEjectCubeAction.h"
 #include <ActionSequence.h>
 #include <basegroups.h>
+#include <DelayAction.h>
 #include <MessageDestDS.h>
 #include <MessageLogger.h>
 #include <MessageDestSeqFile.h>
@@ -89,9 +92,10 @@ namespace xero {
 
 			actlist_p->pushSubActionPair(collector_p->getGrabber(), std::make_shared<GrabberCalibrateAction>(*collector_p->getGrabber())) ;
 			actlist_p->pushSubActionPair(lifter_p, std::make_shared<LifterCalibrateAction>(*lifter_p)) ;
-			actlist_p->pushSubActionPair(lifter_p, std::make_shared<LifterGoToHeightAction>(*lifter_p, 36.0), false) ;
-			actlist_p->pushSubActionPair(collector_p->getGrabber(), std::make_shared<GrabberToAngleAction>(*collector_p->getGrabber(), 45.0), false) ;			
-			actlist_p->pushSubActionPair(collector_p->getIntake(), std::make_shared<IntakeDutyCycleAction>(*collector_p->getIntake(), 0.5), false) ;
+			actlist_p->pushSubActionPair(lifter_p, std::make_shared<LifterGoToHeightAction>(*lifter_p, 11.5), false) ;
+			actlist_p->pushSubActionPair(collector_p, std::make_shared<CollectorCollectCubeAction>(*collector_p)) ;
+			actlist_p->pushAction(std::make_shared<DelayAction>(5.0)) ;
+			actlist_p->pushSubActionPair(collector_p, std::make_shared<CollectorEjectCubeAction>(*collector_p, "collector:eject:fast")) ;			
 
 			auto phoenixauto_p = std::make_shared<PhoenixAutoController>(actlist_p, *this);
 			return phoenixauto_p;

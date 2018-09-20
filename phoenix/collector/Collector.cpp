@@ -1,5 +1,6 @@
 #include "Robot.h"
-#include "collector/Collector.h"
+#include "Collector/Collector.h"
+#include "Collector/CollectorAction.h"
 
 using namespace xero::base;
 
@@ -10,9 +11,6 @@ namespace xero {
 
             double h2ldelay=robot.getSettingsParser().getDouble("collector:cubesensor:h2ldelay");
             double l2hdelay=robot.getSettingsParser().getDouble("collector:cubesensor:l2hdelay");
-            double fast=robot.getSettingsParser().getDouble("collector:eject:fast");
-            double slow=robot.getSettingsParser().getDouble("collector:eject:slow");
-            double eject_time=robot.getSettingsParser().getDouble("collector:eject_time");
             int cubesensor=robot.getSettingsParser().getInteger("hw:collector:cubesensor");
             
             //
@@ -30,6 +28,11 @@ namespace xero {
             debounce_ = std::make_shared<xero::misc::DebounceBoolean>(true, h2ldelay, l2hdelay) ;
 
 
+        }
+
+        bool Collector::canAcceptAction(ActionPtr action) {
+            auto ptr = std::dynamic_pointer_cast<CollectorAction>(action) ;
+            return ptr != nullptr ;
         }
 
         Collector::~Collector(){

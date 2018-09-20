@@ -8,12 +8,17 @@
 
 namespace xero {
     namespace phoenix {
+		/// \brief the grabber subsystem that opens and closes the intake arms.
+		/// This subsystem controls a single motor that controls the angle of the
+		/// grabber arms.  There is an encoder on the motor that is used to detect
+		/// athe angle of the grabber arms.
         class Grabber : public xero::base::Subsystem {
             friend class GrabberCalibrateAction;
             friend class GrabberDutyCycleAction;
             friend class GrabberHoldCubeAction;
             friend class GrabberToAngleAction;
         public:
+
             Grabber(xero::base::Robot & robot);
             virtual ~Grabber(); 
             virtual void computeState();

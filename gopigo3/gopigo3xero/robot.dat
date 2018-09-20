@@ -1,0 +1,26 @@
+# 
+# Robot hardware
+#
+hw:servo:which					1
+hw:tankdrive:leftmotor			1
+hw:tankdrive:rightmotor			2
+hw:tankdrive:leftenc:1			0
+hw:tankdrive:leftenc:2			1
+hw:tankdrive:rightenc:1			2
+hw:tankdrive:rightenc:2			3
+
+#
+# 6 ticks per motor rotation
+# 120 gear ratio from motor to wheel
+# 2.61811 inch wheel diameter
+#
+# inches per encoder tick for the GoPiGo3 robot
+#
+tankdrive:inches_per_tick				0.01142366
+tankdrive:straight:maxa					1.0
+
+
+#
+# The duration of the characterization run
+#
+tankdrive:char:duration					3.0

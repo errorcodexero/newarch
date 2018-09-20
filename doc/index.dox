@@ -10,6 +10,7 @@
  *
  * \section building Building
  *
- * TODO
+ * The software here is built using gradle.  To build everything run ./gradlew build from the top level directory
+ * of the source code.  This code is known to build
  *
  */

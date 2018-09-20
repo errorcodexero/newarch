@@ -4,9 +4,17 @@
 
 namespace xero {
     namespace phoenix {
-         class CollectorCollectCubeAction : public xero::phoenix::CollectorAction {
-            public:
-            CollectorCollectCubeAction(Collector &Collector);
+		/// \brief This action when assigned to the collector, collects a cube.
+		/// The action starts by opening the grabber and running the intake in. 
+		/// When a cube is detected by the collector, the grabber arms close on the
+		/// cube and the intake is stopeed.
+        class CollectorCollectCubeAction : public xero::phoenix::CollectorAction {
+        public:
+			/// \brief create the collect cube action
+			/// \param collector the collector for the action
+            CollectorCollectCubeAction(Collector &collector);
+
+			/// \brief destroy the collect cube action
             virtual ~CollectorCollectCubeAction(); 
 
             /// \brief Start the calibrate action.
@@ -24,34 +32,41 @@ namespace xero {
             /// \brief Returns a human readable string for the action
             virtual std::string toString() ;
 
-           
-
         private:
+			// These are the internal states for the collector
             enum class State {
-                reset, //not doing anything
-                open_grabber, //opens up grabber and starts running intake
-                wait_for_cube,
-                secure_cube, //after collecting cube, wait to make sure it's secure 
-                close_grabber, //quickly close grabber on cube
-                hold  //holding onto a cube
-
+                reset, 					// not doing anything
+                wait_for_cube,			// grabber open, intake running in, waiting for cube
+                secure_cube, 			// closing the grabber arms while running intake in
+                hold  					// holding onto a cube with grabber with intake off
             };
 
+        private:
+			// Return a human readable string for a given state
+            std::string stateToString(State state);
+
+        private:
+
+			// THe current collector state
             State state_;
 
+			// The amount of time to remain in the secure_cube state
             double grab_time_;
 
-            virtual std::string stateToString(State state){
-                switch(state){
-                    case State::reset: return "reset";
-                    case State::open_grabber: return "open grabber";
-                    case State::wait_for_cube: return "wait for cube";
-                    case State::secure_cube: return "secure cube";
-                    case State::close_grabber: return "close grabber";
-                    case State::hold: return "hold";
-                    default: return "";
-                }
-            }
+			// The actual time we entered the secure_cube state
+            double start_grab_;
+
+			// Action for grabber to open grabber to collect angle
+            xero::base::ActionPtr grabber_open_;
+
+			// Action for intake to run intake in to collect cube
+            xero::base::ActionPtr intake_in_;
+
+			// Action for grabber to hold onto cube
+            xero::base::ActionPtr hold_cube_;
+
+			// Action for intake to turn intake off
+            xero::base::ActionPtr intake_off_;
         };
     }
 }

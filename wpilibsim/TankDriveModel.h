@@ -14,10 +14,10 @@ namespace xero
 
         class TankDriveModel : public SubsystemModel
         {
-          private:
+        private:
             static constexpr double PI = 3.14159265359;
 
-          public:
+        public:
             TankDriveModel(RobotSimBase &);
             virtual ~TankDriveModel();
 
@@ -29,6 +29,7 @@ namespace xero
             virtual void addTalon(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
             virtual void addEncoder(frc::Encoder *encoder);
             virtual void addNavX(AHRS *navx);
+			virtual void addSolenid(frc::Solenoid *sol) ;
 
             double getXPos() { 
               return xpos_ ;
@@ -50,13 +51,17 @@ namespace xero
               return max_speed_ ;
             }
 
-          private:
+        private:
             void updatePosition(double dx, double dy, double angle) ;
 
 			double capValue(double prev, double desired, double maxchange) ;
 
+			void lowGear() ;
+			void highGear() ;
+
           private:
 			bool inited_ ;
+			bool gear_ ;
 
             double left_;
             double right_;
@@ -67,8 +72,11 @@ namespace xero
             double right_volts_;
             double scrub_;
             double width_;
+            double high_rps_per_volt_per_time_;
+            double low_rps_per_volt_per_time_;
+			double left_right_error_ ;
             double right_rps_per_volt_per_time_;
-            double left_rps_per_volt_per_time_;
+            double left_rps_per_volt_per_time_;						
             double time_interval_;
             double last_output_;
             double speed_ ;
@@ -90,6 +98,7 @@ namespace xero
             std::vector<ctre::phoenix::motorcontrol::can::TalonSRX *> right_motors_;
             frc::Encoder *left_enc_;
             frc::Encoder *right_enc_;
+			frc::Solenoid *shifter_ ;
             AHRS *navx_;
         };
     } // namespace sim

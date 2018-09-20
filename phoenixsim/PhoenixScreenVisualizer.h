@@ -32,6 +32,8 @@ namespace xero {
 
 
             private:
+				constexpr static double CubeWidthHeight = 11.0 ;
+
                 void displayTankDrive(std::shared_ptr<xero::sim::TankDriveModel> subsystem_p) ;
                 void displayLifter(std::shared_ptr<LifterModel> subsystem_p) ;
                 void displayGrabber(std::shared_ptr<GrabberModel> subsystem_p) ;
@@ -44,6 +46,8 @@ namespace xero {
 				int displayDriver(WINDOW *win, std::shared_ptr<OIModel> subsystem_p, int stick, int top, int width) ;
 				int displayGunner(WINDOW *win, std::shared_ptr<OIModel> subsystem_p, int stick, int top, int width) ;
 
+				void drawCubes(WINDOW *win) ;
+
             private:
 				int gamedata_row_ ;
 				int tankdrive_row_ ;
@@ -52,6 +56,7 @@ namespace xero {
 				int grabber_row_ ;
 				int wings_row_ ;
 				int cubesensor_row_ ;
+				int cube_dim ;
 				bool cube_ ;
             } ;
         }

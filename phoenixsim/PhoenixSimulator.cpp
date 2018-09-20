@@ -8,6 +8,7 @@
 #include "PhoenixScreenVisualizer.h"
 #include <cassert>
 #include <iostream>
+#include <cmath>
 
 using namespace ctre::phoenix::motorcontrol::can ;
 using namespace frc ;
@@ -43,6 +44,15 @@ namespace xero
 				addModel(oi_) ;
 
 				visualizer_ = false ;
+
+				addCubeLocation(134.5, 168) ;
+				addCubeLocation(134.5, 179) ;
+				addCubeLocation(134.5, 157) ;
+
+				addCubeLocation(123.5, 173.5) ;
+				addCubeLocation(123.5, 162.5) ;
+
+				addCubeLocation(112.5, 168) ;
 			}
 
 			PhoenixSimulator::~PhoenixSimulator() {
@@ -64,6 +74,29 @@ namespace xero
 
 			void PhoenixSimulator::disconnect(SimulatedObject *device) {
 				RobotSimBase::disconnect(device) ;
+			}
+
+			size_t PhoenixSimulator::findCubeIndexByPos(double x, double y) {
+				for(size_t i = 0 ; i < cubes_.size() ; i++) {
+					double dx = std::fabs(x - cubes_[i].getX()) ;
+					double dy = std::fabs(y - cubes_[i].getY()) ;
+
+					if (dx < 11 && dy < 11)
+						return i ;
+				}
+
+				return std::numeric_limits<size_t>::max() ;
+			}			
+
+			bool PhoenixSimulator::isCubeAtPosition(double x, double y) {
+				size_t index = findCubeIndexByPos(x, y) ;
+				return index != std::numeric_limits<size_t>::max() ;
+			}
+
+			void PhoenixSimulator::removeCube(double x, double y) {
+				size_t index = findCubeIndexByPos(x, y) ;
+				if (index != std::numeric_limits<size_t>::max())
+					cubes_.erase(cubes_.begin() + index) ;
 			}
 		}
 	}
