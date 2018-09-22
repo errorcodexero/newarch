@@ -117,11 +117,11 @@ model {
 			sources.cpp {
 				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
 				source {
-					srcDirs = ["phoenix"]
+					srcDirs = ["bunny2018"]
 					include "**/*.cpp"
 				}
 				exportedHeaders{
-					srcDirs = ["phoenix"]
+					srcDirs = ["bunny2018"]
 					include "**/*.h"
 				}
 
@@ -231,7 +231,7 @@ model {
 			}
 		}
 
-		phoenixsim(NativeLibrarySpec) {
+		bunny2018sim(NativeLibrarySpec) {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
@@ -242,11 +242,11 @@ model {
 			}
 			sources.cpp {
 				source {
-					srcDirs = ["phoenixsim"]
+					srcDirs = ["bunny2018sim"]
 					include "**/*.cpp"
 				}
 				exportedHeaders {
-					srcDirs = ["phoenixsim"]
+					srcDirs = ["bunny2018sim"]
 					include "**/*.h"
 				}
 
@@ -265,15 +265,15 @@ model {
 			}
 			sources.cpp {
 				source {
-					srcDirs = ["phoenix"]
+					srcDirs = ["bunny2018"]
 					include "**/*.cpp"
 				}
 				exportedHeaders{
-					srcDirs = ["phoenix"]
+					srcDirs = ["bunny2018"]
 					include "**/*.h"
 				}
 
-				lib library: "phoenixsim", linkage: "static"				
+				lib library: "bunny2018sim", linkage: "static"				
 				lib library: "xerobasesim", linkage: "static"
 				lib library: "xeromiscsim", linkage: "static"
 				lib library: "xeromathsim", linkage: "static"				

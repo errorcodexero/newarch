@@ -29,6 +29,7 @@ namespace xero {
 				virtual void run();
 				virtual bool isDone() ;
 				virtual void cancel() ;
+
 				virtual std::string toString() ;
 
 			private:
@@ -95,6 +96,11 @@ namespace xero {
 			/// The output actuators are set to achieve the currently active
 			/// Action based on the current state of the subsystem.
 			virtual void run() ;
+
+			/// \brief initialize the subsystem
+			/// This is called after all of the subsystems are created.
+			virtual void init() {
+			}			
 			
 			/// \brief returns true if the subsystem is done with the current Action
 			/// \returns true if the subsystem is done with the current Action
