@@ -2,6 +2,7 @@
 #include "Bunny.h"
 #include "BunnySubsystem.h"
 #include "BunnyOISubsystem.h"
+#include "BunnyAutoMode.h"
 #include <ActionSequence.h>
 #include <basegroups.h>
 #include <DelayAction.h>
@@ -58,10 +59,7 @@ namespace xero {
 		}
 
 		std::shared_ptr<ControllerBase> Bunny::createAutoController() {
-			//
-			// This is where the automode controller is created
-			//
-			return nullptr ;
+			return std::make_shared<BunnyAutoMode>(*this) ;
 		}
 		
 		std::shared_ptr<ControllerBase> Bunny::createTeleopController() {
@@ -92,7 +90,6 @@ namespace xero {
             //
             // Decide what message groups (incl. subsystems) you want to see
             //
-			// logger.enableSubsystem(MSG_GROUP_PATHFOLLOWER) ;
 			logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
 			logger.enableSubsystem(MSG_GROUP_ACTIONS);
 			logger.enableSubsystem(MSG_GROUP_PARSER) ;
