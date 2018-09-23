@@ -52,7 +52,7 @@ tankdrive:distance_action:stall_monitor:samples        5
 tankdrive:distance_action:stall_monitor:threshold      0
 tankdrive:distance_action:distance_threshold            2
 tankdrive:distance_action:profile_outdated_error_dist        12
-tankdrive:distance_action:profile_outdated_error_long        12        
+tankdrive:distance_action:profile_outdated_error_long        16        
 tankdrive:distance_action:profile_outdated_error_short        2
 
 tankdrive:distance_action:velocity_stall_pid:p                0.0

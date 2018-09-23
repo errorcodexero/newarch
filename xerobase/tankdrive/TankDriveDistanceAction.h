@@ -33,12 +33,13 @@ namespace xero {
 
 			double start_time_ ;
 			double profile_start_time_;	
-			double initial_dist_;
+			double profile_initial_dist_;
 			double distance_threshold_;
 			double target_distance_;
 			double profile_outdated_error_long_;
 			double profile_outdated_error_short_ ;
 			double profile_outdated_error_dist_ ;
+			double total_dist_so_far_ ;
 			bool is_done_;
 		};
 	}
