@@ -74,6 +74,12 @@ namespace xero {
 				return message_logger_ ;
 			}
 
+			/// \brief Return the target loop time for the robot
+			/// \returns the target loop time for the robot
+			double getTargetLoopTime() {
+				return target_loop_time_ ;
+			}
+
 			/// \brief Return the time difference between the last robot loop and the current one in seconds
 			/// \returns the time difference between the last robot loop and the current one in seconds
 			double getDeltaTime()  {

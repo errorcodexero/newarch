@@ -31,11 +31,14 @@ namespace xero {
 
 			bool has_stalled_;
 
-			double start_time_;	
+			double start_time_ ;
+			double profile_start_time_;	
 			double initial_dist_;
 			double distance_threshold_;
 			double target_distance_;
-			double profile_outdated_error_;
+			double profile_outdated_error_long_;
+			double profile_outdated_error_short_ ;
+			double profile_outdated_error_dist_ ;
 			bool is_done_;
 		};
 	}
