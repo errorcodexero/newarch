@@ -28,7 +28,7 @@ TankDriveDistanceAction::~TankDriveDistanceAction() {
 }
 
 void TankDriveDistanceAction::start() {
-	initial_dist_ = getTankDrive().getDist();
+	profile_initial_dist_ = getTankDrive().getDist();
 
 	xero::misc::SettingsParser parser = getTankDrive().getRobot().getSettingsParser();
 
@@ -47,6 +47,8 @@ void TankDriveDistanceAction::start() {
 
 	profile_->update(target_distance_, 0.0, 0.0);
 	getTankDrive().navx_->ZeroYaw();
+
+	total_dist_so_far_ = 0.0 ;
 }
 
 void TankDriveDistanceAction::run() {
@@ -54,10 +56,11 @@ void TankDriveDistanceAction::run() {
 
 	if (!is_done_) {
 		double current_distance = getTankDrive().getDist();
-		double distance_travelled = current_distance - initial_dist_;
-		double remaining_distance = target_distance_ - distance_travelled;
+		double profile_distance_traveled = current_distance - profile_initial_dist_;
+		double profile_remaining_distance = target_distance_ - profile_distance_traveled;
+		double total_traveled = total_dist_so_far_ + profile_distance_traveled ;
 
-		if (std::fabs(remaining_distance) > distance_threshold_) {
+		if (std::fabs(total_traveled - target_distance_) > distance_threshold_) {
 			stall_monitor_.addSample(current_distance);
 			if (stall_monitor_.isStalled()) {
 				if (!has_stalled_) {
@@ -76,29 +79,33 @@ void TankDriveDistanceAction::run() {
 				}
 			}
 
-			double delta_time = getTankDrive().getRobot().getTime() - start_time_; 
-			double target_distance = profile_->getDistance(delta_time);
-			double profile_error = std::fabs(target_distance - distance_travelled);
+			double profile_delta_time = getTankDrive().getRobot().getTime() - profile_start_time_; 
+			double profile_target_distance = profile_->getDistance(profile_delta_time);
+			double profile_error = std::fabs(profile_target_distance - profile_distance_traveled);
 
 			double current_velocity = getTankDrive().getVelocity();
 
 			bool redo = false ;
 
-			if (remaining_distance < profile_outdated_error_dist_ && profile_error < profile_outdated_error_short_)
+			if (profile_remaining_distance < profile_outdated_error_dist_ && profile_error > profile_outdated_error_short_)
 				redo = true ;
-			else if (remaining_distance > profile_outdated_error_dist_ && profile_error < profile_outdated_error_long_)
+			else if (profile_remaining_distance > profile_outdated_error_dist_ && profile_error > profile_outdated_error_long_)
 				redo = true ;
 
 			if (redo) {
+				total_dist_so_far_ += profile_distance_traveled ;
+
 				profile_start_time_ = getTankDrive().getRobot().getTime() ;
-				profile_->update(remaining_distance, current_velocity, 0.0);
+				profile_initial_dist_ = getTankDrive().getDist() ;
+				profile_delta_time = 0.0 ;
+				profile_->update(target_distance_ - total_traveled, current_velocity, 0.0);
 
 				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
 				logger << "Fell behind velocity profile, updating profile";
 				logger.endMessage();
 			}
 
-			double target_velocity = profile_->getSpeed(delta_time + getTankDrive().getRobot().getTargetLoopTime()) ;
+			double target_velocity = profile_->getSpeed(profile_delta_time + getTankDrive().getRobot().getTargetLoopTime()) ;
 
 			double base_power = velocity_pid_.getOutput(target_velocity, current_velocity, getTankDrive().getRobot().getDeltaTime());
 
@@ -109,8 +116,8 @@ void TankDriveDistanceAction::run() {
 
 			logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
 			logger << "time " << getTankDrive().getRobot().getTime() ;
-			logger << ", dist " << distance_travelled ;
-			logger << ", target " << target_distance ;
+			logger << ", dist " << total_traveled ;
+			logger << ", profile " << profile_target_distance ;
 			logger << ", target " << target_velocity;
 			logger << ", actual " << current_velocity ;
 			logger << ", left " << left_power << ", right " << right_power ;
