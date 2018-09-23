@@ -116,6 +116,12 @@ namespace xero {
 				oi_subsystem_ = oi ;
 			}		
 			
+			/// \brief return the robot subsystem
+			/// \returns the robot subsystem
+			SubsystemPtr getRobotSubsystem() {
+				return robot_subsystem_ ;
+			}
+			
 			/// \brief this method runs one loop for the robot.
 			virtual void robotLoop();
 
@@ -147,9 +153,6 @@ namespace xero {
 			/// \brief setup a message logger to send output to a file
 			/// \param file the name of the file for the output
 			void setupRobotOutputFile(const std::string &file) ;
-
-			/// \brief get a subsystem by name
-			SubsystemPtr getSubsystemByName(const std::string &name) ;
 
 		private:
 			// The time per robot loop in seconds

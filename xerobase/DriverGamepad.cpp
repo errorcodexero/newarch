@@ -104,7 +104,7 @@ namespace xero {
                 double spin = (rx > 0.01) ? scalePower(-rx, boost, slow) : 0.0 ;
                 
                 if (std::fabs(power + spin - left_) > tolerance_ || std::fabs(power - spin - right_) > tolerance_) {
-                    auto dir = std::make_shared<TankDrivepowerAction>(*db_, power + spin, power - spin) ;
+                    auto dir = std::make_shared<TankDrivePowerAction>(*db_, power + spin, power - spin) ;
                     seq.pushSubActionPair(db_, dir) ;
                     left_ = power + spin ;
                     right_ = power - spin ;

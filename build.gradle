@@ -125,10 +125,9 @@ model {
 					include "**/*.h"
 				}
 
-				// Define my dependencies. In this case, WPILib (+ friends), CTRE Phoenix (Talon SRX) and NavX.
-				lib library: "xeromath", linkage: "static"				
 				lib library: "xerobase", linkage: "static"
 				lib library: "xeromisc", linkage: "static"				
+				lib library: "xeromath", linkage: "static"				
 				lib library: "wpilib"
 				lib library: "ctre"
 				lib library: "navx"
@@ -276,7 +275,7 @@ model {
 				lib library: "bunny2018sim", linkage: "static"				
 				lib library: "xerobasesim", linkage: "static"
 				lib library: "xeromiscsim", linkage: "static"
-				lib library: "xeromathsim", linkage: "static"				
+				lib library: "xeromathsim", linkage: "static"								
 				lib library: "wpilibsim", linkage: "static"
 			}
 		}

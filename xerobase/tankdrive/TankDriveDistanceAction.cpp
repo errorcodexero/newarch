@@ -16,9 +16,9 @@ TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, double t
 	is_done_ = false;
 
 	has_stalled_ = false;
-	double maxa = tank_drive.getRobot().getSettingsParser().getDouble("tankdrive:straight:maxa") ;
-	double maxd = tank_drive.getRobot().getSettingsParser().getDouble("tankdrive:straight:maxd") ;
-	double maxv = tank_drive.getRobot().getSettingsParser().getDouble("tankdrive:straight:maxv") ;		
+	double maxa = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:straight:maxa") ;
+	double maxd = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:straight:maxd") ;
+	double maxv = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:straight:maxv") ;		
 	profile_ = new TrapezoidalProfile(maxa, maxd, maxv) ;
 }
 
@@ -28,9 +28,9 @@ TankDriveDistanceAction::~TankDriveDistanceAction() {
 }
 
 void TankDriveDistanceAction::start() {
-	initial_dist_ = tank_drive_.getDist();
+	initial_dist_ = getTankDrive().getDist();
 
-	xero::misc::SettingsParser parser = tank_drive_.getRobot().getSettingsParser();
+	xero::misc::SettingsParser parser = getTankDrive().getRobot().getSettingsParser();
 
 	velocity_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:velocity_pid");
 	angle_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:angle_pid", true);
@@ -40,16 +40,16 @@ void TankDriveDistanceAction::start() {
 	distance_threshold_ = parser.getDouble("tankdrive:distanceaction:distance_threshold");
 	profile_outdated_error_ = parser.getDouble("tankdrive:distanceaction:profile_outdated_error");
 
-	start_time_ = tank_drive_.getRobot().getTime();
+	start_time_ = getTankDrive().getRobot().getTime();
 
-	tank_drive_.navx_->ZeroYaw();
+	getTankDrive().navx_->ZeroYaw();
 }
 
 void TankDriveDistanceAction::run() {
-	MessageLogger &logger = tank_drive_.getRobot().getMessageLogger();
+	MessageLogger &logger = getTankDrive().getRobot().getMessageLogger();
 
 	if (!is_done_) {
-		double current_distance = tank_drive_.getDist();
+		double current_distance = getTankDrive().getDist();
 		double distance_travelled = current_distance - initial_dist_;
 		double remaining_distance = target_distance_ - distance_travelled;
 
@@ -57,31 +57,31 @@ void TankDriveDistanceAction::run() {
 			stall_monitor_.addSample(current_distance);
 			if (stall_monitor_.isStalled()) {
 				if (!has_stalled_) {
-					xero::misc::SettingsParser parser = tank_drive_.getRobot().getSettingsParser();
+					xero::misc::SettingsParser parser = getTankDrive().getRobot().getSettingsParser();
 					velocity_pid_.initFromSettingsExtended(parser, "tankdrive:distanceaction:velocity_stall_pid");
 					stall_monitor_.reset();
 					has_stalled_ = true;
 
-					logger.startMessage(MessageLogger::MessageType::debug, msg_group_);
+					logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
 					logger << "Drivebase stalled, switching to stall PID parameters: " << velocity_pid_.toString();
 					logger.endMessage();
 				} else {
-					logger.startMessage(MessageLogger::MessageType::debug, msg_group_);
+					logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
 					logger << "Drivebase stalled despite having already switched to stall PID parameters";
 					logger.endMessage();
 				}
 			}
 
-			double delta_time = tank_drive_.getRobot().getDeltaTime();
+			double delta_time = getTankDrive().getRobot().getDeltaTime();
 			double target_distance = profile_->getDistance(delta_time);
 			double profile_error = std::fabs(target_distance - distance_travelled);
 
-			double current_velocity = tank_drive_.getVelocity();
+			double current_velocity = getTankDrive().getVelocity();
 
 			if (profile_error > profile_outdated_error_) {
 				profile_->update(remaining_distance, current_velocity, 0.0);
 
-				logger.startMessage(MessageLogger::MessageType::debug, msg_group_);
+				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
 				logger << "Fell behind velocity profile, updating profile";
 				logger.endMessage();
 			}
@@ -90,24 +90,24 @@ void TankDriveDistanceAction::run() {
 
 			double base_power = velocity_pid_.getOutput(target_velocity, current_velocity, delta_time);
 
-			double current_angle = tank_drive_.getAngle();
+			double current_angle = getTankDrive().getAngle();
 			double straightness_offset = angle_pid_.getOutput(0, current_angle, delta_time);
 			double left_power = base_power - straightness_offset;
 			double right_power = base_power + straightness_offset;
 
-			tank_drive_.setMotorsToPercents(left_power, right_power);
+			getTankDrive().setMotorsToPercents(left_power, right_power);
 		} else {
 			is_done_ = true;
 
-			logger.startMessage(MessageLogger::MessageType::debug, msg_group_);
+			logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
 			logger << "TankDriveDistanceAction complete";
 			logger.startData("tankdrivedistanceaction_complete")
-				.addData("time", tank_drive_.getRobot().getTime() - start_time_)
+				.addData("time", getTankDrive().getRobot().getTime() - start_time_)
 				.endData();
 			logger.endMessage();
 		}
 	} else {
-		tank_drive_.setMotorsToPercents(0.0, 0.0);
+		getTankDrive().setMotorsToPercents(0.0, 0.0);
 	}
 }
 

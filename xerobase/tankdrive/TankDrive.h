@@ -24,6 +24,9 @@ namespace xero {
 			friend class TankDriveDistanceAction;
 			friend class TankDriveVelocityAction;
 			friend class TankDriveCharAction ;
+			friend class TankDrivePowerAction ;
+			friend class TankDriveCharAction ;
+			friend class TankDriveTimedPowerAction ;
 
 		public:
 			/// \brief Create a new tank drive object
