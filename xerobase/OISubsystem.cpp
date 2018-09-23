@@ -9,7 +9,8 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        OISubsystem::OISubsystem(Robot &robot, const std::string &name, bool adddriver) : Subsystem(robot, name) {
+        OISubsystem::OISubsystem(Robot &robot, const std::string &name, bool adddriver) 
+                                : Subsystem(robot, name) {
             inited_ = false ;
             enabled_ = false ;
 			if (adddriver) {
@@ -18,7 +19,7 @@ namespace xero {
 				addHIDDevice(driver_) ;
 			}
 
-            seq_ = std::make_shared<ActionSequence>("teleop", robot.getMessageLogger()) ;
+            seq_ = std::make_shared<ActionSequence>(robot.getMessageLogger()) ;
         }
 
         OISubsystem::~OISubsystem() {

@@ -10,7 +10,7 @@ namespace xero {
 		}
 
 		TankDriveCharAction::TankDriveCharAction(TankDrive &drive, const std::string &name) : TankDriveAction(drive) {
-			duration_ = tank_drive_.getRobot().getSettingsParser().getDouble(name) ;
+			duration_ = getTankDrive().getRobot().getSettingsParser().getDouble(name) ;
 		}		
 		
 		TankDriveCharAction::~TankDriveCharAction() {			
@@ -19,7 +19,7 @@ namespace xero {
 		void TankDriveCharAction::start() {
 			is_done_ = false ;
 			start_time_ = frc::Timer::GetFPGATimestamp() ;
-			tank_drive_.setMotorsToPercents(1.0, 1.0) ;
+			getTankDrive().setMotorsToPercents(1.0, 1.0) ;
 		}
 
 		void TankDriveCharAction::run() {
@@ -27,11 +27,11 @@ namespace xero {
 				double now = frc::Timer::GetFPGATimestamp() ;
 				if (now - start_time_ >= duration_) {
 					is_done_ = true ;
-					tank_drive_.setMotorsToPercents(0.0, 0.0) ;
+					getTankDrive().setMotorsToPercents(0.0, 0.0) ;
 				} else {
 					std::cout << (now - start_time_) ;
-					std::cout << ", " << tank_drive_.getDist() ;
-					std::cout << ", " << tank_drive_.getVelocity() ;
+					std::cout << ", " << getTankDrive().getDist() ;
+					std::cout << ", " << getTankDrive().getVelocity() ;
 					std::cout << std::endl ;
 				}
 			}

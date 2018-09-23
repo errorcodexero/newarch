@@ -54,6 +54,16 @@ namespace xero {
 			/// \brief create a human readable string representing this action sequence
 			std::string toString();
 
+			/// \brief clear the list of actions
+			void clear() {
+				actionSequence_.clear() ;
+			}
+
+			/// \brief return the number of actions in the sequence
+			size_t size() {
+				return actionSequence_.size() ;
+			}
+
 		private:
 			void startNextAction();
 
