@@ -1,10 +1,8 @@
 #include "TankDriveDistanceAction.h"
-
-#include <math.h>
-
-#include <SettingsParser.h>
 #include "Robot.h"
 #include "basegroups.h"
+#include <SettingsParser.h>
+#include <cmath>
 
 using namespace xero::misc;
 
@@ -14,8 +12,6 @@ namespace base {
 TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, double target_distance) : TankDriveAction(tank_drive) {
 	target_distance_ = target_distance;	
 	is_done_ = false;
-
-	has_stalled_ = false;
 	double maxa = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxa") ;
 	double maxd = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxd") ;
 	double maxv = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxv") ;		
@@ -30,12 +26,10 @@ TankDriveDistanceAction::~TankDriveDistanceAction() {
 void TankDriveDistanceAction::start() {
 	profile_initial_dist_ = getTankDrive().getDist();
 
-	xero::misc::SettingsParser parser = getTankDrive().getRobot().getSettingsParser();
+	xero::misc::SettingsParser &parser = getTankDrive().getRobot().getSettingsParser();
 
 	velocity_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:velocity_pid");
 	angle_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:angle_pid", true);
-
-	stall_monitor_.initFromSettings(parser, "tankdrive:distance_action:stall_monitor");
 
 	distance_threshold_ = parser.getDouble("tankdrive:distance_action:distance_threshold");
 	profile_outdated_error_long_ = parser.getDouble("tankdrive:distance_action:profile_outdated_error_long");
@@ -61,24 +55,6 @@ void TankDriveDistanceAction::run() {
 		double total_traveled = total_dist_so_far_ + profile_distance_traveled ;
 
 		if (std::fabs(total_traveled - target_distance_) > distance_threshold_) {
-			stall_monitor_.addSample(current_distance);
-			if (stall_monitor_.isStalled()) {
-				if (!has_stalled_) {
-					xero::misc::SettingsParser parser = getTankDrive().getRobot().getSettingsParser();
-					velocity_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:velocity_stall_pid");
-					stall_monitor_.reset();
-					has_stalled_ = true;
-
-					logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
-					logger << "Drivebase stalled, switching to stall PID parameters: " << velocity_pid_.toString();
-					logger.endMessage();
-				} else {
-					logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
-					logger << "Drivebase stalled despite having already switched to stall PID parameters";
-					logger.endMessage();
-				}
-			}
-
 			double profile_delta_time = getTankDrive().getRobot().getTime() - profile_start_time_; 
 			double profile_target_distance = profile_->getDistance(profile_delta_time);
 			double profile_error = std::fabs(profile_target_distance - profile_distance_traveled);

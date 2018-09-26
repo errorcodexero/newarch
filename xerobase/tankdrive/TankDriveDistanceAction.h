@@ -25,11 +25,9 @@ namespace xero {
 			std::string toString();
 
 		private:
-			xero::misc::PIDCtrl velocity_pid_, angle_pid_;
-			xero::misc::StallMonitor stall_monitor_;
+			xero::misc::PIDCtrl velocity_pid_ ;
+			xero::misc::PIDCtrl angle_pid_;
 			xero::misc::TrapezoidalProfile *profile_;
-
-			bool has_stalled_;
 
 			double start_time_ ;
 			double profile_start_time_;	
