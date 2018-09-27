@@ -134,6 +134,31 @@ model {
 			}
 		}
 
+		frcUserProgramPhoenix(NativeExecutableSpec) {
+			targetPlatform "roborio"
+			binaries.all {
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
+			}
+			sources.cpp {
+				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
+				source {
+					srcDirs = ["phoenix"]
+					include "**/*.cpp"
+				}
+				exportedHeaders{
+					srcDirs = ["phoenix"]
+					include "**/*.h"
+				}
+
+				lib library: "xerobase", linkage: "static"
+				lib library: "xeromisc", linkage: "static"				
+				lib library: "xeromath", linkage: "static"				
+				lib library: "wpilib"
+				lib library: "ctre"
+				lib library: "navx"
+			}
+		}		
+
 		wpilibsim(NativeLibrarySpec) {
 			targetPlatform "x86_64"
 			binaries.all {

@@ -18,13 +18,15 @@ namespace xero {
 			friend class LifterMaintainHeightAction;
 			friend class LifterChangeGearAction;
 		public:
+
 			enum class LIFTER_GEAR {LOW, HIGH};
 			Lifter(xero::base::Robot& robot);
 			virtual ~Lifter();
 			virtual void run();
+			virtual void computeState() ;
+
 			double getCurrentHeight();
 			double getCurrentVelocity();
-			virtual void computeState() ;
 		protected:
 			/// \brief Determine if the Lifter subsystem can accept the given action.
             /// For this subsystem the only critera is that the action be derived from
