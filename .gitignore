@@ -13,3 +13,10 @@ ROBOT
 SIM
 **/*.o
 **/*.a
+gopigo3/gopigo3xero/GoPiGo3Xero
+**/*~
+**/*.mp4
+**/*.jpg
+**/*.JPG
+**/*.mov
+**/*.MOV
