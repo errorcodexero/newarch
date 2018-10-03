@@ -15,12 +15,11 @@ TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, double t
 	double maxa = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxa") ;
 	double maxd = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxd") ;
 	double maxv = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxv") ;		
-	profile_ = new TrapezoidalProfile(maxa, maxd, maxv) ;
+	profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
 }
 
 TankDriveDistanceAction::~TankDriveDistanceAction() {
-	if (profile_ != nullptr)
-		delete profile_ ;
+	
 }
 
 void TankDriveDistanceAction::start() {
@@ -30,11 +29,6 @@ void TankDriveDistanceAction::start() {
 
 	velocity_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:velocity_pid");
 	angle_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:angle_pid", true);
-
-	distance_threshold_ = parser.getDouble("tankdrive:distance_action:distance_threshold");
-	profile_outdated_error_long_ = parser.getDouble("tankdrive:distance_action:profile_outdated_error_long");
-	profile_outdated_error_short_ = parser.getDouble("tankdrive:distance_action:profile_outdated_error_short");
-	profile_outdated_error_dist_ = parser.getDouble("tankdrive:distance_action:profile_outdated_error_dist");
 
 	distance_threshold_ = parser.getDouble("tankdrive:distance_action:distance_threshold");
 	profile_outdated_error_long_ = parser.getDouble("tankdrive:distance_action:profile_outdated_error_long");
@@ -56,7 +50,7 @@ void TankDriveDistanceAction::run() {
 	if (!is_done_) {
 		double current_distance = getTankDrive().getDist();
 		double profile_distance_traveled = current_distance - profile_initial_dist_;
-		double profile_remaining_distance = target_distance_ - profile_distance_traveled;
+		double profile_remaining_distance = target_distance_ - profile_distance_traveled - total_dist_so_far_ ;
 		double total_traveled = total_dist_so_far_ + profile_distance_traveled ;
 
 		if (std::fabs(total_traveled - target_distance_) > distance_threshold_) {

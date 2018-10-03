@@ -27,7 +27,7 @@ namespace xero {
 		private:
 			xero::misc::PIDCtrl velocity_pid_ ;
 			xero::misc::PIDCtrl angle_pid_;
-			xero::misc::TrapezoidalProfile *profile_;
+			std::shared_ptr<xero::misc::TrapezoidalProfile> profile_;
 			double start_time_ ;
 			double profile_start_time_;	
 			double profile_initial_dist_;
