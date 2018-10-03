@@ -3,7 +3,7 @@ SOURCES = \
 	params_parser.cpp \
 	main.cpp
 
-TARGET = BasketDetector.exe
+TARGET = CrateDetector.exe
 
 LIBS = \
 	`pkg-config --libs opencv libv4l2`
