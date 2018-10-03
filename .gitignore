@@ -6,13 +6,12 @@ doc/out
 build
 .gradle
 *.swp
-*test/*.o
-*test/*.exe
 .vs/
 ROBOT
 SIM
 **/*.o
 **/*.a
+**/*.exe
 gopigo3/gopigo3xero/GoPiGo3Xero
 **/*~
 **/*.mp4
