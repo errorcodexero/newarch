@@ -13,3 +13,5 @@ ROBOT
 SIM
 **/*.o
 **/*.a
+gopigo3/gopigo3xero/GoPiGo3Xero
+gopigo3/gopigo3simple/GoPiGo3Simple
