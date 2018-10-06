@@ -1,0 +1,91 @@
+##############################################################
+#
+# Describe the hardware of the robot
+#
+##############################################################
+hw:tankdrive:leftmotor1             1
+hw:tankdrive:leftmotor2             2
+hw:tankdrive:leftmotor3             3
+hw:tankdrive:rightmotor1            4
+hw:tankdrive:rightmotor2            5
+hw:tankdrive:rightmotor3            6
+hw:tankdrive:shifter                0
+hw:tankdrive:leftencoder1           0
+hw:tankdrive:leftencoder2           1
+hw:tankdrive:rightencoder1          2
+hw:tankdrive:rightencoder2          3
+
+hw:driverstation:hid:oi             3
+hw:driverstation:hid:gunner         2
+hw:driverstation:hid:driver         1
+
+##############################################################
+#
+# The constants that go with each of the subsystems
+#
+##############################################################
+
+#
+# TankDrive subsystem constants
+#
+tankdrive:inches_per_tick           0.07854
+tankdrive:distance_action:maxa             90.0
+tankdrive:distance_action:maxd             -90.0
+tankdrive:distance_action:maxv             180
+tankdrive:distance_action:navxadj          0.2
+tankdrive:distance_action:threshold        2.0
+tankdrive:distance_action:velocity_pid:p                0.0
+tankdrive:distance_action:velocity_pid:i                0.0
+tankdrive:distance_action:velocity_pid:d                0.0
+tankdrive:distance_action:velocity_pid:f                0.01
+tankdrive:distance_action:velocity_pid:max              1.0
+tankdrive:distance_action:velocity_pid:min              -1.0
+tankdrive:distance_action:velocity_pid:imax             6.0
+tankdrive:distance_action:angle_pid:p                0.0
+tankdrive:distance_action:angle_pid:i                0.0
+tankdrive:distance_action:angle_pid:d                0.0
+tankdrive:distance_action:angle_pid:f                0.005556
+tankdrive:distance_action:angle_pid:max              1.0
+tankdrive:distance_action:angle_pid:min              -1.0
+tankdrive:distance_action:angle_pid:imax             6.0
+tankdrive:distance_action:stall_monitor:samples        5
+tankdrive:distance_action:stall_monitor:threshold      0
+tankdrive:distance_action:distance_threshold            2
+tankdrive:distance_action:profile_outdated_error_dist        12
+tankdrive:distance_action:profile_outdated_error_long        16        
+tankdrive:distance_action:profile_outdated_error_short        2
+
+tankdrive:distance_action:velocity_stall_pid:p                0.0
+tankdrive:distance_action:velocity_stall_pid:i                0.0
+tankdrive:distance_action:velocity_stall_pid:d                0.0
+tankdrive:distance_action:velocity_stall_pid:f                0.005556
+tankdrive:distance_action:velocity_stall_pid:max              1.0
+tankdrive:distance_action:velocity_stall_pid:min              -1.0
+tankdrive:distance_action:velocity_stall_pid:imax             6.
+
+tankdrive:rotate:maxa               430
+tankdrive:rotate:maxd               -430
+tankdrive:rotate:maxv               860
+tankdrive:rotate:recalc1            10.0
+tankdrive:rotate:distance2          10.0
+tankdrive:rotate:recalc2            2.0
+tankdrive:rotate:threshold          4.0
+tankdrive:rotate:p                  0.0
+tankdrive:rotate:i                  0.0
+tankdrive:rotate:d                  0.0
+tankdrive:rotate:f                  0.00126
+tankdrive:rotate:max                1.0
+tankdrive:rotate:min                -1.0
+tankdrive:rotate:imax               6.0
+
+#
+# DriverStation subsystem constants
+#
+driver:power:max                    1.0
+driver:power:default                0.6
+driver:power:slowby                 0.5
+driver:power:tolerance              0.05
+driver:power:nudge_straight         0.2
+driver:power:nudge_rotate           0.2
+driver:nudge_time                   0.1
+

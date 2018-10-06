@@ -227,7 +227,7 @@ namespace xero {
 				left_motors_.push_back(motor) ;
 				motor->addModel(this) ;
 			}
-			else if (motor->GetDeviceID() == 14 || motor->GetDeviceID() == 15 || motor->GetDeviceID() == 16) {
+			else if (motor->GetDeviceID() == 4 || motor->GetDeviceID() == 5 || motor->GetDeviceID() == 6) {
 				right_motors_.push_back(motor) ;
 				motor->addModel(this) ;
 			}

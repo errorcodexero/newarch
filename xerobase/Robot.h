@@ -74,6 +74,12 @@ namespace xero {
 				return message_logger_ ;
 			}
 
+			/// \brief Return the target loop time for the robot
+			/// \returns the target loop time for the robot
+			double getTargetLoopTime() {
+				return target_loop_time_ ;
+			}
+
 			/// \brief Return the time difference between the last robot loop and the current one in seconds
 			/// \returns the time difference between the last robot loop and the current one in seconds
 			double getDeltaTime()  {
@@ -92,7 +98,35 @@ namespace xero {
 				return *parser_ ;
 			}
 
+			/// \brief Return the drive base subsystem
+			/// \returns the drivebase subsystem
+			SubsystemPtr getDriveBase() {
+				return drivebase_subsystem_ ;
+			}
+
+			/// \brief return the OIsubsystem
+			/// \returns the OI subsystems
+			SubsystemPtr getOI() {
+				return oi_subsystem_ ;
+			}			
+
 		protected:
+
+			/// \brief add a subsystem to the robot
+			/// \param sub the subsystem to add to the robot
+			void setRobotSubsystem(SubsystemPtr sub, SubsystemPtr oi, SubsystemPtr db) {
+				robot_subsystem_ = sub ;
+				robot_subsystem_->init() ;
+
+				drivebase_subsystem_ = db ;
+				oi_subsystem_ = oi ;
+			}		
+			
+			/// \brief return the robot subsystem
+			/// \returns the robot subsystem
+			SubsystemPtr getRobotSubsystem() {
+				return robot_subsystem_ ;
+			}
 			
 			/// \brief this method runs one loop for the robot.
 			virtual void robotLoop();
@@ -100,12 +134,6 @@ namespace xero {
 			/// \brief this method allows a derived class to change the robot loop time
 			void setRobotLoopTime(double time) {
 				target_loop_time_ = time ;
-			}			
-
-			/// \brief add a subsystem to the robot
-			/// \param sub the subsystem to add to the robot
-			void addSubsystem(SubsystemPtr sub) {
-				subsystems_.push_back(sub) ;
 			}			
 
 			/// \brief this method reads the parameters file for the robot
@@ -132,9 +160,6 @@ namespace xero {
 			/// \param file the name of the file for the output
 			void setupRobotOutputFile(const std::string &file) ;
 
-			/// \brief get a subsystem by name
-			SubsystemPtr getSubsystemByName(const std::string &name) ;
-
 		private:
 			// The time per robot loop in seconds
 			double target_loop_time_;
@@ -144,7 +169,9 @@ namespace xero {
 			std::shared_ptr<ControllerBase> controller_;
 
 			// The list of subsystem that belong to the robot
-			std::list<std::shared_ptr<Subsystem>> subsystems_;
+			SubsystemPtr robot_subsystem_ ;
+			SubsystemPtr drivebase_subsystem_ ;
+			SubsystemPtr oi_subsystem_ ;
 
 			// Message logger instance
 			xero::misc::MessageLogger message_logger_;

@@ -29,15 +29,6 @@ namespace xero {
 				delete output_stream_ ;
 		}
 
-		SubsystemPtr Robot::getSubsystemByName(const std::string &name) {
-			for(auto sub: subsystems_) {
-				if (sub->getName() == name)
-					return sub ;
-			}
-
-			return nullptr ;
-		}
-
 		void Robot::setupRobotOutputFile(const std::string &file) {
 			if (file.length() > 0) {
 				output_stream_ = new std::ofstream(file) ;
@@ -61,16 +52,12 @@ namespace xero {
 
 			delta_time_ = initial_time - last_time_ ;
 
-			for (SubsystemPtr& subsystem : subsystems_) {
-				subsystem->computeState();
-			}
+			robot_subsystem_->computeState() ;
 
 			if (controller_ != nullptr)
 				controller_->run();
-			
-			for (SubsystemPtr& subsystem : subsystems_) {
-				subsystem->run();
-			}
+
+			robot_subsystem_->run() ;			
 
 			double elapsed_time = frc::Timer::GetFPGATimestamp() - initial_time > target_loop_time_;
 			if (elapsed_time < target_loop_time_) {
