@@ -1,5 +1,4 @@
 SOURCES = \
-	Cube.cpp \
 	params_parser.cpp \
 	main.cpp
 
@@ -12,7 +11,7 @@ CXXINC = \
 	`pkg-config --cflags opencv` \
 	-I../xeromisc
 
-CXXFLAGS = -g $(CXXINC) -DDEBUG
+CXXFLAGS = -g $(CXXINC) -std=c++17 -DDEBUG
 
 CXX = /usr/bin/g++
 OBJECTS = $(SOURCES:.cpp=.o)

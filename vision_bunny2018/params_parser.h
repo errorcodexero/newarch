@@ -3,6 +3,7 @@
 #include <fstream>
 #include <map>
 #include <cassert>
+#include <optional>
 
 
 class paramsInput {
@@ -23,16 +24,17 @@ public:
     /// \brief gets the value of a parameter
     /// and returns a default value if the parameter does not exist
     /// \param paramName the name of the parameter we are searching for
-    /// \param defaultValue the value to return if the parameter did not exist in the parameter file
+    /// \param defaultValue the value to return if the parameter did not exist in the parameter file. If no defaultValue specified and parameter not found, give error.
     /// \return the parameter value from the parameter file, or defaultValue if the parameter did not exist in the file
-    double getValue(const std::string &paramName, double defaultValue);
+    double getValue(const std::string &paramName, std::optional<double> defaultValue = std::nullopt);
 
     /// \brief gets the value of a parameter
     /// and returns a default value if the parameter does not exist
     /// \param paramName the name of the parameter we are searching for
     /// \param defaultValue the value to return if the parameter did not exist in the parameter file
     /// \return the parameter value from the parameter file, or defaultValue if the parameter did not exist in the file
-    std::string getString(const std::string &paramName, const std::string& defaultValue);
+    std::string getString(const std::string& paramName, const std::string& defaultValue);
+    std::string getString(const std::string& paramName);
 
     /// \brief print the parameter values to the output stream given
     /// \param out the output stream to write the parameters to

@@ -1,3 +1,12 @@
+BLOB_MIN_AREA 7000
+HSV_H_LOW    0
+HSV_H_HIGH  50
+HSV_S_LOW    0
+HSV_S_HIGH  45
+HSV_V_LOW  167
+HSV_V_HIGH 255
+
+# Params below this line are left over from cube detection
 GRAY_LOW 0
 GRAY_HIGH 255
 H_LOW 25

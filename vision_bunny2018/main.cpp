@@ -1,7 +1,15 @@
 #include <iostream>
+#include <string>
+#include <vector>
 #include "FileUtils.h"
 #include "StringUtils.h"
-#include "Cube.h"
+
+#include "opencv2/core/core.hpp"
+#include "opencv2/opencv.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/features2d.hpp"
+
+#include "params_parser.h"
 
 //#include <cstdlib>
 #include <libv4l2.h>
@@ -102,10 +110,13 @@ int main(int argc, char **argv) {
         cv::Mat frame_HSV, frame_HSV_threshold;
         cvtColor(frame_blur, frame_HSV, cv::COLOR_BGR2HSV);
         // Filter based on HSV Range Values
-        const int low_H =   0, high_H =  50;
-        const int low_S =   0, high_S =  45;
-        const int low_V = 167, high_V = 255;
-        inRange(frame_HSV, cv::Scalar(low_H, low_S, low_V), cv::Scalar(high_H, high_S, high_V), frame_HSV_threshold);
+        const int H_low  = params.getValue("HSV_H_LOW");
+        const int H_high = params.getValue("HSV_H_HIGH");
+        const int S_low  = params.getValue("HSV_S_LOW");
+        const int S_high = params.getValue("HSV_S_HIGH");
+        const int V_low  = params.getValue("HSV_V_LOW");
+        const int V_high = params.getValue("HSV_V_HIGH");
+        inRange(frame_HSV, cv::Scalar(H_low, S_low, V_low), cv::Scalar(H_high, S_high, V_high), frame_HSV_threshold);
         displayImage("HSV Threshold", frame_HSV_threshold, width*2, 0);
 
         // Apply: Erode
@@ -131,21 +142,21 @@ int main(int argc, char **argv) {
         // Blob detection
         double findBlobsCircularity[] = {0.0, 1.0};
         bool findBlobsDarkBlobs = false;
-        cv::SimpleBlobDetector::Params params;
-        params.filterByColor = 1;
-        params.blobColor = (findBlobsDarkBlobs ? 0 : 255);
-        params.minThreshold = 10;
-        params.maxThreshold = 220;
-        params.filterByArea = true;
-        params.minArea = 7000;
-        params.maxArea = 100000;  // Set to very large no. For some reason, it defaults to arbitrary limit that's too small.
-        params.filterByCircularity = true;
-        params.minCircularity = findBlobsCircularity[0];
-        params.maxCircularity = findBlobsCircularity[1];
-        params.filterByConvexity = false;
-        params.filterByInertia = false;
+        cv::SimpleBlobDetector::Params blob_params;
+        blob_params.filterByColor = 1;
+        blob_params.blobColor = (findBlobsDarkBlobs ? 0 : 255);
+        blob_params.minThreshold = 10;
+        blob_params.maxThreshold = 220;
+        blob_params.filterByArea = true;
+        blob_params.minArea = params.getValue("BLOB_MIN_AREA");
+        blob_params.maxArea = 100000;  // Set to very large no. For some reason, it defaults to arbitrary limit that's too small.
+        blob_params.filterByCircularity = true;
+        blob_params.minCircularity = findBlobsCircularity[0];
+        blob_params.maxCircularity = findBlobsCircularity[1];
+        blob_params.filterByConvexity = false;
+        blob_params.filterByInertia = false;
         std::vector<cv::KeyPoint> keypoints;
-        cv::Ptr<cv::SimpleBlobDetector> detector = cv::SimpleBlobDetector::create(params);
+        cv::Ptr<cv::SimpleBlobDetector> detector = cv::SimpleBlobDetector::create(blob_params);
         detector->detect(frame_dilate, keypoints);
         std::cout << "No. of detected blobs: " << keypoints.size() << std::endl;
 
@@ -189,7 +200,7 @@ int main(int argc, char **argv) {
                     
                 cv::imshow("Original", frame);
                 
-                Cube cube(frame, params);
+                //Cube cube(frame, params);
                 
                 //std::cout << cube.getPosition() << std::endl;
                 //cube.getPosition(Cube::detectionMode::CONTOURS);
@@ -244,7 +255,7 @@ int main(int argc, char **argv) {
                 
                 cv::imshow("Original", frame);
                 
-                Cube cube(frame, params);
+                //Cube cube(frame, params);
             }
             key = cv::waitKey(1);
             if (key == 'p') playVideo = !playVideo;

@@ -73,19 +73,36 @@ bool paramsInput::hasParam(const std::string &paramName)
     return found;
 }
 
-double paramsInput::getValue(const std::string &paramName, double defaultValue)
+double paramsInput::getValue(const std::string &paramName, std::optional<double> defaultValue)
 {
     auto it = mParamsMap.find(paramName) ;
-    if (it == mParamsMap.end())
-		return defaultValue ;
+    if (it == mParamsMap.end()) {
+        if (defaultValue) {
+            return *defaultValue ;
+        } else {
+            std::cerr << "No parameter called '" << paramName << "' found." << std::endl;
+            exit(-1);
+        }
+    }
     
     return std::stod((it->second));
 }
 
-std::string paramsInput::getString(const std::string &paramName, const std::string& defaultValue) {
-	auto it = mParamsMap.find(paramName) ;
-    if (it == mParamsMap.end())
-		return defaultValue ;
+std::string paramsInput::getString(const std::string& paramName, const std::string& defaultValue) {
+    auto it = mParamsMap.find(paramName) ;
+    if (it == mParamsMap.end()) {
+        return defaultValue;
+    }
+    
+    return it->second ;
+}
+
+std::string paramsInput::getString(const std::string& paramName) {
+    auto it = mParamsMap.find(paramName) ;
+    if (it == mParamsMap.end()) {
+        std::cerr << "No parameter called '" << paramName << "' found." << std::endl;
+        exit(-1);
+    }
     
     return it->second ;
 }
