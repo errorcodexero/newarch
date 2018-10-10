@@ -10,6 +10,33 @@
 #include <fcntl.h>
 
 
+double getImageScaleFactor(const cv::Mat& frame,
+                           const int      max_width,
+                           const int      max_height)
+{
+    double width_scale = double(max_width) / frame.cols;
+    double height_scale = double(max_width) / frame.rows;
+
+    // Calculate overall scale factor, maintaining aspect ratio.
+    // // If image already smaller, don't want to make it larger.
+    double scale = std::min(width_scale, height_scale);
+    scale = std::min(scale, 1.0);
+    
+    return scale;
+}
+
+
+void displayImage(const std::string& title,
+                  const cv::Mat&     frame,
+                  const int          x_coordinate,
+                  const int          y_coordinate)
+{
+    cv::namedWindow(title.c_str(), cv::WINDOW_AUTOSIZE);
+    cv::moveWindow(title.c_str(), x_coordinate, y_coordinate);
+    cv::imshow(title.c_str(), frame);
+}
+
+
 int main(int argc, char **argv) {
 
     // Read param file
@@ -43,19 +70,37 @@ int main(int argc, char **argv) {
 
     if (is_image) {
         // Open image
-        cv::Mat frame = cv::imread(image_source_file, cv::IMREAD_COLOR);
-        if (!frame.data) {
+        cv::Mat frame_orig = cv::imread(image_source_file, cv::IMREAD_COLOR);
+        if (!frame_orig.data) {
             std::cout << "Could not read image\n";
             return 1;
         }
+
+        // Resize original image
+        double scale = getImageScaleFactor(frame_orig, 640 /*max_width*/, 480 /*max_height*/);
+        double width = scale * frame_orig.cols;
+        double height = scale * frame_orig.rows;
+        cv::Mat frame_orig_resized;
+        cv::resize(frame_orig, frame_orig_resized, cv::Size(), scale, scale);
         
         // Show original image
-        cv::namedWindow("Original", cv::WINDOW_AUTOSIZE);
-        cv::moveWindow("Original", 0, 0);
-        cv::imshow("Original", frame);
+        displayImage("Original", frame_orig_resized, 0, 0);
+
+        // Apply filter #1: HSV threshold
+        // Convert from BGR to HSV colorspace
+        cv::Mat frame_HSV, frame_HSV_threshold;
+        cvtColor(frame_orig_resized, frame_HSV, cv::COLOR_BGR2HSV);
+        // Filter based on HSV Range Values
+        const int low_H =   0, high_H =  44;
+        const int low_S =  43, high_S = 106;
+        const int low_V = 118, high_V = 255;
+        inRange(frame_HSV, cv::Scalar(low_H, low_S, low_V), cv::Scalar(high_H, high_S, high_V), frame_HSV_threshold);
+
+        // Show image
+        displayImage("After HSV Threshold", frame_HSV_threshold, width, 0);
         
         // Detect and show cubes
-        Cube cube(frame, params);
+        //Cube cube(frame, params);
         
         //std::cout << cube.getPosition() << std::endl;
         //cube.getPosition(Cube::detectionMode::CONTOURS);
