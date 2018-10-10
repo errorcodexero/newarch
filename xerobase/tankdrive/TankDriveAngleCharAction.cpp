@@ -34,8 +34,8 @@ namespace xero {
 				} else {
 					std::cout << (now - start_time_) ;
 					std::cout << ", Angle " << getTankDrive().getAngle() ;
-//					std::cout << ", Speed " << getTankDrive().getAngularSpeed() ;
-//					std::cout << ", Acceleration " << getTankDrive().getAngularAcceleration() ;
+					std::cout << ", Velocity " << getTankDrive().getAngularVelocity() ;
+					std::cout << ", Acceleration " << getTankDrive().getAngularAcceleration() ;
 					std::cout << std::endl ;
 				}
 			}

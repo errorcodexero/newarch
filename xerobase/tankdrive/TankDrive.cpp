@@ -103,6 +103,15 @@ namespace xero {
 			velocity_ = (current_dist - last_dist_) / getRobot().getDeltaTime();
 			last_dist_ = current_dist;		
 
+			angular_velocity_ = (angle_ - last_angle_) /getRobot().getDeltaTime();
+			last_angle_ = angle_;
+
+			acceleration_ = (velocity_ - last_velocity_) /getRobot().getDeltaTime();
+			last_velocity_ = velocity_;
+
+			angular_acceleration_ = (angular_velocity_ - last_angular_velocity_) /getRobot().getDeltaTime();
+			last_angular_velocity_ = angular_velocity_;
+
 			last_dist_l_ = dist_l_ ;
 			last_dist_r_ = dist_r_ ;	
 		}

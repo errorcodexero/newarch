@@ -82,6 +82,20 @@ namespace xero {
 				return velocity_;
 			}
 
+			/// \brief Return the angular velocity of the drive base
+			double getAngularVelocity() const {
+				return angular_velocity_;
+			}
+
+			/// \brief Return the acceleration of the drive base
+			double getAcceleration() const {
+				return acceleration_;
+			}
+
+			/// \brief Return the angular acceleration of the drive base
+			double getAngularAcceleration() const {
+				return angular_acceleration_;
+			}
 			/// \brief Invert the output of the left motors
 			void invertLeftMotors() ;
 
@@ -119,7 +133,15 @@ namespace xero {
 			double last_dist_l_, last_dist_r_ ;
 			double last_dist_;
 			double velocity_;
+			double last_velocity_;
+			double angular_velocity_;
+			double last_angular_velocity_;
 			double angle_ ;
+			double last_angle_;
+			double acceleration_;
+			double last_acceleration_;
+			double angular_acceleration_;
+			double last_angular_acceleration;
 
 			double inches_per_tick_ ;
 
