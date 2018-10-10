@@ -86,19 +86,77 @@ int main(int argc, char **argv) {
         // Show original image
         displayImage("Original", frame_orig_resized, 0, 0);
 
-        // Apply filter #1: HSV threshold
+        // Apply: Blur
+        enum BlurType {
+            BOX, GAUSSIAN, MEDIAN, BILATERAL
+        };
+        cv::Mat frame_blur;
+        BlurType blurType = BlurType::MEDIAN;
+	double blurRadius = 15;
+        int kernelSize = 2 * blurRadius + 1;
+        cv::medianBlur(frame_orig_resized, frame_blur, kernelSize);
+        displayImage("Blur", frame_blur, width, 0);
+
+        // Apply: HSV threshold
         // Convert from BGR to HSV colorspace
         cv::Mat frame_HSV, frame_HSV_threshold;
-        cvtColor(frame_orig_resized, frame_HSV, cv::COLOR_BGR2HSV);
+        cvtColor(frame_blur, frame_HSV, cv::COLOR_BGR2HSV);
         // Filter based on HSV Range Values
-        const int low_H =   0, high_H =  44;
-        const int low_S =  43, high_S = 106;
-        const int low_V = 118, high_V = 255;
+        const int low_H =   0, high_H =  50;
+        const int low_S =   0, high_S =  45;
+        const int low_V = 167, high_V = 255;
         inRange(frame_HSV, cv::Scalar(low_H, low_S, low_V), cv::Scalar(high_H, high_S, high_V), frame_HSV_threshold);
+        displayImage("HSV Threshold", frame_HSV_threshold, width*2, 0);
 
-        // Show image
-        displayImage("After HSV Threshold", frame_HSV_threshold, width, 0);
+        // Apply: Erode
+        cv::Mat frame_erode;
+	cv::Mat cvErodeKernel;
+	cv::Point cvErodeAnchor(-1, -1);
+        int cvErodeIterations = 1;
+        int cvErodeBorderType = cv::BORDER_DEFAULT;
+	cv::Scalar cvErodeBorderValue(-1);
+        cv::erode(frame_HSV_threshold, frame_erode, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBorderType, cvErodeBorderValue);
+        displayImage("Erode", frame_erode, width*3, 0);
         
+        // Apply: Dilate
+        cv::Mat frame_dilate;
+	cv::Mat cvDilateKernel;
+	cv::Point cvDilateAnchor(-1, -1);
+	int cvDilateIterations = 27;  // default Double
+        int cvDilateBorderType = cv::BORDER_CONSTANT;
+	cv::Scalar cvDilateBorderValue(-1);
+        cv::dilate(frame_erode, frame_dilate, cvDilateKernel, cvDilateAnchor, cvDilateIterations, cvDilateBorderType, cvDilateBorderValue);
+        displayImage("Dilate", frame_dilate, width*4, 0);
+
+        // Blob detection
+	double findBlobsCircularity[] = {0.0, 1.0};
+	bool findBlobsDarkBlobs = false;
+        cv::SimpleBlobDetector::Params params;
+        params.filterByColor = 1;
+        params.blobColor = (findBlobsDarkBlobs ? 0 : 255);
+        params.minThreshold = 10;
+        params.maxThreshold = 220;
+        params.filterByArea = true;
+        params.minArea = 7000;
+        params.maxArea = 100000;  // Set to very large no. For some reason, it defaults to arbitrary limit that's too small.
+        params.filterByCircularity = true;
+        params.minCircularity = findBlobsCircularity[0];
+        params.maxCircularity = findBlobsCircularity[1];
+        params.filterByConvexity = false;
+        params.filterByInertia = false;
+        std::vector<cv::KeyPoint> keypoints;
+        cv::Ptr<cv::SimpleBlobDetector> detector = cv::SimpleBlobDetector::create(params);
+        detector->detect(frame_dilate, keypoints);
+        std::cout << "No. of detected blobs: " << keypoints.size() << std::endl;
+
+        // Draw keypoints if only 1 found
+        if (keypoints.size() == 1) {
+            cv::Mat frame_with_keypoints;
+            cv::drawKeypoints(frame_dilate, keypoints, frame_with_keypoints, cv::Scalar(0,0,255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
+            displayImage("Dilate", frame_with_keypoints, width*4, 0);
+        }
+        
+
         // Detect and show cubes
         //Cube cube(frame, params);
         
