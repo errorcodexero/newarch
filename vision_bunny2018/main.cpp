@@ -85,7 +85,9 @@ int main(int argc, char **argv) {
         }
 
         // Resize original image
-        double scale = getImageScaleFactor(frame_orig, 640 /*max_width*/, 480 /*max_height*/);
+        double scale = getImageScaleFactor(frame_orig,
+                                           params.getValue("MAX_WIDTH"),
+                                           params.getValue("MAX_HEIGHT"));
         double width = scale * frame_orig.cols;
         double height = scale * frame_orig.rows;
         cv::Mat frame_orig_resized;
@@ -140,21 +142,20 @@ int main(int argc, char **argv) {
         displayImage("Dilate", frame_dilate, width*4, 0);
 
         // Blob detection
-        double findBlobsCircularity[] = {0.0, 1.0};
         bool findBlobsDarkBlobs = false;
         cv::SimpleBlobDetector::Params blob_params;
-        blob_params.filterByColor = 1;
+        blob_params.filterByColor = params.getValue("BLOB_FILTER_BY_COLOR");;
         blob_params.blobColor = (findBlobsDarkBlobs ? 0 : 255);
-        blob_params.minThreshold = 10;
-        blob_params.maxThreshold = 220;
-        blob_params.filterByArea = true;
+        blob_params.minThreshold = params.getValue("BLOB_MIN_THRESHOLD");
+        blob_params.maxThreshold = params.getValue("BLOB_MAX_THRESHOLD");
+        blob_params.filterByArea = params.getValue("BLOB_FILTER_BY_AREA");
         blob_params.minArea = params.getValue("BLOB_MIN_AREA");
         blob_params.maxArea = 100000;  // Set to very large no. For some reason, it defaults to arbitrary limit that's too small.
-        blob_params.filterByCircularity = true;
-        blob_params.minCircularity = findBlobsCircularity[0];
-        blob_params.maxCircularity = findBlobsCircularity[1];
-        blob_params.filterByConvexity = false;
-        blob_params.filterByInertia = false;
+        blob_params.filterByCircularity = params.getValue("BLOB_FILTER_BY_CIRCULARITY");
+        blob_params.minCircularity = params.getValue("BLOB_MIN_CIRCULARITY");
+        blob_params.maxCircularity = params.getValue("BLOB_MAX_CIRCULARITY");
+        blob_params.filterByConvexity = params.getValue("BLOB_FILTER_BY_CONVEXITY");
+        blob_params.filterByInertia = params.getValue("BLOB_FILTER_BY_INERTIA");;
         std::vector<cv::KeyPoint> keypoints;
         cv::Ptr<cv::SimpleBlobDetector> detector = cv::SimpleBlobDetector::create(blob_params);
         detector->detect(frame_dilate, keypoints);
