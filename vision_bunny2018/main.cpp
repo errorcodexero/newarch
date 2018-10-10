@@ -92,7 +92,7 @@ int main(int argc, char **argv) {
         };
         cv::Mat frame_blur;
         BlurType blurType = BlurType::MEDIAN;
-	double blurRadius = 15;
+        double blurRadius = 15;
         int kernelSize = 2 * blurRadius + 1;
         cv::medianBlur(frame_orig_resized, frame_blur, kernelSize);
         displayImage("Blur", frame_blur, width, 0);
@@ -110,27 +110,27 @@ int main(int argc, char **argv) {
 
         // Apply: Erode
         cv::Mat frame_erode;
-	cv::Mat cvErodeKernel;
-	cv::Point cvErodeAnchor(-1, -1);
+        cv::Mat cvErodeKernel;
+        cv::Point cvErodeAnchor(-1, -1);
         int cvErodeIterations = 1;
         int cvErodeBorderType = cv::BORDER_DEFAULT;
-	cv::Scalar cvErodeBorderValue(-1);
+        cv::Scalar cvErodeBorderValue(-1);
         cv::erode(frame_HSV_threshold, frame_erode, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBorderType, cvErodeBorderValue);
         displayImage("Erode", frame_erode, width*3, 0);
         
         // Apply: Dilate
         cv::Mat frame_dilate;
-	cv::Mat cvDilateKernel;
-	cv::Point cvDilateAnchor(-1, -1);
-	int cvDilateIterations = 27;  // default Double
+        cv::Mat cvDilateKernel;
+        cv::Point cvDilateAnchor(-1, -1);
+        int cvDilateIterations = 27;  // default Double
         int cvDilateBorderType = cv::BORDER_CONSTANT;
-	cv::Scalar cvDilateBorderValue(-1);
+        cv::Scalar cvDilateBorderValue(-1);
         cv::dilate(frame_erode, frame_dilate, cvDilateKernel, cvDilateAnchor, cvDilateIterations, cvDilateBorderType, cvDilateBorderValue);
         displayImage("Dilate", frame_dilate, width*4, 0);
 
         // Blob detection
-	double findBlobsCircularity[] = {0.0, 1.0};
-	bool findBlobsDarkBlobs = false;
+        double findBlobsCircularity[] = {0.0, 1.0};
+        bool findBlobsDarkBlobs = false;
         cv::SimpleBlobDetector::Params params;
         params.filterByColor = 1;
         params.blobColor = (findBlobsDarkBlobs ? 0 : 255);
