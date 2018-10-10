@@ -160,8 +160,8 @@ int main(int argc, char **argv) {
         detector->detect(frame_dilate, keypoints);
         std::cout << "No. of detected blobs: " << keypoints.size() << std::endl;
 
-        // Draw keypoints if only 1 found
-        if (keypoints.size() == 1) {
+        // Draw keypoints
+        if (!keypoints.empty()) {
             cv::Mat frame_with_keypoints;
             cv::drawKeypoints(frame_dilate, keypoints, frame_with_keypoints, cv::Scalar(0,0,255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
             displayImage("Dilate", frame_with_keypoints, width*4, 0);
