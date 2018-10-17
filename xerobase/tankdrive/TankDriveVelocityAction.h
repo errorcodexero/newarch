@@ -20,7 +20,12 @@ namespace xero {
 			std::string toString();
 
 		private:
+			xero::misc::PIDCtrl velocity_pid_ ;
+			double start_time_ ;
+			double velocity_threshold_;
 			double target_velocity_;
+			double actual_velocity_;
+			bool is_done_;
 		};
 	}
 }
