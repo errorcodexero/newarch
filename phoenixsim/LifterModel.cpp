@@ -31,6 +31,10 @@ namespace xero {
                 bottom_limit_ = nullptr ;
 
                 voltage_ = 0.0 ;
+
+                enc_ = nullptr ;
+                bottom_limit_ = nullptr ;
+                top_limit_ = nullptr ;
             }
 
             LifterModel::~LifterModel() {
@@ -86,7 +90,8 @@ namespace xero {
 				}
 
 				int encval = static_cast<int>((height_ - bottom_limit_height_) / in_per_tick_) + encoder_base_ ;
-				enc_->SimulatorSetValue(encval) ;
+				if (enc_ != nullptr)
+					enc_->SimulatorSetValue(encval) ;
             }
 
 	        void LifterModel::inputChanged(SimulatedObject *obj) {

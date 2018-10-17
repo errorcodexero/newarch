@@ -88,9 +88,6 @@ model {
 				cppCompiler.args "-Wall", "-std=c++11", "-g"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
 				//Don"t build a shared library for xerobase because it uses static libraries and we only need the static version anyway
 				buildable = false
 			}
@@ -265,7 +262,6 @@ model {
 				toolChain = toolChains["gcc"]
 				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DSIM", "-DDEBUG", "-DXEROSCREEN"
 				linker.args "-lpthread", "-lncurses", "external/dinput/dxguid.lib", "external/dinput/dinput8.lib"
-
 			}
 			sources.cpp {
 				source {

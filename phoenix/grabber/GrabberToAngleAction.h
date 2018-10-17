@@ -8,6 +8,7 @@ namespace xero {
          class GrabberToAngleAction : public GrabberAction {
         public:
             GrabberToAngleAction(Grabber &grabber, double angle);
+            GrabberToAngleAction(Grabber &grabber, const std::string &name);
             virtual ~GrabberToAngleAction(); 
 
             /// \brief Start the calibrate action.

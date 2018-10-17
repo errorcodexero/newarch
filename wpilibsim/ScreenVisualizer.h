@@ -64,6 +64,8 @@ namespace xero {
 
 		private:		
 			static int angleToSide(double angle) ;
+			void updateSmartDashboard() ;
+			std::string getSmartDashboardKeyValue(const std::string &key) ;
 
 		private:
             static const int RobotWindowWidth = 20 ;
@@ -75,6 +77,7 @@ namespace xero {
 			WINDOW *field_window_ ;
 			WINDOW *robot_window_ ;
 			WINDOW *oi_window_ ;
+			WINDOW *smart_window_ ;
 
 			bool inited_ ;
 

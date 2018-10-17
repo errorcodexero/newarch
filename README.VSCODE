@@ -31,19 +31,19 @@ CONFIGURE:
    a. Select File/Preferences/Settings
    b. Copy the following into the User Settings window on the right
       	{
-        	// start bash, not the mintty, or you'll get a new window
-        	"terminal.integrated.shell.windows": "D:\\cygwin\\bin\\bash.exe",
+        	// Start bash shell
+        	"terminal.integrated.shell.windows": "C:\\cygwin64\\bin\\bash.exe",
 
           	// Use this to keep bash from doing a 'cd ${HOME}'
         	"terminal.integrated.env.windows": {
-            	"CHERE_INVOKING": "1"
+            		"CHERE_INVOKING": "1"
         	},
         	// Make it a login shell
         	"terminal.integrated.shellArgs.windows": [
-            	"-l"
+            		"-l", "-i"
         	],
 
-			// Explicitly control indettation, spaces and tabs
+		// Explicitly control indentation. Use tabs.
         	"editor.detectIndentation": false,
 	    	"editor.tabSize": 4,	
     		"editor.insertSpaces": false,		  
@@ -56,10 +56,10 @@ CONFIGURE:
 
 Using gradle from the command line
 ---------------------------------
-Build everything:			./gradlew build
-Build the robot code:		./gradlew frcUserProgramExecutable
-Deploy robot code to robot: ./gradlew deploy
-Build the simulator:		./gradlew frcUserProgramSimExecutable
+Build everything:            ./gradlew build
+Build the robot code:        ./gradlew frcUserProgramExecutable
+Build the simulator:         ./gradlew frcUserProgramSimExecutable
+Deploy robot code to robot:  ./gradlew deploy
 
 
 Using VSCODE

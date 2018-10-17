@@ -1,6 +1,10 @@
 #include "TrapezoidalProfile.h"
+#include <QuadraticSolver.h>
 #include <cmath>
 #include <iostream>
+#include <cassert>
+
+using namespace xero::math ;
 
 namespace xero {
     namespace misc {
@@ -14,7 +18,7 @@ namespace xero {
         TrapezoidalProfile::~TrapezoidalProfile() {
         }
 		
-        double TrapezoidalProfile::intspeed(double t) {
+        double TrapezoidalProfile::intspeed(double t) const {
             double ret ;
             if (t < 0.0) {
                 ret = start_velocity_ ;
@@ -36,12 +40,12 @@ namespace xero {
             return ret ;
         }
 
-        double TrapezoidalProfile::getSpeed(double t) {
+        double TrapezoidalProfile::getSpeed(double t) const {
             double ret = intspeed(t) ;
             return isneg_ ? -ret : ret ;
         }
 
-        double TrapezoidalProfile::getDistance(double t) {
+        double TrapezoidalProfile::getDistance(double t) const {
             double ret ;
 
             if (t > 0.75)
@@ -69,6 +73,49 @@ namespace xero {
 
             return isneg_ ? -ret : ret ;
         }        
+
+		double TrapezoidalProfile::pickRoot(const std::vector<double> &roots) const {
+			//
+			// We want the smallest root that is greater than or equal to zero
+			//
+			assert(roots.size() != 0) ;
+			size_t i = roots.size() - 1 ;
+			while (i != 0) {
+				if (roots[i] >= 0.0)
+					return roots[i] ;
+				i-- ;
+			}
+
+			return roots[0] ;
+		}
+
+		double TrapezoidalProfile::getTimeForDistance(double dist) const {
+			double ret ;
+			double sign = isneg_ ? -1.0 : 1.0 ;
+			std::vector<double> roots ;
+
+			if (isneg_)
+				dist = -dist ;
+
+			if (dist < sign * getDistance(ta_)) {
+				roots = QuadraticSolver::solve(0.5 * max_accel_, start_velocity_, -dist) ;
+				ret = pickRoot(roots) ;
+			}
+			else if (dist < sign * getDistance(ta_ + tc_)) {
+				dist -= sign * getDistance(ta_) ;
+				ret = ta_ + dist / actual_max_velocity_ ;
+			}
+			else if (dist < sign * getDistance(ta_ + tc_ + td_)) {
+				dist -= sign * getDistance(ta_ + tc_) ;
+				roots = QuadraticSolver::solve(0.5 * max_decel_, actual_max_velocity_, -dist) ;
+				ret = pickRoot(roots) + ta_ + tc_ ;
+			}
+			else {
+				ret = ta_ + tc_ + td_ ;
+			}
+
+			return ret ;
+		}
 
         void TrapezoidalProfile::update(double dist, double start_velocity, double end_velocity) {
             start_velocity_ = std::fabs(start_velocity) ;

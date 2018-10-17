@@ -54,7 +54,7 @@ bool MessageLogger::isSubsystemEnabled(uint64_t subs)
     if (subs == 0)
         return true;
 
-    return (subsystems_enabled_ & subs) != 0;
+    return (subsystems_enabled_ & subs) != 0ull;
 }
 
 void MessageLogger::startMessage(const MessageType &type)
