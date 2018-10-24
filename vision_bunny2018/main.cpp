@@ -45,6 +45,101 @@ void displayImage(const std::string& title,
 }
 
 
+std::vector<cv::KeyPoint> detectCrate(const paramsInput& params,
+                                      const cv::Mat& frame_orig)
+{
+    if (!frame_orig.data) {
+        std::cout << "Could not read image\n";
+        exit(1);
+    }
+
+    // Resize original image
+    double scale = getImageScaleFactor(frame_orig,
+                                       params.getValue("MAX_WIDTH"),
+                                       params.getValue("MAX_HEIGHT"));
+    double width = scale * frame_orig.cols;
+    double height = scale * frame_orig.rows;
+    cv::Mat frame_orig_resized;
+    cv::resize(frame_orig, frame_orig_resized, cv::Size(), scale, scale);
+        
+    // Show original image
+    displayImage("Original", frame_orig_resized, 0, 0);
+
+    // Apply: Blur
+    enum BlurType {
+        BOX, GAUSSIAN, MEDIAN, BILATERAL
+    };
+    cv::Mat frame_blur;
+    BlurType blurType = BlurType::MEDIAN;
+    double blurRadius = 15;
+    int kernelSize = 2 * blurRadius + 1;
+    cv::medianBlur(frame_orig_resized, frame_blur, kernelSize);
+    displayImage("Blur", frame_blur, width, 0);
+
+    // Apply: HSV threshold
+    // Convert from BGR to HSV colorspace
+    cv::Mat frame_HSV, frame_HSV_threshold;
+    cvtColor(frame_blur, frame_HSV, cv::COLOR_BGR2HSV);
+    // Filter based on HSV Range Values
+    const int H_low  = params.getValue("HSV_H_LOW");
+    const int H_high = params.getValue("HSV_H_HIGH");
+    const int S_low  = params.getValue("HSV_S_LOW");
+    const int S_high = params.getValue("HSV_S_HIGH");
+    const int V_low  = params.getValue("HSV_V_LOW");
+    const int V_high = params.getValue("HSV_V_HIGH");
+    inRange(frame_HSV, cv::Scalar(H_low, S_low, V_low), cv::Scalar(H_high, S_high, V_high), frame_HSV_threshold);
+    displayImage("HSV Threshold", frame_HSV_threshold, width*2, 0);
+
+    // Apply: Erode
+    cv::Mat frame_erode;
+    cv::Mat cvErodeKernel;
+    cv::Point cvErodeAnchor(-1, -1);
+    int cvErodeIterations = 1;
+    int cvErodeBorderType = cv::BORDER_DEFAULT;
+    cv::Scalar cvErodeBorderValue(-1);
+    cv::erode(frame_HSV_threshold, frame_erode, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBorderType, cvErodeBorderValue);
+    displayImage("Erode", frame_erode, width*3, 0);
+        
+    // Apply: Dilate
+    cv::Mat frame_dilate;
+    cv::Mat cvDilateKernel;
+    cv::Point cvDilateAnchor(-1, -1);
+    int cvDilateIterations = 27;  // default Double
+    int cvDilateBorderType = cv::BORDER_CONSTANT;
+    cv::Scalar cvDilateBorderValue(-1);
+    cv::dilate(frame_erode, frame_dilate, cvDilateKernel, cvDilateAnchor, cvDilateIterations, cvDilateBorderType, cvDilateBorderValue);
+    displayImage("Dilate", frame_dilate, width*4, 0);
+
+    // Blob detection
+    bool findBlobsDarkBlobs = false;
+    cv::SimpleBlobDetector::Params blob_params;
+    blob_params.filterByColor = params.getValue("BLOB_FILTER_BY_COLOR");;
+    blob_params.blobColor = (findBlobsDarkBlobs ? 0 : 255);
+    blob_params.minThreshold = params.getValue("BLOB_MIN_THRESHOLD");
+    blob_params.maxThreshold = params.getValue("BLOB_MAX_THRESHOLD");
+    blob_params.filterByArea = params.getValue("BLOB_FILTER_BY_AREA");
+    blob_params.minArea = params.getValue("BLOB_MIN_AREA");
+    blob_params.maxArea = 100000;  // Set to very large no. For some reason, it defaults to arbitrary limit that's too small.
+    blob_params.filterByCircularity = params.getValue("BLOB_FILTER_BY_CIRCULARITY");
+    blob_params.minCircularity = params.getValue("BLOB_MIN_CIRCULARITY");
+    blob_params.maxCircularity = params.getValue("BLOB_MAX_CIRCULARITY");
+    blob_params.filterByConvexity = params.getValue("BLOB_FILTER_BY_CONVEXITY");
+    blob_params.filterByInertia = params.getValue("BLOB_FILTER_BY_INERTIA");;
+    std::vector<cv::KeyPoint> keypoints;
+    cv::Ptr<cv::SimpleBlobDetector> detector = cv::SimpleBlobDetector::create(blob_params);
+    detector->detect(frame_dilate, keypoints);
+
+    // Draw keypoints
+    if (!keypoints.empty()) {
+        cv::Mat frame_with_keypoints;
+        cv::drawKeypoints(frame_dilate, keypoints, frame_with_keypoints, cv::Scalar(0,0,255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
+        displayImage("Dilate", frame_with_keypoints, width*4, 0);
+    }
+        
+    return keypoints;
+}
+
+
 int main(int argc, char **argv) {
 
     // Read param file
@@ -79,105 +174,9 @@ int main(int argc, char **argv) {
     if (is_image) {
         // Open image
         cv::Mat frame_orig = cv::imread(image_source_file, cv::IMREAD_COLOR);
-        if (!frame_orig.data) {
-            std::cout << "Could not read image\n";
-            return 1;
-        }
-
-        // Resize original image
-        double scale = getImageScaleFactor(frame_orig,
-                                           params.getValue("MAX_WIDTH"),
-                                           params.getValue("MAX_HEIGHT"));
-        double width = scale * frame_orig.cols;
-        double height = scale * frame_orig.rows;
-        cv::Mat frame_orig_resized;
-        cv::resize(frame_orig, frame_orig_resized, cv::Size(), scale, scale);
-        
-        // Show original image
-        displayImage("Original", frame_orig_resized, 0, 0);
-
-        // Apply: Blur
-        enum BlurType {
-            BOX, GAUSSIAN, MEDIAN, BILATERAL
-        };
-        cv::Mat frame_blur;
-        BlurType blurType = BlurType::MEDIAN;
-        double blurRadius = 15;
-        int kernelSize = 2 * blurRadius + 1;
-        cv::medianBlur(frame_orig_resized, frame_blur, kernelSize);
-        displayImage("Blur", frame_blur, width, 0);
-
-        // Apply: HSV threshold
-        // Convert from BGR to HSV colorspace
-        cv::Mat frame_HSV, frame_HSV_threshold;
-        cvtColor(frame_blur, frame_HSV, cv::COLOR_BGR2HSV);
-        // Filter based on HSV Range Values
-        const int H_low  = params.getValue("HSV_H_LOW");
-        const int H_high = params.getValue("HSV_H_HIGH");
-        const int S_low  = params.getValue("HSV_S_LOW");
-        const int S_high = params.getValue("HSV_S_HIGH");
-        const int V_low  = params.getValue("HSV_V_LOW");
-        const int V_high = params.getValue("HSV_V_HIGH");
-        inRange(frame_HSV, cv::Scalar(H_low, S_low, V_low), cv::Scalar(H_high, S_high, V_high), frame_HSV_threshold);
-        displayImage("HSV Threshold", frame_HSV_threshold, width*2, 0);
-
-        // Apply: Erode
-        cv::Mat frame_erode;
-        cv::Mat cvErodeKernel;
-        cv::Point cvErodeAnchor(-1, -1);
-        int cvErodeIterations = 1;
-        int cvErodeBorderType = cv::BORDER_DEFAULT;
-        cv::Scalar cvErodeBorderValue(-1);
-        cv::erode(frame_HSV_threshold, frame_erode, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBorderType, cvErodeBorderValue);
-        displayImage("Erode", frame_erode, width*3, 0);
-        
-        // Apply: Dilate
-        cv::Mat frame_dilate;
-        cv::Mat cvDilateKernel;
-        cv::Point cvDilateAnchor(-1, -1);
-        int cvDilateIterations = 27;  // default Double
-        int cvDilateBorderType = cv::BORDER_CONSTANT;
-        cv::Scalar cvDilateBorderValue(-1);
-        cv::dilate(frame_erode, frame_dilate, cvDilateKernel, cvDilateAnchor, cvDilateIterations, cvDilateBorderType, cvDilateBorderValue);
-        displayImage("Dilate", frame_dilate, width*4, 0);
-
-        // Blob detection
-        bool findBlobsDarkBlobs = false;
-        cv::SimpleBlobDetector::Params blob_params;
-        blob_params.filterByColor = params.getValue("BLOB_FILTER_BY_COLOR");;
-        blob_params.blobColor = (findBlobsDarkBlobs ? 0 : 255);
-        blob_params.minThreshold = params.getValue("BLOB_MIN_THRESHOLD");
-        blob_params.maxThreshold = params.getValue("BLOB_MAX_THRESHOLD");
-        blob_params.filterByArea = params.getValue("BLOB_FILTER_BY_AREA");
-        blob_params.minArea = params.getValue("BLOB_MIN_AREA");
-        blob_params.maxArea = 100000;  // Set to very large no. For some reason, it defaults to arbitrary limit that's too small.
-        blob_params.filterByCircularity = params.getValue("BLOB_FILTER_BY_CIRCULARITY");
-        blob_params.minCircularity = params.getValue("BLOB_MIN_CIRCULARITY");
-        blob_params.maxCircularity = params.getValue("BLOB_MAX_CIRCULARITY");
-        blob_params.filterByConvexity = params.getValue("BLOB_FILTER_BY_CONVEXITY");
-        blob_params.filterByInertia = params.getValue("BLOB_FILTER_BY_INERTIA");;
-        std::vector<cv::KeyPoint> keypoints;
-        cv::Ptr<cv::SimpleBlobDetector> detector = cv::SimpleBlobDetector::create(blob_params);
-        detector->detect(frame_dilate, keypoints);
+        std::vector<cv::KeyPoint> keypoints = detectCrate(params, frame_orig);        
         std::cout << "No. of detected blobs: " << keypoints.size() << std::endl;
 
-        // Draw keypoints
-        if (!keypoints.empty()) {
-            cv::Mat frame_with_keypoints;
-            cv::drawKeypoints(frame_dilate, keypoints, frame_with_keypoints, cv::Scalar(0,0,255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
-            displayImage("Dilate", frame_with_keypoints, width*4, 0);
-        }
-        
-
-        // Detect and show cubes
-        //Cube cube(frame, params);
-        
-        //std::cout << cube.getPosition() << std::endl;
-        //cube.getPosition(Cube::detectionMode::CONTOURS);
-        //cv::imshow("Cube", cube.showFrame());
-        //cv::imshow("Camera", frame);
-        //cv::imshow("Video", frame);
-        
         cv::waitKey(0);
         
     } else if (is_video) {

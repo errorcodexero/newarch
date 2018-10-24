@@ -54,7 +54,7 @@ bool paramsInput::readFile(const std::string &filename)
     return ret ;
 }
 
-bool paramsInput::printMap(std::ostream &fo)
+bool paramsInput::printMap(std::ostream &fo) const
 {
     for (auto it = mParamsMap.begin() ; it != mParamsMap.end(); it++)
     {
@@ -64,7 +64,7 @@ bool paramsInput::printMap(std::ostream &fo)
     return true ;
 }
 
-bool paramsInput::hasParam(const std::string &paramName)
+bool paramsInput::hasParam(const std::string &paramName) const
 {
     bool found = false;
     if (mParamsMap.find(paramName) != mParamsMap.end())
@@ -73,7 +73,7 @@ bool paramsInput::hasParam(const std::string &paramName)
     return found;
 }
 
-double paramsInput::getValue(const std::string &paramName, std::optional<double> defaultValue)
+double paramsInput::getValue(const std::string &paramName, std::optional<double> defaultValue) const
 {
     auto it = mParamsMap.find(paramName) ;
     if (it == mParamsMap.end()) {
@@ -88,7 +88,8 @@ double paramsInput::getValue(const std::string &paramName, std::optional<double>
     return std::stod((it->second));
 }
 
-std::string paramsInput::getString(const std::string& paramName, const std::string& defaultValue) {
+std::string paramsInput::getString(const std::string& paramName, const std::string& defaultValue) const
+{
     auto it = mParamsMap.find(paramName) ;
     if (it == mParamsMap.end()) {
         return defaultValue;
@@ -97,7 +98,8 @@ std::string paramsInput::getString(const std::string& paramName, const std::stri
     return it->second ;
 }
 
-std::string paramsInput::getString(const std::string& paramName) {
+std::string paramsInput::getString(const std::string& paramName) const
+{
     auto it = mParamsMap.find(paramName) ;
     if (it == mParamsMap.end()) {
         std::cerr << "No parameter called '" << paramName << "' found." << std::endl;
@@ -112,7 +114,8 @@ static const char *paramsFile = "paramsTest.txt";
 
 
 
-void test_paramsParser(const std::string &filename, const std::map<std::string, double> &stdMap) {
+void test_paramsParser(const std::string &filename, const std::map<std::string, double> &stdMap)
+{
 	paramsInput params;
 	assert(params.readFile(filename));
 	for (auto it = stdMap.begin(); it != stdMap.end(); it++) {
@@ -122,6 +125,7 @@ void test_paramsParser(const std::string &filename, const std::map<std::string, 
 		assert(value == it->second);
 	}
 }
+
 void createStdMap(std::map<std::string, double> &stdMap) {
 	stdMap["drivebase:diameter"] = 2.61811;
 	stdMap["drivebase:straight:threshold"] = 0.5;
