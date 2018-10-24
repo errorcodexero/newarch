@@ -21,6 +21,7 @@ namespace xero {
 
 		/// \brief a tank-style drivebase
 		class TankDrive : public Subsystem {
+			friend class TankDriveAction;
 			friend class TankDriveDistanceAction;
 			friend class TankDriveVelocityAction;
 			friend class TankDriveCharAction ;
@@ -117,6 +118,10 @@ namespace xero {
 			/// \param action the section to test to see if it can be executed
 			/// \returns true if the action can be executed, false otherwise
 			virtual bool canAcceptAction(xero::base::ActionPtr action) ;
+
+			virtual void zeroYaw() {
+				navx_->ZeroYaw();
+			}
 
 		private:
 			/// \brief Set the motors to output at the given percentages

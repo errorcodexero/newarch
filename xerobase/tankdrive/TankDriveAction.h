@@ -2,6 +2,7 @@
 
 #include "Action.h"
 #include "basegroups.h"
+#include "TankDrive.h"
 
 namespace xero {
 	namespace base {
