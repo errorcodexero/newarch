@@ -92,7 +92,7 @@ namespace xero {
 			}
 
 			if (navx_ != nullptr) {
-				angle_ = navx_->GetYaw();			
+				angle_ = -navx_->GetYaw();
 			}
 			else {
 				kin_->move(dist_l_ - last_dist_l_, dist_r_ - last_dist_r_) ;

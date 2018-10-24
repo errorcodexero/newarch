@@ -66,6 +66,7 @@ namespace xero
             double left_;
             double right_;
             double angle_;
+            double navx_offset_ ;
             double ticks_per_rev_;
             double diameter_;
             double left_volts_;
