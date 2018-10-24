@@ -75,7 +75,8 @@
 		"random": "cpp",
 		"unordered_set": "cpp",
 		"xfunctional": "cpp",
-		"numeric": "cpp"
+		"numeric": "cpp",
+		"*.inc": "cpp"
 	},
     "C_Cpp.dimInactiveRegions": false
 }

@@ -12,14 +12,17 @@ namespace xero {
 		public:
 			/// \brief Create a new TankDriveAction
 			/// \param tank_drive the tank drive subsystem
-			TankDriveAction(TankDrive &tank_drive) : tank_drive_(tank_drive), msg_group_(MSG_GROUP_TANKDRIVE) {}
+			TankDriveAction(TankDrive &tank_drive) : tank_drive_(tank_drive) {
+			}
 
 		protected:
+			TankDrive &getTankDrive() {
+				return tank_drive_ ;
+			}
+
+		private:
 			/// \brief The tank drive subsystem
 			TankDrive &tank_drive_;
-
-			/// \brief The tank drive message group
-			uint64_t msg_group_;
 		};
 	}
 }

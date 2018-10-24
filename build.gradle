@@ -117,6 +117,31 @@ model {
 			sources.cpp {
 				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
 				source {
+					srcDirs = ["bunny2018"]
+					include "**/*.cpp"
+				}
+				exportedHeaders{
+					srcDirs = ["bunny2018"]
+					include "**/*.h"
+				}
+
+				lib library: "xerobase", linkage: "static"
+				lib library: "xeromisc", linkage: "static"				
+				lib library: "xeromath", linkage: "static"				
+				lib library: "wpilib"
+				lib library: "ctre"
+				lib library: "navx"
+			}
+		}
+
+		frcUserProgramPhoenix(NativeExecutableSpec) {
+			targetPlatform "roborio"
+			binaries.all {
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
+			}
+			sources.cpp {
+				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
+				source {
 					srcDirs = ["phoenix"]
 					include "**/*.cpp"
 				}
@@ -125,15 +150,14 @@ model {
 					include "**/*.h"
 				}
 
-				// Define my dependencies. In this case, WPILib (+ friends), CTRE Phoenix (Talon SRX) and NavX.
-				lib library: "xeromath", linkage: "static"				
-				lib library: "xeromisc", linkage: "static"
 				lib library: "xerobase", linkage: "static"
+				lib library: "xeromisc", linkage: "static"				
+				lib library: "xeromath", linkage: "static"				
 				lib library: "wpilib"
 				lib library: "ctre"
 				lib library: "navx"
 			}
-		}
+		}		
 
 		wpilibsim(NativeLibrarySpec) {
 			targetPlatform "x86_64"
@@ -231,7 +255,7 @@ model {
 			}
 		}
 
-		phoenixsim(NativeLibrarySpec) {
+		bunny2018sim(NativeLibrarySpec) {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
@@ -242,11 +266,11 @@ model {
 			}
 			sources.cpp {
 				source {
-					srcDirs = ["phoenixsim"]
+					srcDirs = ["bunny2018sim"]
 					include "**/*.cpp"
 				}
 				exportedHeaders {
-					srcDirs = ["phoenixsim"]
+					srcDirs = ["bunny2018sim"]
 					include "**/*.h"
 				}
 
@@ -265,18 +289,18 @@ model {
 			}
 			sources.cpp {
 				source {
-					srcDirs = ["phoenix"]
+					srcDirs = ["bunny2018"]
 					include "**/*.cpp"
 				}
 				exportedHeaders{
-					srcDirs = ["phoenix"]
+					srcDirs = ["bunny2018"]
 					include "**/*.h"
 				}
 
-				lib library: "phoenixsim", linkage: "static"				
+				lib library: "bunny2018sim", linkage: "static"				
 				lib library: "xerobasesim", linkage: "static"
 				lib library: "xeromiscsim", linkage: "static"
-				lib library: "xeromathsim", linkage: "static"				
+				lib library: "xeromathsim", linkage: "static"								
 				lib library: "wpilibsim", linkage: "static"
 			}
 		}

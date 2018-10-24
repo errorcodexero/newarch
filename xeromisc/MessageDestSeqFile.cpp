@@ -49,7 +49,6 @@ std::string MessageDestSeqFile::getFileName(DIR *dir_p)
 
 	index++;
 	std::string ret = filename_ + std::to_string(index);
-	std::cout << "returned filename " << ret << std::endl;
 	return ret;
 }
 

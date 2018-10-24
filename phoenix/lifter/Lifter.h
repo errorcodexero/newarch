@@ -18,13 +18,15 @@ namespace xero {
 			friend class LifterMaintainHeightAction;
 			friend class LifterChangeGearAction;
 		public:
+
 			enum class LIFTER_GEAR {LOW, HIGH};
 			Lifter(xero::base::Robot& robot);
 			virtual ~Lifter();
 			virtual void run();
+			virtual void computeState() ;
+
 			double getCurrentHeight();
 			double getCurrentVelocity();
-			virtual void computeState() ;
 		protected:
 			/// \brief Determine if the Lifter subsystem can accept the given action.
             /// For this subsystem the only critera is that the action be derived from
@@ -45,6 +47,7 @@ namespace xero {
 			bool brake_applied_;
 			void calibrate();
 			void setBrake(bool value);
+			void setGear(LIFTER_GEAR value);
 			void setMotorsDutyCycle(double value);
 			std::vector<std::shared_ptr<frc::VictorSP>> motors_;
 			std::shared_ptr<frc::Encoder> encoder_;

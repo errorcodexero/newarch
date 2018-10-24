@@ -6,9 +6,9 @@
 hw:tankdrive:leftmotor1             1
 hw:tankdrive:leftmotor2             2
 hw:tankdrive:leftmotor3             3
-hw:tankdrive:rightmotor1            14
-hw:tankdrive:rightmotor2            15
-hw:tankdrive:rightmotor3            16
+hw:tankdrive:rightmotor1            4
+hw:tankdrive:rightmotor2            5
+hw:tankdrive:rightmotor3            6
 hw:tankdrive:shifter                0
 hw:tankdrive:leftencoder1           0
 hw:tankdrive:leftencoder2           1
@@ -111,7 +111,10 @@ collector:eject_time                0.75
 collector:collect_angle             45.0
 collector:intake_duty_cycle         1.0
 collector:outrun_time               1.0
-collector:eject_duty_cycle          -0.4
+collector:eject:fast          		-1.0
+collector:eject:medium				-0.4
+collector:eject:slow				-0.2
+
 #
 # LiftingCollector subsystem constants
 #
