@@ -39,8 +39,6 @@ void TankDriveAngleAction::start() {
 	profile_->update(target_angle_, 0.0, 0.0);
 	getTankDrive().navx_->ZeroYaw();
 
-    //getTankDrive().lowGear();
-
 	total_angle_so_far_ = 0.0 ;
 }
 
@@ -94,9 +92,10 @@ void TankDriveAngleAction::run() {
 			logger << ", actual " << current_velocity ;
 			logger << ", base " << base_power ;
             logger << ", current angle "<< current_angle ;
+			logger << ", motor " << base_power ;
 			logger.endMessage();			
 
-			getTankDrive().setMotorsToPercents(base_power, base_power);
+			getTankDrive().setMotorsToPercents(base_power, -base_power);
 		} else {
 			is_done_ = true;
 

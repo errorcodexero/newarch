@@ -4,6 +4,9 @@
 #include "OISubsystem.h"
 #include "BunnyOISubsystem.h"
 #include <tankdrive/TankDriveDistanceAction.h>
+#include <tankdrive/TankDriveCharAction.h>
+#include <tankdrive/TankDriveAngleCharAction.h>
+#include <tankdrive/TankDriveAngleAction.h>
 #include <SmartDashboard/SmartDashboard.h>
 
 using namespace xero::base ;
@@ -36,7 +39,10 @@ namespace xero {
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger()) ;
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
 
-            auto act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 100.0) ;
+            //auto act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 100.0) ;
+            auto act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;            
+            //auto act = std::make_shared<TankDriveAngleCharAction>(*tankdrive, 5.0, 0.6) ;
+            //auto act = std::make_shared<TankDriveCharAction>(*tankdrive, 5.0, 0.6) ;
             seq->pushSubActionPair(tankdrive, act) ;
 
             setAction(seq) ;
