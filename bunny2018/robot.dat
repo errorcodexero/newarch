@@ -65,7 +65,7 @@ tankdrive:angle_action:angle_threshold                          4.0
 tankdrive:angle_action:velocity_pid:p                           0.0
 tankdrive:angle_action:velocity_pid:i                           0.0
 tankdrive:angle_action:velocity_pid:d                           0.0
-tankdrive:angle_action:velocity_pid:f                           0.00126
+tankdrive:angle_action:velocity_pid:f                           0.00228
 tankdrive:angle_action:velocity_pid:max                         1.0
 tankdrive:angle_action:velocity_pid:min                         -1.0
 tankdrive:angle_action:velocity_pid:imax                        6.0
