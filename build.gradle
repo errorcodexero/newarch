@@ -4,6 +4,7 @@ plugins {
 	id "jaci.openrio.gradle.GradleRIO" version "2018.03.06"
 }
 
+
 def TEAM = 1425
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
@@ -32,7 +33,6 @@ model {
 	}	
 
 	components {
-
 		xeromath(NativeLibrarySpec) {
 			targetPlatform "roborio"
 			binaries.all {

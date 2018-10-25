@@ -3,15 +3,26 @@
 #
 hw:tankdrive:leftmotor1             1
 hw:tankdrive:leftmotor2             2
-hw:tankdrive:leftmotor3             3
 hw:tankdrive:rightmotor1            4
 hw:tankdrive:rightmotor2            5
-hw:tankdrive:rightmotor3            6
-hw:tankdrive:shifter                0
 hw:tankdrive:leftencoder1           0
 hw:tankdrive:leftencoder2           1
 hw:tankdrive:rightencoder1          2
 hw:tankdrive:rightencoder2          3
+hw:bunnycollector:motor				0
+hw:hopper:motor						1
+hw:sorter:input:motor				2
+hw:sorter:output:motor				3
+hw:sorter:motor						4
+hw:sorter:encoder_1					4
+hw:sorter:encoder_2					5
+hw:sorter:index						6
+
+#
+# These parameters control the behavior of the sorter
+#
+aorter:ticks_per_revolution							100
+
 
 #
 # These parameter control how the drive base simulation model

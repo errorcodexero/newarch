@@ -1,8 +1,7 @@
-#include "BunnyAutoMode.h"
-#include "BunnySubsystem.h"
 #include "Bunny.h"
-#include "OISubsystem.h"
-#include "BunnyOISubsystem.h"
+#include "automodes/BunnyAutoMode.h"
+#include "bunnysubsystem/BunnySubsystem.h"
+#include "bunnyoi/BunnyOISubsystem.h"
 #include <tankdrive/TankDriveDistanceAction.h>
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveAngleCharAction.h>

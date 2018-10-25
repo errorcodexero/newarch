@@ -1,8 +1,8 @@
 
 #include "Bunny.h"
-#include "BunnySubsystem.h"
-#include "BunnyOISubsystem.h"
-#include "BunnyAutoMode.h"
+#include "bunnysubsystem/BunnySubsystem.h"
+#include "bunnyoi/BunnyOISubsystem.h"
+#include "automodes/BunnyAutoMode.h"
 #include <ActionSequence.h>
 #include <basegroups.h>
 #include <DelayAction.h>
