@@ -185,11 +185,8 @@ int main(int argc, char **argv) {
         char key;
         cv::VideoCapture capture(image_source_file);
 
-        cv::namedWindow("Original", cv::WINDOW_AUTOSIZE);
-        cv::moveWindow("Original", 0, 0);
-        
         cv::Mat frame;
-        while(capture.get(cv::CAP_PROP_POS_FRAMES)<capture.get(cv::CAP_PROP_FRAME_COUNT)) {
+        while(capture.get(cv::CAP_PROP_POS_FRAMES) < capture.get(cv::CAP_PROP_FRAME_COUNT)) {
 
             if (!capture.isOpened()) {
                 std::cout << "Could not read video\n";
@@ -197,19 +194,20 @@ int main(int argc, char **argv) {
             }
             if (playVideo) {
                 capture >> frame;
-                    
-                cv::imshow("Original", frame);
+
+                cv::Mat rot_frame;
+                cv::rotate(frame, rot_frame, cv::ROTATE_90_CLOCKWISE);
                 
-                //Cube cube(frame, params);
+                std::vector<cv::KeyPoint> keypoints = detectCrate(params, rot_frame);
                 
-                //std::cout << cube.getPosition() << std::endl;
-                //cube.getPosition(Cube::detectionMode::CONTOURS);
-                //cv::imshow("Cube", cube.showFrame());
-                //cv::imshow("Camera", frame);
-                //cv::imshow("Video", frame);
+                std::cout << "No. of detected blobs: " << keypoints.size() << std::endl;
             }
-            key = cv::waitKey(15);
-            if (key == 'p') playVideo = !playVideo;
+            key = cv::waitKey(10);
+            if (key == 'p') {
+                playVideo = !playVideo;
+            } else if (key == 'q') {
+                break;
+            }
             //sleep(10);
         }
         capture.release();
