@@ -34,6 +34,7 @@ namespace xero {
         }
 
         Subsystem::Subsystem(Robot &robot, const std::string &name) : robot_(robot) , name_(name) {
+			action_ = nullptr ;
 		}
 
         Subsystem::~Subsystem() {
@@ -45,8 +46,8 @@ namespace xero {
             
             if (action_ != nullptr)
                 action_->run() ;
-        }
-
+		}
+		
         void Subsystem::computeState() {
             for(auto sub: children_)
                 sub->computeState() ;     
@@ -96,8 +97,9 @@ namespace xero {
 			// And now start the Action
 			//
             action_ = action ;
-            if (action_ != nullptr)
+            if (action_ != nullptr) {
                 action_->start() ;
+			}
 			return true ;
         }
     }

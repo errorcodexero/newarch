@@ -1,29 +1,17 @@
-CC=../../../external/frc/bin/arm-frc-linux-gnueabi-g++
-AR=../../../external/frc/bin/arm-frc-linux-gnueabi-ar
+SOURCES = \
+	ActionSequence.cpp\
+	ControllerBase.cpp\
+	DelayAction.cpp\
+	DispatchAction.cpp\
+	Robot.cpp\
+	Subsystem.cpp\
+	tankdrive/TankDrive.cpp\
+	tankdrive/TankDriveDistanceAction.cpp\
+	tankdrive/TankDriveVelocityAction.cpp\
+	tankdrive/TankDriveCharAction.cpp
 
-CFLAGS = -std=c++1y -Wall -O0 -Og -g3 -fmessage-length=0 -pthread
-CINCS = \
-	-I../../../external/wpilib/cpp/current/include
+TARGET=gopigo3xerobase
 
-TARGET=xerobase.a
+LOCAL_CFLAGS = -I. -I../gopigo3/gopigo3navx -I../gopigo3/gopigo3hw -I../gopigo3/gopigo3frc -I../xeromath -I../xeromisc
 
-CONFIG=Debug
-
-SRC = \
-	Drivebase.cpp\
-	Robot.cpp
-
-OBJS = $(addprefix $(CONFIG)/,$(SRC:.cpp=.o))
-
-all: mkdirs $(CONFIG)/$(TARGET)
-
-$(CONFIG)/$(TARGET): $(OBJS)
-	$(AR) rs $@ $?
-
-$(CONFIG)/%.o: %.cpp
-	$(CC) -c $(CFLAGS) $(CINCS) $< -o $@
-
-mkdirs:
-	mkdir -p $(CONFIG)
-
-.PHONY: mkdirs
+include ../makefiles/gopilib.mk

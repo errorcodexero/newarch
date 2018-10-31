@@ -2,6 +2,8 @@
 
 #include "TankDriveAction.h"
 #include "TankDrive.h"
+#include <PIDCtrl.h>
+#include <StallMonitor.h>
 
 namespace xero {
 	namespace base {
@@ -12,7 +14,6 @@ namespace xero {
 			/// \param tank_drive the tank drive subsystem
 			/// \param target_velocity The velocity to drive at in inches / second
 			TankDriveVelocityAction(TankDrive &tank_drive, double target_velocity);
-
 			void start();
 			void run();
 			void cancel();
@@ -20,7 +21,18 @@ namespace xero {
 			std::string toString();
 
 		private:
+			xero::misc::PIDCtrl velocity_pid_, angle_pid_;
+			xero::misc::StallMonitor stall_monitor_;
+
+			bool has_stalled_;
+
+
+			double start_time_ ;
+			double velocity_threshold_;
+			double initial_velocity_;
 			double target_velocity_;
+			double actual_velocity_;
+			bool is_done_;
 		};
 	}
 }

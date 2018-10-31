@@ -1,0 +1,50 @@
+#!/bin/bash
+
+if [ "$#" -ne 2 ]; then
+    echo "Invalid number of arguments, expected 2"
+    echo "usage: runme start mode"
+    echo "  start: L R C"
+    echo "  mode: auto teleop test"
+    exit 1
+fi
+
+pos=17.0,115.0
+
+#
+# Set the starting position
+#
+if [ $1 = "C" ]; then
+    pos=17.0,115.0
+fi
+
+if [ $1 = "L" ]; then
+    pos=17.0,48.0
+fi
+
+if [ $1 = "R" ]; then
+    pos=17.0,288.0
+fi
+
+modeset=false
+if [ $2 = "auto" ]; then
+    modeset=true
+    autotime=15.0
+    teleoptime=0.0
+    testtime=0.0
+fi
+
+if [ $2 = "teleop" ]; then
+    modeset=true
+    autotime=0.0
+    teleoptime=300.0
+    testtime=0.0
+fi
+
+if [ $2 = "test" ]; then
+    modeset=true
+    autotime=0.0
+    teleoptime=0.0
+    testtime=300.0
+fi    
+
+build/exe/frcUserProgramSim/frcUserProgramSim --simfile SIM --test $testtime --start 0 --auto $autotime --oper $teleoptime --simprop pos=$pos

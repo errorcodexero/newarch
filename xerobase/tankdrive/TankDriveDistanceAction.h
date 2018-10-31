@@ -25,17 +25,18 @@ namespace xero {
 			std::string toString();
 
 		private:
-			xero::misc::PIDCtrl velocity_pid_, angle_pid_;
-			xero::misc::StallMonitor stall_monitor_;
-			xero::misc::TrapezoidalProfile *profile_;
-
-			bool has_stalled_;
-
-			double start_time_;	
-			double initial_dist_;
+			xero::misc::PIDCtrl velocity_pid_ ;
+			xero::misc::PIDCtrl angle_pid_;
+			std::shared_ptr<xero::misc::TrapezoidalProfile> profile_;
+			double start_time_ ;
+			double profile_start_time_;	
+			double profile_initial_dist_;
 			double distance_threshold_;
 			double target_distance_;
-			double profile_outdated_error_;
+			double profile_outdated_error_long_;
+			double profile_outdated_error_short_ ;
+			double profile_outdated_error_dist_ ;
+			double total_dist_so_far_ ;
 			bool is_done_;
 		};
 	}

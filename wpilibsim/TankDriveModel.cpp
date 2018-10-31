@@ -19,6 +19,7 @@ namespace xero {
             left_ = 0.0;
             right_ = 0.0;
             angle_ = 0.0;
+			navx_offset_ = 0.0 ;
             left_volts_ = 0.0;
             right_volts_ = 0.0;
         	time_interval_ = 100000.0;
@@ -182,7 +183,7 @@ namespace xero {
 				right_enc_->SimulatorSetValue(right_enc_value_) ;
 
 			if (navx_ != nullptr) {
-				double deg = -rad2deg(angle_) ;
+				double deg = normalizeAngleDegrees(-rad2deg(angle_ + navx_offset_)) ;
 				navx_->SimulatorSetYaw(deg) ;
 			}
         }
@@ -209,7 +210,7 @@ namespace xero {
 				right_ = 0.0 ;
 			}
 			else if (obj == navx_) {
-				angle_ = 0.0 ;
+				navx_offset_ = -angle_ ;
 			}
 			else if (obj == shifter_) {
 				Solenoid *sol = dynamic_cast<Solenoid *>(obj) ;
@@ -227,7 +228,7 @@ namespace xero {
 				left_motors_.push_back(motor) ;
 				motor->addModel(this) ;
 			}
-			else if (motor->GetDeviceID() == 14 || motor->GetDeviceID() == 15 || motor->GetDeviceID() == 16) {
+			else if (motor->GetDeviceID() == 4 || motor->GetDeviceID() == 5 || motor->GetDeviceID() == 6) {
 				right_motors_.push_back(motor) ;
 				motor->addModel(this) ;
 			}

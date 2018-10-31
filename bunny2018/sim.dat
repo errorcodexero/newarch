@@ -1,0 +1,74 @@
+#
+# This section describes the hardware for the simulated subsystems
+#
+hw:tankdrive:leftmotor1             1
+hw:tankdrive:leftmotor2             2
+hw:tankdrive:rightmotor1            4
+hw:tankdrive:rightmotor2            5
+hw:tankdrive:leftencoder1           0
+hw:tankdrive:leftencoder2           1
+hw:tankdrive:rightencoder1          2
+hw:tankdrive:rightencoder2          3
+hw:bunnycollector:motor				0
+hw:hopper:motor						1
+hw:sorter:input:motor				2
+hw:sorter:output:motor				3
+hw:sorter:motor						4
+hw:sorter:encoder_1					4
+hw:sorter:encoder_2					5
+hw:sorter:index						6
+
+#
+# These parameters control the behavior of the sorter
+#
+aorter:ticks_per_revolution							100
+
+
+#
+# These parameter control how the drive base simulation model
+# behaves
+#
+
+#
+# The revolutions per second per volt on the motors.  This
+# equates to a max speed of about 15 ft per second width
+# five inch diameter wheels
+#
+tankdrive:sim:high:rps_per_volt_per_second               11.45916
+tankdrive:sim:low:rps_per_volt_per_second                 5.72958
+
+#
+# The maximum amount of change per second of the RPS of a motor.
+#
+tankdrive:sim:change_per_second						11.45196
+
+#
+# The maximum random error applied to the left and right
+# side motors on the drivebase.  If this is .05, there can
+# be up to 5% delta applied per side randomly to the
+# rps_per_volt_per_second value above
+#
+tankdrive:sim:error_per_side                        0.0
+
+#
+# The number of ticks per revolution of the wheel for the 
+# encoders
+#
+tankdrive:sim:ticks_per_rev                         200
+
+#
+# The diameter of the robot wheel
+#
+tankdrive:sim:diameter                              5.0
+
+#
+# The percent of the angle that is applied to the robot based on the
+# distance the wheels travel vs an ideal case were the wheels are
+# frictionless
+#
+tankdrive:sim:scrub                                 1.0
+
+#
+# The width of the drivebase for the robot
+#
+tankdrive:sim:width                                24.0
