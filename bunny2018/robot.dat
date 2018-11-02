@@ -38,6 +38,7 @@ tankdrive:distance_action:velocity_pid:p                        0.0
 tankdrive:distance_action:velocity_pid:i                        0.0
 tankdrive:distance_action:velocity_pid:d                        0.0
 tankdrive:distance_action:velocity_pid:f                        0.01
+tankdrive:distance_action:velocity_pid:a                        0.0
 tankdrive:distance_action:velocity_pid:max                      1.0
 tankdrive:distance_action:velocity_pid:min                      -1.0
 tankdrive:distance_action:velocity_pid:imax                     6.0
@@ -45,6 +46,7 @@ tankdrive:distance_action:angle_pid:p                           0.0
 tankdrive:distance_action:angle_pid:i                           0.0
 tankdrive:distance_action:angle_pid:d                           0.0
 tankdrive:distance_action:angle_pid:f                           0.005556
+tankdrive:distance_action:angle_pid:a                           0.0
 tankdrive:distance_action:angle_pid:max                         1.0
 tankdrive:distance_action:angle_pid:min                         -1.0
 tankdrive:distance_action:angle_pid:imax                        6.0
@@ -66,6 +68,7 @@ tankdrive:angle_action:velocity_pid:p                           0.0
 tankdrive:angle_action:velocity_pid:i                           0.0
 tankdrive:angle_action:velocity_pid:d                           0.0
 tankdrive:angle_action:velocity_pid:f                           0.00228
+tankdrive:angle_action:velocity_pid:a                           0.0
 tankdrive:angle_action:velocity_pid:max                         1.0
 tankdrive:angle_action:velocity_pid:min                         -1.0
 tankdrive:angle_action:velocity_pid:imax                        6.0

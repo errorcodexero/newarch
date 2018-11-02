@@ -79,8 +79,8 @@ void TankDriveAngleAction::run() {
 			}
 
 			double target_velocity = profile_->getSpeed(profile_delta_time + getTankDrive().getRobot().getTargetLoopTime()) ;
-
-			double base_power = velocity_pid_.getOutput(target_velocity, current_velocity, getTankDrive().getRobot().getDeltaTime());
+			double target_accel = 0.0 ;		// TODO: get from velocity profile
+			double base_power = velocity_pid_.getOutput(target_velocity, current_velocity, target_accel, getTankDrive().getRobot().getDeltaTime());
 
 			double current_angle = getTankDrive().getAngle();
 			
