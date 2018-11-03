@@ -10,6 +10,7 @@
 
 #include <Encoder.h>
 #include <AHRS.h>
+#include <Solenoid.h>
 #include <Kinematics.h>
 #include <Subsystem.h>
 
@@ -49,6 +50,9 @@ namespace xero {
 			/// \param r1 first digital IO for right encoder
 			/// \param r2 second digital IO for right encoder						
 			void setEncoders(int l1, int l2, int r1, int r2) ;
+
+			/// \brief set the gear shifter for the drivebase
+			void setGearShifter(int index) ;
 
 			/// \brief Return the current angle of the robot relative to its starting angle
 			/// \returns The current angle of the robot
@@ -119,8 +123,19 @@ namespace xero {
 			/// \returns true if the action can be executed, false otherwise
 			virtual bool canAcceptAction(xero::base::ActionPtr action) ;
 
+			/// \brief set the YAW to zero degrees
 			virtual void zeroYaw() {
 				navx_->ZeroYaw();
+			}
+
+			/// \brief set the drive base to low gear
+			void lowGear() {
+				gear_->Set(false) ;
+			}
+
+			/// \brief set the drive base to high gear
+			void highGear() {
+				gear_->Set(true) ;
 			}
 
 		private:
@@ -133,6 +148,11 @@ namespace xero {
 
 		private:
 			std::list<TalonPtr> left_motors_, right_motors_;
+
+			std::shared_ptr<frc::Encoder> left_enc_ ;
+			std::shared_ptr<frc::Encoder> right_enc_ ;
+
+			std::shared_ptr<frc::Solenoid> gear_ ;
 
 			double dist_l_, dist_r_;
 			double last_dist_l_, last_dist_r_ ;
@@ -149,9 +169,6 @@ namespace xero {
 			double last_angular_acceleration;
 
 			double inches_per_tick_ ;
-
-			std::shared_ptr<frc::Encoder> left_enc_ ;
-			std::shared_ptr<frc::Encoder> right_enc_ ;
 
 			AHRS *navx_ ;
 

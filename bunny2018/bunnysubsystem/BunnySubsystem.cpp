@@ -9,6 +9,7 @@ namespace xero {
 			db_ = std::make_shared<TankDrive>(robot, std::list<int>{1, 2, 3}, std::list<int>{4, 5, 6}) ;
             db_->invertRightMotors() ;
             db_->setEncoders(0, 1, 2, 3) ;
+            db_->setGearShifter(0) ;
 
             oi_ = std::make_shared<BunnyOISubsystem>(robot) ;
 

@@ -59,6 +59,10 @@ namespace xero {
 			right_enc_->Reset() ;
   		}
 
+		void TankDrive::setGearShifter(int index) {
+			gear_ = std::make_shared<frc::Solenoid>(index) ;
+		}
+
 		void TankDrive::initTalonList(const std::list<int>& ids, std::list<TalonPtr>& talons) {
 			//Assuming first id will be master
 			for(int id : ids) {

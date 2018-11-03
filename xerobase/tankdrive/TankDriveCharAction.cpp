@@ -5,14 +5,16 @@
 
 namespace xero {
 	namespace base {
-		TankDriveCharAction::TankDriveCharAction(TankDrive &drive, double duration, double voltage) : TankDriveAction(drive) {
+		TankDriveCharAction::TankDriveCharAction(TankDrive &drive, double duration, double voltage, bool highgear) : TankDriveAction(drive) {
 			duration_ = duration ;
 			voltage_ = voltage ;
+			high_gear_ = highgear ;
 		}
 
-		TankDriveCharAction::TankDriveCharAction(TankDrive &drive, const std::string &name, const std::string &voltage) : TankDriveAction(drive) {
+		TankDriveCharAction::TankDriveCharAction(TankDrive &drive, const std::string &name, const std::string &voltage, bool highgear) : TankDriveAction(drive) {
 			duration_ = getTankDrive().getRobot().getSettingsParser().getDouble(name) ;
 			voltage_ = getTankDrive().getRobot().getSettingsParser().getDouble(voltage) ;
+			high_gear_ = highgear ;
 		}		
 		
 		TankDriveCharAction::~TankDriveCharAction() {			
@@ -21,6 +23,11 @@ namespace xero {
 		void TankDriveCharAction::start() {
 			is_done_ = false ;
 			start_time_ = frc::Timer::GetFPGATimestamp() ;
+			if (high_gear_)
+				getTankDrive().highGear() ;
+			else
+				getTankDrive().lowGear() ;
+				
 			getTankDrive().setMotorsToPercents(voltage_, voltage_) ;
 		}
 
