@@ -28,11 +28,11 @@ hw:driverstation:hid:driver         1
 #
 # TankDrive subsystem constants
 #
-tankdrive:inches_per_tick                                       0.07854
-tankdrive:distance_action:maxa                                  90.0
+tankdrive:inches_per_tick                                       0.017954378
+tankdrive:distance_action:maxa                                  90
 tankdrive:distance_action:maxd                                  -90.0
-tankdrive:distance_action:maxv                                  180
-tankdrive:distance_action:navxadj                               0.2
+tankdrive:distance_action:maxv                                  60
+tankdrive:distance_action:navxadj                               0.0
 tankdrive:distance_action:threshold                             2.0
 tankdrive:distance_action:velocity_pid:p                        0.0
 tankdrive:distance_action:velocity_pid:i                        0.0

@@ -82,6 +82,14 @@ namespace xero {
 				return (dist_r_ + dist_l_) / 2.0;
 			}
 
+			int getTickCountL() {
+				return ticks_left_ ;
+			}
+
+			int getTickCountR() {
+				return ticks_right_ ;
+			}
+
 			/// \brief Return the velocity of the drive base
 			double getVelocity() const {
 				return velocity_;
@@ -105,7 +113,16 @@ namespace xero {
 			void invertLeftMotors() ;
 
 			/// \brief Invert the output of the left motors
-			void invertRightMotors() ;			
+			void invertRightMotors() ;	
+
+			/// \brief Invert the left encoders
+			void invertLeftEncoder() {
+				left_enc_->SetReverseDirection(true) ;
+			}
+
+			void invertRightEncoder() {
+				right_enc_->SetReverseDirection(true) ;
+			}
 
 			/// \brief Compute the current state of the drivebase.
 			/// This method generally reads the input sensors associated with the drivebase and
@@ -130,12 +147,12 @@ namespace xero {
 
 			/// \brief set the drive base to low gear
 			void lowGear() {
-				gear_->Set(false) ;
+				gear_->Set(true) ;
 			}
 
 			/// \brief set the drive base to high gear
 			void highGear() {
-				gear_->Set(true) ;
+				gear_->Set(false) ;
 			}
 
 		private:
@@ -154,6 +171,9 @@ namespace xero {
 
 			std::shared_ptr<frc::Solenoid> gear_ ;
 
+			int ticks_left_ ;
+			int ticks_right_ ;
+			
 			double dist_l_, dist_r_;
 			double last_dist_l_, last_dist_r_ ;
 			double last_dist_;

@@ -29,6 +29,7 @@ namespace xero {
 				getTankDrive().lowGear() ;
 				
 			getTankDrive().setMotorsToPercents(voltage_, voltage_) ;
+			std::cout << "Time,Distance,Velocity,Acceleration,TicksL,TicksR" << std::endl ;
 		}
 
 		void TankDriveCharAction::run() {
@@ -41,6 +42,9 @@ namespace xero {
 					std::cout << (now - start_time_) ;
 					std::cout << ", " << getTankDrive().getDist() ;
 					std::cout << ", " << getTankDrive().getVelocity() ;
+					std::cout << ", " << getTankDrive().getAcceleration() ;
+					std::cout << ", " << getTankDrive().getTickCountL() ;
+					std::cout << ", " << getTankDrive().getTickCountR() ;
 					std::cout << std::endl ;
 				}
 			}

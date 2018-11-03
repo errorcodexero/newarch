@@ -2,6 +2,7 @@
 
 #include "ControllerBase.h"
 #include "Action.h"
+#include <iostream>
 
 namespace xero {
 	namespace base {
@@ -26,7 +27,7 @@ namespace xero {
 		protected:
 			/// \brief sets the reference to the action that will be run when run() is called
 			/// \param action run for a controller
-			void setAction(ActionPtr action){
+			void setAction(ActionPtr action) {
 				actionptr_ = action;
 				if (actionptr_ != nullptr)
 					actionptr_->start() ;

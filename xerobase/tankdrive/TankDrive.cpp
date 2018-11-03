@@ -87,8 +87,10 @@ namespace xero {
 			if (left_enc_ != nullptr) {
 				assert(right_enc_ != nullptr) ;
 
-				dist_l_ = left_enc_->Get() * inches_per_tick_ ;
-				dist_r_ = right_enc_->Get() * inches_per_tick_ ;
+				ticks_left_ = left_enc_->Get() ;
+				ticks_right_ = right_enc_->Get() ;
+				dist_l_ = ticks_left_ * inches_per_tick_ ;
+				dist_r_ = ticks_right_ * inches_per_tick_ ;
 			}
 			else {
 				dist_l_ = left_motors_.front()->GetSensorCollection().GetQuadraturePosition();
@@ -118,6 +120,17 @@ namespace xero {
 
 			last_dist_l_ = dist_l_ ;
 			last_dist_r_ = dist_r_ ;	
+			
+
+			if (getAction() == nullptr) {
+				auto &logger = getRobot().getMessageLogger() ;
+				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
+				logger << "time " << getRobot().getTime() ;
+				logger << ", dist " << getDist() ;
+				logger << ", velocity " << getVelocity() ;
+				logger << ", accel " << getAcceleration() ;
+				logger.endMessage();	
+			}
 		}
 
 		void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
