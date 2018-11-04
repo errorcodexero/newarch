@@ -95,7 +95,7 @@ void TankDriveAngleAction::run() {
 			logger << ", motor " << base_power ;
 			logger.endMessage();			
 
-			getTankDrive().setMotorsToPercents(-base_power, base_power);
+			getTankDrive().setMotorsToPercents(base_power, -base_power);
 		} else {
 			is_done_ = true;
 

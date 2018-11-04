@@ -183,7 +183,7 @@ namespace xero {
 				right_enc_->SimulatorSetValue(right_enc_value_) ;
 
 			if (navx_ != nullptr) {
-				double deg = normalizeAngleDegrees(-rad2deg(angle_ + navx_offset_)) ;
+				double deg = normalizeAngleDegrees(rad2deg(angle_ + navx_offset_)) ;
 				navx_->SimulatorSetYaw(deg) ;
 			}
         }
