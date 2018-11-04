@@ -114,11 +114,9 @@ void TankDriveDistanceAction::run() {
 
 		logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
 		logger << "time " << getTankDrive().getRobot().getTime() ;
-		logger << ", dist " << total_traveled ;
-		logger << ", profile " << profile_target_distance ;
-		logger << ", target " << target_velocity;
-		logger << ", actual " << current_velocity ;
-		logger << ", left " << left_power << ", right " << right_power ;
+		logger << ", dist " << getTankDrive().getDist() ;
+		logger << ", velocity " << getTankDrive().getVelocity() ;
+		logger << ", accel " << getTankDrive().getAcceleration() ;
 		logger.endMessage();			
 	}
 }
