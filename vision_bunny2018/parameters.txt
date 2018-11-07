@@ -1,9 +1,9 @@
 #FILENAME cube1.mp4
 #FILENAME cube_vantage_far.JPG
 #FILENAME go_for_cube2.MOV
-#FILENAME crate_710.jpg
+FILENAME crate_710.jpg
 #FILENAME crate.mov
-FILENAME IMG_9002.MOV
+#FILENAME IMG_9002.MOV
 #FILENAME /dev/video1
 
 MAX_WIDTH 640

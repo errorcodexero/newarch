@@ -16,7 +16,7 @@ namespace xero {
 		class ActionSequence : public Action {
 		public:
 			/// \brief create an empty action sequence 
-			ActionSequence(xero::misc::MessageLogger &logger);
+			ActionSequence(xero::misc::MessageLogger &logger, std::string &name);
 
 			/// \brief start this sequence of actions
 			void start();
@@ -62,7 +62,7 @@ namespace xero {
 			/// \brief return the number of actions in the sequence
 			size_t size() {
 				return actionSequence_.size() ;
-			}
+			}			
 
 		private:
 			void startNextAction();
@@ -82,6 +82,9 @@ namespace xero {
 
 			// The message logger
 			xero::misc::MessageLogger &logger_ ;
+
+			//names the overall objective of the actions in the sequence
+			std::string name_;
 
 		};
 	}

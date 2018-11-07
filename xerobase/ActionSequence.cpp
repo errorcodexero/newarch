@@ -8,7 +8,7 @@ namespace xero
 namespace base
 {
 
-ActionSequence::ActionSequence(xero::misc::MessageLogger &logger) : logger_(logger)
+ActionSequence::ActionSequence(xero::misc::MessageLogger &logger,std::string &name) : logger_(logger) , name_(name)
 {
 	isDone_ = false;
 	group_ = MSG_GROUP_ACTIONS ;
@@ -75,14 +75,14 @@ void ActionSequence::cancel()
 std::string ActionSequence::toString()
 {
 	std::string result ;
-
-	result += "[" ;
+	result += name_;
+	result += " [" ;
 	for(size_t i = 0 ; i < actionSequence_.size() ; i++) {
 		if (i != 0)
 			result += "," ;
 		result += actionSequence_[i]->toString() ;
 	}
-	
+	result += "]" ;
 	return result ;
 }
 
