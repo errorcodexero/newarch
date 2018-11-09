@@ -127,14 +127,19 @@ namespace xero {
 			last_dist_r_ = dist_r_ ;	
 			
 
-			if (getAction() == nullptr) {
+			if (getAction() == nullptr || getAction()->isDone()) {
 				auto &logger = getRobot().getMessageLogger() ;
 				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
 				logger << "time " << getRobot().getTime() ;
 				logger << ", dist " << getDist() ;
 				logger << ", velocity " << getVelocity() ;
 				logger << ", accel " << getAcceleration() ;
+				logger << ", angle " << getAngle() ;
+				logger << ", ang velo " << getAngularVelocity() ;
+				logger << ", ang accel " << getAngularAcceleration() ;
 				logger.endMessage();	
+
+				std::cout << "Yaw is " << navx_->GetYaw() << std::endl ;
 			}
 		}
 
@@ -144,10 +149,18 @@ namespace xero {
 		}
 
 		void TankDrive::zeroAngle() {
+			auto &logger = getRobot().getMessageLogger() ;
+			logger.startMessage(MessageLogger::MessageType::debug) ;
+			logger << "Resetting YAW" ;
+			logger.endMessage() ;
+
 			navx_->ZeroYaw() ;
 			while (std::fabs(navx_->GetYaw()) > 1.0) ;
 			angle_ = 0.0 ;
 			last_angle_ = 0.0 ;
+			angular_velocity_ = 0.0 ;
+			last_angular_velocity_ = 0.0 ;
+			angular_acceleration_ = 0.0;
 		}
 	}
 }

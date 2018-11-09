@@ -57,9 +57,9 @@ tankdrive:distance_action:profile_outdated_error_dist           12
 tankdrive:distance_action:profile_outdated_error_long           16        
 tankdrive:distance_action:profile_outdated_error_short          2
 
-tankdrive:angle_action:maxa                                     180
-tankdrive:angle_action:maxd                                     -180
-tankdrive:angle_action:maxv                                     180
+tankdrive:angle_action:maxa                                     60
+tankdrive:angle_action:maxd                                     -60
+tankdrive:angle_action:maxv                                     60
 tankdrive:angle_action:profile_outdated_error_short             2.0
 tankdrive:angle_action:profile_outdated_error_angle             10.0
 tankdrive:angle_action:profile_outdated_error_long              10.0
@@ -67,7 +67,7 @@ tankdrive:angle_action:angle_threshold                          4.0
 tankdrive:angle_action:velocity_pid:p                           0.0
 tankdrive:angle_action:velocity_pid:i                           0.0
 tankdrive:angle_action:velocity_pid:d                           0.0
-tankdrive:angle_action:velocity_pid:f                           0.008
+tankdrive:angle_action:velocity_pid:f                           0.0065
 tankdrive:angle_action:velocity_pid:a                           0.0
 tankdrive:angle_action:velocity_pid:max                         1.0
 tankdrive:angle_action:velocity_pid:min                         -1.0
