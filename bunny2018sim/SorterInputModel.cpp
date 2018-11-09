@@ -2,6 +2,7 @@
 #include <RobotSimBase.h>
 
 using namespace frc ;
+using namespace ctre::phoenix::motorcontrol::can ;
 
 namespace xero {
     namespace sim {
@@ -27,15 +28,15 @@ namespace xero {
 
 	        void SorterInputModel::inputChanged(SimulatedObject *obj) {              
 			    std::lock_guard<std::mutex> lock(getLockMutex()) ;
-                VictorSP *victor = dynamic_cast<VictorSP *>(obj) ;
-                if (victor != nullptr) {
-    			    if (victor == motor_)
-                        voltage_ = victor->Get() ;
+                TalonSRX *talon = dynamic_cast<TalonSRX *>(obj) ;
+                if (talon != nullptr) {
+    			    if (talon == motor_)
+                        voltage_ = talon->Get() ;
                 }
             }    
 
-            void SorterInputModel::addVictorSP(frc::VictorSP *motor) {
-                if (motor->GetChannel() == motor_channel_) {
+            void SorterInputModel::addTalonSRX(TalonSRX *motor) {
+                if (motor->GetDeviceID() == motor_channel_) {
                     motor_ = motor ;
                     motor_->addModel(this) ;
                 }

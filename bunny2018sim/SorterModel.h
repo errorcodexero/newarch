@@ -24,7 +24,7 @@ namespace xero  {
                 virtual void run(double dt) ;
 
 				/// \brief one time initialization at the start of the simulation
-				virtual void init() {					
+				virtual void init() {
 				}
 
 				/// \brief Update the state of the model.  Called when one of its inputs changes.
@@ -33,7 +33,7 @@ namespace xero  {
 
 				/// \brief Add a Victor SP to the model.
 				/// \param victor the Victor SP to add
-                virtual void addVictorSP(frc::VictorSP *victor) ;
+                virtual void addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *talon) ;
 
 				/// \brief Add a ball sorter inde sensor to the subsystem
 				/// \param victor the digital IO to add
@@ -54,11 +54,12 @@ namespace xero  {
                
             private:
                 double voltage_ ;
-                frc::VictorSP *motor_ ;
+                ctre::phoenix::motorcontrol::can::TalonSRX *motor_ ;
 				frc::DigitalInput *index_ ;
 				frc::Encoder *encoder_ ;
 				double angle_ ;
 				int ticks_per_revolution_ ;
+				double degrees_per_hole_ ;
 
                 int motor_channel_ ;
 				int encoder_channel_1_ ;

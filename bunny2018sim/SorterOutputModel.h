@@ -33,7 +33,7 @@ namespace xero  {
 
 				/// \brief Add a Victor SP to the model.
 				/// \param victor the Victor SP to add
-                virtual void addVictorSP(frc::VictorSP *victor) ;
+                virtual void addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *victor) ;
 
 				/// \brief Get the voltage applied to the first motor.
 				/// \returns the voltage applied to the first motor
@@ -43,7 +43,7 @@ namespace xero  {
                
             private:
                 double voltage_ ;
-                frc::VictorSP *motor_ ;
+                ctre::phoenix::motorcontrol::can::TalonSRX *motor_ ;
                 int motor_channel_ ;
             } ;
         }
