@@ -131,10 +131,11 @@ namespace xero {
 		}
 
         void TankDriveModel::run(double dt) {
+
 			//
 			// Calculate the new desired revolutions per second (RPS)
 			//
-			double desired_left_rps = left_volts_ * left_rps_per_volt_per_time_ ;
+			double desired_left_rps = -left_volts_ * left_rps_per_volt_per_time_ ;
 			double desired_right_rps = right_volts_ * right_rps_per_volt_per_time_ ;
 
 			//
@@ -152,7 +153,6 @@ namespace xero {
 			//
 			// And add to the total distance so far
 			//
-
 			left_ += dleft;
 			right_ += dright;
 
@@ -177,13 +177,13 @@ namespace xero {
 			right_enc_value_ = static_cast<int32_t>(rrevs * ticks_per_rev_) ;
 
 			if (left_enc_ != nullptr)
-				left_enc_->SimulatorSetValue(left_enc_value_) ;
+				left_enc_->SimulatorSetValue(-left_enc_value_) ;
 
 			if (right_enc_ != nullptr)
 				right_enc_->SimulatorSetValue(right_enc_value_) ;
 
 			if (navx_ != nullptr) {
-				double deg = normalizeAngleDegrees(-rad2deg(angle_ + navx_offset_)) ;
+				double deg = normalizeAngleDegrees(rad2deg(angle_ + navx_offset_)) ;
 				navx_->SimulatorSetYaw(deg) ;
 			}
         }

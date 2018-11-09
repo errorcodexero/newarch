@@ -2,6 +2,7 @@
 #include "TankDriveAction.h"
 #include "Robot.h"
 #include <cassert>
+#include <cmath>
 
 #ifdef SIM
 #include <SensorCollection.h>
@@ -35,6 +36,9 @@ namespace xero {
 				kin_ = new Kinematics(4.6063, 0.95) ;
 				angle_ = 0.0 ;
 			}
+			else {
+				last_angle_ = navx_->GetYaw() ;
+			}
 		}
 
 		TankDrive::~TankDrive() {			
@@ -58,6 +62,10 @@ namespace xero {
 			left_enc_->Reset() ;
 			right_enc_->Reset() ;
   		}
+
+		void TankDrive::setGearShifter(int index) {
+			gear_ = std::make_shared<frc::Solenoid>(index) ;
+		}
 
 		void TankDrive::initTalonList(const std::list<int>& ids, std::list<TalonPtr>& talons) {
 			//Assuming first id will be master
@@ -83,8 +91,10 @@ namespace xero {
 			if (left_enc_ != nullptr) {
 				assert(right_enc_ != nullptr) ;
 
-				dist_l_ = left_enc_->Get() * inches_per_tick_ ;
-				dist_r_ = right_enc_->Get() * inches_per_tick_ ;
+				ticks_left_ = left_enc_->Get() ;
+				ticks_right_ = right_enc_->Get() ;
+				dist_l_ = ticks_left_ * inches_per_tick_ ;
+				dist_r_ = ticks_right_ * inches_per_tick_ ;
 			}
 			else {
 				dist_l_ = left_motors_.front()->GetSensorCollection().GetQuadraturePosition();
@@ -92,7 +102,7 @@ namespace xero {
 			}
 
 			if (navx_ != nullptr) {
-				angle_ = -navx_->GetYaw();
+				angle_ = navx_->GetYaw();
 			}
 			else {
 				kin_->move(dist_l_ - last_dist_l_, dist_r_ - last_dist_r_) ;
@@ -103,22 +113,41 @@ namespace xero {
 			velocity_ = (current_dist - last_dist_) / getRobot().getDeltaTime();
 			last_dist_ = current_dist;		
 
-			angular_velocity_ = (angle_ - last_angle_) /getRobot().getDeltaTime();
+			std::cout << "ComputState " << angle_ << " " << last_angle_ << std::endl ;
+			angular_velocity_ = (angle_ - last_angle_) / getRobot().getDeltaTime();
 			last_angle_ = angle_;
 
-			acceleration_ = (velocity_ - last_velocity_) /getRobot().getDeltaTime();
+			acceleration_ = (velocity_ - last_velocity_) / getRobot().getDeltaTime();
 			last_velocity_ = velocity_;
 
-			angular_acceleration_ = (angular_velocity_ - last_angular_velocity_) /getRobot().getDeltaTime();
+			angular_acceleration_ = (angular_velocity_ - last_angular_velocity_) / getRobot().getDeltaTime();
 			last_angular_velocity_ = angular_velocity_;
 
 			last_dist_l_ = dist_l_ ;
 			last_dist_r_ = dist_r_ ;	
+			
+
+			if (getAction() == nullptr) {
+				auto &logger = getRobot().getMessageLogger() ;
+				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
+				logger << "time " << getRobot().getTime() ;
+				logger << ", dist " << getDist() ;
+				logger << ", velocity " << getVelocity() ;
+				logger << ", accel " << getAcceleration() ;
+				logger.endMessage();	
+			}
 		}
 
 		void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
 			left_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent);
 			right_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
+		}
+
+		void TankDrive::zeroAngle() {
+			navx_->ZeroYaw() ;
+			while (std::fabs(navx_->GetYaw()) > 1.0) ;
+			angle_ = 0.0 ;
+			last_angle_ = 0.0 ;
 		}
 	}
 }

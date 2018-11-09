@@ -32,7 +32,7 @@ namespace xero {
             void GrabberToAngleAction::run(){
                 double dt = getGrabber().getRobot().getDeltaTime();
                 double current = getGrabber().getAngle();
-                double output = angle_controller_.getOutput(angle_, current, dt);
+                double output = angle_controller_.getOutput(angle_, current, 0.0, dt);
                 getGrabber().motor_->Set(output);
                 if (fabs(angle_-current) < threshold_) {
                     isdone_ = true;

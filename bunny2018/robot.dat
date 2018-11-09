@@ -28,23 +28,25 @@ hw:driverstation:hid:driver         1
 #
 # TankDrive subsystem constants
 #
-tankdrive:inches_per_tick                                       0.07854
-tankdrive:distance_action:maxa                                  90.0
+tankdrive:inches_per_tick                                       0.017954378
+tankdrive:distance_action:maxa                                  90
 tankdrive:distance_action:maxd                                  -90.0
-tankdrive:distance_action:maxv                                  180
-tankdrive:distance_action:navxadj                               0.2
+tankdrive:distance_action:maxv                                  60
+tankdrive:distance_action:navxadj                               0.0
 tankdrive:distance_action:threshold                             2.0
 tankdrive:distance_action:velocity_pid:p                        0.0
 tankdrive:distance_action:velocity_pid:i                        0.0
 tankdrive:distance_action:velocity_pid:d                        0.0
 tankdrive:distance_action:velocity_pid:f                        0.01
+tankdrive:distance_action:velocity_pid:a                        0.0
 tankdrive:distance_action:velocity_pid:max                      1.0
 tankdrive:distance_action:velocity_pid:min                      -1.0
 tankdrive:distance_action:velocity_pid:imax                     6.0
 tankdrive:distance_action:angle_pid:p                           0.0
 tankdrive:distance_action:angle_pid:i                           0.0
 tankdrive:distance_action:angle_pid:d                           0.0
-tankdrive:distance_action:angle_pid:f                           0.005556
+tankdrive:distance_action:angle_pid:f                           0.0
+tankdrive:distance_action:angle_pid:a                           0.0
 tankdrive:distance_action:angle_pid:max                         1.0
 tankdrive:distance_action:angle_pid:min                         -1.0
 tankdrive:distance_action:angle_pid:imax                        6.0
@@ -55,9 +57,9 @@ tankdrive:distance_action:profile_outdated_error_dist           12
 tankdrive:distance_action:profile_outdated_error_long           16        
 tankdrive:distance_action:profile_outdated_error_short          2
 
-tankdrive:angle_action:maxa                                     430
-tankdrive:angle_action:maxd                                     -430
-tankdrive:angle_action:maxv                                     860
+tankdrive:angle_action:maxa                                     180
+tankdrive:angle_action:maxd                                     -180
+tankdrive:angle_action:maxv                                     180
 tankdrive:angle_action:profile_outdated_error_short             2.0
 tankdrive:angle_action:profile_outdated_error_angle             10.0
 tankdrive:angle_action:profile_outdated_error_long              10.0
@@ -65,7 +67,8 @@ tankdrive:angle_action:angle_threshold                          4.0
 tankdrive:angle_action:velocity_pid:p                           0.0
 tankdrive:angle_action:velocity_pid:i                           0.0
 tankdrive:angle_action:velocity_pid:d                           0.0
-tankdrive:angle_action:velocity_pid:f                           0.00228
+tankdrive:angle_action:velocity_pid:f                           0.008
+tankdrive:angle_action:velocity_pid:a                           0.0
 tankdrive:angle_action:velocity_pid:max                         1.0
 tankdrive:angle_action:velocity_pid:min                         -1.0
 tankdrive:angle_action:velocity_pid:imax                        6.0

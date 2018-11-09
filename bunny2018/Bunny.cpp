@@ -37,6 +37,11 @@ namespace xero {
 			//
 			initializeMessageLogger();
 
+			auto &logger = getMessageLogger() ;
+			logger.startMessage(MessageLogger::MessageType::info) ;
+			logger << "Initializing Bunny2018 Robot" ;
+			logger.endMessage() ;
+
 #ifdef SIM
 			filename = "bunny2018/robot.dat" ;
 #else
@@ -56,6 +61,10 @@ namespace xero {
 			SubsystemPtr db = robot_p->getDriveBase() ;
 			SubsystemPtr oi = robot_p->getOI() ;
 			setRobotSubsystem(robot_p, oi, db) ;
+
+			logger.startMessage(MessageLogger::MessageType::info) ;
+			logger << "Initialization complete." ;
+			logger.endMessage() ;			
 		}
 
 		std::shared_ptr<ControllerBase> Bunny::createAutoController() {

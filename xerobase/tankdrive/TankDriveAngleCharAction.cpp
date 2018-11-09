@@ -23,12 +23,14 @@ namespace xero {
 			is_done_ = false ;
 			start_time_ = frc::Timer::GetFPGATimestamp() ;
 			getTankDrive().setMotorsToPercents(value_, -value_) ;
+			std::cout << "Char " << duration_ << std::endl ;
 		}
 
 		void TankDriveAngleCharAction::run() {
 			if (!is_done_) {
 				double now = frc::Timer::GetFPGATimestamp() ;
 				if (now - start_time_ >= duration_) {
+					std::cout << "Done: " << now << " " << start_time_ << " " << duration_ << std::endl ; 
 					is_done_ = true ;
 					getTankDrive().setMotorsToPercents(0.0, 0.0) ;
 				} else {

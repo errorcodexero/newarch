@@ -10,6 +10,7 @@
 
 #include <Encoder.h>
 #include <AHRS.h>
+#include <Solenoid.h>
 #include <Kinematics.h>
 #include <Subsystem.h>
 
@@ -50,6 +51,9 @@ namespace xero {
 			/// \param r2 second digital IO for right encoder						
 			void setEncoders(int l1, int l2, int r1, int r2) ;
 
+			/// \brief set the gear shifter for the drivebase
+			void setGearShifter(int index) ;
+
 			/// \brief Return the current angle of the robot relative to its starting angle
 			/// \returns The current angle of the robot
 			double getAngle() const {
@@ -78,6 +82,14 @@ namespace xero {
 				return (dist_r_ + dist_l_) / 2.0;
 			}
 
+			int getTickCountL() {
+				return ticks_left_ ;
+			}
+
+			int getTickCountR() {
+				return ticks_right_ ;
+			}
+
 			/// \brief Return the velocity of the drive base
 			double getVelocity() const {
 				return velocity_;
@@ -101,7 +113,16 @@ namespace xero {
 			void invertLeftMotors() ;
 
 			/// \brief Invert the output of the left motors
-			void invertRightMotors() ;			
+			void invertRightMotors() ;	
+
+			/// \brief Invert the left encoders
+			void invertLeftEncoder() {
+				left_enc_->SetReverseDirection(true) ;
+			}
+
+			void invertRightEncoder() {
+				right_enc_->SetReverseDirection(true) ;
+			}
 
 			/// \brief Compute the current state of the drivebase.
 			/// This method generally reads the input sensors associated with the drivebase and
@@ -113,14 +134,26 @@ namespace xero {
 			/// \brief Run the subsystem
 			virtual void run() ;
 
+			void zeroAngle() ;
 
 			/// \brief This method returns true if the tankdrive subsystem can execute the given action
 			/// \param action the section to test to see if it can be executed
 			/// \returns true if the action can be executed, false otherwise
 			virtual bool canAcceptAction(xero::base::ActionPtr action) ;
 
+			/// \brief set the YAW to zero degrees
 			virtual void zeroYaw() {
 				navx_->ZeroYaw();
+			}
+
+			/// \brief set the drive base to low gear
+			void lowGear() {
+				gear_->Set(true) ;
+			}
+
+			/// \brief set the drive base to high gear
+			void highGear() {
+				gear_->Set(false) ;
 			}
 
 		private:
@@ -134,6 +167,14 @@ namespace xero {
 		private:
 			std::list<TalonPtr> left_motors_, right_motors_;
 
+			std::shared_ptr<frc::Encoder> left_enc_ ;
+			std::shared_ptr<frc::Encoder> right_enc_ ;
+
+			std::shared_ptr<frc::Solenoid> gear_ ;
+
+			int ticks_left_ ;
+			int ticks_right_ ;
+			
 			double dist_l_, dist_r_;
 			double last_dist_l_, last_dist_r_ ;
 			double last_dist_;
@@ -149,9 +190,6 @@ namespace xero {
 			double last_angular_acceleration;
 
 			double inches_per_tick_ ;
-
-			std::shared_ptr<frc::Encoder> left_enc_ ;
-			std::shared_ptr<frc::Encoder> right_enc_ ;
 
 			AHRS *navx_ ;
 

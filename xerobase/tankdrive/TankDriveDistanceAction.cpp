@@ -81,11 +81,11 @@ void TankDriveDistanceAction::run() {
 			}
 
 			double target_velocity = profile_->getSpeed(profile_delta_time + getTankDrive().getRobot().getTargetLoopTime()) ;
-
-			double base_power = velocity_pid_.getOutput(target_velocity, current_velocity, getTankDrive().getRobot().getDeltaTime());
+			double target_accel = 0.0 ;			// TODO: Get from the profile
+			double base_power = velocity_pid_.getOutput(target_velocity, current_velocity, target_accel, getTankDrive().getRobot().getDeltaTime());
 
 			double current_angle = getTankDrive().getAngle();
-			double straightness_offset = angle_pid_.getOutput(0, current_angle, getTankDrive().getRobot().getDeltaTime());
+			double straightness_offset = angle_pid_.getOutput(0, current_angle, 0.0, getTankDrive().getRobot().getDeltaTime());
 			double left_power = base_power - straightness_offset;
 			double right_power = base_power + straightness_offset;
 
@@ -111,6 +111,13 @@ void TankDriveDistanceAction::run() {
 		}
 	} else {
 		getTankDrive().setMotorsToPercents(0.0, 0.0);
+
+		logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
+		logger << "time " << getTankDrive().getRobot().getTime() ;
+		logger << ", dist " << getTankDrive().getDist() ;
+		logger << ", velocity " << getTankDrive().getVelocity() ;
+		logger << ", accel " << getTankDrive().getAcceleration() ;
+		logger.endMessage();			
 	}
 }
 

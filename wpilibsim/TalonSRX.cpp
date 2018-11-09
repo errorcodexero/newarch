@@ -18,6 +18,7 @@ TalonSRX::TalonSRX(int index)
 
 	RobotSimBase &sim = RobotSimBase::getRobotSimulator();
 	sim.connect(this);
+	inverted_ = false ;
 }
 
 TalonSRX::~TalonSRX()
@@ -28,7 +29,11 @@ TalonSRX::~TalonSRX()
 
 void TalonSRX::Set(ControlMode mode, double v)
 {
-	value_ = v;
+	if (inverted_)
+		value_ = -v;
+	else
+		value_ = v ;
+		
 	changed() ;
 }
 

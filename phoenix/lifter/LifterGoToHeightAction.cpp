@@ -22,7 +22,7 @@ namespace xero {
         void LifterGoToHeightAction::run() {
             current_height_ = getLifter().getCurrentHeight();
             if (!isDone()) {
-                double PID_output = PID_controller_.getOutput(target_height_, current_height_, getLifter().getRobot().getDeltaTime());
+                double PID_output = PID_controller_.getOutput(target_height_, current_height_, 0.0, getLifter().getRobot().getDeltaTime());
                 getLifter().setMotorsDutyCycle(PID_output);
             }
         }
