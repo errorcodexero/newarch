@@ -19,6 +19,11 @@ hw:driverstation:hid:oi             3
 hw:driverstation:hid:gunner         2
 hw:driverstation:hid:driver         1
 
+hw:collector:motor                  1
+hw:hopper:motor                     1
+hw:sorter_in:motor                  1
+hw:sorter_out:motor                 1
+
 ##############################################################
 #
 # The constants that go with each of the subsystems

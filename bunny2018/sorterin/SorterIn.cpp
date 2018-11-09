@@ -1,0 +1,23 @@
+#include "SorterIn.h"
+//#include "SorterInAction.h"       //doesn't exist yet
+#include <Robot.h>
+
+using namespace xero::base;
+
+namespace xero {
+    namespace bunny2018 {
+        SorterIn::SorterIn(Robot & robot):Subsystem(robot,"sorter_in") {
+           int m = robot.getSettingsParser().getInteger("hw:sorter_in:motor") ;
+
+           motor_ =std::make_shared<frc::VictorSP>(m);
+        }
+
+        SorterIn::~SorterIn(){
+        }
+
+        bool SorterIn::canAcceptAction(ActionPtr action) {
+            auto coll = std::dynamic_pointer_cast<SorterInAction>(action) ;
+            return coll != nullptr ;
+        }
+    }
+}
