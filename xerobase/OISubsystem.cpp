@@ -19,7 +19,8 @@ namespace xero {
 				addHIDDevice(driver_) ;
 			}
 
-            seq_ = std::make_shared<ActionSequence>(robot.getMessageLogger()) ;
+            std::string sequence_name = "OIsubsystem";
+            seq_ = std::make_shared<ActionSequence>(robot.getMessageLogger(), sequence_name) ;
         }
 
         OISubsystem::~OISubsystem() {

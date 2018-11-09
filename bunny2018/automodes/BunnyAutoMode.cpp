@@ -36,7 +36,8 @@ namespace xero {
 			std::string mode = std::to_string(sel) ;
 			frc::SmartDashboard::PutString("automode:", mode) ;
 
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger()) ;
+            std::string name = "bunny_auto";
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name ) ;
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
 
             //act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;

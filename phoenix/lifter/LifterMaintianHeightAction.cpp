@@ -1,4 +1,5 @@
 #include "LifterMaintainHeightAction.h"
+#include "Robot.h"
 
 namespace xero {
     namespace phoenix {
