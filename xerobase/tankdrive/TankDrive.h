@@ -134,6 +134,7 @@ namespace xero {
 			/// \brief Run the subsystem
 			virtual void run() ;
 
+			void zeroAngle() ;
 
 			/// \brief This method returns true if the tankdrive subsystem can execute the given action
 			/// \param action the section to test to see if it can be executed

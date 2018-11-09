@@ -2,6 +2,7 @@
 #include "TankDriveAction.h"
 #include "Robot.h"
 #include <cassert>
+#include <cmath>
 
 #ifdef SIM
 #include <SensorCollection.h>
@@ -34,6 +35,9 @@ namespace xero {
 				navx_ = nullptr ;
 				kin_ = new Kinematics(4.6063, 0.95) ;
 				angle_ = 0.0 ;
+			}
+			else {
+				last_angle_ = navx_->GetYaw() ;
 			}
 		}
 
@@ -109,13 +113,14 @@ namespace xero {
 			velocity_ = (current_dist - last_dist_) / getRobot().getDeltaTime();
 			last_dist_ = current_dist;		
 
-			angular_velocity_ = (angle_ - last_angle_) /getRobot().getDeltaTime();
+			std::cout << "ComputState " << angle_ << " " << last_angle_ << std::endl ;
+			angular_velocity_ = (angle_ - last_angle_) / getRobot().getDeltaTime();
 			last_angle_ = angle_;
 
-			acceleration_ = (velocity_ - last_velocity_) /getRobot().getDeltaTime();
+			acceleration_ = (velocity_ - last_velocity_) / getRobot().getDeltaTime();
 			last_velocity_ = velocity_;
 
-			angular_acceleration_ = (angular_velocity_ - last_angular_velocity_) /getRobot().getDeltaTime();
+			angular_acceleration_ = (angular_velocity_ - last_angular_velocity_) / getRobot().getDeltaTime();
 			last_angular_velocity_ = angular_velocity_;
 
 			last_dist_l_ = dist_l_ ;
@@ -136,6 +141,13 @@ namespace xero {
 		void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
 			left_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent);
 			right_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
+		}
+
+		void TankDrive::zeroAngle() {
+			navx_->ZeroYaw() ;
+			while (std::fabs(navx_->GetYaw()) > 1.0) ;
+			angle_ = 0.0 ;
+			last_angle_ = 0.0 ;
 		}
 	}
 }

@@ -22,7 +22,7 @@ TankDriveAngleAction::~TankDriveAngleAction() {
 }
 
 void TankDriveAngleAction::start() {
-	profile_initial_angle_ = getTankDrive().getAngle();
+
 
 	xero::misc::SettingsParser &parser = getTankDrive().getRobot().getSettingsParser();
 
@@ -36,8 +36,9 @@ void TankDriveAngleAction::start() {
 	profile_start_time_ = getTankDrive().getRobot().getTime();
 	start_time_ = profile_start_time_ ;
 
+	profile_initial_angle_ = 0;
 	profile_->update(target_angle_, 0.0, 0.0);
-	getTankDrive().navx_->ZeroYaw();
+	getTankDrive().zeroAngle() ;
 
 	total_angle_so_far_ = 0.0 ;
 }
@@ -50,20 +51,24 @@ void TankDriveAngleAction::run() {
 		double profile_angle_traveled = current_angle - profile_initial_angle_;
 		double profile_remaining_angle = target_angle_ - profile_angle_traveled - total_angle_so_far_ ;
 		double total_traveled = total_angle_so_far_ + profile_angle_traveled ;
+		std::cout << "A " << total_angle_so_far_ << " " << profile_angle_traveled << " " << current_angle << " " << profile_initial_angle_ << std::endl ;
 
 		if (std::fabs(total_traveled - target_angle_) > angle_threshold_) {
 			double profile_delta_time = getTankDrive().getRobot().getTime() - profile_start_time_; 
 			double profile_target_angle = profile_->getDistance(profile_delta_time);
 			double profile_error = std::fabs(profile_target_angle - profile_angle_traveled);
 
-			double current_velocity = getTankDrive().getVelocity();
+			double current_velocity = getTankDrive().getAngularVelocity();
 
 			bool redo = false ;
 
-			if (profile_remaining_angle < profile_outdated_error_angle_ && profile_error > profile_outdated_error_short_)
+			if (std::fabs(profile_remaining_angle) < profile_outdated_error_angle_ && std::fabs(profile_error) > profile_outdated_error_short_) {
 				redo = true ;
-			else if (profile_remaining_angle > profile_outdated_error_angle_ && profile_error > profile_outdated_error_long_)
+				std::cout << "Case one: " << profile_remaining_angle << " " << profile_error << std::endl ;
+			} else if (std::fabs(profile_remaining_angle) > profile_outdated_error_angle_ && std::fabs(profile_error) > profile_outdated_error_long_) {
 				redo = true ;
+				std::cout << "Case two: " << profile_remaining_angle << " " << profile_error << std::endl ;				
+			}
 
 			if (redo) {
 				total_angle_so_far_ += profile_angle_traveled ;
@@ -90,12 +95,12 @@ void TankDriveAngleAction::run() {
 			logger << ", profile " << profile_target_angle ;
 			logger << ", target " << target_velocity;
 			logger << ", actual " << current_velocity ;
-			logger << ", base " << base_power ;
+			logger << ", yaw " << getTankDrive().navx_->GetYaw() ;
             logger << ", current angle "<< current_angle ;
 			logger << ", motor " << base_power ;
 			logger.endMessage();			
 
-			getTankDrive().setMotorsToPercents(-base_power, base_power);
+			getTankDrive().setMotorsToPercents(base_power, -base_power);
 		} else {
 			is_done_ = true;
 
