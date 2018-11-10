@@ -135,6 +135,9 @@ namespace frc
 					ret = false ;
 					break ;
 				}
+
+				if (m_start_delay < 1.0)
+					m_start_delay = 1.0 ;
 				index++;
 			}
 			else if (m_args[index] == "--auto")

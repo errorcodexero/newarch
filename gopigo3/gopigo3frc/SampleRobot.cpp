@@ -119,8 +119,9 @@ namespace frc
 						break;
 					}
 
-					if (args[index - 1] == "--start")
+					if (args[index - 1] == "--start") {
 						m_start_delay = value;
+					}
 					else if (args[index - 1] == "--auto")
 						m_auto_period = value;
 					else if (args[index - 1] == "--oper")

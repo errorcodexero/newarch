@@ -8,8 +8,7 @@ namespace xero {
         public:
             BunnyOISubsystem(xero::base::Robot &robot) ;
             virtual ~BunnyOISubsystem() ;
-            
-            
+			
         private:
         } ;
     }

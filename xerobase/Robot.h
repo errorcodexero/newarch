@@ -161,6 +161,9 @@ namespace xero {
 			void setupRobotOutputFile(const std::string &file) ;
 
 		private:
+			void logAutoModeState() ;
+
+		private:
 			// The time per robot loop in seconds
 			double target_loop_time_;
 

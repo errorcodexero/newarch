@@ -1,7 +1,8 @@
 #pragma once
 
-#include "AutoController.h"
-#include "Action.h"
+#include <AutoController.h>
+#include <Action.h>
+#include <ActionSequence.h>
 
 namespace xero {
 	namespace bunny2018 {
@@ -18,6 +19,12 @@ namespace xero {
 
         private:
             void createAutoMode() ;
+
+			xero::base::ActionSequencePtr createAutoModeZero() ;
+			xero::base::ActionSequencePtr createAutoModeOne() ;
+			xero::base::ActionSequencePtr createAutoModeTwo() ;
+			xero::base::ActionSequencePtr createAutoModeThree() ;
+			xero::base::ActionSequencePtr createAutoModeFour() ;												
 		};
 	}
 }

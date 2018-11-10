@@ -3,6 +3,7 @@
 #include "ControllerBase.h"
 #include "basegroups.h"
 #include <MessageDestStream.h>
+#include <DriverStation.h>
 #include <iostream>
 #include <cassert>
 
@@ -83,10 +84,81 @@ namespace xero {
 			assert(false) ;
 		}
 
-		void Robot::Autonomous() {
+		void Robot::logAutoModeState() {
+			std::string value ;
+			frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
+			
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
-			message_logger_ << "Entering Autonomous mode" ;
+			message_logger_ << "Entering Autonomous mode: " ;
 			message_logger_.endMessage() ;
+
+			value = "undefined" ;
+			if (ds.GetAlliance() == frc::kRed)
+				value = "red" ;
+			else if (ds.GetAlliance() == frc::kBlue)
+				value = "blue" ;
+
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "    Alliance: " << value ;
+			message_logger_.endMessage() ;
+
+			value = std::to_string(ds.GetLocation()) ;
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "    Location: " << value ;
+			message_logger_.endMessage() ;				
+
+			value = ds.GetGameSpecificMessage() ;
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "    GameData: " << value ;
+			message_logger_.endMessage() ;		
+
+			value = ds.GetEventName() ;
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "    EventName: " << value ;
+			message_logger_.endMessage() ;
+
+			value = "invalid" ;
+			frc::MatchType mt = ds.GetMatchType() ;
+			switch(mt) {
+			case frc::kPractice:
+				value = "practice" ;
+				break ;
+			case frc::kNone:
+				value = "none" ;
+				break ;
+			case frc::kQualification:
+				value = "qualification" ;
+				break ;
+			case frc::kElimination:
+				value = "elimination" ;
+				break ;												
+			}
+
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "    MatchType: " << value ;
+			message_logger_.endMessage() ;
+
+			value = std::to_string(ds.GetMatchNumber()) ;
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "    MatchNumber: " << value ;
+			message_logger_.endMessage() ;	
+
+			value = std::to_string(ds.GetReplayNumber()) ;
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "    ReplayNumber: " << value ;
+			message_logger_.endMessage() ;						
+
+			value = "No" ;
+			if (ds.IsFMSAttached())
+				value = "Yes" ;
+
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "    FMS Attached: " << value ;
+			message_logger_.endMessage() ;				
+		}
+
+		void Robot::Autonomous() {
+			logAutoModeState() ;
 
 			controller_ = createAutoController() ;
 			
@@ -139,8 +211,12 @@ namespace xero {
 			message_logger_ << "Robot Disabled" ;
 			message_logger_.endMessage() ;
 
-			while (IsDisabled())
+			while (IsDisabled()) {
+				if (oi_subsystem_ != nullptr)
+					oi_subsystem_->computeState() ;
+					
 				frc::Wait(target_loop_time_) ;
+			}
 		}
 	}
 }

@@ -15,9 +15,9 @@ hw:tankdrive:leftencoder2           1
 hw:tankdrive:rightencoder1          2
 hw:tankdrive:rightencoder2          3
 
-hw:driverstation:hid:oi             3
-hw:driverstation:hid:gunner         2
-hw:driverstation:hid:driver         1
+hw:driverstation:hid:oi             2
+hw:driverstation:hid:gunner         1
+hw:driverstation:hid:driver         0
 
 ##############################################################
 #

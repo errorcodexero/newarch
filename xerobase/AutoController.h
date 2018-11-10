@@ -1,7 +1,8 @@
 #pragma once
 
 #include "ControllerBase.h"
-#include "Action.h"
+#include "ActionSequence.h"
+#include <SmartDashboard/SmartDashboard.h>
 #include <iostream>
 
 namespace xero {
@@ -27,14 +28,23 @@ namespace xero {
 		protected:
 			/// \brief sets the reference to the action that will be run when run() is called
 			/// \param action run for a controller
-			void setAction(ActionPtr action) {
+			void setAction(ActionSequencePtr action) {
 				actionptr_ = action;
 				if (actionptr_ != nullptr)
 					actionptr_->start() ;
+
+
+				if (action != nullptr) {
+					std::string modestr = "None" ;
+					if (action != nullptr)
+						modestr = action->getName() ;
+					frc::SmartDashboard::PutString("automode:", modestr) ;					
+				}
 			}
 
+
 		private:
-			ActionPtr actionptr_;
+			ActionSequencePtr actionptr_;
 		} ;
 	}
 }

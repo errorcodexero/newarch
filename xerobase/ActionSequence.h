@@ -1,8 +1,10 @@
 #pragma once
-#include <vector>
 #include "Action.h"
 #include "DispatchAction.h"
 #include <MessageLogger.h>
+#include <memory>
+#include <vector>
+#include <string>
 
 namespace xero {
 	namespace base {
@@ -16,7 +18,7 @@ namespace xero {
 		class ActionSequence : public Action {
 		public:
 			/// \brief create an empty action sequence 
-			ActionSequence(xero::misc::MessageLogger &logger, std::string &name);
+			ActionSequence(xero::misc::MessageLogger &logger, const std::string &name);
 
 			/// \brief start this sequence of actions
 			void start();
@@ -52,7 +54,14 @@ namespace xero {
 			void pushSubActionPair(SubsystemPtr subsystem, ActionPtr action, bool block = true);
 
 			/// \brief create a human readable string representing this action sequence
+			/// \returns a human readable string representing this action sequence
 			std::string toString();
+
+			/// \brief return the name of the action sequence
+			/// \returns the name of the action sequence
+			const std::string &getName() const {
+				return name_ ;
+			}
 
 			/// \brief clear the list of actions
 			void clear() {
@@ -85,7 +94,8 @@ namespace xero {
 
 			//names the overall objective of the actions in the sequence
 			std::string name_;
-
 		};
+
+		typedef std::shared_ptr<ActionSequence> ActionSequencePtr ;
 	}
 }

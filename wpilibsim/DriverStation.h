@@ -6,6 +6,19 @@
 
 namespace frc
 {
+	enum Alliance {
+		kRed,
+		kBlue,
+		kUnknown,
+	} ;
+
+	enum MatchType {
+		kNone, 
+		kPractice, 
+		kQualification, 
+		kElimination
+	} ;
+
     class DriverStation : public xero::sim::SimulatedObject {
         friend class xero::sim::RobotSimBase ;
 
@@ -69,6 +82,34 @@ namespace frc
 
             return *theOne ;
         }
+
+		Alliance GetAlliance() const {
+			return kUnknown ;
+		}
+
+		int GetLocation() const {
+			return 1 ;
+		}
+
+		bool IsFMSAttached() const {
+			return false ;
+		}
+
+		std::string GetEventName() const {
+			return "SimulatorEvent" ;
+		}
+
+		MatchType GetMatchType() const {
+			return kNone ;
+		}
+
+		int GetMatchNumber() const {
+			return -1 ;
+		}
+
+		int GetReplayNumber() const {
+			return -1 ;
+		}
 
         int GetStickAxisCount(int which) ;
         double GetStickAxis(int which, int i) ;

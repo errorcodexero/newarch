@@ -26,7 +26,7 @@ namespace xero {
             }
 
             void setValue(double value) {
-                value_ = -1 ;
+                value_ = mapping_.size() ;
                 for(size_t i = 0 ; i < mapping_.size() ; i++) {
                     if (value <= mapping_[i]) {
                         value_ = static_cast<int>(i) ;
