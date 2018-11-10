@@ -41,8 +41,8 @@ namespace xero {
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
 
             //act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;
-            act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;
-            //act = std::make_shared<TankDriveAngleCharAction>(*tankdrive, 5.0, 0.6) ;
+            act = std::make_shared<TankDriveAngleAction>(*tankdrive, -90.0) ;
+            //act = std::make_shared<TankDriveAngleCharAction>(*tankdrive, 5.0, 0.0, 1.0, 0.1) ;
             //act = std::make_shared<TankDriveCharAction>(*tankdrive, 1.0, 0.5) ;
             seq->pushSubActionPair(tankdrive, act) ;
 

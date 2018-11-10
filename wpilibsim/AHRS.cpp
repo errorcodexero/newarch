@@ -5,12 +5,14 @@ using namespace xero::sim ;
 
 AHRS::AHRS(const char *port_p)
 {
+	yaw_ = 0.0 ;
     RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
     sim.connect(this) ;	
 }
 
 AHRS::AHRS(frc::SPI::Port p) 
 {
+	yaw_ = 0.0 ;	
     RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
     sim.connect(this) ;	    
 }

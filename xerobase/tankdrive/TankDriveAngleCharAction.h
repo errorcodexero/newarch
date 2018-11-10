@@ -8,8 +8,7 @@ namespace xero {
 		/// \brief Drives the drivebase straight for a given distance
 		class TankDriveAngleCharAction : public TankDriveAction {
 		public:
-			TankDriveAngleCharAction(TankDrive &subsystem, double duration, double value) ;
-			TankDriveAngleCharAction(TankDrive &subsystem, const std::string &name, const std::string &value_name) ;			
+			TankDriveAngleCharAction(TankDrive &subsystem, double duration, double start, double stop, double incr) ;
 			virtual ~TankDriveAngleCharAction() ;
 
 			void start();
@@ -22,7 +21,10 @@ namespace xero {
 			double start_time_ ;
 			double duration_ ;
 			bool is_done_ ;
-            double value_;
+            double start_ ;
+			double stop_ ;
+			double incr_ ;
+			double current_ ;
 		} ;
 	}
 }

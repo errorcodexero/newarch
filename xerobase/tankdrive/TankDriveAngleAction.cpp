@@ -50,7 +50,6 @@ void TankDriveAngleAction::run() {
 		double profile_angle_traveled = xero::math::normalizeAngleDegrees(current_angle - profile_initial_angle_);
 		double profile_remaining_angle = target_angle_ - profile_angle_traveled - total_angle_so_far_ ;
 		double total_traveled = total_angle_so_far_ + profile_angle_traveled ;
-		std::cout << "A " << total_angle_so_far_ << " " << profile_angle_traveled << " " << current_angle << " " << profile_initial_angle_ << std::endl ;
 
 		if (std::fabs(total_traveled - target_angle_) > angle_threshold_) {
 			double profile_delta_time = getTankDrive().getRobot().getTime() - profile_start_time_; 
@@ -63,10 +62,8 @@ void TankDriveAngleAction::run() {
 
 			if (std::fabs(profile_remaining_angle) < profile_outdated_error_angle_ && std::fabs(profile_error) > profile_outdated_error_short_) {
 				redo = true ;
-				std::cout << "Case one: " << profile_remaining_angle << " " << profile_error << std::endl ;
 			} else if (std::fabs(profile_remaining_angle) > profile_outdated_error_angle_ && std::fabs(profile_error) > profile_outdated_error_long_) {
 				redo = true ;
-				std::cout << "Case two: " << profile_remaining_angle << " " << profile_error << std::endl ;				
 			}
 
 			if (redo) {
@@ -82,20 +79,20 @@ void TankDriveAngleAction::run() {
 				logger.endMessage();
 			}
 
-			double target_velocity = profile_->getSpeed(profile_delta_time + getTankDrive().getRobot().getTargetLoopTime()) ;
-			double target_accel = 0.0 ;		// TODO: get from velocity profile
+			double target_velocity = profile_->getSpeed(profile_delta_time) ;
+			double target_accel = profile_->getAccel(profile_delta_time) ;
 			double base_power = velocity_pid_.getOutput(target_velocity, current_velocity, target_accel, getTankDrive().getRobot().getDeltaTime());
 
 			double current_angle = getTankDrive().getAngle();
 			
 			logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
 			logger << "time " << getTankDrive().getRobot().getTime() ;
-			logger << ", angle " << total_traveled ;
-			logger << ", profile " << profile_target_angle ;
-			logger << ", target " << target_velocity;
-			logger << ", actual " << current_velocity ;
-			logger << ", yaw " << getTankDrive().navx_->GetYaw() ;
-            logger << ", current angle "<< current_angle ;
+			logger << ", actual angle " << total_traveled ;
+			logger << ", profile angle " << profile_target_angle ;
+			logger << ", actual velocity " << current_velocity ;			
+			logger << ", profile velocity " << target_velocity;
+			logger << ", actual accel " << getTankDrive().getAngularAcceleration() ;
+			logger << ", profile accel " << profile_->getAccel(profile_delta_time) ;
 			logger << ", motor " << base_power ;
 			logger.endMessage();			
 
@@ -106,9 +103,12 @@ void TankDriveAngleAction::run() {
 			getTankDrive().setMotorsToPercents(0, 0);
 
 			logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
-			logger << "TankDriveAngleAction complete";
-			logger.startData("tankdriveangleaction_complete")
+			logger << "TankDriveAngleAction";
+			logger.startData("complete")
 				.addData("time", getTankDrive().getRobot().getTime() - start_time_)
+				.addData("position", getTankDrive().getAngle())
+				.addData("velocity", getTankDrive().getAngularVelocity())
+				.addData("accel", getTankDrive().getAngularAcceleration())
 				.endData();
 			logger.endMessage();
 		}

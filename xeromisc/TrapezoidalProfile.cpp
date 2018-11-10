@@ -40,6 +40,19 @@ namespace xero {
             return ret ;
         }
 
+		double TrapezoidalProfile::getAccel(double t) const {
+			if (t < 0.0)
+				return 0.0 ;
+			else if (t < ta_)
+				return max_accel_ ;
+			else if (t < ta_ + tc_)
+				return 0.0 ;
+			else if (t < ta_ + tc_ + td_)
+				return max_decel_ ;
+
+			return 0.0 ;
+		}
+
         double TrapezoidalProfile::getSpeed(double t) const {
             double ret = intspeed(t) ;
             return isneg_ ? -ret : ret ;
@@ -47,9 +60,6 @@ namespace xero {
 
         double TrapezoidalProfile::getDistance(double t) const {
             double ret ;
-
-            if (t > 0.75)
-                ret = 0.0 ;
 
             if (t < 0.0) {
                 ret = 0.0 ;
@@ -72,7 +82,7 @@ namespace xero {
             }
 
             return isneg_ ? -ret : ret ;
-        }        
+        }
 
 		double TrapezoidalProfile::pickRoot(const std::vector<double> &roots) const {
 			//

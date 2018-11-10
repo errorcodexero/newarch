@@ -15,29 +15,28 @@ using namespace xero::misc ;
 namespace xero {
 	namespace base {
 
-		TankDrive::TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids) : Subsystem(robot, "tankdrive") {
+		TankDrive::TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids) : Subsystem(robot, "tankdrive"), angular_(true) {
 			//The two sides should always have the same number of motors and at least one motor each
 			assert((left_motor_ids.size() == right_motor_ids.size()) && (left_motor_ids.size() > 0));
 
 			initTalonList(left_motor_ids, left_motors_);
 			initTalonList(right_motor_ids, right_motors_);
 
-			last_dist_ = 0.0;
+			dist_l_ = 0.0 ;
+			dist_r_ = 0.0 ;
 
 #ifdef GOPIGO
 			navx_ = new AHRS("/dev/ttyACM0") ;	
 #else
 			navx_ = new AHRS(frc::SPI::Port::kMXP) ;		
-#endif			
+#endif
 
 			if (!navx_->IsConnected()) {
-				delete navx_ ;
+				auto &logger = getRobot().getMessageLogger() ;
+				logger.startMessage(MessageLogger::MessageType::error) ;
+				logger << "NavX is not connected - cannot perform tankdrive auto functions" ;
+				logger .endMessage() ;
 				navx_ = nullptr ;
-				kin_ = new Kinematics(4.6063, 0.95) ;
-				angle_ = 0.0 ;
-			}
-			else {
-				last_angle_ = navx_->GetYaw() ;
 			}
 		}
 
@@ -102,65 +101,29 @@ namespace xero {
 			}
 
 			if (navx_ != nullptr) {
-				angle_ = navx_->GetYaw();
-			}
-			else {
-				kin_->move(dist_l_ - last_dist_l_, dist_r_ - last_dist_r_) ;
-				angle_ = kin_->getAngle() ;
+				double angle = navx_->GetYaw() ;
+				angular_.update(getRobot().getDeltaTime(), angle) ;
 			}
 
-			double current_dist = getDist();
-			velocity_ = (current_dist - last_dist_) / getRobot().getDeltaTime();
-			last_dist_ = current_dist;		
-
-			std::cout << "ComputState " << angle_ << " " << last_angle_ << std::endl ;
-			angular_velocity_ = (angle_ - last_angle_) / getRobot().getDeltaTime();
-			last_angle_ = angle_;
-
-			acceleration_ = (velocity_ - last_velocity_) / getRobot().getDeltaTime();
-			last_velocity_ = velocity_;
-
-			angular_acceleration_ = (angular_velocity_ - last_angular_velocity_) / getRobot().getDeltaTime();
-			last_angular_velocity_ = angular_velocity_;
-
-			last_dist_l_ = dist_l_ ;
-			last_dist_r_ = dist_r_ ;	
-			
+			linear_.update(getRobot().getDeltaTime(), getDist()) ;
 
 			if (getAction() == nullptr || getAction()->isDone()) {
 				auto &logger = getRobot().getMessageLogger() ;
 				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
 				logger << "time " << getRobot().getTime() ;
-				logger << ", dist " << getDist() ;
+				logger << ", linear dist " << getDist() ;
 				logger << ", velocity " << getVelocity() ;
 				logger << ", accel " << getAcceleration() ;
-				logger << ", angle " << getAngle() ;
-				logger << ", ang velo " << getAngularVelocity() ;
-				logger << ", ang accel " << getAngularAcceleration() ;
+				logger << ", angle dist " << getAngle() ;
+				logger << ", velocity " << getAngularVelocity() ;
+				logger << ", accel " << getAngularAcceleration() ;
 				logger.endMessage();	
-
-				std::cout << "Yaw is " << navx_->GetYaw() << std::endl ;
 			}
 		}
 
 		void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
 			left_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent);
 			right_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
-		}
-
-		void TankDrive::zeroAngle() {
-			auto &logger = getRobot().getMessageLogger() ;
-			logger.startMessage(MessageLogger::MessageType::debug) ;
-			logger << "Resetting YAW" ;
-			logger.endMessage() ;
-
-			navx_->ZeroYaw() ;
-			while (std::fabs(navx_->GetYaw()) > 1.0) ;
-			angle_ = 0.0 ;
-			last_angle_ = 0.0 ;
-			angular_velocity_ = 0.0 ;
-			last_angular_velocity_ = 0.0 ;
-			angular_acceleration_ = 0.0;
 		}
 	}
 }

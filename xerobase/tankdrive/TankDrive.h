@@ -13,6 +13,7 @@
 #include <Solenoid.h>
 #include <Kinematics.h>
 #include <Subsystem.h>
+#include <Speedometer.h>
 
 typedef ctre::phoenix::motorcontrol::can::TalonSRX TalonSRX;
 
@@ -57,7 +58,7 @@ namespace xero {
 			/// \brief Return the current angle of the robot relative to its starting angle
 			/// \returns The current angle of the robot
 			double getAngle() const {
-				return angle_ ;
+				return angular_.getDistance() ;
 			}			
 
 			/// \brief Return the net distance travelled in inches by the left side of the drivebase.
@@ -92,22 +93,22 @@ namespace xero {
 
 			/// \brief Return the velocity of the drive base
 			double getVelocity() const {
-				return velocity_;
+				return linear_.getVelocity() ;
 			}
 
 			/// \brief Return the angular velocity of the drive base
 			double getAngularVelocity() const {
-				return angular_velocity_;
+				return angular_.getVelocity() ;
 			}
 
 			/// \brief Return the acceleration of the drive base
 			double getAcceleration() const {
-				return acceleration_;
+				return linear_.getAcceleration() ;
 			}
 
 			/// \brief Return the angular acceleration of the drive base
 			double getAngularAcceleration() const {
-				return angular_acceleration_;
+				return angular_.getAcceleration() ;
 			}
 			/// \brief Invert the output of the left motors
 			void invertLeftMotors() ;
@@ -134,17 +135,10 @@ namespace xero {
 			/// \brief Run the subsystem
 			virtual void run() ;
 
-			void zeroAngle() ;
-
 			/// \brief This method returns true if the tankdrive subsystem can execute the given action
 			/// \param action the section to test to see if it can be executed
 			/// \returns true if the action can be executed, false otherwise
 			virtual bool canAcceptAction(xero::base::ActionPtr action) ;
-
-			/// \brief set the YAW to zero degrees
-			virtual void zeroYaw() {
-				navx_->ZeroYaw();
-			}
 
 			/// \brief set the drive base to low gear
 			void lowGear() {
@@ -172,22 +166,13 @@ namespace xero {
 
 			std::shared_ptr<frc::Solenoid> gear_ ;
 
+			xero::misc::Speedometer linear_ ;
+			xero::misc::Speedometer angular_ ;
+
 			int ticks_left_ ;
 			int ticks_right_ ;
 			
 			double dist_l_, dist_r_;
-			double last_dist_l_, last_dist_r_ ;
-			double last_dist_;
-			double velocity_;
-			double last_velocity_;
-			double angular_velocity_;
-			double last_angular_velocity_;
-			double angle_ ;
-			double last_angle_;
-			double acceleration_;
-			double last_acceleration_;
-			double angular_acceleration_;
-			double last_angular_acceleration;
 
 			double inches_per_tick_ ;
 

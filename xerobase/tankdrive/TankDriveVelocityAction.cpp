@@ -27,8 +27,6 @@ void TankDriveVelocityAction::start() {
 	velocity_threshold_ = parser.getDouble("tankdrive:distanceaction:velocity_threshold");
 
 	start_time_ = getTankDrive().getRobot().getTime();
-
-	getTankDrive().zeroYaw();
 }
 
 void TankDriveVelocityAction::run() {

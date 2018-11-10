@@ -72,3 +72,6 @@ tankdrive:sim:scrub                                 1.0
 # The width of the drivebase for the robot
 #
 tankdrive:sim:width                                24.0
+
+sorter:ticks_per_revolution						   1000
+sorter:total_holes                                 5

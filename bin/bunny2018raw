@@ -28,7 +28,7 @@ fi
 modeset=false
 if [ $2 = "auto" ]; then
     modeset=true
-    autotime=15.0
+    autotime=60.0
     teleoptime=0.0
     testtime=0.0
 fi

@@ -13,6 +13,7 @@ namespace xero {
 
             void update(double dist, double start_velocity, double end_velocity) ;
 
+			double getAccel(double t) const ;
             double getSpeed(double t) const ;
             double getDistance(double t) const ;
 

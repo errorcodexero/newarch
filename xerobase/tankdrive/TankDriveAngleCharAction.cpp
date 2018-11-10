@@ -1,44 +1,51 @@
 #include "TankDriveAngleCharAction.h"
 #include "TankDrive.h"
 #include <Robot.h>
+#include <MessageLogger.h>
 #include <iostream>
+
+using namespace xero::misc ;
 
 namespace xero {
 	namespace base {
-		TankDriveAngleCharAction::TankDriveAngleCharAction(TankDrive &drive, double duration, double value) : TankDriveAction(drive) {
+		TankDriveAngleCharAction::TankDriveAngleCharAction(TankDrive &drive, double duration, double start, double stop, double incr) : TankDriveAction(drive) {
 			duration_ = duration ;
-            value_ =value ;
-
+			start_ = start ;
+			stop_ = stop ;
+			incr_ = incr ;
 		}
 
-		TankDriveAngleCharAction::TankDriveAngleCharAction(TankDrive &drive, const std::string &name, const std::string &value_name) : TankDriveAction(drive) {
-			duration_ = getTankDrive().getRobot().getSettingsParser().getDouble(name) ;
-            value_ = getTankDrive().getRobot().getSettingsParser().getDouble(value_name) ;
-		}		
-		
 		TankDriveAngleCharAction::~TankDriveAngleCharAction() {			
 		}
 
 		void TankDriveAngleCharAction::start() {
 			is_done_ = false ;
 			start_time_ = frc::Timer::GetFPGATimestamp() ;
-			getTankDrive().setMotorsToPercents(value_, -value_) ;
-			std::cout << "Char " << duration_ << std::endl ;
+			current_ = start_ ;
+			getTankDrive().setMotorsToPercents(current_, -current_) ;
 		}
 
 		void TankDriveAngleCharAction::run() {
+			auto &logger = getTankDrive().getRobot().getMessageLogger() ;
+
 			if (!is_done_) {
 				double now = frc::Timer::GetFPGATimestamp() ;
 				if (now - start_time_ >= duration_) {
-					std::cout << "Done: " << now << " " << start_time_ << " " << duration_ << std::endl ; 
-					is_done_ = true ;
-					getTankDrive().setMotorsToPercents(0.0, 0.0) ;
-				} else {
-					std::cout << (now - start_time_) ;
-					std::cout << ", Angle " << getTankDrive().getAngle() ;
-					std::cout << ", Velocity " << getTankDrive().getAngularVelocity() ;
-					std::cout << ", Acceleration " << getTankDrive().getAngularAcceleration() ;
-					std::cout << std::endl ;
+					logger.startMessage(MessageLogger::MessageType::info) ;
+					logger << "duration " << duration_ ;
+					logger << ", percent " << current_ ;
+					logger << ", angular velocity " << getTankDrive().getAngularVelocity() ;
+					logger << ", angular acceleration " << getTankDrive().getAngularAcceleration() ;
+					logger.endMessage() ;
+
+					current_ = current_ + incr_ ;
+					if (current_ > stop_) {
+						is_done_ = true ;
+					}
+					else {
+						start_time_ = frc::Timer::GetFPGATimestamp() ;
+						getTankDrive().setMotorsToPercents(current_, -current_) ;
+					}
 				}
 			}
 		}

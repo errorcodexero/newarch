@@ -156,7 +156,7 @@ namespace xero {
 			left_ += dleft;
 			right_ += dright;
 
-			double dv = (dright - dleft) / 2 * scrub_;
+			double dv = (dleft - dright) / 2 * scrub_;
 
 			double lrevs = left_ / (PI * diameter_);
 			double rrevs = right_ / (PI * diameter_) ;
