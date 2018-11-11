@@ -25,8 +25,6 @@ namespace xero {
             int sel = oi->getAutoModeSelector() ;
             ActionSequencePtr mode ;
 
-			std::cout << "AutoSel is " << sel << std::endl ;
-
 			//
 			// If there is no hardware to set the automode, default to auto
 			// mode zero
