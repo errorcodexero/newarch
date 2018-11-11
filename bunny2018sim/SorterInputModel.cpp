@@ -16,7 +16,7 @@ namespace xero {
             }
 
             std::string SorterInputModel::toString() {
-                std::string result("bunnycollector: ") ;
+                std::string result("sorterinput ") ;
 
                 result += "duty_cycle " + std::to_string(voltage_) ;
 

@@ -21,8 +21,7 @@ hw:sorter:index						6
 #
 # These parameters control the behavior of the sorter
 #
-aorter:ticks_per_revolution							100
-
+sorter:ticks_per_revolution							100
 
 #
 # These parameter control how the drive base simulation model
@@ -40,7 +39,7 @@ tankdrive:sim:low:rps_per_volt_per_second                 5.72958
 #
 # The maximum amount of change per second of the RPS of a motor.
 #
-tankdrive:sim:change_per_second						11.45196
+tankdrive:sim:change_per_second						11
 
 #
 # The maximum random error applied to the left and right

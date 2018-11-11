@@ -16,7 +16,7 @@ namespace xero {
             }
 
             std::string HopperModel::toString() {
-                std::string result("bunnycollector: ") ;
+                std::string result("hopper: ") ;
 
                 result += "duty_cycle " + std::to_string(voltage_) ;
 

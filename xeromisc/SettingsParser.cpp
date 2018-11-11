@@ -210,6 +210,7 @@ bool SettingsParser::isDefined(const std::string &key) const {
 
 bool SettingsParser::isDefinedOnGet(const std::string &key, const std::string &type) const {
 	if(!isDefined(key)) {
+		std::cerr << "Missing key '" << key << "'" << std::endl ;
 		logger_.startMessage(MessageLogger::MessageType::error, msggroup_);
 		logger_ << "Tried to get " << type << " at " << key << " but no such value is defined.";
 		logger_.endMessage();

@@ -23,6 +23,7 @@ TankDriveDistanceAction::~TankDriveDistanceAction() {
 }
 
 void TankDriveDistanceAction::start() {
+
 	profile_initial_dist_ = getTankDrive().getDist();
 
 	xero::misc::SettingsParser &parser = getTankDrive().getRobot().getSettingsParser();

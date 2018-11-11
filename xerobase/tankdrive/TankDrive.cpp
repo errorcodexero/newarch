@@ -24,6 +24,7 @@ namespace xero {
 
 			dist_l_ = 0.0 ;
 			dist_r_ = 0.0 ;
+			dumpstate_ = false ;
 
 #ifdef GOPIGO
 			navx_ = new AHRS("/dev/ttyACM0") ;	
@@ -107,7 +108,7 @@ namespace xero {
 
 			linear_.update(getRobot().getDeltaTime(), getDist()) ;
 
-			if (getAction() == nullptr || getAction()->isDone()) {
+			if (getAction() == nullptr || getAction()->isDone() || dumpstate_) {
 				auto &logger = getRobot().getMessageLogger() ;
 				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
 				logger << "time " << getRobot().getTime() ;
@@ -117,6 +118,8 @@ namespace xero {
 				logger << ", angle dist " << getAngle() ;
 				logger << ", velocity " << getAngularVelocity() ;
 				logger << ", accel " << getAngularAcceleration() ;
+				logger << ", ticks " << ticks_left_ << " " << ticks_right_ ;
+				logger << ", dist " << dist_l_ << " " << dist_r_ ;
 				logger.endMessage();	
 			}
 		}

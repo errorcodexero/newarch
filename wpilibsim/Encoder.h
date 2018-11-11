@@ -22,12 +22,14 @@ namespace frc
 		void SimulatorSetValue(int value) ;
 
 		void SetReverseDirection(bool b) {
+			reverse_ = b ;
 		}
 
 	private:
 		int value_ ;
 		int first_;
 		int second_;
+		bool reverse_ ;
 	};
 }
 
