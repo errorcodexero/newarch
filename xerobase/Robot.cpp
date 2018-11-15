@@ -93,9 +93,9 @@ namespace xero {
 			message_logger_.endMessage() ;
 
 			value = "undefined" ;
-			if (ds.GetAlliance() == frc::kRed)
+			if (ds.GetAlliance() == frc::DriverStation::kRed)
 				value = "red" ;
-			else if (ds.GetAlliance() == frc::kBlue)
+			else if (ds.GetAlliance() == frc::DriverStation::kBlue)
 				value = "blue" ;
 
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
@@ -118,18 +118,18 @@ namespace xero {
 			message_logger_.endMessage() ;
 
 			value = "invalid" ;
-			frc::MatchType mt = ds.GetMatchType() ;
+			frc::DriverStation::MatchType mt = ds.GetMatchType() ;
 			switch(mt) {
-			case frc::kPractice:
+			case frc::DriverStation::kPractice:
 				value = "practice" ;
 				break ;
-			case frc::kNone:
+			case frc::DriverStation::kNone:
 				value = "none" ;
 				break ;
-			case frc::kQualification:
+			case frc::DriverStation::kQualification:
 				value = "qualification" ;
 				break ;
-			case frc::kElimination:
+			case frc::DriverStation::kElimination:
 				value = "elimination" ;
 				break ;												
 			}

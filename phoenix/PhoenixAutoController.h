@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AutoController.h"
-#include "Action.h"
+#include "ActionSequence.h"
 
 namespace xero {
 	namespace phoenix {
@@ -12,7 +12,7 @@ namespace xero {
 		class PhoenixAutoController : public xero::base::AutoController
 		{
 		public:
-			PhoenixAutoController(xero::base::ActionPtr action, xero::base::Robot &robot):AutoController(robot) {
+			PhoenixAutoController(xero::base::ActionSequencePtr action, xero::base::Robot &robot):AutoController(robot) {
 				setAction(action);
 			}
 		};

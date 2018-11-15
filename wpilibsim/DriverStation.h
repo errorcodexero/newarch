@@ -6,18 +6,7 @@
 
 namespace frc
 {
-	enum Alliance {
-		kRed,
-		kBlue,
-		kUnknown,
-	} ;
 
-	enum MatchType {
-		kNone, 
-		kPractice, 
-		kQualification, 
-		kElimination
-	} ;
 
     class DriverStation : public xero::sim::SimulatedObject {
         friend class xero::sim::RobotSimBase ;
@@ -74,7 +63,18 @@ namespace frc
 		} ;
 
     public:
+		enum Alliance {
+			kRed,
+			kBlue,
+			kUnknown,
+		} ;
 
+		enum MatchType {
+			kNone, 
+			kPractice, 
+			kQualification, 
+			kElimination
+		} ;
 
         static DriverStation &GetInstance() {
             if (theOne == nullptr)
