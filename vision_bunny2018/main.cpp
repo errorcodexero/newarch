@@ -10,6 +10,7 @@
 #include "opencv2/features2d.hpp"
 
 #include "params_parser.h"
+#include "UdpSender.h"
 
 //#include <cstdlib>
 #include <libv4l2.h>
@@ -141,7 +142,6 @@ std::vector<cv::KeyPoint> detectCrate(const paramsInput& params,
 
 
 int main(int argc, char **argv) {
-
     // Read param file
     if (argc < 2) {
         std::cout << "Please specify the params file.\n";
@@ -151,6 +151,20 @@ int main(int argc, char **argv) {
     paramsInput params;
     params.readFile(params_file);
 
+    // UDP broadcaster.  Test creation and basic usage."
+    xeromisc::UdpBroadcastSender m_server_out;
+    if (!m_server_out.open(params.getValue("VISION_RESULT_PORT"))) {
+        std::cout << "Could not start broadcast server.\n";
+        return 1;
+    }
+    std::vector<uint8_t> data(2);
+    size_t count=2;
+    data[0] = 0;
+    data[1] = 1;
+    m_server_out.send(data, 0, count);
+    m_server_out.close();
+
+    // Open and validate image source
     std::string image_source_file(params.getString("FILENAME", ""));
     if (!xero::file::exists(image_source_file)) {
         std::cout << "Input image file '" << image_source_file << "' does not exist.\n";
