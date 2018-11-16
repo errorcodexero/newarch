@@ -14,6 +14,8 @@ namespace frc
 		int32_t Get() const;
 		int32_t GetEncodingScale() const;
 		void Reset();
+		void SetReverseDirection(bool v) {
+		}
 
 	private:
 		uint32_t m_a;

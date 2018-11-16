@@ -184,11 +184,19 @@ namespace frc
 		DriverStation();
 
 	public:
-		enum class Alliance
+		enum Alliance
 		{
 			kRed,
 			kBlue,
 		};
+
+		enum MatchType {
+			kNone, 
+			kPractice, 
+			kQualification, 
+			kElimination
+		} ;
+
 	public:
 		virtual ~DriverStation();
 		static void initialize();
@@ -199,6 +207,18 @@ namespace frc
 				initialize();
 
 			return *m_ds_p;
+		}
+
+		int GetMatchNumber() const {
+			return -1 ;
+		}
+		
+		int GetReplayNumber() const {
+			return -1 ;
+		}
+
+		MatchType GetMatchType() const {
+			return kNone ;
 		}
 
 		bool GetStickButton(int stick, int button);
