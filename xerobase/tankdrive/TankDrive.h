@@ -45,6 +45,12 @@ namespace xero {
 			/// \brief destroy a tank drive object
 			virtual ~TankDrive() ;
 
+			/// \brief returns true if the drivebase has a shifter
+			/// \returns true if the drivebase has a gear shifter
+			bool hasGearShifter() const {
+				return gear_ != nullptr ;
+			}
+
 			/// \brief set to dump state each cycle
 			/// If true, the state of the tankdrive is printed after each iteration of the robot loop
 			/// \param state the value of the flag
@@ -148,14 +154,10 @@ namespace xero {
 			virtual bool canAcceptAction(xero::base::ActionPtr action) ;
 
 			/// \brief set the drive base to low gear
-			void lowGear() {
-				gear_->Set(true) ;
-			}
+			void lowGear() ;
 
 			/// \brief set the drive base to high gear
-			void highGear() {
-				gear_->Set(false) ;
-			}
+			void highGear()  ;
 
 		private:
 			/// \brief Set the motors to output at the given percentages

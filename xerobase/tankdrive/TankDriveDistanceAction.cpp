@@ -43,6 +43,9 @@ void TankDriveDistanceAction::start() {
 	getTankDrive().navx_->ZeroYaw();
 
 	total_dist_so_far_ = 0.0 ;
+
+	if (getTankDrive().hasGearShifter())
+		getTankDrive().lowGear() ;	
 }
 
 void TankDriveDistanceAction::run() {

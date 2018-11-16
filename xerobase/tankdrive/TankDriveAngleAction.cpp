@@ -40,6 +40,9 @@ void TankDriveAngleAction::start() {
 	profile_->update(target_angle_, 0.0, 0.0);
 	profile_initial_angle_ = getTankDrive().getAngle() ;
 	total_angle_so_far_ = 0.0 ;
+
+	if (getTankDrive().hasGearShifter())
+		getTankDrive().lowGear() ;
 }
 
 void TankDriveAngleAction::run() {
