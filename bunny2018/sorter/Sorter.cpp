@@ -23,14 +23,14 @@ namespace xero {
 
         Sorter::~Sorter(){
         }
-		
+    /*
         void Sorter::computeState(){
             encoder_ticks_ = encoder_->Get();
             if(calibrated_){
                 angle_ = encoder_ticks_*degrees_per_tick_;
             }
         }
-
+    
 		bool Sorter::canAcceptAction(ActionPtr action) {
 			std::shared_ptr<SorterAction> act_p = std::dynamic_pointer_cast<SorterAction>(action) ;
 			if (act_p == nullptr)
@@ -40,5 +40,6 @@ namespace xero {
 
 			return true ;
 		}
+    */
     }
 }
