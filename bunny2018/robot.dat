@@ -21,6 +21,9 @@ hw:driverstation:hid:driver         1
 
 hw:collector:motor                  1
 hw:hopper:motor                     1
+hw:sorter:motor                     1
+hw:sorter:encoder1                  1
+hw:sorter:encoder2                  1
 hw:sorter_in:motor                  1
 hw:sorter_out:motor                 1
 
@@ -85,3 +88,11 @@ driver:power:tolerance                                          0.05
 driver:power:nudge_straight                                     0.2
 driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
+
+
+#
+# Sorter Subsystem Constants
+#
+sorter:angle:minimum                                            1
+sorter:angle:maximum                                            1
+sorter:degrees_per_tick                                         1

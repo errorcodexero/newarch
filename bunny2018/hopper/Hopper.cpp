@@ -1,5 +1,5 @@
 #include "Hopper.h"
-//#include "HopperAction.h"     //doesn't exist yet
+#include "singlemotorsubsystem/SingleMotorSubsystemAction.h"
 #include <Robot.h>
 
 using namespace xero::base;
@@ -16,7 +16,7 @@ namespace xero {
         }
 
         bool Hopper::canAcceptAction(ActionPtr action) {
-            auto coll = std::dynamic_pointer_cast<HopperAction>(action) ;
+            auto coll = std::dynamic_pointer_cast<SingleMotorSubsystemAction>(action) ;
             return coll != nullptr ;
         }
     }

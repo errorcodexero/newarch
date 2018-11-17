@@ -1,5 +1,5 @@
 #include "SorterOut.h"
-//#include "SorterOutAction.h"      //doesn't exist yet
+#include "singlemotorsubsystem/SingleMotorSubsystemAction.h"
 #include <Robot.h>
 
 using namespace xero::base;
@@ -16,7 +16,7 @@ namespace xero {
         }
 
         bool SorterOut::canAcceptAction(ActionPtr action) {
-            auto coll = std::dynamic_pointer_cast<SorterOutAction>(action) ;
+            auto coll = std::dynamic_pointer_cast<SingleMotorSubsystemAction>(action) ;
             return coll != nullptr ;
         }
     }

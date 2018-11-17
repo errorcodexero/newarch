@@ -1,6 +1,6 @@
-#include "SingleMotorSubsystemAction.h"
+#include "SingleMotorVoltageAction.h"
 #include "SingleMotorSubsystem.h"
-#include <Robot.h>
+#include "Robot.h"
 
 using namespace xero::base;
 
@@ -18,7 +18,7 @@ namespace xero {
 
             }
             void SingleMotorVoltageAction::start() {
-                getSingleMotorSubsystem().motor->Set(duty_cycle_) ;
+                getSubsystem().getMotor()->Set(duty_cycle_) ;
             }
 
             void SingleMotorVoltageAction::run() {
