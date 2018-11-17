@@ -17,6 +17,7 @@ arguments.  The following command line arguments are defined.
   cube=time,time,time - this causes the cube detect sensor model to detect at each time given
   
 
-
+The simulator executable is at:
+build/exe/frcUserProgramSim/frcUserProgramSim.exe
 
 
