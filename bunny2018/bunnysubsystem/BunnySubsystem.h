@@ -3,6 +3,7 @@
 #include <Subsystem.h>
 #include <tankdrive/TankDrive.h>
 #include <MessageListener/MessageListener.h>
+#include <collector/Collector.h>
 
 namespace xero {
     namespace bunny2018 {
@@ -29,6 +30,7 @@ namespace xero {
             std::shared_ptr<xero::base::TankDrive> db_ ;
             std::shared_ptr<BunnyOISubsystem> oi_ ;
             std::shared_ptr<xero::base::MessageListener> ml_ ;
+            std::shared_ptr<Collector> cl_ ;
         } ;
     }
 }

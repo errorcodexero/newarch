@@ -18,6 +18,9 @@ namespace xero {
             
             ml_ = std::make_shared<MessageListener>(robot) ;
             addChild(ml_) ;
+
+            cl_ = std::make_shared<Collector>(robot) ;
+            addChild(cl_) ;
         }
 
         BunnySubsystem::~BunnySubsystem() {
