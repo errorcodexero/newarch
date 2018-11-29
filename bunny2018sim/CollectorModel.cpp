@@ -1,4 +1,5 @@
-#include "SorterOutputModel.h"
+#include "CollectorModel.h"
+#include <TalonSRX.h>
 #include <RobotSimBase.h>
 
 using namespace frc ;
@@ -7,26 +8,26 @@ using namespace ctre::phoenix::motorcontrol::can ;
 namespace xero {
     namespace sim {
         namespace bunny2018 {
-            SorterOutputModel::SorterOutputModel(RobotSimBase &simbase) : SubsystemModel(simbase, "intake") {
-                motor_channel_ = simbase.getSettingsParser().getInteger("hw:sorter:output:motor") ;
+            CollectorModel::CollectorModel(RobotSimBase &simbase) : SubsystemModel(simbase, "intake") {
+                motor_channel_ = simbase.getSettingsParser().getInteger("hw:bunnycollector:motor") ;
                 voltage_ = 0.0 ;
             }
 
-            SorterOutputModel::~SorterOutputModel() {                
+            CollectorModel::~CollectorModel() {                
             }
 
-            std::string SorterOutputModel::toString() {
-                std::string result("sorteroutput ") ;
+            std::string CollectorModel::toString() {
+                std::string result("bunnycollector: ") ;
 
                 result += "duty_cycle " + std::to_string(voltage_) ;
 
                 return result ;
             }
 
-            void SorterOutputModel::run(double dt) {                
+            void CollectorModel::run(double dt) {                
             }
 
-	        void SorterOutputModel::inputChanged(SimulatedObject *obj) {              
+	        void CollectorModel::inputChanged(SimulatedObject *obj) {              
 			    std::lock_guard<std::mutex> lock(getLockMutex()) ;
                 TalonSRX *talon = dynamic_cast<TalonSRX *>(obj) ;
                 if (talon != nullptr) {
@@ -35,7 +36,7 @@ namespace xero {
                 }
             }    
 
-            void SorterOutputModel::addTalonSRX(TalonSRX *motor) {
+            void CollectorModel::addTalonSRX(TalonSRX *motor) {
                 if (motor->GetDeviceID() == motor_channel_) {
                     motor_ = motor ;
                     motor_->addModel(this) ;

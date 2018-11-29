@@ -6,14 +6,14 @@ namespace xero  {
     namespace sim {
         namespace bunny2018 {
 			/// \brief A model of Phoenix's intake.
-            class SorterOutputModel : public SubsystemModel {
+            class CollectorModel : public SubsystemModel {
             public:
 				/// \brief Create a new model of the robot's intake.
 				/// \param simbase a reference to the base for the robot simulator
-                SorterOutputModel(RobotSimBase &simbase) ;
+                CollectorModel(RobotSimBase &simbase) ;
 
 				/// \brief Destroy the model.
-                virtual ~SorterOutputModel() ;
+                virtual ~CollectorModel() ;
 
 				/// \brief Convert the model to a string.
 				/// \returns details about the intake's state

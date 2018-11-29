@@ -6,7 +6,7 @@
         {
             "label": "Build RobotCode",
             "type": "shell",
-            "command": "./gradlew frcUserProgramExecutable",
+            "command": ".\\gradlew.bat frcUserProgramExecutable",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -18,7 +18,7 @@
         {
             "label": "Build Simulator",
             "type": "shell",
-            "command": "./gradlew frcUserProgramSimExecutable",
+            "command": ".\\gradlew.bat frcUserProgramSimExecutable",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -30,7 +30,7 @@
         {
             "label": "Build All",
             "type": "shell",
-            "command": "./gradlew build",
+            "command": ".\\gradlew.bat build",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -42,7 +42,7 @@
         {
             "label": "Deploy Robot Code",
             "type": "shell",
-            "command": "./gradlew deploy",
+            "command": ".\\gradlew.bat deploy",
             "problemMatcher": [
                 "$gcc"
             ]
@@ -50,7 +50,7 @@
         {
             "label": "Clean",
             "type": "shell",
-            "command": "./gradlew clean",
+            "command": ".\\gradlew.bat clean",
             "problemMatcher": []
         }
     ]

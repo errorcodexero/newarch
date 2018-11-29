@@ -24,7 +24,7 @@ namespace xero
 				oi_ = std::make_shared<OIModel>(*this) ;
 				addModel(oi_) ;
 
-				bunnycollector_ = std::make_shared<BunnyCollectorModel>(*this) ;
+				bunnycollector_ = std::make_shared<CollectorModel>(*this) ;
 				addModel(bunnycollector_) ;
 
 				sorterintput_ = std::make_shared<SorterInputModel>(*this) ;

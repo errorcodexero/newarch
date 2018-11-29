@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RobotSimBase.h"
-#include "BunnyCollectorModel.h"
+#include "CollectorModel.h"
 #include "SorterInputModel.h"
 #include "SorterOutputModel.h"
 #include "HopperModel.h"
@@ -49,7 +49,7 @@ namespace xero
 				static constexpr double PI = 3.14159265359;
 				std::shared_ptr<xero::sim::TankDriveModel> tankdrive_ ;
 				std::shared_ptr<xero::sim::bunny2018::OIModel> oi_ ;
-				std::shared_ptr<xero::sim::bunny2018::BunnyCollectorModel> bunnycollector_ ;
+				std::shared_ptr<xero::sim::bunny2018::CollectorModel> bunnycollector_ ;
 				std::shared_ptr<xero::sim::bunny2018::SorterInputModel> sorterintput_ ;
 				std::shared_ptr<xero::sim::bunny2018::SorterOutputModel> sorteroutput_ ;
 				std::shared_ptr<xero::sim::bunny2018::HopperModel> hopper_ ;
