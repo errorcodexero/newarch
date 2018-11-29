@@ -40,7 +40,7 @@ namespace xeromisc
 		int receive(std::vector<uint8_t> &data)
 		{
 			struct sockaddr_in srcaddr;
-			size_t len = sizeof(srcaddr);
+			socklen_t len = sizeof(srcaddr);
 			int flags = 0;
 			ssize_t count;
 

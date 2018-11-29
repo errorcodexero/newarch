@@ -23,7 +23,7 @@ CONFIGURE:
 
 3. Update the Debug Configuration
    a. Select Debug/Open Configurations from the menu
-   b. Find thr eentry that says miDebuggerPath and change the path to match
+   b. Find the entry that says miDebuggerPath and change the path to match
       your installation of cygwin (most will say C:\\cygwin64\\bin\\gdb.exe)
    c. Save the file
 
@@ -43,10 +43,10 @@ CONFIGURE:
             		"-l", "-i"
         	],
 
-		// Explicitly control indentation. Use tabs.
+		// Explicitly control indentation. Use spaces.
         	"editor.detectIndentation": false,
 	    	"editor.tabSize": 4,	
-    		"editor.insertSpaces": false,		  
+    		"editor.insertSpaces": true,		  
       	}
    c. Save the settings file
 

@@ -5,6 +5,7 @@ SOURCES = \
 	DispatchAction.cpp\
 	Robot.cpp\
 	Subsystem.cpp\
+	MessageListener/MessageListener.cpp\
 	tankdrive/TankDrive.cpp\
 	tankdrive/TankDriveDistanceAction.cpp\
 	tankdrive/TankDriveVelocityAction.cpp\
