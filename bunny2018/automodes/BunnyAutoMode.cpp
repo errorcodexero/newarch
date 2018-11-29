@@ -6,6 +6,11 @@
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveAngleCharAction.h>
 #include <tankdrive/TankDriveAngleAction.h>
+#include <singlemotorsubsystem/SingleMotorVoltageAction.h>
+#include <sorter/SorterDutyCycleAction.h>
+#include <sorter/SorterCalibrateAction.h>
+#include <sorter/SorterStageBallAction.h>
+#include <DelayAction.h>
 
 using namespace xero::base ;
 
@@ -70,6 +75,22 @@ namespace xero {
 					mode = createAutoModeFive() ;
 					break ;
 
+				case 6:
+					mode = createAutoModeSix() ;
+					break ;
+
+				case 7:
+					mode = createAutoModeSeven() ;
+					break ;		
+
+				case 8:
+					mode = createAutoModeEight() ;
+					break ;				
+
+				case 9:
+					mode = createAutoModeNine() ;
+					break ;																
+
 				default:
 					mode = nullptr ;
 					break ;
@@ -85,12 +106,11 @@ namespace xero {
 
 		ActionSequencePtr BunnyAutoMode::createAutoModeZero() {
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
-
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveStraightChar") ;
             auto act = std::make_shared<TankDriveCharAction>(*tankdrive, 10.0, 1.0) ;
 			seq->pushSubActionPair(tankdrive, act) ;
-
 			return seq ;
+
 		}
 
 		ActionSequencePtr BunnyAutoMode::createAutoModeOne() {
@@ -171,6 +191,79 @@ namespace xero {
 			seq->pushSubActionPair(tankdrive, act) ;									
 
 			return seq ;
-		}								
+		}	
+
+		ActionSequencePtr BunnyAutoMode::createAutoModeSix() {
+			auto &robot = getRobot() ;
+			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
+			auto collector = bunny.getBunnySubsystem()->getCollector() ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "CollectorTest") ;
+            auto act = std::make_shared<SingleMotorVoltageAction>(*collector, 0.2) ;
+			seq->pushSubActionPair(collector, act) ;
+			return seq ;
+		}	
+
+		ActionSequencePtr BunnyAutoMode::createAutoModeSeven() {
+			auto &robot = getRobot() ;
+			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
+			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "HopperTest") ;
+            auto act = std::make_shared<SingleMotorVoltageAction>(*hopper, 0.2) ;
+			seq->pushSubActionPair(hopper, act) ;
+			return seq ;
+		}	
+
+		ActionSequencePtr BunnyAutoMode::createAutoModeEight() {
+			xero::base::ActionPtr act ;
+			auto &robot = getRobot() ;
+			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
+			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterMotorTest") ;
+
+            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::IntakeMotor, 0.4) ;			
+			seq->pushSubActionPair(sorter, act) ;
+
+			act = std::make_shared<DelayAction>(5.0) ;
+			seq->pushAction(act) ;
+
+			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::IntakeMotor, 0.0) ;			
+			seq->pushSubActionPair(sorter, act) ;
+
+            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::OuttakeMotor, 0.4) ;			
+			seq->pushSubActionPair(sorter, act) ;
+
+			act = std::make_shared<DelayAction>(5.0) ;
+			seq->pushAction(act) ;
+
+			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::OuttakeMotor, 0.0) ;			
+			seq->pushSubActionPair(sorter, act) ;
+
+            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.2) ;			
+			seq->pushSubActionPair(sorter, act) ;
+
+			act = std::make_shared<DelayAction>(5.0) ;
+			seq->pushAction(act) ;
+
+			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.0) ;			
+			seq->pushSubActionPair(sorter, act) ;						
+
+			return seq ;
+		}			
+
+		ActionSequencePtr BunnyAutoMode::createAutoModeNine() {
+			xero::base::ActionPtr act ;
+			auto &robot = getRobot() ;
+			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
+			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterMotorTest") ;
+
+            act = std::make_shared<SorterCalibrateAction>(*sorter) ;
+			seq->pushSubActionPair(sorter, act) ;
+
+            act = std::make_shared<SorterStageBallAction>(*sorter, Sorter::BallColor::Red) ;
+			seq->pushSubActionPair(sorter, act) ;						
+
+			return seq ;
+		}					
     }
 }

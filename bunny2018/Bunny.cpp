@@ -25,6 +25,9 @@ using namespace xero::base ;
 namespace xero {
 	namespace bunny2018 {
 
+		Bunny::Bunny() : xero::base::Robot(0.02) {
+		}
+
 		std::shared_ptr<BunnySubsystem> Bunny::getBunnySubsystem() {
 			auto sub = getRobotSubsystem() ;
 			return std::dynamic_pointer_cast<BunnySubsystem>(sub) ;

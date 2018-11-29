@@ -2,20 +2,13 @@
 
 #include <list>
 
-#ifdef SIM
-#include <TalonSRX.h>
-#else
-#include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
-#endif
-
+#include "XeroTalonSRX.h"
 #include <Encoder.h>
 #include <AHRS.h>
 #include <Solenoid.h>
 #include <Kinematics.h>
 #include <Subsystem.h>
 #include <Speedometer.h>
-
-typedef ctre::phoenix::motorcontrol::can::TalonSRX TalonSRX;
 
 namespace xero {
 	namespace base {

@@ -28,7 +28,11 @@ namespace xero {
 			xero::base::ActionSequencePtr createAutoModeThree() ;
 			xero::base::ActionSequencePtr createAutoModeFour() ;	
 			xero::base::ActionSequencePtr createAutoModeFive() ;
-
+			xero::base::ActionSequencePtr createAutoModeSix() ;
+			xero::base::ActionSequencePtr createAutoModeSeven() ; 			
+			xero::base::ActionSequencePtr createAutoModeEight() ; 			
+			xero::base::ActionSequencePtr createAutoModeNine() ;
+			
 		private:
 			std::string name_ ;
 		};

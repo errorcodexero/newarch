@@ -45,7 +45,7 @@ namespace xero {
 		class Robot : public frc::SampleRobot {
 		public:
 			/// \brief create the base robot.
-			Robot() ;
+			Robot(double looptime = 0.50) ;
 
 			/// \brief destroy the robot object
 			virtual ~Robot() ;

@@ -12,11 +12,11 @@ using namespace xero::misc ;
 namespace xero {
 	namespace base {
 		
-		Robot::Robot() {
+		Robot::Robot(double looptime) {
 			//
 			// Set the robot loop time to 20 ms
 			//
-			target_loop_time_ = 0.02 ;
+			target_loop_time_ = looptime ;
 			last_time_ = frc::Timer::GetFPGATimestamp() ;
 
 			parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;

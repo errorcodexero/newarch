@@ -1,36 +1,76 @@
 #pragma once
 
-#include "bunnysubsystem/BunnySubsystem.h" 
-#include "sorterin/SorterIn.h"
-#include "sorterout/SorterOut.h"
+#include "XeroTalonSRX.h"
+#include <Subsystem.h>
+#include <Encoder.h>
+#include <I2C.h>
+#include <DigitalInput.h>
+#include <memory>
 
 namespace xero {
     namespace bunny2018 {
 		
         class Sorter : public xero::base::Subsystem {
+            friend class SorterDutyCycleAction ;
+            friend class SorterStageBallAction ;
+            friend class SorterCalibrateAction ;
+
+        public:
+            enum BallColor
+            {
+                Red,
+                Blue,
+                None
+            } ;
 
         public:
             Sorter(xero::base::Robot & robot);
 
             virtual ~Sorter(); 
 
+            virtual void computeState() ;
+		    virtual bool canAcceptAction(xero::base::ActionPtr action)  ;
+
+            bool hasBall() const { return !(ball_ != BallColor::None) ; }
+            BallColor getBallColor() const { return ball_ ; }
+
+            double getAngle() const {
+                return angle_ ;
+            }
+
         private:
-            std::shared_ptr<SorterIn> sorter_in_;
+            void setIntakeMotor(double v) {
+                inmotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v) ;
+            }
 
-            std::shared_ptr<SorterOut> sorter_out_;
-            
-            std::shared_ptr<frc::VictorSP> motor_;
-            std::shared_ptr<frc::Encoder> encoder_;
-            
-            double min_angle_;
-            double max_angle_;
-            double degrees_per_tick_;
-            double encoder_ticks_;
-            double angle_;
+            void setOuttakeMotor(double v) {
+                outmotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v) ;
+            }
 
-            bool calibrated_;
+            void setSorterMotor(double v) {
+                sortmotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v) ;
+            }
+
+            void setCalibrated(bool b) {
+                calibrated_ = b ;
+            }
+
+            void detectBall() ;
 
 
+        private:
+            std::shared_ptr<frc::Encoder> encoder_ ;
+            std::shared_ptr<TalonSRX> sortmotor_ ;
+            std::shared_ptr<TalonSRX> inmotor_ ;
+            std::shared_ptr<TalonSRX> outmotor_ ;
+            std::shared_ptr<frc::I2C> color_sensor_ ;
+            std::shared_ptr<frc::DigitalInput> ball_present_ ;
+            std::shared_ptr<frc::DigitalInput> red_blue_ ;
+            bool calibrated_ ;
+            double degrees_per_tick_ ;
+
+            BallColor ball_ ;
+            double angle_ ;
         };
     }
 }

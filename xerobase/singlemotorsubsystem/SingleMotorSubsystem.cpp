@@ -5,11 +5,15 @@ using namespace xero::misc;
 
 namespace xero {
     namespace base {
-        SingleMotorSubsystem::SingleMotorSubsystem(Robot & robot) : Subsystem(robot,"single_motor_subsystem") {
-           int m = robot.getSettingsParser().getInteger("hw:single_motor_subsystem:motor") ;
+        SingleMotorSubsystem::SingleMotorSubsystem(Robot & robot, const std::string &name, const std::string &motor) : Subsystem(robot,name) {
+           int m = robot.getSettingsParser().getInteger(motor) ;
 
-           motor_ =std::make_shared<frc::VictorSP>(m);
+           motor_ = std::make_shared<TalonSRX>(m);
         }
+
+        SingleMotorSubsystem::SingleMotorSubsystem(Robot & robot, const std::string &name, int m) : Subsystem(robot,name) {
+           motor_ = std::make_shared<TalonSRX>(m);
+        }        
 
         SingleMotorSubsystem::~SingleMotorSubsystem(){
         }

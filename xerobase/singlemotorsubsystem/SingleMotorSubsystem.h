@@ -2,8 +2,9 @@
 
 #include "Subsystem.h" 
 #include "SingleMotorSubsystemAction.h" 
-#include <VictorSP.h>
-#include <memory>
+#include "XeroTalonSRX.h"
+
+typedef ctre::phoenix::motorcontrol::can::TalonSRX TalonSRX;
 
 namespace xero {
     namespace base {
@@ -11,12 +12,12 @@ namespace xero {
         class SingleMotorSubsystem : public Subsystem {
 			friend class SingleMotorSubsystemAction;
         public:
-
-            SingleMotorSubsystem(Robot &robot);
+            SingleMotorSubsystem(Robot &robot, const std::string &name, const std::string &motor);
+            SingleMotorSubsystem(Robot &robot, const std::string &name, int motor);
 
             virtual ~SingleMotorSubsystem();
 
-            std::shared_ptr<frc::VictorSP> &getMotor()
+            std::shared_ptr<TalonSRX> &getMotor()
             {
                 return motor_;
             }
@@ -24,7 +25,7 @@ namespace xero {
             virtual bool canAcceptAction(ActionPtr action) ;
 
         private:
-            std::shared_ptr<frc::VictorSP> motor_;
+            std::shared_ptr<TalonSRX> motor_;
 
         }  ;
     }

@@ -11,6 +11,8 @@ namespace xero {
 		/// \brief the concrete class that represents the robot Phoenix
 		class Bunny : public xero::base::Robot {
 		public:
+			Bunny() ;
+
 			/// \brief return the bunny robot subsystem
 			std::shared_ptr<BunnySubsystem> getBunnySubsystem() ;
 

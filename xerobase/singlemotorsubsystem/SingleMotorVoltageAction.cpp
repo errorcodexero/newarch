@@ -18,7 +18,7 @@ namespace xero {
 
             }
             void SingleMotorVoltageAction::start() {
-                getSubsystem().getMotor()->Set(duty_cycle_) ;
+                getSubsystem().getMotor()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, duty_cycle_) ;
             }
 
             void SingleMotorVoltageAction::run() {
