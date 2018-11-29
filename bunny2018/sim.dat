@@ -9,11 +9,11 @@ hw:tankdrive:leftencoder1           0
 hw:tankdrive:leftencoder2           1
 hw:tankdrive:rightencoder1          2
 hw:tankdrive:rightencoder2          3
-hw:bunnycollector:motor				0
-hw:hopper:motor						1
-hw:sorter:input:motor				2
-hw:sorter:output:motor				3
-hw:sorter:motor						4
+hw:collector:motor					6
+hw:hopper:motor						11
+hw:sorter:in:motor					9
+hw:sorter:out:motor					8
+hw:sorter:motor						10
 hw:sorter:encoder_1					4
 hw:sorter:encoder_2					5
 hw:sorter:index						6

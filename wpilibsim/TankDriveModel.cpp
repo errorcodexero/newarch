@@ -48,6 +48,9 @@ namespace xero {
             left_enc_ = nullptr ;
             right_enc_ = nullptr ;
             navx_ = nullptr ;
+
+			left_volts_ = 0.0 ;
+			right_volts_ = 0.0 ;
         }
 
         TankDriveModel::~TankDriveModel() {
@@ -131,7 +134,6 @@ namespace xero {
 		}
 
         void TankDriveModel::run(double dt) {
-
 			//
 			// Calculate the new desired revolutions per second (RPS)
 			//
@@ -223,12 +225,12 @@ namespace xero {
 			}
 		}
 
-		void TankDriveModel::addTalon(TalonSRX *motor) {
-			if (motor->GetDeviceID() == 1 || motor->GetDeviceID() == 2 || motor->GetDeviceID() == 3) {
+		void TankDriveModel::addTalonSRX(TalonSRX *motor) {
+			if (motor->GetDeviceID() == 1 || motor->GetDeviceID() == 2) {
 				left_motors_.push_back(motor) ;
 				motor->addModel(this) ;
 			}
-			else if (motor->GetDeviceID() == 4 || motor->GetDeviceID() == 5 || motor->GetDeviceID() == 6) {
+			else if (motor->GetDeviceID() == 3 || motor->GetDeviceID() == 4) {
 				right_motors_.push_back(motor) ;
 				motor->addModel(this) ;
 			}

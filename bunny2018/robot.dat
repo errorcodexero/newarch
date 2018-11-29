@@ -5,11 +5,8 @@
 ##############################################################
 hw:tankdrive:leftmotor1             1
 hw:tankdrive:leftmotor2             2
-hw:tankdrive:leftmotor3             3
-hw:tankdrive:rightmotor1            4
-hw:tankdrive:rightmotor2            5
-hw:tankdrive:rightmotor3            6
-hw:tankdrive:shifter                0
+hw:tankdrive:rightmotor1            3
+hw:tankdrive:rightmotor2            4
 hw:tankdrive:leftencoder1           0
 hw:tankdrive:leftencoder2           1
 hw:tankdrive:rightencoder1          2
@@ -20,12 +17,12 @@ hw:driverstation:hid:gunner         1
 hw:driverstation:hid:driver         0
 
 hw:collector:motor                  6
-hw:hopper:motor                     1
-hw:sorter:motor                     1
-hw:sorter:encoder1                  1
-hw:sorter:encoder2                  1
-hw:sorter:in:motor                  1
-hw:sorter:out:motor                 1
+hw:hopper:motor                     11
+hw:sorter:motor                     10
+hw:sorter:encoder1                  3
+hw:sorter:encoder2                  4
+hw:sorter:in:motor                  9
+hw:sorter:out:motor                 8
 hw:sorter:sensoraddr                1
 
 ##############################################################

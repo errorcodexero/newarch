@@ -45,26 +45,46 @@ namespace xero  {
 
 				/// \brief Get the voltage applied to the first motor.
 				/// \returns the voltage applied to the first motor
-                double getVoltage() {
-                    return voltage_ ;
+                double getSorterVoltage() {
+                    return sorter_voltage_ ;
                 }
+
+                double getInVoltage() {
+                    return in_voltage_ ;
+                }		
+
+                double getOutVoltage() {
+                    return out_voltage_ ;
+                }						
 
 			private:
 				int getEncoderValue() ;
                
             private:
-                double voltage_ ;
-                ctre::phoenix::motorcontrol::can::TalonSRX *motor_ ;
+                double sorter_voltage_ ;
+				double in_voltage_ ;
+				double out_voltage_ ;
+
+                ctre::phoenix::motorcontrol::can::TalonSRX *sortermotor_ ;
+                ctre::phoenix::motorcontrol::can::TalonSRX *inmotor_ ;
+                ctre::phoenix::motorcontrol::can::TalonSRX *outmotor_ ;								
 				frc::DigitalInput *index_ ;
+				frc::DigitalInput *ball_present_ ;
+				frc::DigitalInput *red_blue_ ;								
 				frc::Encoder *encoder_ ;
+
 				double angle_ ;
 				int ticks_per_revolution_ ;
 				double degrees_per_hole_ ;
 
-                int motor_channel_ ;
+                int sorter_motor_channel_ ;
+                int in_motor_channel_ ;
+                int out_motor_channel_ ;								
 				int encoder_channel_1_ ;
 				int encoder_channel_2_ ;
 				int index_sensor_ ;
+				int ball_present_index_ ;
+				int red_build_index_ ;
             } ;
         }
     }

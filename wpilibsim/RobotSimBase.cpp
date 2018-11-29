@@ -119,7 +119,7 @@ namespace xero {
 			TalonSRX *talon = dynamic_cast<TalonSRX *>(device) ;
 			if (talon != nullptr) {
 				for(auto model : getModels())
-					model->addTalon(talon) ;
+					model->addTalonSRX(talon) ;
 			}
 
 			DigitalInput *input = dynamic_cast<DigitalInput *>(device) ;

@@ -7,7 +7,7 @@ using namespace ctre::phoenix::motorcontrol::can ;
 namespace xero {
     namespace sim {
         namespace bunny2018 {
-            HopperModel::HopperModel(RobotSimBase &simbase) : SubsystemModel(simbase, "intake") {
+            HopperModel::HopperModel(RobotSimBase &simbase) : SubsystemModel(simbase, "hopper") {
                 motor_channel_ = simbase.getSettingsParser().getInteger("hw:hopper:motor") ;
                 voltage_ = 0.0 ;
             }

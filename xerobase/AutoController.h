@@ -32,14 +32,6 @@ namespace xero {
 				actionptr_ = action;
 				if (actionptr_ != nullptr)
 					actionptr_->start() ;
-
-
-				if (action != nullptr) {
-					std::string modestr = "None" ;
-					if (action != nullptr)
-						modestr = action->getName() ;
-					frc::SmartDashboard::PutString("automode:", modestr) ;					
-				}
 			}
 
 

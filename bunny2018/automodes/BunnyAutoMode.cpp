@@ -38,17 +38,8 @@ namespace xero {
 			// If there is no hardware to set the automode, default to auto
 			// mode zero
 			//
-			if (sel == -1) {
+			if (sel < 0 || sel > 9)
 				sel = 0 ;
-			}
-
-			if (sel == 10)
-				sel = 0 ;
-
-			sel = 0 ;
-
-			std::string autostr = std::to_string(sel) ;
-			frc::SmartDashboard::PutString("AutoMode", autostr) ;				
 
 			switch(sel) {
 				case 0:
@@ -100,6 +91,10 @@ namespace xero {
 				name_ = "None" ;
 			else
 				name_ = mode->getName() ;
+
+			std::string autostr = std::to_string(sel) ;
+			frc::SmartDashboard::PutString("AutoModeNumber", autostr) ;
+			frc::SmartDashboard::PutString("AutoModeName", name_) ;		
 
             setAction(mode) ;
         }
@@ -194,22 +189,38 @@ namespace xero {
 		}	
 
 		ActionSequencePtr BunnyAutoMode::createAutoModeSix() {
+			xero::base::ActionPtr act ;
 			auto &robot = getRobot() ;
 			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
 			auto collector = bunny.getBunnySubsystem()->getCollector() ;
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "CollectorTest") ;
-            auto act = std::make_shared<SingleMotorVoltageAction>(*collector, 0.2) ;
+            act = std::make_shared<SingleMotorVoltageAction>(*collector, 0.2) ;
 			seq->pushSubActionPair(collector, act) ;
+
+			act = std::make_shared<DelayAction>(5.0) ;
+			seq->pushAction(act) ;
+
+            act = std::make_shared<SingleMotorVoltageAction>(*collector, 0) ;
+			seq->pushSubActionPair(collector, act) ;			
 			return seq ;
 		}	
 
 		ActionSequencePtr BunnyAutoMode::createAutoModeSeven() {
+			xero::base::ActionPtr act ;			
 			auto &robot = getRobot() ;
 			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
 			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "HopperTest") ;
-            auto act = std::make_shared<SingleMotorVoltageAction>(*hopper, 0.2) ;
+
+            act = std::make_shared<SingleMotorVoltageAction>(*hopper, 0.2) ;
 			seq->pushSubActionPair(hopper, act) ;
+
+			act = std::make_shared<DelayAction>(5.0) ;
+			seq->pushAction(act) ;
+
+            act = std::make_shared<SingleMotorVoltageAction>(*hopper, 0) ;
+			seq->pushSubActionPair(hopper, act) ;
+
 			return seq ;
 		}	
 
@@ -229,15 +240,6 @@ namespace xero {
 			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::IntakeMotor, 0.0) ;			
 			seq->pushSubActionPair(sorter, act) ;
 
-            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::OuttakeMotor, 0.4) ;			
-			seq->pushSubActionPair(sorter, act) ;
-
-			act = std::make_shared<DelayAction>(5.0) ;
-			seq->pushAction(act) ;
-
-			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::OuttakeMotor, 0.0) ;			
-			seq->pushSubActionPair(sorter, act) ;
-
             act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.2) ;			
 			seq->pushSubActionPair(sorter, act) ;
 
@@ -245,7 +247,16 @@ namespace xero {
 			seq->pushAction(act) ;
 
 			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.0) ;			
-			seq->pushSubActionPair(sorter, act) ;						
+			seq->pushSubActionPair(sorter, act) ;	
+
+            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::OuttakeMotor, 0.4) ;			
+			seq->pushSubActionPair(sorter, act) ;
+
+			act = std::make_shared<DelayAction>(5.0) ;
+			seq->pushAction(act) ;
+
+			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::OuttakeMotor, 0.0) ;			
+			seq->pushSubActionPair(sorter, act) ;								
 
 			return seq ;
 		}			

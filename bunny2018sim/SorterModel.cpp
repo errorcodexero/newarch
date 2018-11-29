@@ -8,15 +8,19 @@ using namespace ctre::phoenix::motorcontrol::can ;
 namespace xero {
     namespace sim {
         namespace bunny2018 {
-            SorterModel::SorterModel(RobotSimBase &simbase) : SubsystemModel(simbase, "intake") {
-                motor_channel_ = simbase.getSettingsParser().getInteger("hw:sorter:motor") ;
+            SorterModel::SorterModel(RobotSimBase &simbase) : SubsystemModel(simbase, "sorter") {
+                sorter_motor_channel_ = simbase.getSettingsParser().getInteger("hw:sorter:motor") ;
+                in_motor_channel_ = simbase.getSettingsParser().getInteger("hw:sorter:in:motor") ;
+                out_motor_channel_ = simbase.getSettingsParser().getInteger("hw:sorter:out:motor") ;								
 				encoder_channel_1_ = simbase.getSettingsParser().getInteger("hw:sorter:encoder_1") ;
 				encoder_channel_2_ = simbase.getSettingsParser().getInteger("hw:sorter:encoder_2") ;
 				index_sensor_ = simbase.getSettingsParser().getInteger("hw:sorter:index") ;
 				ticks_per_revolution_ = simbase.getSettingsParser().getInteger("sorter:ticks_per_revolution") ;
 				int holes = simbase.getSettingsParser().getInteger("sorter:total_holes") ;
 				degrees_per_hole_ = 2 * xero::math::PI / holes ;
-                voltage_ = 0.0 ;
+                sorter_voltage_ = 0.0 ;
+                in_voltage_ = 0.0 ;
+                out_voltage_ = 0.0 ;								
 				angle_ = 0.0 ;
             }
 
@@ -25,8 +29,6 @@ namespace xero {
 
             std::string SorterModel::toString() {
                 std::string result("sorter ") ;
-
-                result += "duty_cycle " + std::to_string(voltage_) ;
 
                 return result ;
             }
@@ -41,16 +43,28 @@ namespace xero {
 			    std::lock_guard<std::mutex> lock(getLockMutex()) ;
                 TalonSRX *talon = dynamic_cast<TalonSRX *>(obj) ;
                 if (talon != nullptr) {
-    			    if (talon == motor_)
-                        voltage_ = talon->Get() ;
+    			    if (talon == sortermotor_)
+                        sorter_voltage_ = talon->Get() ;
+					else if (talon == inmotor_)
+						in_voltage_ = talon->Get() ;
+					else if (talon == outmotor_)
+						out_voltage_ = talon->Get() ;
                 }
             }    
 
             void SorterModel::addTalonSRX(TalonSRX *motor) {
-                if (motor->GetDeviceID() == motor_channel_) {
-                    motor_ = motor ;
-                    motor_->addModel(this) ;
+                if (motor->GetDeviceID() == sorter_motor_channel_) {
+                    sortermotor_ = motor ;
+                    sortermotor_->addModel(this) ;
                 }
+				else if (motor->GetDeviceID() == in_motor_channel_) {
+                    inmotor_ = motor ;
+                    inmotor_->addModel(this) ;
+                }
+				else if (motor->GetDeviceID() == out_motor_channel_) {
+                    outmotor_ = motor ;
+                    outmotor_->addModel(this) ;
+                }				
             }
 
 	        void SorterModel::addEncoder(frc::Encoder *encoder) {

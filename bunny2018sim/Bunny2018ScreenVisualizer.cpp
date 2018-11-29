@@ -14,6 +14,10 @@ namespace xero {
 
 				int row = getFirstSubsystemRow() ;
                 tankdrive_row_ = row ;
+
+				hopper_row_ = row + 8 ;
+				collector_row_ = row + 9 ;
+				sorter_row_ = row + 11 ;
             }
 
             Bunny2018ScreenVisualizer::~Bunny2018ScreenVisualizer() {
@@ -46,12 +50,15 @@ namespace xero {
                     displayTankDrive(std::dynamic_pointer_cast<xero::sim::TankDriveModel>(subsystem_p)) ;
 				else if (subsystem_p->getName() == "oi")
 					displayOI(std::dynamic_pointer_cast<OIModel>(subsystem_p)) ;
+				else if (subsystem_p->getName() == "collector")
+					displayCollector(std::dynamic_pointer_cast<CollectorModel>(subsystem_p)) ;
+				else if (subsystem_p->getName() == "hopper")
+					displayHopper(std::dynamic_pointer_cast<HopperModel>(subsystem_p)) ;
+				else if (subsystem_p->getName() == "sorter")
+					displaySorter(std::dynamic_pointer_cast<SorterModel>(subsystem_p)) ;										
             }
 
 			void Bunny2018ScreenVisualizer::displayOI(std::shared_ptr<OIModel> subsystem_p) {
-				int ch ;
-				int oi = 2 ;
-
 				WINDOW *win = getOIWindow() ;
 				int width = getOIWindowWidth() ;
 				int top = 0 ;
@@ -59,8 +66,6 @@ namespace xero {
 				top = displayBaseOI(win, subsystem_p, 2, top, width) ;
 				top = displayDriver(win, subsystem_p, 0, top, width) ;
 				top = displayGunner(win, subsystem_p, 1, top, width) ;
-
-				ch = wgetch(win) ;
 			}
 
 			int Bunny2018ScreenVisualizer::displayBaseOI(WINDOW *win, std::shared_ptr<OIModel> subsystem_p, int stick, int top, int width) {
@@ -81,6 +86,48 @@ namespace xero {
 			int Bunny2018ScreenVisualizer::displayGunner(WINDOW *win, std::shared_ptr<OIModel> subsystem_p, int stick, int top, int width) {
 				return top ;
 			}
+
+            void Bunny2018ScreenVisualizer::displayCollector(std::shared_ptr<xero::sim::bunny2018::CollectorModel> subsystem_p) {
+                std::string str ;
+                int fieldwidth = getRobotWindowWidth() ;
+
+                wmove(getRobotWindow(),collector_row_, 0 ) ;
+				std::string text = "Collector: " + std::to_string(subsystem_p->getVoltage()) ;
+                waddstr(getRobotWindow(), text.c_str()) ;				
+			}
+
+            void Bunny2018ScreenVisualizer::displayHopper(std::shared_ptr<xero::sim::bunny2018::HopperModel> subsystem_p) {
+                std::string str ;
+                int fieldwidth = getRobotWindowWidth() ;
+
+                wmove(getRobotWindow(),hopper_row_, 0 ) ;
+				std::string text = "Hopper: " + std::to_string(subsystem_p->getVoltage()) ;
+                waddstr(getRobotWindow(), text.c_str()) ;
+			}
+
+            void Bunny2018ScreenVisualizer::displaySorter(std::shared_ptr<xero::sim::bunny2018::SorterModel> subsystem_p) {
+                std::string str ;
+                int fieldwidth = getRobotWindowWidth() ;
+
+                wmove(getRobotWindow(),sorter_row_, 0 ) ;
+				std::string text = "Sorter" ;	
+                waddstr(getRobotWindow(), text.c_str()) ;
+
+                wmove(getRobotWindow(),sorter_row_ + 1, 0 ) ;
+				text = "Input Motor: " + std::to_string(subsystem_p->getInVoltage()) ;
+				text = text.substr(0, fieldwidth) ;
+                waddstr(getRobotWindow(), text.c_str()) ;				
+
+                wmove(getRobotWindow(),sorter_row_ + 2, 0 ) ;
+				text = "Sorter Motor: " + std::to_string(subsystem_p->getSorterVoltage()) ;
+				text = text.substr(0, fieldwidth) ;				
+                waddstr(getRobotWindow(), text.c_str()) ;	
+
+                wmove(getRobotWindow(),sorter_row_ + 3, 0 ) ;
+				text = "Output Motor: " + std::to_string(subsystem_p->getOutVoltage()) ;
+				text = text.substr(0, fieldwidth) ;				
+                waddstr(getRobotWindow(), text.c_str()) ;									
+			}			
 
             void Bunny2018ScreenVisualizer::displayTankDrive(std::shared_ptr<xero::sim::TankDriveModel> subsystem_p) {
                 std::string str ;

@@ -8,10 +8,12 @@ namespace xero {
     namespace bunny2018 {
             SorterDutyCycleAction::SorterDutyCycleAction(Sorter &sorter, Which w, double v) : SorterAction(sorter) {
                 duty_cycle_ = v ;
+				which_ = w ;
             }
 
             SorterDutyCycleAction::SorterDutyCycleAction(Sorter &sorter, Which w, const std::string &name) : SorterAction(sorter) {
                 duty_cycle_ = sorter.getRobot().getSettingsParser().getDouble(name) ;
+				which_ = w ;
             }
 
             SorterDutyCycleAction::~SorterDutyCycleAction() {

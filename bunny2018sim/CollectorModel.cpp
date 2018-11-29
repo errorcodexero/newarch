@@ -8,8 +8,8 @@ using namespace ctre::phoenix::motorcontrol::can ;
 namespace xero {
     namespace sim {
         namespace bunny2018 {
-            CollectorModel::CollectorModel(RobotSimBase &simbase) : SubsystemModel(simbase, "intake") {
-                motor_channel_ = simbase.getSettingsParser().getInteger("hw:bunnycollector:motor") ;
+            CollectorModel::CollectorModel(RobotSimBase &simbase) : SubsystemModel(simbase, "collector") {
+                motor_channel_ = simbase.getSettingsParser().getInteger("hw:collector:motor") ;
                 voltage_ = 0.0 ;
             }
 

@@ -40,6 +40,9 @@ namespace xero  {
                 double getVoltage() {
                     return voltage_ ;
                 }
+
+				void doit() {
+				}
                
             private:
                 double voltage_ ;

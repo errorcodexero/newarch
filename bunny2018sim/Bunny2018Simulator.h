@@ -2,8 +2,6 @@
 
 #include "RobotSimBase.h"
 #include "CollectorModel.h"
-#include "SorterInputModel.h"
-#include "SorterOutputModel.h"
 #include "HopperModel.h"
 #include "SorterModel.h"
 #include <cstdint>
@@ -49,9 +47,7 @@ namespace xero
 				static constexpr double PI = 3.14159265359;
 				std::shared_ptr<xero::sim::TankDriveModel> tankdrive_ ;
 				std::shared_ptr<xero::sim::bunny2018::OIModel> oi_ ;
-				std::shared_ptr<xero::sim::bunny2018::CollectorModel> bunnycollector_ ;
-				std::shared_ptr<xero::sim::bunny2018::SorterInputModel> sorterintput_ ;
-				std::shared_ptr<xero::sim::bunny2018::SorterOutputModel> sorteroutput_ ;
+				std::shared_ptr<xero::sim::bunny2018::CollectorModel> collector_ ;
 				std::shared_ptr<xero::sim::bunny2018::HopperModel> hopper_ ;
 				std::shared_ptr<xero::sim::bunny2018::SorterModel> sorter_ ;										
 				bool visualizer_ ;

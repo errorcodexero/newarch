@@ -26,7 +26,7 @@ namespace xero
             virtual std::string toString()  ;
 			virtual void init() ;			
 
-            virtual void addTalon(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
+            virtual void addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
             virtual void addEncoder(frc::Encoder *encoder);
             virtual void addNavX(AHRS *navx);
 			virtual void addSolenid(frc::Solenoid *sol) ;

@@ -37,7 +37,7 @@ namespace xero {
 			auto oi = getBunnySubsystem()->getOI() ;			
 			int automode = oi->getAutoModeSelector() ;
 			std::string autostr = std::to_string(automode) ;
-			frc::SmartDashboard::PutString("AutoMode", autostr) ;
+			frc::SmartDashboard::PutString("AutoModeNumber", autostr) ;
 		}
 		
 		void Bunny::RobotInit() {
@@ -110,9 +110,9 @@ namespace xero {
             //
             // Decide what message groups (incl. subsystems) you want to see
             //
-			logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
+			// logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
 			logger.enableSubsystem(MSG_GROUP_ACTIONS);
-			logger.enableSubsystem(MSG_GROUP_PARSER) ;
+			//logger.enableSubsystem(MSG_GROUP_PARSER) ;
 
 
 			// Set up message logger destination(s)

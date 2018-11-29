@@ -10,6 +10,7 @@ if [ "$#" -lt 2 ]; then
 fi
 
 pos=17.0,115.0
+autovalues=(-1.0 -0.8 -0.6 -0.4 -0.2 0.1 0.3 0.5 0.7 0.9)
 extra=""
 
 placeset=false
@@ -43,7 +44,8 @@ if [ $2 = "auto" ]; then
     autotime=60.0
     teleoptime=0.0
     testtime=0.0
-    extra="--simprop autovalue=$3"
+    potvalue=${autovalues[$3]}
+    extra="--simprop autovalue=$potvalue"
 fi
 
 if [ $2 = "teleop" ]; then

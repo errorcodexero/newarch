@@ -8,9 +8,9 @@ using namespace xero::base;
 namespace xero {
     namespace bunny2018 {
         Sorter::Sorter(xero::base::Robot & robot) :Subsystem(robot,"sorter"){
-            int sortmotor=robot.getSettingsParser().getInteger("hw:sorter:in:motor");
-            int inmotor=robot.getSettingsParser().getInteger("hw:sorter:out:motor");
-            int outmotor=robot.getSettingsParser().getInteger("hw:sorter:motor");                        
+            int inmotor=robot.getSettingsParser().getInteger("hw:sorter:in:motor");
+            int outmotor=robot.getSettingsParser().getInteger("hw:sorter:out:motor");
+            int sortmotor=robot.getSettingsParser().getInteger("hw:sorter:motor");                        
             int enc1=robot.getSettingsParser().getInteger("hw:sorter:encoder1");
             int enc2=robot.getSettingsParser().getInteger("hw:sorter:encoder2");
             int sensoraddr = robot.getSettingsParser().getInteger("hw:sorter:sensoraddr") ;
