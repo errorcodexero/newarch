@@ -14,9 +14,9 @@ namespace xero {
 		
 		Robot::Robot() {
 			//
-			// Set the robot loop time to 50 ms
+			// Set the robot loop time to 20 ms
 			//
-			target_loop_time_ = 0.05 ;
+			target_loop_time_ = 0.02 ;
 			last_time_ = frc::Timer::GetFPGATimestamp() ;
 
 			parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;
@@ -92,6 +92,10 @@ namespace xero {
 			message_logger_ << "Entering Autonomous mode: " ;
 			message_logger_.endMessage() ;
 
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "    Controller Info: " << controller_->getControllerInformation() ;
+			message_logger_.endMessage() ;			
+
 			value = "undefined" ;
 			if (ds.GetAlliance() == frc::DriverStation::kRed)
 				value = "red" ;
@@ -158,10 +162,11 @@ namespace xero {
 		}
 
 		void Robot::Autonomous() {
-			logAutoModeState() ;
 
 			controller_ = createAutoController() ;
-			
+
+			logAutoModeState() ;
+
 			while (IsAutonomous() && IsEnabled())
 				robotLoop();
 
@@ -214,6 +219,8 @@ namespace xero {
 			while (IsDisabled()) {
 				if (oi_subsystem_ != nullptr)
 					oi_subsystem_->computeState() ;
+
+				DoDisabledWork() ;
 					
 				frc::Wait(target_loop_time_) ;
 			}

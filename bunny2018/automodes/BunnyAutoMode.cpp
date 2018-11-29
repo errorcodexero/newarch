@@ -19,6 +19,10 @@ namespace xero {
 
         }
 
+		std::string BunnyAutoMode::getControllerInformation() {
+			return name_ ;
+		}
+
         void BunnyAutoMode::createAutoMode() {
             Bunny &bunny = dynamic_cast<Bunny &>(getRobot()) ;
             auto oi = bunny.getBunnySubsystem()->getOI() ;
@@ -29,8 +33,17 @@ namespace xero {
 			// If there is no hardware to set the automode, default to auto
 			// mode zero
 			//
-			if (sel == -1)
+			if (sel == -1) {
 				sel = 0 ;
+			}
+
+			if (sel == 10)
+				sel = 0 ;
+
+			sel = 0 ;
+
+			std::string autostr = std::to_string(sel) ;
+			frc::SmartDashboard::PutString("AutoMode", autostr) ;				
 
 			switch(sel) {
 				case 0:
@@ -53,11 +66,19 @@ namespace xero {
 					mode = createAutoModeFour() ;
 					break ;
 
+				case 5:
+					mode = createAutoModeFive() ;
+					break ;
+
 				default:
 					mode = nullptr ;
 					break ;
 			}
 
+			if (mode == nullptr)
+				name_ = "None" ;
+			else
+				name_ = mode->getName() ;
 
             setAction(mode) ;
         }
@@ -66,7 +87,7 @@ namespace xero {
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
 
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveStraightChar") ;
-            auto act = std::make_shared<TankDriveCharAction>(*tankdrive, 1.0, 0.5) ;
+            auto act = std::make_shared<TankDriveCharAction>(*tankdrive, 10.0, 1.0) ;
 			seq->pushSubActionPair(tankdrive, act) ;
 
 			return seq ;
@@ -86,7 +107,7 @@ namespace xero {
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
 
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveStraight") ;
-            auto act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;			
+            auto act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 48.0) ;			
 			seq->pushSubActionPair(tankdrive, act) ;
 
 			return seq ;
@@ -96,13 +117,23 @@ namespace xero {
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
 
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveRotate") ;
-            auto act = std::make_shared<TankDriveAngleAction>(*tankdrive, -90.0) ;
+            auto act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;
 			seq->pushSubActionPair(tankdrive, act) ;
 
 			return seq ;
 		}
 
 		ActionSequencePtr BunnyAutoMode::createAutoModeFour() {
+            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
+
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveRotate") ;
+            auto act = std::make_shared<TankDriveAngleAction>(*tankdrive, -90.0) ;
+			seq->pushSubActionPair(tankdrive, act) ;
+
+			return seq ;
+		}		
+
+		ActionSequencePtr BunnyAutoMode::createAutoModeFive() {
 			ActionPtr act ;
 
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
@@ -112,25 +143,31 @@ namespace xero {
             act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;
 			seq->pushSubActionPair(tankdrive, act) ;
 
-            act = std::make_shared<TankDriveAngleAction>(*tankdrive, -90.0) ;			
+            act = std::make_shared<TankDriveDistanceAction>(*tankdrive, -60.0) ;
+			seq->pushSubActionPair(tankdrive, act) ;
+
+            act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;
+			seq->pushSubActionPair(tankdrive, act) ;						
+
+            act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;			
+			seq->pushSubActionPair(tankdrive, act) ;						
+
+            act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;
+			seq->pushSubActionPair(tankdrive, act) ;
+
+            act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;			
 			seq->pushSubActionPair(tankdrive, act) ;
 
             act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;
 			seq->pushSubActionPair(tankdrive, act) ;
 
-            act = std::make_shared<TankDriveAngleAction>(*tankdrive, -90.0) ;			
+            act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;			
 			seq->pushSubActionPair(tankdrive, act) ;
 
             act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;
 			seq->pushSubActionPair(tankdrive, act) ;
 
-            act = std::make_shared<TankDriveAngleAction>(*tankdrive, -90.0) ;			
-			seq->pushSubActionPair(tankdrive, act) ;
-
-            act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;
-			seq->pushSubActionPair(tankdrive, act) ;
-
-            act = std::make_shared<TankDriveAngleAction>(*tankdrive, -90.0) ;			
+            act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;			
 			seq->pushSubActionPair(tankdrive, act) ;									
 
 			return seq ;

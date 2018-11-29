@@ -110,6 +110,9 @@ namespace xero {
 				return oi_subsystem_ ;
 			}			
 
+			virtual void DoDisabledWork() {
+			}
+
 		protected:
 
 			/// \brief add a subsystem to the robot

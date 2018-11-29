@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace xero {
 	namespace base {
 		class Robot ;
@@ -18,6 +20,10 @@ namespace xero {
 			/// This method is abstract and will be defined by a derived controller
 			/// class.
 			virtual void run() = 0 ;
+
+			virtual std::string getControllerInformation() {
+				return std::string("") ;
+			}
 
 		protected:
 			/// \brief Returns a reference to the robot this robot is controlling

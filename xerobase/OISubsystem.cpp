@@ -30,7 +30,7 @@ namespace xero {
             for(auto dev: hiddevices_) {
                 int automode = dev->getAutoModeSelector() ;
                 if (automode != -1)
-                    return automode ;
+                    return automode + 1 ;
             }
 
             return -1 ;

@@ -1,52 +1,75 @@
 #pragma once
 
 #include <xeromath.h>
+#include <cmath>
+#include <iostream>
 
 namespace xero {
 	namespace misc {
 		class Speedometer {
 		public:
-			Speedometer(bool angle = false) {
+			Speedometer(size_t s, bool angle = false) {
+				samples_ = s ;
 				angle = angle_ ;
-				dist_ = 0.0 ;
-				last_dist_ = 0.0 ;
-				velocity_ = 0.0 ;
-				last_velocity_ = 0.0 ;
+				times_.resize(s) ;
+				distances_.resize(s) ;
+				velocities_.resize(s) ;
 				accel_ = 0.0 ;
 			}
 
 			double getDistance() const {
-				return dist_ ;
+				return distances_[samples_ - 1] ;
 			}
 
 			double getVelocity() const {
-				return velocity_ ;
+				return velocities_[samples_ - 1] ;
 			}
 
 			double getAcceleration() const {
 				return accel_ ;
 			}
 
-			void update(double dt, double pos) {
-				dist_ = pos ;
-				if (angle_)
-					velocity_ = xero::math::normalizeAngleDegrees(dist_ - last_dist_) / dt ;
-				else
-					velocity_ = (dist_ - last_dist_) / dt ;
-					
-				accel_ = (velocity_ - last_velocity_) / dt ;
+			double getOldestDistance() const {
+				return distances_[0] ;
+			}
 
-				last_dist_ = dist_ ;
-				last_velocity_ = velocity_ ;
+			double getOldestVelocity() const {
+				return velocities_[0] ;
+			}
+
+			void update(double dtime, double pos) {
+				double vel ;
+
+				times_.push_back(dtime) ;
+				times_.erase(times_.begin()) ;
+
+				double total = 0.0 ;
+				for(const auto &t : times_)
+					total += t ;
+
+				if (std::fabs(total) > 1e-6) {
+					distances_.push_back(pos) ;
+					distances_.erase(distances_.begin()) ;
+					if (angle_)
+						vel = xero::math::normalizeAngleDegrees(getDistance() - getOldestDistance()) / total ;
+					else
+						vel = (getDistance() - getOldestDistance()) / total ;
+
+					velocities_.push_back(vel) ;
+					velocities_.erase(velocities_.begin()) ;
+						
+					accel_ = (getVelocity() - getOldestVelocity()) / total ;
+				}
+
 			}
 
 		private:
-			double dist_ ;
-			double last_dist_ ;
-			double velocity_ ;
-			double last_velocity_ ;
+			std::vector<double> distances_ ;
+			std::vector<double> velocities_ ;
+			std::vector<double> times_ ;
 			double accel_ ;
 			bool angle_ ;
+			size_t samples_ ;
 		} ;
 	}
 }

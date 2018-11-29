@@ -10,6 +10,7 @@
 #include <MessageLogger.h>
 #include <MessageDestSeqFile.h>
 #include <MessageDestStream.h>
+#include <SmartDashboard/SmartDashboard.h>
 
 #ifdef SIM
 #include <Bunny2018Simulator.h>
@@ -27,6 +28,13 @@ namespace xero {
 		std::shared_ptr<BunnySubsystem> Bunny::getBunnySubsystem() {
 			auto sub = getRobotSubsystem() ;
 			return std::dynamic_pointer_cast<BunnySubsystem>(sub) ;
+		}
+
+		void Bunny::DoDisabledWork() {
+			auto oi = getBunnySubsystem()->getOI() ;			
+			int automode = oi->getAutoModeSelector() ;
+			std::string autostr = std::to_string(automode) ;
+			frc::SmartDashboard::PutString("AutoMode", autostr) ;
 		}
 		
 		void Bunny::RobotInit() {

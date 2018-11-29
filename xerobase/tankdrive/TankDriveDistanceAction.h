@@ -37,6 +37,7 @@ namespace xero {
 			double profile_outdated_error_short_ ;
 			double profile_outdated_error_dist_ ;
 			double total_dist_so_far_ ;
+			double start_angle_ ;
 			bool is_done_;
 		};
 	}

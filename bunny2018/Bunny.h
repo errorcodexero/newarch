@@ -14,6 +14,8 @@ namespace xero {
 			/// \brief return the bunny robot subsystem
 			std::shared_ptr<BunnySubsystem> getBunnySubsystem() ;
 
+			virtual void DoDisabledWork() ;
+
 		protected:
 			/// \brief called to initialize the robot, basically creating the subsystems
 			virtual void RobotInit() ;

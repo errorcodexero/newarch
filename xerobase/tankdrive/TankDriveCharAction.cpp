@@ -3,6 +3,8 @@
 #include <Robot.h>
 #include <iostream>
 
+using namespace xero::misc ;
+
 namespace xero {
 	namespace base {
 		TankDriveCharAction::TankDriveCharAction(TankDrive &drive, double duration, double voltage, bool highgear) : TankDriveAction(drive) {
@@ -39,13 +41,16 @@ namespace xero {
 					is_done_ = true ;
 					getTankDrive().setMotorsToPercents(0.0, 0.0) ;
 				} else {
-					std::cout << (now - start_time_) ;
-					std::cout << ", " << getTankDrive().getDist() ;
-					std::cout << ", " << getTankDrive().getVelocity() ;
-					std::cout << ", " << getTankDrive().getAcceleration() ;
-					std::cout << ", " << getTankDrive().getTickCountL() ;
-					std::cout << ", " << getTankDrive().getTickCountR() ;
-					std::cout << std::endl ;
+					auto &logger = getTankDrive().getRobot().getMessageLogger() ;
+					logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
+					logger << (now - start_time_) ;
+					logger << ", " << getTankDrive().getDist() ;
+					logger << ", " << getTankDrive().getVelocity() ;
+					logger << ", " << getTankDrive().getAcceleration() ;
+					logger << ", " << getTankDrive().getTickCountL() ;
+					logger << ", " << getTankDrive().getTickCountR() ;
+					logger << ", " << voltage_ ;
+					logger.endMessage() ;
 				}
 			}
 		}

@@ -79,6 +79,7 @@ void TankDriveAngleAction::run() {
 
 				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
 				logger << "Fell behind velocity profile, updating profile";
+				logger << profile_->toString() ;				
 				logger.endMessage();
 			}
 

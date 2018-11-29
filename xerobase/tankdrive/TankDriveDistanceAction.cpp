@@ -40,9 +40,9 @@ void TankDriveDistanceAction::start() {
 	start_time_ = profile_start_time_ ;
 
 	profile_->update(target_distance_, 0.0, 0.0);
-	getTankDrive().navx_->ZeroYaw();
-
 	total_dist_so_far_ = 0.0 ;
+
+	start_angle_ = getTankDrive().getAngle() ;
 
 	if (getTankDrive().hasGearShifter())
 		getTankDrive().lowGear() ;	
@@ -80,7 +80,8 @@ void TankDriveDistanceAction::run() {
 				profile_->update(target_distance_ - total_traveled, current_velocity, 0.0);
 
 				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
-				logger << "Fell behind velocity profile, updating profile";
+				logger << "Fell behind velocity profile, updating profile: " ;
+				logger << profile_->toString() ;
 				logger.endMessage();
 			}
 
@@ -88,17 +89,18 @@ void TankDriveDistanceAction::run() {
 			double target_accel = 0.0 ;			// TODO: Get from the profile
 			double base_power = velocity_pid_.getOutput(target_velocity, current_velocity, target_accel, getTankDrive().getRobot().getDeltaTime());
 
-			double current_angle = getTankDrive().getAngle();
+			double current_angle = xero::math::normalizeAngleDegrees(getTankDrive().getAngle() - start_angle_) ;
 			double straightness_offset = angle_pid_.getOutput(0, current_angle, 0.0, getTankDrive().getRobot().getDeltaTime());
 			double left_power = base_power - straightness_offset;
 			double right_power = base_power + straightness_offset;
 
 			logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
-			logger << "time " << getTankDrive().getRobot().getTime() ;
+			logger << "time " << getTankDrive().getRobot().getTime() - start_time_ ;
 			logger << ", dist " << total_traveled ;
 			logger << ", profile " << profile_target_distance ;
 			logger << ", target " << target_velocity;
 			logger << ", actual " << current_velocity ;
+			logger << ", angle " << current_angle ;
 			logger << ", left " << left_power << ", right " << right_power ;
 			logger.endMessage();			
 
@@ -113,15 +115,9 @@ void TankDriveDistanceAction::run() {
 				.endData();
 			logger.endMessage();
 		}
-	} else {
-		getTankDrive().setMotorsToPercents(0.0, 0.0);
-
-		logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
-		logger << "time " << getTankDrive().getRobot().getTime() ;
-		logger << ", dist " << getTankDrive().getDist() ;
-		logger << ", velocity " << getTankDrive().getVelocity() ;
-		logger << ", accel " << getTankDrive().getAcceleration() ;
-		logger.endMessage();			
+	}
+	else {
+		getTankDrive().setMotorsToPercents(0, 0) ;	
 	}
 }
 

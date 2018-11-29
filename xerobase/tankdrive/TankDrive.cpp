@@ -15,7 +15,7 @@ using namespace xero::misc ;
 namespace xero {
 	namespace base {
 
-		TankDrive::TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids) : Subsystem(robot, "tankdrive"), angular_(true) {
+		TankDrive::TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids) : Subsystem(robot, "tankdrive"), angular_(4, true), linear_(4) {
 			//The two sides should always have the same number of motors and at least one motor each
 			assert((left_motor_ids.size() == right_motor_ids.size()) && (left_motor_ids.size() > 0));
 
@@ -150,6 +150,7 @@ namespace xero {
 		}
 
 		void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
+			std::cout << "Motors " << left_percent << " " << right_percent << std::endl ;
 			left_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent);
 			right_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
 		}

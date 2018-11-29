@@ -28,7 +28,7 @@ hw:driverstation:hid:driver         0
 #
 # TankDrive subsystem constants
 #
-tankdrive:inches_per_tick                                       0.017954378
+tankdrive:inches_per_tick                                       0.010471976
 tankdrive:distance_action:maxa                                  90
 tankdrive:distance_action:maxd                                  -90.0
 tankdrive:distance_action:maxv                                  60
@@ -42,7 +42,7 @@ tankdrive:distance_action:velocity_pid:a                        0.0
 tankdrive:distance_action:velocity_pid:max                      1.0
 tankdrive:distance_action:velocity_pid:min                      -1.0
 tankdrive:distance_action:velocity_pid:imax                     6.0
-tankdrive:distance_action:angle_pid:p                           0.0
+tankdrive:distance_action:angle_pid:p                           -0.02
 tankdrive:distance_action:angle_pid:i                           0.0
 tankdrive:distance_action:angle_pid:d                           0.0
 tankdrive:distance_action:angle_pid:f                           0.0
@@ -57,20 +57,20 @@ tankdrive:distance_action:profile_outdated_error_dist           12
 tankdrive:distance_action:profile_outdated_error_long           16        
 tankdrive:distance_action:profile_outdated_error_short          2
 
-tankdrive:angle_action:maxa                                     180
-tankdrive:angle_action:maxd                                     -180
-tankdrive:angle_action:maxv                                     120
+tankdrive:angle_action:maxa                                     220
+tankdrive:angle_action:maxd                                     -220
+tankdrive:angle_action:maxv                                     220
 tankdrive:angle_action:profile_outdated_error_short             2.0
 tankdrive:angle_action:profile_outdated_error_angle             10.0
 tankdrive:angle_action:profile_outdated_error_long              10.0
 tankdrive:angle_action:angle_threshold                          4.0
-tankdrive:angle_action:velocity_pid:p                           0.0
+tankdrive:angle_action:velocity_pid:p                           0.01
 tankdrive:angle_action:velocity_pid:i                           0.0
 tankdrive:angle_action:velocity_pid:d                           0.0
-tankdrive:angle_action:velocity_pid:f                           0.002327
-tankdrive:angle_action:velocity_pid:a                           0.00012
-tankdrive:angle_action:velocity_pid:max                         1.0
-tankdrive:angle_action:velocity_pid:min                         -1.0
+tankdrive:angle_action:velocity_pid:f                           0.002667
+tankdrive:angle_action:velocity_pid:a                           0.0005
+tankdrive:angle_action:velocity_pid:max                         0.6
+tankdrive:angle_action:velocity_pid:min                         -0.6
 tankdrive:angle_action:velocity_pid:imax                        6.0
 
 #
