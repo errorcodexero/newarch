@@ -12,6 +12,8 @@ namespace xero {
 				vmotor_ = std::make_shared<frc::VictorSP>(m) ;
 			else
         		tmotor_ = std::make_shared<TalonSRX>(m);
+
+			current_power_ = 0.0 ;
         }
 
         SingleMotorSubsystem::SingleMotorSubsystem(Robot & robot, const std::string &name, int m, bool victor) : Subsystem(robot,name) {
@@ -19,6 +21,8 @@ namespace xero {
 				vmotor_ = std::make_shared<frc::VictorSP>(m) ;
 			else
         		tmotor_ = std::make_shared<TalonSRX>(m);
+
+			current_power_ = 0.0 ;
         }        
 
         SingleMotorSubsystem::~SingleMotorSubsystem(){
