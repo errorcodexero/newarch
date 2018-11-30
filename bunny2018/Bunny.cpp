@@ -26,6 +26,7 @@ namespace xero {
 	namespace bunny2018 {
 
 		Bunny::Bunny() : xero::base::Robot(0.02) {
+
 		}
 
 		std::shared_ptr<BunnySubsystem> Bunny::getBunnySubsystem() {
@@ -34,10 +35,12 @@ namespace xero {
 		}
 
 		void Bunny::DoDisabledWork() {
-			auto oi = getBunnySubsystem()->getOI() ;			
-			int automode = oi->getAutoModeSelector() ;
-			std::string autostr = std::to_string(automode) ;
-			frc::SmartDashboard::PutString("AutoModeNumber", autostr) ;
+			auto oi = getBunnySubsystem()->getOI() ;
+			if (oi != nullptr) {
+				int automode = oi->getAutoModeSelector() ;
+				std::string autostr = std::to_string(automode) ;
+				frc::SmartDashboard::PutString("AutoModeNumber", autostr) ;
+			}
 		}
 		
 		void Bunny::RobotInit() {

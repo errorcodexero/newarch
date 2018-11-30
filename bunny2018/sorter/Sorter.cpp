@@ -16,6 +16,9 @@ namespace xero {
             int sensoraddr = robot.getSettingsParser().getInteger("hw:sorter:sensoraddr") ;
 			int index = robot.getSettingsParser().getInteger("hw:sorter:index") ;
 
+            enc1 = 0 ;
+            enc2 = 1 ;
+
             if (robot.getSettingsParser().isDefined("hw:sorter:ballpresent") && 
                             robot.getSettingsParser().isDefined("hw:sorter:ballcolor")) {
                 int present = robot.getSettingsParser().getInteger("hw:sorter:ballpresent");

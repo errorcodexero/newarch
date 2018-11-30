@@ -221,6 +221,8 @@ namespace xero {
 			message_logger_ << "Robot Disabled" ;
 			message_logger_.endMessage() ;
 
+			std::cout << "Entering Disabled" << std::endl ;
+
 			while (IsDisabled()) {
 				if (oi_subsystem_ != nullptr)
 					oi_subsystem_->computeState() ;
@@ -228,7 +230,11 @@ namespace xero {
 				DoDisabledWork() ;
 					
 				frc::Wait(target_loop_time_) ;
+
+				std::cout << "In Disabled" << std::endl ;				
 			}
+
+			std::cout << "Leaving Disabled" << std::endl ;
 		}
 	}
 }

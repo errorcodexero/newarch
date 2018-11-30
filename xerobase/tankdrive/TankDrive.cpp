@@ -35,7 +35,7 @@ namespace xero {
 			if (!navx_->IsConnected()) {
 				auto &logger = getRobot().getMessageLogger() ;
 				logger.startMessage(MessageLogger::MessageType::error) ;
-				logger << "NavX is not connected - cannot perform tankdrive auto functions" ;
+				logger << "NavX is not connected - cannot perform tankdrive auto functions - YYY" ;
 				logger .endMessage() ;
 				navx_ = nullptr ;
 			}

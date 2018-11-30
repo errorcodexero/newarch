@@ -83,6 +83,7 @@ namespace xero {
 
         private:
             std::shared_ptr<frc::Encoder> encoder_ ;
+
 #ifdef USE_VICTORS
             std::shared_ptr<VictorSP> sortmotor_ ;
             std::shared_ptr<VictorSP> inmotor_ ;

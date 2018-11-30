@@ -1,5 +1,5 @@
 #!/bin/bash
 
-ssh lvuser@10.14.25.2 "rm -f FRCUserProgram"
-scp build/exe/frcUserProgram/frcUserProgram lvuser@10.14.25.2:/home/lvuser/FRCUserProgram
+ssh lvuser@10.14.25.2 "rm -f frcUserProgram"
+scp build/exe/frcUserProgram/frcUserProgram lvuser@10.14.25.2:/home/lvuser/frcUserProgram
 scp bunny2018/robot.dat lvuser@10.14.25.2:/home/lvuser/
