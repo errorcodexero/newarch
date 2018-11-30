@@ -10,6 +10,7 @@
 #include <sorter/SorterDutyCycleAction.h>
 #include <sorter/SorterCalibrateAction.h>
 #include <sorter/SorterStageBallAction.h>
+#include <sorter/SorterEjectAction.h>
 #include <DelayAction.h>
 #include <ParallelAction.h>
 
@@ -275,18 +276,18 @@ namespace xero {
 			auto collector = bunny.getBunnySubsystem()->getCollector() ;
 			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
 
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterMotorTest") ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "AutoMode One") ;
 			auto seq2 = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "Calibrate/Stage") ;
 			std::shared_ptr<ParallelAction> parallel ;
 
-			act = std::make_shared<TankDriveDistanceAction>(*tankdrive, "automode:1:straight_distance") ;
-			parallel->addAction(act) ;
-
-            act = std::make_shared<SingleMotorVoltageAction>(*hopper, "automode:1:collector_power") ;
-			seq2->pushSubActionPair(hopper, act) ;
+            act = std::make_shared<SingleMotorVoltageAction>(*hopper, "automode:1:hopper_power") ;
+			seq->pushSubActionPair(hopper, act) ;
 
             act = std::make_shared<SingleMotorVoltageAction>(*collector, "automode:1:collector_power") ;
-			seq2->pushSubActionPair(collector, act) ;			
+			seq->pushSubActionPair(collector, act) ;				
+
+			act = std::make_shared<TankDriveDistanceAction>(*tankdrive, "automode:1:forward_distance") ;
+			parallel->addAction(act) ;
 
             act = std::make_shared<SorterCalibrateAction>(*sorter) ;
 			seq2->pushSubActionPair(sorter, act) ;
@@ -297,6 +298,31 @@ namespace xero {
 			parallel->addAction(seq2) ;
 
 			seq->pushAction(parallel) ;
+
+			auto dract = std::make_shared<TankDriveDistanceAction>(*tankdrive, "automode:1:reverse_distance") ;
+			parallel->addAction(act) ;
+
+			seq2 = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "Eject/Stage") ;
+			act = std::make_shared<SorterEjectAction>(*sorter) ;
+			seq2->pushSubActionPair(sorter, act) ;
+            act = std::make_shared<SorterStageBallAction>(*sorter, Sorter::BallColor::Red) ;
+			seq2->pushSubActionPair(sorter, act) ;
+
+			dract->addTriggeredAction("automode:1:eject1", seq2) ;
+			dract->addTriggeredAction("automode:1:eject2", seq2) ;
+			dract->addTriggeredAction("automode:1:eject3", seq2) ;
+			dract->addTriggeredAction("automode:1:eject4", seq2) ;
+			dract->addTriggeredAction("automode:1:eject5", seq2) ;
+			dract->addTriggeredAction("automode:1:eject6", seq2) ;
+			dract->addTriggeredAction("automode:1:eject7", seq2) ;
+			dract->addTriggeredAction("automode:1:eject8", seq2) ;
+			dract->addTriggeredAction("automode:1:eject9", seq2) ;
+			dract->addTriggeredAction("automode:1:eject10", seq2) ;
+			dract->addTriggeredAction("automode:1:eject11", seq2) ;
+			dract->addTriggeredAction("automode:1:eject12", seq2) ;
+			dract->addTriggeredAction("automode:1:eject13", seq2) ;																																				
+			dract->addTriggeredAction("automode:1:eject14", seq2) ;	
+			dract->addTriggeredAction("automode:1:eject15", seq2) ;
 
 			return seq ;
 		}					

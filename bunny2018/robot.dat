@@ -114,7 +114,23 @@ sorter:search_power												0.1
 #
 # Auto mode constants
 #
-automode:1:straight_distance                                   100
+automode:1:forward_distance                                    250
+automode:1:reverse_distance                                    -230
 automode:1:collector_power                                     0.6
 automode:1:hopper_power                                        -0.6
+automode:1:eject1                                              -10.0
+automode:1:eject2                                              -20.0
+automode:1:eject3                                              -30.0
+automode:1:eject4                                              -40.0
+automode:1:eject5                                              -50.0
+automode:1:eject6                                              -60.0
+automode:1:eject7                                              -70.0
+automode:1:eject8                                              -80.0
+automode:1:eject9                                              -90.0
+automode:1:eject10                                             -100.0
+automode:1:eject11                                             -110.0
+automode:1:eject12                                             -120.0
+automode:1:eject13                                             -130.0
+automode:1:eject14                                             -140.0
+automode:1:eject15                                             -150.0
 

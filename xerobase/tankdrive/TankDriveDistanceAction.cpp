@@ -74,6 +74,42 @@ void TankDriveDistanceAction::start() {
 		getTankDrive().lowGear() ;	
 }
 
+void TankDriveDistanceAction::addTriggeredAction(double dist, ActionPtr act) {
+	// TODO: sort these based on distance
+	auto p = std::make_pair(dist, act) ;
+	triggered_actions_.push_back(p) ;
+}
+
+void TankDriveDistanceAction::addTriggeredAction(const std::string &distname, ActionPtr act) {
+	double dist = getTankDrive().getRobot().getSettingsParser().getDouble(distname) ;
+	addTriggeredAction(dist, act) ;
+}
+
+void TankDriveDistanceAction::checkTriggeredEvents(double dist) {
+	while (triggered_actions_.size() > 0 && dist > triggered_actions_.front().first) {
+		ActionPtr p = triggered_actions_.front().second ;
+		triggered_actions_.pop_front() ;
+		p->start() ;
+		if (!p->isDone())
+			running_.push_back(p) ;
+	}
+
+	bool removed = true ;
+	while (removed) {
+		removed = false ;
+		for(auto it = running_.begin() ; it != running_.end() ; it++) {
+			if ((*it)->isDone()) {
+				running_.erase(it) ;
+				removed = true ;
+				break ;
+			}
+		}
+	}
+
+	for(auto act : running_)
+		act->run() ;
+}
+
 void TankDriveDistanceAction::run() {
 	MessageLogger &logger = getTankDrive().getRobot().getMessageLogger();
 
@@ -141,6 +177,8 @@ void TankDriveDistanceAction::run() {
 				.endData();
 			logger.endMessage();
 		}
+
+		checkTriggeredEvents(total_traveled) ;
 	}
 	else {
 		getTankDrive().setMotorsToPercents(0, 0) ;	
@@ -148,6 +186,10 @@ void TankDriveDistanceAction::run() {
 }
 
 void TankDriveDistanceAction::cancel() {
+	for(auto act : running_)
+		act->cancel() ;
+
+	running_.clear() ;
 }
 
 bool TankDriveDistanceAction::isDone() {
