@@ -2,6 +2,9 @@
 #include "BunnyOIDevice.h"
 #include <Robot.h>
 #include <SettingsParser.h>
+#include <DriverGamepad.h>
+
+using namespace xero::misc ;
 
 namespace xero {
     namespace bunny2018 {

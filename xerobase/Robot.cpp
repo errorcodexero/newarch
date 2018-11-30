@@ -2,6 +2,7 @@
 #include "Subsystem.h"
 #include "ControllerBase.h"
 #include "basegroups.h"
+#include "OISubsystem.h"
 #include <MessageDestStream.h>
 #include <DriverStation.h>
 #include <iostream>
@@ -183,11 +184,15 @@ namespace xero {
 			message_logger_.endMessage() ;
 
 			controller_ = createTeleopController() ;
+			auto oi = std::dynamic_pointer_cast<OISubsystem>(oi_subsystem_) ;
+			oi->enable() ;
 
 			while (IsOperatorControl() && IsEnabled())
 				robotLoop();
 
 			controller_ = nullptr ;
+
+			oi->disable() ;			
 
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Leaving Teleop mode" ;
