@@ -17,7 +17,7 @@ namespace xero {
             }
 
             std::string CollectorModel::toString() {
-                std::string result("bunnycollector: ") ;
+                std::string result("collector: ") ;
 
                 result += "duty_cycle " + std::to_string(voltage_) ;
 

@@ -14,6 +14,7 @@ namespace xero {
             int enc1=robot.getSettingsParser().getInteger("hw:sorter:encoder1");
             int enc2=robot.getSettingsParser().getInteger("hw:sorter:encoder2");
             int sensoraddr = robot.getSettingsParser().getInteger("hw:sorter:sensoraddr") ;
+			int index = robot.getSettingsParser().getInteger("hw:sorter:index") ;
 
             if (robot.getSettingsParser().isDefined("hw:sorter:ballpresent") && 
                             robot.getSettingsParser().isDefined("hw:sorter:ballcolor")) {
@@ -31,10 +32,13 @@ namespace xero {
             inmotor_ = std::make_shared<TalonSRX>(inmotor);
             outmotor_ = std::make_shared<TalonSRX>(outmotor) ;          
             encoder_ = std::make_shared<frc::Encoder>(enc1,enc2);
+			index_ = std::make_shared<frc::DigitalInput>(index) ;
 
-            degrees_per_tick_=robot.getSettingsParser().getDouble("sorter:degrees_per_tick");
+            degrees_per_tick_ = robot.getSettingsParser().getDouble("sorter:degrees_per_tick");
 
             calibrated_ = false;
+
+			sorter_motor_power_ = 0.0 ;
         }
 
         Sorter::~Sorter(){
@@ -67,7 +71,9 @@ namespace xero {
         void Sorter::computeState() {
             detectBall() ;
 
-            angle_ = xero::math::normalizeAngleDegrees(encoder_->Get() * degrees_per_tick_) ;
+            angle_ = xero::math::normalizeAngleDegrees(encoder_->Get() * degrees_per_tick_ - calibrated_angle_) ;
+
+			index_state_ = index_->Get() ;
         }
     
 		bool Sorter::canAcceptAction(ActionPtr action) {

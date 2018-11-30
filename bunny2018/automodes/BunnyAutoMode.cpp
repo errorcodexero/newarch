@@ -240,10 +240,10 @@ namespace xero {
 			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::IntakeMotor, 0.0) ;			
 			seq->pushSubActionPair(sorter, act) ;
 
-            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.2) ;			
+            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.4) ;			
 			seq->pushSubActionPair(sorter, act) ;
 
-			act = std::make_shared<DelayAction>(5.0) ;
+			act = std::make_shared<DelayAction>(10.0) ;
 			seq->pushAction(act) ;
 
 			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.0) ;			
@@ -259,7 +259,7 @@ namespace xero {
 			seq->pushSubActionPair(sorter, act) ;								
 
 			return seq ;
-		}			
+		}
 
 		ActionSequencePtr BunnyAutoMode::createAutoModeNine() {
 			xero::base::ActionPtr act ;
@@ -271,9 +271,10 @@ namespace xero {
             act = std::make_shared<SorterCalibrateAction>(*sorter) ;
 			seq->pushSubActionPair(sorter, act) ;
 
+#ifdef NOTYET
             act = std::make_shared<SorterStageBallAction>(*sorter, Sorter::BallColor::Red) ;
 			seq->pushSubActionPair(sorter, act) ;						
-
+#endif
 			return seq ;
 		}					
     }

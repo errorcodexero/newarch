@@ -3,6 +3,7 @@
 #include "SorterAction.h"
 #include "Sorter.h"
 #include <string>
+#include <vector>
 
 namespace xero {
     namespace bunny2018 {
@@ -28,23 +29,31 @@ namespace xero {
                 KeepingBall,
                 RejectingBall,
                 AlignSorter,
+				Done
             } ;
 
         private:
-            void alignSorter() ;
+            bool alignSorter() ;
+			double calcTargetAngle() ;
 
         private:
             Sorter::BallColor color_ ;
 
             double intake_power_ ;
+			double output_power ;
             double keep_ball_motor_power_ ;
             double keep_ball_duration_ ;
             double reject_ball_motor_power_ ;
             double reject_ball_duration_ ;
+			double hole_tolerance_ ;
+			double next_hole_power_ ;
 
             State state_ ;
 
             double kick_start_ ;
+			double target_angle_ ;
+
+			std::vector<double> holes_ ;
         };
     }
 }

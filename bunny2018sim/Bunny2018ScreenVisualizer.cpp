@@ -88,18 +88,12 @@ namespace xero {
 			}
 
             void Bunny2018ScreenVisualizer::displayCollector(std::shared_ptr<xero::sim::bunny2018::CollectorModel> subsystem_p) {
-                std::string str ;
-                int fieldwidth = getRobotWindowWidth() ;
-
                 wmove(getRobotWindow(),collector_row_, 0 ) ;
 				std::string text = "Collector: " + std::to_string(subsystem_p->getVoltage()) ;
                 waddstr(getRobotWindow(), text.c_str()) ;				
 			}
 
             void Bunny2018ScreenVisualizer::displayHopper(std::shared_ptr<xero::sim::bunny2018::HopperModel> subsystem_p) {
-                std::string str ;
-                int fieldwidth = getRobotWindowWidth() ;
-
                 wmove(getRobotWindow(),hopper_row_, 0 ) ;
 				std::string text = "Hopper: " + std::to_string(subsystem_p->getVoltage()) ;
                 waddstr(getRobotWindow(), text.c_str()) ;
@@ -126,7 +120,27 @@ namespace xero {
                 wmove(getRobotWindow(),sorter_row_ + 3, 0 ) ;
 				text = "Output Motor: " + std::to_string(subsystem_p->getOutVoltage()) ;
 				text = text.substr(0, fieldwidth) ;				
-                waddstr(getRobotWindow(), text.c_str()) ;									
+                waddstr(getRobotWindow(), text.c_str()) ;	
+
+                wmove(getRobotWindow(),sorter_row_ + 4, 0 ) ;
+				text = "Wheel Angle: " + std::to_string(subsystem_p->getAngle()) ;
+				text = text.substr(0, fieldwidth) ;				
+                waddstr(getRobotWindow(), text.c_str()) ;
+
+                wmove(getRobotWindow(),sorter_row_ + 5, 0 ) ;
+				text = "Index: " + std::to_string(subsystem_p->getIndexValue()) ;
+				text = text.substr(0, fieldwidth) ;				
+                waddstr(getRobotWindow(), text.c_str()) ;		
+
+                wmove(getRobotWindow(),sorter_row_ + 6, 0 ) ;
+				text = "Ball Present: " + std::to_string(subsystem_p->getBallPresentState()) ;
+				text = text.substr(0, fieldwidth) ;				
+                waddstr(getRobotWindow(), text.c_str()) ;
+
+                wmove(getRobotWindow(),sorter_row_ + 7, 0 ) ;
+				text = "Red Blue: " + std::to_string(subsystem_p->getBallRedState()) ;
+				text = text.substr(0, fieldwidth) ;				
+                waddstr(getRobotWindow(), text.c_str()) ;										
 			}			
 
             void Bunny2018ScreenVisualizer::displayTankDrive(std::shared_ptr<xero::sim::TankDriveModel> subsystem_p) {

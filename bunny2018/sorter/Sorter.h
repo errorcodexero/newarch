@@ -48,15 +48,25 @@ namespace xero {
             }
 
             void setSorterMotor(double v) {
+				sorter_motor_power_ = v ;
                 sortmotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v) ;
             }
 
             void setCalibrated(bool b) {
                 calibrated_ = b ;
+				if (b)
+					calibrated_angle_ = angle_ ;
             }
 
             void detectBall() ;
 
+			bool getIndexState() const {
+				return index_state_ ;
+			}
+
+			double getSorterMotorPower() const {
+				return sorter_motor_power_ ;
+			}
 
         private:
             std::shared_ptr<frc::Encoder> encoder_ ;
@@ -66,11 +76,18 @@ namespace xero {
             std::shared_ptr<frc::I2C> color_sensor_ ;
             std::shared_ptr<frc::DigitalInput> ball_present_ ;
             std::shared_ptr<frc::DigitalInput> red_blue_ ;
+			std::shared_ptr<frc::DigitalInput> index_ ;
             bool calibrated_ ;
             double degrees_per_tick_ ;
 
             BallColor ball_ ;
             double angle_ ;
+
+			bool index_state_ ;
+
+			double calibrated_angle_ ;
+
+			double sorter_motor_power_ ;
         };
     }
 }

@@ -74,3 +74,4 @@ tankdrive:sim:width                                24.0
 
 sorter:ticks_per_revolution						   1000
 sorter:total_holes                                 5
+sorter:degrees_per_volt_per_second				   360

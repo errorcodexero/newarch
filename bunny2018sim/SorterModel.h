@@ -57,6 +57,22 @@ namespace xero  {
                     return out_voltage_ ;
                 }						
 
+				double getAngle() {
+					return angle_ ;
+				}
+
+				bool getIndexValue() {
+					return index_value_ ;
+				}
+
+				bool getBallPresentState() {
+					return ball_present_state_ ;
+				}
+
+				bool getBallRedState() {
+					return ball_red_state_ ;
+				}
+
 			private:
 				int getEncoderValue() ;
                
@@ -73,9 +89,9 @@ namespace xero  {
 				frc::DigitalInput *red_blue_ ;								
 				frc::Encoder *encoder_ ;
 
+				double degrees_per_volt_per_second ;
 				double angle_ ;
 				int ticks_per_revolution_ ;
-				double degrees_per_hole_ ;
 
                 int sorter_motor_channel_ ;
                 int in_motor_channel_ ;
@@ -85,6 +101,11 @@ namespace xero  {
 				int index_sensor_ ;
 				int ball_present_index_ ;
 				int red_build_index_ ;
+
+				bool index_value_ ;
+
+				bool ball_present_state_ ;
+				bool ball_red_state_ ;
             } ;
         }
     }
