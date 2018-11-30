@@ -14,6 +14,10 @@ namespace xero {
 
             SingleMotorVoltageAction(SingleMotorSubsystem &single_motor_subsystem, const std::string &name) ;
 
+            SingleMotorVoltageAction(SingleMotorSubsystem &single_motor_subsystem, double duty, double duration) ;
+
+            SingleMotorVoltageAction(SingleMotorSubsystem &single_motor_subsystem, const std::string &name, const std::string &durname) ;			
+
             virtual ~SingleMotorVoltageAction() ;
 
             virtual void start() ;
@@ -28,6 +32,10 @@ namespace xero {
             
         private:
             double duty_cycle_;
+			bool timed_ ;
+			double duration_ ;
+			bool is_done_ ;
+			double start_ ;
         };
     }
 }
