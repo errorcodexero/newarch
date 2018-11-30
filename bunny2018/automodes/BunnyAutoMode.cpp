@@ -40,6 +40,8 @@ namespace xero {
 			//
 			if (sel < 0 || sel > 9)
 				sel = 0 ;
+			
+			sel = 8 ;
 
 			switch(sel) {
 				case 0:
@@ -249,6 +251,7 @@ namespace xero {
 			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.0) ;			
 			seq->pushSubActionPair(sorter, act) ;	
 
+#ifdef OUTTAKE_MOTOR_PRESENT
             act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::OuttakeMotor, 0.4) ;			
 			seq->pushSubActionPair(sorter, act) ;
 
@@ -256,7 +259,8 @@ namespace xero {
 			seq->pushAction(act) ;
 
 			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::OuttakeMotor, 0.0) ;			
-			seq->pushSubActionPair(sorter, act) ;								
+			seq->pushSubActionPair(sorter, act) ;	
+#endif							
 
 			return seq ;
 		}

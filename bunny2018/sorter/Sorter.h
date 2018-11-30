@@ -1,6 +1,7 @@
 #pragma once
 
 #include "XeroTalonSRX.h"
+#include <VictorSP.h>
 #include <Subsystem.h>
 #include <Encoder.h>
 #include <I2C.h>
@@ -40,16 +41,28 @@ namespace xero {
 
         private:
             void setIntakeMotor(double v) {
+#ifdef USE_VICTORS
+                inmotor_->Set(v) ;
+#else 
                 inmotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v) ;
+#endif
             }
 
             void setOuttakeMotor(double v) {
+#ifdef USE_VICTORS
+                outmotor_->Set(v) ;
+#else                
                 outmotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v) ;
+#endif
             }
 
             void setSorterMotor(double v) {
 				sorter_motor_power_ = v ;
+#ifdef USE_VICTORS
+                sortmotor_->Set(v) ;
+#else
                 sortmotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v) ;
+#endif
             }
 
             void setCalibrated(bool b) {
@@ -70,9 +83,15 @@ namespace xero {
 
         private:
             std::shared_ptr<frc::Encoder> encoder_ ;
+#ifdef USE_VICTORS
+            std::shared_ptr<VictorSP> sortmotor_ ;
+            std::shared_ptr<VictorSP> inmotor_ ;
+            std::shared_ptr<VictorSP> outmotor_ ;
+#else
             std::shared_ptr<TalonSRX> sortmotor_ ;
             std::shared_ptr<TalonSRX> inmotor_ ;
             std::shared_ptr<TalonSRX> outmotor_ ;
+#endif
             std::shared_ptr<frc::I2C> color_sensor_ ;
             std::shared_ptr<frc::DigitalInput> ball_present_ ;
             std::shared_ptr<frc::DigitalInput> red_blue_ ;

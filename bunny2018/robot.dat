@@ -18,10 +18,11 @@ hw:driverstation:hid:driver         0
 
 hw:collector:motor                  6
 hw:hopper:motor                     11
-hw:sorter:motor                     10
+
+hw:sorter:motor                     0
 hw:sorter:encoder1                  3
 hw:sorter:encoder2                  4
-hw:sorter:in:motor                  9
+hw:sorter:in:motor                  1
 hw:sorter:out:motor                 8
 hw:sorter:sensoraddr                1
 hw:sorter:index						6

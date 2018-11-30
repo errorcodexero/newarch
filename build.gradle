@@ -111,7 +111,7 @@ model {
 		frcUserProgram(NativeExecutableSpec) {
 			targetPlatform "roborio"
 			binaries.all {
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DUSE_VICTORS"
 			}
 			sources.cpp {
 				// This is where our source files are located (src/cpp for C++ files, src/include for headers)

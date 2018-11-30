@@ -28,9 +28,15 @@ namespace xero {
                 color_sensor_ = std::make_shared<frc::I2C>(frc::I2C::kOnboard, sensoraddr) ;
             }
 
+#ifdef USE_VICTORS
+            sortmotor_ = std::make_shared<VictorSP>(sortmotor);
+            inmotor_ = std::make_shared<VictorSP>(inmotor);
+            outmotor_ = std::make_shared<VictorSP>(outmotor) ;
+#else
             sortmotor_ = std::make_shared<TalonSRX>(sortmotor);
             inmotor_ = std::make_shared<TalonSRX>(inmotor);
-            outmotor_ = std::make_shared<TalonSRX>(outmotor) ;          
+            outmotor_ = std::make_shared<TalonSRX>(outmotor) ;
+#endif
             encoder_ = std::make_shared<frc::Encoder>(enc1,enc2);
 			index_ = std::make_shared<frc::DigitalInput>(index) ;
 
