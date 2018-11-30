@@ -15,6 +15,7 @@ namespace xero {
             friend class SorterDutyCycleAction ;
             friend class SorterStageBallAction ;
             friend class SorterCalibrateAction ;
+            friend class SorterEjectAction ;
 
         public:
             enum BallColor
