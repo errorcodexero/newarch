@@ -18,6 +18,32 @@ TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, double t
 	profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
 }
 
+TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, const std::string &name) : TankDriveAction(tank_drive) {
+	target_distance_ = tank_drive.getRobot().getSettingsParser().getDouble(name) ;
+	is_done_ = false;
+	double maxa = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxa") ;
+	double maxd = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxd") ;
+	double maxv = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxv") ;		
+	profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
+}
+
+TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, double target_distance, double maxv) : TankDriveAction(tank_drive) {
+	target_distance_ = target_distance;	
+	is_done_ = false;
+	double maxa = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxa") ;
+	double maxd = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxd") ;
+	profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
+}
+
+TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, const std::string &name, const std::string &maxvname) : TankDriveAction(tank_drive) {
+	target_distance_ = tank_drive.getRobot().getSettingsParser().getDouble(name) ;
+	is_done_ = false;
+	double maxa = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxa") ;
+	double maxd = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxd") ;
+	double maxv = getTankDrive().getRobot().getSettingsParser().getDouble(maxvname) ;		
+	profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
+}
+
 TankDriveDistanceAction::~TankDriveDistanceAction() {
 	
 }

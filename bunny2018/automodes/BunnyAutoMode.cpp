@@ -11,6 +11,7 @@
 #include <sorter/SorterCalibrateAction.h>
 #include <sorter/SorterStageBallAction.h>
 #include <DelayAction.h>
+#include <ParallelAction.h>
 
 using namespace xero::base ;
 
@@ -251,7 +252,6 @@ namespace xero {
 			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.0) ;			
 			seq->pushSubActionPair(sorter, act) ;	
 
-#ifdef OUTTAKE_MOTOR_PRESENT
             act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::OuttakeMotor, 0.4) ;			
 			seq->pushSubActionPair(sorter, act) ;
 
@@ -260,25 +260,44 @@ namespace xero {
 
 			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::OuttakeMotor, 0.0) ;			
 			seq->pushSubActionPair(sorter, act) ;	
-#endif							
 
 			return seq ;
 		}
 
 		ActionSequencePtr BunnyAutoMode::createAutoModeNine() {
 			xero::base::ActionPtr act ;
+
 			auto &robot = getRobot() ;
 			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
+
 			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
+            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
+			auto collector = bunny.getBunnySubsystem()->getCollector() ;
+			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
+
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterMotorTest") ;
+			auto seq2 = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "Calibrate/Stage") ;
+			std::shared_ptr<ParallelAction> parallel ;
+
+			act = std::make_shared<TankDriveDistanceAction>(*tankdrive, "automode:1:straight_distance") ;
+			parallel->addAction(act) ;
+
+            act = std::make_shared<SingleMotorVoltageAction>(*hopper, "automode:1:collector_power") ;
+			seq2->pushSubActionPair(hopper, act) ;
+
+            act = std::make_shared<SingleMotorVoltageAction>(*collector, "automode:1:collector_power") ;
+			seq2->pushSubActionPair(collector, act) ;			
 
             act = std::make_shared<SorterCalibrateAction>(*sorter) ;
-			seq->pushSubActionPair(sorter, act) ;
+			seq2->pushSubActionPair(sorter, act) ;
 
-#ifdef NOTYET
             act = std::make_shared<SorterStageBallAction>(*sorter, Sorter::BallColor::Red) ;
-			seq->pushSubActionPair(sorter, act) ;						
-#endif
+			seq2->pushSubActionPair(sorter, act) ;
+
+			parallel->addAction(seq2) ;
+
+			seq->pushAction(parallel) ;
+
 			return seq ;
 		}					
     }

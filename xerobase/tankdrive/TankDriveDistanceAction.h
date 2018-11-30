@@ -16,6 +16,9 @@ namespace xero {
 			/// \param tank_drive the tank drive subsystem
 			/// \param target_distance The distance to drive in inches
 			TankDriveDistanceAction(TankDrive &tank_drive, double target_distance);
+			TankDriveDistanceAction(TankDrive &tank_drive, double target_distance, double maxv);			
+			TankDriveDistanceAction(TankDrive &tank_drive, const std::string &distname);			
+			TankDriveDistanceAction(TankDrive &tank_drive, const std::string &distname, const std::string &maxvname) ;
 			virtual ~TankDriveDistanceAction() ;
 
 			void start();

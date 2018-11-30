@@ -110,3 +110,11 @@ sorter:intake_power												0.4
 sorter:output_power												0.4
 sorter:hole_offset												0
 sorter:search_power												0.1
+
+#
+# Auto mode constants
+#
+automode:1:straight_distance                                   100
+automode:1:collector_power                                     0.6
+automode:1:hopper_power                                        -0.6
+

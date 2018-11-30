@@ -28,7 +28,6 @@ namespace xero {
             Sorter(xero::base::Robot & robot);
 
             virtual ~Sorter(); 
-
             virtual void computeState() ;
 		    virtual bool canAcceptAction(xero::base::ActionPtr action)  ;
 
