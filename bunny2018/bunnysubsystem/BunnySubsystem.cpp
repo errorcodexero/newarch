@@ -27,6 +27,7 @@ namespace xero {
                     if (!settings.isDefined(motstr))
                         break ;
                     right.push_back(settings.getInteger(motstr)) ;
+                    index++;
                 }
 
                 if (left.size() != right.size()) {
