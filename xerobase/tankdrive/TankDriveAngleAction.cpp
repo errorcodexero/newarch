@@ -83,7 +83,7 @@ void TankDriveAngleAction::run() {
 				logger.endMessage();
 			}
 
-			double target_velocity = profile_->getSpeed(profile_delta_time) ;
+			double target_velocity = profile_->getVelocity(profile_delta_time) ;
 			double target_accel = profile_->getAccel(profile_delta_time) ;
 			double base_power = velocity_pid_.getOutput(target_velocity, current_velocity, target_accel, getTankDrive().getRobot().getDeltaTime());
 

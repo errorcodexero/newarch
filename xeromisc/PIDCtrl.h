@@ -70,6 +70,7 @@ public:
 	double getOutput(double target, double current, double accel, double timeDifference);
 
 	/// \brief return a human readable string representing the PID controller
+	/// \returns a human readable string representing the PID controller state
 	std::string toString();
 	
 private:

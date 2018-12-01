@@ -57,18 +57,26 @@ namespace xero {
 				string_ = s ;
 			}
 
+			/// \brief returns true if the setting is a boolean
+			/// \returns true if the setting is a boolean
 			bool isBoolean() const {
 				return type_ == Type::Boolean ;
 			}
 
+			/// \brief returns true if the setting is a double
+			/// \returns true if the setting is a double
 			bool isDouble() const {
 				return type_ == Type::Double ;
 			}
 
+			/// \brief returns true if the setting is an integer
+			/// \returns true if the setting is an integer
 			bool isInteger() const {
 				return type_ == Type::Integer ;
 			}
 
+			/// \brief returns true if the setting is a string
+			/// \returns true if the setting is a string
 			bool isString() const {
 				return type_ == Type::String ;
 			}
@@ -108,6 +116,7 @@ namespace xero {
 			}
 
 			/// \brief The == operator for the setting object
+			/// \param s the setting to compare to
 			/// \returns true if the objects are the same type and value
 			bool operator==(const Setting &s) const  {
 				bool ret = true ;

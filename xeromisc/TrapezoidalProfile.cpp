@@ -19,6 +19,25 @@ namespace xero {
         }
 		
         double TrapezoidalProfile::intspeed(double t) const {
+
+        }
+
+		double TrapezoidalProfile::getAccel(double t) const {
+			double ret ;
+
+			if (t < 0.0)
+				ret = max_accel_ ;
+			else if (t < ta_)
+				ret = max_accel_ ;
+			else if (t < ta_ + tc_)
+				ret = 0.0 ;
+			else if (t < ta_ + tc_ + td_)
+				ret = max_decel_ ;
+
+			return isneg_ ? -ret : ret ;
+		}
+
+        double TrapezoidalProfile::getVelocity(double t) const {
             double ret ;
             if (t < 0.0) {
                 ret = start_velocity_ ;
@@ -37,24 +56,6 @@ namespace xero {
                 ret = end_velocity_ ;
             }
 
-            return ret ;
-        }
-
-		double TrapezoidalProfile::getAccel(double t) const {
-			if (t < 0.0)
-				return 0.0 ;
-			else if (t < ta_)
-				return max_accel_ ;
-			else if (t < ta_ + tc_)
-				return 0.0 ;
-			else if (t < ta_ + tc_ + td_)
-				return max_decel_ ;
-
-			return 0.0 ;
-		}
-
-        double TrapezoidalProfile::getSpeed(double t) const {
-            double ret = intspeed(t) ;
             return isneg_ ? -ret : ret ;
         }
 

@@ -99,41 +99,69 @@ class MessageLogger
     /// \returns a copy of the message logger
     MessageLogger &operator<<(double value);
 
+	/// \brief start logging a block of data
+	/// \param label the label for the data
+	/// \returns a reference to the MessageLogger object
 	MessageLogger &startData(const std::string &label) {
 		current_data_.init(label);
 		return *this;
 	}
 
+	/// \brief add data to the message logger
+	/// \param key the name of the data
+	/// \param value the data to log
+	/// \returns a reference to the MessageLogger object
 	MessageLogger &addData(const std::string &key, const std::string &value) {
 		current_data_.add(key, value);
 		return *this;
 	}
 
+	/// \brief add data to the message logger
+	/// \param key the name of the data
+	/// \param value the data to log
+	/// \returns a reference to the MessageLogger object
 	MessageLogger &addData(const std::string &key, const char *value) {
 		current_data_.add(key, value);
 		return *this;
 	}
 
+	/// \brief add data to the message logger
+	/// \param key the name of the data
+	/// \param value the data to log
+	/// \returns a reference to the MessageLogger object
 	MessageLogger &addData(const std::string &key, double value) {
 		current_data_.add(key, value);
 		return *this;
 	}
 
+	/// \brief add data to the message logger
+	/// \param key the name of the data
+	/// \param value the data to log
+	/// \returns a reference to the MessageLogger object
 	MessageLogger &addData(const std::string &key, int value) {
 		current_data_.add(key, value);
 		return *this;
 	}
 
+	/// \brief add data to the message logger
+	/// \param key the name of the data
+	/// \param value the data to log
+	/// \returns a reference to the MessageLogger object
 	MessageLogger &addData(const std::string &key, size_t value) {
 		current_data_.add(key, value);
 		return *this;
 	}
 
+	/// \brief add data to the message logger
+	/// \param key the name of the data
+	/// \param value the data to log
+	/// \returns a reference to the MessageLogger object
 	MessageLogger &addData(const std::string &key, bool value) {
 		current_data_.add(key, value);
 		return *this;
 	}
 
+	/// \brief end the data being sent to the logger
 	void endData() {
 		*this << current_data_.toString();
 	}

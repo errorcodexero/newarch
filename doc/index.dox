@@ -6,11 +6,15 @@
  *
  * \section structure File Structure
  *
- * TODO
+ * The Error Code Xero base library is divided into three directorys.  xeromisc contains various classes
+ * that are useful, but are not really part of the robot application framework.  This includes things like
+ * the message logger and the settings parser.  xeromath contains various classes that are useful, but are
+ * part of the robot application framework.  The classes in xeromath are related to the mathematics and
+ * include classes that represent points, points with angle, and other math related functions.
  *
  * \section building Building
  *
  * The software here is built using gradle.  To build everything run ./gradlew build from the top level directory
- * of the source code.  This code is known to build
+ * of the source code.
  *
  */
