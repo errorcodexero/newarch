@@ -3,7 +3,7 @@
 # Describe the hardware of the robot
 #
 ##############################################################
-hw:tankdrive:disable                true
+#hw:tankdrive:disable                true
 hw:tankdrive:leftmotor1             1
 hw:tankdrive:leftmotor2             2
 hw:tankdrive:rightmotor1            3
@@ -18,10 +18,10 @@ hw:driverstation:hid:oi             2
 hw:driverstation:hid:gunner         1
 hw:driverstation:hid:driver         0
 
-hw:collector:disabled               true
+#hw:collector:disabled               true
 hw:collector:motor                  6
 
-hw:hopper:disabled                  true
+#hw:hopper:disabled                  true
 hw:hopper:motor                     11
 
 hw:sorter:motor                     0
