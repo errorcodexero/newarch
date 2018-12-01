@@ -25,11 +25,6 @@ namespace xero {
 			angle_ = angle ;
 		}
 
-		void Kinematics::set (double x, double y) {
-			x_ = x ;
-			y_ = y ;
-		}
-
 		void Kinematics::move(double right, double left) {
 			double dv = (right - left) / 2 * scrub_ ;
 			double angle = angle_ + (dv * 2.0) / width_ ;

@@ -9,30 +9,6 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
 
-        Subsystem::ExecuteNamedSequence::ExecuteNamedSequence(ActionPtr step_p) {
-            action_ = step_p ;
-        }
-
-        void Subsystem::ExecuteNamedSequence::start() {
-            action_->start() ;
-        }
-
-        void Subsystem::ExecuteNamedSequence::run() {
-            action_->run() ;
-        }
-
-        bool Subsystem::ExecuteNamedSequence::isDone() {
-            return action_->isDone() ;
-        }
-
-        void Subsystem::ExecuteNamedSequence::cancel() {
-            action_->cancel() ;
-        }
-
-        std::string Subsystem::ExecuteNamedSequence::toString() {
-            return action_->toString() ;
-        }
-
         Subsystem::Subsystem(Robot &robot, const std::string &name) : robot_(robot) , name_(name) {
 			action_ = nullptr ;
 		}
@@ -51,22 +27,6 @@ namespace xero {
         void Subsystem::computeState() {
             for(auto sub: children_)
                 sub->computeState() ;     
-        }
-
-        bool Subsystem::executeNamedSequence(const std::string &name) {
-            auto it = sequences_.find(name) ;
-            if (it == sequences_.end()) {
-                MessageLogger &logger = getRobot().getMessageLogger() ;
-                logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_SUBSYSTEMS) ;
-                logger << "subsystem '" << name_ << "'" ;
-                logger << " was requested to execute unknown named sequence '" ;
-                logger << name << "'" ;
-                logger.endMessage() ;
-                return false ;
-            }
-            
-            std::shared_ptr<ExecuteNamedSequence> seqdir_p = std::make_shared<ExecuteNamedSequence>(it->second) ;
-            return setAction(seqdir_p) ;
         }
 
 		void Subsystem::cancelAction() {

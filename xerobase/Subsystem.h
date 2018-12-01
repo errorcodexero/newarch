@@ -19,24 +19,6 @@ namespace xero {
 		/// \brief The base class for any subsystem in the system.
 		class Subsystem {
 		public:	
-			/// \brief An action capable of executing a named sequence of actions
-			class ExecuteNamedSequence : public Action {
-			public:
-				/// \brief Create a new action capable of executing a named sequence of actions
-				ExecuteNamedSequence(ActionPtr action_p) ;
-
-				virtual void start();
-				virtual void run();
-				virtual bool isDone() ;
-				virtual void cancel() ;
-
-				virtual std::string toString() ;
-
-			private:
-				ActionPtr action_ ;
-			} ;
-
-		public:
 			/// \brief create a new subsystem
 			/// \param robot the robot
 			/// \param name the name of the subsystem
@@ -118,13 +100,6 @@ namespace xero {
 			}			
 
 		protected:
-			/// \brief add a named sequence to a subsystem
-			/// \param name the name of the sequence to define
-			/// \param sequence_p the step to execute for this sequence
-			void defineNamedSequence(const std::string &name, ActionPtr sequence_p) {
-				sequences_[name] = sequence_p ;
-			}
-
 			/// \brief check that a Action is valid for a subsystem
 			/// \param Action the Action to check for a subsystem
 			/// \return true if the action is valid for a subsystem
@@ -148,11 +123,6 @@ namespace xero {
 			// The currently active Action
 			//
 			ActionPtr action_;
-
-			//
-			// A set of named sequences associatd with this subsystem
-			//
-			std::map<std::string, ActionPtr> sequences_ ;
 
 			//
 			// The set of child subsystems
