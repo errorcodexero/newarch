@@ -8,7 +8,7 @@
 
 namespace xero {
 	namespace base {
-		/// \brief this class stores and executes a sequence of actions.
+		/// \brief This class stores and executes a sequence of actions.
 		/// Actions are added to this action sequence object.  When run() is called
 		/// this sequence of action is ececuted in sequence until they are all complete.
 		/// When an action in the sequence is complete (e.g. isDone() returns true), 

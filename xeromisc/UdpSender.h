@@ -6,17 +6,24 @@
 
 namespace xeromisc
 {
+	/// \brief this class sends messages on a UDP socket
 	class UdpBroadcastSender : public UdpSocket
 	{
 	public:
+		/// \brief create the new UDP socket sender objects
 		UdpBroadcastSender()
 		{
 		}
 
+		/// \brief destroy the new UDP socket sender object
 		virtual ~UdpBroadcastSender()
 		{
 		}
 
+		/// \brief open the UDP socket sender.
+		/// \param addr the address to bind the socket to.  If empty, bind to broadcast address
+		/// \param port the power to bind the aocket to
+		/// \returns true if the socket is opened, otherwise false
 		bool open(const std::string &addr, uint16_t port)
 		{
 			if (isOpen())
@@ -52,22 +59,35 @@ namespace xeromisc
 			return true;
 		}
 
+		/// \brief open a socket bound to the broadcast address
+		/// \param port the port to bind the socket to
+		/// \returns true if the socket is opened, otherwise false
 		bool open(uint16_t port)
 		{
 			std::string empty;
 			return open(empty, port);
 		}
 
+		/// \brief close the socket
+		/// \returns true if the socket is closed, otherwise false
 		bool close()
 		{
 			return destroySocket();
 		}
 
+		/// \brief send a block of data
+		/// \param data the vector of data to send
+		/// \returns true if the data is sent sucessfully, otherwise false
 		bool send(const std::vector<uint8_t> &data)
 		{
 			return send(data, 0, data.size());
 		}
 
+		/// \brief send a subset of data from within a vector
+		/// \param data the vector containing the data to send
+		/// \param start the starting position in the vector for the data
+		/// \param count the number of bytes to send
+		/// \returns true if the data is sent sucessfully, otherwise falsae
 		bool send(const std::vector<uint8_t> &data, size_t start, size_t count)
 		{
 			ssize_t ret = ::sendto(getSocket(), &data[start], count, 0, (struct sockaddr *)&m_saddr, sizeof(m_saddr));

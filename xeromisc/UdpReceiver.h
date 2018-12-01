@@ -6,17 +6,24 @@
 
 namespace xeromisc
 {
+	/// \brief This class is a receiver of UDP broadcast packets
 	class UdpBroadcastReceiver : public UdpSocket
 	{
 	public:
+		/// \brief create the UDP broadcast receiver
 		UdpBroadcastReceiver()
 		{
 		}
 
+		/// \brief destroy the UDP broadcast receiver
 		virtual ~UdpBroadcastReceiver()
 		{
 		}
 
+		/// \brief open the broadcast receiver
+		/// \param addr the address to bind the socket to, if empty bind to the INADDR_ANY address
+		/// \param port the port to bind the socket to
+		/// \returns true if the socket was created, otherwise false
 		bool open(const std::string &addr, uint16_t port)
 		{
 			if (!createSocket())
@@ -31,12 +38,18 @@ namespace xeromisc
 			return true;
 		}
 
+		/// \brief open the broadcast receiver
+		/// \param port the port to bind the socket to
+		/// \returns true if the socket was created, otherwise false
 		bool open(uint16_t port)
 		{
 			std::string empty;
 			return open(empty, port);
 		}
 
+		/// \brief receive a package of data from the socket
+		/// \param data a vector to store the data, must be sized to the desired receive size
+		/// \returns the number of bytes sent, or -1 if there is an error
 		int receive(std::vector<uint8_t> &data)
 		{
 			struct sockaddr_in srcaddr;
@@ -52,6 +65,10 @@ namespace xeromisc
 		}
 
 	protected:
+		/// \brief bind the socket to a given address and port
+		/// \param addr the address for the socket, empty means INADDR_ANY
+		/// \param port the port for the socket
+		/// \returns true if the socket is bound to the address given
 		bool bind(const std::string &addr, uint16_t port)
 		{
 			memset(&m_saddr, 0, sizeof(m_saddr));

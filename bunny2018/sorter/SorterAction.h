@@ -5,7 +5,7 @@
 
 namespace xero {
 	namespace bunny2018 {
-		/// \brief This is a directive for the single motor subsystem.
+		/// \brief This is the base class for actions that can be assigned to the sorter
 		class SorterAction : public xero::base::Action {
 		public:
 			/// \brief Create a new SingleMotorAction

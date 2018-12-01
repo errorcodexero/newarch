@@ -40,7 +40,7 @@ namespace xero {
 		/// create the controller (see createAutoController(), createTeleopController(), and createTestController).
 		/// This controller processes the state of the subsystems and directs subsystems to perform Actions.
 		/// <br>
-		/// Finally, the robot calls each of the subsytems to execute on any assigned directives.
+		/// Finally, the robot calls each of the subsytems to execute on any assigned actions.
 		///
 		class Robot : public frc::SampleRobot {
 		public:

@@ -9,69 +9,86 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-namespace xeromisc
+namespace xero
 {
-	class UdpSocket
+	namespace misc 
 	{
-	public:
-		UdpSocket()
+		/// \brief This is the base class for a UDP socket.
+		class UdpSocket
 		{
-			m_socket = -1;
-		}
-
-		virtual ~UdpSocket()
-		{
-			if (m_socket != -1)
-				destroySocket();
-		}
-
-		bool isOpen()
-		{
-			return m_socket != -1;
-		}
-
-	protected:
-		int getSocket()
-		{
-			return m_socket;
-		}
-
-		bool createSocket()
-		{
-			m_socket = socket(AF_INET, SOCK_DGRAM, 0);
-			if (m_socket < 0)
-				return false;
-
-
-			return true;
-		}
-
-		bool destroySocket()
-		{
-			if (m_socket != -1)
+		public:
+			/// \brief create a new socket
+			UdpSocket()
 			{
-				::close(m_socket);
 				m_socket = -1;
 			}
 
-			return true;
-		}
-
-		bool setBroadcast()
-		{
-			int broad = 1;
-
-			if (setsockopt(m_socket, SOL_SOCKET, SO_BROADCAST, &broad, sizeof(broad)))
+			/// \brief destroy this socket object, closing any open socket
+			virtual ~UdpSocket()
 			{
-				int err = errno;
-				std::cout << "cannot setsockopt to broadcast " << err << std::endl;
-				return false;
+				if (m_socket != -1)
+					destroySocket();
 			}
 
-			return true;
-		}
+			/// \brief returns true if this socket is open
+			/// \returns true if the socket is open
+			bool isOpen()
+			{
+				return m_socket != -1;
+			}
 
-	private:
-		int m_socket;
-	};
+		protected:
+
+			/// \brief get the underlying socket from the socket object
+			/// \returns the socket associated with the object
+			int getSocket()
+			{
+				return m_socket;
+			}
+
+			/// \brief create a new UDP (datagram) socket
+			/// \returns true if the socket is created, otherwise false
+			bool createSocket()
+			{
+				m_socket = socket(AF_INET, SOCK_DGRAM, 0);
+				if (m_socket < 0)
+					return false;
+
+
+				return true;
+			}
+
+			/// \brief destroy the created socket
+			/// \returns true if the socket is destroyed, otherwise false
+			bool destroySocket()
+			{
+				if (m_socket != -1)
+				{
+					::close(m_socket);
+					m_socket = -1;
+				}
+
+				return true;
+			}
+
+			/// \brief set the sockt object into broadcast mode
+			/// \returns true if the socket is set to broadcast, otherwise false
+			bool setBroadcast()
+			{
+				int broad = 1;
+
+				if (setsockopt(m_socket, SOL_SOCKET, SO_BROADCAST, &broad, sizeof(broad)))
+				{
+					int err = errno;
+					std::cout << "cannot setsockopt to broadcast " << err << std::endl;
+					return false;
+				}
+
+				return true;
+			}
+
+		private:
+			int m_socket;
+		};
+	}
 }

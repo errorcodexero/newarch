@@ -2,19 +2,22 @@
 
 namespace xero {
     namespace base {
-        /// \brief Start the directive; called once per directive when it starts
+        /// \brief Start the action; called once per action when it starts
+		/// This method calls the start method on each of the parallel actions to be executed
         void ParallelAction::start() {
             for(auto act : action_list_)
                 act->start() ;
         }
 
-        /// \brief Manage the directive; called each time through the robot loop
+        /// \brief Manage the action; called each time through the robot loop
+		/// This method calls the run method on each of the parallel actions to be executes
         void ParallelAction::run() {
             for(auto act : action_list_)
                 act->run() ;
         }
 
-        /// \brief Cancel the directive
+        /// \brief Cancel the action
+		/// This method calls the cancel method on each of the parallel actions to be executes
         void ParallelAction::cancel() {
             for(auto act : action_list_) {
                 if (!act->isDone())
@@ -22,8 +25,9 @@ namespace xero {
             }
         }
 
-        /// \brief Return true if the directive is complete
-        /// \returns True if the directive is complete
+        /// \brief Return true if the action is complete.
+		/// This method returns true only when all of the parallel actions are complete.
+        /// \returns True if the action is complete
         bool ParallelAction::isDone() {
             bool done = true ;
             for(auto act : action_list_) {
@@ -37,6 +41,7 @@ namespace xero {
         }
 
         /// \brief return a human readable string representing the action
+		/// \returns a human readable strinct
         std::string ParallelAction::toString() {
             std::string ret("Parallel [") ;
             bool first = true ;

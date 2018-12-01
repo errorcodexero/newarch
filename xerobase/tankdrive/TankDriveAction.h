@@ -8,7 +8,8 @@ namespace xero {
 	namespace base {
 		class TankDrive;
 
-		/// \brief This is a directive for the drivebase.  All directives for the drivebase should be derived from this class.
+		/// \brief This is the base class for all actions for the to be assigned to the TankDrive class.
+		/// \sa TankDrive
 		class TankDriveAction : public Action {
 		public:
 			/// \brief Create a new TankDriveAction
