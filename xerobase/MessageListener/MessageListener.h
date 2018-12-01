@@ -3,6 +3,7 @@
 #include <list>
 
 #include <Subsystem.h>
+#include <UdpReceiver.h>
 
 namespace xero {
     namespace base {
@@ -13,7 +14,8 @@ namespace xero {
         public:
             /// \brief Constructor
             /// \param robot The robot that contains this subsystem.
-            MessageListener(Robot& robot);
+            /// \param socket_port_number The port number on which the raspberry will broadcast UDP packets with the results.
+            MessageListener(Robot& robot, int socket_port_number);
 
             /// \brief Destructor
             virtual ~MessageListener() ;
@@ -31,7 +33,11 @@ namespace xero {
             //virtual bool canAcceptAction(xero::base::ActionPtr action) ;
 
         private:
-            /// \brief Message received and not processed yet.
+
+            /// \brief Pointer to UDP baordcast receiver.
+            xero::misc::UdpBroadcastReceiver* m_server_in_p;
+
+            /// \brief Messages received and not processed yet.
             std::list<std::string> messages;
         };
     }

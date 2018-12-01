@@ -122,6 +122,13 @@ collector:power
 hopper:power
 
 #
+# MessageListener subsystem constants
+#
+
+# The port number must match the port parameter set on raspberry in the vision directory.  *** Don't change one without the other. ***
+messagelistener:port                                        5808
+
+#
 # Auto mode constants
 #
 automode:1:forward_distance                                    250

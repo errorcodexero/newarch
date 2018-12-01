@@ -37,8 +37,8 @@ namespace xero
 				return m_socket != -1;
 			}
 
-		protected:
-
+        protected:
+                
 			/// \brief get the underlying socket from the socket object
 			/// \returns the socket associated with the object
 			int getSocket()

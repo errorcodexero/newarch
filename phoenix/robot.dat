@@ -158,6 +158,14 @@ tankdrive:rotate:imax               6.0
 # Wings subsystem constants
 #
 
+
+#
+# MessageListener subsystem constants
+#
+
+# The port number must match the port parameter set on raspberry in the vision directory.  *** Don't change one without the other. ***
+messagelistener:port               5808
+
 #
 # DriverStation subsystem constants
 #

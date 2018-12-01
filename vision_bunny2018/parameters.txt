@@ -10,6 +10,7 @@ MAX_WIDTH 640
 MAX_HEIGHT 480
 
 # Only ports 5800-5810 are available for team use
+# Must match port parameter set on robot side.  *** Don't change one without the other. ***
 VISION_RESULT_PORT 5808
 
 BLOB_MIN_THRESHOLD 10
