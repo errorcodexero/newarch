@@ -40,14 +40,18 @@ namespace xero {
             if (!inited_) {
                 auto sub = getRobot().getDriveBase() ;
                 std::shared_ptr<TankDrive> db = std::dynamic_pointer_cast<TankDrive>(sub) ;
-                assert(db != nullptr) ; 
-                driver_->init(db) ;
-                inited_ = true ;
+                if (db != nullptr) {
+                    driver_->init(db) ;
+                    inited_ = true ;
+                }
             }
 
+#ifdef NOTYET
             seq_->clear() ;
-            for(auto dev: hiddevices_)
+            for(auto dev: hiddevices_) {
                 dev->computeState(*seq_) ;
+            }
+#endif
         }
 
         void OISubsystem::run() {

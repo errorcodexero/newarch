@@ -235,32 +235,14 @@ namespace xero {
 			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterMotorTest") ;
 
-            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::IntakeMotor, 0.4) ;			
+#ifdef NOTYET
+            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::IntakeMotor, 0.3) ;			
 			seq->pushSubActionPair(sorter, act) ;
 
-			act = std::make_shared<DelayAction>(5.0) ;
-			seq->pushAction(act) ;
-
-			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::IntakeMotor, 0.0) ;			
+            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.1) ;			
 			seq->pushSubActionPair(sorter, act) ;
 
-            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.4) ;			
-			seq->pushSubActionPair(sorter, act) ;
-
-			act = std::make_shared<DelayAction>(10.0) ;
-			seq->pushAction(act) ;
-
-			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.0) ;			
-			seq->pushSubActionPair(sorter, act) ;	
-
-            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::OuttakeMotor, 0.4) ;			
-			seq->pushSubActionPair(sorter, act) ;
-
-			act = std::make_shared<DelayAction>(5.0) ;
-			seq->pushAction(act) ;
-
-			act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::OuttakeMotor, 0.0) ;			
-			seq->pushSubActionPair(sorter, act) ;	
+			#endif
 
 			return seq ;
 		}

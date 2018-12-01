@@ -1,9 +1,11 @@
 #include "Sorter.h"
 #include "SorterAction.h"
+#include "bunnyids.h"
 #include <Robot.h>
 #include <xeromath.h>
 
 using namespace xero::base;
+using namespace xero::misc ;
 
 namespace xero {
     namespace bunny2018 {
@@ -38,11 +40,12 @@ namespace xero {
             outmotor_ = std::make_shared<TalonSRX>(outmotor) ;
 #endif
             encoder_ = std::make_shared<frc::Encoder>(enc1,enc2);
+            encoder_->Reset() ;
 			index_ = std::make_shared<frc::DigitalInput>(index) ;
 
             degrees_per_tick_ = robot.getSettingsParser().getDouble("sorter:degrees_per_tick");
 
-            calibrated_ = false;
+            calibrated_ = true;
 
 			sorter_motor_power_ = 0.0 ;
         }
@@ -75,9 +78,21 @@ namespace xero {
         }
     
         void Sorter::computeState() {
+            auto &logger = getRobot().getMessageLogger() ;
+
             detectBall() ;
 
-            angle_ = xero::math::normalizeAngleDegrees(encoder_->Get() * degrees_per_tick_ - calibrated_angle_) ;
+            if (calibrated_)
+                angle_ = xero::math::normalizeAngleDegrees(encoder_->Get() * degrees_per_tick_ - calibrated_angle_) ;
+            else
+                angle_ = 1000.0 ;
+
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER) ;
+            logger << "The angle is " << angle_ ;
+            logger << ", encoder value is " << encoder_->Get() ;
+            logger.endMessage() ;
+
+            std::cout << "Encoder Value " << encoder_->Get() << std::endl ;
 
 			index_state_ = index_->Get() ;
         }

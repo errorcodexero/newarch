@@ -101,7 +101,7 @@ driver:nudge_time                                               0.1
 #
 # Sorter Subsystem Constants
 #
-sorter:degrees_per_tick                                         1
+sorter:degrees_per_tick                                         0.6382978723404255
 sorter:calibration_power										0.3
 sorter:holes													5
 sorter:hole_width												45

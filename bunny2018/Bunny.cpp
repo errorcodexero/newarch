@@ -3,6 +3,7 @@
 #include "bunnysubsystem/BunnySubsystem.h"
 #include "bunnyoi/BunnyOISubsystem.h"
 #include "automodes/BunnyAutoMode.h"
+#include "bunnyids.h"
 #include <ActionSequence.h>
 #include <basegroups.h>
 #include <DelayAction.h>
@@ -115,8 +116,9 @@ namespace xero {
             //
 			// logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
 			logger.enableSubsystem(MSG_GROUP_ACTIONS);
-			//logger.enableSubsystem(MSG_GROUP_PARSER) ;
+			logger.enableSubsystem(MSG_GROUP_PARSER) ;
 			logger.enableSubsystem(MSG_GROUP_OI) ;
+			logger.enableSubsystem(MSG_GROUP_SORTER) ;
 
 			// Set up message logger destination(s)
             std::shared_ptr<MessageLoggerDest> dest_p ;
