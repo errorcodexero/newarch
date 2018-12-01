@@ -21,5 +21,6 @@ gopigo3/gopigo3xero/GoPiGo3Xero
 **/*.JPG
 **/*.mov
 **/*.MOV
+**/*.stackdump
 html
 rtf
