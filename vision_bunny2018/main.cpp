@@ -152,7 +152,7 @@ int main(int argc, char **argv) {
     params.readFile(params_file);
 
     // UDP broadcaster.  Test creation and basic usage."
-    xeromisc::UdpBroadcastSender m_server_out;
+    xero::misc::UdpBroadcastSender m_server_out;
     if (!m_server_out.open(params.getValue("VISION_RESULT_PORT"))) {
         std::cout << "Could not start broadcast server.\n";
         return 1;

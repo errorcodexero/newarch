@@ -153,7 +153,7 @@ namespace frc
 
 	void DriverStation::waitForConnection()
 	{
-		m_server_in_p = new xeromisc::UdpBroadcastReceiver();
+		m_server_in_p = new xero::misc::UdpBroadcastReceiver();
 		if (!m_server_in_p->open(ROBOT_IN_PORT))
 		{
 			std::string err("could not connect to driver station - in port");
@@ -161,7 +161,7 @@ namespace frc
 			throw ex;
 		}
 
-		m_server_out_p = new xeromisc::UdpBroadcastSender();
+		m_server_out_p = new xero::misc::UdpBroadcastSender();
 		if (!m_server_out_p->open(ROBOT_OUT_PORT))
 		{
 			std::string err("could not connect to driver station - out port");

@@ -361,8 +361,8 @@ namespace frc
 	private:
 		static DriverStation *m_ds_p;
 
-		xeromisc::UdpBroadcastSender *m_server_out_p;
-		xeromisc::UdpBroadcastReceiver *m_server_in_p;
+		xero::misc::UdpBroadcastSender *m_server_out_p;
+		xero::misc::UdpBroadcastReceiver *m_server_in_p;
 		std::thread m_ds_recv_thread;
 		std::thread m_ds_send_thread;
 		bool m_running;
