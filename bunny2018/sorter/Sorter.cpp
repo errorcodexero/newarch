@@ -3,6 +3,7 @@
 #include "bunnyids.h"
 #include <Robot.h>
 #include <xeromath.h>
+#include <smartdashboard/SmartDashboard.h>
 #include <memory>
 
 using namespace xero::base;
@@ -21,33 +22,31 @@ namespace xero {
             int sensoraddr = robot.getSettingsParser().getInteger("hw:sorter:sensoraddr") ;
 			int index = robot.getSettingsParser().getInteger("hw:sorter:index") ;
 
-            color_ = std::make_shared<ColorSensor>(sensoraddr, ColorSensor::TCS34725_INTEGRATIONTIME_24MS, ColorSensor::TCS34725_GAIN_4X) ;
+			white_detect_threshold_ = robot.getSettingsParser().getInteger("sorter:ball_detect:white_threshold") ;
+			blue_detect_threshold_ = robot.getSettingsParser().getInteger("sorter:ball_detect:blue_threshold") ;
+			red_detect_threshold_ = robot.getSettingsParser().getInteger("sorter:ball_detect:red_threshold") ;
+
+            color_ = std::make_shared<TCS34725ColorSensor>(sensoraddr, TCS34725ColorSensor::TCS34725_INTEGRATIONTIME_24MS, TCS34725ColorSensor::TCS34725_GAIN_4X) ;
             if (!color_->isAlive()) {
                 color_ = nullptr ;
                 logger.startMessage(MessageLogger::MessageType::error) ;
-                logger << "cannot initialize the color sensor" ;
+                logger << "cannot communicate with the color sensor" ;
                 logger.endMessage() ;
 
                 std::cout << "color sensor failed" << std::endl ;
             }
             else {
-                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER) ;
-                logger << "color sensor has been installed";
-                logger.endMessage() ;
-                std::cout << "    - color sensor has been created" << std::endl ;
+				if (!color_->initialize()) {
+					logger.startMessage(MessageLogger::MessageType::error) ;
+					logger << "cannot initialize color sensor" ;
+					logger.endMessage() ;
+				}
 
-                if (!color_->enable())
-                    std::cout << "Could not enable color sensor" << std::endl ;
-                else
-                    std::cout << "    - Color sensor has been enabled" << std::endl ;
-
-                while (1) {
-                    uint16_t r, g, b, c ;
-                    color_->getRawData(&r, &g, &b, &c) ;
-
-                    frc::Wait(10.0) ;
-                    std::cout << "Colors: " << r << " " << g << " " << b << " " << c << std::endl ;
-                }
+                if (!color_->enable()) {
+					logger.startMessage(MessageLogger::MessageType::error) ;
+					logger << "cannot enable color sensor" ;
+					logger.endMessage() ;					
+				}
             }
 
 #ifdef USE_VICTORS
@@ -66,34 +65,51 @@ namespace xero {
             degrees_per_tick_ = robot.getSettingsParser().getDouble("sorter:degrees_per_tick");
 
             calibrated_ = true;
-
+			calibrated_angle_ = -36.0 ;
 			sorter_motor_power_ = 0.0 ;
         }
 
         Sorter::~Sorter(){
         }
 
-        void Sorter::detectBall() {
-            uint16_t r, g, b, c ;
-            color_->getRawData(&r, &g, &b, &c) ;
+        void Sorter::detectBall(uint16_t &red, uint16_t &green, uint16_t &blue, uint16_t &white) {
+			color_->getRawData(red, green, blue, white) ;
 
-            std::cout << "RGB " << r << " " << g << " " << b << std::endl ;
+			if (white > white_detect_threshold_) {
+				if (red > green && red > blue && red > red_detect_threshold_) {
+					ball_ = BallColor::Red ;
+				}
+				else if (blue > red && blue > green) {
+					ball_ = BallColor::Blue ;
+				}
+				else {
+					ball_ = BallColor::None ;
+				}
+			}
+			else {
+				ball_ = BallColor::None ;
+			}
         }
     
         void Sorter::computeState() {
+			uint16_t red, green, blue, white ;
             auto &logger = getRobot().getMessageLogger() ;
 
-            detectBall() ;
-
+            detectBall(red, green, blue, white) ;
+			
             if (calibrated_)
                 angle_ = xero::math::normalizeAngleDegrees(encoder_->Get() * degrees_per_tick_ - calibrated_angle_) ;
             else
                 angle_ = 1000.0 ;
 
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER) ;
-            logger << "The angle is " << angle_ ;
-            logger << ", encoder value is " << encoder_->Get() ;
+            logger << "Sorter: angle " << angle_  << "\n" ;
+            logger << "        encoder " << encoder_->Get() << "\n" ;
+			logger << "        ball " << toString(ball_) << "\n" ;
+			logger << "        rgbw " << red << " " << green << " " << blue << " " << white ;
             logger.endMessage() ;
+
+			frc::SmartDashboard::PutString("BallColor", toString(ball_)) ;
 
 			index_state_ = index_->Get() ;
         }

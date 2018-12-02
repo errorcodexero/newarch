@@ -54,7 +54,7 @@
 
 namespace xero {
     namespace bunny2018 {
-        class ColorSensor
+        class TCS34725ColorSensor
         { 
         public:
             typedef enum
@@ -78,13 +78,13 @@ namespace xero {
             tcs34725Gain_t;
 
         public:
-            ColorSensor(int addr, tcs34725IntegrationTime_t time, tcs34725Gain_t gain) ;
+            TCS34725ColorSensor(int addr, tcs34725IntegrationTime_t time, tcs34725Gain_t gain) ;
 
             bool isAlive() ;
             bool initialize() ;
             bool enable() ;
             bool disable() ;
-            void getRawData (uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c) ;
+            void getRawData (uint16_t &r, uint16_t &g, uint16_t &b, uint16_t &c) ;
 
         private:
 

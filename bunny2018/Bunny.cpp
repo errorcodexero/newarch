@@ -42,6 +42,9 @@ namespace xero {
 				std::string autostr = std::to_string(automode) ;
 				frc::SmartDashboard::PutString("AutoModeNumber", autostr) ;
 			}
+			else {
+				frc::SmartDashboard::PutString("AutoModeNumber", "No OI Attached") ;
+			}
 		}
 		
 		void Bunny::RobotInit() {

@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
+            "name": "(gdb) Launch Simulator",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/exe/frcUserProgramSim/frcUserProgramSim.exe",
@@ -23,6 +23,33 @@
                     "ignoreFailures": true
                 }
             ],
-        }
+		},
+        {
+            "name": "(gdb) Launch Robot",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "C:/cygwin64/home/ButchGriffin/src/new/master/build/exe/frcUserProgram",
+            "args": [],
+            "stopAtEntry": true,
+            "targetArchitecture": "arm",
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/cygwin64/home/ButchGriffin/src/robotdev/external/frc/bin/arm-frc-linux-gnueabi-gdb.exe",
+            "customLaunchSetupCommands": [
+                {
+                    "text": "file C:/cygwin64/home/ButchGriffin/src/new/master/build/exe/frcUserProgram",
+                    "description": "load symbols",
+                    "ignoreFailures": false
+				},
+                {
+                    "text": "target remote 10.14.25.2:3333",
+                    "description": "connect to remote target",
+                    "ignoreFailures": false
+                },
+            ],
+			"logging":{"engineLogging": true, "programOutput": true}  
+        }		
     ]
 }

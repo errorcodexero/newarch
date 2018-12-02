@@ -11,6 +11,7 @@
 #include <sorter/SorterCalibrateAction.h>
 #include <sorter/SorterStageBallAction.h>
 #include <sorter/SorterEjectAction.h>
+#include <sorter/SorterRotateAngleAction.h>
 #include <DelayAction.h>
 #include <ParallelAction.h>
 
@@ -84,7 +85,11 @@ namespace xero {
 
 				case 9:
 					mode = createAutoModeNine() ;
-					break ;																
+					break ;			
+
+				case 10:
+					mode = createRotateSorterAutoMode() ;
+					break ;																					
 
 				default:
 					mode = nullptr ;
@@ -235,14 +240,8 @@ namespace xero {
 			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterMotorTest") ;
 
-#ifdef NOTYET
-            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::IntakeMotor, 0.3) ;			
-			seq->pushSubActionPair(sorter, act) ;
-
-            act = std::make_shared<SorterDutyCycleAction>(*sorter, SorterDutyCycleAction::Which::SortMotor, 0.1) ;			
-			seq->pushSubActionPair(sorter, act) ;
-
-			#endif
+            act = std::make_shared<SorterStageBallAction>(*sorter, Sorter::BallColor::Red) ;
+			seq->pushSubActionPair(sorter, act) ;			
 
 			return seq ;
 		}
@@ -307,6 +306,20 @@ namespace xero {
 			dract->addTriggeredAction("automode:1:eject15", seq2) ;
 
 			return seq ;
-		}					
+		}
+
+
+		ActionSequencePtr BunnyAutoMode::createRotateSorterAutoMode() {
+			xero::base::ActionPtr act ;
+			auto &robot = getRobot() ;
+			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
+			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterMotorTest") ;
+
+            act = std::make_shared<SorterRotateAngleAction>(*sorter, 720, 0.3) ;
+			seq->pushSubActionPair(sorter, act) ;			
+
+			return seq ;
+		}
     }
 }

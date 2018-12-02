@@ -15,5 +15,13 @@ namespace frc
 
         virtual ~I2C() {            
         }
+
+		bool Read(int, int, uint8_t *buffer) {
+			return false ;
+		}
+
+		bool Write(int, int) {
+			return false ;
+		}
     } ;
 }

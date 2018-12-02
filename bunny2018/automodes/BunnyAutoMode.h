@@ -32,6 +32,7 @@ namespace xero {
 			xero::base::ActionSequencePtr createAutoModeSeven() ; 			
 			xero::base::ActionSequencePtr createAutoModeEight() ; 			
 			xero::base::ActionSequencePtr createAutoModeNine() ;
+			xero::base::ActionSequencePtr createRotateSorterAutoMode() ;
 			
 		private:
 			std::string name_ ;
