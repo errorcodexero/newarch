@@ -3,6 +3,7 @@
 #include "bunnyids.h"
 #include <Robot.h>
 #include <xeromath.h>
+#include <memory>
 
 using namespace xero::base;
 using namespace xero::misc ;
@@ -10,6 +11,8 @@ using namespace xero::misc ;
 namespace xero {
     namespace bunny2018 {
         Sorter::Sorter(xero::base::Robot & robot) :Subsystem(robot,"sorter"){
+            auto &logger = robot.getMessageLogger() ;
+
             int inmotor=robot.getSettingsParser().getInteger("hw:sorter:in:motor");
             int outmotor=robot.getSettingsParser().getInteger("hw:sorter:out:motor");
             int sortmotor=robot.getSettingsParser().getInteger("hw:sorter:motor");                        
@@ -18,16 +21,33 @@ namespace xero {
             int sensoraddr = robot.getSettingsParser().getInteger("hw:sorter:sensoraddr") ;
 			int index = robot.getSettingsParser().getInteger("hw:sorter:index") ;
 
-            if (robot.getSettingsParser().isDefined("hw:sorter:ballpresent") && 
-                            robot.getSettingsParser().isDefined("hw:sorter:ballcolor")) {
-                int present = robot.getSettingsParser().getInteger("hw:sorter:ballpresent");
-                int color = robot.getSettingsParser().getInteger("hw:sorter:ballcolor");
+            color_ = std::make_shared<ColorSensor>(sensoraddr, ColorSensor::TCS34725_INTEGRATIONTIME_24MS, ColorSensor::TCS34725_GAIN_4X) ;
+            if (!color_->isAlive()) {
+                color_ = nullptr ;
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << "cannot initialize the color sensor" ;
+                logger.endMessage() ;
 
-                ball_present_ = std::make_shared<frc::DigitalInput>(present) ;
-                red_blue_ = std::make_shared<frc::DigitalInput>(color) ;
+                std::cout << "color sensor failed" << std::endl ;
             }
             else {
-                color_sensor_ = std::make_shared<frc::I2C>(frc::I2C::kOnboard, sensoraddr) ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER) ;
+                logger << "color sensor has been installed";
+                logger.endMessage() ;
+                std::cout << "    - color sensor has been created" << std::endl ;
+
+                if (!color_->enable())
+                    std::cout << "Could not enable color sensor" << std::endl ;
+                else
+                    std::cout << "    - Color sensor has been enabled" << std::endl ;
+
+                while (1) {
+                    uint16_t r, g, b, c ;
+                    color_->getRawData(&r, &g, &b, &c) ;
+
+                    frc::Wait(10.0) ;
+                    std::cout << "Colors: " << r << " " << g << " " << b << " " << c << std::endl ;
+                }
             }
 
 #ifdef USE_VICTORS
@@ -54,27 +74,10 @@ namespace xero {
         }
 
         void Sorter::detectBall() {
-            if (color_sensor_ == nullptr) {
-                //
-                // If not color sensor is defined, we are relying on two digital
-                // inputs.  One is active when a ball is present.  If a ball is present
-                // the secone gives us the color.
-                //
-                if (ball_present_->Get()) {
-                    if (red_blue_->Get())
-                        ball_ = BallColor::Red ;
-                    else
-                        ball_ = BallColor::Blue ;
-                }
-                else {
-                    ball_ = BallColor::None ;
-                }
-            }
-            else {
-                //
-                // Logic to read I2C to get red/blue/present data
-                //
-            }
+            uint16_t r, g, b, c ;
+            color_->getRawData(&r, &g, &b, &c) ;
+
+            std::cout << "RGB " << r << " " << g << " " << b << std::endl ;
         }
     
         void Sorter::computeState() {
@@ -91,8 +94,6 @@ namespace xero {
             logger << "The angle is " << angle_ ;
             logger << ", encoder value is " << encoder_->Get() ;
             logger.endMessage() ;
-
-            std::cout << "Encoder Value " << encoder_->Get() << std::endl ;
 
 			index_state_ = index_->Get() ;
         }

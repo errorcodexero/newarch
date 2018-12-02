@@ -29,7 +29,7 @@ hw:sorter:encoder1                  4
 hw:sorter:encoder2                  5
 hw:sorter:in:motor                  1
 hw:sorter:out:motor                 8
-hw:sorter:sensoraddr                1
+hw:sorter:sensoraddr                41
 hw:sorter:index						6
 
 ##############################################################
@@ -101,7 +101,7 @@ driver:nudge_time                                               0.1
 #
 # Sorter Subsystem Constants
 #
-sorter:degrees_per_tick                                         0.6382978723404255
+sorter:degrees_per_tick                                         0.6818181818181818
 sorter:calibration_power										0.3
 sorter:holes													5
 sorter:hole_width												45

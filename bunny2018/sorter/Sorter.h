@@ -1,6 +1,7 @@
 #pragma once
 
 #include "XeroTalonSRX.h"
+#include "ColorSensor.h"
 #include <VictorSP.h>
 #include <Subsystem.h>
 #include <Encoder.h>
@@ -16,6 +17,7 @@ namespace xero {
             friend class SorterStageBallAction ;
             friend class SorterCalibrateAction ;
             friend class SorterEjectAction ;
+
 
         public:
             enum BallColor
@@ -93,10 +95,12 @@ namespace xero {
             std::shared_ptr<TalonSRX> inmotor_ ;
             std::shared_ptr<TalonSRX> outmotor_ ;
 #endif
-            std::shared_ptr<frc::I2C> color_sensor_ ;
             std::shared_ptr<frc::DigitalInput> ball_present_ ;
             std::shared_ptr<frc::DigitalInput> red_blue_ ;
 			std::shared_ptr<frc::DigitalInput> index_ ;
+
+            std::shared_ptr<ColorSensor> color_ ;
+
             bool calibrated_ ;
             double degrees_per_tick_ ;
 
