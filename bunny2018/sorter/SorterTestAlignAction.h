@@ -41,6 +41,7 @@ namespace xero {
 			int desired_ ;
 			bool dir_ ;
 			double pertdur_ ;
+			double start_align_ ;
         };
     }
 }

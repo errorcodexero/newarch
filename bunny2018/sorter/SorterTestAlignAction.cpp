@@ -55,6 +55,7 @@ namespace xero {
 							double target = calcTargetAngle() ;	
 							setTargetAngle(target) ;													
 							state_ = State::Align ;
+							start_align_ = getSubsystem().getRobot().getTime() ;
 						}
 						break ;						
 
@@ -104,7 +105,8 @@ namespace xero {
 						if (alignSorter()) {
 							logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER) ;
 							logger << "SorterTestAlignAction: complete" ;
-							logger << ", time " << getSubsystem().getRobot().getTime() ;							
+							logger << ", time " << getSubsystem().getRobot().getTime() ;
+							logger << ", elapsed " << getSubsystem().getRobot().getTime() - start_align_ ;							
 							logger << ", target angle " << getTargetAngle() ;
 							logger << ", actual angle " << getSubsystem().getAngle() ;
 							logger.endMessage() ;
