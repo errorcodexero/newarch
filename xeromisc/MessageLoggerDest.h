@@ -4,6 +4,9 @@
 #include <cstdint>
 #include <string>
 
+
+/// \file
+
 namespace xero
 {
 namespace misc

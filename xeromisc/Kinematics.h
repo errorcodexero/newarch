@@ -2,6 +2,8 @@
 
 #include <xeromath.h>
 
+/// \file
+
 namespace xero {
 	namespace misc {
 		/// \brief this class tracks the movement of the robot based on encoder and IMU data

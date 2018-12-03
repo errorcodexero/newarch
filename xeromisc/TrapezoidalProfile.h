@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+/// \file
 
 namespace xero {
     namespace misc {

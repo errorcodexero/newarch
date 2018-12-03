@@ -3,6 +3,9 @@
 #include <string>
 #include <map>
 
+
+/// \file
+
 namespace xero {
 	namespace misc {
 

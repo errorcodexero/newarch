@@ -4,6 +4,9 @@
 #include <cmath>
 #include <iostream>
 
+
+/// \file
+
 namespace xero {
 	namespace misc {
 		/// \brief this class calculates velocity and acceleration given a set of distance samples over time

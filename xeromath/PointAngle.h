@@ -2,6 +2,8 @@
 
 #include "Point.h"
 
+/// \file
+
 namespace xero {
 	namespace math {
 		class PointAngle : public Point {

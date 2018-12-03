@@ -4,6 +4,9 @@
 #include <string.h>
 #include <vector>
 
+
+/// \file
+
 namespace xero
 {
 	namespace misc {
