@@ -101,22 +101,28 @@ driver:nudge_time                                               0.1
 #
 # Sorter Subsystem Constants
 #
-sorter:degrees_per_tick                                         0.6818181818181818
+sorter:degrees_per_tick                                         0.65824463712647304641987364969136
 sorter:calibration_power										0.3
 sorter:holes													5
-sorter:hole_width												60
 sorter:tolerance												5
 sorter:intake_power												0.4
 sorter:output_power												0.4
 sorter:hole_offset												0
-sorter:search_power												0.3
-sorter:keep_power												0.6
-sorter:keep_duration											0.1
-sorter:reject_power												-0.6
-sorter:reject_duration											0.1
+sorter:keep_power												0.4
+sorter:keep_duration											0.4
+sorter:reject_power												-0.4
+sorter:reject_duration											0.4
 sorter:ball_detect:white_threshold								100
 sorter:ball_detect:blue_threshold								8000
 sorter:ball_detect:red_threshold								8000
+sorter:pid:p                           							0.006
+sorter:pid:i                           							0.001875
+sorter:pid:d                           							0.0
+sorter:pid:f                           							0.0
+sorter:pid:a                           							0.0
+sorter:pid:max                         							0.3
+sorter:pid:min                         							-0.3
+sorter:pid:imax                        							80
 
 
 #

@@ -2,6 +2,8 @@
 
 #include "SorterAction.h"
 #include "Sorter.h"
+#include "SorterHoleCalculator.h"
+#include <PIDCtrl.h>
 #include <string>
 
 namespace xero {
@@ -15,15 +17,23 @@ namespace xero {
 		protected:
 			double calcTargetAngle() ;		
 			bool alignSorter() ;
-			void setTargetAngle(double a) {
-				target_angle_ = a ;
+			void setTargetAngle(double a) ;
+			double getTargetAngle() const {
+				return target_angle_ ;
 			}
-            
+
+			size_t getHoleCount() const {
+				return calc_->size() ;
+			}
+
+		private:
+			bool isAtTarget() ;
+
         private:
+			std::shared_ptr<SorterHoleCalculator> calc_ ;
 			double target_angle_ ;
-			std::vector<double> holes_ ;
 			double hole_tolerance_ ;
-			double next_hole_power_ ;			
+			xero::misc::PIDCtrl pid_ ;
         };
     }
 }

@@ -9,83 +9,53 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace bunny2018 {
-            SorterAlignCapableAction::SorterAlignCapableAction(Sorter &sorter) : SorterAction(sorter) {
-				hole_tolerance_ = sorter.getRobot().getSettingsParser().getDouble("sorter:tolerance") ;
-				next_hole_power_ = sorter.getRobot().getSettingsParser().getDouble("sorter:search_power") ;
-				int hole_count = sorter.getRobot().getSettingsParser().getInteger("sorter:holes") ;
-				double hole_size = sorter.getRobot().getSettingsParser().getDouble("sorter:hole_width") ;
-				double hole_offset = sorter.getRobot().getSettingsParser().getDouble("sorter:hole_offset") ;
+		SorterAlignCapableAction::SorterAlignCapableAction(Sorter &sorter) : SorterAction(sorter) {
+			hole_tolerance_ = sorter.getRobot().getSettingsParser().getDouble("sorter:tolerance") ;
+			int hole_count = sorter.getRobot().getSettingsParser().getInteger("sorter:holes") ;
+			double hole_offset = sorter.getRobot().getSettingsParser().getDouble("sorter:hole_offset") ;
 
-				for(int i = 0 ; i < hole_count ; i++)
-					holes_.push_back(i * 360.0 / hole_count + hole_offset) ;				
-            }
+			pid_.initFromSettingsExtended(sorter.getRobot().getSettingsParser(), "sorter:pid") ;
+			calc_ = std::make_shared<SorterHoleCalculator>(hole_count, hole_offset) ;
 
-            SorterAlignCapableAction::~SorterAlignCapableAction() {
-            }
+			auto &logger = getSubsystem().getRobot().getMessageLogger() ;	
+			logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER) ;
+			logger << "SorterAlignCapableAction: hole angles " ;
+			logger << calc_->toString() ;
+			logger.endMessage() ;				
+		}
+
+		SorterAlignCapableAction::~SorterAlignCapableAction() {
+		}
 
 		double SorterAlignCapableAction::calcTargetAngle() {
-			double ret = holes_[0] ;
-			double v = getSubsystem().getSorterMotorPower() ;
+			double power = getSubsystem().getSorterMotorPower() ;
 			double angle = getSubsystem().getAngle() ;
+			return calc_->calcTargetAngle(power, angle) ;
+		}
 
-			if (v < 0.05) {
-				//
-				// The sorter motor is stopped, find the next opening that is the closest
-				//
-				double diff = std::numeric_limits<double>::max() ;
-				for(double a : holes_) {
-					double mydiff = std::fabs(a - angle) ;
-					if (mydiff < diff) {
-						ret = a ;
-						diff = mydiff ;
-					}
-				}
-			}
-			else if (v < 0.0) {
-				//
-				// The motor is already moving in a negative direction, find the angle that is
-				// next but less than the current angle
-				//
-				double diff = std::numeric_limits<double>::max() ;
-				for(double a : holes_) {
-					double mydiff = std::fabs(a - angle) ;
-					if (mydiff < diff && a < angle) {
-						ret = a ;
-						diff = mydiff ;
-					}
-				}					
-			}
-			else if (v > 0.0) {
-				//
-				// The motor is already moving in a positive direction, find the angle that is
-				// next but greater than the current angle
-				//
-				double diff = std::numeric_limits<double>::max() ;
-				for(double a : holes_) {
-					double mydiff = std::fabs(a - angle) ;
-					if (mydiff < diff && a > angle) {
-						ret = a ;
-						diff = mydiff ;
-					}
-				}						
-			}
+		void SorterAlignCapableAction::setTargetAngle(double a) {
+			target_angle_ = a ;
 
-			return ret ;
+			auto &logger = getSubsystem().getRobot().getMessageLogger() ;	
+			logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER) ;
+			logger << "SorterAlignCapableAction: setTargetAngle" ;
+			logger << ", target angle " << target_angle_ ;
+			logger.endMessage() ;				
+		}
+
+		bool SorterAlignCapableAction::isAtTarget() {
+			bool ret = false ;
+			double angle = getSubsystem().getAngle() ;			
+			double diff = xero::math::normalizeAngleDegrees(target_angle_ - angle) ;
+			return std::fabs(diff) < hole_tolerance_ ;
 		}
 
 		bool SorterAlignCapableAction::alignSorter() {
 			auto &logger = getSubsystem().getRobot().getMessageLogger() ;				
 			bool ret = false ;
 			double angle = getSubsystem().getAngle() ;
-			double diff = xero::math::normalizeAngleDegrees(target_angle_ - angle) ;
 
-			logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER) ;
-			logger << "SoterStageBallAction: alignSorter" ;
-			logger << ", target angle " << target_angle_ ;
-			logger << ", current angle " << angle ;
-			logger.endMessage() ;				
-
-			if (std::fabs(diff) < hole_tolerance_) {
+			if (isAtTarget()) {
 				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER) ;
 				logger << "SoterStageBallAction: alignSorter complete" ;
 				logger.endMessage() ;	
@@ -93,11 +63,17 @@ namespace xero {
 				getSubsystem().setSorterMotor(0.0) ;
 				ret = true ;
 			}
-			else if (diff > 0) {
-				getSubsystem().setSorterMotor(next_hole_power_) ;
-			}
 			else {
-				getSubsystem().setSorterMotor(-next_hole_power_) ;					
+				double out = pid_.getOutput(target_angle_, angle, 0.0, getSubsystem().getRobot().getDeltaTime()) ;
+				getSubsystem().setSorterMotor(out) ;
+
+				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER) ;
+				logger << "SorterAlignCapableAction: alignSorter" ;
+				logger << ", ticks " << getSubsystem().getTicks() ;
+				logger << ", target angle " << target_angle_ ;
+				logger << ", current angle " << angle ;
+				logger << ", output " << out ;
+				logger.endMessage() ;
 			}
 
 			return ret ;

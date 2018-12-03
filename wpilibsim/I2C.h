@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace frc
 {
     class I2C {

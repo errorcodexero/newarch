@@ -43,6 +43,7 @@ namespace xero {
 						//
 						// Keep ball
 						//
+						getSubsystem().setIntakeMotor(0.0) ;
 						getSubsystem().setSorterMotor(keep_ball_motor_power_) ;
 						state_ = State::KeepingBall ;
 					}
@@ -50,6 +51,7 @@ namespace xero {
 						//
 						// Reject ball
 						//
+						getSubsystem().setIntakeMotor(0.0) ;						
 						getSubsystem().setSorterMotor(reject_ball_motor_power_) ;
 						state_ = State::RejectingBall ;
 					}
@@ -90,6 +92,7 @@ namespace xero {
 
 				if (alignSorter()) {
 					state_ = State::WaitingForBall ;
+					getSubsystem().setIntakeMotor(intake_power_) ;
 				}
 				break ;
 			}

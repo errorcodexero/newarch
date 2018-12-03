@@ -22,14 +22,6 @@ namespace xero {
 			/// class.
 			virtual void run() = 0 ;
 
-			/// \brief return a string indicating the state of the controller. 
-			/// This is generally used by the logging functions and is mostly used by the
-			/// AutoController class to log which auto mode has been selected and is being run.
-			/// \returns a string representing the state of the controller
-			virtual std::string getControllerInformation() {
-				return std::string("") ;
-			}
-
 		protected:
 			/// \brief Returns a reference to the robot this robot is controlling
 			/// \returns a reference to a robot

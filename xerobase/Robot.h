@@ -17,6 +17,7 @@ namespace xero {
 		//
 		class Subsystem ;
 		class ControllerBase ;
+		class AutoController ;
 
 		/// \brief the base robot class for Error Code Xero robots
 		/// This class manages the operation of the robot.  The robot for a specific
@@ -110,9 +111,6 @@ namespace xero {
 				return oi_subsystem_ ;
 			}			
 
-			virtual void DoDisabledWork() {
-			}
-
 		protected:
 
 			/// \brief add a subsystem to the robot
@@ -163,8 +161,15 @@ namespace xero {
 			/// \param file the name of the file for the output
 			void setupRobotOutputFile(const std::string &file) ;
 
+			/// \brief initialize the robot hardware
+			virtual void RobotHardwareInit() ;
+
+			/// \brief return the auto mode selection
+			virtual int getAutoModelSelection() ;
+
 		private:
 			void logAutoModeState() ;
+			void displayAutoModeState() ;
 
 		private:
 			// The time per robot loop in seconds
@@ -173,6 +178,9 @@ namespace xero {
 			// The controller that provides control during the
 			// robot loop
 			std::shared_ptr<ControllerBase> controller_;
+
+			// Auto mode controller, created at the start and stored
+			std::shared_ptr<AutoController> auto_controller_;			
 
 			// The list of subsystem that belong to the robot
 			SubsystemPtr robot_subsystem_ ;
@@ -196,6 +204,9 @@ namespace xero {
 
 			// The stream for the robot output
 			std::ofstream *output_stream_ ;
+
+			// The selected auto mode
+			int automode_ ;
 		} ;
 	}
 }

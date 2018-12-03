@@ -43,8 +43,13 @@ namespace xero {
                 return angle_ ;
             }
 
+			int getTicks() const {
+				return ticks_ ;
+			}
+
         private:
             void setIntakeMotor(double v) {
+				intake_motor_power_ = v ;
 #ifdef USE_VICTORS
                 inmotor_->Set(v) ;
 #else 
@@ -53,6 +58,7 @@ namespace xero {
             }
 
             void setOuttakeMotor(double v) {
+				outtake_motor_power_ = v ;
 #ifdef USE_VICTORS
                 outmotor_->Set(v) ;
 #else                
@@ -132,12 +138,15 @@ namespace xero {
 
             BallColor ball_ ;
             double angle_ ;
+			int ticks_ ;
 
 			bool index_state_ ;
 
 			double calibrated_angle_ ;
 
 			double sorter_motor_power_ ;
+			double intake_motor_power_ ;
+			double outtake_motor_power_ ;
 
 			int white_detect_threshold_;
 			int blue_detect_threshold_ ;

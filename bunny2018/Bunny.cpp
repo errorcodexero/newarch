@@ -27,7 +27,6 @@ namespace xero {
 	namespace bunny2018 {
 
 		Bunny::Bunny() : xero::base::Robot(0.02) {
-
 		}
 
 		std::shared_ptr<BunnySubsystem> Bunny::getBunnySubsystem() {
@@ -35,19 +34,7 @@ namespace xero {
 			return std::dynamic_pointer_cast<BunnySubsystem>(sub) ;
 		}
 
-		void Bunny::DoDisabledWork() {
-			auto oi = getBunnySubsystem()->getOI() ;
-			if (oi != nullptr) {
-				int automode = oi->getAutoModeSelector() ;
-				std::string autostr = std::to_string(automode) ;
-				frc::SmartDashboard::PutString("AutoModeNumber", autostr) ;
-			}
-			else {
-				frc::SmartDashboard::PutString("AutoModeNumber", "No OI Attached") ;
-			}
-		}
-		
-		void Bunny::RobotInit() {
+		void Bunny::RobotHardwareInit() {
 			std::string filename ;
 
 			//
@@ -122,6 +109,7 @@ namespace xero {
 			logger.enableSubsystem(MSG_GROUP_PARSER) ;
 			logger.enableSubsystem(MSG_GROUP_OI) ;
 			logger.enableSubsystem(MSG_GROUP_SORTER) ;
+			// logger.enableSubsystem(MSG_GROUP_SORTER_VERBOSE) ;
 
 			// Set up message logger destination(s)
             std::shared_ptr<MessageLoggerDest> dest_p ;

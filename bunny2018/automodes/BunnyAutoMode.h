@@ -17,11 +17,9 @@ namespace xero {
 
 			virtual ~BunnyAutoMode() ;
 
-			virtual std::string getControllerInformation() ;
+			virtual void update(int sel) ;
 
         private:
-            void createAutoMode() ;
-
 			xero::base::ActionSequencePtr createAutoModeZero() ;
 			xero::base::ActionSequencePtr createAutoModeOne() ;
 			xero::base::ActionSequencePtr createAutoModeTwo() ;
@@ -30,12 +28,10 @@ namespace xero {
 			xero::base::ActionSequencePtr createAutoModeFive() ;
 			xero::base::ActionSequencePtr createAutoModeSix() ;
 			xero::base::ActionSequencePtr createAutoModeSeven() ; 			
-			xero::base::ActionSequencePtr createAutoModeEight() ; 			
-			xero::base::ActionSequencePtr createAutoModeNine() ;
+			xero::base::ActionSequencePtr createStageBallAutomode() ; 			
+			xero::base::ActionSequencePtr createStraightBackAutomode() ;
 			xero::base::ActionSequencePtr createRotateSorterAutoMode() ;
-			
-		private:
-			std::string name_ ;
+			xero::base::ActionSequencePtr createTestAlignAutoMode() ;
 		};
 	}
 }

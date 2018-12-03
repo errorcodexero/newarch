@@ -12,6 +12,7 @@
 #include <sorter/SorterStageBallAction.h>
 #include <sorter/SorterEjectAction.h>
 #include <sorter/SorterRotateAngleAction.h>
+#include <sorter/SorterTestAlignAction.h>
 #include <DelayAction.h>
 #include <ParallelAction.h>
 
@@ -20,31 +21,13 @@ using namespace xero::base ;
 namespace xero {
     namespace bunny2018 {
         BunnyAutoMode::BunnyAutoMode(Robot &robot) : AutoController(robot) {
-            createAutoMode() ;
         }
         
         BunnyAutoMode::~BunnyAutoMode() {
-
         }
 
-		std::string BunnyAutoMode::getControllerInformation() {
-			return name_ ;
-		}
-
-        void BunnyAutoMode::createAutoMode() {
-            Bunny &bunny = dynamic_cast<Bunny &>(getRobot()) ;
-            auto oi = bunny.getBunnySubsystem()->getOI() ;
-            int sel = oi->getAutoModeSelector() ;
+    	void BunnyAutoMode::update(int sel) {
             ActionSequencePtr mode ;
-
-			//
-			// If there is no hardware to set the automode, default to auto
-			// mode zero
-			//
-			if (sel < 0 || sel > 9)
-				sel = 0 ;
-			
-			sel = 8 ;
 
 			switch(sel) {
 				case 0:
@@ -80,31 +63,25 @@ namespace xero {
 					break ;		
 
 				case 8:
-					mode = createAutoModeEight() ;
+					mode = createStageBallAutomode() ;
 					break ;				
 
 				case 9:
-					mode = createAutoModeNine() ;
+					mode = createStraightBackAutomode() ;
 					break ;			
 
 				case 10:
 					mode = createRotateSorterAutoMode() ;
-					break ;																					
+					break ;		
+
+				case 11:
+					mode = createTestAlignAutoMode() ;
+					break ;																									
 
 				default:
 					mode = nullptr ;
 					break ;
 			}
-
-			if (mode == nullptr)
-				name_ = "None" ;
-			else
-				name_ = mode->getName() ;
-
-			std::string autostr = std::to_string(sel) ;
-			frc::SmartDashboard::PutString("AutoModeNumber", autostr) ;
-			frc::SmartDashboard::PutString("AutoModeName", name_) ;		
-
             setAction(mode) ;
         }
 
@@ -233,7 +210,7 @@ namespace xero {
 			return seq ;
 		}	
 
-		ActionSequencePtr BunnyAutoMode::createAutoModeEight() {
+		ActionSequencePtr BunnyAutoMode::createStageBallAutomode() {
 			xero::base::ActionPtr act ;
 			auto &robot = getRobot() ;
 			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
@@ -246,7 +223,7 @@ namespace xero {
 			return seq ;
 		}
 
-		ActionSequencePtr BunnyAutoMode::createAutoModeNine() {
+		ActionSequencePtr BunnyAutoMode::createStraightBackAutomode() {
 			xero::base::ActionPtr act ;
 
 			auto &robot = getRobot() ;
@@ -314,12 +291,25 @@ namespace xero {
 			auto &robot = getRobot() ;
 			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
 			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterMotorTest") ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterRotateAngleTest") ;
 
-            act = std::make_shared<SorterRotateAngleAction>(*sorter, 720, 0.3) ;
+            act = std::make_shared<SorterRotateAngleAction>(*sorter, 720, 0.2) ;
 			seq->pushSubActionPair(sorter, act) ;			
 
 			return seq ;
 		}
+
+		ActionSequencePtr BunnyAutoMode::createTestAlignAutoMode() {
+			xero::base::ActionPtr act ;
+			auto &robot = getRobot() ;
+			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
+			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterAlignTest") ;
+
+            act = std::make_shared<SorterTestAlignAction>(*sorter, 2.0, 10) ;
+			seq->pushSubActionPair(sorter, act) ;			
+
+			return seq ;
+		}		
     }
 }

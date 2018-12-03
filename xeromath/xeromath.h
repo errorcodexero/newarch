@@ -5,10 +5,12 @@ namespace xero {
         static constexpr double PI=3.1415926535897931 ;
 		
 		inline double normalizeAngleDegrees(double a) {
-            if (a <= -180)
-                a += 360 ;
-            else if (a > 180)
-                a -= 360 ;
+			while (a <= -180.0)
+				a += 360.0 ;
+
+			while (a > 180.0)
+				a -= 360.0 ;
+				
             return a ;			
 		}
 

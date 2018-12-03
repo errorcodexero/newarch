@@ -67,6 +67,8 @@ namespace xero {
             calibrated_ = true;
 			calibrated_angle_ = -36.0 ;
 			sorter_motor_power_ = 0.0 ;
+			intake_motor_power_ = 0.0 ;
+			outtake_motor_power_ = 0.0 ;
         }
 
         Sorter::~Sorter(){
@@ -97,16 +99,21 @@ namespace xero {
 
             detectBall(red, green, blue, white) ;
 			
+			ticks_ = encoder_->Get() ;
             if (calibrated_)
-                angle_ = xero::math::normalizeAngleDegrees(encoder_->Get() * degrees_per_tick_ - calibrated_angle_) ;
+                angle_ = xero::math::normalizeAngleDegrees(ticks_ * degrees_per_tick_ - calibrated_angle_) ;
             else
                 angle_ = 1000.0 ;
 
-            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER) ;
-            logger << "Sorter: angle " << angle_  << "\n" ;
-            logger << "        encoder " << encoder_->Get() << "\n" ;
-			logger << "        ball " << toString(ball_) << "\n" ;
-			logger << "        rgbw " << red << " " << green << " " << blue << " " << white ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER_VERBOSE) ;
+            logger << "Sorter: \n" ;
+			logger << "    angle " << angle_  << "\n" ;
+			logger << "    sorter motor " << sorter_motor_power_ << "\n" ;
+			logger << "    intake motor " << intake_motor_power_ << "\n" ;
+			logger << "    outtake motor " << outtake_motor_power_ << "\n" ;			
+            logger << "    encoder " << encoder_->Get() << "\n" ;
+			logger << "    ball " << toString(ball_) << "\n" ;
+			logger << "    rgbw " << red << " " << green << " " << blue << " " << white ;
             logger.endMessage() ;
 
 			frc::SmartDashboard::PutString("BallColor", toString(ball_)) ;
