@@ -17,7 +17,7 @@ namespace xero {
             /// \brief Create the OIDevice
             /// \param sub the OI subsystem this device is part of
             /// \param index the joystick index for this OI device
-            OIDevice(Subsystem &sub, int index) ;
+            OIDevice(OISubsystem &sub, int index) ;
 
             /// \brief Destroy this device
             virtual ~OIDevice() ;
