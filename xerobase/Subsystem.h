@@ -6,6 +6,9 @@
 #include <list>
 #include <string>
 
+/// \file
+
+
 namespace xero {
 	namespace base {
 		//
@@ -14,6 +17,7 @@ namespace xero {
 		class Robot ;
 		class Subsystem ;
 
+        /// \brief convience definition
 		typedef std::shared_ptr<Subsystem> SubsystemPtr ;
 		
 		/// \brief The base class for any subsystem in the system.

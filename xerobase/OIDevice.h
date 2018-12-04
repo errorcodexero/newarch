@@ -7,6 +7,9 @@
 #include <map>
 #include <memory>
 
+/// \file
+
+
 namespace xero {
     namespace base {
         /// \brief This class is derived from the HIDDevice class and maps OI items to an OI.

@@ -2,6 +2,9 @@
 
 #include <string>
 
+/// \file
+
+
 namespace xero {
 	namespace base {
 		class Robot ;

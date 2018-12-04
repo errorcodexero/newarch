@@ -2,6 +2,9 @@
 
 #include "OIItem.h"
 
+/// \file
+
+
 namespace xero {
     namespace base {
         /// \brief A button item on a HIDDevices

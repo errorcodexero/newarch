@@ -2,6 +2,9 @@
 
 #include "OIItem.h"
 
+/// \file
+
+
 namespace xero {
     namespace base {
         /// \brief a switch that gets input from a joystick axis (analog input)

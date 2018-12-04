@@ -7,6 +7,9 @@
 #include <iostream>
 #include <cassert>
 
+/// \file
+
+
 namespace xero {
 	namespace base {
 		/// \brief This is the base class for any autonomous mode controller.

@@ -3,6 +3,9 @@
 #include "Action.h"
 #include <list>
 
+/// \file
+
+
 namespace xero {
     namespace base {
 		/// \brief A class capable of doing work

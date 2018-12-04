@@ -2,6 +2,9 @@
 
 #include <DriverStation.h>
 
+/// \file
+
+
 namespace xero {
     namespace base {
 		/// \brief the base class for any switch, button, axis, etc. that is part of an OIDevice

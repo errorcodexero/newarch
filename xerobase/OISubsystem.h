@@ -4,6 +4,9 @@
 #include "DriverGamepad.h"
 #include "ActionSequence.h"
 
+/// \file
+
+
 namespace xero {
     namespace base {
         /// \brief This is the base class for the OI subsystem

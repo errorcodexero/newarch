@@ -4,6 +4,9 @@
 #include <vector>
 #include <cstdlib>
 
+/// \file
+
+
 namespace xero {
     namespace base {
         /// \brief An OI item that maps a joystick axis to a set of integer values based on a mapping array

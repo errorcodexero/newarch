@@ -6,6 +6,9 @@
 #include <vector>
 #include <string>
 
+/// \file
+
+
 namespace xero {
 	namespace base {
 		/// \brief This class stores and executes a sequence of actions.
@@ -100,6 +103,7 @@ namespace xero {
 			std::string name_;
 		};
 
+        /// \brief convience definition for a shared pointer to an action sequence
 		typedef std::shared_ptr<ActionSequence> ActionSequencePtr ;
 	}
 }

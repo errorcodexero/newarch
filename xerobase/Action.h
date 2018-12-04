@@ -5,6 +5,9 @@
 #include <string>
 #include <memory>
 
+/// \file
+
+
 namespace xero {
     namespace base {
 		/// \brief A class capable of doing work.

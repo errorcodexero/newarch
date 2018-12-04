@@ -2,6 +2,9 @@
 #include "Action.h"
 #include "Subsystem.h"
 
+/// \file
+
+
 namespace xero {
 	namespace base {
 		/// \brief this is a an action that wraps a subsystem and an action to assign to a subsystem

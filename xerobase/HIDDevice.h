@@ -1,5 +1,8 @@
 #pragma once
 
+/// \file
+
+
 namespace xero {
     namespace base {
         class ActionSequence ;

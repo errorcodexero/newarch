@@ -7,6 +7,8 @@
 
 
 
+/// \file
+
 namespace xero {
 	namespace base {
 		/// This class represents a rotate action rotating a specific angle
