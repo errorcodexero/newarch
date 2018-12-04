@@ -49,6 +49,7 @@ namespace xero {
 
 
 			/// \brief update the automode as the selector has changed
+			/// \param sel the automode selector value
 			virtual void update(int sel) = 0 ;
 
 		protected:

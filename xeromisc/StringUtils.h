@@ -41,7 +41,7 @@ namespace xero {
 
         /// \brief returns true if the string starts with a given value
         /// \param main the string to check
-        /// \param ending the string to check for at the start
+        /// \param start the string to check for at the start
         /// \returns true if the string starts with the value given
         inline bool startsWith(const std::string& main, const std::string &start) {
             if (main.size() >= start.size() &&

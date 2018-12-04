@@ -25,10 +25,10 @@ namespace xero {
                 value_ = value ;
             }
 
-            void setValue(double value) {
+            void setValue(double v) {
                 value_ = mapping_.size() ;
                 for(size_t i = 0 ; i < mapping_.size() ; i++) {
-                    if (value <= mapping_[i]) {
+                    if (v <= mapping_[i]) {
                         value_ = static_cast<int>(i) ;
                         break ;
                     }

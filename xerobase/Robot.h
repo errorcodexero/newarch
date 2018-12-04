@@ -46,7 +46,8 @@ namespace xero {
 		class Robot : public frc::SampleRobot {
 		public:
 			/// \brief create the base robot.
-			Robot(double looptime = 0.50) ;
+			/// \param looptime the loop time for each robot loop (generally between 0.02 and 0.05)
+			Robot(double looptime = 0.050) ;
 
 			/// \brief destroy the robot object
 			virtual ~Robot() ;
@@ -115,6 +116,8 @@ namespace xero {
 
 			/// \brief add a subsystem to the robot
 			/// \param sub the subsystem to add to the robot
+			/// \param oi the subsystem for the OI
+			/// \param db the subsystem for the drive base
 			void setRobotSubsystem(SubsystemPtr sub, SubsystemPtr oi, SubsystemPtr db) {
 				robot_subsystem_ = sub ;
 				robot_subsystem_->init() ;
@@ -132,12 +135,9 @@ namespace xero {
 			/// \brief this method runs one loop for the robot.
 			virtual void robotLoop();
 
-			/// \brief this method allows a derived class to change the robot loop time
-			void setRobotLoopTime(double time) {
-				target_loop_time_ = time ;
-			}			
-
 			/// \brief this method reads the parameters file for the robot
+			/// \param filename the name of the file to read parameters from
+			/// \returns true if the file is read sucessfully
 			bool readParamsFile(const std::string &filename) ;
 
 			//
@@ -147,14 +147,17 @@ namespace xero {
 
 			/// \brief create the autonomous controller.
 			/// This method will be defined by a concrete derived robot object
+			/// \returns the auto controller for the robot
 			virtual std::shared_ptr<ControllerBase> createAutoController() = 0 ;
 
 			/// \brief create the teleop controller.
 			/// This method will be defined by a concrete derived robot object
+			/// \returns the teleop controller for the robot
 			virtual std::shared_ptr<ControllerBase> createTeleopController() = 0 ;
 			
 			/// \brief create the test controller.
 			/// This method will be defined by a concrete derived robot object
+			/// \returns the test controller for the robot
 			virtual std::shared_ptr<ControllerBase> createTestController() = 0 ;
 
 			/// \brief setup a message logger to send output to a file

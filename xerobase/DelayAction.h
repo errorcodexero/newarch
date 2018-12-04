@@ -20,12 +20,14 @@ namespace xero {
 			void run();
 
 			/// \brief returns true when the desired delay has occured
+			/// \returns true when the delay has elapsed
 			bool isDone();
 
 			/// \brief cancel the delay, isDone will return true immediately
 			void cancel();
 
 			/// \brief return a human readable string represnting this step
+			/// \returns a human readable string for this action
 			std::string toString();
 			
 		private:

@@ -8,7 +8,18 @@ namespace xero {
 		/// \brief Drives the drivebase straight for a given distance
 		class TankDriveAngleCharAction : public TankDriveAction {
 		public:
-			TankDriveAngleCharAction(TankDrive &subsystem, double duration, double start, double stop, double incr) ;
+			/// \brief Create the angle characterization action
+			/// This action rotates the robot by applying opposite power to the two sides of the drivebase.  The
+			/// power applied is sequenced from the start value to the stop value with the increment given.  At each
+			/// steps of the way information about rotational velocity and acceleration is provided.
+			/// \param db the drivebase to rotate
+			/// \param duration the duration of rotation at each of the steps along the way
+			/// \param start the starting power for the rotation
+			/// \param stop the ending power for the rotation
+			/// \param incr the increment in power from the start to the end of rotation
+			TankDriveAngleCharAction(TankDrive &db, double duration, double start, double stop, double incr) ;
+
+			/// \brief destroy the action
 			virtual ~TankDriveAngleCharAction() ;
 
 			/// \brief Start the action; called once per action when it starts

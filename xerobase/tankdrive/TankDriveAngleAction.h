@@ -9,10 +9,20 @@
 
 namespace xero {
 	namespace base {
+		/// This class represents a rotate action rotating a specific angle
 		class TankDriveAngleAction : public TankDriveAction {
 		public:
-			TankDriveAngleAction(TankDrive &subsystem, double duration) ;
-			TankDriveAngleAction(TankDrive &subsystem, const std::string &name) ;			
+			/// \brief Create action to rotate the robot a specific angle
+			/// \param db the tankdrive subsystem to rotate
+			/// \param angle the angle of rotate for the robot
+			TankDriveAngleAction(TankDrive &db, double angle) ;
+
+			/// \brief Create action to rotate the robot a specific angle
+			/// \param db the tankdrive subsystem to rotate
+			/// \param name the name of the parameter for the angle to rotate the robot
+			TankDriveAngleAction(TankDrive &db, const std::string &name) ;			
+
+			/// \brief destroy the action to rotate the robot
 			virtual ~TankDriveAngleAction() ;
 
 			/// \brief Start the action; called once per action when it starts

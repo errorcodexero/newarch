@@ -4,6 +4,7 @@
 
 namespace xero {
     namespace base {
+        /// \brief This action supplies power to the left and right sides of the drive base
         class TankDrivePowerAction : public TankDriveAction {
         public:
             /// \brief this action applies power to the left and right side of the robot

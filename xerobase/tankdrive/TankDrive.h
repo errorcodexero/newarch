@@ -16,18 +16,28 @@
 
 namespace xero {
 	namespace base {
+		/// \brief a convience type for a shared pointer to a TalonSRX object
 		typedef std::shared_ptr<TalonSRX> TalonPtr;
 
 		/// \brief a tank-style drivebase
 		class TankDrive : public Subsystem {
+			/// \brief class for tank drive actions
 			friend class TankDriveAction;
+			/// \brief class for tank drive actions			
 			friend class TankDriveDistanceAction;
+			/// \brief class for tank drive actions			
 			friend class TankDriveVelocityAction;
+			/// \brief class for tank drive actions			
 			friend class TankDriveCharAction ;
+			/// \brief class for tank drive actions			
 			friend class TankDrivePowerAction ;
+			/// \brief class for tank drive actions			
 			friend class TankDriveCharAction ;
+			/// \brief class for tank drive actions			
 			friend class TankDriveTimedPowerAction ;
+			/// \brief class for tank drive actions			
 			friend class TankDriveAngleAction ;
+			/// \brief class for tank drive actions			
 			friend class TankDriveAngleCharAction ;
 
 		public:
@@ -63,6 +73,7 @@ namespace xero {
 			void setEncoders(int l1, int l2, int r1, int r2) ;
 
 			/// \brief set the gear shifter for the drivebase
+			/// \param index the gear to shift into
 			void setGearShifter(int index) ;
 
 			/// \brief Return the current angle of the robot relative to its starting angle
@@ -106,21 +117,25 @@ namespace xero {
 			}
 
 			/// \brief Return the velocity of the drive base
+			/// \returns the linear velocity of the drive base
 			double getVelocity() const {
 				return linear_.getVelocity() ;
 			}
 
 			/// \brief Return the angular velocity of the drive base
+			/// \returns the angular velocity of the drive base
 			double getAngularVelocity() const {
 				return angular_.getVelocity() ;
 			}
 
 			/// \brief Return the acceleration of the drive base
+			/// \returns the linear acceleration of the drive base
 			double getAcceleration() const {
 				return linear_.getAcceleration() ;
 			}
 
 			/// \brief Return the angular acceleration of the drive base
+			/// \returns the angular acceleration of the drive base
 			double getAngularAcceleration() const {
 				return angular_.getAcceleration() ;
 			}
