@@ -14,11 +14,23 @@ namespace xero {
 			/// \param tank_drive the tank drive subsystem
 			/// \param target_velocity The velocity to drive at in inches / second
 			TankDriveVelocityAction(TankDrive &tank_drive, double target_velocity);
-			void start();
-			void run();
-			void cancel();
-			bool isDone();
-			std::string toString();
+
+			/// \brief Start the action; called once per action when it starts
+            virtual void start() ;
+
+			/// \brief Manage the action; called each time through the robot loop
+            virtual void run() ;
+
+			/// \brief Cancel the action
+            virtual void cancel() ;
+
+			/// \brief Return true if the action is complete
+			/// \returns True if the action is complete
+            virtual bool isDone() ;
+
+            /// \brief return a human readable string representing the action
+            /// \returns a human readable string representing the action
+            virtual std::string toString() ;
 
 		private:
 			xero::misc::PIDCtrl velocity_pid_, angle_pid_;

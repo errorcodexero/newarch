@@ -15,11 +15,22 @@ namespace xero {
 			TankDriveAngleAction(TankDrive &subsystem, const std::string &name) ;			
 			virtual ~TankDriveAngleAction() ;
 
-			void start();
-			void run();
-			void cancel();
-			bool isDone();
-			std::string toString();
+			/// \brief Start the action; called once per action when it starts
+            virtual void start() ;
+
+			/// \brief Manage the action; called each time through the robot loop
+            virtual void run() ;
+
+			/// \brief Cancel the action
+            virtual void cancel() ;
+
+			/// \brief Return true if the action is complete
+			/// \returns True if the action is complete
+            virtual bool isDone() ;
+
+            /// \brief return a human readable string representing the action
+            /// \returns a human readable string representing the action
+            virtual std::string toString() ;
 
 		private:
 			xero::misc::PIDCtrl velocity_pid_ ;

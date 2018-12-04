@@ -31,6 +31,7 @@ namespace xero {
             virtual bool isDone() = 0 ;
 
             /// \brief return a human readable string representing the action
+            /// \returns a human readable string representing the action
             virtual std::string toString() = 0 ;
         private:
         };

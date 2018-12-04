@@ -12,6 +12,7 @@ namespace xero {
         class TeleopController : public ControllerBase {
         public:
             /// \brief create a new controller
+            /// \param robot the robot this controller will control
             TeleopController(Robot &robot) ;
 
             /// \brief destroy the existing controller
