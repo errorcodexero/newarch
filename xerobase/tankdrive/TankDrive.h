@@ -10,6 +10,10 @@
 #include <Subsystem.h>
 #include <Speedometer.h>
 
+
+/// \file
+
+
 namespace xero {
 	namespace base {
 		typedef std::shared_ptr<TalonSRX> TalonPtr;
@@ -89,10 +93,14 @@ namespace xero {
 				return (dist_r_ + dist_l_) / 2.0;
 			}
 
+			/// \brief returns the left encoder tick count
+			/// \returns left encoder tick count
 			int getTickCountL() {
 				return ticks_left_ ;
 			}
 
+			/// \brief returns the right encoder tick count
+			/// \returns right encoder tick count
 			int getTickCountR() {
 				return ticks_right_ ;
 			}
@@ -127,6 +135,7 @@ namespace xero {
 				left_enc_->SetReverseDirection(true) ;
 			}
 
+			/// \brief Invert the right encoders
 			void invertRightEncoder() {
 				right_enc_->SetReverseDirection(true) ;
 			}

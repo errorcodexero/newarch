@@ -1,8 +1,9 @@
 #pragma once
 
 #include <list>
-
 #include <Subsystem.h>
+
+/// \file
 
 namespace xero {
     namespace base {
