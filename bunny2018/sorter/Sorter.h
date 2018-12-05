@@ -1,6 +1,7 @@
 #pragma once
 
 #include "XeroTalonSRX.h"
+#include "TCS34725ColorSensor.h"
 #include <VictorSP.h>
 #include <Subsystem.h>
 #include <Encoder.h>
@@ -16,6 +17,9 @@ namespace xero {
             friend class SorterStageBallAction ;
             friend class SorterCalibrateAction ;
             friend class SorterEjectAction ;
+			friend class SorterAlignCapableAction ;
+			friend class SorterTestAlignAction ;
+			friend class SorterRotateAngleAction ;
 
         public:
             enum BallColor
@@ -32,15 +36,20 @@ namespace xero {
             virtual void computeState() ;
 		    virtual bool canAcceptAction(xero::base::ActionPtr action)  ;
 
-            bool hasBall() const { return !(ball_ != BallColor::None) ; }
+            bool hasBall() const { return !(ball_ == BallColor::None) ; }
             BallColor getBallColor() const { return ball_ ; }
 
             double getAngle() const {
                 return angle_ ;
             }
 
+			int getTicks() const {
+				return ticks_ ;
+			}
+
         private:
             void setIntakeMotor(double v) {
+				intake_motor_power_ = v ;
 #ifdef USE_VICTORS
                 inmotor_->Set(v) ;
 #else 
@@ -49,6 +58,7 @@ namespace xero {
             }
 
             void setOuttakeMotor(double v) {
+				outtake_motor_power_ = v ;
 #ifdef USE_VICTORS
                 outmotor_->Set(v) ;
 #else                
@@ -71,7 +81,7 @@ namespace xero {
 					calibrated_angle_ = angle_ ;
             }
 
-            void detectBall() ;
+            void detectBall(uint16_t &red, uint16_t &green, uint16_t &blue, uint16_t &white) ;
 
 			bool getIndexState() const {
 				return index_state_ ;
@@ -79,6 +89,30 @@ namespace xero {
 
 			double getSorterMotorPower() const {
 				return sorter_motor_power_ ;
+			}
+
+			std::string toString(BallColor c) {
+				std::string ret ;
+
+				switch(c) {
+				case BallColor::None:
+					ret = "None" ;
+					break ;
+
+				case BallColor::Red:
+					ret = "Red" ;
+					break ;
+
+				case BallColor::Blue:
+					ret = "Blue" ;
+					break ;
+
+				default:
+					ret = std::to_string(static_cast<int>(c)) ;
+					break ;
+				}
+
+				return ret ;
 			}
 
         private:
@@ -93,21 +127,30 @@ namespace xero {
             std::shared_ptr<TalonSRX> inmotor_ ;
             std::shared_ptr<TalonSRX> outmotor_ ;
 #endif
-            std::shared_ptr<frc::I2C> color_sensor_ ;
             std::shared_ptr<frc::DigitalInput> ball_present_ ;
             std::shared_ptr<frc::DigitalInput> red_blue_ ;
 			std::shared_ptr<frc::DigitalInput> index_ ;
+
+            std::shared_ptr<TCS34725ColorSensor> color_ ;
+
             bool calibrated_ ;
             double degrees_per_tick_ ;
 
             BallColor ball_ ;
             double angle_ ;
+			int ticks_ ;
 
 			bool index_state_ ;
 
 			double calibrated_angle_ ;
 
 			double sorter_motor_power_ ;
+			double intake_motor_power_ ;
+			double outtake_motor_power_ ;
+
+			int white_detect_threshold_;
+			int blue_detect_threshold_ ;
+			int red_detect_threshold_ ;
         };
     }
 }

@@ -3,6 +3,9 @@
 #include <cassert>
 #include <iostream>
 
+
+/// \file
+
 namespace xero {
 	namespace misc {
 		/// \brief A single setting item, capable of holding a boolean, integer, double, or string value

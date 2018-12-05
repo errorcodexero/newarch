@@ -6,6 +6,9 @@
 #include <list>
 #include <string>
 
+/// \file
+
+
 namespace xero {
 	namespace base {
 		//
@@ -14,6 +17,7 @@ namespace xero {
 		class Robot ;
 		class Subsystem ;
 
+        /// \brief convience definition
 		typedef std::shared_ptr<Subsystem> SubsystemPtr ;
 		
 		/// \brief The base class for any subsystem in the system.
@@ -34,6 +38,7 @@ namespace xero {
 			}
 
 			/// \brief add a subsystem as a child of the current subsystem
+			/// \param child the subsystem to add as a child to the current subsystem
 			void addChild(SubsystemPtr child) {
 				children_.push_back(child) ;
 			}
@@ -64,15 +69,6 @@ namespace xero {
 			/// It also cancels the actions for any children subsystems
 			/// \returns true if the action was canceled, false if it could not be
 			virtual void cancelAction() ;
-
-			/// \brief asks a subsystem to execute a named sequence
-			/// \param name the name of the sequence to execute
-			/// \return true if the named sequence able to be executed
-			bool executeNamedSequence(const std::string &name) ;
-
-			/// \brief asks a subsystem to create any named sequences
-			virtual void createNamedSequences(SubsystemPtr ptr) {				
-			}
 
 			/// \brief Set output actuators associated with the subsystem
 			/// The output actuators are set to achieve the currently active

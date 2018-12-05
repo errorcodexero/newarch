@@ -45,13 +45,13 @@ namespace xero {
                     inited_ = true ;
                 }
             }
-
-#ifdef NOTYET
             seq_->clear() ;
             for(auto dev: hiddevices_) {
                 dev->computeState(*seq_) ;
             }
-#endif
+
+            if (!enabled_)
+                seq_->clear() ;
         }
 
         void OISubsystem::run() {

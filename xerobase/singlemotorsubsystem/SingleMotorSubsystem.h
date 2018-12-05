@@ -6,6 +6,9 @@
 #include <VictorSP.h>
 
 
+/// \file
+
+/// \brief a short cut type for specifying a TalonSRX motor controller
 typedef ctre::phoenix::motorcontrol::can::TalonSRX TalonSRX;
 
 namespace xero {
@@ -17,7 +20,10 @@ namespace xero {
 		/// <b>Actions:</b><br>
 		///     - SingleMotorVoltageAction
         class SingleMotorSubsystem : public Subsystem {
+			/// \brief Action class for this subsystem
 			friend class SingleMotorSubsystemAction;
+
+			/// \brief Action class for this subsystem			
 			friend class SingleMotorVoltageAction ;
 		private:
 			constexpr static double epsilon = 1e-3 ;

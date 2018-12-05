@@ -1,6 +1,6 @@
 #include "DriverGamepad.h"
 #include <DriverStation.h>
-#include "Subsystem.h"
+#include "OISubsystem.h"
 #include "Robot.h"
 #include "ActionSequence.h"
 #include "basegroups.h"
@@ -15,7 +15,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        DriverGamepad::DriverGamepad(Subsystem &oi, int index): HIDDevice(oi, index) {
+        DriverGamepad::DriverGamepad(OISubsystem &oi, int index): HIDDevice(oi, index) {
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
             if (ds.GetStickPOVCount(getIndex()) == 0) {
                 MessageLogger &logger = oi.getRobot().getMessageLogger() ;

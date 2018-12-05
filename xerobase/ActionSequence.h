@@ -6,6 +6,9 @@
 #include <vector>
 #include <string>
 
+/// \file
+
+
 namespace xero {
 	namespace base {
 		/// \brief This class stores and executes a sequence of actions.
@@ -18,6 +21,8 @@ namespace xero {
 		class ActionSequence : public Action {
 		public:
 			/// \brief create an empty action sequence 
+			/// \param logger the message logger action
+			/// \param name the human readable name of this sequence
 			ActionSequence(xero::misc::MessageLogger &logger, const std::string &name);
 
 			/// \brief start this sequence of actions
@@ -29,6 +34,7 @@ namespace xero {
 
 			/// \brief returns false until all actions in the sequence are complete, or until cancel is called.
 			/// Once all actions in the sequence are complete, or if cancel is called, then this returns true.
+			/// \returns true whan the last action is the sequence is complete
 			bool isDone();
 
 			/// \brief cancel the action sequence.
@@ -69,6 +75,7 @@ namespace xero {
 			}
 
 			/// \brief return the number of actions in the sequence
+			/// \returns the count of the actions in the sequence
 			size_t size() {
 				return actionSequence_.size() ;
 			}			
@@ -96,6 +103,7 @@ namespace xero {
 			std::string name_;
 		};
 
+        /// \brief convience definition for a shared pointer to an action sequence
 		typedef std::shared_ptr<ActionSequence> ActionSequencePtr ;
 	}
 }

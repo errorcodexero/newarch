@@ -1,13 +1,13 @@
 #pragma once
 
-#include "SorterAction.h"
+#include "SorterAlignCapableAction.h"
 #include "Sorter.h"
 #include <string>
 #include <vector>
 
 namespace xero {
     namespace bunny2018 {
-        class SorterStageBallAction : public SorterAction {
+        class SorterStageBallAction : public SorterAlignCapableAction {
         public:
             SorterStageBallAction(Sorter &sorter, Sorter::BallColor color) ;
 
@@ -29,12 +29,8 @@ namespace xero {
                 KeepingBall,
                 RejectingBall,
                 AlignSorter,
-				Done
+				Done,
             } ;
-
-        private:
-            bool alignSorter() ;
-			double calcTargetAngle() ;
 
         private:
             Sorter::BallColor color_ ;
@@ -45,15 +41,13 @@ namespace xero {
             double keep_ball_duration_ ;
             double reject_ball_motor_power_ ;
             double reject_ball_duration_ ;
-			double hole_tolerance_ ;
+
 			double next_hole_power_ ;
 
             State state_ ;
 
             double kick_start_ ;
-			double target_angle_ ;
 
-			std::vector<double> holes_ ;
         };
     }
 }

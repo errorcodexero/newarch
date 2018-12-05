@@ -5,6 +5,9 @@
 #include <string>
 #include <chrono>
 
+
+/// \file
+
 namespace xero
 {
 namespace misc
