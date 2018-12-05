@@ -9,8 +9,8 @@ build
 .vs/
 ROBOT
 SIM
-**/*.o
-**/*.a
+*.o
+*.a
 gopigo3/gopigo3xero/GoPiGo3Xero
 gopigo3/gopigo3simple/GoPiGo3Simple
 **/*.exe
@@ -21,7 +21,6 @@ gopigo3/gopigo3xero/GoPiGo3Xero
 **/*.JPG
 **/*.mov
 **/*.MOV
-**/*.stackdump
 html
 rtf
 *.stackdump
