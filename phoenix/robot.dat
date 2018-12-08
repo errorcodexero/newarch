@@ -53,6 +53,7 @@ grabber:degrees_per_tick            0.625
 grabber:calibrate:count             5
 grabber:calibrate:value             -0.4
 grabber:calibrate:diff              2
+grabber:a
 grabber:p                           0.1
 grabber:i                           0.0
 grabber:d                           0.0
@@ -79,6 +80,8 @@ lifter:max_height                   86.0
 lifter:min_height                   11.375
 lifter:goto:distance_threshold      1.0
 lifter:goto:speed_threshold         1.0
+lifter:goto:angle					0.0
+lifter:goto:a						0.0
 lifter:goto:p                       0.1
 lifter:goto:i                       0.0
 lifter:goto:d                       0.0001
