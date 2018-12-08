@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Subsystem.h>
+#include <RobotSubsystem.h>
 #include <tankdrive/TankDrive.h>
 #include <singlemotorsubsystem/SingleMotorSubsystem.h>
 #include <MessageListener/MessageListener.h>
@@ -12,7 +12,7 @@ namespace xero {
         class BunnyOISubsystem ;
         class Sorter ;
 
-        class BunnySubsystem : public xero::base::Subsystem {
+        class BunnySubsystem : public xero::base::RobotSubsystem {
         public:
             BunnySubsystem(xero::base::Robot &robot) ;
             virtual ~BunnySubsystem() ;
@@ -36,6 +36,7 @@ namespace xero {
             std::shared_ptr<BunnyOISubsystem> getOI() {
                 return oi_ ;
             }
+			
             std::shared_ptr<xero::base::MessageListener> getMessageListener() {
                 return ml_ ;
             }
@@ -46,6 +47,7 @@ namespace xero {
             std::shared_ptr<xero::base::MessageListener> ml_ ;
             std::shared_ptr<xero::base::SingleMotorSubsystem> collector_ ;
             std::shared_ptr<xero::base::SingleMotorSubsystem> hopper_ ;
+			std::shared_ptr<xero::base::SingleMotorSubsystem> intake_ ;
             std::shared_ptr<Sorter> sorter_ ;
         } ;
     }

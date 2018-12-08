@@ -1,50 +1,51 @@
-#include "Robot.h"
-#include "Collector/Collector.h"
-#include "Collector/CollectorAction.h"
+#include "Collector.h"
+#include "CollectorAction.h"
+#include "intake/Intake.h"
+#include "grabber/Grabber.h"
+#include <ActionSequence.h>
+#include <Robot.h>
+#include <DigitalInput.h>
 
-using namespace xero::base;
+using namespace xero::base ;
+using namespace xero::misc ;
 
 namespace xero {
     namespace phoenix {
+        Collector::Collector(Robot &robot) : Subsystem(robot, "collector") {            
+            intake_ = std::make_shared<Intake>(robot) ;
+            addChild(intake_) ;
+            intake_->createNamedSequences() ;
 
-        Collector::Collector(xero::base::Robot & robot) :Subsystem(robot,"Collector"){
+            grabber_ = std::make_shared<Grabber>(robot);
+            addChild(grabber_) ;
+            grabber_->createNamedSequences() ;
 
-            double h2ldelay=robot.getSettingsParser().getDouble("collector:cubesensor:h2ldelay");
-            double l2hdelay=robot.getSettingsParser().getDouble("collector:cubesensor:l2hdelay");
-            int cubesensor=robot.getSettingsParser().getInteger("hw:collector:cubesensor");
-            
-            //
-			// Add in the intake subsystem
-			//
-			intake_ = std::make_shared<Intake>(robot) ;
+            int sensor = robot.getSettingsParser().getInteger("hw:collector:cubesensor") ;
+            sensor_ = std::make_shared<frc::DigitalInput>(sensor) ;
 
-            grabber_ = std::make_shared<Grabber>(robot) ;
+            double dh2l = robot.getSettingsParser().getDouble("collector:cubesensor:h2ldelay") ;
+            double dl2h = robot.getSettingsParser().getDouble("collector:cubesensor:l2hdelay") ;
+            deb_sensor_ = std::make_shared<DebounceBoolean>(true, dh2l, dl2h) ;
 
-            addChild(intake_);
-            addChild(grabber_);
+        }
 
-            sensor_ = std::make_shared<frc::DigitalInput>(cubesensor) ;
-
-            debounce_ = std::make_shared<xero::misc::DebounceBoolean>(true, h2ldelay, l2hdelay) ;
-
-
+        Collector::~Collector() {
         }
 
         bool Collector::canAcceptAction(ActionPtr action) {
-            auto ptr = std::dynamic_pointer_cast<CollectorAction>(action) ;
-            return ptr != nullptr ;
+            auto coldir_p = std::dynamic_pointer_cast<CollectorAction>(action) ;
+            if (coldir_p == nullptr)
+                return false ;
+
+            return true ;
         }
 
-        Collector::~Collector(){
+        void Collector::computeState() {
+            Subsystem::computeState() ;
 
+            has_cube_ = deb_sensor_->getState(sensor_->Get(), getRobot().getTime()) ;
+            if (!has_cube_)
+                collected_cube_ = false ;
         }
-        
-        void Collector::computeState(){
-            Subsystem::computeState();
-            bool state = sensor_->Get();
-            has_cube_ = debounce_->getState(state, getRobot().getTime());            
-        }
-
-
     }
 }

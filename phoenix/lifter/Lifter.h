@@ -1,59 +1,79 @@
 #pragma once
 
 #include <Subsystem.h>
-#include <memory>
+#include <VictorSP.h>
+#include <Encoder.h>
+#include <DigitalInput.h>
 #include <Solenoid.h>
-#include "VictorSP.h"
-#include "DigitalInput.h"
-#include "Encoder.h"
-#include "LifterAction.h"
 
 namespace xero {
-	namespace phoenix {
-		/// \brief this is the lifter subsystem
-		class Lifter : public xero::base::Subsystem {
-			friend class LifterCalibrateAction;	
-			friend class LifterGoToHeightAction;
-			friend class LifterSetDutyCycleAction;
-			friend class LifterMaintainHeightAction;
-			friend class LifterChangeGearAction;
-		public:
+    namespace phoenix {
+        class Lifter : public xero::base::Subsystem {
+            friend class LifterGoToHeightAction ;
+            friend class LifterPowerAction ;
+            friend class LifterCalibrateAction ;
+            friend class LifterLowGearAction ;
+            friend class LifterGoToEncoderAction ;
+            friend class LifterHoldClimbAction ;
+        public:
+            Lifter(xero::base::Robot &robot) ;
+            virtual ~Lifter() ;
 
-			enum class LIFTER_GEAR {LOW, HIGH};
-			Lifter(xero::base::Robot& robot);
-			virtual ~Lifter();
-			virtual void run();
-			virtual void computeState() ;
+            virtual bool canAcceptAction(xero::base::ActionPtr action) ;
+            virtual void computeState() ;
 
-			double getCurrentHeight();
-			double getCurrentVelocity();
-		protected:
-			/// \brief Determine if the Lifter subsystem can accept the given action.
-            /// For this subsystem the only critera is that the action be derived from
-            /// the LifterAction type.
-			virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
-		
-		
-		
-		private:
-			int encoder_ticks_;
-			double height_; //Inches
-			double previous_height_; //Inches			//Height in the previous robot loop
-			double velocity_;
-			LIFTER_GEAR current_gear_;
-			bool calibrate_flag_;
-			enum class CALIBRATED_STATUS {UNCALIBRATED, CALIBRATED, DECALIBRATED};
-			CALIBRATED_STATUS calibrated_;
-			bool brake_applied_;
-			void calibrate();
-			void setBrake(bool value);
-			void setGear(LIFTER_GEAR value);
-			void setMotorsDutyCycle(double value);
-			std::vector<std::shared_ptr<frc::VictorSP>> motors_;
-			std::shared_ptr<frc::Encoder> encoder_;
-			std::shared_ptr<frc::Solenoid> brake_solenoid_, gear_solenoid_;
-			std::shared_ptr<frc::DigitalInput> upper_limit_sensor_;
-			std::shared_ptr<frc::DigitalInput> lower_limit_sensor_;
-		};
-	}
+            double getHeight() const {
+                return height_ ;
+            }
+
+            double getVelocity() const {
+                return speed_ ;
+            }
+
+            int getEncoderValue() const {
+                return encoder_value_ ;
+            }
+
+            bool isAtTop() ;
+            bool isAtBottom() ;
+			bool isCalibrated() {
+				return is_calibrated_ ;
+			}
+
+			void createNamedSequences() {
+			}
+
+		private:            
+            void calibrate() ;
+            void setLowGear() ;
+            void setHighGear() ;
+            void setBrakeOn() ;
+            void setBrakeOff() ;
+			void setMotorDutyCycle(double v) ;
+
+        private:
+            std::shared_ptr<frc::VictorSP> motor1_ ;
+            std::shared_ptr<frc::VictorSP> motor2_ ;
+            std::shared_ptr<frc::Encoder> encoder_ ;
+            std::shared_ptr<frc::DigitalInput> bottom_limit_ ;
+            std::shared_ptr<frc::DigitalInput> top_limit_ ;
+            std::shared_ptr<frc::Solenoid> gear_box_ ;
+            std::shared_ptr<frc::Solenoid> brake_ ;
+
+            bool is_calibrated_ ;
+
+            int encoder_value_ ;
+
+            double collector_offset_ ;
+            double inches_per_tick_high_ ;
+            double height_ ;
+            double last_height_ ;
+            double speed_ ;
+            double max_height_ ;
+            double min_height_ ;
+
+            bool high_gear_ ;
+            bool brake_on_ ;
+        } ;
+    }
 }

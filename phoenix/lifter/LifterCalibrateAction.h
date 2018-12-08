@@ -1,21 +1,35 @@
 #pragma once
+
 #include "LifterAction.h"
+#include "Lifter.h"
 
 namespace xero {
     namespace phoenix {
         class LifterCalibrateAction : public LifterAction {
         public:
-            LifterCalibrateAction(Lifter& lifter) : LifterAction(lifter) {
+            LifterCalibrateAction(Lifter &lifter) ;
+            virtual ~LifterCalibrateAction() ;
 
-            };
-            virtual void start();
-            virtual void run();
-            virtual bool isDone();
-            virtual void cancel();
-            virtual std::string toString();
+            virtual void start() {
+                getLifter().calibrate() ;
+            }
+
+            virtual void run() {                
+            }
+
+            virtual bool isDone() {
+                return true ;
+            }
+
+            virtual void cancel() {
+            }
+
+            virtual std::string toString() {
+                return action_name ;
+            }
+
         private:
-            bool is_done_;
-            static const std::string action_name_;
-        };
-    };
+            static std::string action_name ;
+        } ;
+    }
 }

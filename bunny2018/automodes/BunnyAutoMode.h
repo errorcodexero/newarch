@@ -20,15 +20,14 @@ namespace xero {
 			virtual void update(int sel) ;
 
         private:
-			xero::base::ActionSequencePtr createAutoModeZero() ;
-			xero::base::ActionSequencePtr createAutoModeOne() ;
-			xero::base::ActionSequencePtr createAutoModeTwo() ;
-			xero::base::ActionSequencePtr createAutoModeThree() ;
-			xero::base::ActionSequencePtr createAutoModeFour() ;	
-			xero::base::ActionSequencePtr createAutoModeFive() ;
+			xero::base::ActionSequencePtr createDriveStraightChar() ;
+			xero::base::ActionSequencePtr createRotateChar() ;
+			xero::base::ActionSequencePtr createDriveStraightTest() ;
+			xero::base::ActionSequencePtr createRotatePos90Test() ;
+			xero::base::ActionSequencePtr createRotateNeg90Test() ;	
+			xero::base::ActionSequencePtr createDriveSquareTest() ;
 			xero::base::ActionSequencePtr createAutoModeSix() ;
 			xero::base::ActionSequencePtr createAutoModeSeven() ; 			
-			xero::base::ActionSequencePtr createStageBallAutomode() ; 			
 			xero::base::ActionSequencePtr createStraightBackAutomode() ;
 			xero::base::ActionSequencePtr createRotateSorterAutoMode() ;
 			xero::base::ActionSequencePtr createTestAlignAutoMode() ;

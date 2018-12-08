@@ -1,19 +1,15 @@
-
 #include "Phoenix.h"
 #include "phoenixgroups.h"
 #include "PhoenixAutoController.h"
-#include "intake/IntakeDutyCycleAction.h"
-#include "grabber/GrabberToAngleAction.h"
-#include "grabber/GrabberCalibrateAction.h"
-#include "lifter/LifterGoToHeightAction.h"
-#include "lifter/LifterCalibrateAction.h"
-#include "collector/Collector.h"
-#include "collector/CollectorCollectCubeAction.h"
-#include "collector/CollectorEjectCubeAction.h"
-#include "phoenixsubsystem/PhoenixSubsystem.h"
+
+// Subsystems
+
+
+// Other misc classes
 #include <ActionSequence.h>
-#include <basegroups.h>
 #include <DelayAction.h>
+
+#include <basegroups.h>
 #include <MessageDestDS.h>
 #include <MessageLogger.h>
 #include <MessageDestSeqFile.h>
@@ -52,8 +48,8 @@ namespace xero {
 				assert(false) ;
 			}
 
-			auto sub_p = std::make_shared<PhoenixSubsystem>(*this) ;
-			setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getDriveBase()) ;
+			auto sub_p = std::make_shared<PhoenixRobotSubsystem>(*this) ;
+			setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getTankDrive()) ;
 		}
 
 		std::shared_ptr<ControllerBase> Phoenix::createAutoController() {

@@ -23,6 +23,9 @@ namespace xero {
             /// \brief returns true if this action is valid for this subsystem
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
 
+			void createNamedSequences() {
+			}
+
         private:
             /// The first motor
             std::shared_ptr<frc::VictorSP> motor1_;

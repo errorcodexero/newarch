@@ -1,37 +1,40 @@
 #pragma once
 
+#include "GrabberAction.h"
 #include <PIDCtrl.h>
-#include "GrabberAction.h" 
 
 namespace xero {
     namespace phoenix {
-         class GrabberToAngleAction : public GrabberAction {
+        class GrabberToAngleAction : public GrabberAction {
         public:
-            GrabberToAngleAction(Grabber &grabber, double angle);
-            GrabberToAngleAction(Grabber &grabber, const std::string &name);
-            virtual ~GrabberToAngleAction(); 
+            GrabberToAngleAction(Grabber &g, double a) ;
+            GrabberToAngleAction(Grabber &g, const std::string &name) ;
+            virtual ~GrabberToAngleAction() ;
 
-            /// \brief Start the calibrate action.
-            virtual void start() ;
+            double getTarget() const {
+                return target_ ;
+            }
 
-            /// \brief Run the duty cycle action.  This method does nothing.            
+            bool isAtTargetAngle() const ;
+
+            virtual void start() {
+            }
+
             virtual void run() ;
 
-            /// \brief Signals if this action is done, always returs true    
-            virtual bool isDone() ;
+            virtual bool isDone() {
+                return false ;
+            }
 
-            /// \brief Canel the current action, stops the motors and returns true
             virtual void cancel() ;
 
-            /// \brief Returns a human readable string for the action
             virtual std::string toString() ;
 
         private:
-            xero::misc::PIDCtrl angle_controller_;
-            double angle_;
-            double threshold_;
-            bool isdone_;
-
-        };
+            xero::misc::PIDCtrl pid_ctrl_ ;            
+            double target_ ;
+            double output_ ;
+            double threshold_ ;
+        } ;
     }
 }

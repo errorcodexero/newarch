@@ -1,19 +1,45 @@
 #include "LiftingCollector.h"
-#include "Robot.h"
+#include "lifter/Lifter.h"
+#include "lifter/LifterGoToHeightAction.h"
+#include "collector/Collector.h"
+#include "collector/CollectCubeAction.h"
+#include "LiftingCollectCubeAction.h"
+#include <ActionSequence.h>
+#include <Robot.h>
 
+using namespace xero::base ;
+using namespace xero::misc ;
 
 namespace xero {
-	namespace phoenix {
-		LiftingCollector::LiftingCollector(xero::base::Robot& robot) : xero::base::Subsystem(robot, "lifting collector") {
-			lifter_ = std::make_shared<Lifter>(robot) ;
+    namespace phoenix {
+        LiftingCollector::LiftingCollector(Robot &robot) : Subsystem(robot, "liftingcollector") {
 
+            lifter_ = std::make_shared<Lifter>(robot) ;
+            addChild(lifter_) ;
+            lifter_->createNamedSequences() ;
+            
             collector_ = std::make_shared<Collector>(robot) ;
+            addChild(collector_) ;
+            collector_->createNamedSequences() ;
+        }
 
-            addChild(lifter_);
-            addChild(collector_);
-		}
+        LiftingCollector::~LiftingCollector() {
+        }
 
-		LiftingCollector::~LiftingCollector(){
-		}
-	}
+        void LiftingCollector::createNamedSequences() {
+        }
+
+        bool LiftingCollector::canAcceptAction(ActionPtr action) {
+            auto ldir_p = std::dynamic_pointer_cast<LiftingCollectCubeAction>(action) ;
+            if (ldir_p == nullptr)
+                return false ;
+
+            return true ;
+        }
+
+        void LiftingCollector::computeState() {
+            lifter_->computeState() ;
+            collector_->computeState() ;
+        }
+    }
 }

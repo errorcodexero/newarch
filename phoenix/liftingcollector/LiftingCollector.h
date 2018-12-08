@@ -1,27 +1,36 @@
 #pragma once
 
 #include <Subsystem.h>
-#include <memory>
-#include "collector/Collector.h"
-#include "lifter/Lifter.h"
 
 namespace xero {
-	namespace phoenix {
-		/// \brief this is the LiftingCollector subsystem
-		class LiftingCollector : public xero::base::Subsystem {
-		public:
-			LiftingCollector(xero::base::Robot& robot);
-			virtual ~LiftingCollector();
+    namespace phoenix {
+        class Lifter ;
+        class Collector ;
 
-			std::shared_ptr<Lifter> getLifter(){
-                return lifter_;
+        class LiftingCollector: public xero::base::Subsystem {
+        public:
+            class LiftingCollectorAction : public xero::base::Action {                
+            } ;
+
+        public:
+            LiftingCollector(xero::base::Robot &robot) ;
+            virtual ~LiftingCollector() ;
+
+            virtual void createNamedSequences() ;
+            virtual bool canAcceptAction(xero::base::ActionPtr action) ;
+            virtual void computeState() ;
+
+            std::shared_ptr<Lifter> getLifter() {
+                return lifter_ ;
             }
-			std::shared_ptr<Collector> getCollector(){
-                return collector_;
+
+            std::shared_ptr<Collector> getCollector() {
+                return collector_ ;
             }
-		private:
-			std::shared_ptr<Lifter> lifter_;
-			std::shared_ptr<Collector> collector_;
-		};
-	}
+
+        private:
+            std::shared_ptr<Lifter> lifter_ ;
+            std::shared_ptr<Collector> collector_ ;
+        } ;
+    }
 }

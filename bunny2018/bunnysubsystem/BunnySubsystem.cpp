@@ -8,12 +8,9 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace bunny2018 {
-        BunnySubsystem::BunnySubsystem(Robot &robot) : Subsystem(robot, "bunny2018") {
+        BunnySubsystem::BunnySubsystem(Robot &robot) : RobotSubsystem(robot, "bunny2018") {
             auto &settings = robot.getSettingsParser() ;
             auto &logger = robot.getMessageLogger() ;
-            std::list<int> left, right ;
-            bool dberror = false ;
-            int index = 1 ;
 
             // Register message listener *before* any sub-system like the drive base which needs vision information.
             // The vision info received will only be present during 1 robot loop so ML's computeState()
@@ -22,74 +19,29 @@ namespace xero {
             ml_ = std::make_shared<MessageListener>(robot, socket_port_number) ;
             addChild(ml_) ;
 
-            if (!settings.isDefined("hw:tankdrive:disable")) {
+			//
+			// Add the tank drive.  This is handled by the base class RobotSubsystem since all robots have a drivebase
+			// and for now they are all tank drives
+			//
+			addTankDrive() ;
 
-                while (true) {
-                    std::string motstr = "hw:tankdrive:leftmotor" + std::to_string(index) ;
-                    if (!settings.isDefined(motstr))
-                        break ;
-                    left.push_back(settings.getInteger(motstr)) ;
-
-                    motstr = "hw:tankdrive:rightmotor" + std::to_string(index) ;
-                    if (!settings.isDefined(motstr))
-                        break ;
-                    right.push_back(settings.getInteger(motstr)) ;
-                    index++;
-                }
-
-                if (left.size() != right.size()) {
-                    logger.startMessage(MessageLogger::MessageType::error) ;
-                    logger << "differ motor count for drive base on left and right sides" ;
-                    logger << ", left " << left.size() ;
-                    logger << ", right " << right.size() ;
-                    logger.endMessage() ;
-                    dberror = true ;
-                }
-                
-                db_ = std::make_shared<TankDrive>(robot, left, right) ;
-
-                if (settings.isDefined("hw:tankdrive:leftencoder1") && settings.isDefined("hw:tankdrive:leftencoder2") &&
-                    settings.isDefined("hw:tankdrive:rightencoder1") && settings.isDefined("hw:tankdrive:rightencoder2")) {
-                    
-                    int l1 = settings.getInteger("hw:tankdrive:leftencoder1") ;
-                    int l2 = settings.getInteger("hw:tankdrive:leftencoder2") ;
-                    int r1 = settings.getInteger("hw:tankdrive:rightencoder1") ;
-                    int r2 = settings.getInteger("hw:tankdrive:rightencoder2") ;
-
-                    db_->setEncoders(l1, l2, r1, r2) ;
-                }
-
-                if (settings.isDefined("hw:tankdrive:invertleft")) {
-                    db_->invertLeftMotors() ;
-                    db_->invertLeftEncoder() ;
-                }
-                else if (settings.isDefined("hw:tankdrive:invertright")) {
-                    db_->invertRightMotors() ;
-                    db_->invertRightEncoder() ;                
-                }
-
-                db_->setEncoders(0, 1, 2, 3) ;
-
-                addChild(db_) ;
-            }
-
+			//
+			// Add the OI to the robot.  The OI is specific to this robot.
+			//
             oi_ = std::make_shared<BunnyOISubsystem>(robot) ;
             addChild(oi_) ;
 
-            if (!settings.isDefined("hw:collector:disabled")) {
-                collector_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Collector", "hw:collector:motor") ;
-                addChild(collector_) ;
-            }
+            collector_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Collector", "hw:collector:motor") ;
+            addChild(collector_) ;
 
-            if (!settings.isDefined("hw:hopper:disabled")) {
-                hopper_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Hopper", "hw:hopper:motor") ;
-                addChild(hopper_) ;
-            }
+            hopper_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Hopper", "hw:hopper:motor") ;
+            addChild(hopper_) ;
 
-            if (!settings.isDefined("hw:sorter:disabled")) {
-                sorter_ = std::make_shared<Sorter>(robot) ;
-                addChild(sorter_) ;     
-            }
+			intake_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Intake", "hw:intake:motor") ;
+			addChild(intake_) ;
+
+            sorter_ = std::make_shared<Sorter>(robot) ;
+            addChild(sorter_) ;
         }
 
         BunnySubsystem::~BunnySubsystem() {

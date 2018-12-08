@@ -6,11 +6,13 @@
 
 namespace xero {
     namespace bunny2018 {
-        class SorterEjectAction : public SorterAction {
+        class SorterPowerAction : public SorterAction {
         public:
-            SorterEjectAction(Sorter &sorter) ;
+            SorterPowerAction(Sorter &sorter, double duty) ;
 
-            virtual ~SorterEjectAction() ;
+            SorterPowerAction(Sorter &sorter, const std::string &name) ;
+
+            virtual ~SorterPowerAction() ;
 
             virtual void start() ;
         
@@ -23,10 +25,7 @@ namespace xero {
             virtual std::string toString() ;
             
         private:
-			double eject_power_ ;
-            double eject_duration_ ;
-            double eject_start_ ;
-			bool is_done_ ;
+            double power_ ;
         };
     }
 }
