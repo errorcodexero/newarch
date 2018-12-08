@@ -17,15 +17,15 @@ hw:driverstation:hid:oi             2
 hw:driverstation:hid:gunner         1
 hw:driverstation:hid:driver         0
 
-hw:collector:motor                  6
+hw:collector:motor                  11
 
-hw:hopper:motor                     11
+hw:hopper:motor                     6
 
 hw:intake:motor						12
 
 hw:shooter:motor					13
 
-hw:sorter:motor                     0
+hw:sorter:motor                     7
 hw:sorter:encoder1                  4
 hw:sorter:encoder2                  5
 hw:sorter:in:motor                  1
