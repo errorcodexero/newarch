@@ -7,7 +7,7 @@
 #include <AHRS.h>
 #include <Solenoid.h>
 #include <Kinematics.h>
-#include <Subsystem.h>
+#include <DriveBase.h>
 #include <Speedometer.h>
 
 
@@ -20,7 +20,7 @@ namespace xero {
 		typedef std::shared_ptr<TalonSRX> TalonPtr;
 
 		/// \brief a tank-style drivebase
-		class TankDrive : public Subsystem {
+		class TankDrive : public DriveBase {
 			/// \brief class for tank drive actions
 			friend class TankDriveAction;
 			/// \brief class for tank drive actions			

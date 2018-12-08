@@ -15,7 +15,7 @@ using namespace xero::misc ;
 namespace xero {
 	namespace base {
 
-		TankDrive::TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids) : Subsystem(robot, "tankdrive"), angular_(4, true), linear_(4) {
+		TankDrive::TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids) : DriveBase(robot, "tankdrive"), angular_(4, true), linear_(4) {
 			//The two sides should always have the same number of motors and at least one motor each
 			assert((left_motor_ids.size() == right_motor_ids.size()) && (left_motor_ids.size() > 0));
 
@@ -35,7 +35,7 @@ namespace xero {
 			if (!navx_->IsConnected()) {
 				auto &logger = getRobot().getMessageLogger() ;
 				logger.startMessage(MessageLogger::MessageType::error) ;
-				logger << "NavX is not connected - cannot perform tankdrive auto functions - YYY" ;
+				logger << "NavX is not connected - cannot perform tankdrive auto functions" ;
 				logger .endMessage() ;
 				navx_ = nullptr ;
 			}

@@ -14,8 +14,6 @@ namespace xero {
         Sorter::Sorter(xero::base::Robot & robot) :Subsystem(robot,"sorter"){
             auto &logger = robot.getMessageLogger() ;
 
-            int inmotor=robot.getSettingsParser().getInteger("hw:sorter:in:motor");
-            int outmotor=robot.getSettingsParser().getInteger("hw:sorter:out:motor");
             int sortmotor=robot.getSettingsParser().getInteger("hw:sorter:motor");                        
             int enc1=robot.getSettingsParser().getInteger("hw:sorter:encoder1");
             int enc2=robot.getSettingsParser().getInteger("hw:sorter:encoder2");
@@ -23,8 +21,6 @@ namespace xero {
 			int index = robot.getSettingsParser().getInteger("hw:sorter:index") ;
 
 			white_detect_threshold_ = robot.getSettingsParser().getInteger("sorter:ball_detect:white_threshold") ;
-			blue_detect_threshold_ = robot.getSettingsParser().getInteger("sorter:ball_detect:blue_threshold") ;
-			red_detect_threshold_ = robot.getSettingsParser().getInteger("sorter:ball_detect:red_threshold") ;
 
             color_ = std::make_shared<TCS34725ColorSensor>(sensoraddr, TCS34725ColorSensor::TCS34725_INTEGRATIONTIME_24MS, TCS34725ColorSensor::TCS34725_GAIN_4X) ;
             if (!color_->isAlive()) {
@@ -49,16 +45,9 @@ namespace xero {
 				}
             }
 
-#ifdef USE_VICTORS
-            sortmotor_ = std::make_shared<VictorSP>(sortmotor);
-            inmotor_ = std::make_shared<VictorSP>(inmotor);
-            outmotor_ = std::make_shared<VictorSP>(outmotor) ;
-#else
             sortmotor_ = std::make_shared<TalonSRX>(sortmotor);
-            inmotor_ = std::make_shared<TalonSRX>(inmotor);
-            outmotor_ = std::make_shared<TalonSRX>(outmotor) ;
-#endif
-            encoder_ = std::make_shared<frc::Encoder>(enc1,enc2);
+    
+	        encoder_ = std::make_shared<frc::Encoder>(enc1,enc2);
             encoder_->Reset() ;
 			index_ = std::make_shared<frc::DigitalInput>(index) ;
 
@@ -67,29 +56,31 @@ namespace xero {
             calibrated_ = true;
 			calibrated_angle_ = -36.0 ;
 			sorter_motor_power_ = 0.0 ;
-			intake_motor_power_ = 0.0 ;
-			outtake_motor_power_ = 0.0 ;
         }
 
         Sorter::~Sorter(){
         }
 
         void Sorter::detectBall(uint16_t &red, uint16_t &green, uint16_t &blue, uint16_t &white) {
-			color_->getRawData(red, green, blue, white) ;
+			if (color_ == nullptr)
+				ball_ = BallColor::None ;
+			else {
+				color_->getRawData(red, green, blue, white) ;
 
-			if (white > white_detect_threshold_) {
-				if (red > green && red > blue && red > red_detect_threshold_) {
-					ball_ = BallColor::Red ;
-				}
-				else if (blue > red && blue > green) {
-					ball_ = BallColor::Blue ;
+				if (white > white_detect_threshold_) {
+					if (red > green && red > blue) {
+						ball_ = BallColor::Red ;
+					}
+					else if (blue > red && blue > green) {
+						ball_ = BallColor::Blue ;
+					}
+					else {
+						ball_ = BallColor::None ;
+					}
 				}
 				else {
 					ball_ = BallColor::None ;
 				}
-			}
-			else {
-				ball_ = BallColor::None ;
 			}
         }
     
@@ -109,8 +100,6 @@ namespace xero {
             logger << "Sorter: \n" ;
 			logger << "    angle " << angle_  << "\n" ;
 			logger << "    sorter motor " << sorter_motor_power_ << "\n" ;
-			logger << "    intake motor " << intake_motor_power_ << "\n" ;
-			logger << "    outtake motor " << outtake_motor_power_ << "\n" ;			
             logger << "    encoder " << encoder_->Get() << "\n" ;
 			logger << "    ball " << toString(ball_) << "\n" ;
 			logger << "    rgbw " << red << " " << green << " " << blue << " " << white ;

@@ -1,10 +1,9 @@
 #pragma once
 
 #include "Subsystem.h"
-#include <WPILib.h>
-#include "WPILib.h"
 #include "MessageLogger.h"
 #include "SettingsParser.h"
+#include <WPILib.h>
 #include <memory>
 #include <list>
 #include <fstream>
@@ -21,6 +20,8 @@ namespace xero {
 		class Subsystem ;
 		class ControllerBase ;
 		class AutoController ;
+		class DriveBase ;
+		class OISubsystem ;
 
 		/// \brief the base robot class for Error Code Xero robots
 		/// This class manages the operation of the robot.  The robot for a specific
@@ -105,13 +106,13 @@ namespace xero {
 
 			/// \brief Return the drive base subsystem
 			/// \returns the drivebase subsystem
-			SubsystemPtr getDriveBase() {
+			std::shared_ptr<DriveBase> getDriveBase() {
 				return drivebase_subsystem_ ;
 			}
 
 			/// \brief return the OIsubsystem
 			/// \returns the OI subsystems
-			SubsystemPtr getOI() {
+			std::shared_ptr<OISubsystem> getOI() {
 				return oi_subsystem_ ;
 			}			
 
@@ -121,7 +122,7 @@ namespace xero {
 			/// \param sub the subsystem to add to the robot
 			/// \param oi the subsystem for the OI
 			/// \param db the subsystem for the drive base
-			void setRobotSubsystem(SubsystemPtr sub, SubsystemPtr oi, SubsystemPtr db) {
+			void setRobotSubsystem(SubsystemPtr sub, std::shared_ptr<OISubsystem> oi, std::shared_ptr<DriveBase> db) {
 				robot_subsystem_ = sub ;
 				robot_subsystem_->init() ;
 
@@ -190,8 +191,8 @@ namespace xero {
 
 			// The list of subsystem that belong to the robot
 			SubsystemPtr robot_subsystem_ ;
-			SubsystemPtr drivebase_subsystem_ ;
-			SubsystemPtr oi_subsystem_ ;
+			std::shared_ptr<DriveBase> drivebase_subsystem_ ;
+			std::shared_ptr<OISubsystem> oi_subsystem_ ;
 
 			// Message logger instance
 			xero::misc::MessageLogger message_logger_;

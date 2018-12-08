@@ -104,9 +104,6 @@ namespace xero {
 			if (oi != nullptr)
 				sel = oi->getAutoModeSelector() ;
 
-			if (sel == -1)
-				sel = 11 ;
-
 			return sel ;
 		}		
 

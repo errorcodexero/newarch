@@ -47,12 +47,15 @@ namespace xero {
 			logger << "Initializing Bunny2018 Robot" ;
 			logger.endMessage() ;
 
+
+			//
+			// Setup access to the parameter file
+			//
 #ifdef SIM
 			filename = "bunny2018/robot.dat" ;
 #else
 			filename = "/home/lvuser/robot.dat" ;
 #endif
-
 			if (!readParamsFile(filename)) {
 				std::cerr << "Robot  Initialization failed - could not read robot data file '" ;
 				std::cerr << filename << "'" << std::endl ;
@@ -63,12 +66,12 @@ namespace xero {
 			// This is where the subsystems for the robot get created
 			//
 			auto robot_p = std::make_shared<BunnySubsystem>(*this) ;
-			SubsystemPtr db = robot_p->getDriveBase() ;
-			SubsystemPtr oi = robot_p->getOI() ;
+			auto db = robot_p->getDriveBase() ;
+			auto oi = robot_p->getOI() ;
 			setRobotSubsystem(robot_p, oi, db) ;
 
 			logger.startMessage(MessageLogger::MessageType::info) ;
-			logger << "Initialization complete." ;
+			logger << "Robot Initialization complete." ;
 			logger.endMessage() ;			
 		}
 
