@@ -113,6 +113,7 @@ namespace xero {
 			logger.enableSubsystem(MSG_GROUP_OI) ;
 			logger.enableSubsystem(MSG_GROUP_SORTER) ;
 			// logger.enableSubsystem(MSG_GROUP_SORTER_VERBOSE) ;
+            // logger.enableSubsystem(MSG_GROUP_ALL) ;
 
 			// Set up message logger destination(s)
             std::shared_ptr<MessageLoggerDest> dest_p ;

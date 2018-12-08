@@ -27,6 +27,8 @@ namespace xero {
     	void BunnyAutoMode::update(int sel) {
             ActionSequencePtr mode ;
 
+            sel = -1 ;
+
 			switch(sel) {
 				case 0:
 					mode = createStraightBackAutomode() ;
