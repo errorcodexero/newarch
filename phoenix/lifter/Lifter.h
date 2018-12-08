@@ -40,6 +40,9 @@ namespace xero {
 				return is_calibrated_ ;
 			}
 
+			void createNamedSequences() {
+			}
+
 		private:            
             void calibrate() ;
             void setLowGear() ;

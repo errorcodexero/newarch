@@ -34,11 +34,7 @@ namespace xero {
             calibrated_ = true ;
         }
 
-        void Grabber::createNamedSequences(SubsystemPtr sub) {
-            std::shared_ptr<ActionSequence> list_p = std::make_shared<ActionSequence>(sub->getRobot().getMessageLogger(), "calibratehold") ;
-            list_p->pushAction(std::make_shared<GrabberCalibrateAction>(*this)) ;
-            list_p->pushAction(std::make_shared<GrabberHoldCubeAction>(*this)) ;
-            defineNamedSequence("calibrateHold", list_p) ; 
+        void Grabber::createNamedSequences() {
         }
 
         bool Grabber::canAcceptAction(xero::base::ActionPtr action) {
