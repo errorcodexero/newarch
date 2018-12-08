@@ -3,6 +3,8 @@
 #include "Point.h"
 #include "xeromath.h"
 
+/// \file
+
 namespace xero {
 	namespace math {
 

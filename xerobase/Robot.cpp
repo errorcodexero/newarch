@@ -1,6 +1,7 @@
 #include "Robot.h"
 #include "Subsystem.h"
 #include "ControllerBase.h"
+#include "AutoController.h"
 #include "basegroups.h"
 #include "OISubsystem.h"
 #include <MessageDestStream.h>
@@ -29,6 +30,13 @@ namespace xero {
 			message_logger_.clear() ;
 			if (output_stream_ != nullptr)
 				delete output_stream_ ;
+		}
+
+		void Robot::RobotHardwareInit() {
+			//
+			// This method must be provided by a derived class that initializes the hardware for the robot
+			//
+			assert(false) ;
 		}
 
 		void Robot::setupRobotOutputFile(const std::string &file) {
@@ -75,15 +83,32 @@ namespace xero {
 		}
 
 		void Robot::RobotInit() {
-			//
-			// This is a virtual robot.  The actual robot class (i.e. Phoenix) will
-			// override this method and create all of the subsystems.  We put an assert
-			// here so the program prints information about what needs to be done and
-			// then crashes.
-			//
-			std::cerr << "RobotInit() should be defined in the top level robot class" << std::endl;
-			assert(false) ;
+			RobotHardwareInit() ;
+			auto_controller_ = std::dynamic_pointer_cast<AutoController>(createAutoController()) ;
+			assert(auto_controller_ != nullptr) ;
 		}
+
+		void Robot::displayAutoModeState() {
+			std::string str = std::to_string(getAutoModelSelection()) ;
+			frc::SmartDashboard::PutString("AutoModeNumber", str) ;
+			frc::SmartDashboard::PutString("AutoModeName", auto_controller_->getAutoModeName()) ;
+		}
+
+
+		/// \brief return the selector switch value for the automode
+		/// \returns auto mode selector switch value
+		int Robot::getAutoModelSelection() {
+			int sel = -1 ;
+
+			auto oi = std::dynamic_pointer_cast<OISubsystem>(oi_subsystem_) ;
+			if (oi != nullptr)
+				sel = oi->getAutoModeSelector() ;
+
+			if (sel == -1)
+				sel = 11 ;
+
+			return sel ;
+		}		
 
 		void Robot::logAutoModeState() {
 			std::string value ;
@@ -94,8 +119,12 @@ namespace xero {
 			message_logger_.endMessage() ;
 
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
-			message_logger_ << "    Controller Info: " << controller_->getControllerInformation() ;
+			message_logger_ << "    Auto Mode Number: " << getAutoModelSelection() ;
 			message_logger_.endMessage() ;			
+
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "    Auto Mode: " << auto_controller_->getAutoModeName() ;
+			message_logger_.endMessage() ;
 
 			value = "undefined" ;
 			if (ds.GetAlliance() == frc::DriverStation::kRed)
@@ -164,9 +193,9 @@ namespace xero {
 
 		void Robot::Autonomous() {
 
-			controller_ = createAutoController() ;
-
 			logAutoModeState() ;
+
+			controller_ = auto_controller_ ;
 
 			while (IsAutonomous() && IsEnabled())
 				robotLoop();
@@ -221,11 +250,22 @@ namespace xero {
 			message_logger_ << "Robot Disabled" ;
 			message_logger_.endMessage() ;
 
-			while (IsDisabled()) {
-				if (oi_subsystem_ != nullptr)
-					oi_subsystem_->computeState() ;
+			automode_ = -1 ;
 
-				DoDisabledWork() ;
+			while (IsDisabled()) {
+				if (oi_subsystem_ != nullptr) {
+					oi_subsystem_->computeState() ;
+				}
+
+				if (auto_controller_ != nullptr) {
+					int sel = getAutoModelSelection() ;
+					if (sel != automode_) {
+						automode_ = sel ;
+						auto_controller_->update(sel) ;
+						displayAutoModeState() ;
+					}
+				}
+
 				frc::Wait(target_loop_time_) ;				
 			}
 		}

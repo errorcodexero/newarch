@@ -4,6 +4,9 @@
 #include "Setting.h"
 #include "MessageLogger.h"
 
+
+/// \file
+
 namespace xero {
 	namespace misc {
 		/// \brief this class parses a text file for a set of name value pairs

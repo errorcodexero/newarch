@@ -5,6 +5,10 @@
 #include "SingleMotorSubsystem.h"
 #include "SingleMotorSubsystemAction.h"
 
+
+/// \file
+
+
 namespace xero {
     namespace base {
 		/// \brief This action assigns a power to the motor in the subsystem
@@ -34,7 +38,7 @@ namespace xero {
 			/// \param subsystem the subsystem this action is applied to
 			/// \param power the power to apply to the motor (-1 to 1)
 			/// \param duration the amount of time to apply the given power
-            SingleMotorVoltageAction(SingleMotorSubsystem &subsystem, double duty, double duration) ;
+            SingleMotorVoltageAction(SingleMotorSubsystem &subsystem, double power, double duration) ;
 
 			/// \brief Create an action that sets the motor to a given power for a fixed duration of time
 			/// The power is applied immediately when the action is stared and remains applied

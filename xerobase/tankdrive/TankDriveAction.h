@@ -4,6 +4,10 @@
 #include "basegroups.h"
 #include "TankDrive.h"
 
+
+/// \file
+
+
 namespace xero {
 	namespace base {
 		class TankDrive;
@@ -18,6 +22,8 @@ namespace xero {
 			}
 
 		protected:
+            /// \brief Return the tankdrive subsystem associated with this action
+            /// \returns the tankdrive subsystem assocaited with this action
 			TankDrive &getTankDrive() {
 				return tank_drive_ ;
 			}

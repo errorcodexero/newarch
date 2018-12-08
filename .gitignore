@@ -24,3 +24,4 @@ gopigo3/gopigo3xero/GoPiGo3Xero
 **/*.stackdump
 html
 rtf
+*.stackdump

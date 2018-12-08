@@ -9,6 +9,9 @@
 
 #include "MessageLoggerData.h"
 
+
+/// \file
+
 namespace xero
 {
 namespace misc

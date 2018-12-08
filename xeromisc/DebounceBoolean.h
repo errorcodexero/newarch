@@ -1,5 +1,7 @@
 #pragma once
 
+/// \file
+
 namespace xero {
     namespace misc {
 		/// \brief A utility class for debouncing a boolean value

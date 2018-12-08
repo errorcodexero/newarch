@@ -4,6 +4,9 @@
 #include <ostream>
 #include <string>
 
+
+/// \file
+
 namespace xero
 {
 namespace misc

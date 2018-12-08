@@ -3,51 +3,67 @@
 #include "HIDDevice.h"
 #include "Action.h"
 
+/// \file
+
 namespace xero {
     namespace base {
         class TankDrive ;
 
+        /// \brief A DriveGamepad used to control the drivebase
         class DriverGamepad : public HIDDevice {
         public:
+            /// \brief the axis number of the gamepad
             enum AxisNumber : int {
-                LEFTX = 0,
-                LEFTY = 1, 
-                LTRIGGER = 2,
-                RTRIGGER = 3,
-                RIGHTX = 4,
-                RIGHTY = 5
+                LEFTX = 0,              ///< Left X axis
+                LEFTY = 1,              ///< Left Y axis
+                LTRIGGER = 2,           ///< Left Trigger Axis
+                RTRIGGER = 3,           ///< Right Trigger Axis
+                RIGHTX = 4,             ///< Right X axis
+                RIGHTY = 5              ///< Right Y axis
             } ;
 
+            /// \brief buttons on the gamepad
             enum ButtonNumber : int {
-                A = 0,
-                B = 1,
-                X = 2,
-                Y = 3,
-                LB = 4,
-                RB = 5,
-                BACK = 6,
-                START = 7,
-                L_JOY = 8,
-                R_JOY = 9
+                A = 0,                  ///< A button
+                B = 1,                  ///< B button
+                X = 2,                  ///< X button
+                Y = 3,                  ///< Y button
+                LB = 4,                 ///< Left back button
+                RB = 5,                 ///< Right back button
+                BACK = 6,               ///< Back button
+                START = 7,              ///< Start button
+                L_JOY = 8,              ///< Left joystick button
+                R_JOY = 9               ///< Right joystick button
             } ;
 
+            /// \brief POV angles
             enum POVAngle : int {
-                UP = 0,
-                UPRIGHT = 45,
-                RIGHT = 90,
-                DOWNRIGHT = 135,
-                DOWN=180,
-                DOWNLEFT = 225,
-                LEFT = 270,
-                UPLEFT = 315, 
+                UP = 0,                 ///< Up, 0 degrees
+                UPRIGHT = 45,           ///< UpRight, 45 degrees
+                RIGHT = 90,             ///< Right, 90 degrees
+                DOWNRIGHT = 135,        ///< DownRight, 135 degrees
+                DOWN=180,               ///< Down, 180 degrees
+                DOWNLEFT = 225,         ///< DownLeft, 225 degrees
+                LEFT = 270,             ///< Left, 270 degrees
+                UPLEFT = 315,           ///< UpLeft, 315 degrees
             } ;
 
         public:
-            DriverGamepad(Subsystem &oi, int index) ;
+            /// \brief create the driver gamepad object
+            /// \param oi the OI subsystem for this gamepad
+            /// \param index the index of the object
+            DriverGamepad(OISubsystem &oi, int index) ;
+
+            /// \brief destroy the object
             virtual ~DriverGamepad() ;
 
-            virtual void computeState(ActionSequence &) ;
+            /// \brief compute the state of the gamepad
+            /// This method stores and required actions in the sequence given
+            /// \param seq the action sequence for storing created actions
+            virtual void computeState(ActionSequence &seq) ;
 
+            /// \brief associate the driver gamepad with a drive base
+            /// \param db the drivebase to control
 			void init(std::shared_ptr<TankDrive> db) ;
 
         private:

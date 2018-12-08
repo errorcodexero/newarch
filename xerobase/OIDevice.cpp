@@ -3,7 +3,7 @@
 
 namespace xero {
     namespace base {
-        OIDevice::OIDevice(Subsystem &sub, int index) : HIDDevice(sub, index) {
+        OIDevice::OIDevice(OISubsystem &sub, int index) : HIDDevice(sub, index) {
         }
 
         OIDevice::~OIDevice() {            

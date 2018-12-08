@@ -7,6 +7,9 @@
 #include <sys/types.h>
 #include <dirent.h>
 
+
+/// \file
+
 namespace xero
 {
 namespace misc

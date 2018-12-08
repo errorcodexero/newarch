@@ -9,6 +9,9 @@
 #include <list>
 #include <fstream>
 
+/// \file
+
+
 namespace xero {
 	namespace base {
 
@@ -17,6 +20,7 @@ namespace xero {
 		//
 		class Subsystem ;
 		class ControllerBase ;
+		class AutoController ;
 
 		/// \brief the base robot class for Error Code Xero robots
 		/// This class manages the operation of the robot.  The robot for a specific
@@ -45,7 +49,8 @@ namespace xero {
 		class Robot : public frc::SampleRobot {
 		public:
 			/// \brief create the base robot.
-			Robot(double looptime = 0.50) ;
+			/// \param looptime the loop time for each robot loop (generally between 0.02 and 0.05)
+			Robot(double looptime = 0.050) ;
 
 			/// \brief destroy the robot object
 			virtual ~Robot() ;
@@ -110,13 +115,12 @@ namespace xero {
 				return oi_subsystem_ ;
 			}			
 
-			virtual void DoDisabledWork() {
-			}
-
 		protected:
 
 			/// \brief add a subsystem to the robot
 			/// \param sub the subsystem to add to the robot
+			/// \param oi the subsystem for the OI
+			/// \param db the subsystem for the drive base
 			void setRobotSubsystem(SubsystemPtr sub, SubsystemPtr oi, SubsystemPtr db) {
 				robot_subsystem_ = sub ;
 				robot_subsystem_->init() ;
@@ -134,12 +138,9 @@ namespace xero {
 			/// \brief this method runs one loop for the robot.
 			virtual void robotLoop();
 
-			/// \brief this method allows a derived class to change the robot loop time
-			void setRobotLoopTime(double time) {
-				target_loop_time_ = time ;
-			}			
-
 			/// \brief this method reads the parameters file for the robot
+			/// \param filename the name of the file to read parameters from
+			/// \returns true if the file is read sucessfully
 			bool readParamsFile(const std::string &filename) ;
 
 			//
@@ -149,22 +150,32 @@ namespace xero {
 
 			/// \brief create the autonomous controller.
 			/// This method will be defined by a concrete derived robot object
+			/// \returns the auto controller for the robot
 			virtual std::shared_ptr<ControllerBase> createAutoController() = 0 ;
 
 			/// \brief create the teleop controller.
 			/// This method will be defined by a concrete derived robot object
+			/// \returns the teleop controller for the robot
 			virtual std::shared_ptr<ControllerBase> createTeleopController() = 0 ;
 			
 			/// \brief create the test controller.
 			/// This method will be defined by a concrete derived robot object
+			/// \returns the test controller for the robot
 			virtual std::shared_ptr<ControllerBase> createTestController() = 0 ;
 
 			/// \brief setup a message logger to send output to a file
 			/// \param file the name of the file for the output
 			void setupRobotOutputFile(const std::string &file) ;
 
+			/// \brief initialize the robot hardware
+			virtual void RobotHardwareInit() ;
+
+			/// \brief return the auto mode selection
+			virtual int getAutoModelSelection() ;
+
 		private:
 			void logAutoModeState() ;
+			void displayAutoModeState() ;
 
 		private:
 			// The time per robot loop in seconds
@@ -173,6 +184,9 @@ namespace xero {
 			// The controller that provides control during the
 			// robot loop
 			std::shared_ptr<ControllerBase> controller_;
+
+			// Auto mode controller, created at the start and stored
+			std::shared_ptr<AutoController> auto_controller_;			
 
 			// The list of subsystem that belong to the robot
 			SubsystemPtr robot_subsystem_ ;
@@ -196,6 +210,9 @@ namespace xero {
 
 			// The stream for the robot output
 			std::ofstream *output_stream_ ;
+
+			// The selected auto mode
+			int automode_ ;
 		} ;
 	}
 }

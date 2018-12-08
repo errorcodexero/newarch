@@ -2,6 +2,9 @@
 
 #include "SettingsParser.h"
 
+
+/// \file
+
 namespace xero {
 namespace misc {
 

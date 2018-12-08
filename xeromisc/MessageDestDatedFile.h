@@ -4,6 +4,9 @@
 #include <ctime>
 #include <array>
 
+
+/// \file
+
 namespace xero
 {
 namespace misc

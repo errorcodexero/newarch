@@ -1,9 +1,10 @@
 #pragma once
 
 #include <list>
-
 #include <Subsystem.h>
 #include <UdpReceiver.h>
+
+/// \file
 
 namespace xero {
     namespace base {

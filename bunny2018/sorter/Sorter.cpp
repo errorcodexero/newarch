@@ -3,6 +3,8 @@
 #include "bunnyids.h"
 #include <Robot.h>
 #include <xeromath.h>
+#include <smartdashboard/SmartDashboard.h>
+#include <memory>
 
 using namespace xero::base;
 using namespace xero::misc ;
@@ -10,6 +12,8 @@ using namespace xero::misc ;
 namespace xero {
     namespace bunny2018 {
         Sorter::Sorter(xero::base::Robot & robot) :Subsystem(robot,"sorter"){
+            auto &logger = robot.getMessageLogger() ;
+
             int inmotor=robot.getSettingsParser().getInteger("hw:sorter:in:motor");
             int outmotor=robot.getSettingsParser().getInteger("hw:sorter:out:motor");
             int sortmotor=robot.getSettingsParser().getInteger("hw:sorter:motor");                        
@@ -18,16 +22,31 @@ namespace xero {
             int sensoraddr = robot.getSettingsParser().getInteger("hw:sorter:sensoraddr") ;
 			int index = robot.getSettingsParser().getInteger("hw:sorter:index") ;
 
-            if (robot.getSettingsParser().isDefined("hw:sorter:ballpresent") && 
-                            robot.getSettingsParser().isDefined("hw:sorter:ballcolor")) {
-                int present = robot.getSettingsParser().getInteger("hw:sorter:ballpresent");
-                int color = robot.getSettingsParser().getInteger("hw:sorter:ballcolor");
+			white_detect_threshold_ = robot.getSettingsParser().getInteger("sorter:ball_detect:white_threshold") ;
+			blue_detect_threshold_ = robot.getSettingsParser().getInteger("sorter:ball_detect:blue_threshold") ;
+			red_detect_threshold_ = robot.getSettingsParser().getInteger("sorter:ball_detect:red_threshold") ;
 
-                ball_present_ = std::make_shared<frc::DigitalInput>(present) ;
-                red_blue_ = std::make_shared<frc::DigitalInput>(color) ;
+            color_ = std::make_shared<TCS34725ColorSensor>(sensoraddr, TCS34725ColorSensor::TCS34725_INTEGRATIONTIME_24MS, TCS34725ColorSensor::TCS34725_GAIN_4X) ;
+            if (!color_->isAlive()) {
+                color_ = nullptr ;
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << "cannot communicate with the color sensor" ;
+                logger.endMessage() ;
+
+                std::cout << "color sensor failed" << std::endl ;
             }
             else {
-                color_sensor_ = std::make_shared<frc::I2C>(frc::I2C::kOnboard, sensoraddr) ;
+				if (!color_->initialize()) {
+					logger.startMessage(MessageLogger::MessageType::error) ;
+					logger << "cannot initialize color sensor" ;
+					logger.endMessage() ;
+				}
+
+                if (!color_->enable()) {
+					logger.startMessage(MessageLogger::MessageType::error) ;
+					logger << "cannot enable color sensor" ;
+					logger.endMessage() ;					
+				}
             }
 
 #ifdef USE_VICTORS
@@ -46,53 +65,58 @@ namespace xero {
             degrees_per_tick_ = robot.getSettingsParser().getDouble("sorter:degrees_per_tick");
 
             calibrated_ = true;
-
+			calibrated_angle_ = -36.0 ;
 			sorter_motor_power_ = 0.0 ;
+			intake_motor_power_ = 0.0 ;
+			outtake_motor_power_ = 0.0 ;
         }
 
         Sorter::~Sorter(){
         }
 
-        void Sorter::detectBall() {
-            if (color_sensor_ == nullptr) {
-                //
-                // If not color sensor is defined, we are relying on two digital
-                // inputs.  One is active when a ball is present.  If a ball is present
-                // the secone gives us the color.
-                //
-                if (ball_present_->Get()) {
-                    if (red_blue_->Get())
-                        ball_ = BallColor::Red ;
-                    else
-                        ball_ = BallColor::Blue ;
-                }
-                else {
-                    ball_ = BallColor::None ;
-                }
-            }
-            else {
-                //
-                // Logic to read I2C to get red/blue/present data
-                //
-            }
+        void Sorter::detectBall(uint16_t &red, uint16_t &green, uint16_t &blue, uint16_t &white) {
+			color_->getRawData(red, green, blue, white) ;
+
+			if (white > white_detect_threshold_) {
+				if (red > green && red > blue && red > red_detect_threshold_) {
+					ball_ = BallColor::Red ;
+				}
+				else if (blue > red && blue > green) {
+					ball_ = BallColor::Blue ;
+				}
+				else {
+					ball_ = BallColor::None ;
+				}
+			}
+			else {
+				ball_ = BallColor::None ;
+			}
         }
     
         void Sorter::computeState() {
+			uint16_t red, green, blue, white ;
             auto &logger = getRobot().getMessageLogger() ;
 
-            detectBall() ;
-
+            detectBall(red, green, blue, white) ;
+			
+			ticks_ = encoder_->Get() ;
             if (calibrated_)
-                angle_ = xero::math::normalizeAngleDegrees(encoder_->Get() * degrees_per_tick_ - calibrated_angle_) ;
+                angle_ = xero::math::normalizeAngleDegrees(ticks_ * degrees_per_tick_ - calibrated_angle_) ;
             else
                 angle_ = 1000.0 ;
 
-            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER) ;
-            logger << "The angle is " << angle_ ;
-            logger << ", encoder value is " << encoder_->Get() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER_VERBOSE) ;
+            logger << "Sorter: \n" ;
+			logger << "    angle " << angle_  << "\n" ;
+			logger << "    sorter motor " << sorter_motor_power_ << "\n" ;
+			logger << "    intake motor " << intake_motor_power_ << "\n" ;
+			logger << "    outtake motor " << outtake_motor_power_ << "\n" ;			
+            logger << "    encoder " << encoder_->Get() << "\n" ;
+			logger << "    ball " << toString(ball_) << "\n" ;
+			logger << "    rgbw " << red << " " << green << " " << blue << " " << white ;
             logger.endMessage() ;
 
-            std::cout << "Encoder Value " << encoder_->Get() << std::endl ;
+			frc::SmartDashboard::PutString("BallColor", toString(ball_)) ;
 
 			index_state_ = index_->Get() ;
         }

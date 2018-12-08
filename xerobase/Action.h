@@ -5,6 +5,9 @@
 #include <string>
 #include <memory>
 
+/// \file
+
+
 namespace xero {
     namespace base {
 		/// \brief A class capable of doing work.
@@ -31,6 +34,7 @@ namespace xero {
             virtual bool isDone() = 0 ;
 
             /// \brief return a human readable string representing the action
+            /// \returns a human readable string representing the action
             virtual std::string toString() = 0 ;
         private:
         };

@@ -3,12 +3,16 @@
 #include "Action.h"
 #include <list>
 
+/// \file
+
+
 namespace xero {
     namespace base {
 		/// \brief A class capable of doing work
         class ParallelAction : public Action {
         public:
             /// \brief add a parallel action
+            /// \param action an action to be added to the parallel action
             void addAction(std::shared_ptr<Action> action) {
                 action_list_.push_back(action) ;
             }

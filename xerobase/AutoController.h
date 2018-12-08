@@ -2,8 +2,13 @@
 
 #include "ControllerBase.h"
 #include "ActionSequence.h"
+#include "OISubsystem.h"
 #include <SmartDashboard/SmartDashboard.h>
 #include <iostream>
+#include <cassert>
+
+/// \file
+
 
 namespace xero {
 	namespace base {
@@ -33,7 +38,23 @@ namespace xero {
 						actionptr_ = nullptr ;
 				}
 			}
-			
+
+			/// \brief return a human readable name for the auto mode
+			/// \returns auto mode name
+			virtual std::string getAutoModeName() {
+				std::string ret = "None" ;
+
+				if (actionptr_ != nullptr)
+					ret = actionptr_->getName() ;
+
+				return ret ;
+			}
+
+
+			/// \brief update the automode as the selector has changed
+			/// \param sel the automode selector value
+			virtual void update(int sel) = 0 ;
+
 		protected:
 			/// \brief sets the reference to the action that will be run when run() is called
 			/// \param action run for a controller
