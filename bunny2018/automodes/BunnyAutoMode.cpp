@@ -174,9 +174,8 @@ namespace xero {
 			auto &robot = getRobot() ;
 			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
 			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterRotateAngleTest") ;
-
-            act = std::make_shared<SorterRotateAngleAction>(*sorter, 720, 0.2) ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterPower") ;
+            act = std::make_shared<SorterPowerAction>(*sorter, 0.25) ;
 			seq->pushSubActionPair(sorter, act) ;			
 
 			return seq ;

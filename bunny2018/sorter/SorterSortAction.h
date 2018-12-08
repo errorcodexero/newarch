@@ -10,7 +10,7 @@ namespace xero {
     namespace bunny2018 {
         class SorterSortAction : public SorterAction {
         public:
-            SorterSortAction(Sorter &sorter Sorter::BallColor color) ;
+            SorterSortAction(Sorter &sorter, Sorter::BallColor color) ;
 
             virtual ~SorterSortAction() ;
 
