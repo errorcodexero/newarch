@@ -1,5 +1,6 @@
 #include "SorterSortAction.h"
 #include "Robot.h"
+#include <cmath>
 
 using namespace xero::base;
 using namespace xero::misc ;

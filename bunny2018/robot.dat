@@ -33,6 +33,10 @@ hw:sorter:out:motor                 8
 hw:sorter:sensoraddr                41
 hw:sorter:index						6
 
+hw:shooter:motor                    0   /* PLACEHOLDER. NEEDS TO BE SET TO ACTUAL VALUE. */
+hw:shooter:sensor                   0   /* PLACEHOLDER. NEEDS TO BE SET TO ACTUAL VALUE. */
+
+
 ##############################################################
 #
 # The constants that go with each of the subsystems
@@ -116,6 +120,12 @@ sorter:pid:max                         							0.3
 sorter:pid:min                         							-0.3
 sorter:pid:imax                        							80
 
+
+#
+# Shooter subsystem constants
+#
+shooter:stage_motor_power                                       0.5
+shooter:eject_motor_power                                       1.0
 
 #
 # Collector constants
