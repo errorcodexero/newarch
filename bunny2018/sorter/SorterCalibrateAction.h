@@ -23,8 +23,6 @@ namespace xero {
             virtual std::string toString() ;
             
         private:
-			double calibrate_power_ ;
-			bool is_done_ ;
         };
     }
 }

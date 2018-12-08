@@ -25,7 +25,7 @@ namespace xero {
 			return ret ;
 		}
 
-		double SorterHoleCalculator::calcTargetAngle(double power, double angle) {
+		double SorterHoleCalculator::calcTargetAngle(double angle) {
 			double ret = holes_[0] ;
 
 			//
@@ -40,8 +40,6 @@ namespace xero {
 					diff = mydiff ;
 				}
 			}
-
-			std::cout << "calcTargetAngle: angle " << angle << ", result " << ret << std::endl ;
 
 			return ret ;
 		}		

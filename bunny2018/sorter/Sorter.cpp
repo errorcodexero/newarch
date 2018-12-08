@@ -46,15 +46,10 @@ namespace xero {
             }
 
             sortmotor_ = std::make_shared<TalonSRX>(sortmotor);
-    
 	        encoder_ = std::make_shared<frc::Encoder>(enc1,enc2);
-            encoder_->Reset() ;
-			index_ = std::make_shared<frc::DigitalInput>(index) ;
 
             degrees_per_tick_ = robot.getSettingsParser().getDouble("sorter:degrees_per_tick");
 
-            calibrated_ = true;
-			calibrated_angle_ = -36.0 ;
 			sorter_motor_power_ = 0.0 ;
         }
 
@@ -91,10 +86,7 @@ namespace xero {
             detectBall(red, green, blue, white) ;
 			
 			ticks_ = encoder_->Get() ;
-            if (calibrated_)
-                angle_ = xero::math::normalizeAngleDegrees(ticks_ * degrees_per_tick_ - calibrated_angle_) ;
-            else
-                angle_ = 1000.0 ;
+            angle_ = xero::math::normalizeAngleDegrees(ticks_ * degrees_per_tick_) ;
 
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SORTER_VERBOSE) ;
             logger << "Sorter: \n" ;
@@ -107,7 +99,6 @@ namespace xero {
 
 			frc::SmartDashboard::PutString("BallColor", toString(ball_)) ;
 
-			index_state_ = index_->Get() ;
         }
     
 		bool Sorter::canAcceptAction(ActionPtr action) {

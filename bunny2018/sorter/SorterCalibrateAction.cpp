@@ -7,28 +7,20 @@ using namespace xero::misc ;
 namespace xero {
     namespace bunny2018 {
             SorterCalibrateAction::SorterCalibrateAction(Sorter &sorter) : SorterAction(sorter) {
-				calibrate_power_ = sorter.getRobot().getSettingsParser().getDouble("sorter:calibration_power") ;
             }
 
             SorterCalibrateAction::~SorterCalibrateAction() {
             }
 
             void SorterCalibrateAction::start() {
-				is_done_ = false ;
-                getSubsystem().setCalibrated(false) ;
-				getSubsystem().setSorterMotor(calibrate_power_) ;
+                getSubsystem().encoder_->Reset();
             }
 
             void SorterCalibrateAction::run() {
-				if (getSubsystem().getIndexState()) {
-					getSubsystem().setCalibrated(true) ;
-					is_done_ = true ;
-					getSubsystem().setSorterMotor(0) ;
-				}
             }
 
             bool SorterCalibrateAction::isDone() {
-                return is_done_ ;
+                return true;
             }
 
             void SorterCalibrateAction::cancel() {

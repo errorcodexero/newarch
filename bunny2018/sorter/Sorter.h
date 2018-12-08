@@ -16,9 +16,9 @@ namespace xero {
             friend class SorterPowerAction ;
             friend class SorterCalibrateAction ;
             friend class SorterEjectAction ;
-			friend class SorterAlignCapableAction ;
 			friend class SorterTestAlignAction ;
 			friend class SorterRotateAngleAction ;
+            friend class SorterSortAction ;
 
         public:
             enum BallColor
@@ -52,17 +52,7 @@ namespace xero {
                 sortmotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v) ;
             }
 
-            void setCalibrated(bool b) {
-                calibrated_ = b ;
-				if (b)
-					calibrated_angle_ = angle_ ;
-            }
-
             void detectBall(uint16_t &red, uint16_t &green, uint16_t &blue, uint16_t &white) ;
-
-			bool getIndexState() const {
-				return index_state_ ;
-			}
 
 			double getSorterMotorPower() const {
 				return sorter_motor_power_ ;
@@ -95,19 +85,14 @@ namespace xero {
         private:
             std::shared_ptr<frc::Encoder> encoder_ ;
             std::shared_ptr<TalonSRX> sortmotor_ ;
-			std::shared_ptr<frc::DigitalInput> index_ ;
             std::shared_ptr<TCS34725ColorSensor> color_ ;
 
-            bool calibrated_ ;
             double degrees_per_tick_ ;
 
             BallColor ball_ ;
             double angle_ ;
 			int ticks_ ;
 
-			bool index_state_ ;
-
-			double calibrated_angle_ ;
 
 			double sorter_motor_power_ ;
 

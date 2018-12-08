@@ -10,7 +10,6 @@
 #include <sorter/SorterPowerAction.h>
 #include <sorter/SorterCalibrateAction.h>
 #include <sorter/SorterRotateAngleAction.h>
-#include <sorter/SorterTestAlignAction.h>
 #include <DelayAction.h>
 #include <ParallelAction.h>
 
@@ -67,7 +66,6 @@ namespace xero {
 					break ;				
 
 				case 9:
-					mode = createTestAlignAutoMode() ;
 					break ;
 
 				default:
@@ -183,18 +181,5 @@ namespace xero {
 
 			return seq ;
 		}
-
-		ActionSequencePtr BunnyAutoMode::createTestAlignAutoMode() {
-			xero::base::ActionPtr act ;
-			auto &robot = getRobot() ;
-			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
-			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "SorterAlignTest") ;
-
-            act = std::make_shared<SorterTestAlignAction>(*sorter, 2.0, 10) ;
-			seq->pushSubActionPair(sorter, act) ;			
-
-			return seq ;
-		}		
     }
 }

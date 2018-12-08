@@ -12,7 +12,7 @@ namespace xero
 		public:
 			SorterHoleCalculator(int count, double offset) ;
 
-			double calcTargetAngle(double power, double angle) ;
+			double calcTargetAngle(double angle) ;
 
 			std::size_t size() const {
 				return holes_.size() ;
