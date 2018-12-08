@@ -123,7 +123,10 @@ namespace xero {
 			message_logger_.endMessage() ;			
 
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
-			message_logger_ << "    Auto Mode: " << auto_controller_->getAutoModeName() ;
+			if (auto_controller_ == nullptr)
+				message_logger_ << "    Auto Mode: NO AUTO MODE CONTROLLER" ;
+			else
+				message_logger_ << "    Auto Mode: " << auto_controller_->getAutoModeName() ;
 			message_logger_.endMessage() ;
 
 			value = "undefined" ;
