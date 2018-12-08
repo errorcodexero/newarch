@@ -16,22 +16,17 @@ namespace xero {
 
             lifter_ = std::make_shared<Lifter>(robot) ;
             addChild(lifter_) ;
-            lifter_->createNamedSequences(lifter_) ;
+            lifter_->createNamedSequences() ;
             
             collector_ = std::make_shared<Collector>(robot) ;
             addChild(collector_) ;
-            collector_->createNamedSequences(collector_) ;
+            collector_->createNamedSequences() ;
         }
 
         LiftingCollector::~LiftingCollector() {
         }
 
-        void LiftingCollector::createNamedSequences(SubsystemPtr sub) {
-            std::shared_ptr<ActionSequence> list_p = std::make_shared<ActionSequence>(sub->getRobot().getMessageLogger(), "collectcube") ;
-            list_p->pushSubActionPair(lifter_, std::make_shared<LifterGoToHeightAction>(*lifter_, "lifter:height:floor")) ;
-            list_p->pushSubActionPair(collector_, std::make_shared<CollectCubeAction>(*collector_)) ;
-            list_p->pushSubActionPair(lifter_, std::make_shared<LifterGoToHeightAction>(*lifter_, "lifter:height:exchange")) ;
-            defineNamedSequence("collectCube", list_p) ; 
+        void LiftingCollector::createNamedSequences() {
         }
 
         bool LiftingCollector::canAcceptAction(ActionPtr action) {

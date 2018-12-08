@@ -14,11 +14,11 @@ namespace xero {
         Collector::Collector(Robot &robot) : Subsystem(robot, "collector") {            
             intake_ = std::make_shared<Intake>(robot) ;
             addChild(intake_) ;
-            intake_->createNamedSequences(intake_) ;
+            intake_->createNamedSequences() ;
 
             grabber_ = std::make_shared<Grabber>(robot);
             addChild(grabber_) ;
-            grabber_->createNamedSequences(grabber_) ;
+            grabber_->createNamedSequences() ;
 
             int sensor = robot.getSettingsParser().getInteger("hw:collector:cubesensor") ;
             sensor_ = std::make_shared<frc::DigitalInput>(sensor) ;

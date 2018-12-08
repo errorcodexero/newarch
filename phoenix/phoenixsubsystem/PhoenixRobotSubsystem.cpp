@@ -29,7 +29,7 @@ namespace xero {
 			//
 			lifting_collector_ = std::make_shared<LiftingCollector>(robot) ;
             addChild(lifting_collector_) ;
-            lifting_collector_->createNamedSequences(lifting_collector_) ;
+            lifting_collector_->createNamedSequences() ;
 
             if (!settings.isDefined("hw:tankdrive:disable")) {
 

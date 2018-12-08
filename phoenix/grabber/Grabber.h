@@ -23,7 +23,7 @@ namespace xero {
             Grabber(xero::base::Robot &robot) ;
             virtual ~Grabber() ;
             
-            void createNamedSequences(xero::base::SubsystemPtr sub) ;
+            void createNamedSequences() ;
             virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
             virtual void computeState() ;
 
