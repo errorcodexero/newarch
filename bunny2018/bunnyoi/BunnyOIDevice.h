@@ -23,14 +23,21 @@ namespace xero {
             void initialize() ;
             
         private:
-            size_t collector_on_off_ ;
-            size_t hopper_on_off_ ;
+            size_t collector_ ;
+            size_t hopper_ ;
+            size_t sorter_color_ ;
+            size_t shoot_one_ ;
+            size_t shoot_many_ ;
             size_t automode_ ;
 
-			xero::base::ActionPtr collector_on_action_ ;
+            xero::base::ActionPtr collector_rev_action_ ;
+			xero::base::ActionPtr collector_fwd_action_ ;
 			xero::base::ActionPtr collector_off_action_ ;
-			xero::base::ActionPtr hopper_on_action_ ;
-			xero::base::ActionPtr hopper_off_action_ ;									
+			xero::base::ActionPtr hopper_rev_action_ ;
+			xero::base::ActionPtr hopper_fwd_action_ ;
+			xero::base::ActionPtr hopper_off_action_ ;	
+            xero::base::ActionPtr sort_red_ ;
+            xero::base::ActionPtr sort_blue_ ;								
         } ;
     }
 }

@@ -1,0 +1,5 @@
+hopper 3 position, collect end height,axis 3
+collector 3 position, intake out, off, and in, axis 4
+sorter red blue, 2 position climb lock, button 15
+push to shoot button, switch, button 3
+hold to shoot button, eject, button 6

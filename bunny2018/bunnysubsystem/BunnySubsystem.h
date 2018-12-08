@@ -5,6 +5,7 @@
 #include <singlemotorsubsystem/SingleMotorSubsystem.h>
 #include <MessageListener/MessageListener.h>
 #include "sorter/Sorter.h"
+#include "shooter/Shooter.h"
 
 namespace xero {
     namespace bunny2018 {
@@ -33,6 +34,10 @@ namespace xero {
                 return sorter_ ;
             }
             
+            std::shared_ptr<Shooter> getShooter() {
+                return shooter_ ;
+            }
+            
             std::shared_ptr<BunnyOISubsystem> getOI() {
                 return oi_ ;
             }
@@ -47,8 +52,9 @@ namespace xero {
             std::shared_ptr<xero::base::MessageListener> ml_ ;
             std::shared_ptr<xero::base::SingleMotorSubsystem> collector_ ;
             std::shared_ptr<xero::base::SingleMotorSubsystem> hopper_ ;
-			std::shared_ptr<xero::base::SingleMotorSubsystem> intake_ ;
+	    std::shared_ptr<xero::base::SingleMotorSubsystem> intake_ ;
             std::shared_ptr<Sorter> sorter_ ;
+            std::shared_ptr<Shooter> shooter_ ;
         } ;
     }
 }

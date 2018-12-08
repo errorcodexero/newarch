@@ -37,11 +37,14 @@ namespace xero {
             hopper_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Hopper", "hw:hopper:motor") ;
             addChild(hopper_) ;
 
-			intake_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Intake", "hw:intake:motor") ;
-			addChild(intake_) ;
+            intake_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Intake", "hw:intake:motor") ;
+            addChild(intake_) ;
 
             sorter_ = std::make_shared<Sorter>(robot) ;
             addChild(sorter_) ;
+            
+            shooter_ = std::make_shared<Shooter>(robot) ;
+            addChild(shooter_) ;
         }
 
         BunnySubsystem::~BunnySubsystem() {

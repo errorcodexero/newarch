@@ -2,6 +2,7 @@
 #include "BunnyOISubsystem.h"
 #include "Bunny.h"
 #include "bunnysubsystem/BunnySubsystem.h"
+#include "sorter/SorterSortAction.h"
 #include <ActionSequence.h>
 #include <singlemotorsubsystem/SingleMotorSubsystem.h>
 #include <singlemotorsubsystem/SingleMotorVoltageAction.h>
@@ -21,9 +22,11 @@ namespace xero {
             //
             // Actions
             //
-            collector_on_off_ = mapButton(11, OIButton::ButtonType::Level) ;            // Toggle
-            hopper_on_off_ = mapButton(16, OIButton::ButtonType::Level) ;       		// Toggle
-
+			collector_ = mapAxisSwitch(4,3) ;
+			hopper_ = mapAxisSwitch(3,3) ;
+			sorter_color_ = mapButton(15, OIButton::ButtonType::Level) ;
+			shoot_one_ = mapButton(3, OIButton::ButtonType::LowToHigh) ;
+			shoot_many_ = mapButton(6, OIButton::ButtonType::Level) ;
             //
             // Modes
             //
@@ -36,10 +39,15 @@ namespace xero {
 			auto collector = bunny.getBunnySubsystem()->getCollector() ;
 			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
 
-			collector_on_action_ = std::make_shared<SingleMotorVoltageAction>(*collector, "collector:power") ;
+			collector_fwd_action_ = std::make_shared<SingleMotorVoltageAction>(*collector, "collector:power:fwd") ;
 			collector_off_action_ = std::make_shared<SingleMotorVoltageAction>(*collector, 0.0) ;
-			hopper_on_action_ = std::make_shared<SingleMotorVoltageAction>(*hopper, "hopper:power") ;
+			collector_rev_action_ = std::make_shared<SingleMotorVoltageAction>(*collector, "collector:power:rev") ;
+			hopper_fwd_action_ = std::make_shared<SingleMotorVoltageAction>(*hopper, "hopper:power:fwd") ;
 			hopper_off_action_ = std::make_shared<SingleMotorVoltageAction>(*hopper, 0.0) ;
+			hopper_rev_action_ = std::make_shared<SingleMotorVoltageAction>(*hopper, "hopper:power:rev") ;
+			sort_red_ = std::make_shared<SorterSortAction>(*hopper, Sorter::BallColor::Red) ;
+			sort_blue_ = std::make_shared<SorterSortAction>(*hopper, Sorter::BallColor::Blue) ;
+
 		}
 
         void BunnyOIDevice::computeState(ActionSequence &seq) {
@@ -47,15 +55,29 @@ namespace xero {
 			auto collector = bunny.getBunnySubsystem()->getCollector() ;
 			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
 
-			if (getValue(collector_on_off_) && !collector->isRunning())
-				seq.pushSubActionPair(collector, collector_on_action_) ;
-			else if (!getValue(collector_on_off_) && collector->isRunning())
-				seq.pushSubActionPair(collector, collector_off_action_) ;
+			switch(getValue(collector_)){
+				case 0:
+					seq.pushSubActionPair(collector, collector_rev_action_) ;
+					break;
+				case 1:
+					seq.pushSubActionPair(collector, collector_fwd_action_) ;
+					break;
+				case 2:
+					seq.pushSubActionPair(collector, collector_off_action_) ;
+					break;
+			}
 
-			if (getValue(hopper_on_off_) && !hopper->isRunning())
-				seq.pushSubActionPair(hopper, hopper_on_action_) ;
-			else if (!getValue(hopper_on_off_) && hopper->isRunning())
-				seq.pushSubActionPair(hopper, hopper_off_action_) ;				
+			switch(getValue(hopper_)){
+				case 0:
+					seq.pushSubActionPair(hopper, hopper_rev_action_) ;
+					break;
+				case 1:
+					seq.pushSubActionPair(hopper, hopper_fwd_action_) ;
+					break;
+				case 2:
+					seq.pushSubActionPair(hopper,hopper_off_action_) ;
+					break;
+			}		
 		}
     }
 }
