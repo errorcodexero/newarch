@@ -303,6 +303,56 @@ model {
 				lib library: "wpilibsim", linkage: "static"
 			}
 		}
+
+		phoenixsim(NativeLibrarySpec) {
+			targetPlatform "x86_64"
+			binaries.all {
+				toolChain = toolChains["gcc"]
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DXEROSCREEN"
+			}
+			binaries.withType(SharedLibraryBinarySpec) {
+				buildable = false
+			}
+			sources.cpp {
+				source {
+					srcDirs = ["phoenixsim"]
+					include "**/*.cpp"
+				}
+				exportedHeaders {
+					srcDirs = ["phoenixsim"]
+					include "**/*.h"
+				}
+
+				lib library: "xeromiscsim", linkage: "static"
+				lib library: "xeromathsim", linkage: "static"				
+				lib library: "wpilibsim", linkage: "static"				
+			}
+		}		
+
+		frcUserProgramPhoenixSim(NativeExecutableSpec) {
+			targetPlatform "x86_64"
+			binaries.all {
+				toolChain = toolChains["gcc"]
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DSIM", "-DDEBUG", "-DXEROSCREEN"
+				linker.args "-lpthread", "-lncurses", "external/dinput/dxguid.lib", "external/dinput/dinput8.lib"
+			}
+			sources.cpp {
+				source {
+					srcDirs = ["phoenix"]
+					include "**/*.cpp"
+				}
+				exportedHeaders{
+					srcDirs = ["phoenix"]
+					include "**/*.h"
+				}
+
+				lib library: "phoenixsim", linkage: "static"				
+				lib library: "xerobasesim", linkage: "static"
+				lib library: "xeromiscsim", linkage: "static"
+				lib library: "xeromathsim", linkage: "static"								
+				lib library: "wpilibsim", linkage: "static"
+			}
+		}		
 	}
 }
 
