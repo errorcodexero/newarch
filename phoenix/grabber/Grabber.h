@@ -1,10 +1,11 @@
 #pragma once
 
 #include <Subsystem.h>
-#include <Encoder.h>
 #include <VictorSP.h>
-#include <cassert>
-#include <memory>
+#include <Encoder.h>
+#include <PIDCtrl.h>
+#include <limits>
+#include <vector>
 
 namespace xero {
     namespace phoenix {
@@ -13,50 +14,65 @@ namespace xero {
 		/// grabber arms.  There is an encoder on the motor that is used to detect
 		/// athe angle of the grabber arms.
         class Grabber : public xero::base::Subsystem {
-            friend class GrabberCalibrateAction;
-            friend class GrabberDutyCycleAction;
-            friend class GrabberHoldCubeAction;
-            friend class GrabberToAngleAction;
-        public:
-
-            Grabber(xero::base::Robot & robot);
-            virtual ~Grabber(); 
-            virtual void computeState();
-
-            int getEncoderTicks() const {
-                return encoder_ticks_;
-            }
-
-            double getAngle() const{
-                assert(calibrated_);
-                return angle_;
-            }
-
-		protected:
-			/// \brief check that a Action is valid for a subsystem
-			/// \param Action the Action to check for a subsystem
-			/// \return true if the action is valid for a subsystem
-			virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
+            friend class GrabberCalibrateAction ;
+            friend class GrabberHoldCubeAction ;
+            friend class GrabberToAngleAction ;
+            friend class GrabberPowerAction ;
             
-            void setMotorVoltage(double motorVoltage){
-                motor_->Set(motorVoltage);
+        public:
+            Grabber(xero::base::Robot &robot) ;
+            virtual ~Grabber() ;
+            
+            void createNamedSequences(xero::base::SubsystemPtr sub) ;
+            virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
+            virtual void computeState() ;
+
+            double getAngle() const {
+                return angle_ ;
             }
 
-        private:
-            void calibrate(){
-                encoder_->Reset();
-                calibrated_ = true;
+            int getEncoderValue() const {
+                return encoder_->Get() ;
             }
 
+            void calibrate() ;
+
         private:
-            std::shared_ptr<frc::VictorSP> motor_;
-            std::shared_ptr<frc::Encoder> encoder_;
-            double min_angle_;
-            double max_angle_;
-            double degrees_per_tick_;
-            int encoder_ticks_;
-            bool calibrated_;
-            double angle_;
-        };
+            void setMotorValue(double value) ;
+
+        private:
+            //
+            // The value of the encoder at zero angle (grabber straight out)
+            //
+            int encoder_zero_ ;
+
+            //
+            // The angle of the grabber tha last time computeState was called.  This is
+            // only valid if the grabber is calibrated
+            //
+            double angle_ ;
+
+            //
+            // If true, the grabber has been calibrated
+            //
+            bool calibrated_ ;
+
+            //
+            // The number of degree per encoder tick
+            //
+            double degrees_per_tick_ ;
+
+            //
+            // The min angle for the grabber
+            //
+            double min_angle_ ;
+            double max_angle_ ;
+
+            //
+            // The grabber hardware
+            //
+            std::shared_ptr<frc::VictorSP> motor_ ;
+            std::shared_ptr<frc::Encoder> encoder_ ;
+        } ;
     }
 }

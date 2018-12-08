@@ -1,37 +1,45 @@
 #pragma once
 
-#include "GrabberAction.h" 
+#include "GrabberAction.h"
 #include <list>
-
 
 namespace xero {
     namespace phoenix {
-         class GrabberCalibrateAction : public GrabberAction {
-         public:
-            GrabberCalibrateAction(Grabber &grabber);
-            virtual ~GrabberCalibrateAction(); 
+        class GrabberCalibrateAction : public GrabberAction {
+        public:
+            GrabberCalibrateAction(Grabber &g) ;
+            virtual ~GrabberCalibrateAction() ;
 
-            /// \brief Start the calibrate action.
-            virtual void start() ;
+            int getCalibrationValue() const {
+                return calibration_location_ ;
+            }
 
-            /// \brief Run the duty cycle action.  This method does nothing.            
+            virtual void start() {
+                is_calibrated_ = false ;
+            }
+
             virtual void run() ;
 
-            /// \brief Signals if this action is done, always returs true    
-            virtual bool isDone() ;
+            virtual bool isDone() {
+                return is_calibrated_ ;
+            }
 
-            /// \brief Canel the current action, stops the motors and returns true
             virtual void cancel() ;
 
-            /// \brief Returns a human readable string for the action
-            virtual std::string toString() ;
+            virtual std::string toString() {
+                return action_name ;
+            }
 
         private:
-            double calibratepower_;
-            size_t count_;
-            int diff_;
-            std::list<int> ticks_;
-            bool isdone_;
-        };
+            static std::string action_name ;
+
+        private:
+            size_t count_ ;
+            size_t calibrate_diff_ ;
+            std::list<int> samples_ ;
+            double calibrate_value_ ;
+            bool is_calibrated_ ;
+            int calibration_location_ ;
+        } ;
     }
 }

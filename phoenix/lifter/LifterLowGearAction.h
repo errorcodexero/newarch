@@ -5,13 +5,12 @@
 
 namespace xero {
     namespace phoenix {
-        class LifterCalibrateAction : public LifterAction {
+        class LifterLowGearAction : public LifterAction {
         public:
-            LifterCalibrateAction(Lifter &lifter) ;
-            virtual ~LifterCalibrateAction() ;
+            LifterLowGearAction(Lifter &lifter) ;
 
             virtual void start() {
-                getLifter().calibrate() ;
+                getLifter().setLowGear() ;
             }
 
             virtual void run() {                
@@ -28,7 +27,7 @@ namespace xero {
                 return action_name ;
             }
 
-        private:
+        private:    
             static std::string action_name ;
         } ;
     }

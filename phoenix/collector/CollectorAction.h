@@ -1,31 +1,25 @@
 #pragma once
 
-#include "Action.h" 
+#include <Action.h>
 
 namespace xero {
     namespace phoenix {
-        class Collector;
+        class Collector ;
 
-		/// \brief the base class for all collector actions
         class CollectorAction : public xero::base::Action {
         public:
-			/// \brief create a new collector action
-			/// \partam collector the collector this action is for
-            CollectorAction(Collector &collector);
+            CollectorAction(Collector &col) : collector_(col) {                
+            }
 
-			/// \brief destroy a collector action
-            virtual ~CollectorAction(); 
+            virtual ~CollectorAction() {                
+            }
 
-        protected:
-			/// \brief returns a reference to the collector associated with this action
-			/// \return a reference to the associated collector
-            Collector & getCollector() {
-                return Collector_ ;
+            Collector &getCollector() {
+                return collector_ ;
             }
 
         private:
-			// The collector associated with this action
-            Collector &Collector_ ;
-        };
+            Collector &collector_ ;
+        } ;
     }
 }

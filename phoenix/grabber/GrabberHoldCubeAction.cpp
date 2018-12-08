@@ -1,36 +1,23 @@
 #include "GrabberHoldCubeAction.h"
 #include "Grabber.h"
 #include <Robot.h>
-
-using namespace xero::base;
+#include <algorithm>
+#include <numeric>
 
 namespace xero {
     namespace phoenix {
-            GrabberHoldCubeAction::GrabberHoldCubeAction(Grabber &grabber) : GrabberAction(grabber) {
-                hold_value_=getGrabber().getRobot().getSettingsParser().getDouble("grabber:hold");
-            }
-            GrabberHoldCubeAction::~GrabberHoldCubeAction(){
 
-            }
+        std::string GrabberHoldCubeAction::action_name("GrabberHoldCube") ;
 
-            void GrabberHoldCubeAction::start(){
-                getGrabber().motor_->Set(hold_value_);
-            }
-          
-            void GrabberHoldCubeAction::run(){
+        GrabberHoldCubeAction::GrabberHoldCubeAction(Grabber &g) : GrabberAction(g) {
+            hold_value_ = g.getRobot().getSettingsParser().getDouble("grabber:hold") ;
+        }
 
-            }
-
-            bool GrabberHoldCubeAction::isDone(){
-                return true;
-            }
-
-            void GrabberHoldCubeAction::cancel(){
-                
-            }
-
-            std::string GrabberHoldCubeAction::toString(){
-
-            }
+        GrabberHoldCubeAction::~GrabberHoldCubeAction() {            
+        }
+        
+        void GrabberHoldCubeAction::run() {
+            getGrabber().motor_->Set(hold_value_) ;
+        }
     }
 }
