@@ -1,17 +1,29 @@
 #pragma once
 
-#include <Robot.h>
-#include <tankdrive/TankDrive.h>
 #include "wings/Wings.h"
 #include "intake/Intake.h"
 #include "lifter/Lifter.h"
 #include "grabber/Grabber.h"
+#include "collector/Collector.h"
+#include "phoenixsubsystem/PhoenixRobotSubsystem.h"
+#include "phoenixoi/PhoenixOISubsystem.h"
+#include <tankdrive/TankDrive.h>
+#include <Robot.h>
 
 namespace xero {
 	namespace phoenix {
 
 		/// \brief the concrete class that represents the robot Phoenix
 		class Phoenix : public xero::base::Robot {
+
+		public:
+			/// \brief return the robot subsystem cast to the phoenix specific type
+			/// \returns the robot subsystem cast to the phoenix specific type
+			std::shared_ptr<PhoenixRobotSubsystem> getPhoenixRobotSubsystem() {
+				return std::dynamic_pointer_cast<PhoenixRobotSubsystem>(getRobotSubsystem()) ;
+			}
+
+		protected:
 
 			/// \brief called to initialize the robot, basically creating the subsystems
 			virtual void RobotInit() ;

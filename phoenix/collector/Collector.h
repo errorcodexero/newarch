@@ -1,74 +1,58 @@
 #pragma once
 
-#include <cassert>
-#include <memory>
-#include "DigitalInput.h"
-#include "Subsystem.h" 
-#include "intake/Intake.h"
-#include "grabber/Grabber.h"
-#include "DebounceBoolean.h"
+#include <Subsystem.h>
+#include <DebounceBoolean.h>
+#include <DigitalInput.h>
 
 namespace xero {
     namespace phoenix {
-		/// \brief This subsystem represents the collector on the robot.
-		/// The collector consists of the grabber, the intake, and the
-		/// cube detect sensor.
+        class Intake ;
+        class Grabber ;
+
         class Collector : public xero::base::Subsystem {
-            friend class CollectorEjectCubeAction;
-            friend class CollectorGetCubeAction;
-
+            friend class CollectCubeAction ;
         public:
-			/// \brief create the new collector subsystem.
-			/// This in turn creates the grabber subsystem and the intake subsystem
-			/// \param robot the robot this subsystem belong to
-            Collector(xero::base::Robot & robot);
+            Collector(xero::base::Robot &robot) ;
+            virtual ~Collector() ;
 
-			/// \brief destroys the collector subsystem
-            virtual ~Collector(); 
-
-			/// \brief computes the state of the collector subsystem.
-			/// Noteable this determines if the collector has a cube by reading the 
-			/// cube detect sensor.
-            virtual void computeState();
-
-			/// \brief determines if this subsystem can accept the action given
-			/// \param action the action to check
-			/// \returns true if the subsystem can accept the action, otherwise false
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
+            virtual void computeState() ;
 
-			/// \brief returns true if the collector currently has a cube
-			/// \returns true if the collector has a cube.
-            bool hasCube(){
-                return has_cube_;
+            std::shared_ptr<Grabber> getGrabber() {
+                return grabber_ ;
             }
 
-			/// \brief returns a shared pointer to the intake subsystem
-			/// \returns a shared pointer to the intake subsystem
-            std::shared_ptr<Intake> getIntake(){
-                return intake_;
+            std::shared_ptr<Intake> getIntake() {
+                return intake_ ;
             }
 
-			/// \brief returns a shared pointer to the grabber subsystem
-			/// \returns a shared pointer to the grabber subsystem
-            std::shared_ptr<Grabber> getGrabber(){
-                return grabber_;
+            bool hasCube() {
+                return has_cube_ ;
+            }
+
+            bool collectedCube() {
+                return collected_cube_ ;
             }
 
         private:
-			// The intake subsystem
-            std::shared_ptr<Intake> intake_;
+            void setCollectedCubeState(bool st) {
+                collected_cube_ = st ;
+            }
 
-			// The grabber subsystem
-            std::shared_ptr<Grabber> grabber_;
+        private:
+            //
+            // This is the raw cube state, does not mean a cube is collected
+            //
+            bool has_cube_ ;
 
-			// The input with a connection to the cube detect sensor
-            std::shared_ptr<frc::DigitalInput> sensor_;
-
-			// A debounced version of the cube detect sensor
-            std::shared_ptr<xero::misc::DebounceBoolean> debounce_;
-
-			// If true, the collector is holding a cube
-            bool has_cube_;
-        };
+            //
+            // This means we have collected a cube
+            //
+            bool collected_cube_ ;
+            std::shared_ptr<Intake> intake_ ;
+            std::shared_ptr<Grabber> grabber_ ;
+            std::shared_ptr<frc::DigitalInput> sensor_ ;
+            std::shared_ptr<xero::misc::DebounceBoolean> deb_sensor_ ;
+        } ;
     }
 }

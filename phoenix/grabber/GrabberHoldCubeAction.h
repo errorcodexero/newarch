@@ -1,31 +1,36 @@
 #pragma once
 
-#include "GrabberAction.h" 
+#include "GrabberAction.h"
+#include <vector>
 
 namespace xero {
     namespace phoenix {
-        class GrabberHoldCubeAction : public xero::phoenix::GrabberAction {
+        class GrabberHoldCubeAction : public GrabberAction {
         public:
-            GrabberHoldCubeAction(Grabber &grabber);
-            virtual ~GrabberHoldCubeAction(); 
+            GrabberHoldCubeAction(Grabber &g) ;
+            virtual ~GrabberHoldCubeAction() ;
 
-            /// \brief Start the calibrate action.
-            virtual void start() ;
+            virtual void start() {
+            }
 
-            /// \brief Run the duty cycle action.  This method does nothing.            
             virtual void run() ;
 
-            /// \brief Signals if this action is done, always returs true    
-            virtual bool isDone() ;
+            virtual bool isDone() {
+                return true ;
+            }
 
-            /// \brief Canel the current action, stops the motors and returns true
-            virtual void cancel() ;
+            virtual void cancel() {
+            }
 
-            /// \brief Returns a human readable string for the action
-            virtual std::string toString() ;
+            virtual std::string toString() {
+                return action_name ;
+            }
 
         private:
-            double hold_value_;
-        };
+            static std::string action_name ;
+
+        private:
+            double hold_value_ ;
+        } ;
     }
 }

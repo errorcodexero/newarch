@@ -107,6 +107,12 @@ namespace xero {
 				return false ;
 			}
 
+			/// \brief define a named sequence of actions
+			/// 
+			void defineNamedSequence(const char *name_p, ActionPtr action) {
+				named_sequences_[name_p] = action ;
+			}
+
 
 		private:
 			//
@@ -128,6 +134,11 @@ namespace xero {
 			// The set of child subsystems
 			//
 			std::list<SubsystemPtr> children_ ;
+
+			//
+			// The set of named sequences
+			//
+			std::map<std::string, ActionPtr> named_sequences_ ;
 		} ;
 
 		typedef std::shared_ptr<Subsystem> SubsystemPtr ;

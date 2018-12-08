@@ -1,63 +1,62 @@
 #include "GrabberCalibrateAction.h"
 #include "Grabber.h"
+#include "phoenixgroups.h"
+#include <MessageLogger.h>
 #include <Robot.h>
-#include <numeric>
 #include <algorithm>
+#include <numeric>
 
-using namespace xero::base;
+using namespace xero::misc ;
 
 namespace xero {
     namespace phoenix {
-            GrabberCalibrateAction::GrabberCalibrateAction(Grabber &grabber) : GrabberAction(grabber){
-                calibratepower_ = grabber.getRobot().getSettingsParser().getDouble("grabber:calibrate:value");
-                count_ = static_cast<size_t>(grabber.getRobot().getSettingsParser().getInteger("grabber:calibrate:count"));
-                diff_ = grabber.getRobot().getSettingsParser().getInteger("grabber:calibrate:diff");
-            }
 
-            GrabberCalibrateAction::~GrabberCalibrateAction() {
-            }
+        std::string GrabberCalibrateAction::action_name("GrabberCalibration") ;
 
-            /// \brief Start the calibrate action.
-            void GrabberCalibrateAction::start(){
-                ticks_.clear();
-                isdone_ = false;
-                getGrabber().setMotorVoltage(calibratepower_);
-            }
+        GrabberCalibrateAction::GrabberCalibrateAction(Grabber &g) : GrabberAction(g) {
+            calibrate_value_ = g.getRobot().getSettingsParser().getDouble("grabber:calibrate:value") ;
+            count_ = static_cast<size_t>(g.getRobot().getSettingsParser().getInteger("grabber:calibrate:count")) ;
+            calibrate_diff_ = static_cast<size_t>(g.getRobot().getSettingsParser().getInteger("grabber:calibrate:diff")) ;
+        }
 
-            /// \brief Run the duty cycle action.  This method does nothing.            
-            void GrabberCalibrateAction::run(){
-                ticks_.push_back(getGrabber().getEncoderTicks());
-                if(ticks_.size()>count_){
-                    ticks_.pop_front();
-                }
+        GrabberCalibrateAction::~GrabberCalibrateAction() {            
+        }
 
-                if(ticks_.size()== count_){
-                   auto miniter = std::min_element(ticks_.begin(),ticks_.end());
-                    auto maxiter = std::max_element(ticks_.begin(),ticks_.end());
-                    auto minval = *miniter;
-                    auto maxval = *maxiter;
-                    if(maxval-minval<diff_){
-                        getGrabber().calibrate();
-                        isdone_ = true;
+        void GrabberCalibrateAction::run() {
+            if (!is_calibrated_) {
+                getGrabber().motor_->Set(calibrate_value_) ;
 
+                samples_.push_front(getGrabber().getEncoderValue()) ;
+                while (samples_.size() > count_)
+                    samples_.pop_back() ;
+
+                if (samples_.size() == count_) {
+                    int minval = *std::min_element(samples_.begin(), samples_.end()) ;
+                    int maxval = *std::max_element(samples_.begin(), samples_.end()) ;
+
+                    if (maxval - minval < static_cast<int>(calibrate_diff_)) {
+                        //
+                        // We are at our calibration location
+                        //
+                        double sum = std::accumulate(samples_.begin(), samples_.end(), 0) ;
+                        calibration_location_ = static_cast<int>((sum + 0.5)/samples_.size()) ;
+                        is_calibrated_ = true ;
+
+                        //
+                        // Push the calibration value to the grabber
+                        //
+                        MessageLogger &logger = getGrabber().getRobot().getMessageLogger() ;
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_GRABBER) ;
+                        logger << "Calibration complete, value is " << calibration_location_ ;
+                        logger.endMessage() ;
+                        
+                        getGrabber().calibrate() ;
                     }
                 }
             }
+        }
 
-            /// \brief Signals if this action is done, always returns true    
-            bool GrabberCalibrateAction::isDone(){
-                return isdone_;
-            }
-
-            /// \brief Canel the current action, stops the motors and returns true
-            void GrabberCalibrateAction::cancel(){
-                isdone_ = true;
-            }
-
-            /// \brief Returns a human readable string for the action
-            std::string GrabberCalibrateAction::toString() {
-				return std::string("GrabberCalibrationAction") ;
-            }
-
+        void GrabberCalibrateAction::cancel() {
+        }
     }
 }
