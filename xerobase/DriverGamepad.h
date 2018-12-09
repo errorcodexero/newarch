@@ -58,9 +58,11 @@ namespace xero {
             virtual ~DriverGamepad() ;
 
             /// \brief compute the state of the gamepad
-            /// This method stores and required actions in the sequence given
+            virtual void computeState() ;
+
+			/// \brief genreation actions based on the HID device
             /// \param seq the action sequence for storing created actions
-            virtual void computeState(ActionSequence &seq) ;
+			virtual void generateActions(ActionSequence &seq) ;
 
             /// \brief associate the driver gamepad with a drive base
             /// \param db the drivebase to control

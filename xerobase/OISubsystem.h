@@ -28,14 +28,14 @@ namespace xero {
             /// \brief enable the OI subsystem.
             /// If this OI subsystem is enabled any action stored in the internal action
             /// list that are added during the computeState method will be executed.
-			void enable() {
+			void enableActionGeneration() {
 				enabled_ = true ;
 			}
 
             /// \brief disable the OI subsystem.
             /// If this OI subsystem is disabled, no actions will be generated as part of 
             /// computing the state of the OI subsystem.
-			void disable() {
+			void disableActionGeneration() {
 				enabled_ = false ;
 			}            
 

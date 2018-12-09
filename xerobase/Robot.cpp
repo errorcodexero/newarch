@@ -232,15 +232,19 @@ namespace xero {
 			message_logger_.endMessage() ;
 
 			controller_ = createTeleopController() ;
-			auto oi = std::dynamic_pointer_cast<OISubsystem>(oi_subsystem_) ;
-			oi->enable() ;
+
+			//
+			// The OI subsystem runs in teleop and autonomous mode.  However, we only enable
+			// the OI subsystem for 
+			//
+			oi_subsystem_->enableActionGeneration() ;
 
 			while (IsOperatorControl() && IsEnabled())
 				robotLoop(LoopType::OperatorControl) ;
 
 			controller_ = nullptr ;
 
-			oi->disable() ;			
+			oi_subsystem_->disableActionGeneration() ;			
 
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Leaving Teleop mode" ;
