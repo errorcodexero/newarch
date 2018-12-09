@@ -23,7 +23,7 @@ namespace xero {
         BunnyAutoMode::~BunnyAutoMode() {
         }
 
-    	void BunnyAutoMode::update(int sel) {
+    	void BunnyAutoMode::updateAutoMode(int sel, const std::string &gamedata) {
             ActionSequencePtr mode ;
 
             sel = -1 ;

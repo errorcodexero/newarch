@@ -26,7 +26,7 @@ namespace xero {
 		protected:
 
 			/// \brief called to initialize the robot, basically creating the subsystems
-			virtual void RobotInit() ;
+			virtual void RobotHardwareInit() ;
 
 			/// \brief called to create the autonomous controller
 			/// \returns a robot controller

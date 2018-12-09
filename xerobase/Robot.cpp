@@ -269,6 +269,8 @@ namespace xero {
 		}
 
 		void Robot::Disabled() {
+			auto &ds = frc::DriverStation::GetInstance() ;
+			std::string msg = ds.GetGameSpecificMessage() ;
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Robot Disabled" ;
 			message_logger_.endMessage() ;
@@ -293,9 +295,11 @@ namespace xero {
 					// the drive team about what automode is selected
 					//
 					int sel = getAutoModelSelection() ;
-					if (sel != automode_) {
+
+					if (sel != automode_ || msg != gamedata_) {
 						automode_ = sel ;
-						auto_controller_->update(sel) ;
+						gamedata_ = msg ;
+						auto_controller_->updateAutoMode(sel, gamedata_) ;
 						displayAutoModeState() ;
 					}
 				}

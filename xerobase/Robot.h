@@ -223,6 +223,9 @@ namespace xero {
 			// The selected auto mode
 			int automode_ ;
 
+			// The game specific message data
+			std::string gamedata_ ;
+
 			std::vector<double> sleep_time_ ;
 			std::vector<size_t> iterations_ ;
 		} ;

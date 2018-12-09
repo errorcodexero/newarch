@@ -1,6 +1,6 @@
 #include "Phoenix.h"
 #include "phoenixgroups.h"
-#include "PhoenixAutoController.h"
+#include "automodes/PhoenixAutoController.h"
 
 // Subsystems
 
@@ -28,7 +28,7 @@ using namespace xero::base ;
 namespace xero {
 	namespace phoenix {
 		
-		void Phoenix::RobotInit() {
+		void Phoenix::RobotHardwareInit() {
 			std::string filename ;
 
 			//
@@ -53,7 +53,8 @@ namespace xero {
 		}
 
 		std::shared_ptr<ControllerBase> Phoenix::createAutoController() {
-			return nullptr ;
+			auto ctrl = std::make_shared<PhoenixAutoController>(*this) ;
+			return ctrl ;
 		}
 		
 		std::shared_ptr<ControllerBase> Phoenix::createTeleopController() {

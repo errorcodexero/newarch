@@ -13,8 +13,6 @@ namespace xero {
     namespace phoenix {
         PhoenixOISubsystem::PhoenixOISubsystem(Robot &robot) : OISubsystem(robot, "phoenixoi") {
             int oi = robot.getSettingsParser().getInteger("hw:driverstation:hid:oi") ;
-            int gunner = robot.getSettingsParser().getInteger("hw:driverstation:hid:gunner") ;
-
             auto oidev = std::make_shared<PhoenixOIDevice>(*this, oi) ;
 			addHIDDevice(oidev) ;
         }
