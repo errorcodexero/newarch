@@ -23,6 +23,12 @@ namespace xero {
 
 			parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;
 			output_stream_ = nullptr ;
+
+			sleep_time_.resize(static_cast<int>(LoopType::MaxValue)) ;
+			std::fill(sleep_time_.begin(), sleep_time_.end(), 0.0) ;
+
+			iterations_.resize(static_cast<int>(LoopType::MaxValue)) ;
+			std::fill(iterations_.begin(), iterations_.end(), 0) ;
 		}
 
 		Robot::~Robot() {
@@ -57,7 +63,8 @@ namespace xero {
 			return parser_->readFile(filename) ;
 		}
 		
-		void Robot::robotLoop() {
+		void Robot::robotLoop(LoopType type) {
+			int index = static_cast<int>(type) ;
 			double initial_time = frc::Timer::GetFPGATimestamp();
 
 			delta_time_ = initial_time - last_time_ ;
@@ -67,10 +74,13 @@ namespace xero {
 			if (controller_ != nullptr)
 				controller_->run();
 
-			robot_subsystem_->run() ;			
+			robot_subsystem_->run() ;
+
+			iterations_[index]++ ;
 
 			double elapsed_time = frc::Timer::GetFPGATimestamp() - initial_time > target_loop_time_;
 			if (elapsed_time < target_loop_time_) {
+				sleep_time_[index] += target_loop_time_ - elapsed_time ;
 				frc::Wait(target_loop_time_ - elapsed_time);
 			} else if (elapsed_time > target_loop_time_) {
 				message_logger_.startMessage(MessageLogger::MessageType::warning) ;
@@ -80,6 +90,15 @@ namespace xero {
 			}
 
 			last_time_ = initial_time ;
+
+			if ((iterations_[index] % 500) == 0) {
+				double avg = sleep_time_[index] / iterations_[index] ;
+				message_logger_.startMessage(MessageLogger::MessageType::info) ;
+				message_logger_ << "RobotLoop:" ;
+				message_logger_ << "iterations " << iterations_[index] ;
+				message_logger_ << ", average sleep time " << avg ;
+				message_logger_.endMessage() ;
+			}
 		}
 
 		void Robot::RobotInit() {
@@ -198,7 +217,7 @@ namespace xero {
 			controller_ = auto_controller_ ;
 
 			while (IsAutonomous() && IsEnabled())
-				robotLoop();
+				robotLoop(LoopType::Autonomous);
 
 			controller_ = nullptr ;
 
@@ -217,7 +236,7 @@ namespace xero {
 			oi->enable() ;
 
 			while (IsOperatorControl() && IsEnabled())
-				robotLoop();
+				robotLoop(LoopType::OperatorControl) ;
 
 			controller_ = nullptr ;
 
@@ -236,7 +255,7 @@ namespace xero {
 			controller_ = createTestController() ;
 
 			while (IsTest() && IsEnabled())
-				robotLoop();
+				robotLoop(LoopType::Test) ;
 
 			controller_ = nullptr ;
 
@@ -254,10 +273,21 @@ namespace xero {
 
 			while (IsDisabled()) {
 				if (oi_subsystem_ != nullptr) {
+					//
+					// We query the OI subsystem while disabled so we can know
+					// what automode program to run based on the OI
+					//
 					oi_subsystem_->computeState() ;
 				}
 
 				if (auto_controller_ != nullptr) {
+					//
+					// If we have an automode controller (should be always), we allow the
+					// auto mode controller to look at the automode selection and do any 
+					// initialization it can while the robot is disabled to get ready for
+					// the automode program.  This also includes providing information for
+					// the drive team about what automode is selected
+					//
 					int sel = getAutoModelSelection() ;
 					if (sel != automode_) {
 						automode_ = sel ;

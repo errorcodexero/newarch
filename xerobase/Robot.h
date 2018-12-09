@@ -118,6 +118,14 @@ namespace xero {
 
 		protected:
 
+			/// \brief The type of robot loop we are running
+			enum class LoopType : int {
+				OperatorControl = 0,				///< Operator control robot loop
+				Autonomous = 1,						///< Autnomous robot loop
+				Test = 2,							///< Test robot loop
+				MaxValue = 3						///< Not a loop type, used to get maximum value
+			} ;		
+
 			/// \brief add a subsystem to the robot
 			/// \param sub the subsystem to add to the robot
 			/// \param oi the subsystem for the OI
@@ -137,7 +145,7 @@ namespace xero {
 			}
 			
 			/// \brief this method runs one loop for the robot.
-			virtual void robotLoop();
+			virtual void robotLoop(LoopType type);
 
 			/// \brief this method reads the parameters file for the robot
 			/// \param filename the name of the file to read parameters from
@@ -214,6 +222,9 @@ namespace xero {
 
 			// The selected auto mode
 			int automode_ ;
+
+			std::vector<double> sleep_time_ ;
+			std::vector<size_t> iterations_ ;
 		} ;
 	}
 }
