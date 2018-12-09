@@ -2,7 +2,6 @@
 
 #include <OISubsystem.h>
 #include "PhoenixOIDevice.h"
-#include "PhoenixGunnerGamepad.h"
 #include <DriverGamepad.h>
 #include <memory>
 

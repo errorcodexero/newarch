@@ -101,7 +101,7 @@ namespace xero {
 			lifter_zero_ = std::make_shared<LifterPowerAction>(*lifter, 0.0) ;
 		}
 
-        void PhoenixOIDevice::computeState(ActionSequence &seq) {
+        void PhoenixOIDevice::generateActions(ActionSequence &seq) {
 			if (to_floor_ == nullptr)
 				createActions() ;
 
@@ -110,8 +110,6 @@ namespace xero {
             auto grabber = ph.getPhoenixRobotSubsystem()->getLiftingCollector()->getCollector()->getGrabber() ;
             auto collector = ph.getPhoenixRobotSubsystem()->getLiftingCollector()->getCollector() ;
 			auto wings = ph.getPhoenixRobotSubsystem()->getWings() ;
-
-            OIDevice::computeState(seq) ;
 
             if (getValue(climb_disabled_)) {
                 prev_climb_enabled_ = false ;

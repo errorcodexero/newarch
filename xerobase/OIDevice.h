@@ -25,10 +25,9 @@ namespace xero {
             /// \brief Destroy this device
             virtual ~OIDevice() ;
 
-            /// \brief compute the state of the device by mapping joystick values to OIItems
-            /// \param seq the action sequence to store actions
-            virtual void computeState(ActionSequence &seq) ;
-            
+            /// \brief compute the state of the gamepad
+            virtual void computeState() ;
+
         protected:
             /// \brief map a joystick button to an OIButton of the given type
             /// \param button the joystick button

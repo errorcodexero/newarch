@@ -75,7 +75,10 @@ namespace xero {
             return axis * (baseduty - slowdown) ;
         }
 
-        void DriverGamepad::computeState(ActionSequence &seq) {
+        void DriverGamepad::computeState() {
+		}
+
+		void DriverGamepad::generateActions(ActionSequence &seq) {
             auto &logger = getSubsystem().getRobot().getMessageLogger() ;
 
             if (getIndex() == -1 || db_ == nullptr)

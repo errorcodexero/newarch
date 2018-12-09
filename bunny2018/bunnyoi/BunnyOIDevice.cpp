@@ -48,10 +48,9 @@ namespace xero {
 			hopper_rev_action_ = std::make_shared<SingleMotorVoltageAction>(*hopper, "hopper:power:rev") ;
 			sort_red_ = std::make_shared<SorterSortAction>(*sorter, Sorter::BallColor::Red) ;
 			sort_blue_ = std::make_shared<SorterSortAction>(*sorter, Sorter::BallColor::Blue) ;
-
 		}
 
-        void BunnyOIDevice::computeState(ActionSequence &seq) {
+        void BunnyOIDevice::generateActions(ActionSequence &seq) {
 			Bunny &bunny = dynamic_cast<Bunny &>(getSubsystem().getRobot()) ;
 			auto collector = bunny.getBunnySubsystem()->getCollector() ;
 			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
