@@ -66,6 +66,7 @@ namespace xero {
 					break ;				
 
 				case 9:
+					mode = createGameAutoMode() ;
 					break ;
 
 				default:
@@ -179,6 +180,42 @@ namespace xero {
 			seq->pushSubActionPair(sorter, act) ;			
 
 			return seq ;
+		}
+
+		ActionSequencePtr BunnyAutoMode::createGameAutoMode() {
+			ActionPtr act ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "StraightAndBackAutoMode") ;		
+			
+            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
+
+			// Eject existing ball
+
+			// Collector to state on
+
+			// Hopper to state on
+
+			// Shooter to state stage
+			
+			// Drive straight (collecting as we go)
+
+			//
+			// Drive back (ejecting as we go)
+			// Note, we can create actions to associated with specific distances on the drive
+			// So we create a sequence that is reused to trigger a shooter eject followed by
+			// a shooter stage.  We attach this sequence at known intervals
+			//
+			// Pseudo Code:
+			//     drvact = new drive straight action
+			//     ActionSequencePtr actseq = new action sequence
+			//     actseq->pushSubActionPair(shooter, eject)
+			//     actseq->pushSubActionPair(shooter, stage)
+			//
+			//     std::vector<double> dists = calcDistanceForCrates()
+			//     foreach(dist in dists)
+			//       drvact->addTriggeredAction(dist, actseq)
+			//     seq->pushSubActionPair(tankdrive, drvact)
+			// 
+
 		}
     }
 }

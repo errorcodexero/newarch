@@ -29,14 +29,28 @@ namespace xero {
 		// and will be named with the give name with a dat extension.  For instance, for
 		// bunny2018, the file will be bunny2018/bunny2018.dat
 		//
+		// The float point number given (0.02) is the duration of the robot loop.  In this
+		// case we are running at a 20 millisecond robot loop.  The robot does everything it
+		// needs to do in a single loop and then sleeps until it has used 20 ms for each loop.
+		// These number are never exact, but we use them to get an approximately consistent
+		// loop time.
+		//
 		Bunny::Bunny() : xero::base::Robot("bunny2018", 0.02) {
 		}
 
+		//
+		// Return the top level subsysstem for the robot cast to the type for
+		// this specific robot.
+		//
 		std::shared_ptr<BunnySubsystem> Bunny::getBunnySubsystem() {
 			auto sub = getRobotSubsystem() ;
 			return std::dynamic_pointer_cast<BunnySubsystem>(sub) ;
 		}
 
+		//
+		// Chnage the calls to the message logger in this method to indicate what
+		// messages are to be displayed. 
+		//
 		void Bunny::enableSpecificMessages() {
             MessageLogger& logger = getMessageLogger();
 

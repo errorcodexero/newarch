@@ -193,7 +193,7 @@ namespace xero {
 			// Print initialization messages
 			//
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
-			message_logger_ << "Initializing Bunny2018 Robot" ;
+			message_logger_ << "Initializing robot " << name_  ;
 			message_logger_.endMessage() ;
 
 			//

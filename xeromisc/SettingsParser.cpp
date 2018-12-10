@@ -167,11 +167,23 @@ bool SettingsParser::parseInteger(const std::string &value, int &result) {
 	size_t output;
 
 	try {
-		result = std::stoi(value, &output);
+		if (value[0] == '0' && (value[1] == 'X' || value[1] == 'x')) {
+			//
+			// This is a hex value
+			//
+			std::string sub = value.substr(2) ;
+			result = std::stoi(sub, &output, 16) ;
+			if (output != sub.length())
+				return false ;
+		}
+		else {
+			result = std::stoi(value, &output);
 
-		// Check for extra characters in value
-		if(output != value.length())
-			return false;
+			// Check for extra characters in value
+			if(output != value.length())
+				return false;
+		}
+
 	} catch(...) {
 		return false;
 	}

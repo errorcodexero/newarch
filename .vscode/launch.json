@@ -4,9 +4,8 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
-            "name": "(gdb) Launch Simulator",
+            "name": "(gdb) Launch Phoenix Simulator",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/exe/frcUserProgramPhoenixSim/frcUserProgramPhoenixSim.exe",
@@ -26,31 +25,24 @@
             ],
 		},
         {
-            "name": "(gdb) Launch Robot",
+            "name": "(gdb) Launch Bunny2018 Simulator",
             "type": "cppdbg",
             "request": "launch",
-            "program": "C:/cygwin64/home/ButchGriffin/src/new/master/build/exe/frcUserProgram",
-            "args": [],
-            "stopAtEntry": true,
-            "targetArchitecture": "arm",
+            "program": "${workspaceFolder}/build/exe/frcUserProgramSim/frcUserProgramSim.exe",
+            "args": ["--start","0","--auto","0","--oper","0", "--test", "0", "--simprop", "pos=17.0,115.0","--simfile","SIM","--robotfile","ROBOT", "--simprop", "autovalue=-0.8"],
+            "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:/cygwin64/home/ButchGriffin/src/robotdev/external/frc/bin/arm-frc-linux-gnueabi-gdb.exe",
-            "customLaunchSetupCommands": [
+            "miDebuggerPath": "C:\\cygwin64\\bin\\gdb.exe",
+            "setupCommands": [
                 {
-                    "text": "file C:/cygwin64/home/ButchGriffin/src/new/master/build/exe/frcUserProgram",
-                    "description": "load symbols",
-                    "ignoreFailures": false
-				},
-                {
-                    "text": "target remote 10.14.25.2:3333",
-                    "description": "connect to remote target",
-                    "ignoreFailures": false
-                },
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
             ],
-			"logging":{"engineLogging": true, "programOutput": true}  
-        }		
+		}		
     ]
 }

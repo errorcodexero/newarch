@@ -30,11 +30,18 @@ hw:sorter:encoder1                  4
 hw:sorter:encoder2                  5
 hw:sorter:in:motor                  1
 hw:sorter:out:motor                 8
-hw:sorter:sensoraddr                41
+hw:sorter:sensoraddr                0x29
 hw:sorter:index						6
 
-hw:shooter:motor                    0   /* PLACEHOLDER. NEEDS TO BE SET TO ACTUAL VALUE. */
-hw:shooter:sensor                   0   /* PLACEHOLDER. NEEDS TO BE SET TO ACTUAL VALUE. */
+hw:shooter:motor                    12
+hw:shooter:sensor                   10
+
+##############################################################
+#
+# Enable messages associated with various subsystems
+#
+##############################################################
+messages:enabled
 
 
 ##############################################################
