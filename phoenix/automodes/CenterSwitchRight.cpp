@@ -2,7 +2,7 @@
 
 namespace xero {
 	namespace phoenix {
-		CenterSwitchRight::CenterSwitchRight(Phoenix &robot) : PhoenixAutoMode(robot, "CrossTheLine") {
+		CenterSwitchRight::CenterSwitchRight(Phoenix &robot) : PhoenixAutoMode(robot, "CenterSwitch") {
 			create() ;
 		}
 

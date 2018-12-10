@@ -15,8 +15,9 @@ namespace xero {
 
 		/// \brief the concrete class that represents the robot Phoenix
 		class Phoenix : public xero::base::Robot {
-
 		public:
+			Phoenix() ;
+
 			/// \brief return the robot subsystem cast to the phoenix specific type
 			/// \returns the robot subsystem cast to the phoenix specific type
 			std::shared_ptr<PhoenixRobotSubsystem> getPhoenixRobotSubsystem() {

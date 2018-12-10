@@ -16,6 +16,10 @@ public:
 		return true;
 	}
 
+	bool IsCalibrating() {
+		return false ;
+	}
+
 	double GetYaw();
 	void ZeroYaw();
 

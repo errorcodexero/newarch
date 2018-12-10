@@ -27,6 +27,9 @@ using namespace xero::base ;
 
 namespace xero {
 	namespace phoenix {
+
+		Phoenix::Phoenix() : xero::base::Robot(0.02) {			
+		}
 		
 		void Phoenix::RobotHardwareInit() {
 			std::string filename ;

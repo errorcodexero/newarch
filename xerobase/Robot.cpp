@@ -119,9 +119,15 @@ namespace xero {
 		int Robot::getAutoModelSelection() {
 			int sel = -1 ;
 
-			auto oi = std::dynamic_pointer_cast<OISubsystem>(oi_subsystem_) ;
-			if (oi != nullptr)
-				sel = oi->getAutoModeSelector() ;
+			//
+			// We generally get the automode selection from the OI.  If you get the OI selection
+			// in some other way (e.g. robot switch or SmartDashboard) override this function in 
+			// your robot specific derived class.
+			//
+			if (oi_subsystem_ != nullptr) {
+				oi_subsystem_->computeState() ;			
+				sel = oi_subsystem_->getAutoModeSelector() ;
+			}
 
 			return sel ;
 		}		
@@ -210,8 +216,41 @@ namespace xero {
 			message_logger_.endMessage() ;				
 		}
 
+		void Robot::updateAutoMode() {
+			if (auto_controller_ != nullptr && oi_subsystem_ != nullptr) {
+
+				auto &ds = frc::DriverStation::GetInstance() ;
+				std::string msg = ds.GetGameSpecificMessage() ;				
+
+				//
+				// Query the OI subsystem to get the automode nubmer selected
+				//
+
+				//
+				// If we have an automode controller (should be always), we allow the
+				// auto mode controller to look at the automode selection and do any 
+				// initialization it can while the robot is disabled to get ready for
+				// the automode program.  This also includes providing information for
+				// the drive team about what automode is selected
+				//
+				int sel = getAutoModelSelection() ;
+
+				if (sel != automode_ || msg != gamedata_) {
+					automode_ = sel ;
+					gamedata_ = msg ;
+					auto_controller_->updateAutoMode(sel, gamedata_) ;
+					displayAutoModeState() ;
+				}
+			}			
+		}
+
 		void Robot::Autonomous() {
 
+			//
+			// Just in case something like the field data changes as we enter
+			// the autonomous state
+			//
+			updateAutoMode() ;
 			logAutoModeState() ;
 
 			controller_ = auto_controller_ ;
@@ -269,8 +308,7 @@ namespace xero {
 		}
 
 		void Robot::Disabled() {
-			auto &ds = frc::DriverStation::GetInstance() ;
-			std::string msg = ds.GetGameSpecificMessage() ;
+
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Robot Disabled" ;
 			message_logger_.endMessage() ;
@@ -278,32 +316,9 @@ namespace xero {
 			automode_ = -1 ;
 
 			while (IsDisabled()) {
-				if (oi_subsystem_ != nullptr) {
-					//
-					// We query the OI subsystem while disabled so we can know
-					// what automode program to run based on the OI
-					//
-					oi_subsystem_->computeState() ;
-				}
 
-				if (auto_controller_ != nullptr) {
-					//
-					// If we have an automode controller (should be always), we allow the
-					// auto mode controller to look at the automode selection and do any 
-					// initialization it can while the robot is disabled to get ready for
-					// the automode program.  This also includes providing information for
-					// the drive team about what automode is selected
-					//
-					int sel = getAutoModelSelection() ;
 
-					if (sel != automode_ || msg != gamedata_) {
-						automode_ = sel ;
-						gamedata_ = msg ;
-						auto_controller_->updateAutoMode(sel, gamedata_) ;
-						displayAutoModeState() ;
-					}
-				}
-
+				updateAutoMode() ;
 				frc::Wait(target_loop_time_) ;				
 			}
 		}

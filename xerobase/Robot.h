@@ -185,6 +185,7 @@ namespace xero {
 		private:
 			void logAutoModeState() ;
 			void displayAutoModeState() ;
+			void updateAutoMode() ;
 
 		private:
 			// The time per robot loop in seconds
