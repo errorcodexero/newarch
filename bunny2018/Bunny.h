@@ -32,8 +32,8 @@ namespace xero {
 			/// \returns a robot controller
 			virtual std::shared_ptr<xero::base::ControllerBase> createTestController() ;
 
-		private:
-			void initializeMessageLogger();
+			/// \brief enable specific message for logging
+			virtual void enableSpecificMessages() ;			
 		} ;
 	}
 }

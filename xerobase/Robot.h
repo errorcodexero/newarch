@@ -50,8 +50,13 @@ namespace xero {
 		class Robot : public frc::SampleRobot {
 		public:
 			/// \brief create the base robot.
+			/// The name must be a legal directory name in the file system and is generally the name
+			/// of the directory containing the robot source.  When simulating this name is used to
+			/// find the data files (sim.dat and robot.dat) by looking in a directory with the name
+			/// given.
+			/// \param name the name of the robot, must be a legal directory name in the filesystem
 			/// \param looptime the loop time for each robot loop (generally between 0.02 and 0.05)
-			Robot(double looptime = 0.050) ;
+			Robot(const std::string &name, double looptime = 0.050) ;
 
 			/// \brief destroy the robot object
 			virtual ~Robot() ;
@@ -118,6 +123,13 @@ namespace xero {
 
 		protected:
 
+			/// \brief initialize the message logger subsystem
+			virtual void initializeMessageLogger() ;
+
+			/// \brief enable specific messages of interest
+			virtual void enableSpecificMessages() {
+			}
+
 			/// \brief The type of robot loop we are running
 			enum class LoopType : int {
 				OperatorControl = 0,				///< Operator control robot loop
@@ -151,6 +163,11 @@ namespace xero {
 			/// \param filename the name of the file to read parameters from
 			/// \returns true if the file is read sucessfully
 			bool readParamsFile(const std::string &filename) ;
+
+			/// \brief this method reads the parameters file for the robot
+			/// It finds the name of the params file based on runtime vs
+			/// simulator and based on the name of the robot
+			bool readParamsFile() ;
 
 			//
 			// These methods are overridden by the actual robot class because
@@ -227,8 +244,12 @@ namespace xero {
 			// The game specific message data
 			std::string gamedata_ ;
 
+			// Used to keep track of sleep time in the robot loop
 			std::vector<double> sleep_time_ ;
 			std::vector<size_t> iterations_ ;
+
+			// The name of the robot
+			std::string name_ ;
 		} ;
 	}
 }

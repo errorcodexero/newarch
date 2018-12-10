@@ -162,7 +162,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC", "-DSIM"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC", "-DENABLE_SIMULATOR"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -186,7 +186,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-DSIM"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-DENABLE_SIMULATOR"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -209,7 +209,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-DSIM"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-DENABLE_SIMULATOR"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -233,7 +233,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC", "-DSIM"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC", "-DENABLE_SIMULATOR"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
                 buildable = false
@@ -283,7 +283,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DSIM", "-DDEBUG", "-DXEROSCREEN"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DENABLE_SIMULATOR", "-DDEBUG", "-DXEROSCREEN"
 				linker.args "-lpthread", "-lncurses", "external/dinput/dxguid.lib", "external/dinput/dinput8.lib"
 			}
 			sources.cpp {
@@ -333,7 +333,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DSIM", "-DDEBUG", "-DXEROSCREEN"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DENABLE_SIMULATOR", "-DDEBUG", "-DXEROSCREEN"
 				linker.args "-lpthread", "-lncurses", "external/dinput/dxguid.lib", "external/dinput/dinput8.lib"
 			}
 			sources.cpp {

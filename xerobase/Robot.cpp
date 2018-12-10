@@ -5,6 +5,8 @@
 #include "basegroups.h"
 #include "OISubsystem.h"
 #include <MessageDestStream.h>
+#include <MessageDestSeqFile.h>
+#include <MessageDestDS.h>
 #include <DriverStation.h>
 #include <iostream>
 #include <cassert>
@@ -14,11 +16,11 @@ using namespace xero::misc ;
 namespace xero {
 	namespace base {
 		
-		Robot::Robot(double looptime) {
-			//
-			// Set the robot loop time to 20 ms
-			//
+		Robot::Robot(const std::string &name, double looptime) {
+			name_ = name ;
+
 			target_loop_time_ = looptime ;
+
 			last_time_ = frc::Timer::GetFPGATimestamp() ;
 
 			parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;
@@ -37,6 +39,60 @@ namespace xero {
 			if (output_stream_ != nullptr)
 				delete output_stream_ ;
 		}
+
+		void Robot::initializeMessageLogger() {
+            MessageLogger& logger = getMessageLogger();
+
+			//
+			// Enable message of all severities
+			//
+            logger.enableType(MessageLogger::MessageType::error);
+            logger.enableType(MessageLogger::MessageType::warning);
+            logger.enableType(MessageLogger::MessageType::info);
+            logger.enableType(MessageLogger::MessageType::debug);
+
+
+			// Set up message logger destination(s)
+            std::shared_ptr<MessageLoggerDest> dest_p ;
+
+#ifdef ENABLE_SIMULATOR
+			if (!isScreen())
+			{
+				dest_p = std::make_shared<MessageDestStream>(std::cout);
+				logger.addDestination(dest_p);
+			}
+
+			const std::string outfile = getRobotOutputFile();
+			if (outfile.length() > 0)
+				setupRobotOutputFile(outfile);
+#else
+
+			//
+			// This is where the roborio places the first USB flash drive it
+			// finds.  Other drives are placed at /V, /W, /X.  The devices are
+			// actually mounted at /media/sd*, and a symbolic link is created
+			// to /U.
+			//
+			std::string flashdrive("/u/");
+			std::string logname("logfile_");
+			dest_p = std::make_shared<MessageDestSeqFile>(flashdrive, logname);
+			logger.addDestination(dest_p);
+
+#ifdef DEBUG
+			dest_p = std::make_shared<MessageDestStream>(std::cout);
+			logger.addDestination(dest_p);
+#endif
+
+#endif
+
+#ifndef ENABLE_SIMULATOR
+			//
+			// Send warnings and errors to the driver station
+			//
+			dest_p = std::make_shared<MessageDestDS>();
+			logger.addDestination(dest_p);
+#endif			
+		}		
 
 		void Robot::RobotHardwareInit() {
 			//
@@ -61,6 +117,31 @@ namespace xero {
 
 		bool Robot::readParamsFile(const std::string &filename) {
 			return parser_->readFile(filename) ;
+		}
+
+		bool Robot::readParamsFile() {
+			std::string filename ;
+
+			//
+			// Setup access to the parameter file
+			//
+#ifdef ENABLE_SIMULATOR
+			//
+			// In the simulation environment, we look in the robot sourc code specific
+			// directory for the parameter files
+			//
+			filename = name_ + "/" + name_ + ".dat" ;
+#else
+			//
+			// In the
+			//
+			filename = "/home/lvuser/" + name_ + ".dat" ;
+#endif
+			if (!readParamsFile(filename)) {
+				std::cerr << "Robot  Initialization failed - could not read robot data file '" ;
+				std::cerr << filename << "'" << std::endl ;
+				assert(false) ;
+			}		
 		}
 		
 		void Robot::robotLoop(LoopType type) {
@@ -102,9 +183,39 @@ namespace xero {
 		}
 
 		void Robot::RobotInit() {
+			
+			//
+			// Initialize message logger
+			//
+			initializeMessageLogger();
+
+			//
+			// Print initialization messages
+			//
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "Initializing Bunny2018 Robot" ;
+			message_logger_.endMessage() ;
+
+			//
+			// Read parameters from the parameters file
+			// 
+			readParamsFile() ;			
+
+			//
+			// Initialize the robot hardware
+			//
 			RobotHardwareInit() ;
+
+			//
+			// Create the auto mode controller.  Its around for the complete lifecycle of the
+			// robot object
+			//
 			auto_controller_ = std::dynamic_pointer_cast<AutoController>(createAutoController()) ;
 			assert(auto_controller_ != nullptr) ;
+
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "Robot Initialization complete." ;
+			message_logger_.endMessage() ;				
 		}
 
 		void Robot::displayAutoModeState() {
