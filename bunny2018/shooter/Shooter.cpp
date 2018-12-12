@@ -15,6 +15,7 @@ namespace xero {
 
             stage_motor_power_ = robot.getSettingsParser().getDouble("shooter:stage_motor_power");
             eject_motor_power_ = robot.getSettingsParser().getDouble("shooter:eject_motor_power");
+            eject_duration_    = robot.getSettingsParser().getDouble("shooter:eject_duration");
 
             ball_is_staged_ = false;
         }
