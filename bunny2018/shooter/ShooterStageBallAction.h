@@ -5,6 +5,8 @@
 
 namespace xero {
     namespace bunny2018 {
+
+        /// \brief Run the belt at reduced speed until a ball is detected by the sensor, then stop the belt (motor).
         class ShooterStageBallAction : public ShooterAction {
 
         public:

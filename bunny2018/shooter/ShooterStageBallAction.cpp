@@ -14,6 +14,13 @@ namespace xero {
             }
 
             void ShooterStageBallAction::run() {
+                double motor_power;
+                if (getSubsystem().getBallIsStaged()) {
+                    motor_power = 0;
+                } else {
+                    motor_power = getSubsystem().getStageMotorPower();
+                }
+                getSubsystem().setMotor(motor_power);
             }
 
             bool ShooterStageBallAction::isDone() {
@@ -21,6 +28,7 @@ namespace xero {
             }
 
             void ShooterStageBallAction::cancel() {
+                getSubsystem().setMotor(0);
             }
 
             std::string ShooterStageBallAction::toString() {
