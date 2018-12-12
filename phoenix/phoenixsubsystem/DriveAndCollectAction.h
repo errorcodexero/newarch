@@ -1,10 +1,10 @@
 #pragma once
 
-#include "PhoenixRobotSubsystemAction.h"
+#include "PhoenixSubsystemAction.h"
 
 namespace xero {
     namespace phoenix {
-        class DriveAndCollectAction : public PhoenixRobotSubsystemAction {
+        class DriveAndCollectAction : public PhoenixSubsystemAction {
         public:
             DriveAndCollectAction(PhoenixRobotSubsystem &sub, double distance) ;
             DriveAndCollectAction(PhoenixRobotSubsystem &sub, const std::string &distance) ;            

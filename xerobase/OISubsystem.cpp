@@ -47,7 +47,9 @@ namespace xero {
             }
             seq_->clear() ;
             for(auto dev: hiddevices_) {
-                dev->computeState(*seq_) ;
+                dev->computeState() ;
+				if (enabled_)
+					dev->generateActions(*seq_) ;
             }
 
             if (!enabled_)

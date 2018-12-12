@@ -17,7 +17,7 @@ namespace xero {
 
 			virtual ~BunnyAutoMode() ;
 
-			virtual void update(int sel) ;
+			virtual void updateAutoMode(int sel, const std::string &gamedata) ;
 
         private:
 			xero::base::ActionSequencePtr createDriveStraightChar() ;
@@ -30,6 +30,7 @@ namespace xero {
 			xero::base::ActionSequencePtr createAutoModeSeven() ; 			
 			xero::base::ActionSequencePtr createStraightBackAutomode() ;
 			xero::base::ActionSequencePtr createRotateSorterAutoMode() ;
+			xero::base::ActionSequencePtr createGameAutoMode() ;
 		};
 	}
 }

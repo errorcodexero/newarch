@@ -15,8 +15,9 @@ namespace xero {
 
 		/// \brief the concrete class that represents the robot Phoenix
 		class Phoenix : public xero::base::Robot {
-
 		public:
+			Phoenix() ;
+
 			/// \brief return the robot subsystem cast to the phoenix specific type
 			/// \returns the robot subsystem cast to the phoenix specific type
 			std::shared_ptr<PhoenixRobotSubsystem> getPhoenixRobotSubsystem() {
@@ -26,7 +27,7 @@ namespace xero {
 		protected:
 
 			/// \brief called to initialize the robot, basically creating the subsystems
-			virtual void RobotInit() ;
+			virtual void RobotHardwareInit() ;
 
 			/// \brief called to create the autonomous controller
 			/// \returns a robot controller
@@ -40,8 +41,8 @@ namespace xero {
 			/// \returns a robot controller
 			virtual std::shared_ptr<xero::base::ControllerBase> createTestController() ;
 
-		private:
-			void initializeMessageLogger();
+			/// \brief enable specific message for logging
+			virtual void enableSpecificMessages() ;	
 		} ;
 	}
 }

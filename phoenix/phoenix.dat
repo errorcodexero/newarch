@@ -36,9 +36,14 @@ hw:collector:cubesensor             12
 
 hw:wings:solenoid                   1
 
-hw:driverstation:hid:oi             3
-hw:driverstation:hid:gunner         2
-hw:driverstation:hid:driver         1
+hw:driverstation:hid:oi             2
+hw:driverstation:hid:driver         0
+
+##############################################################
+#
+# The constants that go with each of the subsystems
+#
+##############################################################
 
 ##############################################################
 #
@@ -126,36 +131,65 @@ collector:eject:slow				-0.2
 #
 # TankDrive subsystem constants
 #
-tankdrive:inches_per_tick           0.07854
-tankdrive:straight:maxa             90.0
-tankdrive:straight:maxd             -90.0
-tankdrive:straight:maxv             180
-tankdrive:straight:recalc1          12.0
-tankdrive:straight:distance2        12.0
-tankdrive:straight:recalc2          2.0
-tankdrive:straight:navxadj          0.2
-tankdrive:straight:threshold        2.0
-tankdrive:straight:p                0.0
-tankdrive:straight:i                0.0
-tankdrive:straight:d                0.0
-tankdrive:straight:f                0.005556
-tankdrive:straight:max              1.0
-tankdrive:straight:min              -1.0
-tankdrive:straight:imax             6.0
-tankdrive:rotate:maxa               430
-tankdrive:rotate:maxd               -430
-tankdrive:rotate:maxv               860
-tankdrive:rotate:recalc1            10.0
-tankdrive:rotate:distance2          10.0
-tankdrive:rotate:recalc2            2.0
-tankdrive:rotate:threshold          4.0
-tankdrive:rotate:p                  0.0
-tankdrive:rotate:i                  0.0
-tankdrive:rotate:d                  0.0
-tankdrive:rotate:f                  0.00126
-tankdrive:rotate:max                1.0
-tankdrive:rotate:min                -1.0
-tankdrive:rotate:imax               6.0
+tankdrive:inches_per_tick                                       0.010471976
+tankdrive:distance_action:maxa                                  90
+tankdrive:distance_action:maxd                                  -90.0
+tankdrive:distance_action:maxv                                  60
+tankdrive:distance_action:navxadj                               0.0
+tankdrive:distance_action:threshold                             2.0
+tankdrive:distance_action:velocity_pid:p                        0.0
+tankdrive:distance_action:velocity_pid:i                        0.0
+tankdrive:distance_action:velocity_pid:d                        0.0
+tankdrive:distance_action:velocity_pid:f                        0.01
+tankdrive:distance_action:velocity_pid:a                        0.0
+tankdrive:distance_action:velocity_pid:max                      1.0
+tankdrive:distance_action:velocity_pid:min                      -1.0
+tankdrive:distance_action:velocity_pid:imax                     6.0
+tankdrive:distance_action:angle_pid:p                           -0.02
+tankdrive:distance_action:angle_pid:i                           0.0
+tankdrive:distance_action:angle_pid:d                           0.0
+tankdrive:distance_action:angle_pid:f                           0.0
+tankdrive:distance_action:angle_pid:a                           0.0
+tankdrive:distance_action:angle_pid:max                         1.0
+tankdrive:distance_action:angle_pid:min                         -1.0
+tankdrive:distance_action:angle_pid:imax                        6.0
+tankdrive:distance_action:stall_monitor:samples                 5
+tankdrive:distance_action:stall_monitor:threshold               0
+tankdrive:distance_action:distance_threshold                    2
+tankdrive:distance_action:profile_outdated_error_dist           12
+tankdrive:distance_action:profile_outdated_error_long           16        
+tankdrive:distance_action:profile_outdated_error_short          2
+
+tankdrive:angle_action:maxa                                     220
+tankdrive:angle_action:maxd                                     -220
+tankdrive:angle_action:maxv                                     220
+tankdrive:angle_action:profile_outdated_error_short             2.0
+tankdrive:angle_action:profile_outdated_error_angle             10.0
+tankdrive:angle_action:profile_outdated_error_long              10.0
+tankdrive:angle_action:angle_threshold                          4.0
+tankdrive:angle_action:velocity_pid:p                           0.01
+tankdrive:angle_action:velocity_pid:i                           0.0
+tankdrive:angle_action:velocity_pid:d                           0.0
+tankdrive:angle_action:velocity_pid:f                           0.002667
+tankdrive:angle_action:velocity_pid:a                           0.0005
+tankdrive:angle_action:velocity_pid:max                         0.6
+tankdrive:angle_action:velocity_pid:min                         -0.6
+tankdrive:angle_action:velocity_pid:imax                        6.0
+
+tankdrive:angle_action:maxa               430
+tankdrive:angle_action:maxd               -430
+tankdrive:angle_action:maxv               860
+tankdrive:angle_action:recalc1            10.0
+tankdrive:angle_action:distance2          10.0
+tankdrive:angle_action:recalc2            2.0
+tankdrive:angle_action:threshold          4.0
+tankdrive:angle_action:p                  0.0
+tankdrive:angle_action:i                  0.0
+tankdrive:angle_action:d                  0.0
+tankdrive:angle_action:f                  0.00126
+tankdrive:angle_action:max                1.0
+tankdrive:angle_action:min                -1.0
+tankdrive:angle_action:imax               6.0
 
 #
 # Wings subsystem constants
@@ -188,3 +222,8 @@ auto:c_switch_l:segment2                 110
 auto:c_switch_l:segment3                 58
 auto:c_switch_l:segment4                 -25
 auto:c_switch_l:segment5                 158
+
+auto:c_switch_r:segment1				 60
+auto:c_switch_r:segment2				 24
+auto:c_switch_r:segment3                 100
+

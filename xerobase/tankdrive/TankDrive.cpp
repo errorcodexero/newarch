@@ -4,7 +4,7 @@
 #include <cassert>
 #include <cmath>
 
-#ifdef SIM
+#ifdef ENABLE_SIMULATOR
 #include <SensorCollection.h>
 #else
 #include <ctre/phoenix/MotorControl/SensorCollection.h>

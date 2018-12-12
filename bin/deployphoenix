@@ -1,6 +1,6 @@
 #!/bin/bash
 
 ssh lvuser@10.14.25.2 "rm -f frcUserProgram ; rm -f FRCUserProgram"
-scp build/exe/frcUserProgram/frcUserProgram lvuser@10.14.25.2:/home/lvuser/FRCUserProgram
-scp bunny2018/robot.dat lvuser@10.14.25.2:/home/lvuser/
+scp build/exe/frcUserProgramPhoenix/frcUserProgramPhoenix lvuser@10.14.25.2:/home/lvuser/FRCUserProgram
+scp phoenix/phoenix.dat lvuser@10.14.25.2:/home/lvuser/phoenix.dat
 ssh lvuser@10.14.25.2 "chmod a+x /home/lvuser/FRCUserProgram ; /usr/local/frc/bin/frcKillRobot.sh -t -r & "

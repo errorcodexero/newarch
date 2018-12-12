@@ -32,6 +32,13 @@ model {
 	}	
 
 	components {
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// Base libraries for the roborio (real hardware robot)
+		//
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		xeromath(NativeLibrarySpec) {
 			targetPlatform "roborio"
 			binaries.all {
@@ -87,7 +94,6 @@ model {
 				cppCompiler.args "-Wall", "-std=c++11", "-g"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
-				//Don"t build a shared library for xerobase because it uses static libraries and we only need the static version anyway
 				buildable = false
 			}
 			sources.cpp {
@@ -108,61 +114,17 @@ model {
 			}
 		}
 
-		frcUserProgram(NativeExecutableSpec) {
-			targetPlatform "roborio"
-			binaries.all {
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DUSE_VICTORS"
-			}
-			sources.cpp {
-				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
-				source {
-					srcDirs = ["bunny2018"]
-					include "**/*.cpp"
-				}
-				exportedHeaders{
-					srcDirs = ["bunny2018"]
-					include "**/*.h"
-				}
-
-				lib library: "xerobase", linkage: "static"
-				lib library: "xeromisc", linkage: "static"				
-				lib library: "xeromath", linkage: "static"				
-				lib library: "wpilib"
-				lib library: "ctre"
-				lib library: "navx"
-			}
-		}
-
-		frcUserProgramPhoenix(NativeExecutableSpec) {
-			targetPlatform "roborio"
-			binaries.all {
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
-			}
-			sources.cpp {
-				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
-				source {
-					srcDirs = ["phoenix"]
-					include "**/*.cpp"
-				}
-				exportedHeaders{
-					srcDirs = ["phoenix"]
-					include "**/*.h"
-				}
-
-				lib library: "xerobase", linkage: "static"
-				lib library: "xeromisc", linkage: "static"				
-				lib library: "xeromath", linkage: "static"				
-				lib library: "wpilib"
-				lib library: "ctre"
-				lib library: "navx"
-			}
-		}		
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// Base libraries for the simulator
+		//
+		/////////////////////////////////////////////////////////////////////////////////////////////////////		
 
 		wpilibsim(NativeLibrarySpec) {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC", "-DSIM"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC", "-DENABLE_SIMULATOR"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -186,7 +148,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-DSIM"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-DENABLE_SIMULATOR"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -209,7 +171,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-DSIM"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-DENABLE_SIMULATOR"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -233,7 +195,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC", "-DSIM"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC", "-DENABLE_SIMULATOR"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
                 buildable = false
@@ -251,6 +213,37 @@ model {
 				lib library: "xeromathsim", linkage: "static"				
 				lib library: "xeromiscsim", linkage: "static"
 				lib library: "wpilibsim", linkage: "static"				
+			}
+		}
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// Bunny bots 2018
+		//
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		frcUserProgram(NativeExecutableSpec) {
+			targetPlatform "roborio"
+			binaries.all {
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DUSE_VICTORS"
+			}
+			sources.cpp {
+				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
+				source {
+					srcDirs = ["bunny2018"]
+					include "**/*.cpp"
+				}
+				exportedHeaders{
+					srcDirs = ["bunny2018"]
+					include "**/*.h"
+				}
+
+				lib library: "xerobase", linkage: "static"
+				lib library: "xeromisc", linkage: "static"				
+				lib library: "xeromath", linkage: "static"				
+				lib library: "wpilib"
+				lib library: "ctre"
+				lib library: "navx"
 			}
 		}
 
@@ -283,7 +276,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DSIM", "-DDEBUG", "-DXEROSCREEN"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DENABLE_SIMULATOR", "-DDEBUG", "-DXEROSCREEN"
 				linker.args "-lpthread", "-lncurses", "external/dinput/dxguid.lib", "external/dinput/dinput8.lib"
 			}
 			sources.cpp {
@@ -301,6 +294,37 @@ model {
 				lib library: "xeromiscsim", linkage: "static"
 				lib library: "xeromathsim", linkage: "static"								
 				lib library: "wpilibsim", linkage: "static"
+			}
+		}		
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// Phoenix (2017 robot) ported to new software framework
+		//
+		/////////////////////////////////////////////////////////////////////////////////////////////////////		
+
+		frcUserProgramPhoenix(NativeExecutableSpec) {
+			targetPlatform "roborio"
+			binaries.all {
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
+			}
+			sources.cpp {
+				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
+				source {
+					srcDirs = ["phoenix"]
+					include "**/*.cpp"
+				}
+				exportedHeaders{
+					srcDirs = ["phoenix"]
+					include "**/*.h"
+				}
+
+				lib library: "xerobase", linkage: "static"
+				lib library: "xeromisc", linkage: "static"				
+				lib library: "xeromath", linkage: "static"				
+				lib library: "wpilib"
+				lib library: "ctre"
+				lib library: "navx"
 			}
 		}
 
@@ -333,7 +357,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DSIM", "-DDEBUG", "-DXEROSCREEN"
+				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DENABLE_SIMULATOR", "-DDEBUG", "-DXEROSCREEN"
 				linker.args "-lpthread", "-lncurses", "external/dinput/dxguid.lib", "external/dinput/dinput8.lib"
 			}
 			sources.cpp {

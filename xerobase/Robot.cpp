@@ -5,6 +5,8 @@
 #include "basegroups.h"
 #include "OISubsystem.h"
 #include <MessageDestStream.h>
+#include <MessageDestSeqFile.h>
+#include <MessageDestDS.h>
 #include <DriverStation.h>
 #include <iostream>
 #include <cassert>
@@ -14,15 +16,21 @@ using namespace xero::misc ;
 namespace xero {
 	namespace base {
 		
-		Robot::Robot(double looptime) {
-			//
-			// Set the robot loop time to 20 ms
-			//
+		Robot::Robot(const std::string &name, double looptime) {
+			name_ = name ;
+
 			target_loop_time_ = looptime ;
+
 			last_time_ = frc::Timer::GetFPGATimestamp() ;
 
 			parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;
 			output_stream_ = nullptr ;
+
+			sleep_time_.resize(static_cast<int>(LoopType::MaxValue)) ;
+			std::fill(sleep_time_.begin(), sleep_time_.end(), 0.0) ;
+
+			iterations_.resize(static_cast<int>(LoopType::MaxValue)) ;
+			std::fill(iterations_.begin(), iterations_.end(), 0) ;
 		}
 
 		Robot::~Robot() {
@@ -31,6 +39,60 @@ namespace xero {
 			if (output_stream_ != nullptr)
 				delete output_stream_ ;
 		}
+
+		void Robot::initializeMessageLogger() {
+            MessageLogger& logger = getMessageLogger();
+
+			//
+			// Enable message of all severities
+			//
+            logger.enableType(MessageLogger::MessageType::error);
+            logger.enableType(MessageLogger::MessageType::warning);
+            logger.enableType(MessageLogger::MessageType::info);
+            logger.enableType(MessageLogger::MessageType::debug);
+
+
+			// Set up message logger destination(s)
+            std::shared_ptr<MessageLoggerDest> dest_p ;
+
+#ifdef ENABLE_SIMULATOR
+			if (!isScreen())
+			{
+				dest_p = std::make_shared<MessageDestStream>(std::cout);
+				logger.addDestination(dest_p);
+			}
+
+			const std::string outfile = getRobotOutputFile();
+			if (outfile.length() > 0)
+				setupRobotOutputFile(outfile);
+#else
+
+			//
+			// This is where the roborio places the first USB flash drive it
+			// finds.  Other drives are placed at /V, /W, /X.  The devices are
+			// actually mounted at /media/sd*, and a symbolic link is created
+			// to /U.
+			//
+			std::string flashdrive("/u/");
+			std::string logname("logfile_");
+			dest_p = std::make_shared<MessageDestSeqFile>(flashdrive, logname);
+			logger.addDestination(dest_p);
+
+#ifdef DEBUG
+			dest_p = std::make_shared<MessageDestStream>(std::cout);
+			logger.addDestination(dest_p);
+#endif
+
+#endif
+
+#ifndef ENABLE_SIMULATOR
+			//
+			// Send warnings and errors to the driver station
+			//
+			dest_p = std::make_shared<MessageDestDS>();
+			logger.addDestination(dest_p);
+#endif			
+		}		
 
 		void Robot::RobotHardwareInit() {
 			//
@@ -56,8 +118,34 @@ namespace xero {
 		bool Robot::readParamsFile(const std::string &filename) {
 			return parser_->readFile(filename) ;
 		}
+
+		bool Robot::readParamsFile() {
+			std::string filename ;
+
+			//
+			// Setup access to the parameter file
+			//
+#ifdef ENABLE_SIMULATOR
+			//
+			// In the simulation environment, we look in the robot sourc code specific
+			// directory for the parameter files
+			//
+			filename = name_ + "/" + name_ + ".dat" ;
+#else
+			//
+			// In the
+			//
+			filename = "/home/lvuser/" + name_ + ".dat" ;
+#endif
+			if (!readParamsFile(filename)) {
+				std::cerr << "Robot  Initialization failed - could not read robot data file '" ;
+				std::cerr << filename << "'" << std::endl ;
+				assert(false) ;
+			}		
+		}
 		
-		void Robot::robotLoop() {
+		void Robot::robotLoop(LoopType type) {
+			int index = static_cast<int>(type) ;
 			double initial_time = frc::Timer::GetFPGATimestamp();
 
 			delta_time_ = initial_time - last_time_ ;
@@ -67,10 +155,13 @@ namespace xero {
 			if (controller_ != nullptr)
 				controller_->run();
 
-			robot_subsystem_->run() ;			
+			robot_subsystem_->run() ;
+
+			iterations_[index]++ ;
 
 			double elapsed_time = frc::Timer::GetFPGATimestamp() - initial_time > target_loop_time_;
 			if (elapsed_time < target_loop_time_) {
+				sleep_time_[index] += target_loop_time_ - elapsed_time ;
 				frc::Wait(target_loop_time_ - elapsed_time);
 			} else if (elapsed_time > target_loop_time_) {
 				message_logger_.startMessage(MessageLogger::MessageType::warning) ;
@@ -80,12 +171,51 @@ namespace xero {
 			}
 
 			last_time_ = initial_time ;
+
+			if ((iterations_[index] % 500) == 0) {
+				double avg = sleep_time_[index] / iterations_[index] ;
+				message_logger_.startMessage(MessageLogger::MessageType::info) ;
+				message_logger_ << "RobotLoop:" ;
+				message_logger_ << "iterations " << iterations_[index] ;
+				message_logger_ << ", average sleep time " << avg ;
+				message_logger_.endMessage() ;
+			}
 		}
 
 		void Robot::RobotInit() {
+			
+			//
+			// Initialize message logger
+			//
+			initializeMessageLogger();
+
+			//
+			// Print initialization messages
+			//
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "Initializing robot " << name_  ;
+			message_logger_.endMessage() ;
+
+			//
+			// Read parameters from the parameters file
+			// 
+			readParamsFile() ;			
+
+			//
+			// Initialize the robot hardware
+			//
 			RobotHardwareInit() ;
+
+			//
+			// Create the auto mode controller.  Its around for the complete lifecycle of the
+			// robot object
+			//
 			auto_controller_ = std::dynamic_pointer_cast<AutoController>(createAutoController()) ;
 			assert(auto_controller_ != nullptr) ;
+
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "Robot Initialization complete." ;
+			message_logger_.endMessage() ;				
 		}
 
 		void Robot::displayAutoModeState() {
@@ -100,9 +230,15 @@ namespace xero {
 		int Robot::getAutoModelSelection() {
 			int sel = -1 ;
 
-			auto oi = std::dynamic_pointer_cast<OISubsystem>(oi_subsystem_) ;
-			if (oi != nullptr)
-				sel = oi->getAutoModeSelector() ;
+			//
+			// We generally get the automode selection from the OI.  If you get the OI selection
+			// in some other way (e.g. robot switch or SmartDashboard) override this function in 
+			// your robot specific derived class.
+			//
+			if (oi_subsystem_ != nullptr) {
+				oi_subsystem_->computeState() ;			
+				sel = oi_subsystem_->getAutoModeSelector() ;
+			}
 
 			return sel ;
 		}		
@@ -191,14 +327,47 @@ namespace xero {
 			message_logger_.endMessage() ;				
 		}
 
+		void Robot::updateAutoMode() {
+			if (auto_controller_ != nullptr && oi_subsystem_ != nullptr) {
+
+				auto &ds = frc::DriverStation::GetInstance() ;
+				std::string msg = ds.GetGameSpecificMessage() ;				
+
+				//
+				// Query the OI subsystem to get the automode nubmer selected
+				//
+
+				//
+				// If we have an automode controller (should be always), we allow the
+				// auto mode controller to look at the automode selection and do any 
+				// initialization it can while the robot is disabled to get ready for
+				// the automode program.  This also includes providing information for
+				// the drive team about what automode is selected
+				//
+				int sel = getAutoModelSelection() ;
+
+				if (sel != automode_ || msg != gamedata_) {
+					automode_ = sel ;
+					gamedata_ = msg ;
+					auto_controller_->updateAutoMode(sel, gamedata_) ;
+					displayAutoModeState() ;
+				}
+			}			
+		}
+
 		void Robot::Autonomous() {
 
+			//
+			// Just in case something like the field data changes as we enter
+			// the autonomous state
+			//
+			updateAutoMode() ;
 			logAutoModeState() ;
 
 			controller_ = auto_controller_ ;
 
 			while (IsAutonomous() && IsEnabled())
-				robotLoop();
+				robotLoop(LoopType::Autonomous);
 
 			controller_ = nullptr ;
 
@@ -213,15 +382,19 @@ namespace xero {
 			message_logger_.endMessage() ;
 
 			controller_ = createTeleopController() ;
-			auto oi = std::dynamic_pointer_cast<OISubsystem>(oi_subsystem_) ;
-			oi->enable() ;
+
+			//
+			// The OI subsystem runs in teleop and autonomous mode.  However, we only enable
+			// the OI subsystem for 
+			//
+			oi_subsystem_->enableActionGeneration() ;
 
 			while (IsOperatorControl() && IsEnabled())
-				robotLoop();
+				robotLoop(LoopType::OperatorControl) ;
 
 			controller_ = nullptr ;
 
-			oi->disable() ;			
+			oi_subsystem_->disableActionGeneration() ;			
 
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Leaving Teleop mode" ;
@@ -236,7 +409,7 @@ namespace xero {
 			controller_ = createTestController() ;
 
 			while (IsTest() && IsEnabled())
-				robotLoop();
+				robotLoop(LoopType::Test) ;
 
 			controller_ = nullptr ;
 
@@ -246,6 +419,7 @@ namespace xero {
 		}
 
 		void Robot::Disabled() {
+
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Robot Disabled" ;
 			message_logger_.endMessage() ;
@@ -253,19 +427,9 @@ namespace xero {
 			automode_ = -1 ;
 
 			while (IsDisabled()) {
-				if (oi_subsystem_ != nullptr) {
-					oi_subsystem_->computeState() ;
-				}
 
-				if (auto_controller_ != nullptr) {
-					int sel = getAutoModelSelection() ;
-					if (sel != automode_) {
-						automode_ = sel ;
-						auto_controller_->update(sel) ;
-						displayAutoModeState() ;
-					}
-				}
 
+				updateAutoMode() ;
 				frc::Wait(target_loop_time_) ;				
 			}
 		}

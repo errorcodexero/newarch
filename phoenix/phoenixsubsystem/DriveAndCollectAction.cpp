@@ -2,6 +2,7 @@
 #include "PhoenixRobotSubsystem.h"
 #include "liftingcollector/LiftingCollector.h"
 #include "liftingcollector/LiftingCollectCubeAction.h"
+#include "tankdrive/TankDrive.h"
 #include "tankdrive/TankDriveDistanceAction.h"
 #include "tankdrive/TankDrivePowerAction.h"
 #include <Robot.h>
@@ -11,14 +12,14 @@ using namespace xero::base ;
 namespace xero {
     namespace phoenix {
 
-        DriveAndCollectAction::DriveAndCollectAction(PhoenixRobotSubsystem &sub, double distance) : PhoenixRobotSubsystemAction(sub) {
+        DriveAndCollectAction::DriveAndCollectAction(PhoenixRobotSubsystem &sub, double distance) : PhoenixSubsystemAction(sub) {
             distance_ = distance ;
 
             auto drivebase = getRobotSubsystem().getTankDrive() ;    
             stop_drivebase_ = std::make_shared<TankDrivePowerAction>(*drivebase, 0.0, 0.0) ;
         }
 
-        DriveAndCollectAction::DriveAndCollectAction(PhoenixRobotSubsystem &sub, const std::string &distance) : PhoenixRobotSubsystemAction(sub) {
+        DriveAndCollectAction::DriveAndCollectAction(PhoenixRobotSubsystem &sub, const std::string &distance) : PhoenixSubsystemAction(sub) {
             distance_ = sub.getRobot().getSettingsParser().getDouble(distance) ;
 
             auto drivebase = getRobotSubsystem().getTankDrive() ;    

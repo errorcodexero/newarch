@@ -34,7 +34,7 @@ if [ $2 = "auto" ]; then
     teleoptime=0.0
     testtime=0.0
     potvalue=${autovalues[$3]}
-    extra="--simprop autovalue=$potvalue"
+    extra="--simprop autovalue=$potvalue --simprop gamedata=$4"
 fi
 
 if [ $2 = "teleop" ]; then

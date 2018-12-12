@@ -6,9 +6,9 @@
 #include <SmartDashboard/SmartDashboard.h>
 #include <iostream>
 #include <cassert>
+#include <string>
 
 /// \file
-
 
 namespace xero {
 	namespace base {
@@ -50,10 +50,10 @@ namespace xero {
 				return ret ;
 			}
 
-
 			/// \brief update the automode as the selector has changed
 			/// \param sel the automode selector value
-			virtual void update(int sel) = 0 ;
+			/// \param gamedata the game specific data from the driver station
+			virtual void updateAutoMode(int sel, const std::string &gamedata) = 0 ;
 
 		protected:
 			/// \brief sets the reference to the action that will be run when run() is called

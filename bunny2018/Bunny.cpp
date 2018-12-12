@@ -7,13 +7,10 @@
 #include <ActionSequence.h>
 #include <basegroups.h>
 #include <DelayAction.h>
-#include <MessageDestDS.h>
 #include <MessageLogger.h>
-#include <MessageDestSeqFile.h>
-#include <MessageDestStream.h>
 #include <SmartDashboard/SmartDashboard.h>
 
-#ifdef SIM
+#ifdef ENABLE_SIMULATOR
 #include <Bunny2018Simulator.h>
 #endif
 
@@ -26,53 +23,57 @@ using namespace xero::base ;
 namespace xero {
 	namespace bunny2018 {
 
-		Bunny::Bunny() : xero::base::Robot(0.02) {
+		//
+		// Note, this name (bunny2018) must match the name where the source code is
+		// located.  The robot data file will be found in that directory for simulation
+		// and will be named with the give name with a dat extension.  For instance, for
+		// bunny2018, the file will be bunny2018/bunny2018.dat
+		//
+		// The float point number given (0.02) is the duration of the robot loop.  In this
+		// case we are running at a 20 millisecond robot loop.  The robot does everything it
+		// needs to do in a single loop and then sleeps until it has used 20 ms for each loop.
+		// These number are never exact, but we use them to get an approximately consistent
+		// loop time.
+		//
+		Bunny::Bunny() : xero::base::Robot("bunny2018", 0.02) {
 		}
 
+		//
+		// Return the top level subsysstem for the robot cast to the type for
+		// this specific robot.
+		//
 		std::shared_ptr<BunnySubsystem> Bunny::getBunnySubsystem() {
 			auto sub = getRobotSubsystem() ;
 			return std::dynamic_pointer_cast<BunnySubsystem>(sub) ;
 		}
 
-		void Bunny::RobotHardwareInit() {
-			std::string filename ;
+		//
+		// Chnage the calls to the message logger in this method to indicate what
+		// messages are to be displayed. 
+		//
+		void Bunny::enableSpecificMessages() {
+            MessageLogger& logger = getMessageLogger();
 
+            //
+            // Decide what message groups (incl. subsystems) you want to see
+            //
+			// logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
+			// logger.enableSubsystem(MSG_GROUP_ACTIONS);
+			// logger.enableSubsystem(MSG_GROUP_PARSER) ;
+			// logger.enableSubsystem(MSG_GROUP_OI) ;
+			// logger.enableSubsystem(MSG_GROUP_SORTER) ;
+			// logger.enableSubsystem(MSG_GROUP_SORTER_VERBOSE) ;
 			//
-			// Initialize message logger
-			//
-			initializeMessageLogger();
-
-			auto &logger = getMessageLogger() ;
-			logger.startMessage(MessageLogger::MessageType::info) ;
-			logger << "Initializing Bunny2018 Robot" ;
-			logger.endMessage() ;
-
-
-			//
-			// Setup access to the parameter file
-			//
-#ifdef SIM
-			filename = "bunny2018/robot.dat" ;
-#else
-			filename = "/home/lvuser/robot.dat" ;
-#endif
-			if (!readParamsFile(filename)) {
-				std::cerr << "Robot  Initialization failed - could not read robot data file '" ;
-				std::cerr << filename << "'" << std::endl ;
-				assert(false) ;
-			}
 			
+            logger.enableSubsystem(MSG_GROUP_ALL) ;			
+		}
+
+		void Bunny::RobotHardwareInit() {
 			//
 			// This is where the subsystems for the robot get created
 			//
 			auto robot_p = std::make_shared<BunnySubsystem>(*this) ;
-			auto db = robot_p->getDriveBase() ;
-			auto oi = robot_p->getOI() ;
-			setRobotSubsystem(robot_p, oi, db) ;
-
-			logger.startMessage(MessageLogger::MessageType::info) ;
-			logger << "Robot Initialization complete." ;
-			logger.endMessage() ;			
+			setRobotSubsystem(robot_p, robot_p->getOI(), robot_p->getDriveBase()) ;
 		}
 
 		std::shared_ptr<ControllerBase> Bunny::createAutoController() {
@@ -93,74 +94,10 @@ namespace xero {
 			return nullptr ;
 		}
 
-		void Bunny::initializeMessageLogger() {
-            MessageLogger& logger = getMessageLogger();
-
-			//
-			// Enable message of all severities
-			//
-            logger.enableType(MessageLogger::MessageType::error);
-            logger.enableType(MessageLogger::MessageType::warning);
-            logger.enableType(MessageLogger::MessageType::info);
-            logger.enableType(MessageLogger::MessageType::debug);
-
-            //
-            // Decide what message groups (incl. subsystems) you want to see
-            //
-			// logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
-			logger.enableSubsystem(MSG_GROUP_ACTIONS);
-			logger.enableSubsystem(MSG_GROUP_PARSER) ;
-			logger.enableSubsystem(MSG_GROUP_OI) ;
-			logger.enableSubsystem(MSG_GROUP_SORTER) ;
-			// logger.enableSubsystem(MSG_GROUP_SORTER_VERBOSE) ;
-            // logger.enableSubsystem(MSG_GROUP_ALL) ;
-
-			// Set up message logger destination(s)
-            std::shared_ptr<MessageLoggerDest> dest_p ;
-
-#if defined(SIM)
-			if (!isScreen())
-			{
-				dest_p = std::make_shared<MessageDestStream>(std::cout);
-				logger.addDestination(dest_p);
-			}
-
-			const std::string outfile = getRobotOutputFile();
-			if (outfile.length() > 0)
-				setupRobotOutputFile(outfile);
-
-#else
-
-			//
-			// This is where the roborio places the first USB flash drive it
-			// finds.  Other drives are placed at /V, /W, /X.  The devices are
-			// actually mounted at /media/sd*, and a symbolic link is created
-			// to /U.
-			//
-			std::string flashdrive("/u/");
-			std::string logname("logfile_");
-			dest_p = std::make_shared<MessageDestSeqFile>(flashdrive, logname);
-			logger.addDestination(dest_p);
-
-#ifdef DEBUG
-			dest_p = std::make_shared<MessageDestStream>(std::cout);
-			logger.addDestination(dest_p);
-#endif
-
-#endif
-
-#ifndef SIM
-			//
-			// Send warnings and errors to the driver station
-			//
-			dest_p = std::make_shared<MessageDestDS>();
-			logger.addDestination(dest_p);
-#endif			
-		}
 	}
 }
 
-#ifdef SIM
+#ifdef ENABLE_SIMULATOR
 xero::sim::bunny2018::Bunny2018Simulator sim("bunny2018/sim.dat") ;
 #endif
 
