@@ -2,11 +2,13 @@
 #include "automodes/BunnyAutoMode.h"
 #include "bunnysubsystem/BunnySubsystem.h"
 #include "bunnyoi/BunnyOISubsystem.h"
+#include <tankdrive/TankDrive.h>
 #include <tankdrive/TankDriveDistanceAction.h>
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveAngleCharAction.h>
 #include <tankdrive/TankDriveAngleAction.h>
-#include <singlemotorsubsystem/SingleMotorVoltageAction.h>
+#include <tankdrive/TankDriveTimedPowerAction.h>
+#include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <sorter/SorterPowerAction.h>
 #include <sorter/SorterCalibrateAction.h>
 #include <sorter/SorterRotateAngleAction.h>
@@ -182,21 +184,60 @@ namespace xero {
 		}
 
 		ActionSequencePtr BunnyAutoMode::createTestAuto() {
+			ActionPtr act ;
 			auto &robot = getRobot() ;
 			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
+
 			auto intake = bunny.getBunnySubsystem()->getIntake() ;
+			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
+			auto tankdrive = bunny.getBunnySubsystem()->getTankDrive() ;
+			auto collector = bunny.getBunnySubsystem()->getCollector() ;
+			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
+
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TestIntake") ;
-            auto act = std::make_shared<SingleMotorVoltageAction>(*intake, 0.25) ;
-			seq->pushSubActionPair(intake, act) ;	  
+
+            act = std::make_shared<SingleMotorPowerAction>(*intake, 0.5, 2.0) ;
+			seq->pushSubActionPair(intake, act) ;
+
+            act = std::make_shared<SingleMotorPowerAction>(*intake, -0.5, 2.0) ;
+			seq->pushSubActionPair(intake, act)	;
+
+            act = std::make_shared<SingleMotorPowerAction>(*hopper, 0.5, 2.0) ;
+			seq->pushSubActionPair(hopper, act) ;		
+
+            act = std::make_shared<SingleMotorPowerAction>(*hopper, -0.5, 2.0) ;
+			seq->pushSubActionPair(hopper, act) ;						
+
+            act = std::make_shared<SingleMotorPowerAction>(*collector, 0.5, 2.0) ;
+			seq->pushSubActionPair(collector, act) ;		
+
+            act = std::make_shared<SingleMotorPowerAction>(*collector, -0.5, 2.0) ;
+			seq->pushSubActionPair(collector, act) ;	
+
+			act = std::make_shared<SorterPowerAction>(*sorter, 0.5) ;
+			seq->pushSubActionPair(sorter, act) ;
+
+			act = std::make_shared<DelayAction>(2.0) ;
+			seq->pushAction(act) ;
+
+			act = std::make_shared<SorterPowerAction>(*sorter, -0.5) ;
+			seq->pushSubActionPair(sorter, act) ;
+
+			act = std::make_shared<DelayAction>(2.0) ;
+			seq->pushAction(act) ;
+
+			act = std::make_shared<TankDriveTimedPowerAction>(*tankdrive, 0.5, 0.5, 2.0) ;
+			seq->pushSubActionPair(tankdrive, act) ;
+
+			act = std::make_shared<TankDriveTimedPowerAction>(*tankdrive, -0.5, -0.5, 2.0) ;
+			seq->pushSubActionPair(tankdrive, act) ;			
 
             return seq ;          
         }        
 
 		ActionSequencePtr BunnyAutoMode::createGameAutoMode() {
 			ActionPtr act ;
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "StraightAndBackAutoMode") ;		
-			
-            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "StraightAndBackAutoMode") ;					
 
 			// Eject existing ball
 

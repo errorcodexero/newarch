@@ -5,7 +5,7 @@
 #include "sorter/SorterSortAction.h"
 #include <ActionSequence.h>
 #include <singlemotorsubsystem/SingleMotorSubsystem.h>
-#include <singlemotorsubsystem/SingleMotorVoltageAction.h>
+#include <singlemotorsubsystem/SingleMotorPowerAction.h>
 
 using namespace xero::base ;
 
@@ -41,12 +41,12 @@ namespace xero {
 			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
 			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
 
-			collector_fwd_action_ = std::make_shared<SingleMotorVoltageAction>(*collector, "collector:power:fwd") ;
-			collector_off_action_ = std::make_shared<SingleMotorVoltageAction>(*collector, 0.0) ;
-			collector_rev_action_ = std::make_shared<SingleMotorVoltageAction>(*collector, "collector:power:rev") ;
-			hopper_fwd_action_ = std::make_shared<SingleMotorVoltageAction>(*hopper, "hopper:power:fwd") ;
-			hopper_off_action_ = std::make_shared<SingleMotorVoltageAction>(*hopper, 0.0) ;
-			hopper_rev_action_ = std::make_shared<SingleMotorVoltageAction>(*hopper, "hopper:power:rev") ;
+			collector_fwd_action_ = std::make_shared<SingleMotorPowerAction>(*collector, "collector:power:fwd") ;
+			collector_off_action_ = std::make_shared<SingleMotorPowerAction>(*collector, 0.0) ;
+			collector_rev_action_ = std::make_shared<SingleMotorPowerAction>(*collector, "collector:power:rev") ;
+			hopper_fwd_action_ = std::make_shared<SingleMotorPowerAction>(*hopper, "hopper:power:fwd") ;
+			hopper_off_action_ = std::make_shared<SingleMotorPowerAction>(*hopper, 0.0) ;
+			hopper_rev_action_ = std::make_shared<SingleMotorPowerAction>(*hopper, "hopper:power:rev") ;
 			sort_red_ = std::make_shared<SorterSortAction>(*sorter, Sorter::BallColor::Red) ;
 			sort_blue_ = std::make_shared<SorterSortAction>(*sorter, Sorter::BallColor::Blue) ;
 		}

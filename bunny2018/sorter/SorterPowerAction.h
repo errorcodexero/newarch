@@ -8,7 +8,7 @@ namespace xero {
     namespace bunny2018 {
         class SorterPowerAction : public SorterAction {
         public:
-            SorterPowerAction(Sorter &sorter, double duty) ;
+            SorterPowerAction(Sorter &sorter, double power) ;
 
             SorterPowerAction(Sorter &sorter, const std::string &name) ;
 

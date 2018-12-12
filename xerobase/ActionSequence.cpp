@@ -1,5 +1,6 @@
 #include "ActionSequence.h"
 #include "basegroups.h"
+#include <smartdashboard/SmartDashboard.h>
 
 using namespace xero::misc ;
 
@@ -34,6 +35,7 @@ void ActionSequence::startNextAction()
 		logger_ << " '" << actionSequence_[index_]->toString() << "'" ;
 		logger_.endMessage() ;
 		actionSequence_[index_]->start();
+		frc::SmartDashboard::PutString("Step", actionSequence_[index_]->toString()) ;
 	}
 	else {
 		//

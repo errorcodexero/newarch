@@ -18,13 +18,13 @@ namespace xero {
 		/// The motor can be a controlled via a VictorSP motor controller or
 		/// via a TalonSRX motor controller.<br><br>
 		/// <b>Actions:</b><br>
-		///     - SingleMotorVoltageAction
+		///     - SingleMotorPowerAction
         class SingleMotorSubsystem : public Subsystem {
 			/// \brief Action class for this subsystem
 			friend class SingleMotorSubsystemAction;
 
 			/// \brief Action class for this subsystem			
-			friend class SingleMotorVoltageAction ;
+			friend class SingleMotorPowerAction ;
 		private:
 			constexpr static double epsilon = 1e-3 ;
 
@@ -38,7 +38,7 @@ namespace xero {
 			/// \param motor the name of the parameter file entry that contains the index of the motor
 			/// \param victor if true use a VictorSP motor controller, otherwise create a TalonSRX
 			/// \sa xero::misc::SettingsParser
-            SingleMotorSubsystem(Robot &robot, const std::string &name, const std::string &motor, bool victor=false) ;
+            SingleMotorSubsystem(Robot &robot, const std::string &name, const std::string &motor, uint64_t id, bool victor=false) ;
 
 			/// \brief Create a new subsystem object
 			/// The motor parameter is the number of the PWM to use for VictorSP or the CAN address
@@ -48,7 +48,7 @@ namespace xero {
 			/// \param motor the actual number (PWM or CAN address) for the motor controller
 			/// \param victor if true use a VictorSP motor controller, otherwise create a TalonSRX
 			/// \sa xero::misc::SettingsParser
-            SingleMotorSubsystem(Robot &robot, const std::string &name, int motor, bool victor=false) ;
+            SingleMotorSubsystem(Robot &robot, const std::string &name, int motor, uint64_t id, bool victor=false) ;
 
 			/// \brief destroy the subsystem, freeing up the motor controllers
             virtual ~SingleMotorSubsystem();
@@ -72,7 +72,6 @@ namespace xero {
                 }
 				else
                 {
-                    std::cout << "Setting motor " << index_ << " " << power << std::endl ;
 					tmotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, power) ;
                 }
 
@@ -89,7 +88,11 @@ namespace xero {
 			// The current power applied to the motor (-1 to 1)
 			double current_power_ ;
 
+			// The motor index
             int index_ ;
+
+			// The message id
+			uint64_t msg_id_ ;
         }  ;
     }
 }

@@ -1,5 +1,6 @@
 #include "BunnySubsystem.h"
 #include "bunnyoi/BunnyOISubsystem.h"
+#include "bunnyids.h"
 #include <Robot.h>
 #include <list>
 
@@ -31,13 +32,13 @@ namespace xero {
             oi_ = std::make_shared<BunnyOISubsystem>(robot) ;
             addChild(oi_) ;
 
-            collector_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Collector", "hw:collector:motor") ;
+            collector_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Collector", "hw:collector:motor", MSG_GROUP_COLLECTOR) ;
             addChild(collector_) ;
 
-            hopper_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Hopper", "hw:hopper:motor") ;
+            hopper_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Hopper", "hw:hopper:motor", MSG_GROUP_HOPPER) ;
             addChild(hopper_) ;
 
-            intake_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Intake", "hw:intake:motor") ;
+            intake_ = std::make_shared<xero::base::SingleMotorSubsystem>(robot, "Intake", "hw:intake:motor", MSG_GROUP_INTAKE) ;
             addChild(intake_) ;
 
             sorter_ = std::make_shared<Sorter>(robot) ;

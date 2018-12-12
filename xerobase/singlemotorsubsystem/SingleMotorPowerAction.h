@@ -15,21 +15,21 @@ namespace xero {
 		/// The power can be turned on and left on continously, or it can be turned on for a fixed
 		/// duration of time.
 		/// \sa xero::misc::SettingsParser
-        class SingleMotorVoltageAction : public SingleMotorSubsystemAction {
+        class SingleMotorPowerAction : public SingleMotorSubsystemAction {
         public:
 			/// \brief Create an action that sets the motor to a given power.
 			/// The power is applied immediately when the action is stared and remains applied
 			/// to the motor indefinitely.  This action is considered done (/sa isDone) immediately.
 			/// \param subsystem the subsystem this action is applied to
 			/// \param power the power to apply to the motor (-1 to 1)
-            SingleMotorVoltageAction(SingleMotorSubsystem &subsystem, double power) ;
+            SingleMotorPowerAction(SingleMotorSubsystem &subsystem, double power) ;
 
 			/// \brief Create an action that sets the motor to a given power.
 			/// The power is applied immediately when the action is stared and remains applied
 			/// to the motor indefinitely.  This action is considered done (/sa isDone) immediately.
 			/// \param subsystem the subsystem this action is applied to
 			/// \param name the name of a setting in the settings file that contains the power for the motor
-            SingleMotorVoltageAction(SingleMotorSubsystem &subsystem, const std::string &name) ;
+            SingleMotorPowerAction(SingleMotorSubsystem &subsystem, const std::string &name) ;
 
 			/// \brief Create an action that sets the motor to a given power for a fixed duration of time
 			/// The power is applied immediately when the action is stared and remains applied
@@ -38,7 +38,7 @@ namespace xero {
 			/// \param subsystem the subsystem this action is applied to
 			/// \param power the power to apply to the motor (-1 to 1)
 			/// \param duration the amount of time to apply the given power
-            SingleMotorVoltageAction(SingleMotorSubsystem &subsystem, double power, double duration) ;
+            SingleMotorPowerAction(SingleMotorSubsystem &subsystem, double power, double duration) ;
 
 			/// \brief Create an action that sets the motor to a given power for a fixed duration of time
 			/// The power is applied immediately when the action is stared and remains applied
@@ -47,10 +47,10 @@ namespace xero {
 			/// \param subsystem the subsystem this action is applied to
 			/// \param name the name of a setting in the settings file that contains the power for the motor
 			/// \param durname the name of the setting in the settings file that contains the duration of the power
-            SingleMotorVoltageAction(SingleMotorSubsystem &subsystem, const std::string &name, const std::string &durname) ;			
+            SingleMotorPowerAction(SingleMotorSubsystem &subsystem, const std::string &name, const std::string &durname) ;			
 
 			/// \brief destroy the action object
-            virtual ~SingleMotorVoltageAction() ;
+            virtual ~SingleMotorPowerAction() ;
 
             virtual void start() ;
         
@@ -68,7 +68,7 @@ namespace xero {
             virtual std::string toString() ;
             
         private:
-            double duty_cycle_;
+            double power_;
 			bool timed_ ;
 			double duration_ ;
 			bool is_done_ ;

@@ -5,3 +5,6 @@
 #define MSG_GROUP_SORTER_VERBOSE       (1ull << 33)
 #define MSG_GROUP_SHOOTER              (1ull << 34)
 #define MSG_GROUP_SHOOTER_VERBOSE      (1ull << 35)
+#define MSG_GROUP_INTAKE			   (1ull << 36)
+#define MSG_GROUP_HOPPER               (1ull << 37)
+#define MSG_GROUP_COLLECTOR            (1ull << 38)

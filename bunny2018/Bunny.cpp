@@ -65,7 +65,7 @@ namespace xero {
 			// logger.enableSubsystem(MSG_GROUP_SORTER_VERBOSE) ;
 			//
 			
-            logger.enableSubsystem(MSG_GROUP_ACTIONS) ;			
+            logger.enableSubsystem(MSG_GROUP_ALL) ;			
 		}
 
 		void Bunny::RobotHardwareInit() {
