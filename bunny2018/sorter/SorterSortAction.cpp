@@ -11,7 +11,7 @@ namespace xero {
 				auto & settings = sorter.getRobot().getSettingsParser() ;
                 color_ = color ;
                 state_ = State::Waiting ;
-                ctrl_.initFromSettingsExtended(settings, "sorter.pid") ;
+                ctrl_.initFromSettingsExtended(settings, "sorter:pid") ;
                 reject_angle_ = settings.getDouble("sorter:reject_angle") ;
                 keep_angle_ =settings.getDouble("sorter:keep_angle") ;
                 tolerance_ = settings.getDouble("sorter:tolerance") ;

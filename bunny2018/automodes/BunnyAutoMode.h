@@ -31,6 +31,7 @@ namespace xero {
 			xero::base::ActionSequencePtr createStraightBackAutomode() ;
 			xero::base::ActionSequencePtr createRotateSorterAutoMode() ;
 			xero::base::ActionSequencePtr createGameAutoMode() ;
+            xero::base::ActionSequencePtr createTestAuto() ;
 		};
 	}
 }

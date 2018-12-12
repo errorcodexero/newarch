@@ -84,6 +84,7 @@ namespace xero {
             if (getIndex() == -1 || db_ == nullptr)
                 return ;
 
+
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
             int pov = ds.GetStickPOV(getIndex(), pov_) ;
             double ly = ds.GetStickAxis(getIndex(),AxisNumber::LEFTY) ;

@@ -26,11 +26,9 @@ namespace xero {
     	void BunnyAutoMode::updateAutoMode(int sel, const std::string &gamedata) {
             ActionSequencePtr mode ;
 
-            sel = -1 ;
-
 			switch(sel) {
 				case 0:
-					mode = createStraightBackAutomode() ;
+					mode = createTestAuto() ;
 					break ;
 
 				case 1:
@@ -181,6 +179,15 @@ namespace xero {
 
 			return seq ;
 		}
+
+		ActionSequencePtr BunnyAutoMode::createTestAuto() {
+			auto &robot = getRobot() ;
+			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
+			auto intake = bunny.getBunnySubsystem()->getIntake() ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TestIntake") ;
+            auto act = std::make_shared<SingleMotorVoltageAction>(*intake, 0.25) ;
+			seq->pushSubActionPair(intake, act) ;	            
+        }        
 
 		ActionSequencePtr BunnyAutoMode::createGameAutoMode() {
 			ActionPtr act ;

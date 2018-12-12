@@ -137,12 +137,14 @@ shooter:eject_motor_power                                       1.0
 #
 # Collector constants
 #
-collector:power
+collector:power:fwd                                             1.0
+collector:power:rev                                             -1.0
 
 #
 # Hopper constants
 #
-hopper:power
+hopper:power:fwd                                                0.5
+hopper:power:rev                                                -0.5
 
 #
 # MessageListener subsystem constants

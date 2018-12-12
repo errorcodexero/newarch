@@ -4,7 +4,7 @@
 #include "SingleMotorSubsystemAction.h" 
 #include "XeroTalonSRX.h"
 #include <VictorSP.h>
-
+#include <iostream>
 
 /// \file
 
@@ -66,10 +66,15 @@ namespace xero {
 			/// \param power the power to apply to the motor, between -1.0 and 1.0
             void setMotor(double power)
             {
-				if (vmotor_ != nullptr)
+				if (vmotor_ != nullptr) 
+                {
 					vmotor_->Set(power) ;
+                }
 				else
+                {
+                    std::cout << "Setting motor " << index_ << " " << power << std::endl ;
 					tmotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, power) ;
+                }
 
 				current_power_ = power ;
             }		
@@ -83,6 +88,8 @@ namespace xero {
 
 			// The current power applied to the motor (-1 to 1)
 			double current_power_ ;
+
+            int index_ ;
         }  ;
     }
 }

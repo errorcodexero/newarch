@@ -23,5 +23,8 @@
 /// \brief ID for the actions related messages
 #define MSG_GROUP_ACTIONS               (1ull << 4)
 
+/// \brief ID for the robot loop debug messages
+#define MSG_GROUP_ROBOTLOOP             (1ull << 5)
+
 /// \brief ID to get all messages
 #define MSG_GROUP_ALL                   (0xffffffffffffffffull)

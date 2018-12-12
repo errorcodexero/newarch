@@ -51,6 +51,8 @@ namespace xero {
             logger.enableType(MessageLogger::MessageType::info);
             logger.enableType(MessageLogger::MessageType::debug);
 
+            enableSpecificMessages() ;
+
 
 			// Set up message logger destination(s)
             std::shared_ptr<MessageLoggerDest> dest_p ;
@@ -148,14 +150,30 @@ namespace xero {
 			int index = static_cast<int>(type) ;
 			double initial_time = frc::Timer::GetFPGATimestamp();
 
+            message_logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ROBOTLOOP) ;
+            message_logger_ << "Entering robot loop" ;
+            message_logger_.endMessage() ;
+
 			delta_time_ = initial_time - last_time_ ;
 
 			robot_subsystem_->computeState() ;
 
+            message_logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ROBOTLOOP) ;
+            message_logger_ << "    completed compute state" ;
+            message_logger_.endMessage() ;
+
 			if (controller_ != nullptr)
 				controller_->run();
 
+            message_logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ROBOTLOOP) ;
+            message_logger_ << "    completed controller run" ;
+            message_logger_.endMessage() ;
+
 			robot_subsystem_->run() ;
+
+            message_logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ROBOTLOOP) ;
+            message_logger_ << "    completed subsystem run" ;
+            message_logger_.endMessage() ;            
 
 			iterations_[index]++ ;
 
@@ -170,6 +188,10 @@ namespace xero {
 				message_logger_.endMessage() ;
 			}
 
+            message_logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ROBOTLOOP) ;
+            message_logger_ << "    completed delay" ;
+            message_logger_.endMessage() ;               
+
 			last_time_ = initial_time ;
 
 			if ((iterations_[index] % 500) == 0) {
@@ -183,7 +205,6 @@ namespace xero {
 		}
 
 		void Robot::RobotInit() {
-			
 			//
 			// Initialize message logger
 			//
@@ -347,6 +368,8 @@ namespace xero {
 				int sel = getAutoModelSelection() ;
 
 				if (sel != automode_ || msg != gamedata_) {
+                    std::cout << "Calling automode controller " ;
+                    std::cout << sel << " " << automode_ << " '" << msg << "' '" << gamedata_ << "'" << std::endl ;
 					automode_ = sel ;
 					gamedata_ = msg ;
 					auto_controller_->updateAutoMode(sel, gamedata_) ;
@@ -379,7 +402,7 @@ namespace xero {
 		void Robot::OperatorControl() {
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Starting Teleop mode" ;
-			message_logger_.endMessage() ;
+			message_logger_.endMessage() ;           
 
 			controller_ = createTeleopController() ;
 
@@ -427,11 +450,13 @@ namespace xero {
 			automode_ = -1 ;
 
 			while (IsDisabled()) {
-
-
 				updateAutoMode() ;
 				frc::Wait(target_loop_time_) ;				
 			}
+            
+			message_logger_.startMessage(MessageLogger::MessageType::info) ;
+			message_logger_ << "Leaving Robot Disabled" ;
+			message_logger_.endMessage() ;
 		}
 	}
 }

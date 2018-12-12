@@ -8,6 +8,8 @@ namespace xero {
         SingleMotorSubsystem::SingleMotorSubsystem(Robot & robot, const std::string &name, const std::string &motor, bool victor) : Subsystem(robot,name) {
         	int m = robot.getSettingsParser().getInteger(motor) ;
 
+            index_ = m ;
+
 			if (victor)
 				vmotor_ = std::make_shared<frc::VictorSP>(m) ;
 			else
@@ -17,6 +19,9 @@ namespace xero {
         }
 
         SingleMotorSubsystem::SingleMotorSubsystem(Robot & robot, const std::string &name, int m, bool victor) : Subsystem(robot,name) {
+
+            index_ = m ;
+            
 			if (victor)
 				vmotor_ = std::make_shared<frc::VictorSP>(m) ;
 			else

@@ -18,8 +18,8 @@ namespace xero {
             BunnySubsystem(xero::base::Robot &robot) ;
             virtual ~BunnySubsystem() ;
 
-            std::shared_ptr<xero::base::TankDrive> getDriveBase() {
-                return db_ ;
+            std::shared_ptr<xero::base::TankDrive> getTankDrive() {
+                return std::dynamic_pointer_cast<xero::base::TankDrive>(getDriveBase()) ;
             }
 
             std::shared_ptr<xero::base::SingleMotorSubsystem> getCollector() {
@@ -51,7 +51,6 @@ namespace xero {
             }
 
         private:
-            std::shared_ptr<xero::base::TankDrive> db_ ;
             std::shared_ptr<BunnyOISubsystem> oi_ ;
             std::shared_ptr<xero::base::MessageListener> ml_ ;
             std::shared_ptr<xero::base::SingleMotorSubsystem> collector_ ;

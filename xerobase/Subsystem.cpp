@@ -17,8 +17,9 @@ namespace xero {
         }
 
         void Subsystem::run() {
-            for(auto sub: children_)
+            for(auto sub: children_) {
                 sub->run() ;
+            }
             
             if (action_ != nullptr)
                 action_->run() ;

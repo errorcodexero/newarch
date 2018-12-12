@@ -27,6 +27,7 @@ namespace xero {
 			sorter_color_ = mapButton(15, OIButton::ButtonType::Level) ;
 			shoot_one_ = mapButton(3, OIButton::ButtonType::LowToHigh) ;
 			shoot_many_ = mapButton(6, OIButton::ButtonType::Level) ;
+
             //
             // Modes
             //
@@ -51,6 +52,9 @@ namespace xero {
 		}
 
         void BunnyOIDevice::generateActions(ActionSequence &seq) {
+            if (collector_fwd_action_ == nullptr)
+                createActions() ;
+
 			Bunny &bunny = dynamic_cast<Bunny &>(getSubsystem().getRobot()) ;
 			auto collector = bunny.getBunnySubsystem()->getCollector() ;
 			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
@@ -60,10 +64,10 @@ namespace xero {
 					seq.pushSubActionPair(collector, collector_rev_action_) ;
 					break;
 				case 1:
-					seq.pushSubActionPair(collector, collector_fwd_action_) ;
+					seq.pushSubActionPair(collector, collector_off_action_) ;                
 					break;
 				case 2:
-					seq.pushSubActionPair(collector, collector_off_action_) ;
+					seq.pushSubActionPair(collector, collector_fwd_action_) ;
 					break;
 			}
 
@@ -72,12 +76,12 @@ namespace xero {
 					seq.pushSubActionPair(hopper, hopper_rev_action_) ;
 					break;
 				case 1:
-					seq.pushSubActionPair(hopper, hopper_fwd_action_) ;
-					break;
-				case 2:
 					seq.pushSubActionPair(hopper,hopper_off_action_) ;
 					break;
-			}		
+				case 2:
+					seq.pushSubActionPair(hopper, hopper_fwd_action_) ;                
+					break;
+			}	
 		}
     }
 }

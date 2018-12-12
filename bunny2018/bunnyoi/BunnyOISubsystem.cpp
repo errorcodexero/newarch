@@ -9,7 +9,8 @@ using namespace xero::misc ;
 namespace xero {
     namespace bunny2018 {
         BunnyOISubsystem::BunnyOISubsystem(xero::base::Robot &robot) : OISubsystem(robot, "oi") {
-            int oi = robot.getSettingsParser().getInteger("hw:driverstation:hid:oi") ;			
+            int oi = robot.getSettingsParser().getInteger("hw:driverstation:hid:oi") ;	
+
 			auto oidev = std::make_shared<BunnyOIDevice>(*this, oi) ;
 			addHIDDevice(oidev) ;
         }

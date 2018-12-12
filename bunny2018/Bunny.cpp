@@ -65,7 +65,7 @@ namespace xero {
 			// logger.enableSubsystem(MSG_GROUP_SORTER_VERBOSE) ;
 			//
 			
-            logger.enableSubsystem(MSG_GROUP_ALL) ;			
+            logger.enableSubsystem(MSG_GROUP_ACTIONS) ;			
 		}
 
 		void Bunny::RobotHardwareInit() {
@@ -73,7 +73,11 @@ namespace xero {
 			// This is where the subsystems for the robot get created
 			//
 			auto robot_p = std::make_shared<BunnySubsystem>(*this) ;
-			setRobotSubsystem(robot_p, robot_p->getOI(), robot_p->getDriveBase()) ;
+            auto oi = robot_p->getOI() ;
+            auto db = robot_p->getTankDrive() ;
+            assert(oi != nullptr) ;
+            assert(db != nullptr) ;
+			setRobotSubsystem(robot_p, oi, db) ;
 		}
 
 		std::shared_ptr<ControllerBase> Bunny::createAutoController() {

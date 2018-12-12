@@ -1,6 +1,7 @@
 #pragma once
 
 #include "OIItem.h"
+#include <iostream>
 
 /// \file
 
@@ -39,6 +40,7 @@ private:
                 const double slice = range / number_ ;
 
                 double v = minvalue + slice ;
+                value_ = number_ - 1 ;
                 for(int i = 0 ; i < number_ ; i++) {
                     if (value < v) {
                         value_ = i ;
