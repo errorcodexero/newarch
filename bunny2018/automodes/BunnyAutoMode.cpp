@@ -71,6 +71,7 @@ namespace xero {
 					mode = nullptr ;
 					break ;
 			}
+
             setAction(mode) ;
         }
 
@@ -186,7 +187,9 @@ namespace xero {
 			auto intake = bunny.getBunnySubsystem()->getIntake() ;
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TestIntake") ;
             auto act = std::make_shared<SingleMotorVoltageAction>(*intake, 0.25) ;
-			seq->pushSubActionPair(intake, act) ;	            
+			seq->pushSubActionPair(intake, act) ;	  
+
+            return seq ;          
         }        
 
 		ActionSequencePtr BunnyAutoMode::createGameAutoMode() {

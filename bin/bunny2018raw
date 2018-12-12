@@ -40,6 +40,10 @@ fi
 
 modeset=false
 if [ $2 = "auto" ]; then
+    if [ $3 = "" ]; then
+	echo "If the mode is auto, the third argument should be the automode (0 - 9)"
+	exit 1 ;
+    fi
     modeset=true
     autotime=60.0
     teleoptime=0.0

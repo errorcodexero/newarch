@@ -12,23 +12,37 @@ pos=17.0,115.0
 autovalues=(-1.0 -0.8 -0.6 -0.4 -0.2 0.1 0.3 0.5 0.7 0.9)
 extra=""
 
+placeset=false
+
 #
 # Set the starting position
 #
 if [ $1 = "C" ]; then
     pos=17.0,115.0
+    placeset=true
 fi
 
 if [ $1 = "L" ]; then
     pos=17.0,48.0
+    placeset=true
 fi
 
 if [ $1 = "R" ]; then
     pos=17.0,288.0
+    placeset=true
+fi
+
+if [ $placeset = "false" ]; then
+    echo "The first argument is the location of the robot, L, C, or R"
+    exit 1 ;
 fi
 
 modeset=false
 if [ $2 = "auto" ]; then
+    if [ $3 = "" ]; then
+	echo "If the mode is auto, the third argument should be the automode (0 - 9)"
+	exit 1 ;
+    fi
     modeset=true
     autotime=60.0
     teleoptime=0.0
@@ -49,6 +63,12 @@ if [ $2 = "test" ]; then
     autotime=0.0
     teleoptime=0.0
     testtime=300.0
-fi    
+fi
+
+if [ $modeset = "false" ]; then
+    echo "The second argument is the mode of the robot, auto, teleop, or test"
+    exit 1
+fi
+
 
 build/exe/frcUserProgramSim/frcUserProgramSim --simfile SIM --robotfile ROBOT --test $testtime --start 0 --auto $autotime --oper $teleoptime --simscreen --simprop pos=$pos $extra

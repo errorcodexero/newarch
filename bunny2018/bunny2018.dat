@@ -133,7 +133,7 @@ sorter:pid:imax                        							80
 #
 shooter:stage_motor_power                                       0.5
 shooter:eject_motor_power                                       1.0
-shooter:eject_duration                                          1.0   # Ejection time in seconds
+shooter:eject_duration                                          1.0
 
 #
 # Collector constants

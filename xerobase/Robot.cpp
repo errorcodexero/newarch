@@ -368,8 +368,6 @@ namespace xero {
 				int sel = getAutoModelSelection() ;
 
 				if (sel != automode_ || msg != gamedata_) {
-                    std::cout << "Calling automode controller " ;
-                    std::cout << sel << " " << automode_ << " '" << msg << "' '" << gamedata_ << "'" << std::endl ;
 					automode_ = sel ;
 					gamedata_ = msg ;
 					auto_controller_->updateAutoMode(sel, gamedata_) ;
