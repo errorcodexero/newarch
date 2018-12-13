@@ -3,6 +3,7 @@
 #include "Subsystem.h"
 #include "MessageLogger.h"
 #include "SettingsParser.h"
+#include "basegroups.h"
 #include <WPILib.h>
 #include <memory>
 #include <list>

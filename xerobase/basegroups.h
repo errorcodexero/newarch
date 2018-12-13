@@ -23,8 +23,14 @@
 /// \brief ID for the actions related messages
 #define MSG_GROUP_ACTIONS               (1ull << 4)
 
+/// \brief ID for the path follower message logging
+#define MSG_GROUP_PATHFOLLOWER			(1ull << 5)
+
+/// \brief ID for the path manager message logging
+#define MSG_GROUP_PATHMGR				(1ull << 6)
+
 /// \brief ID for the robot loop debug messages
-#define MSG_GROUP_ROBOTLOOP             (1ull << 5)
+#define MSG_GROUP_ROBOTLOOP             (1ull << 7)
 
 /// \brief ID to get all messages
 #define MSG_GROUP_ALL                   (0xffffffffffffffffull)

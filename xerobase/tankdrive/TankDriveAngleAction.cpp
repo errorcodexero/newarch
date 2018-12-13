@@ -108,7 +108,7 @@ namespace xero
 					double base_power = velocity_pid_.getOutput(target_velocity, current_velocity, target_accel, getTankDrive().getRobot().getDeltaTime());
 
 					logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
-					logger << "time " << getTankDrive().getRobot().getTime();
+					logger << "TankDriveAngleAction: time " << getTankDrive().getRobot().getTime();
 					logger << ", actual angle " << total_traveled;
 					logger << ", profile angle " << profile_target_angle;
 					logger << ", actual velocity " << current_velocity;

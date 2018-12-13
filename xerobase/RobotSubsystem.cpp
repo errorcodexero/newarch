@@ -54,6 +54,11 @@ namespace xero {
 				int r2 = settings.getInteger("hw:tankdrive:rightencoder:2") ;
 
 				tank->setEncoders(l1, l2, r1, r2) ;
+			} else {
+				logger.startMessage(MessageLogger::MessageType::error) ;
+				logger << "encoders not found in robot data file" ;
+				logger.endMessage() ;
+				db_ = nullptr ;			
 			}
 
 			if (settings.isDefined("hw:tankdrive:invertleft")) {

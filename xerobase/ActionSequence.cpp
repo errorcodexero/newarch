@@ -31,7 +31,7 @@ void ActionSequence::startNextAction()
 	if (static_cast<size_t>(index_) < actionSequence_.size())
 	{
 		logger_.startMessage(MessageLogger::MessageType::debug, group_) ;
-		logger_ << "starting action " << index_ << " of " << actionSequence_.size() - 1 ;
+		logger_ << "Actions: starting " << index_ << " of " << actionSequence_.size() - 1 ;
 		logger_ << " '" << actionSequence_[index_]->toString() << "'" ;
 		logger_.endMessage() ;
 		actionSequence_[index_]->start();

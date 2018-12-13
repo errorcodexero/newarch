@@ -57,9 +57,6 @@ namespace xero {
 					dev->generateActions(*seq_) ;
                 }
             }
-
-            if (!enabled_)
-                seq_->clear() ;
         }
 
         void OISubsystem::run() {

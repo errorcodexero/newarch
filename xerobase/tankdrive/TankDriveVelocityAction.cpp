@@ -45,7 +45,7 @@ void TankDriveVelocityAction::run() {
 			double right_power = base_power + straightness_offset;
 
 			logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
-			logger << "time " << getTankDrive().getRobot().getTime() ;
+			logger << "TankDriveVelocityAction: time " << getTankDrive().getRobot().getTime() ;
 			logger << ", target " << target_velocity_;
 			logger << ", actual " << current_velocity ;
 			logger << ", left " << left_power << ", right " << right_power ;
