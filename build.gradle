@@ -42,7 +42,7 @@ model {
 		xeromath(NativeLibrarySpec) {
 			targetPlatform "roborio"
 			binaries.all {
-				cppCompiler.args "-Wall", "-std=c++11", "-g"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -66,7 +66,7 @@ model {
 		xeromisc(NativeLibrarySpec) {
 			targetPlatform "roborio"
 			binaries.all {
-				cppCompiler.args "-Wall", "-std=c++11", "-g"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -91,7 +91,7 @@ model {
 		xerobase(NativeLibrarySpec) {
 			targetPlatform "roborio"
 			binaries.all {
-				cppCompiler.args "-Wall", "-std=c++11", "-g"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -124,7 +124,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC", "-DENABLE_SIMULATOR"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-fPIC", "-DENABLE_SIMULATOR"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -148,7 +148,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-DENABLE_SIMULATOR"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DENABLE_SIMULATOR"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -171,7 +171,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-DENABLE_SIMULATOR"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DENABLE_SIMULATOR"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -195,7 +195,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-fPIC", "-DENABLE_SIMULATOR"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-fPIC", "-DENABLE_SIMULATOR"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
                 buildable = false
@@ -225,7 +225,7 @@ model {
 		frcUserProgram(NativeExecutableSpec) {
 			targetPlatform "roborio"
 			binaries.all {
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DUSE_VICTORS"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-DUSE_VICTORS"
 			}
 			sources.cpp {
 				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
@@ -251,7 +251,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DXEROSCREEN"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-DXEROSCREEN"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -276,7 +276,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DENABLE_SIMULATOR", "-DDEBUG", "-DXEROSCREEN"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-DENABLE_SIMULATOR", "-DDEBUG", "-DXEROSCREEN"
 				linker.args "-lpthread", "-lncurses", "external/dinput/dxguid.lib", "external/dinput/dinput8.lib"
 			}
 			sources.cpp {
@@ -306,7 +306,7 @@ model {
 		frcUserProgramPhoenix(NativeExecutableSpec) {
 			targetPlatform "roborio"
 			binaries.all {
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread"
 			}
 			sources.cpp {
 				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
@@ -332,7 +332,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DXEROSCREEN"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-DXEROSCREEN"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
@@ -357,7 +357,7 @@ model {
 			targetPlatform "x86_64"
 			binaries.all {
 				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-std=c++11", "-g", "-pthread", "-DENABLE_SIMULATOR", "-DDEBUG", "-DXEROSCREEN"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-DENABLE_SIMULATOR", "-DDEBUG", "-DXEROSCREEN"
 				linker.args "-lpthread", "-lncurses", "external/dinput/dxguid.lib", "external/dinput/dinput8.lib"
 			}
 			sources.cpp {

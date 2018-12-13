@@ -33,8 +33,6 @@ void TankDriveVelocityAction::run() {
 	MessageLogger &logger = getTankDrive().getRobot().getMessageLogger();
 
 	if (!is_done_) {
-		double current_velocity = getTankDrive().getVelocity();
-
 		if (std::fabs(target_velocity_ - actual_velocity_) > velocity_threshold_) {
 			
 			double current_velocity = getTankDrive().getVelocity();	

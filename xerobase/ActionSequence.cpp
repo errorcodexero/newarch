@@ -28,7 +28,7 @@ void ActionSequence::start()
 void ActionSequence::startNextAction()
 {
 	index_++;
-	if (index_ < actionSequence_.size())
+	if (static_cast<size_t>(index_) < actionSequence_.size())
 	{
 		logger_.startMessage(MessageLogger::MessageType::debug, group_) ;
 		logger_ << "starting action " << index_ << " of " << actionSequence_.size() - 1 ;
@@ -52,7 +52,7 @@ void ActionSequence::run()
 		if (index_ == -1 || actionSequence_[index_]->isDone())
 		{
 			startNextAction();
-			if (index_ == actionSequence_.size())
+			if (static_cast<size_t>(index_) == actionSequence_.size())
 				break;
 		};
 		actionSequence_[index_]->run();

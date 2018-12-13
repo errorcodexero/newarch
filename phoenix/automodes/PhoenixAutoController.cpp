@@ -22,7 +22,6 @@ namespace xero {
 			auto &ds = frc::DriverStation::GetInstance() ;
 			std::string game = ds.GetGameSpecificMessage() ;
 			char myswitch = game[0] ;
-			char myscale = game[1] ;
 
 			switch(sel) {
 			case 0:

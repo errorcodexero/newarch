@@ -11,7 +11,6 @@ namespace xero {
     namespace bunny2018 {
         BunnySubsystem::BunnySubsystem(Robot &robot) : RobotSubsystem(robot, "bunny2018") {
             auto &settings = robot.getSettingsParser() ;
-            auto &logger = robot.getMessageLogger() ;
 
             // Register message listener *before* any sub-system like the drive base which needs vision information.
             // The vision info received will only be present during 1 robot loop so ML's computeState()

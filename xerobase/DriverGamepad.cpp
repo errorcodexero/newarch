@@ -79,11 +79,15 @@ namespace xero {
 		}
 
 		void DriverGamepad::generateActions(ActionSequence &seq) {
-            auto &logger = getSubsystem().getRobot().getMessageLogger() ;
+			if (db_ == nullptr) {
+				auto &logger = getSubsystem().getRobot().getMessageLogger() ;
+				logger.startMessage(MessageLogger::MessageType::warning) ;
+				logger << "DriverGamepad: generateActions called with no attached drivebase" ;
+				logger.endMessage() ;
+			}
 
-            if (getIndex() == -1 || db_ == nullptr)
+            if (getIndex() == -1)
                 return ;
-
 
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
             int pov = ds.GetStickPOV(getIndex(), pov_) ;

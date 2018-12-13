@@ -101,7 +101,7 @@ namespace xero {
                 int first, second ;
 
                 encoder->SimulatorGetDigitalIOs(first, second) ;
-                if (first == encoder_channel_1_ && second == encoder_channel_2_ || first == encoder_channel_2_ && second == encoder_channel_1_) {
+                if ((first == encoder_channel_1_ && second == encoder_channel_2_) || (first == encoder_channel_2_ && second == encoder_channel_1_)) {
                     encoder_ = encoder ;
                     encoder_->addModel(this) ;
                     encoder_->SimulatorSetValue(getEncoderValue()) ;

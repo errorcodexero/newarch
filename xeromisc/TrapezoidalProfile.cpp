@@ -18,10 +18,6 @@ namespace xero {
         TrapezoidalProfile::~TrapezoidalProfile() {
         }
 		
-        double TrapezoidalProfile::intspeed(double t) const {
-
-        }
-
 		double TrapezoidalProfile::getAccel(double t) const {
 			double ret ;
 

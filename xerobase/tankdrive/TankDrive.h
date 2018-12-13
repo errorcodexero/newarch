@@ -191,9 +191,10 @@ namespace xero {
 			std::shared_ptr<frc::Encoder> right_enc_ ;
 
 			std::shared_ptr<frc::Solenoid> gear_ ;
-
-			xero::misc::Speedometer linear_ ;
+			
 			xero::misc::Speedometer angular_ ;
+			xero::misc::Speedometer linear_ ;
+
 
 			int ticks_left_ ;
 			int ticks_right_ ;

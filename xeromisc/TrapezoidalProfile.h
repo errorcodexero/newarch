@@ -108,7 +108,6 @@ namespace xero {
 			}
 
         private:
-            double intspeed(double t) const ;
 			double pickRoot(const std::vector<double> &roots) const;
 
         private:

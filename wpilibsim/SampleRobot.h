@@ -6,29 +6,29 @@
 #include <thread>
 #include <cassert>
 
-#define START_ROBOT_CLASS(_ClassName_)                                               \
-  int main(int ac, char **av) {                                                      \
-    _ClassName_ *robot = new _ClassName_();                                          \
-	while (ac-- > 0) robot->addArg(*av++) ;			         						 \
-	try {									         								 \
-        frc::SampleRobot::robotSetup(robot);                                         \
-    }                                                                                \
-    catch (const std::exception &ex)                                                 \
-    {																		         \
-        std::cerr << "exception caught from robot - " << ex.what() << std::endl ;    \
-    }                                                                                \
-	catch (const std::system_error &ex) {                                            \
-		std::cerr << "system_error exception caught from robot - " << ex.what() << std::endl ; \
-	}                                                                                \
-	try {																			 \
-		delete robot ;																 \
-	}                                                                                \
-    catch( const std::exception &ex)                                                 \
-	{                                                                                \
-		std::cerr << "exception caught deleting robot - " << ex.what() << std::endl; \
-	}                                                                                \
-	exit(0) ;																		 \
-    return 0;                                                                        \
+#define START_ROBOT_CLASS(_ClassName_)                                               				\
+  int main(int ac, char **av) {                                                      				\
+    _ClassName_ *robot = new _ClassName_();                                          				\
+	while (ac-- > 0) robot->addArg(*av++) ;			         						 				\
+	try {									         								 				\
+        frc::SampleRobot::robotSetup(robot);                                         				\
+    }                                                                                				\
+	catch (const std::system_error &ex) {                                            				\
+		std::cerr << "system_error exception caught from robot - " << ex.what() << std::endl ; 		\
+	}																								\
+    catch (const std::exception &ex)                                                 				\
+    {																		         				\
+        std::cerr << "exception caught from robot - " << ex.what() << std::endl ;    				\
+    }                                                                                				\
+	try {																			 				\
+		delete robot ;																 				\
+	}                                                                                				\
+    catch( const std::exception &ex)                                                 				\
+	{                                                                                				\
+		std::cerr << "exception caught deleting robot - " << ex.what() << std::endl; 				\
+	}                                                                                				\
+	exit(0) ;																		 				\
+    return 0;                                                                        				\
   }
 
 namespace frc

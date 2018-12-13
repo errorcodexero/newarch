@@ -18,7 +18,6 @@ namespace xero {
             int enc1=robot.getSettingsParser().getInteger("hw:sorter:encoder1");
             int enc2=robot.getSettingsParser().getInteger("hw:sorter:encoder2");
             int sensoraddr = robot.getSettingsParser().getInteger("hw:sorter:sensoraddr") ;
-			int index = robot.getSettingsParser().getInteger("hw:sorter:index") ;
 
 			white_detect_threshold_ = robot.getSettingsParser().getInteger("sorter:ball_detect:white_threshold") ;
 

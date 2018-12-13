@@ -143,7 +143,9 @@ namespace xero {
 				std::cerr << "Robot  Initialization failed - could not read robot data file '" ;
 				std::cerr << filename << "'" << std::endl ;
 				assert(false) ;
-			}		
+			}
+
+			return true ;
 		}
 		
 		void Robot::robotLoop(LoopType type) {

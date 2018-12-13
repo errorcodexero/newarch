@@ -18,7 +18,6 @@ namespace xero {
 			size_t index = 1 ;
 			std::list<int> left ;
 			std::list<int> right ;
-			bool dberror = false ;
 
 			//
 			// Search the params file for all of the motors on the left and right sides
@@ -42,7 +41,6 @@ namespace xero {
 				logger << ", left " << left.size() ;
 				logger << ", right " << right.size() ;
 				logger.endMessage() ;
-				dberror = true ;
 			}
 			
 			auto tank = std::make_shared<TankDrive>(getRobot(), left, right) ;

@@ -15,7 +15,6 @@ namespace xero {
             auto &settings = robot.getSettingsParser() ;
             auto &logger = robot.getMessageLogger() ;
             std::list<int> left, right ;
-            bool dberror = false ;
             int index = 1 ;
 
 			//
@@ -52,7 +51,6 @@ namespace xero {
                     logger << ", left " << left.size() ;
                     logger << ", right " << right.size() ;
                     logger.endMessage() ;
-                    dberror = true ;
                 }
                 
                 db_ = std::make_shared<TankDrive>(robot, left, right) ;
