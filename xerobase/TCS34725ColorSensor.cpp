@@ -3,7 +3,7 @@
 #include <iostream>
 
 namespace xero {
-    namespace bunny2018 {
+    namespace base {
         TCS34725ColorSensor::TCS34725ColorSensor(int devaddr, tcs34725IntegrationTime_t time, tcs34725Gain_t gain) {
             i2c_ = std::make_shared<frc::I2C>(frc::I2C::kOnboard, devaddr) ;
 

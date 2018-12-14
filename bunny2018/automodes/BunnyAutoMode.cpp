@@ -12,8 +12,7 @@
 #include <tankdrive/TankDriveTimedPowerAction.h>
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <sorter/SorterPowerAction.h>
-#include <sorter/SorterCalibrateAction.h>
-#include <sorter/SorterRotateAngleAction.h>
+#include <sorter/SorterSortAction.h>
 #include <DelayAction.h>
 #include <ParallelAction.h>
 
@@ -55,6 +54,7 @@ namespace xero {
 				case 9:
 					mode = createGameAutoMode(sel + min_crates) ;
 					break ;
+
 				case 10:
 					mode = createTestAuto() ;
 					break ;
@@ -91,9 +91,6 @@ namespace xero {
 					mode = createRotateSorterAutoMode() ;
 					break ;				
 
-			/*	case 19:
-					mode = createGameAutoMode(number_of_crates) ;
-					break ;*/
 				default:
 					mode = nullptr ;
 					break ; 
@@ -218,26 +215,27 @@ namespace xero {
 			auto tankdrive = bunny.getBunnySubsystem()->getTankDrive() ;
 			auto collector = bunny.getBunnySubsystem()->getCollector() ;
 			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
+			auto shooter = bunny.getBunnySubsystem()->getShooter() ;
 
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TestIntake") ;
-
-            act = std::make_shared<SingleMotorPowerAction>(*intake, 0.5, 2.0) ;
-			seq->pushSubActionPair(intake, act) ;
-
-            act = std::make_shared<SingleMotorPowerAction>(*intake, -0.5, 2.0) ;
-			seq->pushSubActionPair(intake, act)	;
-
-            act = std::make_shared<SingleMotorPowerAction>(*hopper, 0.5, 2.0) ;
-			seq->pushSubActionPair(hopper, act) ;		
-
-            act = std::make_shared<SingleMotorPowerAction>(*hopper, -0.5, 2.0) ;
-			seq->pushSubActionPair(hopper, act) ;						
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TestMotors") ;
 
             act = std::make_shared<SingleMotorPowerAction>(*collector, 0.5, 2.0) ;
 			seq->pushSubActionPair(collector, act) ;		
 
             act = std::make_shared<SingleMotorPowerAction>(*collector, -0.5, 2.0) ;
 			seq->pushSubActionPair(collector, act) ;	
+
+            act = std::make_shared<SingleMotorPowerAction>(*hopper, 0.5, 2.0) ;
+			seq->pushSubActionPair(hopper, act) ;		
+
+            act = std::make_shared<SingleMotorPowerAction>(*hopper, -0.5, 2.0) ;
+			seq->pushSubActionPair(hopper, act) ;	
+
+            act = std::make_shared<SingleMotorPowerAction>(*intake, 0.5, 2.0) ;
+			seq->pushSubActionPair(intake, act) ;
+
+            act = std::make_shared<SingleMotorPowerAction>(*intake, -0.5, 2.0) ;
+			seq->pushSubActionPair(intake, act)	;
 
 			act = std::make_shared<SorterPowerAction>(*sorter, 0.5) ;
 			seq->pushSubActionPair(sorter, act) ;

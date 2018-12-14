@@ -14,10 +14,8 @@ namespace xero {
 		
         class Sorter : public xero::base::Subsystem {
             friend class SorterPowerAction ;
-            friend class SorterCalibrateAction ;
             friend class SorterEjectAction ;
 			friend class SorterTestAlignAction ;
-			friend class SorterRotateAngleAction ;
             friend class SorterSortAction ;
 
         public:
@@ -85,7 +83,7 @@ namespace xero {
         private:
             std::shared_ptr<frc::Encoder> encoder_ ;
             std::shared_ptr<TalonSRX> sortmotor_ ;
-            std::shared_ptr<TCS34725ColorSensor> color_ ;
+            std::shared_ptr<xero::base::TCS34725ColorSensor> color_ ;
 
             double degrees_per_tick_ ;
 

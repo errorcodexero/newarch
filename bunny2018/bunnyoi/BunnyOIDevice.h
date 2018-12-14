@@ -12,9 +12,7 @@ namespace xero {
             BunnyOIDevice(BunnyOISubsystem &sub, int index) ;
             virtual ~BunnyOIDevice() ;
 
-            virtual int getAutoModeSelector() {
-                return getValue(automode_) ;
-            }
+            virtual int getAutoModeSelector() ;
 
 			virtual void generateActions(xero::base::ActionSequence &seq) ;
 
@@ -29,6 +27,9 @@ namespace xero {
             size_t shoot_one_ ;
             size_t shoot_many_ ;
             size_t automode_ ;
+			size_t test_auto_modes_ ;
+
+			int base_ ;
 
             xero::base::ActionPtr collector_rev_action_ ;
 			xero::base::ActionPtr collector_fwd_action_ ;

@@ -27,12 +27,26 @@ namespace xero {
 			sorter_color_ = mapButton(15, OIButton::ButtonType::Level) ;
 			shoot_one_ = mapButton(3, OIButton::ButtonType::LowToHigh) ;
 			shoot_many_ = mapButton(6, OIButton::ButtonType::Level) ;
+            test_auto_modes_ = mapButton(12, OIButton::ButtonType::LowToHigh) ;           // PUsh button			
 
             //
             // Modes
             //
             std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
             automode_ = mapAxisScale(6, mapping) ;                                  // Rotary knob, 10 position
+
+			base_ = 0 ;
+        }
+
+		
+        int BunnyOIDevice::getAutoModeSelector() {
+
+			int base = 0 ;
+
+			if (getValue(test_auto_modes_))
+				base = 10 - base ;
+
+            return getValue(automode_ + base ) ;
         }
 
 		void BunnyOIDevice::createActions() {

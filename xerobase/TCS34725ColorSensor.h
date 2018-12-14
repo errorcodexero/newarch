@@ -53,7 +53,7 @@
 #define TCS34725_BDATAH           (0x1B)
 
 namespace xero {
-    namespace bunny2018 {
+    namespace base {
         class TCS34725ColorSensor
         { 
         public:
