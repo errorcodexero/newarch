@@ -142,6 +142,12 @@ collector:power:fwd                                             1.0
 collector:power:rev                                             -1.0
 
 #
+# Intake constants
+#
+intake:power:fwd                                             1.0
+intake:power:rev                                             -1.0
+
+#
 # Hopper constants
 #
 hopper:power:fwd                                                0.5
@@ -159,8 +165,6 @@ messagelistener:port                                        5808
 #
 automode:1:forward_distance                                    250
 automode:1:reverse_distance                                    -230
-automode:1:collector_power                                     0.6
-automode:1:hopper_power                                        -0.6
 automode:1:eject1                                              -10.0
 automode:1:eject2                                              -20.0
 automode:1:eject3                                              -30.0
@@ -176,4 +180,5 @@ automode:1:eject12                                             -120.0
 automode:1:eject13                                             -130.0
 automode:1:eject14                                             -140.0
 automode:1:eject15                                             -150.0
+automode:1:min_crate_number                                     5
 

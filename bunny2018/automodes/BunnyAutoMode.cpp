@@ -2,6 +2,8 @@
 #include "automodes/BunnyAutoMode.h"
 #include "bunnysubsystem/BunnySubsystem.h"
 #include "bunnyoi/BunnyOISubsystem.h"
+#include <shooter/ShooterEjectOneBallAction.h>
+#include <shooter/ShooterStageBallAction.h>
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/TankDriveDistanceAction.h>
 #include <tankdrive/TankDriveCharAction.h>
@@ -15,6 +17,7 @@
 #include <DelayAction.h>
 #include <ParallelAction.h>
 
+
 using namespace xero::base ;
 
 namespace xero {
@@ -27,51 +30,73 @@ namespace xero {
 
     	void BunnyAutoMode::updateAutoMode(int sel, const std::string &gamedata) {
             ActionSequencePtr mode ;
+			
+			int min_crates = getRobot().getSettingsParser().getInteger("automode:1:min_crate_number") ;
 
 			switch(sel) {
 				case 0:
+					
+				case 1:
+					
+				case 2:
+					
+				case 3:
+					
+				case 4:
+					
+				case 5:
+					
+				case 6:
+					
+				case 7:
+					
+				case 8:
+					
+				case 9:
+					mode = createGameAutoMode(sel + min_crates) ;
+					break ;
+				case 10:
 					mode = createTestAuto() ;
 					break ;
 
-				case 1:
+				case 11:
 					mode = createRotateChar() ;
 					break ;
 
-				case 2:
+				case 12:
 					mode = createDriveStraightTest() ;
 					break ;
 
-				case 3:
+				case 13:
 					mode = createRotatePos90Test() ;
 					break ;
 
-				case 4:
+				case 14:
 					mode = createRotateNeg90Test() ;
 					break ;
 
-				case 5:
+				case 15:
 					mode = createDriveSquareTest() ;
 					break ;
 
-				case 6:
+				case 16:
 					mode = createDriveStraightChar() ;				
 					break ;
 
-				case 7:
+				case 17:
 					mode = createStraightBackAutomode() ;
 					break ;		
 
-				case 8:
+				case 18:
 					mode = createRotateSorterAutoMode() ;
 					break ;				
 
-				case 9:
-					mode = createGameAutoMode() ;
-					break ;
-
+			/*	case 19:
+					mode = createGameAutoMode(number_of_crates) ;
+					break ;*/
 				default:
 					mode = nullptr ;
-					break ;
+					break ; 
 			}
 
             setAction(mode) ;
@@ -235,19 +260,50 @@ namespace xero {
             return seq ;          
         }        
 
-		ActionSequencePtr BunnyAutoMode::createGameAutoMode() {
+		ActionSequencePtr BunnyAutoMode::createGameAutoMode(int number_of_crates) {
 			ActionPtr act ;
+
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "StraightAndBackAutoMode") ;					
+
+			auto &robot = getRobot() ;
+			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
+
+			auto intake = bunny.getBunnySubsystem()->getIntake() ;
+			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
+			auto tankdrive = bunny.getBunnySubsystem()->getTankDrive() ;
+			auto collector = bunny.getBunnySubsystem()->getCollector() ;
+			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
+			auto shooter = bunny.getBunnySubsystem()->getShooter() ;
 
 			// Eject existing ball
 
+			act = std::make_shared<ShooterEjectOneBallAction>(*shooter) ;
+			seq->pushSubActionPair(shooter, act) ;
+
 			// Collector to state on
+
+            act = std::make_shared<SingleMotorPowerAction>(*collector, "collector:power:fwd") ;
+			seq->pushSubActionPair(collector, act) ;
 
 			// Hopper to state on
 
+            act = std::make_shared<SingleMotorPowerAction>(*hopper, "hopper:power:fwd") ;
+			seq->pushSubActionPair(hopper, act) ;	
+
+			// Intake to state on
+
+			act = std::make_shared<SingleMotorPowerAction>(*intake, "intake:power:fwd") ;
+			seq->pushSubActionPair(intake, act)	;
+
 			// Shooter to state stage
+
+			act = std::make_shared<ShooterStageBallAction>(*shooter) ;
+			seq->pushSubActionPair(shooter, act) ;
 			
 			// Drive straight (collecting as we go)
+
+			act = std::make_shared<TankDriveDistanceAction>(*tankdrive, "automode:1:forward_distance") ;
+			seq->pushSubActionPair(tankdrive, act) ;
 
 			//
 			// Drive back (ejecting as we go)
@@ -266,6 +322,19 @@ namespace xero {
 			//       drvact->addTriggeredAction(dist, actseq)
 			//     seq->pushSubActionPair(tankdrive, drvact)
 			// 
+
+			auto reverse_drive = std::make_shared<TankDriveDistanceAction>(*tankdrive, "automode:1:reverse_distance") ;
+			seq->pushSubActionPair(tankdrive, reverse_drive) ;
+
+			for(int i = 0; i < number_of_crates; i++){
+
+				act = std::make_shared<ShooterEjectOneBallAction>(*shooter) ;
+				reverse_drive->addTriggeredAction("automode:1:eject" + i, act) ;
+
+				act = std::make_shared<ShooterStageBallAction>(*shooter) ;
+				reverse_drive->addTriggeredAction("automode:1:eject" + i, act) ;
+
+			}
 
 			return seq ;
 		}
