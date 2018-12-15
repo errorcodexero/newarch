@@ -12,7 +12,6 @@ namespace xero {
 
             friend class ShooterStageBallAction;
             friend class ShooterEjectOneBallAction;
-			friend class ShooterPowerAction ;
             
         public:
             
@@ -38,6 +37,10 @@ namespace xero {
             double getBallIsStaged() const {
                 return ball_is_staged_;
             }
+
+			void clearBallIsStaged() {
+				ball_is_staged_ = false ;
+			}
 
 
         private:

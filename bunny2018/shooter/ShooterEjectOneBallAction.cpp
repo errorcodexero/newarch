@@ -34,6 +34,7 @@ namespace xero {
                     // In the process of ejecting and done with ejecting, stop motor and complete action
                     state_ = State::DONE;
                     getSubsystem().setMotor(0);
+					getSubsystem().clearBallIsStaged() ;
                 } else if (state_ == State::EJECTING) {
                     // In the process of ejecting and NOT done with ejecting.  Do nothing.
                 } else {

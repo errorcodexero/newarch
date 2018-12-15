@@ -24,15 +24,16 @@ namespace xero {
         }
 
         void Shooter::computeState() {
-            ball_is_staged_ = ball_sensor_->Get();
+            if (ball_sensor_->Get())
+				ball_is_staged_ = true ;
 
             auto& logger = getRobot().getMessageLogger() ;
 
-            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SHOOTER_VERBOSE) ;
-            if (getBallIsStaged()) {
-                logger << "Shooter: ball is staged\n";
-            }
-            logger.endMessage() ;
+			if (getBallIsStaged()) {
+	            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SHOOTER_VERBOSE) ;
+            	logger << "Shooter: ball is staged\n" ;
+	            logger.endMessage() ;
+			}
         }
     
 		bool Shooter::canAcceptAction(ActionPtr action) {

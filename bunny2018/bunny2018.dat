@@ -22,8 +22,10 @@ hw:collector:motor                  11
 hw:hopper:motor                     6
 
 hw:intake:motor						12
+hw:intake:sensor					99
 
 hw:shooter:motor					13
+hw:shooter:sensor					98
 
 hw:sorter:motor                     7
 hw:sorter:encoder1                  4
