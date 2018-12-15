@@ -249,6 +249,12 @@ namespace xero {
 			act = std::make_shared<DelayAction>(2.0) ;
 			seq->pushAction(act) ;
 
+            act = std::make_shared<SingleMotorPowerAction>(*shooter, 0.5, 2.0) ;
+			seq->pushSubActionPair(shooter, act) ;		
+
+            act = std::make_shared<SingleMotorPowerAction>(*shooter, -0.5, 2.0) ;
+			seq->pushSubActionPair(shooter, act) ;				
+
 			act = std::make_shared<TankDriveTimedPowerAction>(*tankdrive, 0.5, 0.5, 2.0) ;
 			seq->pushSubActionPair(tankdrive, act) ;
 
