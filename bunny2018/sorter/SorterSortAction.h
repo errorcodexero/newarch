@@ -24,11 +24,19 @@ namespace xero {
 
             virtual std::string toString() ;
 
+
         private:
             typedef enum class State {
-                Waiting, 
-                GoToAngle
+                NotValid,
+                Waiting,            // Running intake, waiting on ball sensor
+                IntakeDelay,        // Running intake for a fixed amount of time
+                ColorSense,         // Wait for color sensor or timeout
+                ColorSenseDelay,    
+                NextHole,           // Find the next hole (dir based on color sense)
             } State;
+
+        private:
+            std::string toString(State st)  ;
 
 		private:
 			Sorter::BallColor color_ ;
@@ -38,7 +46,10 @@ namespace xero {
             double keep_angle_ ;
             double tolerance_ ;
             double target_ ;
+            double start_time_ ;
+            double dir_ ;
             SorterHoleCalculator calc_ ;
+            State last_state_ ;
         };
     }
 }

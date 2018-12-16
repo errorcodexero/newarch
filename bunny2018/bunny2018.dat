@@ -21,11 +21,11 @@ hw:collector:motor                  11
 
 hw:hopper:motor                     6
 
-hw:intake:motor						12
-hw:intake:sensor					99
+hw:intake:motor						13
+hw:intake:sensor					8
 
-hw:shooter:motor					13
-hw:shooter:sensor					98
+hw:shooter:motor					12
+hw:shooter:sensor					7
 
 hw:sorter:motor                     7
 hw:sorter:encoder1                  4
@@ -33,10 +33,7 @@ hw:sorter:encoder2                  5
 hw:sorter:in:motor                  1
 hw:sorter:out:motor                 8
 hw:sorter:sensoraddr                0x29
-hw:sorter:index						6
-
-hw:shooter:motor                    12
-hw:shooter:sensor                   10
+hw:sorter:wheel                     6						
 
 ##############################################################
 #
@@ -111,24 +108,24 @@ driver:power:nudge_straight                                     0.2
 driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
 
-
 #
 # Sorter Subsystem Constants
 #
-sorter:degrees_per_tick                                         0.65824463712647304641987364969136
+sorter:degrees_per_tick                                         12
 sorter:reject_angle                                             -72
 sorter:keep_angle                                               72
 sorter:tolerance												2
-sorter:ball_detect:white_threshold								100
+sorter:ball_detect:white_threshold						        700
 sorter:pid:p                           							0.006
-sorter:pid:i                           							0.001875
+sorter:pid:i                           							0.0
 sorter:pid:d                           							0.0
 sorter:pid:f                           							0.0
 sorter:pid:a                           							0.0
 sorter:pid:max                         							0.3
 sorter:pid:min                         							-0.3
 sorter:pid:imax                        							80
-
+sorter:goto:power                                               0.15
+sorter:goto:duration                                            0.25
 
 #
 # Shooter subsystem constants
@@ -167,20 +164,20 @@ messagelistener:port                                        5808
 #
 automode:1:forward_distance                                    250
 automode:1:reverse_distance                                    -230
-automode:1:eject1                                              -10.0
-automode:1:eject2                                              -20.0
-automode:1:eject3                                              -30.0
-automode:1:eject4                                              -40.0
-automode:1:eject5                                              -50.0
-automode:1:eject6                                              -60.0
-automode:1:eject7                                              -70.0
-automode:1:eject8                                              -80.0
-automode:1:eject9                                              -90.0
-automode:1:eject10                                             -100.0
-automode:1:eject11                                             -110.0
-automode:1:eject12                                             -120.0
-automode:1:eject13                                             -130.0
-automode:1:eject14                                             -140.0
-automode:1:eject15                                             -150.0
+automode:1:eject0                                              -10.0
+automode:1:eject1                                              -20.0
+automode:1:eject2                                              -30.0
+automode:1:eject3                                              -40.0
+automode:1:eject4                                              -50.0
+automode:1:eject5                                              -60.0
+automode:1:eject6                                              -70.0
+automode:1:eject7                                              -80.0
+automode:1:eject8                                              -90.0
+automode:1:eject9                                             -100.0
+automode:1:eject10                                             -110.0
+automode:1:eject11                                             -120.0
+automode:1:eject12                                             -130.0
+automode:1:eject13                                             -140.0
+automode:1:eject14                                             -150.0
 automode:1:min_crate_number                                     5
 

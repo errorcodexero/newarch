@@ -84,7 +84,7 @@ namespace xero {
 					break ;
 
 				case 17:
-					mode = createStraightBackAutomode() ;
+					mode = createTestMode99() ;
 					break ;		
 
 				case 18:
@@ -98,6 +98,25 @@ namespace xero {
 
             setAction(mode) ;
         }
+
+		ActionSequencePtr BunnyAutoMode::createTestMode99() {
+			ActionPtr act ;
+			auto &robot = getRobot() ;
+			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
+
+			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
+			auto tankdrive = bunny.getBunnySubsystem()->getTankDrive() ;
+			auto collector = bunny.getBunnySubsystem()->getCollector() ;
+			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
+			auto shooter = bunny.getBunnySubsystem()->getShooter() ;
+
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "AutoSortMode") ;		
+
+            act = std::make_shared<SorterSortAction>(*sorter, Sorter::BallColor::None) ;
+			seq->pushSubActionPair(sorter, act) ;
+
+			return seq ;
+		}
 
 		ActionSequencePtr BunnyAutoMode::createDriveStraightChar() {
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
@@ -131,7 +150,7 @@ namespace xero {
 		ActionSequencePtr BunnyAutoMode::createRotatePos90Test() {
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
 
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveRotate") ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveRotatev 90") ;
             auto act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;
 			seq->pushSubActionPair(tankdrive, act) ;
 
@@ -141,7 +160,7 @@ namespace xero {
 		ActionSequencePtr BunnyAutoMode::createRotateNeg90Test() {
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
 
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveRotate") ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveRotate -90") ;
             auto act = std::make_shared<TankDriveAngleAction>(*tankdrive, -90.0) ;
 			seq->pushSubActionPair(tankdrive, act) ;
 
@@ -210,7 +229,6 @@ namespace xero {
 			auto &robot = getRobot() ;
 			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
 
-			auto intake = bunny.getBunnySubsystem()->getIntake() ;
 			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
 			auto tankdrive = bunny.getBunnySubsystem()->getTankDrive() ;
 			auto collector = bunny.getBunnySubsystem()->getCollector() ;
@@ -219,6 +237,7 @@ namespace xero {
 
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TestMotors") ;
 
+#ifdef NOTYET
             act = std::make_shared<SingleMotorPowerAction>(*collector, 0.5, 2.0) ;
 			seq->pushSubActionPair(collector, act) ;		
 
@@ -231,28 +250,25 @@ namespace xero {
             act = std::make_shared<SingleMotorPowerAction>(*hopper, -0.5, 2.0) ;
 			seq->pushSubActionPair(hopper, act) ;	
 
-            act = std::make_shared<SingleMotorPowerAction>(*intake, 0.5, 2.0) ;
-			seq->pushSubActionPair(intake, act) ;
-
-            act = std::make_shared<SingleMotorPowerAction>(*intake, -0.5, 2.0) ;
-			seq->pushSubActionPair(intake, act)	;
-
-			act = std::make_shared<SorterPowerAction>(*sorter, 0.5) ;
+			act = std::make_shared<SorterPowerAction>(*sorter, 0.1) ;
 			seq->pushSubActionPair(sorter, act) ;
 
 			act = std::make_shared<DelayAction>(2.0) ;
 			seq->pushAction(act) ;
 
-			act = std::make_shared<SorterPowerAction>(*sorter, -0.5) ;
+			act = std::make_shared<SorterPowerAction>(*sorter, -0.1) ;
 			seq->pushSubActionPair(sorter, act) ;
 
 			act = std::make_shared<DelayAction>(2.0) ;
 			seq->pushAction(act) ;
+
+			act = std::make_shared<SorterPowerAction>(*sorter, 0) ;
+			seq->pushSubActionPair(sorter, act) ;
 
             act = std::make_shared<SingleMotorPowerAction>(*shooter, 0.5, 2.0) ;
 			seq->pushSubActionPair(shooter, act) ;		
 
-            act = std::make_shared<SingleMotorPowerAction>(*shooter, -0.5, 2.0) ;
+            act = std::make_shared<SingleMotorPowerAction>(*shooter, 0.2) ;
 			seq->pushSubActionPair(shooter, act) ;				
 
 			act = std::make_shared<TankDriveTimedPowerAction>(*tankdrive, 0.5, 0.5, 2.0) ;
@@ -260,6 +276,10 @@ namespace xero {
 
 			act = std::make_shared<TankDriveTimedPowerAction>(*tankdrive, -0.5, -0.5, 2.0) ;
 			seq->pushSubActionPair(tankdrive, act) ;			
+#endif
+
+			act = std::make_shared<SorterPowerAction>(*sorter, -0.05) ;
+			seq->pushSubActionPair(sorter, act) ;
 
             return seq ;          
         }        
@@ -267,12 +287,13 @@ namespace xero {
 		ActionSequencePtr BunnyAutoMode::createGameAutoMode(int number_of_crates) {
 			ActionPtr act ;
 
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "StraightAndBackAutoMode") ;					
+			std::string name("automode ") ;
+			name += std::to_string(number_of_crates) ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name) ;
 
 			auto &robot = getRobot() ;
 			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
 
-			auto intake = bunny.getBunnySubsystem()->getIntake() ;
 			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
 			auto tankdrive = bunny.getBunnySubsystem()->getTankDrive() ;
 			auto collector = bunny.getBunnySubsystem()->getCollector() ;
@@ -293,11 +314,6 @@ namespace xero {
 
             act = std::make_shared<SingleMotorPowerAction>(*hopper, "hopper:power:fwd") ;
 			seq->pushSubActionPair(hopper, act) ;	
-
-			// Intake to state on
-
-			act = std::make_shared<SingleMotorPowerAction>(*intake, "intake:power:fwd") ;
-			seq->pushSubActionPair(intake, act)	;
 
 			// Shooter to state stage
 
@@ -333,10 +349,10 @@ namespace xero {
 			for(int i = 0; i < number_of_crates; i++){
 
 				act = std::make_shared<ShooterEjectOneBallAction>(*shooter) ;
-				reverse_drive->addTriggeredAction("automode:1:eject" + i, act) ;
+				reverse_drive->addTriggeredAction("automode:1:eject" + std::to_string(i), act) ;
 
 				act = std::make_shared<ShooterStageBallAction>(*shooter) ;
-				reverse_drive->addTriggeredAction("automode:1:eject" + i, act) ;
+				reverse_drive->addTriggeredAction("automode:1:eject" + std::to_string(i), act) ;
 
 			}
 

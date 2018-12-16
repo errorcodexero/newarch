@@ -118,6 +118,7 @@ namespace xero {
 
 				ticks_left_ = left_enc_->Get() ;
 				ticks_right_ = right_enc_->Get() ;
+
 				dist_l_ = ticks_left_ * inches_per_tick_ ;
 				dist_r_ = ticks_right_ * inches_per_tick_ ;
 			}

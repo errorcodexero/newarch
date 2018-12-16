@@ -11,7 +11,8 @@ namespace xero {
         Intake::Intake(xero::base::Robot& robot) : SingleMotorSubsystem(robot, "shooter", "hw:shooter:motor", false /*not victor*/) {
 
             int sensor_addr = robot.getSettingsParser().getInteger("hw:intake:sensor") ;
-            ball_sensor_ = std::make_shared<frc::DigitalInput>(sensor_addr) ;
+            if (sensor_addr != -1)
+                ball_sensor_ = std::make_shared<frc::DigitalInput>(sensor_addr) ;
         }
 
         Intake::~Intake(){

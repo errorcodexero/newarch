@@ -451,6 +451,7 @@ namespace xero {
 
 			while (IsDisabled()) {
 				updateAutoMode() ;
+				robot_subsystem_->computeState() ;
 				frc::Wait(target_loop_time_) ;				
 			}
             

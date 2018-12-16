@@ -40,13 +40,12 @@ namespace xero {
 
 		
         int BunnyOIDevice::getAutoModeSelector() {
+			if (getValue(test_auto_modes_)) {
+				base_ = 10 - base_ ;
+			}
 
-			int base = 0 ;
-
-			if (getValue(test_auto_modes_))
-				base = 10 - base ;
-
-            return getValue(automode_ + base ) ;
+            int res = getValue(automode_) + base_  ;
+			return res ;
         }
 
 		void BunnyOIDevice::createActions() {

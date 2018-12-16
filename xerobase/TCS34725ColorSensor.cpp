@@ -16,6 +16,7 @@ namespace xero {
 
             if (i2c_->Read(regaddr | CommandBit, 1, &v)) {
                 std::cout << "I2C read8 failed, address " << std::hex << "0x" << (int)regaddr << std::endl ;
+                std::cout << std::dec ;                
                 return -1 ;
             }
 
@@ -25,6 +26,7 @@ namespace xero {
        bool TCS34725ColorSensor::write8(uint8_t regaddr, uint8_t value) {
             if (i2c_->Write(regaddr | CommandBit, value)) {
                 std::cout << "I2C write failed, address " << std::hex << "0x" << (int)regaddr << std::endl ;
+                std::cout << std::dec ;
                 return false ;
             }
 
@@ -37,10 +39,11 @@ namespace xero {
 
             if (i2c_->Read(regaddr | (1 << 5) | CommandBit, 2, data)) {
                 std::cout << "I2C read16 failed, address " << std::hex << "0x" << (int)regaddr << std::endl ;
+                std::cout << std::dec ;
                 return -1 ;
             }
 
-            return data[0] << 8 | data[1] ;
+            return data[1] << 8 | data[0] ;
         }
 
         bool TCS34725ColorSensor::setIntegrationTime(tcs34725IntegrationTime_t t) {

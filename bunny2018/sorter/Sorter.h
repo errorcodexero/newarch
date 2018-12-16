@@ -50,6 +50,10 @@ namespace xero {
                 sortmotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v) ;
             }
 
+            void setIntakeMotor(double v) {
+                intakemotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v) ;
+            }
+
             void detectBall(uint16_t &red, uint16_t &green, uint16_t &blue, uint16_t &white) ;
 
 			double getSorterMotorPower() const {
@@ -83,18 +87,22 @@ namespace xero {
         private:
             std::shared_ptr<frc::Encoder> encoder_ ;
             std::shared_ptr<TalonSRX> sortmotor_ ;
+            std::shared_ptr<TalonSRX> intakemotor_ ;            
             std::shared_ptr<xero::base::TCS34725ColorSensor> color_ ;
+            std::shared_ptr<frc::DigitalInput> intake_ball_sensor_ ;
+            std::shared_ptr<frc::DigitalInput> wheel_sensor_ ;
 
             double degrees_per_tick_ ;
 
             BallColor ball_ ;
+            BallColor last_ball_ ;
             double angle_ ;
 			int ticks_ ;
 
 
 			double sorter_motor_power_ ;
 
-			int white_detect_threshold_;
+			int clear_detect_threshold_;
         };
     }
 }
