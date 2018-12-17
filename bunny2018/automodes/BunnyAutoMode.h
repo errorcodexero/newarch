@@ -34,6 +34,7 @@ namespace xero {
             xero::base::ActionSequencePtr createTestAuto() ;
 
 			xero::base::ActionSequencePtr createTestMode99() ;
+			xero::base::ActionSequencePtr createTestMode98() ;
 		};
 	}
 }

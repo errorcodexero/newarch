@@ -8,6 +8,7 @@
 #include <I2C.h>
 #include <DigitalInput.h>
 #include <memory>
+#include <iostream>
 
 namespace xero {
     namespace bunny2018 {
@@ -51,6 +52,7 @@ namespace xero {
             }
 
             void setIntakeMotor(double v) {
+                std::cout << "Intake Motor " << v << std::endl ;
                 intakemotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v) ;
             }
 

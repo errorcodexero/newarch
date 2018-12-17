@@ -21,11 +21,15 @@ namespace xero {
             }
 
             void ShooterEjectOneBallAction::run() {
-                assert(state_ != State::DONE);
 
-                if (getSubsystem().getBallIsStaged()) {
+                if (isDone()) {
+                    // Do nothing.  Ball already ejected.
+                } else if (getSubsystem().getBallIsStaged() && state_ != State::EJECTING) {
                     // Ball detected by sensor. Switch from staging to ejecting and maintain eject speed for
                     // specified period duration.
+                    // Note that once a ball is staged, it can only be cleared by an eject action even
+                    // if the ball is no longer seen by the sensor.
+                    assert(state_ == State::STAGING);
                     state_ = State::EJECTING;
                     eject_start_time_ = getTime();
                     const double motor_power = getSubsystem().getEjectMotorPower();

@@ -88,7 +88,7 @@ namespace xero {
 					break ;		
 
 				case 18:
-					mode = createRotateSorterAutoMode() ;
+					mode = createTestMode98() ;
 					break ;				
 
 				default:
@@ -114,6 +114,36 @@ namespace xero {
 
             act = std::make_shared<SorterSortAction>(*sorter, Sorter::BallColor::None) ;
 			seq->pushSubActionPair(sorter, act) ;
+
+			return seq ;
+		}
+
+		ActionSequencePtr BunnyAutoMode::createTestMode98() {
+			ActionPtr act ;
+			auto &robot = getRobot() ;
+			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
+
+			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
+			auto tankdrive = bunny.getBunnySubsystem()->getTankDrive() ;
+			auto collector = bunny.getBunnySubsystem()->getCollector() ;
+			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
+			auto shooter = bunny.getBunnySubsystem()->getShooter() ;
+
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "ShootTest") ;	
+
+#ifdef NOTYET
+			act = std::make_shared<SorterPowerAction>(*sorter, -1.0, false) ;
+			seq->pushSubActionPair(sorter, act) ;	
+#endif
+
+            act = std::make_shared<ShooterStageBallAction>(*shooter) ;
+			seq->pushSubActionPair(shooter, act) ;
+
+			act = std::make_shared<DelayAction>(2.0) ;
+			seq->pushAction(act) ;
+
+            act = std::make_shared<ShooterEjectOneBallAction>(*shooter) ;
+			seq->pushSubActionPair(shooter, act) ;
 
 			return seq ;
 		}
@@ -275,11 +305,22 @@ namespace xero {
 			seq->pushSubActionPair(tankdrive, act) ;
 
 			act = std::make_shared<TankDriveTimedPowerAction>(*tankdrive, -0.5, -0.5, 2.0) ;
-			seq->pushSubActionPair(tankdrive, act) ;			
+			seq->pushSubActionPair(tankdrive, act) ;	
+
+			act = std::make_shared<SorterPowerAction>(*sorter, -1.0, false) ;
+			seq->pushSubActionPair(sorter, act) ;		
+
+
+            act = std::make_shared<SingleMotorPowerAction>(*shooter, 0.5, 2.0) ;
+			seq->pushSubActionPair(shooter, act) ;	
+									
 #endif
 
-			act = std::make_shared<SorterPowerAction>(*sorter, -0.05) ;
-			seq->pushSubActionPair(sorter, act) ;
+			act = std::make_shared<SorterPowerAction>(*sorter, -1.0, false) ;
+			seq->pushSubActionPair(sorter, act) ;	
+
+
+
 
             return seq ;          
         }        
@@ -287,7 +328,7 @@ namespace xero {
 		ActionSequencePtr BunnyAutoMode::createGameAutoMode(int number_of_crates) {
 			ActionPtr act ;
 
-			std::string name("automode ") ;
+			std::string name("crates ") ;
 			name += std::to_string(number_of_crates) ;
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name) ;
 

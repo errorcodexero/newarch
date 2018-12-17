@@ -21,11 +21,11 @@ hw:collector:motor                  11
 
 hw:hopper:motor                     6
 
-hw:intake:motor						13
+hw:intake:motor						12
 hw:intake:sensor					8
 
-hw:shooter:motor					12
-hw:shooter:sensor					7
+hw:shooter:motor					13
+hw:shooter:sensor					9
 
 hw:sorter:motor                     7
 hw:sorter:encoder1                  4
@@ -130,9 +130,9 @@ sorter:goto:duration                                            0.25
 #
 # Shooter subsystem constants
 #
-shooter:stage_motor_power                                       0.5
+shooter:stage_motor_power                                       0.70
 shooter:eject_motor_power                                       1.0
-shooter:eject_duration                                          1.0
+shooter:eject_duration                                          0.9
 
 #
 # Collector constants

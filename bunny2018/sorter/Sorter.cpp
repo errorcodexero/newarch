@@ -17,7 +17,7 @@ namespace xero {
             auto &logger = robot.getMessageLogger() ;
 
             int sortmotor=robot.getSettingsParser().getInteger("hw:sorter:motor");        
-			int intakemotor = robot.getSettingsParser().getInteger("hw:shooter:motor") ;    
+			int intakemotor = robot.getSettingsParser().getInteger("hw:intake:motor") ;    
             int enc1=robot.getSettingsParser().getInteger("hw:sorter:encoder1");
             int enc2=robot.getSettingsParser().getInteger("hw:sorter:encoder2");
             int sensoraddr = robot.getSettingsParser().getInteger("hw:sorter:sensoraddr") ;

@@ -25,7 +25,7 @@ namespace xero {
 
         void Shooter::computeState() {
             if (ball_sensor_->Get())
-				ball_is_staged_ = true ;
+                ball_is_staged_ = true ;
 
             auto& logger = getRobot().getMessageLogger() ;
 
@@ -34,6 +34,8 @@ namespace xero {
             	logger << "Shooter: ball is staged\n" ;
 	            logger.endMessage() ;
 			}
+            else {
+            }
         }
     
 		bool Shooter::canAcceptAction(ActionPtr action) {

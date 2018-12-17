@@ -6,19 +6,25 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace bunny2018 {
-            SorterPowerAction::SorterPowerAction(Sorter &sorter, double v) : SorterAction(sorter) {
+            SorterPowerAction::SorterPowerAction(Sorter &sorter, double v, bool smotor) : SorterAction(sorter) {
                 power_ = v ;
+                sorter_ = smotor ;
             }
 
-            SorterPowerAction::SorterPowerAction(Sorter &sorter, const std::string &name) : SorterAction(sorter) {
+            SorterPowerAction::SorterPowerAction(Sorter &sorter, const std::string &name, bool smotor) : SorterAction(sorter) {
                 power_ = sorter.getRobot().getSettingsParser().getDouble(name) ;
+                sorter_ = smotor;
             }
 
             SorterPowerAction::~SorterPowerAction() {
 
             }
             void SorterPowerAction::start() {
-            	getSubsystem().setSorterMotor(power_) ;
+                if (sorter_) {
+                	getSubsystem().setSorterMotor(power_) ;
+                } else {
+                    getSubsystem().setIntakeMotor(power_) ;
+                }
             }
 
             void SorterPowerAction::run() {

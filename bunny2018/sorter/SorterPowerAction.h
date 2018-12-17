@@ -8,9 +8,9 @@ namespace xero {
     namespace bunny2018 {
         class SorterPowerAction : public SorterAction {
         public:
-            SorterPowerAction(Sorter &sorter, double power) ;
+            SorterPowerAction(Sorter &sorter, double power, bool smotor = true) ;
 
-            SorterPowerAction(Sorter &sorter, const std::string &name) ;
+            SorterPowerAction(Sorter &sorter, const std::string &name, bool smotor = true) ;
 
             virtual ~SorterPowerAction() ;
 
@@ -26,6 +26,7 @@ namespace xero {
             
         private:
             double power_ ;
+            bool sorter_ ;
         };
     }
 }
