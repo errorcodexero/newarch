@@ -5,7 +5,7 @@
 namespace xero {
     namespace bunny2018 {
         
-            ShooterEjectOneBallAction::ShooterEjectOneBallAction(Shooter& shooter) : ShooterAction(shooter) {
+            ShooterEjectOneBallAction::ShooterEjectOneBallAction(Shooter& shooter) : ShooterStageBallAction(shooter) {
                 state_= State::NOT_STARTED;
             }
 
@@ -13,37 +13,75 @@ namespace xero {
             }
 
             void ShooterEjectOneBallAction::start() {
-                state_= State::STAGING;
-                if (!getSubsystem().getBallIsStaged()) {
-                    const double motor_power = getSubsystem().getStageMotorPower();
-                    getSubsystem().setMotor(motor_power);
+                if (getSubsystem().getBallIsStaged()) {
+                    if (ejectTrigger()) {
+                        readyEjecting() ;
+                        state_ = State::EJECTING ;
+                    }
+                    else {
+                        state_ = State::WAITING ;
+                    }
+                }
+                else {
+                    state_ = State::STAGING ;
+                    readyStaging() ;
                 }
             }
 
-            void ShooterEjectOneBallAction::run() {
+            void ShooterEjectOneBallAction::readyStaging() {
+                const double motor_power = getSubsystem().getStageMotorPower();
+                getSubsystem().setMotor(motor_power);                
+            }
 
-                if (isDone()) {
-                    // Do nothing.  Ball already ejected.
-                } else if (getSubsystem().getBallIsStaged() && state_ != State::EJECTING) {
-                    // Ball detected by sensor. Switch from staging to ejecting and maintain eject speed for
-                    // specified period duration.
-                    // Note that once a ball is staged, it can only be cleared by an eject action even
-                    // if the ball is no longer seen by the sensor.
-                    assert(state_ == State::STAGING);
-                    state_ = State::EJECTING;
-                    eject_start_time_ = getTime();
-                    const double motor_power = getSubsystem().getEjectMotorPower();
-                    getSubsystem().setMotor(motor_power);
-                } else if (state_ == State::EJECTING && ((getTime() - eject_start_time_) >= getSubsystem().getEjectDuration())) {
-                    // In the process of ejecting and done with ejecting, stop motor and complete action
-                    state_ = State::DONE;
-                    getSubsystem().setMotor(0);
-					getSubsystem().clearBallIsStaged() ;
-                } else if (state_ == State::EJECTING) {
-                    // In the process of ejecting and NOT done with ejecting.  Do nothing.
-                } else {
-                    // Continue staging
-                    assert(state_ == State::STAGING);
+            void ShooterEjectOneBallAction::readyEjecting() {
+                eject_start_time_ = getTime() ;
+                getSubsystem().setMotor(getSubsystem().getEjectMotorPower()) ;
+            }
+
+            void ShooterEjectOneBallAction::run() {
+                if (isDone())
+                    return ;
+
+                switch(state_) {
+                    case State::NOT_STARTED:
+                        assert(false) ;
+                        break ;
+
+                    case State::STAGING:
+                        if (ShooterStageBallAction::isDone()) {
+                            if (ejectTrigger()) {
+                                readyEjecting() ;
+                                state_ = State::EJECTING ;
+                            }
+                            else {
+                                state_ = State::WAITING ;
+                            }
+                        }
+                        break ;
+
+                    case State::WAITING:
+                        if (ejectTrigger()) {
+                            readyEjecting() ;
+                            state_ = State::EJECTING ;
+                        }
+                        break ;
+
+                    case State::EJECTING:
+                        if (getTime() - eject_start_time_ > getSubsystem().getEjectDuration()) {
+                            getSubsystem().setMotor(0.0) ;
+                            getSubsystem().clearBallIsStaged() ;
+
+                            if (repeatEjectOne()) {
+                                readyStaging() ;
+                                state_ = State::STAGING ;
+                            } else {
+                                state_ = State::DONE ;
+                            }
+                        }
+                        break ;
+
+                    case State::DONE:
+                        break ;
                 }
             }
 
@@ -66,6 +104,9 @@ namespace xero {
 
                 result += " state=";
                 switch (state_) {
+                    case State::WAITING:
+                        result += "WAITING" ;
+                        break ;
                     case State::NOT_STARTED:
                         result += "NOT_STARTED";
                         break;

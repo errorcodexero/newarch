@@ -12,6 +12,10 @@ namespace xero {
 
 			virtual ~DriveBase() {
 			}
+
+			virtual double getDist() const = 0 ;
+			virtual double getAngle() const = 0 ;
+			virtual double getVelocity() const = 0 ;
 		} ;
 	}
 }

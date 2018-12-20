@@ -78,7 +78,7 @@ namespace xero {
 
 			/// \brief Return the current angle of the robot relative to its starting angle
 			/// \returns The current angle of the robot
-			double getAngle() const {
+			virtual double getAngle() const {
 				return angular_.getDistance() ;
 			}			
 
@@ -100,7 +100,7 @@ namespace xero {
 
 			/// \brief Return the average net distanced travelled by the two sides of the drivebase.
 			/// \returns The average net distance travelled by the two sides to the drivebase
-			double getDist() const {
+			virtual double getDist() const {
 				return (dist_r_ + dist_l_) / 2.0;
 			}
 
@@ -118,7 +118,7 @@ namespace xero {
 
 			/// \brief Return the velocity of the drive base
 			/// \returns the linear velocity of the drive base
-			double getVelocity() const {
+			virtual double getVelocity() const {
 				return linear_.getVelocity() ;
 			}
 

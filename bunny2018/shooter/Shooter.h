@@ -12,6 +12,7 @@ namespace xero {
 
             friend class ShooterStageBallAction;
             friend class ShooterEjectOneBallAction;
+            friend class ShooterEjectAutoBallAction ;
             
         public:
             
