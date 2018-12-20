@@ -149,6 +149,8 @@ namespace xero {
 		}
 		
 		void Robot::robotLoop(LoopType type) {
+			frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
+			voltage_ = ds.GetBatteryVoltage() ;
 			int index = static_cast<int>(type) ;
 			double initial_time = frc::Timer::GetFPGATimestamp();
 

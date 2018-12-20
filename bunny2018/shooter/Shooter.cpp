@@ -24,8 +24,9 @@ namespace xero {
         }
 
         void Shooter::computeState() {
-            if (ball_sensor_->Get())
+            if (ball_sensor_->Get()) {
                 ball_is_staged_ = true ;
+            }
 
             auto& logger = getRobot().getMessageLogger() ;
 

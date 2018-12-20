@@ -2,7 +2,6 @@
 #include "BunnyOISubsystem.h"
 #include "Bunny.h"
 #include "bunnysubsystem/BunnySubsystem.h"
-#include "sorter/SorterSortAction.h"
 #include <ActionSequence.h>
 #include <singlemotorsubsystem/SingleMotorSubsystem.h>
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
@@ -24,7 +23,6 @@ namespace xero {
             //
 			collector_ = mapAxisSwitch(4,3) ;
 			hopper_ = mapAxisSwitch(3,3) ;
-			sorter_color_ = mapButton(15, OIButton::ButtonType::Level) ;
 			shoot_one_ = mapButton(3, OIButton::ButtonType::LowToHigh) ;
 			shoot_many_ = mapButton(6, OIButton::ButtonType::Level) ;
             test_auto_modes_ = mapButton(12, OIButton::ButtonType::LowToHigh) ;           // PUsh button			
@@ -52,7 +50,6 @@ namespace xero {
 			Bunny &bunny = dynamic_cast<Bunny &>(getSubsystem().getRobot()) ;
 			auto collector = bunny.getBunnySubsystem()->getCollector() ;
 			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
-			auto sorter = bunny.getBunnySubsystem()->getSorter() ;
 
 			collector_fwd_action_ = std::make_shared<SingleMotorPowerAction>(*collector, "collector:power:fwd") ;
 			collector_off_action_ = std::make_shared<SingleMotorPowerAction>(*collector, 0.0) ;
@@ -60,8 +57,6 @@ namespace xero {
 			hopper_fwd_action_ = std::make_shared<SingleMotorPowerAction>(*hopper, "hopper:power:fwd") ;
 			hopper_off_action_ = std::make_shared<SingleMotorPowerAction>(*hopper, 0.0) ;
 			hopper_rev_action_ = std::make_shared<SingleMotorPowerAction>(*hopper, "hopper:power:rev") ;
-			sort_red_ = std::make_shared<SorterSortAction>(*sorter, Sorter::BallColor::Red) ;
-			sort_blue_ = std::make_shared<SorterSortAction>(*sorter, Sorter::BallColor::Blue) ;
 		}
 
         void BunnyOIDevice::generateActions(ActionSequence &seq) {

@@ -104,6 +104,11 @@ namespace xero {
 				return frc::Timer::GetFPGATimestamp() ;
 			}
 
+			/// \brief Return the battery voltage
+			double getBatteryVoltage() {
+				return voltage_ ;
+			}
+
 			/// \brief Return a reference to the one settings parser
 			/// \return a reference to the one settings parser
 			xero::misc::SettingsParser& getSettingsParser() {
@@ -251,6 +256,9 @@ namespace xero {
 
 			// The name of the robot
 			std::string name_ ;
+
+			// The battery voltage
+			double voltage_ ;
 		} ;
 	}
 }

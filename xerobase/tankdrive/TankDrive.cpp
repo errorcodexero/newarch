@@ -119,6 +119,11 @@ namespace xero {
 				ticks_left_ = left_enc_->Get() ;
 				ticks_right_ = right_enc_->Get() ;
 
+				//
+				// Hack because right side encoders do not work
+				//
+				ticks_right_ = ticks_left_ ;
+
 				dist_l_ = ticks_left_ * inches_per_tick_ ;
 				dist_r_ = ticks_right_ * inches_per_tick_ ;
 			}
@@ -136,7 +141,7 @@ namespace xero {
 
 			if (getAction() == nullptr || getAction()->isDone() || dumpstate_) {
 				auto &logger = getRobot().getMessageLogger() ;
-				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
+				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE_VERBOSE);
 				logger << "time " << getRobot().getTime() ;
 				logger << ", linear dist " << getDist() ;
 				logger << ", velocity " << getVelocity() ;
@@ -151,8 +156,9 @@ namespace xero {
 		}
 
 		void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
-			left_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent);
-			right_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
+			double mult = 12.0 / getRobot().getBatteryVoltage() ;
+			left_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent * mult);
+			right_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent * mult);
 		}
 	}
 }

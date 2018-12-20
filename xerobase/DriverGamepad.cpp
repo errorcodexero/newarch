@@ -110,7 +110,7 @@ namespace xero {
                 bool slow = ds.GetStickButton(getIndex(),ButtonNumber::LB) ;
                 double boost = ds.GetStickAxis(getIndex(),AxisNumber::LTRIGGER) ;
 
-                double power = scalePower(ly, boost, slow) ;
+                double power = -scalePower(ly, boost, slow) ;
                 double spin = (std::fabs(rx) > 0.01) ? scalePower(-rx, boost, slow) : 0.0 ;
                 
                 if (std::fabs(power + spin - left_) > tolerance_ || std::fabs(power - spin - right_) > tolerance_) {

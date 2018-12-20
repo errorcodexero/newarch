@@ -66,6 +66,7 @@ void TankDriveDistanceAction::start() {
 	start_time_ = profile_start_time_ ;
 
 	profile_->update(target_distance_, 0.0, 0.0);
+	std::cout << profile_->toString() << std::endl ;
 	total_dist_so_far_ = 0.0 ;
 
 	start_angle_ = getTankDrive().getAngle() ;

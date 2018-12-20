@@ -23,7 +23,6 @@ namespace xero {
         private:
             size_t collector_ ;
             size_t hopper_ ;
-            size_t sorter_color_ ;
             size_t shoot_one_ ;
             size_t shoot_many_ ;
             size_t automode_ ;

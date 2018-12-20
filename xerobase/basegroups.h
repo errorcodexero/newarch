@@ -32,5 +32,7 @@
 /// \brief ID for the robot loop debug messages
 #define MSG_GROUP_ROBOTLOOP             (1ull << 7)
 
+#define MSG_GROUP_TANKDRIVE_VERBOSE     (1ull << 8)
+
 /// \brief ID to get all messages
 #define MSG_GROUP_ALL                   (0xffffffffffffffffull)

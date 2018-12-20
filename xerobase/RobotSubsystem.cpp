@@ -67,7 +67,7 @@ namespace xero {
 			}
 			else if (settings.isDefined("hw:tankdrive:invertright")) {
 				tank->invertRightMotors() ;
-				tank->invertRightEncoder() ;                
+				tank->invertLeftEncoder() ;                
 			}
 
 			db_ = tank ;

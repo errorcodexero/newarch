@@ -1,4 +1,0 @@
-Sorts balls by color, has a wheel that spins in in either direction depending on the ball color. 
-One direction gets balls ready to be put in buckets, other direction spits balls out. 
-Needs a color sensor, a motor to spin the wheel both ways and an encoder to make sure it only 
-spins far enough to allow the next ball in.

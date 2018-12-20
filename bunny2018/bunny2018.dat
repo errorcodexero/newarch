@@ -11,7 +11,7 @@ hw:tankdrive:leftencoder:1          0
 hw:tankdrive:leftencoder:2          1
 hw:tankdrive:rightencoder:1         2
 hw:tankdrive:rightencoder:2         3
-hw:tankdrive:invertleft             true
+hw:tankdrive:invertright            true
 
 hw:driverstation:hid:oi             2
 hw:driverstation:hid:gunner         1
@@ -22,18 +22,9 @@ hw:collector:motor                  11
 hw:hopper:motor                     6
 
 hw:intake:motor						12
-hw:intake:sensor					8
 
-hw:shooter:motor					13
-hw:shooter:sensor					9
-
-hw:sorter:motor                     7
-hw:sorter:encoder1                  4
-hw:sorter:encoder2                  5
-hw:sorter:in:motor                  1
-hw:sorter:out:motor                 8
-hw:sorter:sensoraddr                0x29
-hw:sorter:wheel                     6						
+hw:shooter:motor                    13
+hw:shooter:sensor                   9					
 
 ##############################################################
 #
@@ -52,16 +43,15 @@ messages:enabled
 #
 # TankDrive subsystem constants
 #
-tankdrive:inches_per_tick                                       0.010471976
-tankdrive:distance_action:maxa                                  90
-tankdrive:distance_action:maxd                                  -90.0
-tankdrive:distance_action:maxv                                  60
-tankdrive:distance_action:navxadj                               0.0
+tankdrive:inches_per_tick                                       0.06483439
+tankdrive:distance_action:maxa                                  40
+tankdrive:distance_action:maxd                                  -40.0
+tankdrive:distance_action:maxv                                  70
 tankdrive:distance_action:threshold                             2.0
 tankdrive:distance_action:velocity_pid:p                        0.0
 tankdrive:distance_action:velocity_pid:i                        0.0
 tankdrive:distance_action:velocity_pid:d                        0.0
-tankdrive:distance_action:velocity_pid:f                        0.01
+tankdrive:distance_action:velocity_pid:f                        0.012
 tankdrive:distance_action:velocity_pid:a                        0.0
 tankdrive:distance_action:velocity_pid:max                      1.0
 tankdrive:distance_action:velocity_pid:min                      -1.0
@@ -130,9 +120,9 @@ sorter:goto:duration                                            0.25
 #
 # Shooter subsystem constants
 #
-shooter:stage_motor_power                                       0.70
+shooter:stage_motor_power                                       1.0
 shooter:eject_motor_power                                       1.0
-shooter:eject_duration                                          0.9
+shooter:eject_duration                                          0.2
 
 #
 # Collector constants
@@ -149,8 +139,8 @@ intake:power:rev                                             -1.0
 #
 # Hopper constants
 #
-hopper:power:fwd                                                0.5
-hopper:power:rev                                                -0.5
+hopper:power:fwd                                                -0.5
+hopper:power:rev                                                0.5
 
 #
 # MessageListener subsystem constants
