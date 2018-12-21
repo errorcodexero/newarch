@@ -44,6 +44,12 @@ namespace can {
 
 		void Follow(TalonSRX& master) {};
 
+		void ConfigVoltageCompSaturation(double v, int timeout) {
+		}
+
+		void EnableVoltageCompensation(bool b) {
+		}
+
 	private:
 		int index_ ;
 		double value_ ;
