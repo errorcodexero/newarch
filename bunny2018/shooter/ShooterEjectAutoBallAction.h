@@ -25,12 +25,18 @@ namespace xero {
             virtual bool ejectTrigger() ;
             virtual bool repeatEjectOne() ;
 
+			double getClosestCrate(double pos, bool fwd) ;
+
         private:
             std::shared_ptr<xero::base::DriveBase> db_ ;
 
             double base_location_ ;
             std::vector<double> crates_ ;
             std::vector<bool> filled_ ;
+
+			double offset_ ;
+			double window_ ;
+			double crate_width_ ;
         };
     }
 }

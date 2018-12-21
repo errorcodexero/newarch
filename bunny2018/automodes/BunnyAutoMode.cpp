@@ -2,8 +2,7 @@
 #include "automodes/BunnyAutoMode.h"
 #include "bunnysubsystem/BunnySubsystem.h"
 #include "bunnyoi/BunnyOISubsystem.h"
-#include <shooter/ShooterEjectOneBallAction.h>
-#include <shooter/ShooterStageBallAction.h>
+#include <shooter/ShooterEjectAutoBallAction.h>
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/TankDriveDistanceAction.h>
 #include <tankdrive/TankDriveCharAction.h>
@@ -28,75 +27,56 @@ namespace xero {
     	void BunnyAutoMode::updateAutoMode(int sel, const std::string &gamedata) {
             ActionSequencePtr mode ;
 			
-			int min_crates = getRobot().getSettingsParser().getInteger("automode:1:min_crate_number") ;
+			if (sel >= 0 && sel <= 9) {
+				int min_crates = getRobot().getSettingsParser().getInteger("automode:1:min_crate_number") ;				
+				mode = createGameAutoMode(sel + min_crates) ;
+			}
+			else {
+				switch(sel) {
+					case 10:
+						mode = createTestMotors() ;
+						break ;
 
-			switch(sel) {
-				case 0:
-					
-				case 1:
-					
-				case 2:
-					
-				case 3:
-					
-				case 4:
-					
-				case 5:
-					
-				case 6:
-					
-				case 7:
-					
-				case 8:
-					
-				case 9:
-					mode = createGameAutoMode(sel + min_crates) ;
-					break ;
+					case 11:
+						mode = createDriveStraightChar() ;
+						break ;
 
-				case 10:
-					mode = createTestAuto() ;
-					break ;
+					case 12:
+						mode = createDriveStraightTest() ;
+						break ;
 
-				case 11:
-					mode = createRotateChar() ;
-					break ;
+					case 13:
+						mode = createShooterTestMode() ;
+						break ;				
 
-				case 12:
-					mode = createDriveStraightTest() ;
-					break ;
-
-				case 13:
-					mode = createRotatePos90Test() ;
-					break ;
-
-				case 14:
-					mode = createRotateNeg90Test() ;
-					break ;
-
-				case 15:
-					mode = createDriveSquareTest() ;
-					break ;
-
-				case 16:
-					mode = createDriveStraightChar() ;				
-					break ;
-
-				case 17:
-					break ;		
-
-				case 18:
-					mode = createTestMode98() ;
-					break ;				
-
-				default:
-					mode = nullptr ;
-					break ; 
+					default:
+						mode = nullptr ;
+						break ; 
+				}
 			}
 
             setAction(mode) ;
         }
 
-		ActionSequencePtr BunnyAutoMode::createTestMode98() {
+		ActionSequencePtr BunnyAutoMode::createDriveStraightChar() {
+            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveStraightChar") ;
+            auto act = std::make_shared<TankDriveCharAction>(*tankdrive, 2.0, 0.9) ;
+			seq->pushSubActionPair(tankdrive, act) ;
+			return seq ;
+		}
+
+		ActionSequencePtr BunnyAutoMode::createDriveStraightTest() {
+            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
+
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveStraight") ;
+            auto act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 276.0) ;			
+			seq->pushSubActionPair(tankdrive, act) ;
+
+			return seq ;
+		}
+
+		ActionSequencePtr BunnyAutoMode::createShooterTestMode() {
 			ActionPtr act ;
 			auto &robot = getRobot() ;
 			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
@@ -169,96 +149,7 @@ namespace xero {
 			return seq ;
 		}
 
-		ActionSequencePtr BunnyAutoMode::createDriveStraightChar() {
-            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveStraightChar") ;
-            auto act = std::make_shared<TankDriveCharAction>(*tankdrive, 2.0, 0.9) ;
-			seq->pushSubActionPair(tankdrive, act) ;
-			return seq ;
-
-		}
-
-		ActionSequencePtr BunnyAutoMode::createRotateChar() {
-            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
-
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveRotateChar") ;
-            auto act = std::make_shared<TankDriveAngleCharAction>(*tankdrive, 5.0, 0.0, 1.0, 0.1) ;			
-			seq->pushSubActionPair(tankdrive, act) ;
-
-			return seq ;
-		}
-
-		ActionSequencePtr BunnyAutoMode::createDriveStraightTest() {
-            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
-
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveStraight") ;
-            auto act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 276.0) ;			
-			seq->pushSubActionPair(tankdrive, act) ;
-
-			return seq ;
-		}
-
-		ActionSequencePtr BunnyAutoMode::createRotatePos90Test() {
-            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
-
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveRotatev 90") ;
-            auto act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;
-			seq->pushSubActionPair(tankdrive, act) ;
-
-			return seq ;
-		}
-
-		ActionSequencePtr BunnyAutoMode::createRotateNeg90Test() {
-            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
-
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveRotate -90") ;
-            auto act = std::make_shared<TankDriveAngleAction>(*tankdrive, -90.0) ;
-			seq->pushSubActionPair(tankdrive, act) ;
-
-			return seq ;
-		}		
-
-		ActionSequencePtr BunnyAutoMode::createDriveSquareTest() {
-			ActionPtr act ;
-
-            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
-
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveSquare") ;
-
-            act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;
-			seq->pushSubActionPair(tankdrive, act) ;
-
-            act = std::make_shared<TankDriveDistanceAction>(*tankdrive, -60.0) ;
-			seq->pushSubActionPair(tankdrive, act) ;
-
-            act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;
-			seq->pushSubActionPair(tankdrive, act) ;						
-
-            act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;			
-			seq->pushSubActionPair(tankdrive, act) ;						
-
-            act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;
-			seq->pushSubActionPair(tankdrive, act) ;
-
-            act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;			
-			seq->pushSubActionPair(tankdrive, act) ;
-
-            act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;
-			seq->pushSubActionPair(tankdrive, act) ;
-
-            act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;			
-			seq->pushSubActionPair(tankdrive, act) ;
-
-            act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 60.0) ;
-			seq->pushSubActionPair(tankdrive, act) ;
-
-            act = std::make_shared<TankDriveAngleAction>(*tankdrive, 90.0) ;			
-			seq->pushSubActionPair(tankdrive, act) ;									
-
-			return seq ;
-		}	
-
-		ActionSequencePtr BunnyAutoMode::createTestAuto() {
+		ActionSequencePtr BunnyAutoMode::createTestMotors() {
 			ActionPtr act ;
 			auto &robot = getRobot() ;
 			Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
@@ -320,67 +211,46 @@ namespace xero {
 			seq->pushSubActionPair(shooter, act) ;
 
 			// Eject existing ball
-
 			act = std::make_shared<ShooterEjectOneBallAction>(*shooter) ;
 			seq->pushSubActionPair(shooter, act) ;
 
 			// Collector to state on
-
             act = std::make_shared<SingleMotorPowerAction>(*collector, "collector:power:fwd") ;
 			seq->pushSubActionPair(collector, act) ;
 
 			// Hopper to state on
-
             act = std::make_shared<SingleMotorPowerAction>(*hopper, "hopper:power:fwd") ;
 			seq->pushSubActionPair(hopper, act) ;
 
-			// Intake to state one
+			// Intake to state on
             act = std::make_shared<SingleMotorPowerAction>(*hopper, "intake:power:fwd") ;
 			seq->pushSubActionPair(hopper, act) ;	
 
 			// Shooter to state stage
-
-			act = std::make_shared<ShooterStageBallAction>(*shooter) ;
+			auto shootact = std::make_shared<ShooterEjectAutoBallAction>(*shooter) ;
+			addCrateLocations(shootact, number_of_crates) ;
 			seq->pushSubActionPair(shooter, act, false) ;
 			
-			// Drive straight (collecting as we go)
-
+			// Drive straight, collecting and depositing as we go
 			act = std::make_shared<TankDriveDistanceAction>(*tankdrive, "automode:1:forward_distance") ;
 			seq->pushSubActionPair(tankdrive, act) ;
 
-			//
-			// Drive back (ejecting as we go)
-			// Note, we can create actions to associated with specific distances on the drive
-			// So we create a sequence that is reused to trigger a shooter eject followed by
-			// a shooter stage.  We attach this sequence at known intervals
-			//
-			// Pseudo Code:
-			//     drvact = new drive straight action
-			//     ActionSequencePtr actseq = new action sequence
-			//     actseq->pushSubActionPair(shooter, eject)
-			//     actseq->pushSubActionPair(shooter, stage)
-			//
-			//     std::vector<double> dists = calcDistanceForCrates()
-			//     foreach(dist in dists)
-			//       drvact->addTriggeredAction(dist, actseq)
-			//     seq->pushSubActionPair(tankdrive, drvact)
-			// 
+			// Backup, depositing as we go
+			act = std::make_shared<TankDriveDistanceAction>(*tankdrive, "automode:1:reverse_distance") ;
+			seq->pushSubActionPair(tankdrive, act) ;
 
-#ifdef NOTYET
-			auto reverse_drive = std::make_shared<TankDriveDistanceAction>(*tankdrive, "automode:1:reverse_distance") ;
-			seq->pushSubActionPair(tankdrive, reverse_drive) ;
-
-			for(int i = 0; i < number_of_crates; i++){
-
-				act = std::make_shared<ShooterEjectOneBallAction>(*shooter) ;
-				reverse_drive->addTriggeredAction("automode:1:eject" + std::to_string(i), act) ;
-
-				act = std::make_shared<ShooterStageBallAction>(*shooter) ;
-				reverse_drive->addTriggeredAction("automode:1:eject" + std::to_string(i), act) ;
-
-			}
-#endif
 			return seq ;
+		}
+
+		void BunnyAutoMode::addCrateLocations(std::shared_ptr<ShooterEjectAutoBallAction> act, int numcrates) {
+			
+			double crate_width = getRobot().getSettingsParser().getDouble("automode:1:crate_width") ;
+			double pos = crate_width * 2.5 ;
+
+			for(int i = 0 ; i < numcrates ; i++) {
+				act->addCrateLocation(pos) ;
+				pos += crate_width * 2 ;
+			}
 		}
     }
 }

@@ -152,22 +152,10 @@ messagelistener:port                                        5808
 #
 # Auto mode constants
 #
-automode:1:forward_distance                                    250
-automode:1:reverse_distance                                    -230
-automode:1:eject0                                              -10.0
-automode:1:eject1                                              -20.0
-automode:1:eject2                                              -30.0
-automode:1:eject3                                              -40.0
-automode:1:eject4                                              -50.0
-automode:1:eject5                                              -60.0
-automode:1:eject6                                              -70.0
-automode:1:eject7                                              -80.0
-automode:1:eject8                                              -90.0
-automode:1:eject9                                             -100.0
-automode:1:eject10                                             -110.0
-automode:1:eject11                                             -120.0
-automode:1:eject12                                             -130.0
-automode:1:eject13                                             -140.0
-automode:1:eject14                                             -150.0
+automode:1:forward_distance                                     250
+automode:1:reverse_distance                                     -230
 automode:1:min_crate_number                                     5
+automode:1:crate_width											13.0
+automode:1:offset												8.0
+automode:1:window												11.0
 
