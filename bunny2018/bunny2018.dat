@@ -46,7 +46,7 @@ messages:enabled
 tankdrive:inches_per_tick                                       0.06483439
 tankdrive:distance_action:maxa                                  40
 tankdrive:distance_action:maxd                                  -40.0
-tankdrive:distance_action:maxv                                  70
+tankdrive:distance_action:maxv                                  30
 tankdrive:distance_action:threshold                             2.0
 tankdrive:distance_action:velocity_pid:p                        0.0
 tankdrive:distance_action:velocity_pid:i                        0.0
@@ -123,7 +123,7 @@ sorter:goto:duration                                            0.25
 shooter:stage_motor_power                                       1.0
 shooter:eject_motor_power                                       1.0
 shooter:eject_duration                                          0.2
-
+shooter:power:continous                                         1.0
 #
 # Collector constants
 #
@@ -133,14 +133,14 @@ collector:power:rev                                             -1.0
 #
 # Intake constants
 #
-intake:power:fwd                                             1.0
-intake:power:rev                                             -1.0
+intake:power:fwd                                             -1.0
+intake:power:rev                                             1.0
 
 #
 # Hopper constants
 #
-hopper:power:fwd                                                -0.5
-hopper:power:rev                                                0.5
+hopper:power:fwd                                                -1.0
+hopper:power:rev                                                1.0
 
 #
 # MessageListener subsystem constants
@@ -157,5 +157,5 @@ automode:1:reverse_distance                                     -230
 automode:1:min_crate_number                                     5
 automode:1:crate_width											13.0
 automode:1:offset												8.0
-automode:1:window												11.0
+automode:1:window												4
 

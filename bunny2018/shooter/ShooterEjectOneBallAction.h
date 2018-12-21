@@ -49,8 +49,10 @@ namespace xero {
                 DONE
             };
             State state_;
+            State last_state_ ;
             double eject_start_time_;
 
+            std::string toString(State st) ;
             double getTime();
         };
     }

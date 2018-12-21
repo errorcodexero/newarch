@@ -13,8 +13,10 @@ namespace xero {
             }
 
             void ShooterEjectOneBallAction::start() {
+                last_state_ = State::NOT_STARTED ;
                 if (getSubsystem().getBallIsStaged()) {
                     if (ejectTrigger()) {
+                        std::cout << "Eject Trigger in start" << std::endl ;
                         readyEjecting() ;
                         state_ = State::EJECTING ;
                     }
@@ -38,7 +40,35 @@ namespace xero {
                 getSubsystem().setMotor(getSubsystem().getEjectMotorPower()) ;
             }
 
+            std::string ShooterEjectOneBallAction::toString(ShooterEjectOneBallAction::State st) {
+                std::string ret = "???" ;
+                switch(st) {
+                    case State::NOT_STARTED:
+                        ret = "NOT_STARTED" ;
+                        break ;
+
+                    case State::STAGING:
+                        ret = "STAGING" ;
+                        break ;
+
+                    case State::WAITING:
+                        ret = "WAITING" ;
+                        break ;
+
+                    case State::EJECTING:
+                        ret = "EJECTING" ;
+                        break ;
+
+                    case State::DONE:
+                        ret = "DONE" ;
+                        break ;
+                }
+
+                return ret ;
+            }
+
             void ShooterEjectOneBallAction::run() {
+                bool b ;
                 if (isDone())
                     return ;
 
@@ -54,13 +84,16 @@ namespace xero {
                                 state_ = State::EJECTING ;
                             }
                             else {
+                                getSubsystem().setMotor(0.0) ;
                                 state_ = State::WAITING ;
                             }
                         }
                         break ;
 
                     case State::WAITING:
-                        if (ejectTrigger()) {
+                        b = ejectTrigger() ;
+                        if (b) {
+                            std::cout << "ejectTrigger in run" << std::endl ;
                             readyEjecting() ;
                             state_ = State::EJECTING ;
                         }
@@ -82,6 +115,11 @@ namespace xero {
 
                     case State::DONE:
                         break ;
+                }
+
+                if (last_state_ != state_) {
+                    std::cout << "State: " << toString(last_state_) << " -> " << toString(state_) << std::endl ;
+                    last_state_ = state_ ;
                 }
             }
 

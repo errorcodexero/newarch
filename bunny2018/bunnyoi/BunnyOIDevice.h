@@ -27,6 +27,7 @@ namespace xero {
             size_t shoot_many_ ;
             size_t automode_ ;
 			size_t test_auto_modes_ ;
+            size_t intake_on_off_ ;
 
 			int base_ ;
 
@@ -37,7 +38,12 @@ namespace xero {
 			xero::base::ActionPtr hopper_fwd_action_ ;
 			xero::base::ActionPtr hopper_off_action_ ;	
             xero::base::ActionPtr sort_red_ ;
-            xero::base::ActionPtr sort_blue_ ;								
+            xero::base::ActionPtr sort_blue_; 
+            xero::base::ActionPtr shoot_one_action_ ;
+            xero::base::ActionPtr shoot_many_action_on_ ;
+            xero::base::ActionPtr shoot_many_action_stage_ ;
+			xero::base::ActionPtr intake_on_action_ ;
+			xero::base::ActionPtr intake_off_action_ ;	            
         } ;
     }
 }

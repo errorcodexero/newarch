@@ -1,6 +1,7 @@
 #pragma once
 
 #include <singlemotorsubsystem/SingleMotorSubsystem.h>
+#include <SmartDashboard/SmartDashboard.h>
 #include <DigitalInput.h>
 
 namespace xero {
@@ -21,6 +22,11 @@ namespace xero {
             virtual void computeState();
             virtual bool canAcceptAction(xero::base::ActionPtr action);
 
+			void clearBallIsStaged() {
+				ball_is_staged_ = false ;
+        		frc::SmartDashboard::PutBoolean("Staged", false) ;
+			}            
+
         private:
 
             double getStageMotorPower() const {
@@ -39,9 +45,6 @@ namespace xero {
                 return ball_is_staged_;
             }
 
-			void clearBallIsStaged() {
-				ball_is_staged_ = false ;
-			}
 
 
         private:

@@ -205,6 +205,7 @@ namespace xero {
 			auto collector = bunny.getBunnySubsystem()->getCollector() ;
 			auto hopper = bunny.getBunnySubsystem()->getHopper() ;
 			auto shooter = bunny.getBunnySubsystem()->getShooter() ;
+			auto intake = bunny.getBunnySubsystem()->getIntake() ;
 
 			// Stage a ball
 			act = std::make_shared<ShooterStageBallAction>(*shooter) ;
@@ -223,20 +224,16 @@ namespace xero {
 			seq->pushSubActionPair(hopper, act) ;
 
 			// Intake to state on
-            act = std::make_shared<SingleMotorPowerAction>(*hopper, "intake:power:fwd") ;
-			seq->pushSubActionPair(hopper, act) ;	
+            act = std::make_shared<SingleMotorPowerAction>(*intake, "intake:power:fwd") ;
+			seq->pushSubActionPair(intake, act) ;	
 
-			// Shooter to state stage
+			// Shooter to state auto shoot action
 			auto shootact = std::make_shared<ShooterEjectAutoBallAction>(*shooter) ;
 			addCrateLocations(shootact, number_of_crates) ;
-			seq->pushSubActionPair(shooter, act, false) ;
+			seq->pushSubActionPair(shooter, shootact, false) ;
 			
 			// Drive straight, collecting and depositing as we go
 			act = std::make_shared<TankDriveDistanceAction>(*tankdrive, "automode:1:forward_distance") ;
-			seq->pushSubActionPair(tankdrive, act) ;
-
-			// Backup, depositing as we go
-			act = std::make_shared<TankDriveDistanceAction>(*tankdrive, "automode:1:reverse_distance") ;
 			seq->pushSubActionPair(tankdrive, act) ;
 
 			return seq ;
@@ -247,10 +244,13 @@ namespace xero {
 			double crate_width = getRobot().getSettingsParser().getDouble("automode:1:crate_width") ;
 			double pos = crate_width * 2.5 ;
 
+			std::cout << "Crates" ;
 			for(int i = 0 ; i < numcrates ; i++) {
+				std::cout << " " << pos ;
 				act->addCrateLocation(pos) ;
 				pos += crate_width * 2 ;
 			}
+			std::cout << std::endl ;
 		}
     }
 }
