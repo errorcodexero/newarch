@@ -1,4 +1,5 @@
 #include "GoPiGo3Subsystem.h"
+#include "GoPiGo3OISubsystem.h"
 #include <Robot.h>
 
 using namespace xero::base ;
@@ -15,6 +16,9 @@ namespace xero {
 		GoPiGo3Subsystem::GoPiGo3Subsystem(Robot &robot) : Subsystem(robot, "gopigo") {	
 			servo_ = std::make_shared<ServoSubsystem>(robot) ;
 			addChild(servo_) ;
+
+			oi_ = std::make_shared<GoPiGo3OISubsystem>(robot) ;
+			addChild(oi_) ;
 
 			std::list<int> left_motors ;
 			std::list<int> right_motors ;

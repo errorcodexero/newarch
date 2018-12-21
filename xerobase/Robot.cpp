@@ -127,15 +127,22 @@ namespace xero {
 			//
 			// Setup access to the parameter file
 			//
-#ifdef ENABLE_SIMULATOR
+#if defined(ENABLE_SIMULATOR)
 			//
 			// In the simulation environment, we look in the robot sourc code specific
 			// directory for the parameter files
 			//
 			filename = name_ + "/" + name_ + ".dat" ;
+#elif defined(GOPIGO)
+			//
+			// This is the gopigo3, Raspberry PI based robot.  Get the parameters file from
+			// the home directory of the PI user
+			//
+			filename = "/home/pi/" + name_ + ".dat" ;
 #else
 			//
-			// In the
+			// This is the robo rio, get the parameters file from the home directory of the
+			// robot application user (e.g. lvuser)
 			//
 			filename = "/home/lvuser/" + name_ + ".dat" ;
 #endif

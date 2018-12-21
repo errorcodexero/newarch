@@ -16,6 +16,6 @@ NEED_XERO=true
 #
 # When we deploy, copy the robot.dat file as well
 #
-DEPLOY_EXTRA=robot.dat
+DEPLOY_EXTRA=gopigo3.dat
 
 include ../../makefiles/gopielf.mk
