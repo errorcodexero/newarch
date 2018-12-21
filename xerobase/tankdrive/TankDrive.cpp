@@ -95,7 +95,10 @@ namespace xero {
 		void TankDrive::initTalonList(const std::list<int>& ids, std::list<TalonPtr>& talons) {
 			//Assuming first id will be master
 			for(int id : ids) {
-				talons.push_back(std::make_shared<TalonSRX>(id));
+				auto talon = std::make_shared<TalonSRX>(id) ;
+				talon->ConfigVoltageCompSaturation(12.0, 10) ;
+				talon->EnableVoltageCompensation(true) ;
+				talons.push_back(talon);
 				if(talons.size() > 1)
 					talons.back()->Follow(*talons.front());
 			}
@@ -118,11 +121,6 @@ namespace xero {
 
 				ticks_left_ = left_enc_->Get() ;
 				ticks_right_ = right_enc_->Get() ;
-
-				//
-				// Hack because right side encoders do not work
-				//
-				ticks_right_ = ticks_left_ ;
 
 				dist_l_ = ticks_left_ * inches_per_tick_ ;
 				dist_r_ = ticks_right_ * inches_per_tick_ ;
@@ -156,9 +154,8 @@ namespace xero {
 		}
 
 		void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
-			double mult = 12.0 / getRobot().getBatteryVoltage() ;
-			left_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent * mult);
-			right_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent * mult);
+			left_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent);
+			right_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
 		}
 	}
 }

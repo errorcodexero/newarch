@@ -68,12 +68,12 @@ namespace frc
 		return 0;
 	}
 
-	double Joystick::GetX(JoystickHand hand) const
+	double Joystick::GetX(JoystickHand hand)
 	{
 		return 0;
 	}
 
-	double Joystick::GetY(JoystickHand hand) const
+	double Joystick::GetY(JoystickHand hand)
 	{
 		return 0;
 	}

@@ -7,10 +7,11 @@ namespace frc
 	class I2C
 	{
 	public:
-		enum class Port
+		enum Port
 		{
 			Port_0 = 0,
 			Port_1 = 1,
+			kOnboard = 1,
 		} ;
 
 	public:

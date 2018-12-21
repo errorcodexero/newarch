@@ -14,5 +14,5 @@
 #include "Timer.h"
 #include "SensorBase.h"
 #include "PIDSource.h"
-#include "SmartDashboard.h"
+#include "smartdashboard/SmartDashboard.h"
 

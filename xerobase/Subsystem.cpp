@@ -63,5 +63,12 @@ namespace xero {
 			}
 			return true ;
         }
+
+		void Subsystem::reset() {
+			action_ = nullptr ;
+
+			for(auto child: children_)
+				child->reset() ;
+		}
     }
 }

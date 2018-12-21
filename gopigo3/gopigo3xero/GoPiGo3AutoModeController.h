@@ -9,8 +9,10 @@ namespace xero {
 			GoPiGo3AutoModeController(xero::base::Robot &robot) ;
 			virtual ~GoPiGo3AutoModeController() ;
 
+			virtual void updateAutoMode(int sel, const std::string &gamedata) ;
+
 		private:
-			xero::base::ActionPtr createAutoMode() ;
+			xero::base::ActionSequencePtr createAutoMode() ;
 		} ;
 	}
 }

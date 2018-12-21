@@ -3,7 +3,8 @@ SOURCES = \
 	ServoGoToAngle.cpp\
 	ServoSubsystem.cpp\
 	GoPiGo3Subsystem.cpp\
-	GoPiGo3AutoModeController.cpp
+	GoPiGo3AutoModeController.cpp\
+	GoPiGo3OISubsystem.cpp
 
 TARGET=GoPiGo3Xero
 

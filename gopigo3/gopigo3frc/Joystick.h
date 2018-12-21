@@ -40,8 +40,8 @@ namespace frc
 		int GetTwistChannel() const;
 		int GetThrottleChannel() const;
 		int GetAxisChannel(AxisType axis) const;
-		double GetX(JoystickHand hand = JoystickHand::kRightHand) const;
-		double GetY(JoystickHand hand = JoystickHand::kRightHand) const;
+		double GetX(JoystickHand hand = JoystickHand::kRightHand) ;
+		double GetY(JoystickHand hand = JoystickHand::kRightHand) ;
 		double GetX() const;
 		double GetTwist() const;
 		double GetThrottle() const;

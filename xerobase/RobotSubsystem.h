@@ -18,6 +18,9 @@ namespace xero {
 			}
 
 		private:
+			bool isDefinedAndTrue(const std::string &name) ;
+
+		private:
 			std::shared_ptr<DriveBase> db_ ;
 		} ;
 	}

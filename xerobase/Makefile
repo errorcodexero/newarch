@@ -3,13 +3,25 @@ SOURCES = \
 	ControllerBase.cpp\
 	DelayAction.cpp\
 	DispatchAction.cpp\
+	DriverGamepad.cpp\
+	OIDevice.cpp\
+	OIOutputAction.cpp\
+	OISubsystem.cpp\
+	ParallelAction.cpp\
 	Robot.cpp\
+	RobotSubsystem.cpp\
 	Subsystem.cpp\
+	TCS34725ColorSensor.cpp\
+	TeleopController.cpp\
 	MessageListener/MessageListener.cpp\
 	tankdrive/TankDrive.cpp\
 	tankdrive/TankDriveDistanceAction.cpp\
 	tankdrive/TankDriveVelocityAction.cpp\
-	tankdrive/TankDriveCharAction.cpp
+	tankdrive/TankDriveCharAction.cpp\
+	tankdrive/TankDriveAngleAction.cpp\
+	tankdrive/TankDriveAngleCharAction.cpp\
+	tankdrive/TankDrivePowerAction.cpp\
+	tankdrive/TankDriveTimedPowerAction.cpp
 
 TARGET=gopigo3xerobase
 

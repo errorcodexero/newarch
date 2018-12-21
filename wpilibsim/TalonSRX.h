@@ -18,8 +18,8 @@ namespace motorcontrol {
 			MotionProfileArc,
 			Disabled
 		} ;
-namespace can {
 
+namespace can {
 	class TalonSRX : public xero::sim::SimulatedObject
 	{
 		friend xero::sim::RobotSimBase ;

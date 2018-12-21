@@ -13,23 +13,26 @@ using namespace xero::base ;
 namespace xero {
 	namespace gopigo {
 		GoPiGo3AutoModeController::GoPiGo3AutoModeController(Robot &robot) : AutoController(robot) {
-			auto ptr = createAutoMode() ;
-			setAction(ptr) ;
+
 		}
 
 		GoPiGo3AutoModeController::~GoPiGo3AutoModeController() {			
 		}
 
-		ActionPtr GoPiGo3AutoModeController::createAutoMode() {
+		void GoPiGo3AutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
+			auto ptr = createAutoMode() ;
+			setAction(ptr) ;
+		}
+
+		ActionSequencePtr GoPiGo3AutoModeController::createAutoMode() {
 			ActionPtr action ;
 			GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot()) ;
 			auto sub = xerorobot.getRobotSubsystem() ;
-			auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger()) ;
+			auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "OnlyAutoMode") ;
 
 			auto servo = sub->getServoSubsystem() ;
-			auto tankdrive = sub->getTankDriveSubsystem() ;
+			auto tankdrive = sub->getTankDrive() ;
 			
-#ifdef ROTATE_HEAD
 			action = std::make_shared<ServoGoToAngle>(*servo, 0.0) ;
 			seq->pushSubActionPair(servo, action) ;
 
@@ -44,10 +47,6 @@ namespace xero {
 
 			action = std::make_shared<ServoGoToAngle>(*servo, 90.0) ;
 			seq->pushSubActionPair(servo, action) ;
-#endif
-
-			action = std::make_shared<TankDriveCharAction>(*tankdrive,"tankdrive:char:duration") ;
-			seq->pushSubActionPair(tankdrive, action) ;
 
 			return seq ;
 		}

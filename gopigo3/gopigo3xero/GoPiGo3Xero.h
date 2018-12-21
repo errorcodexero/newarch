@@ -13,8 +13,10 @@ namespace xero {
 		class GoPiGo3Xero : public xero::base::Robot {
 		public:
 
-			/// \brief called to initialize the robot, basically creating the subsystems
-			virtual void RobotInit() ;
+			GoPiGo3Xero() ;
+
+			void enableSpecificMessages() ;
+			void RobotHardwareInit() ;
 
 			/// \brief called to create the autonomous controller
 			/// \returns a robot controller
@@ -32,7 +34,6 @@ namespace xero {
 			std::shared_ptr<GoPiGo3Subsystem> getRobotSubsystem() ;
 
 		private:
-			void initializeMessageLogger();
 		} ;
 	}
 }

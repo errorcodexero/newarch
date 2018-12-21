@@ -93,7 +93,10 @@ namespace xero {
 			/// \returns the main robot object
 			Robot &getRobot() {
 				return robot_ ;
-			}			
+			}
+
+			/// \brief reset a subsystem by remove all actions on the subsystem and its children
+			void reset() ;
 
 		protected:
 			/// \brief check that a Action is valid for a subsystem

@@ -381,7 +381,6 @@ namespace xero {
 		}
 
 		void Robot::Autonomous() {
-
 			//
 			// Just in case something like the field data changes as we enter
 			// the autonomous state
@@ -399,6 +398,8 @@ namespace xero {
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Leaving Autonomous mode" ;
 			message_logger_.endMessage() ;
+
+			robot_subsystem_->reset() ;
 		}
 
 		void Robot::OperatorControl() {
@@ -423,7 +424,9 @@ namespace xero {
 
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Leaving Teleop mode" ;
-			message_logger_.endMessage() ;			
+			message_logger_.endMessage() ;	
+
+			robot_subsystem_->reset() ;					
 		}
 
 		void Robot::Test() {
@@ -440,7 +443,9 @@ namespace xero {
 
 			message_logger_.startMessage(MessageLogger::MessageType::info) ;
 			message_logger_ << "Leaving Test mode" ;
-			message_logger_.endMessage() ;			
+			message_logger_.endMessage() ;		
+
+			robot_subsystem_->reset() ;				
 		}
 
 		void Robot::Disabled() {

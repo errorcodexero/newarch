@@ -14,6 +14,6 @@ SOURCES = \
 
 TARGET=gopigo3frc
 
-LOCAL_CFLAGS=-I../gopigo3hw -I.
+LOCAL_CFLAGS=-I../gopigo3hw -I../../xeromisc -I.
 
 include ../../makefiles/gopilib.mk

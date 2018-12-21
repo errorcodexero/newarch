@@ -12,6 +12,17 @@ namespace xero {
 
 		}
 
+		bool RobotSubsystem::isDefinedAndTrue(const std::string &name) {
+			auto &settings = getRobot().getSettingsParser() ;
+			if (!settings.isDefined(name))
+				return false ;
+
+			if (settings.getBoolean(name) == false)
+				return false ;
+
+			return true ;
+		}
+
 		void RobotSubsystem::addTankDrive() {
 			auto &settings = getRobot().getSettingsParser() ;
 			auto &logger = getRobot().getMessageLogger() ;
@@ -54,6 +65,7 @@ namespace xero {
 				int r2 = settings.getInteger("hw:tankdrive:rightencoder:2") ;
 
 				tank->setEncoders(l1, l2, r1, r2) ;
+				
 			} else {
 				logger.startMessage(MessageLogger::MessageType::error) ;
 				logger << "encoders not found in robot data file" ;
@@ -61,14 +73,22 @@ namespace xero {
 				db_ = nullptr ;			
 			}
 
-			if (settings.isDefined("hw:tankdrive:invertleft")) {
+			//
+			// Depending on how the robot is wired, these reverse the motor and/or the
+			// encoders such that a positive power on the robot moves the robot forward, and
+			// forward motion on the robot results in positive encoder values.
+			//
+			if (isDefinedAndTrue("hw:tankdrive:invert:motors"))
 				tank->invertLeftMotors() ;
-				tank->invertLeftEncoder() ;
-			}
-			else if (settings.isDefined("hw:tankdrive:invertright")) {
+
+			if (isDefinedAndTrue("hw:tankdrive:invert:motors:right"))
 				tank->invertRightMotors() ;
-				tank->invertLeftEncoder() ;                
-			}
+
+			if (isDefinedAndTrue("hw:tankdrive:invert:encoders:left"))
+				tank->invertLeftEncoder() ;
+
+			if (isDefinedAndTrue("hw:tankdrive:invert:encoders:right"))
+				tank->invertRightEncoder() ;				
 
 			db_ = tank ;
 			addChild(db_) ;

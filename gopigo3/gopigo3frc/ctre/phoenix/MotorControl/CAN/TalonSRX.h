@@ -26,6 +26,12 @@ public:
 		frc::GPG3MotorController::Set(value) ;
 	}
 
+	void ConfigVoltageCompSaturation(double voltage, int timeout) {
+	}
+
+	void EnableVoltageCompensation(bool enable) {
+	}
+
 private:
 	ctre::phoenix::motorcontrol::SensorCollection sensors_ ;
 } ;
