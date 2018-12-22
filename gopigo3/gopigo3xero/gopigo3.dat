@@ -1,0 +1,33 @@
+# 
+# Robot hardware
+#
+hw:servo:which					1
+hw:tankdrive:leftmotor			1
+hw:tankdrive:rightmotor			2
+hw:tankdrive:leftenc:1			0
+hw:tankdrive:leftenc:2			1
+hw:tankdrive:rightenc:1			2
+hw:tankdrive:rightenc:2			3
+
+hw:driverstation:hid:driver 	0
+
+#
+# 6 ticks per motor rotation
+# 120 gear ratio from motor to wheel
+# 2.61811 inch wheel diameter
+#
+# inches per encoder tick for the GoPiGo3 robot
+#
+tankdrive:inches_per_tick				0.01142366
+tankdrive:straight:maxa					1.0
+
+#
+# The gamepad driver
+#
+driver:power:max                                                1.0
+driver:power:default                                            0.6
+driver:power:slowby                                             0.5
+driver:power:tolerance                                          0.05
+driver:power:nudge_straight                                     0.2
+driver:power:nudge_rotate                                       0.2
+driver:nudge_time                                               0.1

@@ -23,7 +23,7 @@ namespace xero {
 		GoPiGo3Xero::GoPiGo3Xero() : xero::base::Robot("gopigo3", 0.02) {
 		}
 
-		std::shared_ptr<GoPiGo3Subsystem> GoPiGo3Xero::getRobotSubsystem() {
+		std::shared_ptr<GoPiGo3Subsystem> GoPiGo3Xero::getGoPiGoSubsystem() {
 			auto sub = getRobotSubsystem() ;
 			return std::dynamic_pointer_cast<GoPiGo3Subsystem>(sub) ;
 		}
@@ -34,7 +34,8 @@ namespace xero {
             //
             // Decide what message groups (incl. subsystems) you want to see
 			//
-            logger.enableSubsystem(MSG_GROUP_ALL) ;			
+            // logger.enableSubsystem(MSG_GROUP_ALL) ;			
+			logger.enableSubsystem(MSG_GROUP_ACTIONS);			
 		}			
 
 		void GoPiGo3Xero::RobotHardwareInit() {

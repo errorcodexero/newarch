@@ -31,7 +31,7 @@ namespace xero {
 			virtual std::shared_ptr<xero::base::ControllerBase> createTestController() ;
 
 			/// \brief return the robot subsystem for the robot
-			std::shared_ptr<GoPiGo3Subsystem> getRobotSubsystem() ;
+			std::shared_ptr<GoPiGo3Subsystem> getGoPiGoSubsystem() ;
 
 		private:
 		} ;

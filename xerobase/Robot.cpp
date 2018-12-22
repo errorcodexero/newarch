@@ -57,7 +57,7 @@ namespace xero {
 			// Set up message logger destination(s)
             std::shared_ptr<MessageLoggerDest> dest_p ;
 
-#ifdef ENABLE_SIMULATOR
+#if defined(ENABLE_SIMULATOR)
 			if (!isScreen())
 			{
 				dest_p = std::make_shared<MessageDestStream>(std::cout);
@@ -67,8 +67,18 @@ namespace xero {
 			const std::string outfile = getRobotOutputFile();
 			if (outfile.length() > 0)
 				setupRobotOutputFile(outfile);
+#elif defined(GOPIGO)
+			//
+			// This is where the roborio places the first USB flash drive it
+			// finds.  Other drives are placed at /V, /W, /X.  The devices are
+			// actually mounted at /media/sd*, and a symbolic link is created
+			// to /U.
+			//
+			std::string flashdrive("/home/pi/logs/");
+			std::string logname("logfile_");
+			dest_p = std::make_shared<MessageDestSeqFile>(flashdrive, logname);
+			logger.addDestination(dest_p);
 #else
-
 			//
 			// This is where the roborio places the first USB flash drive it
 			// finds.  Other drives are placed at /V, /W, /X.  The devices are
@@ -79,12 +89,6 @@ namespace xero {
 			std::string logname("logfile_");
 			dest_p = std::make_shared<MessageDestSeqFile>(flashdrive, logname);
 			logger.addDestination(dest_p);
-
-#ifdef DEBUG
-			dest_p = std::make_shared<MessageDestStream>(std::cout);
-			logger.addDestination(dest_p);
-#endif
-
 #endif
 
 #ifndef ENABLE_SIMULATOR
@@ -170,20 +174,20 @@ namespace xero {
 			robot_subsystem_->computeState() ;
 
             message_logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ROBOTLOOP) ;
-            message_logger_ << "    completed compute state" ;
+            message_logger_ << "RobotLoop: completed compute state" ;
             message_logger_.endMessage() ;
 
 			if (controller_ != nullptr)
 				controller_->run();
 
             message_logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ROBOTLOOP) ;
-            message_logger_ << "    completed controller run" ;
+            message_logger_ << "RobotLoop: completed controller run" ;
             message_logger_.endMessage() ;
 
 			robot_subsystem_->run() ;
 
             message_logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ROBOTLOOP) ;
-            message_logger_ << "    completed subsystem run" ;
+            message_logger_ << "RobotLoop: completed subsystem run" ;
             message_logger_.endMessage() ;            
 
 			iterations_[index]++ ;
@@ -205,7 +209,7 @@ namespace xero {
 
 			last_time_ = initial_time ;
 
-			if ((iterations_[index] % 500) == 0) {
+  			if ((iterations_[index] % 500) == 0) {
 				double avg = sleep_time_[index] / iterations_[index] ;
 				message_logger_.startMessage(MessageLogger::MessageType::info) ;
 				message_logger_ << "RobotLoop:" ;

@@ -27,7 +27,7 @@ namespace xero {
 		ActionSequencePtr GoPiGo3AutoModeController::createAutoMode() {
 			ActionPtr action ;
 			GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot()) ;
-			auto sub = xerorobot.getRobotSubsystem() ;
+			auto sub = xerorobot.getGoPiGoSubsystem() ;
 			auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "OnlyAutoMode") ;
 
 			auto servo = sub->getServoSubsystem() ;
