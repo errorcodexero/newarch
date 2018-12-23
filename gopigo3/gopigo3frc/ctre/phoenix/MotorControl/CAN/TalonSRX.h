@@ -3,6 +3,7 @@
 #include <GPG3MotorController.h>
 #include "../SensorCollection.h"
 #include "../ControlMode.h"
+#include "../NeutralMode.h"
 #include <cassert>
 
 namespace ctre {
@@ -30,6 +31,9 @@ public:
 	}
 
 	void EnableVoltageCompensation(bool enable) {
+	}
+
+	void SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode mode) {
 	}
 
 private:

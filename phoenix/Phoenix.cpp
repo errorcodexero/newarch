@@ -1,14 +1,9 @@
 #include "Phoenix.h"
 #include "phoenixgroups.h"
 #include "automodes/PhoenixAutoController.h"
-
-// Subsystems
-
-
-// Other misc classes
 #include <ActionSequence.h>
 #include <DelayAction.h>
-
+#include <TeleopController.h>
 #include <basegroups.h>
 #include <MessageDestDS.h>
 #include <MessageLogger.h>
@@ -58,9 +53,9 @@ namespace xero {
 		
 		std::shared_ptr<ControllerBase> Phoenix::createTeleopController() {
 			//
-			// This is where the teleop controller is created
+			// The base teleop controller is sufficient
 			//
-			return nullptr ;
+			return std::make_shared<xero::base::TeleopController>(*this) ;
 		}
 		 
 		std::shared_ptr<ControllerBase> Phoenix::createTestController() {

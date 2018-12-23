@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ControllerBase.h"
-
+#include <ActionSequence.h>
 
 /// \file
 
@@ -21,6 +21,7 @@ namespace xero {
             virtual void run() ;
 
         private:
+            std::shared_ptr<ActionSequence> seq_ ;		
         } ;
     }
 }

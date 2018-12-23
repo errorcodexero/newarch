@@ -25,24 +25,14 @@ namespace xero {
             /// \brief destroy the OI subsystem
             virtual ~OISubsystem() ;
 
-            /// \brief enable the OI subsystem.
-            /// If this OI subsystem is enabled any action stored in the internal action
-            /// list that are added during the computeState method will be executed.
-			void enableActionGeneration() {
-				enabled_ = true ;
-			}
-
-            /// \brief disable the OI subsystem.
-            /// If this OI subsystem is disabled, no actions will be generated as part of 
-            /// computing the state of the OI subsystem.
-			void disableActionGeneration() {
-				enabled_ = false ;
-			}            
-
             /// \brief compute the state of the subsystem
             /// If the OI is enabled, this will generate a series of actions to be executed based on
             /// the state of the OI
             virtual void computeState()  ;
+
+			/// \brief generate actions from the OI
+			/// \param seq the action sequenced used to store the generated actions
+			virtual void generateActions(ActionSequencePtr seq) ;
 
             /// \brief run the action generated in the computeState above
             virtual void run() ;
@@ -62,8 +52,6 @@ protected:
 
         private:
             bool inited_ ;
-            bool enabled_ ;
-            std::shared_ptr<ActionSequence> seq_ ;
             std::list<std::shared_ptr<HIDDevice>> hiddevices_ ;
             std::shared_ptr<DriverGamepad> driver_ ;
         } ;

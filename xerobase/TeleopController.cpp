@@ -1,4 +1,9 @@
 #include "TeleopController.h"
+#include <Robot.h>
+#include <OISubsystem.h>
+#include <MessageLogger.h>
+
+using namespace xero::misc ;
 
 namespace xero {
     namespace base {
@@ -8,7 +13,22 @@ namespace xero {
         TeleopController::~TeleopController() {            
         }
 
-        void TeleopController::run() {            
+        void TeleopController::run() {
+			auto oi = getRobot().getOI() ;
+
+			oi->generateActions(seq_) ;
+
+            seq_->start() ;
+            seq_->run() ;
+            if (!seq_->isDone()) {
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << "telop sequence did not complete in one cycle" ;
+                logger.endMessage() ;
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << "Sequence: " << seq_->toString() ;
+                logger.endMessage() ;
+            }			
         }
     }
 }

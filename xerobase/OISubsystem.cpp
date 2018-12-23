@@ -12,7 +12,6 @@ namespace xero {
         OISubsystem::OISubsystem(Robot &robot, const std::string &name, bool adddriver) 
                                 : Subsystem(robot, name) {
             inited_ = false ;
-            enabled_ = false ;
 			if (adddriver) {
 				int driver = robot.getSettingsParser().getInteger("hw:driverstation:hid:driver") ;                
 				driver_ = std::make_shared<DriverGamepad>(*this, driver);
@@ -20,7 +19,6 @@ namespace xero {
 			}
 
             std::string sequence_name = "OIsubsystem";
-            seq_ = std::make_shared<ActionSequence>(robot.getMessageLogger(), sequence_name) ;
         }
 
         OISubsystem::~OISubsystem() {
@@ -50,29 +48,16 @@ namespace xero {
                         std::cout << "But it was a " << sub->getName() << std::endl ;
                 }
             }
-            seq_->clear() ;
-            for(auto dev: hiddevices_) {
+            for(auto dev: hiddevices_)
                 dev->computeState() ;
-				if (enabled_) {
-					dev->generateActions(*seq_) ;
-                }
-            }
         }
 
+		void OISubsystem::generateActions(ActionSequencePtr seq) {
+            for(auto dev: hiddevices_)
+				dev->generateActions(*seq) ;
+		}
+
         void OISubsystem::run() {
-            if (enabled_ && seq_->size() > 0) {
-                seq_->start() ;
-                seq_->run() ;
-                if (!seq_->isDone()) {
-                    MessageLogger &logger = getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::error) ;
-                    logger << "telop sequence did not complete in one cycle" ;
-                    logger.endMessage() ;
-                    logger.startMessage(MessageLogger::MessageType::error) ;
-                    logger << "Sequence: " << seq_->toString() ;
-                    logger.endMessage() ;
-                }
-            }
         }
     }
 }
