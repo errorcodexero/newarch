@@ -19,6 +19,11 @@ namespace motorcontrol {
 			Disabled
 		} ;
 
+		enum class NeutralMode {
+			Brake,
+			Coast
+		} ;
+
 namespace can {
 	class TalonSRX : public xero::sim::SimulatedObject
 	{
@@ -48,6 +53,9 @@ namespace can {
 		}
 
 		void EnableVoltageCompensation(bool b) {
+		}
+
+		void SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode mode) {
 		}
 
 	private:

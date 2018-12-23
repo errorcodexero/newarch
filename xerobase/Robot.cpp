@@ -401,7 +401,7 @@ namespace xero {
 
 			controller_ = auto_controller_ ;
 
-			robot_subsystem_->init() ;
+			robot_subsystem_->init(LoopType::Autonomous) ;
 
 			while (IsAutonomous() && IsEnabled())
 				robotLoop(LoopType::Autonomous);
@@ -422,7 +422,7 @@ namespace xero {
 
 			controller_ = createTeleopController() ;
 
-			robot_subsystem_->init() ;			
+			robot_subsystem_->init(LoopType::OperatorControl) ;			
 
 			//
 			// The OI subsystem runs in teleop and autonomous mode.  However, we only want the
@@ -451,7 +451,7 @@ namespace xero {
 
 			controller_ = createTestController() ;
 
-			robot_subsystem_->init() ;
+			robot_subsystem_->init(LoopType::Test) ;
 
 			while (IsTest() && IsEnabled())
 				robotLoop(LoopType::Test) ;
