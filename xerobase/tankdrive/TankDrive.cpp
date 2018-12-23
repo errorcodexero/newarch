@@ -1,6 +1,7 @@
 #include "TankDrive.h"
 #include "TankDriveAction.h"
 #include "Robot.h"
+#include "LoopType.h"
 #include <cassert>
 #include <cmath>
 
@@ -42,6 +43,30 @@ namespace xero {
 		}
 
 		TankDrive::~TankDrive() {			
+		}
+
+		void TankDrive::reset() {
+			Subsystem::reset() ;
+
+			for(auto &talon : left_motors_) {
+				talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast) ;
+			}
+
+			for(auto &talon : right_motors_) {
+				talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast) ;
+			}			
+		}
+
+		void TankDrive::init(LoopType ltype) {
+			Subsystem::init(ltype) ;
+
+			for(auto &talon : left_motors_) {
+				talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
+			}
+
+			for(auto &talon : right_motors_) {
+				talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
+			}			
 		}
 
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Action.h"
+#include "LoopType.h"
 #include <memory>
 #include <map>
 #include <list>
@@ -76,9 +77,12 @@ namespace xero {
 			virtual void run() ;
 
 			/// \brief initialize the subsystem
+			/// \param ltype the type of loop we are initializing for
 			/// This is called after all of the subsystems are created.
-			virtual void init() {
-			}			
+			virtual void init(LoopType ltype) ;
+
+			/// \brief reset a subsystem by remove all actions on the subsystem and its children
+			virtual void reset() ;					
 			
 			/// \brief returns true if the subsystem is done with the current Action
 			/// \returns true if the subsystem is done with the current Action
@@ -95,8 +99,6 @@ namespace xero {
 				return robot_ ;
 			}
 
-			/// \brief reset a subsystem by remove all actions on the subsystem and its children
-			void reset() ;
 
 		protected:
 			/// \brief check that a Action is valid for a subsystem

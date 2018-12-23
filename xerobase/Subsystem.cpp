@@ -70,5 +70,10 @@ namespace xero {
 			for(auto child: children_)
 				child->reset() ;
 		}
+
+		void Subsystem::init(LoopType ltype) {
+			for(auto child: children_)
+				child->init(ltype) ;			
+		}
     }
 }

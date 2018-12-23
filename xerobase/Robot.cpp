@@ -401,6 +401,8 @@ namespace xero {
 
 			controller_ = auto_controller_ ;
 
+			robot_subsystem_->init() ;
+
 			while (IsAutonomous() && IsEnabled())
 				robotLoop(LoopType::Autonomous);
 
@@ -420,9 +422,11 @@ namespace xero {
 
 			controller_ = createTeleopController() ;
 
+			robot_subsystem_->init() ;			
+
 			//
-			// The OI subsystem runs in teleop and autonomous mode.  However, we only enable
-			// the OI subsystem for 
+			// The OI subsystem runs in teleop and autonomous mode.  However, we only want the
+			// OI subsystem to generate actions in the teleop mode.
 			//
 			oi_subsystem_->enableActionGeneration() ;
 
@@ -446,6 +450,8 @@ namespace xero {
 			message_logger_.endMessage() ;
 
 			controller_ = createTestController() ;
+
+			robot_subsystem_->init() ;
 
 			while (IsTest() && IsEnabled())
 				robotLoop(LoopType::Test) ;

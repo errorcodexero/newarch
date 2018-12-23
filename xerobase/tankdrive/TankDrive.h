@@ -176,6 +176,12 @@ namespace xero {
 			/// \brief set the drive base to high gear
 			void highGear()  ;
 
+			/// \brief reset the tank drive after leaving a mode
+			virtual void reset() ;
+
+			/// \brief init the subsystem for the enabled mode
+			virtual void init(LoopType ltype) ;
+
 		private:
 			/// \brief Set the motors to output at the given percentages
 			/// \param left_percent the percent output for the left motors

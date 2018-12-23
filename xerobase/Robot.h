@@ -3,6 +3,7 @@
 #include "Subsystem.h"
 #include "MessageLogger.h"
 #include "SettingsParser.h"
+#include "LoopType.h"
 #include "basegroups.h"
 #include <WPILib.h>
 #include <memory>
@@ -49,6 +50,8 @@ namespace xero {
 		/// Finally, the robot calls each of the subsytems to execute on any assigned actions.
 		///
 		class Robot : public frc::SampleRobot {
+		public:
+
 		public:
 			/// \brief create the base robot.
 			/// The name must be a legal directory name in the file system and is generally the name
@@ -136,22 +139,12 @@ namespace xero {
 			virtual void enableSpecificMessages() {
 			}
 
-			/// \brief The type of robot loop we are running
-			enum class LoopType : int {
-				OperatorControl = 0,				///< Operator control robot loop
-				Autonomous = 1,						///< Autnomous robot loop
-				Test = 2,							///< Test robot loop
-				MaxValue = 3						///< Not a loop type, used to get maximum value
-			} ;		
-
 			/// \brief add a subsystem to the robot
 			/// \param sub the subsystem to add to the robot
 			/// \param oi the subsystem for the OI
 			/// \param db the subsystem for the drive base
 			void setRobotSubsystem(SubsystemPtr sub, std::shared_ptr<OISubsystem> oi, std::shared_ptr<DriveBase> db) {
 				robot_subsystem_ = sub ;
-				robot_subsystem_->init() ;
-
 				drivebase_subsystem_ = db ;
 				oi_subsystem_ = oi ;
 			}		
