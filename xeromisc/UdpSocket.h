@@ -52,11 +52,20 @@ namespace xero
 
 			/// \brief create a new UDP (datagram) socket
 			/// \returns true if the socket is created, otherwise false
-			bool createSocket()
+			bool createSocket(bool broadcast=false)
 			{
 				m_socket = socket(AF_INET, SOCK_DGRAM, 0);
 				if (m_socket < 0)
 					return false;
+
+				if (broadcast) {
+					int v = 1 ;
+					if (setsockopt(m_socket, SOL_SOCKET, SO_BROADCAST, &v, sizeof(v)) == -1) {
+						close(m_socket) ;
+						m_socket = -1 ;
+						return false ;
+					}
+				}
 
 
 				return true;

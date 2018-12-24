@@ -43,6 +43,27 @@
                     "ignoreFailures": true
                 }
             ],
+		},
+        {
+            "name": "(gdb) Launch GoPiGO3",
+            "type": "cppdbg",
+            "request": "launch",
+			"program": "${workspaceFolder}/gopigo3/gopigo3xero/GoPiGo3Xero",
+			"targetArchitecture": "arm",
+            "args": ["--station"],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}/gopigo3/gopigo3xero",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\SysGCC\\raspberry\\bin\\arm-linux-gnueabihf-gdb.exe",
+            "customLaunchSetupCommands": [
+                {
+                    "text": "target remote 192.168.1.86:3333",
+                    "description": "connect to remote target",
+                    "ignoreFailures": false
+                }
+            ]
 		}		
     ]
 }

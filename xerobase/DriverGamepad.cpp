@@ -79,6 +79,8 @@ namespace xero {
 		}
 
 		void DriverGamepad::generateActions(ActionSequence &seq) {
+			int pov ;
+
 			if (db_ == nullptr) {
 				auto &logger = getSubsystem().getRobot().getMessageLogger() ;
 				logger.startMessage(MessageLogger::MessageType::warning) ;
@@ -90,21 +92,22 @@ namespace xero {
                 return ;
 
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
-            int pov = ds.GetStickPOV(getIndex(), pov_) ;
+			if (pov_ != -1)
+				pov = ds.GetStickPOV(getIndex(), pov_) ;
             double ly = ds.GetStickAxis(getIndex(),AxisNumber::LEFTY) ;
             double rx = ds.GetStickAxis(getIndex(),AxisNumber::RIGHTX) ;
 
             if (pov == POVAngle::LEFT) {
-                seq.pushSubActionPair(db_, nudge_clockwise_) ;
+                seq.pushSubActionPair(db_, nudge_clockwise_, false) ;
             }
             else if (pov == POVAngle::UP) {
-                seq.pushSubActionPair(db_, nudge_forward_) ;
+                seq.pushSubActionPair(db_, nudge_forward_, false) ;
             }
             else if (pov == POVAngle::DOWN) {
-                seq.pushSubActionPair(db_, nudge_backward_) ;
+                seq.pushSubActionPair(db_, nudge_backward_, false) ;
             }
             else if (pov == POVAngle::RIGHT) {
-                seq.pushSubActionPair(db_, nudge_counter_clockwise_) ;
+                seq.pushSubActionPair(db_, nudge_counter_clockwise_, false) ;
             }
             else {
                 bool slow = ds.GetStickButton(getIndex(),ButtonNumber::LB) ;

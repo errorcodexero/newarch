@@ -153,7 +153,7 @@ namespace frc
 
 	void DriverStation::waitForConnection()
 	{
-		m_server_in_p = new xero::misc::UdpBroadcastReceiver();
+		m_server_in_p = new xero::misc::UdpReceiver();
 		if (!m_server_in_p->open(ROBOT_IN_PORT))
 		{
 			std::string err("could not connect to driver station - in port");
@@ -168,8 +168,6 @@ namespace frc
 			std::runtime_error ex(err.c_str());
 			throw ex;
 		}
-
-		std::cout << "DriverStation connection established" << std::endl;
 
 		m_running = true;
 		m_ds_recv_thread = std::thread(&DriverStation::dsRecvCommThread, this);
@@ -200,7 +198,9 @@ namespace frc
 		}
 
 		if ((control & cEnabled) == cEnabled)
+		{
 			m_enabled = true;
+		}
 		else
 			m_enabled = false;
 
@@ -263,12 +263,8 @@ namespace frc
 		state.setAxisCount(axiscount);
 		for (size_t i = 0; i < axiscount; i++)
 		{
-			float v = byteToFloat(data[start], 1.0);
-
-			std::cout << "Axis " << i;
-			std::cout << ", Raw Value " << data[start];
-			std::cout << ", Axis Value " << v << std::endl;
-			state.setAxis(i, byteToFloat(data[start++], 1.0));
+			float v = byteToFloat(data[start++], 2.0) - 1.0 ;
+			state.setAxis(i, v) ;
 			state.setAxisType(i, 0);
 		}
 
@@ -296,6 +292,7 @@ namespace frc
 		{
 			size_t sofar = 0;
 			int ret = m_server_in_p->receive(data);
+
 			if (ret < 6)
 				continue;
 

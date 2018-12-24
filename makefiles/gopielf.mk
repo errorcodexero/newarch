@@ -44,7 +44,18 @@ else
 endif
 
 run:
-	ssh -t pi@$(GOPIGOIP) "./$(TARGET) --start 0 --auto 15 --oper 0"
+ifdef GOPIGOIP
+	ssh -t pi@$(GOPIGOIP) "./$(TARGET) --station"
+else
+	echo GOPIGOIP is not defined
+endif
+
+debug:
+ifdef GOPIGOIP
+	ssh -t pi@$(GOPIGOIP) "gdbserver --once 0.0.0.0:3333 GoPiGo3Xero --station"
+else
+	echo GOPIGOIP is not defined
+endif
 
 
 clean:

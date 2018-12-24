@@ -7,7 +7,7 @@ namespace xero {
     namespace base {
 
         MessageListener::MessageListener(Robot& robot, int socket_port_number) : Subsystem(robot, "MessageListener") {
-            m_server_in_p = new xero::misc::UdpBroadcastReceiver();
+            m_server_in_p = new xero::misc::UdpReceiver();
             m_server_in_p->setBlocking(false);
             if (!m_server_in_p->open(socket_port_number)) {
                 std::string err("Message listener could not connect to port");

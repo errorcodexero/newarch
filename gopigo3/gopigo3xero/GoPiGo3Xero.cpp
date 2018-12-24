@@ -10,6 +10,8 @@
 #include <MessageLogger.h>
 #include <MessageDestSeqFile.h>
 #include <MessageDestStream.h>
+#include <TeleopController.h>
+#include <TestController.h>
 
 #include <memory>
 #include <cassert>
@@ -53,14 +55,11 @@ namespace xero {
 		}
 		
 		std::shared_ptr<ControllerBase> GoPiGo3Xero::createTeleopController() {
-			return nullptr ;
+			return std::make_shared<TeleopController>(*this) ;
 		}
 		 
 		std::shared_ptr<ControllerBase> GoPiGo3Xero::createTestController() {
-			//
-			// This is where the test controller is created
-			//
-			return nullptr ;
+			return std::make_shared<TestController>(*this) ;
 		}
 	}
 }

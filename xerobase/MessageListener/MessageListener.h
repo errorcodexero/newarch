@@ -36,7 +36,7 @@ namespace xero {
         private:
 
             /// \brief Pointer to UDP baordcast receiver.
-            xero::misc::UdpBroadcastReceiver* m_server_in_p;
+            xero::misc::UdpReceiver* m_server_in_p;
 
             /// \brief Messages received and not processed yet.
             std::list<std::string> messages;
