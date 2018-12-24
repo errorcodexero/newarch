@@ -90,13 +90,11 @@ namespace frc
 
 			bool getButton(int button) const
 			{
-				button--;
 				return ((m_buttons & (1 << button)) != 0);
 			}
 
 			bool getButtonPressed(int button)
 			{
-				button--;
 				bool pressed = ((m_presses & (1 << button)) != 0);
 				m_presses = static_cast<uint16_t>(m_presses & ~(1 << button));
 
@@ -105,7 +103,6 @@ namespace frc
 
 			bool getButtonReleased(int button)
 			{
-				button--;
 				bool released = ((m_releases & (1 << button)) != 0);
 				m_releases = static_cast<uint16_t>(m_releases & ~(1 << button));
 

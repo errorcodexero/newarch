@@ -24,16 +24,16 @@ namespace xero {
 
             /// \brief buttons on the gamepad
             enum ButtonNumber : int {
-                A = 0,                  ///< A button
-                B = 1,                  ///< B button
-                X = 2,                  ///< X button
-                Y = 3,                  ///< Y button
-                LB = 4,                 ///< Left back button
-                RB = 5,                 ///< Right back button
-                BACK = 6,               ///< Back button
-                START = 7,              ///< Start button
-                L_JOY = 8,              ///< Left joystick button
-                R_JOY = 9               ///< Right joystick button
+                A = 1,                  ///< A button
+                B = 2,                  ///< B button
+                X = 3,                  ///< X button
+                Y = 4,                  ///< Y button
+                LB = 5,                 ///< Left back button
+                RB = 6,                 ///< Right back button
+                BACK = 7,               ///< Back button
+                START = 8,              ///< Start button
+                L_JOY = 9,              ///< Left joystick button
+                R_JOY = 10               ///< Right joystick button
             } ;
 
             /// \brief POV angles

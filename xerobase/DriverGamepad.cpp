@@ -81,6 +81,9 @@ namespace xero {
 		void DriverGamepad::generateActions(ActionSequence &seq) {
 			int pov ;
 
+			if (nudge_forward_ == nullptr)
+				init(db_) ;
+
 			if (db_ == nullptr) {
 				auto &logger = getSubsystem().getRobot().getMessageLogger() ;
 				logger.startMessage(MessageLogger::MessageType::warning) ;
@@ -94,6 +97,7 @@ namespace xero {
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
 			if (pov_ != -1)
 				pov = ds.GetStickPOV(getIndex(), pov_) ;
+
             double ly = ds.GetStickAxis(getIndex(),AxisNumber::LEFTY) ;
             double rx = ds.GetStickAxis(getIndex(),AxisNumber::RIGHTX) ;
 
