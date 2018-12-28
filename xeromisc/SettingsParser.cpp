@@ -151,6 +151,7 @@ bool SettingsParser::readFile(const std::string &filename) {
 	return true;
 }
 
+
 bool SettingsParser::parseBoolean(const std::string &value, bool &result) {
 	if(value == "true") {
 		result = true;
@@ -229,6 +230,14 @@ bool SettingsParser::isDefinedOnGet(const std::string &key, const std::string &t
 		return false;
 	}
 	return true;
+}
+
+
+Setting &SettingsParser::get(const std::string &key) {
+	auto it = settings_.find(key) ;
+	assert(it != settings_.end()) ;
+
+	return it->second ;	
 }
 
 void SettingsParser::set(const std::string &key, bool value) {

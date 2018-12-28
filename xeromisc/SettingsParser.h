@@ -41,6 +41,11 @@ namespace xero {
 			/// \returns true if a value with the given name is found
 			bool isDefinedOnGet(const std::string &key, const std::string &type) const;
 
+			/// \brief returns the setting object
+			/// \param key the name of the value of interest
+			/// \returns the setting object
+			Setting &get(const std::string &key) ;
+
 			/// \brief associate the given key with the given boolean value
 			/// \param key the name to associate with the value
 			/// \param value the boolean value to be associated
