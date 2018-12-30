@@ -17,7 +17,7 @@ namespace xero {
 	namespace base {
 
 		TankDrive::TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids) : 
-						DriveBase(robot, "tankdrive"), angular_(3, true), left_linear_(4), right_linear_(4) {
+						DriveBase(robot, "tankdrive"), angular_(4, true), left_linear_(4), right_linear_(4) {
 			//The two sides should always have the same number of motors and at least one motor each
 			assert((left_motor_ids.size() == right_motor_ids.size()) && (left_motor_ids.size() > 0));
 
@@ -40,15 +40,6 @@ namespace xero {
 				logger << "NavX is not connected - cannot perform tankdrive auto functions" ;
 				logger .endMessage() ;
 				navx_ = nullptr ;
-			}
-
-			if (navx_ != nullptr)
-			{
-				//
-				// Give the thread running the navx software a chance to get some
-				// samples and be ready to go
-				//
-				std::this_thread::sleep_for(std::chrono::milliseconds(250)) ;
 			}
 		}
 
@@ -153,6 +144,7 @@ namespace xero {
 		}		
 
 		void TankDrive::computeState() {
+
 			if (left_enc_ != nullptr) {
 				assert(right_enc_ != nullptr) ;
 

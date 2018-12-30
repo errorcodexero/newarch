@@ -9,7 +9,6 @@ namespace frc
 		m_start_delay = 1.0;
 		m_auto_period = 15.0;
 		m_teleop_period = 0.0;
-		m_disabled_loops = 0 ;
 	}
 
 	SampleRobot::~SampleRobot() {
@@ -196,7 +195,6 @@ namespace frc
 			m_running = true;
 			while (m_running) {
 				if (IsDisabled()) {
-					m_disabled_loops++ ;
 					Disabled();
 					while (IsDisabled());
 				}

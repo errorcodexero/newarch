@@ -47,9 +47,6 @@ namespace frc
 
 		// The length of the teleop mode in seconds
 		double m_teleop_period;
-
-		// The number of disabled loops
-		int m_disabled_loops ;
 	};
 }
 
