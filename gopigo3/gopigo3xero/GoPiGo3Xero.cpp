@@ -37,7 +37,8 @@ namespace xero {
             // Decide what message groups (incl. subsystems) you want to see
 			//
             // logger.enableSubsystem(MSG_GROUP_ALL) ;			
-			logger.enableSubsystem(MSG_GROUP_ACTIONS);			
+			logger.enableSubsystem(MSG_GROUP_TANKDRIVE);			
+			logger.enableSubsystem(MSG_GROUP_TANKDRIVE_VERBOSE);			
 		}			
 
 		void GoPiGo3Xero::RobotHardwareInit() {

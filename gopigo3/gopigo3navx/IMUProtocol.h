@@ -398,7 +398,7 @@ protected:
             unsigned char checksum = 0;
             for ( int i = 0; i < content_length; i++ )
             {
-				checksum = static_cast<unsigned char>(checksum + buffer[i]);
+                checksum += buffer[i];
             }
             // convert checksum to two ascii bytes
             sprintf(&buffer[content_length], "%02X", checksum);
@@ -421,9 +421,7 @@ protected:
     {
         char work_buffer[PROTOCOL_FLOAT_LENGTH + 1];
         int i;
-		float rem = f - static_cast<float>(static_cast<int>(f));
-		int rem100 = static_cast<int>(rem * 100);
-		int temp1 = abs(rem100);
+        int temp1 = abs((int)((f - (int)f) * 100));
         if ( f < 0 ) buff[0] = '-'; else buff[0] = ' ';
         sprintf(work_buffer,"%03d.%02d", abs((int)f), temp1);
         for ( i = 0; i < (PROTOCOL_FLOAT_LENGTH-1); i++ ) {
@@ -442,8 +440,8 @@ protected:
         unsigned int shift_left = 12;
         for ( int i = 0; i < 4; i++ )
         {
-			unsigned char digit = static_cast<unsigned char>(uint16_string[i] <= '9' ? uint16_string[i] - '0' : ((uint16_string[i] - 'A') + 10));
-			decoded_uint16 = static_cast<uint16_t>(decoded_uint16 + (((uint16_t)digit) << shift_left));
+            unsigned char digit = uint16_string[i] <= '9' ? uint16_string[i] - '0' : ((uint16_string[i] - 'A') + 10);
+            decoded_uint16 += (((uint16_t)digit) << shift_left);
             shift_left -= 4;
         }
         return decoded_uint16;
@@ -466,7 +464,7 @@ protected:
         unsigned char checksum = 0;
         for ( int i = 0; i < content_length; i++ )
         {
-			checksum = static_cast<unsigned char>(checksum + buffer[i]);
+            checksum += buffer[i];
         }
 
         // Decode Checksum
@@ -477,9 +475,9 @@ protected:
 
     static unsigned char decodeUint8( char *checksum )
     {
-		unsigned char first_digit = static_cast<unsigned char>(checksum[0] <= '9' ? checksum[0] - '0' : ((checksum[0] - 'A') + 10));
-		unsigned char second_digit = static_cast<unsigned char>(checksum[1] <= '9' ? checksum[1] - '0' : ((checksum[1] - 'A') + 10));
-		unsigned char decoded_checksum = static_cast<unsigned char>((first_digit * 16) + second_digit);
+        unsigned char first_digit = checksum[0] <= '9' ? checksum[0] - '0' : ((checksum[0] - 'A') + 10);
+        unsigned char second_digit = checksum[1] <= '9' ? checksum[1] - '0' : ((checksum[1] - 'A') + 10);
+        unsigned char decoded_checksum = (first_digit * 16) + second_digit;
         return decoded_checksum;
     }
 
@@ -491,7 +489,7 @@ protected:
             temp[i] = buffer[i];
         }
         temp[PROTOCOL_FLOAT_LENGTH] = 0;
-		return static_cast<float>(atof(temp));
+        return atof(temp);
     }
 
 };

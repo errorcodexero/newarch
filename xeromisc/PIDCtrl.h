@@ -75,6 +75,11 @@ public:
 	/// \brief return a human readable string representing the PID controller
 	/// \returns a human readable string representing the PID controller state
 	std::string toString();
+
+	/// \brief reset a stored state, specifically the accumulated integral
+	void reset() {
+		integral_ = 0.0 ;
+	}
 	
 private:
 	double calcError(double target, double current);

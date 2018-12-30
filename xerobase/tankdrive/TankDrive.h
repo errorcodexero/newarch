@@ -86,7 +86,7 @@ namespace xero {
 			/// If the robot travels forward and then back by the same distance, the net distance
 			/// is zero and zero will be returned.
 			/// \returns The distance traveled by the left side in inches
-			double getDistL() const {
+			double getLeftDistance() const {
 				return dist_l_ ;
 			}
 
@@ -94,7 +94,7 @@ namespace xero {
 			/// If the robot travels forward and then back by the same distance, the net distance
 			/// is zero and zero will be returned.
 			/// \returns The distance traveled by the right side in inches
-			double getDistR() const {
+			double getRightDistance() const {
 				return dist_r_ ;
 			}
 
@@ -106,21 +106,33 @@ namespace xero {
 
 			/// \brief returns the left encoder tick count
 			/// \returns left encoder tick count
-			int getTickCountL() {
+			int getLeftTickCount() {
 				return ticks_left_ ;
 			}
 
 			/// \brief returns the right encoder tick count
 			/// \returns right encoder tick count
-			int getTickCountR() {
+			int getRightTickCount() {
 				return ticks_right_ ;
 			}
 
 			/// \brief Return the velocity of the drive base
 			/// \returns the linear velocity of the drive base
 			virtual double getVelocity() const {
-				return linear_.getVelocity() ;
+				return (left_linear_.getVelocity() + right_linear_.getVelocity()) / 2.0 ;
 			}
+
+			/// \brief Return the velocity of the left side of the drive base
+			/// \returns the linear velocity of the left side of the drive base
+			virtual double getLeftVelocity() const {
+				return left_linear_.getVelocity() ;
+			}
+
+			/// \brief Return the velocity of the right side of the drive base
+			/// \returns the linear velocity of the right side of the drive base
+			virtual double getRightVelocity() const {
+				return right_linear_.getVelocity() ;
+			}			
 
 			/// \brief Return the angular velocity of the drive base
 			/// \returns the angular velocity of the drive base
@@ -131,7 +143,7 @@ namespace xero {
 			/// \brief Return the acceleration of the drive base
 			/// \returns the linear acceleration of the drive base
 			double getAcceleration() const {
-				return linear_.getAcceleration() ;
+				return (left_linear_.getAcceleration() + right_linear_.getAcceleration()) / 2.0 ;
 			}
 
 			/// \brief Return the angular acceleration of the drive base
@@ -139,6 +151,7 @@ namespace xero {
 			double getAngularAcceleration() const {
 				return angular_.getAcceleration() ;
 			}
+
 			/// \brief Invert the output of the left motors
 			void invertLeftMotors() ;
 
@@ -199,8 +212,8 @@ namespace xero {
 			std::shared_ptr<frc::Solenoid> gear_ ;
 			
 			xero::misc::Speedometer angular_ ;
-			xero::misc::Speedometer linear_ ;
-
+			xero::misc::Speedometer left_linear_ ;
+			xero::misc::Speedometer right_linear_ ;
 
 			int ticks_left_ ;
 			int ticks_right_ ;

@@ -10,25 +10,22 @@
 #include <iomanip>
 #include <AHRS.h>
 #include <AHRSProtocol.h>
-#include <ctime>
-#include <pthread.h>
 #include "IIOProvider.h"
 #include "IIOCompleteNotification.h"
 #include "IBoardCapabilities.h"
 #include "InertialDataIntegrator.h"
 #include "OffsetTracker.h"
 #include "ContinuousAngleTracker.h"
+#include "RegisterIOSPI.h"
+#include "RegisterIOI2C.h"
 #include "SerialIO.h"
 
 static const uint8_t    NAVX_DEFAULT_UPDATE_RATE_HZ         = 60;
 static const int        YAW_HISTORY_LENGTH                  = 10;
 static const int16_t    DEFAULT_ACCEL_FSR_G                 = 2;
 static const int16_t    DEFAULT_GYRO_FSR_DPS                = 2000;
-static const uint32_t   MAX_SPI_BITRATE                     = 2000000;
-static const uint32_t   MIN_SPI_BITRATE                     = 100000;
 static const uint32_t   DEFAULT_SPI_BITRATE                 = 500000;
 static const uint8_t    NAVX_MXP_I2C_ADDRESS                = 0x32;
-static const float  	QUATERNION_HISTORY_SECONDS			= 5.0f;
 
 class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
     AHRS *ahrs;
@@ -37,12 +34,13 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
         this->ahrs = ahrs;
     }
 
+    virtual ~AHRSInternal() {}
+
     /***********************************************************/
     /* IIOCompleteNotification Interface Implementation        */
     /***********************************************************/
 
     void SetYawPitchRoll(IMUProtocol::YPRUpdate& ypr_update, long sensor_timestamp) {
-        //printf("Setting pitch value to %f", ypr_update.pitch);
         ahrs->yaw               	= ypr_update.yaw;
         ahrs->pitch             	= ypr_update.pitch;
         ahrs->roll              	= ypr_update.roll;
@@ -52,7 +50,7 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
 
     void SetAHRSPosData(AHRSProtocol::AHRSPosUpdate& ahrs_update, long sensor_timestamp) {
         /* Update base IMU class variables */
-        //printf("Setting pitch to: %f\n", ahrs_update.pitch);
+
         ahrs->yaw                    = ahrs_update.yaw;
         ahrs->pitch                  = ahrs_update.pitch;
         ahrs->roll                   = ahrs_update.roll;
@@ -109,7 +107,7 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
         for (int i = 0; i < MAX_NUM_CALLBACKS; i++) {
             ITimestampedDataSubscriber *callback = ahrs->callbacks[i];
             if (callback != NULL) {
-            	long system_timestamp = (long)(std::time(nullptr) * 1000);
+            	long system_timestamp = (long)(Timer::GetFPGATimestamp() * 1000);
                 callback->timestampedDataReceived(system_timestamp,
                 		sensor_timestamp,
                 		ahrs_update,
@@ -206,7 +204,7 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
         for (int i = 0; i < MAX_NUM_CALLBACKS; i++) {
             ITimestampedDataSubscriber *callback = ahrs->callbacks[i];
             if (callback != NULL) {
-            	long system_timestamp = (long)(std::time(nullptr) * 1000);
+            	long system_timestamp = (long)(Timer::GetFPGATimestamp() * 1000);
                 callback->timestampedDataReceived(system_timestamp,
                 		sensor_timestamp,
                 		ahrs_update,
@@ -238,7 +236,11 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
         ahrs->sensor_status = board_state.sensor_status;
         ahrs->cal_status = board_state.cal_status;
         ahrs->selftest_status = board_state.selftest_status;
-     }
+    }
+
+	void YawResetComplete() {
+		ahrs->yaw_angle_tracker->Reset();
+	}
 
     /***********************************************************/
     /* IBoardCapabilities Interface Implementation        */
@@ -282,6 +284,9 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
  * @author Scott
  */
 
+AHRS::AHRS(SPI::Port spi_port_id, uint8_t update_rate_hz) {
+    SPIInit(spi_port_id, DEFAULT_SPI_BITRATE, update_rate_hz);
+}
 
 /**
  * The AHRS class provides an interface to AHRS capabilities
@@ -304,6 +309,9 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
  * @author Scott
  */
 
+AHRS::AHRS(SPI::Port spi_port_id, uint32_t spi_bitrate, uint8_t update_rate_hz) {
+    SPIInit(spi_port_id, spi_bitrate, update_rate_hz);
+}
 
 /**
  * Constructs the AHRS class using I2C communication, overriding the
@@ -318,6 +326,9 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
  * @param i2c_port_id I2C Port to use
  * @param update_rate_hz Custom Update Rate (Hz)
  */
+AHRS::AHRS(I2C::Port i2c_port_id, uint8_t update_rate_hz) {
+    I2CInit(i2c_port_id, update_rate_hz);
+}
 
     /**
      * Constructs the AHRS class using serial communication, overriding the
@@ -339,7 +350,7 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
      * @param data_type either kProcessedData or kRawData
      * @param update_rate_hz Custom Update Rate (Hz)
      */
-AHRS::AHRS(std::string serial_port_id, AHRS::SerialDataType data_type, uint8_t update_rate_hz) {
+AHRS::AHRS(SerialPort::Port serial_port_id, AHRS::SerialDataType data_type, uint8_t update_rate_hz) {
     SerialInit(serial_port_id, data_type, update_rate_hz);
 }
 
@@ -350,6 +361,9 @@ AHRS::AHRS(std::string serial_port_id, AHRS::SerialDataType data_type, uint8_t u
  *<p>
  * @param spi_port_id SPI port to use.
  */
+AHRS::AHRS(SPI::Port spi_port_id) {
+    SPIInit(spi_port_id, DEFAULT_SPI_BITRATE, NAVX_DEFAULT_UPDATE_RATE_HZ);
+}
 
 
 /**
@@ -359,6 +373,9 @@ AHRS::AHRS(std::string serial_port_id, AHRS::SerialDataType data_type, uint8_t u
  *<p>
  * @param i2c_port_id I2C port to use
  */
+AHRS::AHRS(I2C::Port i2c_port_id) {
+    I2CInit(i2c_port_id, NAVX_DEFAULT_UPDATE_RATE_HZ);
+}
 
 
 /**
@@ -370,7 +387,7 @@ AHRS::AHRS(std::string serial_port_id, AHRS::SerialDataType data_type, uint8_t u
  *<p>
  * @param serial_port_id SerialPort to use
  */
-AHRS::AHRS(std::string serial_port_id) {
+AHRS::AHRS(SerialPort::Port serial_port_id) {
     SerialInit(serial_port_id, SerialDataType::kProcessedData, NAVX_DEFAULT_UPDATE_RATE_HZ);
 }
 
@@ -441,8 +458,11 @@ float AHRS::GetCompassHeading() {
 void AHRS::ZeroYaw() {
     if ( ahrs_internal->IsBoardYawResetSupported() ) {
         io->ZeroYaw();
+        /* Notification is deferred until action is complete. */
     } else {
-        yaw_offset_tracker->SetOffset();
+		yaw_offset_tracker->SetOffset();
+		/* Notification occurs immediately. */
+		ahrs_internal->YawResetComplete();
     }
 }
 
@@ -862,15 +882,44 @@ float AHRS::GetDisplacementZ() {
     return (ahrs_internal->IsDisplacementSupported() ? displacement[2] : 0.f);
 }
 
+/**
+ * Enables or disables logging (via Console I/O) of AHRS library internal
+ * behaviors, including events such as transient communication errors.
+ * @param enable
+ */
+void AHRS::EnableLogging(bool enable) {
+	if ( this->io != NULL) {
+		io->EnableLogging(enable);
+	}
+}
+
+int16_t AHRS::GetGyroFullScaleRangeDPS() {
+	return gyro_fsr_dps;
+}
+
+int16_t AHRS::GetAccelFullScaleRangeG() {
+	return accel_fsr_g;
+}
+
 #define NAVX_IO_THREAD_NAME "navXIOThread"
 
+void AHRS::SPIInit( SPI::Port spi_port_id, uint32_t bitrate, uint8_t update_rate_hz ) {
+    commonInit( update_rate_hz );
+    io = new RegisterIO(new RegisterIO_SPI(new SPI(spi_port_id), bitrate), update_rate_hz, ahrs_internal, ahrs_internal);
+    task = new std::thread(AHRS::ThreadFunc, io);
+}
 
-void AHRS::SerialInit(std::string serial_port_id, AHRS::SerialDataType data_type, uint8_t update_rate_hz) {
+void AHRS::I2CInit( I2C::Port i2c_port_id, uint8_t update_rate_hz ) {
+    commonInit(update_rate_hz);
+    io = new RegisterIO(new RegisterIO_I2C(new I2C(i2c_port_id, NAVX_MXP_I2C_ADDRESS)), update_rate_hz, ahrs_internal, ahrs_internal);
+    task = new std::thread(AHRS::ThreadFunc, io);
+}
+
+void AHRS::SerialInit(SerialPort::Port serial_port_id, AHRS::SerialDataType data_type, uint8_t update_rate_hz) {
     commonInit(update_rate_hz);
     bool processed_data = (data_type == SerialDataType::kProcessedData);
     io = new SerialIO(serial_port_id, update_rate_hz, processed_data, ahrs_internal, ahrs_internal);
-    pthread_t trd;
-    pthread_create(&trd, NULL, AHRS::ThreadFunc, io);
+    task = new std::thread(AHRS::ThreadFunc, io);
 }
 
 void AHRS::commonInit( uint8_t update_rate_hz ) {
@@ -930,11 +979,10 @@ void AHRS::commonInit( uint8_t update_rate_hz ) {
     accel_fsr_g = DEFAULT_ACCEL_FSR_G;
     gyro_fsr_dps = DEFAULT_GYRO_FSR_DPS;
     capability_flags = 0;
-	op_status = 0;
-	sensor_status = 0;
-	cal_status = 0;
-	selftest_status = 0;
-
+    op_status =
+            sensor_status =
+                    cal_status =
+                            selftest_status = 0;
     /* Board ID */
     board_type =
             hw_rev =
@@ -982,6 +1030,37 @@ double AHRS::GetAngle() {
 
 double AHRS::GetRate() {
     return yaw_angle_tracker->GetRate();
+}
+
+/**
+ * Sets an amount of angle to be automatically added before returning a
+ * angle from the getAngle() method.  This allows users of the getAngle() method
+ * to logically rotate the sensor by a given amount of degrees.
+ * <p>
+ * NOTE 1:  The adjustment angle is <b>only</b> applied to the value returned
+ * from getAngle() - it does not adjust the value returned from getYaw(), nor
+ * any of the quaternion values.
+ * <p>
+ * NOTE 2:  The adjustment angle is <b>not</b>automatically cleared whenever the
+ * sensor yaw angle is reset.
+ * <p>
+ * If not set, the default adjustment angle is 0 degrees (no adjustment).
+ * @param adjustment, in degrees (range:  -360 to 360)
+ */
+void AHRS::SetAngleAdjustment(double adjustment) {
+	yaw_angle_tracker->SetAngleAdjustment(adjustment);
+}
+
+/**
+ * Returns the currently configured adjustment angle.  See
+ * setAngleAdjustment() for more details.
+ *
+ * If this method returns 0 degrees, no adjustment to the value returned
+ * via getAngle() will occur.
+ * @param adjustment, in degrees (range:  -360 to 360)
+ */
+double AHRS::GetAngleAdjustment() {
+	return yaw_angle_tracker->GetAngleAdjustment();
 }
 
 /**
@@ -1161,7 +1240,7 @@ AHRS::BoardYawAxis AHRS::GetBoardYawAxis() {
         yaw_axis.board_axis = BoardAxis::kBoardAxisZ;
     } else {
         yaw_axis.up = (((yaw_axis_info & 0x01) != 0) ? true : false);
-		yaw_axis_info = static_cast<short>(yaw_axis_info >> 1);
+        yaw_axis_info >>= 1;
         switch ( yaw_axis_info ) {
         case 0:
             yaw_axis.board_axis = BoardAxis::kBoardAxisX;
@@ -1196,21 +1275,12 @@ std::string AHRS::GetFirmwareVersion() {
 }
 
     /***********************************************************/
-    /* LiveWindowSendable Interface Implementation             */
+    /* SendableBase Interface Implementation                   */
     /***********************************************************/
 
-
-void AHRS::StartLiveWindowMode() {
-}
-
-void AHRS::StopLiveWindowMode() {
-}
-
-/* Are the two following functions still needed? */
-
-
-std::string AHRS::GetSmartDashboardType() const {
-    return "Gyro";
+void AHRS::InitSendable(SendableBuilder& builder) {
+	builder.SetSmartDashboardType("Gyro");
+	builder.AddDoubleProperty("Value", [=]() { return GetYaw(); }, nullptr);
 }
 
 /***********************************************************/
@@ -1227,10 +1297,9 @@ double AHRS::PIDGet() {
     return GetYaw();
 }
 
-void *AHRS::ThreadFunc(void *threadarg) {
-    IIOProvider *io_provider = (IIOProvider*)threadarg;
+int AHRS::ThreadFunc(IIOProvider *io_provider) {
     io_provider->Run();
-	return NULL;
+    return 0;
 }
 
 /**
@@ -1293,7 +1362,7 @@ bool AHRS::DeregisterCallback( ITimestampedDataSubscriber *callback ) {
  */
 
 int AHRS::GetActualUpdateRate() {
-    uint8_t actual_update_rate = GetActualUpdateRateInternal(static_cast<uint8_t>(GetRequestedUpdateRate()));
+    uint8_t actual_update_rate = GetActualUpdateRateInternal(GetRequestedUpdateRate());
     return (int)actual_update_rate;
 }
 
@@ -1322,6 +1391,4 @@ int AHRS::GetRequestedUpdateRate() {
     return (int)update_rate_hz;
 }
 
-void AHRS::Close() {
-    io->Stop();    
-}
+

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <AutoController.h>
+#include <memory>
 
 namespace xero {
 	namespace gopigo {
@@ -12,7 +13,11 @@ namespace xero {
 			virtual void updateAutoMode(int sel, const std::string &gamedata) ;
 
 		private:
-			xero::base::ActionSequencePtr createAutoMode() ;
+			xero::base::ActionSequencePtr createRotatePos90() ;
+			xero::base::ActionSequencePtr createRotatePos45() ;			
+			xero::base::ActionSequencePtr createRotatePos135() ;			
+			xero::base::ActionSequencePtr createRotateNeg90() ;				
+	
 		} ;
 	}
 }

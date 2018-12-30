@@ -722,7 +722,7 @@ public:
             update.selftest_status = buffer[AHRSPOS_TS_UPDATE_SELFTEST_STATUS_VALUE_INDEX];
             update.timestamp = (uint32_t)IMURegisters::decodeProtocolInt32(&buffer[AHRSPOS_TS_UPDATE_TIMESTAMP_INDEX]);
 
-            return AHRSPOS_UPDATE_MESSAGE_LENGTH;
+            return AHRSPOS_TS_UPDATE_MESSAGE_LENGTH;
         }
         return 0;
     }
@@ -793,7 +793,7 @@ public:
         return DATA_SET_RESPONSE_MESSAGE_LENGTH;
     }
 
-    static int decodeDataSetResponse( char *buffer, int length, AHRS_DATA_TYPE &type, AHRS_TUNING_VAR_ID &subtype, uint8_t& status )
+    static int decodeDataSetResponse( char *buffer, int length, AHRS_DATA_TYPE& type, AHRS_TUNING_VAR_ID& subtype, uint8_t& status )
     {
         if ( length < DATA_SET_RESPONSE_MESSAGE_LENGTH ) return 0;
         if ( ( buffer[0] == PACKET_START_CHAR ) &&

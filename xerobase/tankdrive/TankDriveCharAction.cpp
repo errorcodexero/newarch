@@ -47,8 +47,8 @@ namespace xero {
 					logger << ", " << getTankDrive().getDist() ;
 					logger << ", " << getTankDrive().getVelocity() ;
 					logger << ", " << getTankDrive().getAcceleration() ;
-					logger << ", " << getTankDrive().getTickCountL() ;
-					logger << ", " << getTankDrive().getTickCountR() ;
+					logger << ", " << getTankDrive().getLeftTickCount() ;
+					logger << ", " << getTankDrive().getRightTickCount() ;
 					logger << ", " << voltage_ ;
 					logger.endMessage() ;
 				}

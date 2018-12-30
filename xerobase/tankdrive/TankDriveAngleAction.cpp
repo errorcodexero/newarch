@@ -12,22 +12,42 @@ namespace xero
 	{
 		TankDriveAngleAction::TankDriveAngleAction(TankDrive &tank_drive, double target_angle) : TankDriveAction(tank_drive)
 		{
+			SettingsParser &parser = tank_drive.getRobot().getSettingsParser();
+
 			target_angle_ = target_angle;
 			is_done_ = false;
-			double maxa = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:angle_action:maxa");
-			double maxd = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:angle_action:maxd");
-			double maxv = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:angle_action:maxv");
+			double maxa = parser.getDouble("tankdrive:angle_action:maxa");
+			double maxd = parser.getDouble("tankdrive:angle_action:maxd");
+			double maxv = parser.getDouble("tankdrive:angle_action:maxv");
 			profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv);
+
+			velocity_pid_.initFromSettingsExtended(parser, "tankdrive:angle_action:velocity_pid", true);		
+
+
+			angle_threshold_ = parser.getDouble("tankdrive:angle_action:angle_threshold");
+			profile_outdated_error_long_ = parser.getDouble("tankdrive:angle_action:profile_outdated_error_long");
+			profile_outdated_error_short_ = parser.getDouble("tankdrive:angle_action:profile_outdated_error_short");
+			profile_outdated_error_angle_ = parser.getDouble("tankdrive:angle_action:profile_outdated_error_angle");				
 		}
 
 		TankDriveAngleAction::TankDriveAngleAction(TankDrive &tank_drive, const std::string &name) : TankDriveAction(tank_drive)
 		{
+			SettingsParser &parser = tank_drive.getRobot().getSettingsParser();
+
 			target_angle_ = tank_drive.getRobot().getSettingsParser().getDouble(name);
 			is_done_ = false;
-			double maxa = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:angle_action:maxa");
-			double maxd = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:angle_action:maxd");
-			double maxv = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:angle_action:maxv");
+			double maxa = parser.getDouble("tankdrive:angle_action:maxa");
+			double maxd = parser.getDouble("tankdrive:angle_action:maxd");
+			double maxv = parser.getDouble("tankdrive:angle_action:maxv");
 			profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv);
+
+			velocity_pid_.initFromSettingsExtended(parser, "tankdrive:angle_action:velocity_pid", true);	
+
+
+			angle_threshold_ = parser.getDouble("tankdrive:angle_action:angle_threshold");
+			profile_outdated_error_long_ = parser.getDouble("tankdrive:angle_action:profile_outdated_error_long");
+			profile_outdated_error_short_ = parser.getDouble("tankdrive:angle_action:profile_outdated_error_short");
+			profile_outdated_error_angle_ = parser.getDouble("tankdrive:angle_action:profile_outdated_error_angle");					
 		}
 
 		TankDriveAngleAction::~TankDriveAngleAction()
@@ -36,21 +56,18 @@ namespace xero
 
 		void TankDriveAngleAction::start()
 		{
-
-			xero::misc::SettingsParser &parser = getTankDrive().getRobot().getSettingsParser();
-
-			velocity_pid_.initFromSettingsExtended(parser, "tankdrive:angle_action:velocity_pid", true);
-
-			angle_threshold_ = parser.getDouble("tankdrive:angle_action:angle_threshold");
-			profile_outdated_error_long_ = parser.getDouble("tankdrive:angle_action:profile_outdated_error_long");
-			profile_outdated_error_short_ = parser.getDouble("tankdrive:angle_action:profile_outdated_error_short");
-			profile_outdated_error_angle_ = parser.getDouble("tankdrive:angle_action:profile_outdated_error_angle");
+			SettingsParser &parser = getTankDrive().getRobot().getSettingsParser();
+			MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
 
 			profile_start_time_ = getTankDrive().getRobot().getTime();
 			start_time_ = profile_start_time_;
 
-			profile_initial_angle_ = 0;
 			profile_->update(target_angle_, 0.0, 0.0);
+			
+			logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
+			logger << "Initial Profile: " << profile_->toString() ;
+			logger.endMessage() ;
+
 			profile_initial_angle_ = getTankDrive().getAngle();
 			total_angle_so_far_ = 0.0;
 
@@ -65,7 +82,8 @@ namespace xero
 			if (!is_done_)
 			{
 				double current_angle = getTankDrive().getAngle();
-				double profile_angle_traveled = xero::math::normalizeAngleDegrees(current_angle - profile_initial_angle_);
+				double profile_angle_diff = current_angle - profile_initial_angle_ ;
+				double profile_angle_traveled = xero::math::normalizeAngleDegrees(profile_angle_diff);
 				double profile_remaining_angle = target_angle_ - profile_angle_traveled - total_angle_so_far_;
 				double total_traveled = total_angle_so_far_ + profile_angle_traveled;
 
@@ -98,8 +116,16 @@ namespace xero
 						profile_->update(xero::math::normalizeAngleDegrees(target_angle_ - total_traveled), current_velocity, 0.0);
 
 						logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
-						logger << "Fell behind velocity profile, updating profile";
-						logger << profile_->toString();
+						logger << "Fell behind velocity profile\n" ;
+						logger << "    remaining angle " << profile_remaining_angle ;
+						logger << ", profile error " << profile_error ;
+						logger << ", target angle " << profile_target_angle ;
+						logger << ", angle traveled " << profile_angle_traveled ;
+						logger << ", current angle " << current_angle ;
+						logger << ", initial angle " << profile_initial_angle_ ;
+						logger << ", diff " << profile_angle_diff ;
+						logger << "\n" ;
+						logger << "    Profile: " << profile_->toString();
 						logger.endMessage();
 					}
 

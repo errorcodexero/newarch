@@ -48,6 +48,10 @@ namespace xero {
 					}
 				}
 			}
+			else
+			{
+				getTankDrive().setMotorsToPercents(0.0, 0.0) ;
+			}
 		}
 
 		void TankDriveAngleCharAction::cancel() {

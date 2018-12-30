@@ -328,6 +328,10 @@ public:
     static inline void encodeProtocolInt16( int16_t val, char *int16_bytes) {
         *((int16_t *)int16_bytes) = val;
     }
+	
+    static inline uint32_t decodeProtocolUint32( char *uint32_bytes ) {
+        return *((uint32_t *)uint32_bytes);
+    }	
 
     static inline int32_t decodeProtocolInt32( char *int32_bytes ) {
         return *((int32_t *)int32_bytes);
@@ -391,7 +395,7 @@ public:
     }
     static inline void encodeProtocolRatio( float ratio, char *uint8_ratio ) {
         ratio *= 32768.0f;
-        encodeProtocolInt16(static_cast<int16_t>(ratio),uint8_ratio);
+        encodeProtocolInt16(ratio,uint8_ratio);
     }
 
     /* <int16>.<uint16> (-32768.9999 to 32767.9999) */
@@ -421,7 +425,7 @@ public:
                     }
                     crc >>= 1;
                 }
-                table[i] = static_cast<uint8_t>(crc);
+                table[i] = crc;
             }
         }
     }
@@ -450,7 +454,7 @@ public:
                 if (crc & 1) {
                     crc ^= CRC7_POLY;
                 }
-				crc = static_cast<uint8_t>(crc >> 1);
+                crc >>= 1;
             }
         }
         return crc;

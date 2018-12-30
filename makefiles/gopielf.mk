@@ -2,7 +2,8 @@ CXX = arm-linux-gnueabihf-g++
 
 CXXINCS = \
 	-I../gopigo3hw\
-	-I../gopigo3frc\
+	-I../frc\
+	-I..\
 	-I../gopigo3navx
 
 ifdef NEED_XERO
@@ -27,7 +28,7 @@ endif
 
 PILIBS += \
 	../gopigo3navx/gopigo3navx.a\
-	../gopigo3frc/gopigo3frc.a\
+	../frc/wpilib.a\
 	../gopigo3hw/gopigo3hw.a\
 
 
@@ -43,6 +44,13 @@ else
 	echo GOPIGOIP is not defined
 endif
 
+deploydata:
+ifdef GOPIGOIP
+	scp $(DEPLOY_EXTRA) pi@$(GOPIGOIP):/home/pi
+else
+	echo GOPIGOIP is not defined
+endif
+
 run:
 ifdef GOPIGOIP
 	ssh -t pi@$(GOPIGOIP) "./$(TARGET) --station"
@@ -50,9 +58,23 @@ else
 	echo GOPIGOIP is not defined
 endif
 
+runauto:
+ifdef GOPIGOIP
+	ssh -t pi@$(GOPIGOIP) "./$(TARGET) --auto 25 --oper 0.0 --start 0.0"
+else
+	echo GOPIGOIP is not defined
+endif
+
 debug:
 ifdef GOPIGOIP
 	ssh -t pi@$(GOPIGOIP) "gdbserver --once 0.0.0.0:3333 GoPiGo3Xero --station"
+else
+	echo GOPIGOIP is not defined
+endif
+
+debugauto:
+ifdef GOPIGOIP
+	ssh -t pi@$(GOPIGOIP) "gdbserver --once 0.0.0.0:3333 GoPiGo3Xero --auto 25 --oper 0 --start 0"
 else
 	echo GOPIGOIP is not defined
 endif
@@ -66,7 +88,7 @@ ifdef NEED_XERO
 	(cd ../../xeromath ; make clean)
 endif
 	(cd ../gopigo3navx ; make clean)
-	(cd ../gopigo3frc ; make clean)
+	(cd ../frc ; make clean)
 	(cd ../gopigo3hw ; make clean)
 
 ifdef NEED_XERO
@@ -83,8 +105,8 @@ endif
 ../gopigo3navx/gopigo3navx.a:
 	(cd ../gopigo3navx ; make)
 
-../gopigo3frc/gopigo3frc.a:
-	(cd ../gopigo3frc ; make)
+../frc/wpilib.a:
+	(cd ../frc ; make)
 
 ../gopigo3hw/gopigo3hw.a:
 	(cd ../gopigo3hw ; make)

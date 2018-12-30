@@ -16,6 +16,12 @@ NEED_XERO=true
 #
 # When we deploy, copy the robot.dat file as well
 #
-DEPLOY_EXTRA=gopigo3.dat
+DEPLOY_EXTRA=gopigo3.dat $(wildcard path*.csv)
 
 include ../../makefiles/gopielf.mk
+
+copylogs:
+	mkdir -p logs
+	scp pi@grond.local:/home/pi/logs/\* ./logs
+	ssh -t pi@$(GOPIGOIP) "rm -rf logs/\*"
+

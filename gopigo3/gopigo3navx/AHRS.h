@@ -8,9 +8,16 @@
 #ifndef SRC_AHRS_H_
 #define SRC_AHRS_H_
 
+#include "frc/smartdashboard/SendableBase.h"
+#include "frc/smartdashboard/SendableBuilder.h"
+#include "frc/I2C.h"
+#include "frc/SPI.h"
+#include "frc/SerialPort.h"
+#include "frc/PIDSource.h"
+#include "frc/Timer.h"
 #include "ITimestampedDataSubscriber.h"
-#include <memory>
-#include <string>
+#include "networktables/NetworkTableEntry.h"
+#include <thread>
 
 class IIOProvider;
 class ContinuousAngleTracker;
@@ -18,7 +25,11 @@ class InertialDataIntegrator;
 class OffsetTracker;
 class AHRSInternal;
 
-class AHRS{
+using namespace frc;
+
+class AHRS : public SendableBase,
+             public ErrorBase,
+             public PIDSource  {
 public:
 
     enum BoardAxis {
@@ -107,21 +118,28 @@ private:
     long                last_sensor_timestamp;
     double              last_update_time;
 
-
     InertialDataIntegrator *integrator;
     ContinuousAngleTracker *yaw_angle_tracker;
     OffsetTracker *         yaw_offset_tracker;
     IIOProvider *           io;
 
+    std::thread *           task;
 
 #define MAX_NUM_CALLBACKS 3
     ITimestampedDataSubscriber *callbacks[MAX_NUM_CALLBACKS];
     void *callback_contexts[MAX_NUM_CALLBACKS];
 
 public:
-    AHRS(std::string serial_port_id);
+    AHRS(SPI::Port spi_port_id);
+    AHRS(I2C::Port i2c_port_id);
+    AHRS(SerialPort::Port serial_port_id);
 
-    AHRS(std::string serial_port_id, AHRS::SerialDataType data_type, uint8_t update_rate_hz);
+    AHRS(SPI::Port spi_port_id, uint8_t update_rate_hz);
+    AHRS(SPI::Port spi_port_id, uint32_t spi_bitrate, uint8_t update_rate_hz);
+
+    AHRS(I2C::Port i2c_port_id, uint8_t update_rate_hz);
+
+    AHRS(SerialPort::Port serial_port_id, AHRS::SerialDataType data_type, uint8_t update_rate_hz);
 
     float  GetPitch();
     float  GetRoll();
@@ -159,6 +177,8 @@ public:
     float  GetDisplacementZ();
     double GetAngle();
     double GetRate();
+    void   SetAngleAdjustment(double angle);
+    double GetAngleAdjustment();
     void   Reset();
     float  GetRawGyroX();
     float  GetRawGyroY();
@@ -180,22 +200,27 @@ public:
     int GetActualUpdateRate();
     int GetRequestedUpdateRate();
 
-    void Close();
+    void EnableLogging(bool enable);
+
+    int16_t GetGyroFullScaleRangeDPS();
+    int16_t GetAccelFullScaleRangeG();
 
 private:
-    void SerialInit(std::string serial_port_id, AHRS::SerialDataType data_type, uint8_t update_rate_hz);
+    void SPIInit( SPI::Port spi_port_id, uint32_t bitrate, uint8_t update_rate_hz );
+    void I2CInit( I2C::Port i2c_port_id, uint8_t update_rate_hz );
+    void SerialInit(SerialPort::Port serial_port_id, AHRS::SerialDataType data_type, uint8_t update_rate_hz);
     void commonInit( uint8_t update_rate_hz );
-    static void *ThreadFunc(void *threadarg);
+    static int ThreadFunc(IIOProvider *io_provider);
 
-    /* LiveWindowSendable implementation */
-    std::string GetSmartDashboardType() const;
-    void StartLiveWindowMode();
-    void StopLiveWindowMode();
+    /* SendableBase implementation */
+    void InitSendable(SendableBuilder& builder) override;
 
     /* PIDSource implementation */
     double PIDGet();
 
     uint8_t GetActualUpdateRateInternal(uint8_t update_rate);
+
+    nt::NetworkTableEntry m_valueEntry;
 };
 
 #endif /* SRC_AHRS_H_ */
