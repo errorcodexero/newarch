@@ -75,7 +75,6 @@ namespace frc
 		{
 			int actual = ::write(m_handle, buffer, count);
 			if (actual != count)
-				std::cout << "MMMMMMMMMM" << std::endl;
 			count -= actual;
 			written += actual;
 
