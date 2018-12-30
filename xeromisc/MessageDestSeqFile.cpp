@@ -1,4 +1,5 @@
 #include "MessageDestSeqFile.h"
+#include "FileUtils.h"
 #include <iostream>
 
 namespace xero
@@ -87,6 +88,12 @@ bool MessageDestSeqFile::openfile()
 		{
 			ret = true;
 		}
+
+        //
+        // For convenience, always create a symlink point to the latest log file
+        //
+        const std::string latest_file_symlink_name(dirname_ + "/latest");
+        xero::file::create_symlink(filename, latest_file_symlink_name);
 	}
 
 	return ret;
