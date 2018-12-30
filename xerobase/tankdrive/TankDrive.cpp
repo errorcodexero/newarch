@@ -52,7 +52,8 @@ namespace xero {
 			}
 		}
 
-		TankDrive::~TankDrive() {			
+		TankDrive::~TankDrive() {	
+            setMotorsToPercents(0, 0);   // Turn motors off		
 		}
 
 		void TankDrive::reset() {
@@ -65,6 +66,8 @@ namespace xero {
 			for(auto &talon : right_motors_) {
 				talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast) ;
 			}			
+
+            setMotorsToPercents(0, 0);   // Turn motors off
 		}
 
 		void TankDrive::init(LoopType ltype) {
