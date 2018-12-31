@@ -1,6 +1,8 @@
 #include "SampleRobot.h"
+#include <networktables/NetworkTableInstance.h>
 #include <chrono>
 #include <iostream>
+#include <csignal>
 
 namespace frc
 {
@@ -11,8 +13,11 @@ namespace frc
     {
         std::cout << "Control-C detected, shutting down robot" << std::endl;
         SampleRobot &robot = SampleRobot::GetInstance();
+        std::cout << "    Got robot instance - shutting down motors" << std::endl;
         robot.stopAll();
+        std::cout << "    Shut down motors - performaing a hard exit" << std::endl;
         exit(0);
+        std::cout << "    Should never get here" << std::endl;
     }
 
     SampleRobot::SampleRobot() {
@@ -20,9 +25,11 @@ namespace frc
 		m_start_delay = 1.0;
 		m_auto_period = 15.0;
 		m_teleop_period = 0.0;
-	}
 
-	SampleRobot::~SampleRobot() {
+        nt::NetworkTableInstance::GetDefault().StartServer();
+    }
+
+    SampleRobot::~SampleRobot() {
 	}
 
    
@@ -176,7 +183,9 @@ namespace frc
 
 	void SampleRobot::StartCompetition() 
 	{
-		//
+        signal(SIGINT, SampleRobot::ControlCHandler);
+
+        //
 		// Process command line arguments
 		//
 		if (!ProcessCmdLineArgs())

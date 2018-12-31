@@ -12,10 +12,6 @@ namespace frc
 
     void SmartDashboard::PutString(wpi::StringRef key, wpi::StringRef value)
     {
-        std::cout << "SmartDashboard::PutString called";
-        std::cout << ", key = '" << key << "'";
-        std::cout << "< value = '" << value << "'";
-        std::cout << std::endl;
         init();
         table_->GetEntry(key).SetString(value);
     }
