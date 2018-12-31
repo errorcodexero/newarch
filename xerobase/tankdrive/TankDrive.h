@@ -193,6 +193,7 @@ namespace xero {
 			virtual void reset() ;
 
 			/// \brief init the subsystem for the enabled mode
+            /// \param ltype the type of loop being enabled (e.g. teleop, auto, test)
 			virtual void init(LoopType ltype) ;
 
 		private:

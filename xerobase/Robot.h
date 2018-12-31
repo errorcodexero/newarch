@@ -108,6 +108,7 @@ namespace xero {
 			}
 
 			/// \brief Return the battery voltage
+            /// \returns the battery voltage in volts
 			double getBatteryVoltage() {
 				return voltage_ ;
 			}
@@ -156,6 +157,7 @@ namespace xero {
 			}
 			
 			/// \brief this method runs one loop for the robot.
+            /// \param type the type of the robot loop to run (teleop, auto, test)
 			virtual void robotLoop(LoopType type);
 
 			/// \brief this method reads the parameters file for the robot
@@ -166,6 +168,7 @@ namespace xero {
 			/// \brief this method reads the parameters file for the robot
 			/// It finds the name of the params file based on runtime vs
 			/// simulator and based on the name of the robot
+            /// \returns true if the file is read sucessfully
 			bool readParamsFile() ;
 
 			//

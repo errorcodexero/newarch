@@ -36,6 +36,7 @@ namespace xero {
 			/// \param robot a reference to the robot for this subsystem
 			/// \param name the name of this subsystem, must be unique across all subsystems
 			/// \param motor the name of the parameter file entry that contains the index of the motor
+            /// \param id the message logger id to use for messages from this class            
 			/// \param victor if true use a VictorSP motor controller, otherwise create a TalonSRX
 			/// \sa xero::misc::SettingsParser
             SingleMotorSubsystem(Robot &robot, const std::string &name, const std::string &motor, uint64_t id, bool victor=false) ;
@@ -46,6 +47,7 @@ namespace xero {
 			/// \param robot a reference to the robot for this subsystem
 			/// \param name the name of this subsystem, must be unique across all subsystems
 			/// \param motor the actual number (PWM or CAN address) for the motor controller
+            /// \param id the message logger id to use for messages from this class
 			/// \param victor if true use a VictorSP motor controller, otherwise create a TalonSRX
 			/// \sa xero::misc::SettingsParser
             SingleMotorSubsystem(Robot &robot, const std::string &name, int motor, uint64_t id, bool victor=false) ;

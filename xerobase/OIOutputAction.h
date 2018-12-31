@@ -10,7 +10,7 @@ namespace xero {
             /// \brief create an output action
             /// \param hid the HID device to control
             /// \param output the specific output to control
-            /// \param the state of the output
+            /// \param state the state of the output
             OIOutputAction(int hid, int output, int state) ;
 
             /// \brief destroy the action

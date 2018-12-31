@@ -109,7 +109,8 @@ namespace xero {
 			}
 
 			/// \brief define a named sequence of actions
-			/// 
+			/// \param name_p the name of the named sequence
+            /// \param action the action for the named sequence
 			void defineNamedSequence(const char *name_p, ActionPtr action) {
 				named_sequences_[name_p] = action ;
 			}

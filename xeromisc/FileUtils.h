@@ -12,7 +12,7 @@ namespace xero {
     namespace file {
 
         /// \brief Checks if the file exists.
-        /// \param Name of the file.
+        /// \param name Name of the file.
         /// \returns true if the file exists.
         inline bool exists(const std::string& name) {
             struct stat buffer;   
@@ -20,7 +20,7 @@ namespace xero {
         }
     
         /// \brief Checks if the file is readable.
-        /// \param Name of the file.
+        /// \param name Name of the file.
         /// \returns true if the file is readable.
         inline bool is_readable(const std::string& name) {
             std::ifstream f(name.c_str());
@@ -28,7 +28,7 @@ namespace xero {
         }
 
         /// \brief Checks if the file exists and is a symlink.
-        /// \param Name of the file.
+        /// \param name Name of the file.
         /// \returns true if the file exists and is a symlink.
         inline bool is_a_symlink(const std::string& name) {
             struct stat buffer;   
@@ -38,6 +38,8 @@ namespace xero {
 
         /// \brief Create a symlink from a filename to another.
         ///        Only overwrite an existing file if it's already a symlink.
+        /// \param dest the destination of the link
+        /// \param link the actual name of the link
         /// \returns true upon success, false upon failure.
         inline bool create_symlink(const std::string& dest, const std::string& link) {
             // Ensure the destination file exists

@@ -167,20 +167,18 @@ namespace xero {
 			left_linear_.update(getRobot().getDeltaTime(), getLeftDistance()) ;
 			right_linear_.update(getRobot().getDeltaTime(), getRightDistance()) ;
 
-			if (getAction() == nullptr || getAction()->isDone() || dumpstate_) {
-				auto &logger = getRobot().getMessageLogger() ;
-				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE_VERBOSE);
-				logger << "time " << getRobot().getTime() ;
-				logger << ", linear dist " << getDist() ;
-				logger << ", velocity " << getVelocity() ;
-				logger << ", accel " << getAcceleration() ;
-				logger << ", angle dist " << getAngle() ;
-				logger << ", velocity " << getAngularVelocity() ;
-				logger << ", accel " << getAngularAcceleration() ;
-				logger << ", ticks " << ticks_left_ << " " << ticks_right_ ;
-				logger << ", dist " << dist_l_ << " " << dist_r_ ;
-				logger.endMessage();	
-			}
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE_VERBOSE);
+            logger << "time " << getRobot().getTime() ;
+            logger << ", linear dist " << getDist() ;
+            logger << ", velocity " << getVelocity() ;
+            logger << ", accel " << getAcceleration() ;
+            logger << ", angle dist " << getAngle() ;
+            logger << ", velocity " << getAngularVelocity() ;
+            logger << ", accel " << getAngularAcceleration() ;
+            logger << ", ticks " << ticks_left_ << " " << ticks_right_ ;
+            logger << ", dist " << dist_l_ << " " << dist_r_ ;
+            logger.endMessage();	
 		}
 
 		void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {

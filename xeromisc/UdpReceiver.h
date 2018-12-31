@@ -50,6 +50,7 @@ namespace xero
 
             /// \brief open the broadcast receiver
             /// \param port the port to bind the socket to
+            /// \param broadcast if true this receiver recieves broadcast packets
             /// \returns true if the socket was created, otherwise false
             bool open(uint16_t port, bool broadcast = false)
             {

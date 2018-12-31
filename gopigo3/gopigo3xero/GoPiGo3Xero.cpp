@@ -38,8 +38,7 @@ namespace xero {
 			//
             // logger.enableSubsystem(MSG_GROUP_ALL) ;			
 			logger.enableSubsystem(MSG_GROUP_TANKDRIVE);			
-			logger.enableSubsystem(MSG_GROUP_TANKDRIVE_VERBOSE);			
-		}			
+		}
 
 		void GoPiGo3Xero::RobotHardwareInit() {
 			auto robot_p = std::make_shared<GoPiGo3Subsystem>(*this) ;

@@ -32,6 +32,10 @@
 /// \brief ID for the robot loop debug messages
 #define MSG_GROUP_ROBOTLOOP             (1ull << 7)
 
+/// \brief ID for the tank drive subsystem message.  
+/// This specific ID gets verbose messages including drivebase status
+/// for each robot loop.  This produces a lot of data and should be
+/// used cautiously and never during a competition.
 #define MSG_GROUP_TANKDRIVE_VERBOSE     (1ull << 8)
 
 /// \brief ID to get all messages

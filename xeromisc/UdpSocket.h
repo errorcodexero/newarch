@@ -51,6 +51,7 @@ namespace xero
 			}
 
 			/// \brief create a new UDP (datagram) socket
+            /// \param broadcast if true put the socket in state to receive broadcast packets
 			/// \returns true if the socket is created, otherwise false
 			bool createSocket(bool broadcast=false)
 			{
@@ -58,15 +59,8 @@ namespace xero
 				if (m_socket < 0)
 					return false;
 
-				if (broadcast) {
-					int v = 1 ;
-					if (setsockopt(m_socket, SOL_SOCKET, SO_BROADCAST, &v, sizeof(v)) == -1) {
-						close(m_socket) ;
-						m_socket = -1 ;
-						return false ;
-					}
-				}
-
+				if (broadcast)
+                    setBroadcast();
 
 				return true;
 			}
