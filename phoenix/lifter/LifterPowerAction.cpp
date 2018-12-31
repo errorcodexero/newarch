@@ -19,7 +19,7 @@ namespace xero {
 
         std::string LifterPowerAction::toString() {
             std::string result = "LifterDutyCycle " + std::to_string(duty_cycle_) ;
-			return result ;
+            return result ;
         }
 
         void LifterPowerAction::start() {
@@ -27,14 +27,14 @@ namespace xero {
 
             if (low_gear_)
                 lifter.setLowGear() ;
-			else
-				lifter.setHighGear() ;
+            else
+                lifter.setHighGear() ;
                                 
             lifter.setBrakeOff() ;
-			lifter.setMotorDutyCycle(duty_cycle_) ;
+            lifter.setMotorDutyCycle(duty_cycle_) ;
         }
 
-		void LifterPowerAction::run() {			
-		}
+        void LifterPowerAction::run() {         
+        }
     }
 }

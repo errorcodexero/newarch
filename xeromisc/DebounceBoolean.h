@@ -4,32 +4,32 @@
 
 namespace xero {
     namespace misc {
-		/// \brief A utility class for debouncing a boolean value
+        /// \brief A utility class for debouncing a boolean value
         class DebounceBoolean {
         public:
-			/// \brief Create a new boolean debouncer
-			/// \param init the initial state of the boolean
-			/// \param delay the delay before confirming the state of the boolean
+            /// \brief Create a new boolean debouncer
+            /// \param init the initial state of the boolean
+            /// \param delay the delay before confirming the state of the boolean
             DebounceBoolean(bool init, double delay) {
                 state_ = init ? State::high : State::low ;
                 delaylow_ = delay ;
                 delayhigh_ = delay ;
             }
 
-			/// \brief Create a new boolean debouncer
-			/// \param init the initial state of the boolean
-			/// \param low the delay before confirming the state of the boolean as low
-			/// \param high the delay before confirming the state of the boolean as high
+            /// \brief Create a new boolean debouncer
+            /// \param init the initial state of the boolean
+            /// \param low the delay before confirming the state of the boolean as low
+            /// \param high the delay before confirming the state of the boolean as high
             DebounceBoolean(bool init, double low, double high) {
                 state_ = init ? State::high : State::low ;
                 delaylow_ = low ;
                 delayhigh_ = high ;
             }            
 
-			/// \brief Return the debounced state of the boolean
-			/// \param st the state of the original boolean
-			/// \param now the current time
-			/// \returns the debounced state of the boolean
+            /// \brief Return the debounced state of the boolean
+            /// \param st the state of the original boolean
+            /// \param now the current time
+            /// \returns the debounced state of the boolean
             bool getState(bool st, double now) {
                 bool ret = false ;
 

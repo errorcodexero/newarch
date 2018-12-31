@@ -24,12 +24,12 @@ namespace xero
             virtual void run(double dt);
             virtual void inputChanged(SimulatedObject *obj);
             virtual std::string toString()  ;
-			virtual void init() ;			
+            virtual void init() ;           
 
             virtual void addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
             virtual void addEncoder(frc::Encoder *encoder);
             virtual void addNavX(AHRS *navx);
-			virtual void addSolenid(frc::Solenoid *sol) ;
+            virtual void addSolenid(frc::Solenoid *sol) ;
 
             double getXPos() { 
               return xpos_ ;
@@ -54,14 +54,14 @@ namespace xero
         private:
             void updatePosition(double dx, double dy, double angle) ;
 
-			double capValue(double prev, double desired, double maxchange) ;
+            double capValue(double prev, double desired, double maxchange) ;
 
-			void lowGear() ;
-			void highGear() ;
+            void lowGear() ;
+            void highGear() ;
 
           private:
-			bool inited_ ;
-			bool gear_ ;
+            bool inited_ ;
+            bool gear_ ;
 
             double left_;
             double right_;
@@ -75,16 +75,16 @@ namespace xero
             double width_;
             double high_rps_per_volt_per_time_;
             double low_rps_per_volt_per_time_;
-			double left_right_error_ ;
+            double left_right_error_ ;
             double right_rps_per_volt_per_time_;
-            double left_rps_per_volt_per_time_;						
+            double left_rps_per_volt_per_time_;                     
             double time_interval_;
             double last_output_;
             double speed_ ;
             double max_speed_ ;
-			double max_change_ ;
-			double current_left_rps_ ;
-			double current_right_rps_ ;
+            double max_change_ ;
+            double current_left_rps_ ;
+            double current_right_rps_ ;
 
             double xpos_ ;
             double ypos_ ;
@@ -99,7 +99,7 @@ namespace xero
             std::vector<ctre::phoenix::motorcontrol::can::TalonSRX *> right_motors_;
             frc::Encoder *left_enc_;
             frc::Encoder *right_enc_;
-			frc::Solenoid *shifter_ ;
+            frc::Solenoid *shifter_ ;
             AHRS *navx_;
         };
     } // namespace sim

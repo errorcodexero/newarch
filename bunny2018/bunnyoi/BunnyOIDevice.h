@@ -14,10 +14,10 @@ namespace xero {
 
             virtual int getAutoModeSelector() ;
 
-			virtual void generateActions(xero::base::ActionSequence &seq) ;
+            virtual void generateActions(xero::base::ActionSequence &seq) ;
 
         private:
-			void createActions() ;
+            void createActions() ;
             void initialize() ;
             
         private:
@@ -26,24 +26,24 @@ namespace xero {
             size_t shoot_one_ ;
             size_t shoot_many_ ;
             size_t automode_ ;
-			size_t test_auto_modes_ ;
+            size_t test_auto_modes_ ;
             size_t intake_on_off_ ;
 
-			int base_ ;
+            int base_ ;
 
             xero::base::ActionPtr collector_rev_action_ ;
-			xero::base::ActionPtr collector_fwd_action_ ;
-			xero::base::ActionPtr collector_off_action_ ;
-			xero::base::ActionPtr hopper_rev_action_ ;
-			xero::base::ActionPtr hopper_fwd_action_ ;
-			xero::base::ActionPtr hopper_off_action_ ;	
+            xero::base::ActionPtr collector_fwd_action_ ;
+            xero::base::ActionPtr collector_off_action_ ;
+            xero::base::ActionPtr hopper_rev_action_ ;
+            xero::base::ActionPtr hopper_fwd_action_ ;
+            xero::base::ActionPtr hopper_off_action_ ;  
             xero::base::ActionPtr sort_red_ ;
             xero::base::ActionPtr sort_blue_; 
             xero::base::ActionPtr shoot_one_action_ ;
             xero::base::ActionPtr shoot_many_action_on_ ;
             xero::base::ActionPtr shoot_many_action_stage_ ;
-			xero::base::ActionPtr intake_on_action_ ;
-			xero::base::ActionPtr intake_off_action_ ;	            
+            xero::base::ActionPtr intake_on_action_ ;
+            xero::base::ActionPtr intake_off_action_ ;              
         } ;
     }
 }

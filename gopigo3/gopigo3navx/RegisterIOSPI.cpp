@@ -29,7 +29,7 @@ bool RegisterIO_SPI::Init() {
 }
 
 bool RegisterIO_SPI::Write(uint8_t address, uint8_t value ) {
-	std::unique_lock<wpi::mutex> sync(imu_mutex);
+    std::unique_lock<wpi::mutex> sync(imu_mutex);
     uint8_t cmd[3];
     cmd[0] = address | 0x80;
     cmd[1] = value;
@@ -42,7 +42,7 @@ bool RegisterIO_SPI::Write(uint8_t address, uint8_t value ) {
 }
 
 bool RegisterIO_SPI::Read(uint8_t first_address, uint8_t* buffer, uint8_t buffer_len) {
-	std::unique_lock<wpi::mutex> sync(imu_mutex);
+    std::unique_lock<wpi::mutex> sync(imu_mutex);
     uint8_t cmd[3];
     cmd[0] = first_address;
     cmd[1] = buffer_len;
@@ -71,5 +71,5 @@ bool RegisterIO_SPI::Shutdown() {
 }
 
 void RegisterIO_SPI::EnableLogging(bool enable) {
-	trace = enable;
+    trace = enable;
 }

@@ -5,7 +5,7 @@
 
 namespace xero {
     namespace bunny2018 {
-		
+        
         class Intake : public xero::base::SingleMotorSubsystem {
 
             /// The action to set the motor power is derived from SingleMotorSubsystem

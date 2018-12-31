@@ -33,10 +33,10 @@ namespace xero {
 
             std::string ShooterStageBallAction::toString() {
                 std::string result = "ShooterStageBallAction staged=" ;
-				if (getSubsystem().getBallIsStaged())
-					result += "true" ;
-				else
-					result += "false" ;
+                if (getSubsystem().getBallIsStaged())
+                    result += "true" ;
+                else
+                    result += "false" ;
 
                 return result ;
             }

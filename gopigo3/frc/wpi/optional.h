@@ -407,7 +407,7 @@ public:
   
   constexpr T&& value() && {
     if (!initialized()) throw bad_optional_access("bad optional access");
-	return std::move(contained_val());
+    return std::move(contained_val());
   }
   
 # else

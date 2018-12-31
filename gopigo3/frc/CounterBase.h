@@ -1,24 +1,24 @@
 #pragma once
 #include <cstdint>
 namespace frc {
-	class CounterBase
-	{
-	public:
-		enum EncodingType {
-			k1X,
-			k2X,
-			k4X
-		};
+    class CounterBase
+    {
+    public:
+        enum EncodingType {
+            k1X,
+            k2X,
+            k4X
+        };
 
-	public:
-		CounterBase() 
-		{
-		}
+    public:
+        CounterBase() 
+        {
+        }
 
-		virtual ~CounterBase()
-		{
-		}
-	};
+        virtual ~CounterBase()
+        {
+        }
+    };
 
 }
 

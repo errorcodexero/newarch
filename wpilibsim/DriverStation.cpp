@@ -11,49 +11,49 @@ namespace frc {
         sim.connect(this) ;
     }
 
-	DriverStation::~DriverStation() {		
-	}
+    DriverStation::~DriverStation() {       
+    }
     
     int DriverStation::GetStickAxisCount(int which) {
-    	std::lock_guard<std::mutex> lock(getLockMutex()) ;
-		return sticks_[which].getAxisCount() ;
+        std::lock_guard<std::mutex> lock(getLockMutex()) ;
+        return sticks_[which].getAxisCount() ;
     }
 
     double DriverStation::GetStickAxis(int which, int i) {
         std::lock_guard<std::mutex> lock(getLockMutex()) ;        
-		return sticks_[which].getAxisValue(i) ;
+        return sticks_[which].getAxisValue(i) ;
     }
 
     int DriverStation::GetStickButtonCount(int which) {
         std::lock_guard<std::mutex> lock(getLockMutex()) ;        
-		return sticks_[which].getButtonCount() ;
+        return sticks_[which].getButtonCount() ;
     }
 
     bool DriverStation::GetStickButton(int which, int i) {
         std::lock_guard<std::mutex> lock(getLockMutex()) ;        
-		return sticks_[which].getButtonValue(i) ;
+        return sticks_[which].getButtonValue(i) ;
     }
 
     int DriverStation::GetStickPOVCount(int which) {
         std::lock_guard<std::mutex> lock(getLockMutex()) ;        
-		return sticks_[which].getPOVCount() ;
+        return sticks_[which].getPOVCount() ;
     }   
 
     int DriverStation::GetStickPOV(int which, int i) {
         std::lock_guard<std::mutex> lock(getLockMutex()) ;
-		return sticks_[which].getPOVValue(i) ;
+        return sticks_[which].getPOVValue(i) ;
     }         
 
-	void DriverStation::ReportError(const char *msg) {
-		std::cout << msg << std::endl ;
-	}
+    void DriverStation::ReportError(const char *msg) {
+        std::cout << msg << std::endl ;
+    }
 
-	std::string DriverStation::GetGameSpecificMessage() const {
-		std::string ret = "LLL" ;
+    std::string DriverStation::GetGameSpecificMessage() const {
+        std::string ret = "LLL" ;
         RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
-		if (sim.hasProperty("gamedata"))
-			ret = sim.getProperty("gamedata") ;
+        if (sim.hasProperty("gamedata"))
+            ret = sim.getProperty("gamedata") ;
 
-		return ret ;
-	}
+        return ret ;
+    }
 }

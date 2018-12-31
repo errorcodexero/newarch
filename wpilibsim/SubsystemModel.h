@@ -22,7 +22,7 @@ namespace xero {
             virtual ~SubsystemModel() ;
 
             virtual void run(double dt) = 0 ;
-			virtual void init() = 0 ;
+            virtual void init() = 0 ;
             virtual void inputChanged(SimulatedObject *obj) = 0 ;
             virtual std::string toString() = 0 ;
 
@@ -60,9 +60,9 @@ namespace xero {
                 return simbase_ ;
             }
 
-		protected:
-			bool parseDoubleList(const std::string &list, std::vector<double> &values) ;
-			bool parseDouble (const std::string &prop, double &value) ;
+        protected:
+            bool parseDoubleList(const std::string &list, std::vector<double> &values) ;
+            bool parseDouble (const std::string &prop, double &value) ;
 
         private:
             std::string name_ ;

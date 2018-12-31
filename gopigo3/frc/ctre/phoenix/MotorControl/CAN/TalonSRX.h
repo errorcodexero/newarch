@@ -13,31 +13,31 @@ namespace can {
 
 class TalonSRX : public frc::GPG3MotorController {
 public:
-	TalonSRX(int id) ;
+    TalonSRX(int id) ;
 
-	void Follow(TalonSRX &talon) {		
-	}
+    void Follow(TalonSRX &talon) {      
+    }
 
-	ctre::phoenix::motorcontrol::SensorCollection &GetSensorCollection() {
-		return sensors_ ;
-	}
+    ctre::phoenix::motorcontrol::SensorCollection &GetSensorCollection() {
+        return sensors_ ;
+    }
 
-	void Set(ctre::phoenix::motorcontrol::ControlMode mode, double value) {
-		assert(mode == ControlMode::PercentOutput) ;
-		frc::GPG3MotorController::Set(value) ;
-	}
+    void Set(ctre::phoenix::motorcontrol::ControlMode mode, double value) {
+        assert(mode == ControlMode::PercentOutput) ;
+        frc::GPG3MotorController::Set(value) ;
+    }
 
-	void ConfigVoltageCompSaturation(double voltage, int timeout) {
-	}
+    void ConfigVoltageCompSaturation(double voltage, int timeout) {
+    }
 
-	void EnableVoltageCompensation(bool enable) {
-	}
+    void EnableVoltageCompensation(bool enable) {
+    }
 
-	void SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode mode) {
-	}
+    void SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode mode) {
+    }
 
 private:
-	ctre::phoenix::motorcontrol::SensorCollection sensors_ ;
+    ctre::phoenix::motorcontrol::SensorCollection sensors_ ;
 } ;
 
 }

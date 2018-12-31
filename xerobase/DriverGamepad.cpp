@@ -24,9 +24,9 @@ namespace xero {
                 logger.endMessage() ;
                 pov_ = -1 ;
             }
-			else {
-				pov_ = 0 ;
-			}
+            else {
+                pov_ = 0 ;
+            }
 
             if (ds.GetStickAxisCount(getIndex()) < 6) {
                 MessageLogger &logger = oi.getRobot().getMessageLogger() ;
@@ -39,8 +39,8 @@ namespace xero {
         DriverGamepad::~DriverGamepad() {            
         }
 
-		void DriverGamepad::init(std::shared_ptr<TankDrive> db) {
-			db_ = db ;
+        void DriverGamepad::init(std::shared_ptr<TankDrive> db) {
+            db_ = db ;
 
             default_duty_cycle_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:default") ;
             max_duty_cycle_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:max") ;
@@ -56,7 +56,7 @@ namespace xero {
             nudge_backward_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_straight, -nudge_straight, nudge_time) ;
             nudge_clockwise_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_rotate, nudge_rotate, nudge_time) ;
             nudge_counter_clockwise_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_rotate, -nudge_rotate, nudge_time) ;
-		}
+        }
 
         double DriverGamepad::scalePower(double axis, double boost, bool slow) {
             //
@@ -76,27 +76,27 @@ namespace xero {
         }
 
         void DriverGamepad::computeState() {
-		}
+        }
 
-		void DriverGamepad::generateActions(ActionSequence &seq) {
-			int pov ;
+        void DriverGamepad::generateActions(ActionSequence &seq) {
+            int pov ;
 
-			if (nudge_forward_ == nullptr)
-				init(db_) ;
+            if (nudge_forward_ == nullptr)
+                init(db_) ;
 
-			if (db_ == nullptr) {
-				auto &logger = getSubsystem().getRobot().getMessageLogger() ;
-				logger.startMessage(MessageLogger::MessageType::warning) ;
-				logger << "DriverGamepad: generateActions called with no attached drivebase" ;
-				logger.endMessage() ;
-			}
+            if (db_ == nullptr) {
+                auto &logger = getSubsystem().getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::warning) ;
+                logger << "DriverGamepad: generateActions called with no attached drivebase" ;
+                logger.endMessage() ;
+            }
 
             if (getIndex() == -1)
                 return ;
 
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
-			if (pov_ != -1)
-				pov = ds.GetStickPOV(getIndex(), pov_) ;
+            if (pov_ != -1)
+                pov = ds.GetStickPOV(getIndex(), pov_) ;
 
             double ly = ds.GetStickAxis(getIndex(),AxisNumber::LEFTY) ;
             double rx = ds.GetStickAxis(getIndex(),AxisNumber::RIGHTX) ;

@@ -15,43 +15,43 @@
 
 namespace xeromisc
 {
-	class TcpClientSocket : public TcpSocket
-	{
-	public:
-		TcpClientSocket()
-		{
-		}
+    class TcpClientSocket : public TcpSocket
+    {
+    public:
+        TcpClientSocket()
+        {
+        }
 
-		virtual ~TcpClientSocket()
-		{
-		}
+        virtual ~TcpClientSocket()
+        {
+        }
 
-		bool open(const std::string &host, uint16_t port)
-		{
-			int sockfd;
-			struct sockaddr_in saddr;
+        bool open(const std::string &host, uint16_t port)
+        {
+            int sockfd;
+            struct sockaddr_in saddr;
 
-			memset(&saddr, 0, sizeof(saddr));
+            memset(&saddr, 0, sizeof(saddr));
 
-			if (!inet_aton(host.c_str(), &saddr.sin_addr))
-				return false;
+            if (!inet_aton(host.c_str(), &saddr.sin_addr))
+                return false;
 
-			saddr.sin_family = AF_INET;
-			saddr.sin_port = htons(port);
+            saddr.sin_family = AF_INET;
+            saddr.sin_port = htons(port);
 
-			sockfd = ::socket(AF_INET, SOCK_STREAM, 0);
-			if (sockfd < 0)
-				return false;
+            sockfd = ::socket(AF_INET, SOCK_STREAM, 0);
+            if (sockfd < 0)
+                return false;
 
-			if (connect(sockfd, (struct sockaddr *)&saddr, sizeof(saddr)) < 0)
-			{
-				::close(sockfd);
-				return false;
-			}
+            if (connect(sockfd, (struct sockaddr *)&saddr, sizeof(saddr)) < 0)
+            {
+                ::close(sockfd);
+                return false;
+            }
 
-			setSocket(sockfd);
-			return true;
-		}
-	};
+            setSocket(sockfd);
+            return true;
+        }
+    };
 }
 

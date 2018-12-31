@@ -4,28 +4,28 @@
 
 namespace frc
 {
-	class Timer
-	{
-	public:
-		Timer();
-		virtual ~Timer();
+    class Timer
+    {
+    public:
+        Timer();
+        virtual ~Timer();
 
-		static double GetFPGATimestamp();
-		static double getPPCTimestamp();
-		static double GetMatchTime();
+        static double GetFPGATimestamp();
+        static double getPPCTimestamp();
+        static double GetMatchTime();
 
-		void Reset() {
-		}
+        void Reset() {
+        }
 
-		void Start() {
-		}
+        void Start() {
+        }
 
-		double Get() {
-			return 0.0;
-		}
+        double Get() {
+            return 0.0;
+        }
 
-		static std::chrono::time_point<std::chrono::steady_clock> m_start;
-	};
+        static std::chrono::time_point<std::chrono::steady_clock> m_start;
+    };
 
-	void Wait(double);
+    void Wait(double);
 }

@@ -19,7 +19,7 @@ namespace xero {
             virtual void generateActions(xero::base::ActionSequence &seq) ;
 
         private:
-			void createActions() ;
+            void createActions() ;
             void initialize() ;
             
         private:
@@ -54,11 +54,11 @@ namespace xero {
             xero::base::ActionPtr lifter_up_low_power_ ;
             xero::base::ActionPtr lifter_down_low_power_ ;
             xero::base::ActionPtr lifter_up_high_power_ ;
-            xero::base::ActionPtr lifter_down_high_power_ ;			
+            xero::base::ActionPtr lifter_down_high_power_ ;         
             xero::base::ActionPtr lifter_climb_up_ ;
             xero::base::ActionPtr lifter_climb_down_ ;
             xero::base::ActionPtr lifter_hold_climb_ ;
-			xero::base::ActionPtr lifter_zero_ ;
+            xero::base::ActionPtr lifter_zero_ ;
 
             xero::base::ActionPtr lifter_calibrate_ ;
             xero::base::ActionPtr grabber_calibrate_ ;

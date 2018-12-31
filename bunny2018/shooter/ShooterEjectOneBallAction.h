@@ -39,7 +39,7 @@ namespace xero {
         private:
             void readyStaging() ;
             void readyEjecting() ;
-			
+            
         private:
             enum class State {
                 NOT_STARTED,

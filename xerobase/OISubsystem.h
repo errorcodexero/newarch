@@ -30,9 +30,9 @@ namespace xero {
             /// the state of the OI
             virtual void computeState()  ;
 
-			/// \brief generate actions from the OI
-			/// \param seq the action sequenced used to store the generated actions
-			virtual void generateActions(ActionSequencePtr seq) ;
+            /// \brief generate actions from the OI
+            /// \param seq the action sequenced used to store the generated actions
+            virtual void generateActions(ActionSequencePtr seq) ;
 
             /// \brief run the action generated in the computeState above
             virtual void run() ;

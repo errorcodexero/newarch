@@ -21,7 +21,7 @@ namespace xero {
             virtual void run() ;
 
         private:
-            std::shared_ptr<ActionSequence> seq_ ;		
+            std::shared_ptr<ActionSequence> seq_ ;      
         } ;
     }
 }

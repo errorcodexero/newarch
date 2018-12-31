@@ -62,7 +62,7 @@ namespace xero {
                     drivebase->setAction(stop_drivebase_) ;
                     getRobotSubsystem().getRobot().getSettingsParser().set("var:cube_collected", false) ;
                     getRobotSubsystem().getRobot().getSettingsParser().set("var:collect_distance", 0.0) ;
-					state_ = State::DistanceReached ;
+                    state_ = State::DistanceReached ;
                 }
                 break ;
 

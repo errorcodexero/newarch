@@ -18,32 +18,32 @@ namespace xero {
 
         CollectCubeAction::CollectCubeAction(Collector &col) : CollectorAction(col) {
             grab_time_ = col.getRobot().getSettingsParser().getDouble("collector:grab_time") ;
-			prev_state_ = State::reset ;
+            prev_state_ = State::reset ;
         }
 
         CollectCubeAction::~CollectCubeAction() {            
         }
 
-		std::string CollectCubeAction::toString(State st) {
-			std::string ret ;
+        std::string CollectCubeAction::toString(State st) {
+            std::string ret ;
 
-			switch (st) {
-			case State::reset:
-				ret = "reset" ;
-				break ;			
-			case State::waiting:
-				ret = "waiting" ;
-				break ;			
-			case State::clamp:
-				ret = "clamp" ;
-				break ;			
-			case State::grabbing:
-				ret = "grabbing" ;
-				break ;
-			}
+            switch (st) {
+            case State::reset:
+                ret = "reset" ;
+                break ;         
+            case State::waiting:
+                ret = "waiting" ;
+                break ;         
+            case State::clamp:
+                ret = "clamp" ;
+                break ;         
+            case State::grabbing:
+                ret = "grabbing" ;
+                break ;
+            }
 
-			return ret ;
-		}
+            return ret ;
+        }
 
         void CollectCubeAction::start() {
             auto grabber_dir_p = std::make_shared<GrabberToAngleAction>(*getCollector().getGrabber(), "grabber:angle:collect") ;
@@ -57,9 +57,9 @@ namespace xero {
 
         void CollectCubeAction::run() {
             switch(state_) {
-			case State::reset:
-				state_ = State::waiting ;
-				break ;
+            case State::reset:
+                state_ = State::waiting ;
+                break ;
 
             case State::waiting:
                 if (getCollector().hasCube()) {
@@ -82,7 +82,7 @@ namespace xero {
                     //
                     // We really have the cube now, go to the hold state
                     //
-            		auto intake_dir_p = std::make_shared<IntakeDutyCycleAction>(*getCollector().getIntake(), 0) ;					
+                    auto intake_dir_p = std::make_shared<IntakeDutyCycleAction>(*getCollector().getIntake(), 0) ;                   
                     getCollector().getIntake()->setAction(intake_dir_p) ;
                     getCollector().setCollectedCubeState(true) ;
                     state_ = State::clamp ;
@@ -95,17 +95,17 @@ namespace xero {
                 break ;
             }
 
-			if (state_ != prev_state_) {
-				MessageLogger &logger = getCollector().getRobot().getMessageLogger() ;
-				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_COLLECTOR) ;
-				logger << "Collected: changed states '" ;
-				logger << toString(prev_state_) ;
-				logger << "' -> '" ;
-				logger << toString(state_) ;
-				logger.endMessage() ;
-			}
+            if (state_ != prev_state_) {
+                MessageLogger &logger = getCollector().getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_COLLECTOR) ;
+                logger << "Collected: changed states '" ;
+                logger << toString(prev_state_) ;
+                logger << "' -> '" ;
+                logger << toString(state_) ;
+                logger.endMessage() ;
+            }
 
-			prev_state_ = state_ ;
+            prev_state_ = state_ ;
         }
 
         bool CollectCubeAction::isDone() {
@@ -115,7 +115,7 @@ namespace xero {
         void CollectCubeAction::cancel() {
             auto action = getCollector().getIntake()->getAction() ;
             if (action != nullptr)
-				action->cancel() ;
+                action->cancel() ;
 
             action = getCollector().getGrabber()->getAction() ;
             if (action != nullptr)

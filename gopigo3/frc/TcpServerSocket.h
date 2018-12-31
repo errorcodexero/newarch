@@ -14,56 +14,56 @@
 
 namespace xeromisc
 {
-	class TcpServerSocket : public TcpSocket
-	{
-	public:
-		TcpServerSocket()
-		{
-		}
+    class TcpServerSocket : public TcpSocket
+    {
+    public:
+        TcpServerSocket()
+        {
+        }
 
-		virtual ~TcpServerSocket()
-		{
-		}
+        virtual ~TcpServerSocket()
+        {
+        }
 
-		bool create(uint16_t port)
-		{
-			struct sockaddr_in addr;
+        bool create(uint16_t port)
+        {
+            struct sockaddr_in addr;
 
-			int sockfd = ::socket(AF_INET, SOCK_STREAM, 0);
-			if (sockfd < 0)
-				return false;
+            int sockfd = ::socket(AF_INET, SOCK_STREAM, 0);
+            if (sockfd < 0)
+                return false;
 
-			memset(&addr, 0, sizeof(addr));
-			addr.sin_family = AF_INET;
-			addr.sin_port = htons(port);
-			addr.sin_addr.s_addr = INADDR_ANY;
+            memset(&addr, 0, sizeof(addr));
+            addr.sin_family = AF_INET;
+            addr.sin_port = htons(port);
+            addr.sin_addr.s_addr = INADDR_ANY;
 
-			if (bind(sockfd, (struct sockaddr *)&addr, sizeof(addr)) < 0)
-			{
-				::close(sockfd);
-				return false;
-			}
+            if (bind(sockfd, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+            {
+                ::close(sockfd);
+                return false;
+            }
 
-			if (listen(sockfd, 5) == -1)
-			{
-				::close(sockfd);
-				return false;
-			}
+            if (listen(sockfd, 5) == -1)
+            {
+                ::close(sockfd);
+                return false;
+            }
 
-			size_t addrlen = sizeof(m_client_addr);
-			int newsock = ::accept(sockfd, (struct sockaddr *)&m_client_addr, &addrlen);
-			if (newsock < 0)
-			{
-				::close(sockfd);
-				return false;
-			}
+            size_t addrlen = sizeof(m_client_addr);
+            int newsock = ::accept(sockfd, (struct sockaddr *)&m_client_addr, &addrlen);
+            if (newsock < 0)
+            {
+                ::close(sockfd);
+                return false;
+            }
 
-			::close(sockfd);
-			setSocket(newsock);
-			return true;
-		}
+            ::close(sockfd);
+            setSocket(newsock);
+            return true;
+        }
 
-	private:
-		struct sockaddr_in m_client_addr;
-	};
+    private:
+        struct sockaddr_in m_client_addr;
+    };
 }

@@ -5,35 +5,35 @@
 
 
 namespace xero {
-	namespace gopigo {
+    namespace gopigo {
 
-		class GoPiGo3Subsystem ;
+        class GoPiGo3Subsystem ;
 
-		/// \brief the concrete class that represents the robot Phoenix
-		class GoPiGo3Xero : public xero::base::Robot {
-		public:
+        /// \brief the concrete class that represents the robot Phoenix
+        class GoPiGo3Xero : public xero::base::Robot {
+        public:
 
-			GoPiGo3Xero() ;
+            GoPiGo3Xero() ;
 
-			void enableSpecificMessages() ;
-			void RobotHardwareInit() ;
+            void enableSpecificMessages() ;
+            void RobotHardwareInit() ;
 
-			/// \brief called to create the autonomous controller
-			/// \returns a robot controller
-			virtual std::shared_ptr<xero::base::ControllerBase> createAutoController() ;
-			
-			/// \brief called to create the teleop controller
-			/// \returns a robot controller
-			virtual std::shared_ptr<xero::base::ControllerBase> createTeleopController() ;
+            /// \brief called to create the autonomous controller
+            /// \returns a robot controller
+            virtual std::shared_ptr<xero::base::ControllerBase> createAutoController() ;
+            
+            /// \brief called to create the teleop controller
+            /// \returns a robot controller
+            virtual std::shared_ptr<xero::base::ControllerBase> createTeleopController() ;
 
-			/// \brief called to create the test controller
-			/// \returns a robot controller
-			virtual std::shared_ptr<xero::base::ControllerBase> createTestController() ;
+            /// \brief called to create the test controller
+            /// \returns a robot controller
+            virtual std::shared_ptr<xero::base::ControllerBase> createTestController() ;
 
-			/// \brief return the robot subsystem for the robot
-			std::shared_ptr<GoPiGo3Subsystem> getGoPiGoSubsystem() ;
+            /// \brief return the robot subsystem for the robot
+            std::shared_ptr<GoPiGo3Subsystem> getGoPiGoSubsystem() ;
 
-		private:
-		} ;
-	}
+        private:
+        } ;
+    }
 }

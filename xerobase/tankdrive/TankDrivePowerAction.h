@@ -25,17 +25,17 @@ namespace xero {
             /// \brief destroy the action object
             virtual ~TankDrivePowerAction() ;
 
-			/// \brief Start the action; called once per action when it starts
+            /// \brief Start the action; called once per action when it starts
             virtual void start() ;
 
-			/// \brief Manage the action; called each time through the robot loop
+            /// \brief Manage the action; called each time through the robot loop
             virtual void run() ;
 
-			/// \brief Cancel the action
+            /// \brief Cancel the action
             virtual void cancel() ;
 
-			/// \brief Return true if the action is complete
-			/// \returns True if the action is complete
+            /// \brief Return true if the action is complete
+            /// \returns True if the action is complete
             virtual bool isDone() ;
 
             /// \brief return a human readable string representing the action

@@ -4,17 +4,17 @@
 
 namespace frc
 {
-	class Timer : public xero::sim::SimulatedObject
-	{
-	public:
-		Timer();
-		virtual ~Timer();
+    class Timer : public xero::sim::SimulatedObject
+    {
+    public:
+        Timer();
+        virtual ~Timer();
 
-		static double GetFPGATimestamp();
+        static double GetFPGATimestamp();
 
-	private:
-	};
+    private:
+    };
 
-	void Wait(double secs);
+    void Wait(double secs);
 }
 

@@ -29,10 +29,10 @@ int Encoder::Get()
 
 void Encoder::SimulatorSetValue(int value) {
     std::lock_guard<std::mutex> lock(getLockMutex());
-	if (reverse_)
-	    value_ = -value ;
-	else
-		value_ = value ;
+    if (reverse_)
+        value_ = -value ;
+    else
+        value_ = value ;
 }
 
 void Encoder::Reset()

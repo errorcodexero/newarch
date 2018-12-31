@@ -41,7 +41,7 @@ namespace xero {
             /// \param mapping the range values for each of the integer settings for the axis
             /// \returns the item ID for this OI button
             /// \sa OIAxisScale
-        	size_t mapAxisScale(int axis, const std::vector<double> &mapping) ;
+            size_t mapAxisScale(int axis, const std::vector<double> &mapping) ;
 
             /// \brief map a joystick axis to an OISwitch of the given type
             /// \param axis the joystick axis to map

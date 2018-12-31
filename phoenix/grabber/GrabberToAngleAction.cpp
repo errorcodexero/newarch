@@ -6,13 +6,13 @@
 namespace xero {
     namespace phoenix {
         GrabberToAngleAction::GrabberToAngleAction(Grabber &g, double a) : GrabberAction(g) {            
-			pid_ctrl_.initFromSettingsExtended(g.getRobot().getSettingsParser(), "grabber") ;
+            pid_ctrl_.initFromSettingsExtended(g.getRobot().getSettingsParser(), "grabber") ;
             threshold_ = g.getRobot().getSettingsParser().getDouble("grabber:threshold") ;
             target_ = a ;
         }
 
         GrabberToAngleAction::GrabberToAngleAction(Grabber &g, const std::string &name) : GrabberAction(g) {
-			pid_ctrl_.initFromSettingsExtended(g.getRobot().getSettingsParser(), "grabber") ;			
+            pid_ctrl_.initFromSettingsExtended(g.getRobot().getSettingsParser(), "grabber") ;           
             threshold_ = g.getRobot().getSettingsParser().getDouble("grabber:threshold") ;
             target_ = g.getRobot().getSettingsParser().getDouble(name) ;
         }        

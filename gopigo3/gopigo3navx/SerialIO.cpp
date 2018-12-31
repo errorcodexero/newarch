@@ -20,7 +20,7 @@ SerialIO::SerialIO( SerialPort::Port port_id,
                     IBoardCapabilities *board_capabilities ) {
     this->serial_port_id = port_id;
     is_usb = ((port_id != SerialPort::Port::kMXP) &&
-    		  (port_id != SerialPort::Port::kOnboard));
+              (port_id != SerialPort::Port::kOnboard));
     ypr_update_data = {};
     gyro_update_data = {};
     ahrs_update_data = {};
@@ -97,16 +97,16 @@ void SerialIO::DispatchStreamResponse(IMUProtocol::StreamResponse& response) {
     /* the board supports it, otherwise fall all the way back to AHRS Update mode. */
     if ( response.stream_type != this->update_type ) {
         if ( this->update_type == MSGID_AHRSPOS_TS_UPDATE ) {
-        	if ( board_capabilities->IsAHRSPosTimestampSupported() ) {
-        		this->update_type = MSGID_AHRSPOS_TS_UPDATE;
-        	}
-        	else if ( board_capabilities->IsDisplacementSupported() ) {
+            if ( board_capabilities->IsAHRSPosTimestampSupported() ) {
+                this->update_type = MSGID_AHRSPOS_TS_UPDATE;
+            }
+            else if ( board_capabilities->IsDisplacementSupported() ) {
                 this->update_type = MSGID_AHRSPOS_UPDATE;
             }
-        	else {
-        		this->update_type = MSGID_AHRS_UPDATE;
-        	}
-    		signal_retransmit_stream_config = true;
+            else {
+                this->update_type = MSGID_AHRS_UPDATE;
+            }
+            signal_retransmit_stream_config = true;
         }
     }
 }
@@ -188,11 +188,11 @@ void SerialIO::Run() {
     while (!stop) {
         try {
 
-        	if( serial_port == NULL) {
+            if( serial_port == NULL) {
                 delayMillis(1000/update_rate_hz);
-        		ResetSerialPort();
-        		continue;
-        	}
+                ResetSerialPort();
+                continue;
+            }
 
             // Wait, with delays to conserve CPU resources, until
             // bytes have arrived.
@@ -204,16 +204,16 @@ void SerialIO::Run() {
                 next_integration_control_action = 0;
                 cmd_packet_length = AHRSProtocol::encodeIntegrationControlCmd( integration_control_command, integration_control );
                 try {
-                	/* Ugly Hack.  This is a workaround for ARTF5478:           */
-                	/* (USB Serial Port Write hang if receive buffer not empty. */
-                	if (is_usb) {
-                		serial_port->Reset();
-                	}
+                    /* Ugly Hack.  This is a workaround for ARTF5478:           */
+                    /* (USB Serial Port Write hang if receive buffer not empty. */
+                    if (is_usb) {
+                        serial_port->Reset();
+                    }
                     int num_written = serial_port->Write( integration_control_command, cmd_packet_length );
                     if ( num_written != cmd_packet_length ) {
-                    	printf("Error writing integration control command.  Only %d of %d bytes were sent.\n", num_written, cmd_packet_length);
+                        printf("Error writing integration control command.  Only %d of %d bytes were sent.\n", num_written, cmd_packet_length);
                     } else {
-                    	printf("Checksum:  %X %X\n", integration_control_command[9], integration_control_command[10]);
+                        printf("Checksum:  %X %X\n", integration_control_command[9], integration_control_command[10]);
                     }
                     serial_port->Flush();
                 } catch (std::exception ex) {
@@ -329,7 +329,7 @@ void SerialIO::Run() {
                                 #endif
                                 i += packet_length;
                                 if ((integration_control.action & NAVX_INTEGRATION_CTL_RESET_YAW)!=0) {
-                                	notify_sink->YawResetComplete();
+                                    notify_sink->YawResetComplete();
                                 }
                             } else {
                                 /* Even though a start-of-packet indicator was found, the  */
@@ -471,11 +471,11 @@ void SerialIO::Run() {
                     try {
                         ResetSerialPort();
                         last_stream_command_sent_timestamp = Timer::GetFPGATimestamp();
-                    	/* Ugly Hack.  This is a workaround for ARTF5478:           */
-                    	/* (USB Serial Port Write hang if receive buffer not empty. */
-                    	if (is_usb) {
-                    		serial_port->Reset();
-                    	}
+                        /* Ugly Hack.  This is a workaround for ARTF5478:           */
+                        /* (USB Serial Port Write hang if receive buffer not empty. */
+                        if (is_usb) {
+                            serial_port->Reset();
+                        }
                         serial_port->Write( stream_command, cmd_packet_length );
                         cmd_packet_length = AHRSProtocol::encodeDataGetRequest( stream_command,  AHRS_DATA_TYPE::BOARD_IDENTITY, AHRS_TUNING_VAR_ID::UNSPECIFIED );
                         serial_port->Write( stream_command, cmd_packet_length );

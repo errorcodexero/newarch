@@ -6,7 +6,7 @@
 
 namespace xero {
     namespace bunny2018 {
-		
+        
         class Shooter : public xero::base::SingleMotorSubsystem {
 
             /// The action to set the motor power is derived from SingleMotorSubsystem
@@ -22,10 +22,10 @@ namespace xero {
             virtual void computeState();
             virtual bool canAcceptAction(xero::base::ActionPtr action);
 
-			void clearBallIsStaged() {
-				ball_is_staged_ = false ;
-        		frc::SmartDashboard::PutBoolean("Staged", false) ;
-			}            
+            void clearBallIsStaged() {
+                ball_is_staged_ = false ;
+                frc::SmartDashboard::PutBoolean("Staged", false) ;
+            }            
 
         private:
 

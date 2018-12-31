@@ -36,9 +36,9 @@ namespace xero {
             /// \brief set the value of the item
             /// \param ds the drive station object to get joystick values
             /// \param index the index of the joystick to read
-			virtual void setValue(frc::DriverStation &ds, int index) {
-				setValue(ds.GetStickAxis(index, getItem())) ;
-			}
+            virtual void setValue(frc::DriverStation &ds, int index) {
+                setValue(ds.GetStickAxis(index, getItem())) ;
+            }
 
         private:
             void setValue(double v) {

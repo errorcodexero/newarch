@@ -1,15 +1,15 @@
 #pragma once
 
 namespace frc {
-	class Joystick {
-	public:
-		Joystick(int port) {
-		}
+    class Joystick {
+    public:
+        Joystick(int port) {
+        }
 
-		virtual ~Joystick() {
-		}
+        virtual ~Joystick() {
+        }
 
-		void SetOutput(int output, bool state) {
-		}
-	} ;
+        void SetOutput(int output, bool state) {
+        }
+    } ;
 }

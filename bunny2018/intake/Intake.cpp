@@ -21,17 +21,17 @@ namespace xero {
         void Intake::computeState() {
         }
     
-		bool Intake::canAcceptAction(ActionPtr action) {
+        bool Intake::canAcceptAction(ActionPtr action) {
             // Allow action to to set motor power that's derived from the base class
             if (SingleMotorSubsystem::canAcceptAction(action)) {
                 return true;
             }
 
-			std::shared_ptr<IntakeAction> act_p = std::dynamic_pointer_cast<IntakeAction>(action) ;
-			if (act_p == nullptr)
-				return false ;
+            std::shared_ptr<IntakeAction> act_p = std::dynamic_pointer_cast<IntakeAction>(action) ;
+            if (act_p == nullptr)
+                return false ;
 
-			return true ;
-		}
+            return true ;
+        }
     }
 }

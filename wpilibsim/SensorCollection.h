@@ -3,10 +3,10 @@
 namespace ctre {
 namespace phoenix {
 namespace motorcontrol {
-	class SensorCollection {
-		public:
-		int GetQuadraturePosition();
-	};
+    class SensorCollection {
+        public:
+        int GetQuadraturePosition();
+    };
 }
 }
 }

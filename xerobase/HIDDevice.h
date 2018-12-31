@@ -37,9 +37,9 @@ namespace xero {
             /// \brief compute the state for this HID device
             virtual void computeState() = 0 ;
 
-			/// \brief generation the actions for the HID device
+            /// \brief generation the actions for the HID device
             /// \param seq the action sequence for generated actions
-			virtual void generateActions(ActionSequence &seq) = 0 ;
+            virtual void generateActions(ActionSequence &seq) = 0 ;
 
             /// \brief return the value of the automode selector
             /// \returns the value of the auto mode selector

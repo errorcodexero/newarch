@@ -21,50 +21,50 @@ using namespace xero::misc ;
 using namespace xero::base ;
 
 namespace xero {
-	namespace phoenix {
+    namespace phoenix {
 
-		Phoenix::Phoenix() : xero::base::Robot("phoenix", 0.02) {			
-		}
+        Phoenix::Phoenix() : xero::base::Robot("phoenix", 0.02) {           
+        }
 
-		void Phoenix::enableSpecificMessages() {
+        void Phoenix::enableSpecificMessages() {
             MessageLogger& logger = getMessageLogger();
-						
+                        
             //
             // Decide what message groups (incl. subsystems) you want to see
             //
-			// logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
-			// logger.enableSubsystem(MSG_GROUP_ACTIONS);
-			// logger.enableSubsystem(MSG_GROUP_PARSER) ;
-			// logger.enableSubsystem(MSG_GROUP_OI) ;
-			//
-			
-            logger.enableSubsystem(MSG_GROUP_ALL) ;			
-		}
-		
-		void Phoenix::RobotHardwareInit() {
-			auto sub_p = std::make_shared<PhoenixRobotSubsystem>(*this) ;
-			setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getTankDrive()) ;
-		}
+            // logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
+            // logger.enableSubsystem(MSG_GROUP_ACTIONS);
+            // logger.enableSubsystem(MSG_GROUP_PARSER) ;
+            // logger.enableSubsystem(MSG_GROUP_OI) ;
+            //
+            
+            logger.enableSubsystem(MSG_GROUP_ALL) ;         
+        }
+        
+        void Phoenix::RobotHardwareInit() {
+            auto sub_p = std::make_shared<PhoenixRobotSubsystem>(*this) ;
+            setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getTankDrive()) ;
+        }
 
-		std::shared_ptr<ControllerBase> Phoenix::createAutoController() {
-			auto ctrl = std::make_shared<PhoenixAutoController>(*this) ;
-			return ctrl ;
-		}
-		
-		std::shared_ptr<ControllerBase> Phoenix::createTeleopController() {
-			//
-			// The base teleop controller is sufficient
-			//
-			return std::make_shared<xero::base::TeleopController>(*this) ;
-		}
-		 
-		std::shared_ptr<ControllerBase> Phoenix::createTestController() {
-			//
-			// This is where the test controller is created
-			//
-			return nullptr ;
-		}
-	}
+        std::shared_ptr<ControllerBase> Phoenix::createAutoController() {
+            auto ctrl = std::make_shared<PhoenixAutoController>(*this) ;
+            return ctrl ;
+        }
+        
+        std::shared_ptr<ControllerBase> Phoenix::createTeleopController() {
+            //
+            // The base teleop controller is sufficient
+            //
+            return std::make_shared<xero::base::TeleopController>(*this) ;
+        }
+         
+        std::shared_ptr<ControllerBase> Phoenix::createTestController() {
+            //
+            // This is where the test controller is created
+            //
+            return nullptr ;
+        }
+    }
 }
 
 #ifdef SIMULATOR

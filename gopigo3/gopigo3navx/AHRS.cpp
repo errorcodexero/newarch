@@ -42,11 +42,11 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
     /***********************************************************/
 
     void SetYawPitchRoll(IMUProtocol::YPRUpdate& ypr_update, long sensor_timestamp) {
-        ahrs->yaw               	= ypr_update.yaw;
-        ahrs->pitch             	= ypr_update.pitch;
-        ahrs->roll              	= ypr_update.roll;
-        ahrs->compass_heading   	= ypr_update.compass_heading;
-        ahrs->last_sensor_timestamp	= sensor_timestamp;
+        ahrs->yaw                   = ypr_update.yaw;
+        ahrs->pitch                 = ypr_update.pitch;
+        ahrs->roll                  = ypr_update.roll;
+        ahrs->compass_heading       = ypr_update.compass_heading;
+        ahrs->last_sensor_timestamp = sensor_timestamp;
     }
 
     void SetAHRSPosData(AHRSProtocol::AHRSPosUpdate& ahrs_update, long sensor_timestamp) {
@@ -102,17 +102,17 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
         ahrs->quaternionY                = ahrs_update.quat_y;
         ahrs->quaternionZ                = ahrs_update.quat_z;
 
-        ahrs->last_sensor_timestamp	= sensor_timestamp;
+        ahrs->last_sensor_timestamp = sensor_timestamp;
 
         /* Notify external data arrival subscribers, if any. */
         for (int i = 0; i < MAX_NUM_CALLBACKS; i++) {
             ITimestampedDataSubscriber *callback = ahrs->callbacks[i];
             if (callback != NULL) {
-            	long system_timestamp = (long)(Timer::GetFPGATimestamp() * 1000);
+                long system_timestamp = (long)(Timer::GetFPGATimestamp() * 1000);
                 callback->timestampedDataReceived(system_timestamp,
-                		sensor_timestamp,
-                		ahrs_update,
-                		ahrs->callback_contexts[i]);
+                        sensor_timestamp,
+                        ahrs_update,
+                        ahrs->callback_contexts[i]);
             }
         }
 
@@ -124,7 +124,7 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
         ahrs->displacement[2] = ahrs_update.disp_z;
 
         ahrs->yaw_angle_tracker->NextAngle(ahrs->GetYaw());
-        ahrs->last_sensor_timestamp	= sensor_timestamp;
+        ahrs->last_sensor_timestamp = sensor_timestamp;
     }
 
     void SetRawData(AHRSProtocol::GyroUpdate& raw_data_update, long sensor_timestamp) {
@@ -138,7 +138,7 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
         ahrs->cal_mag_y      = raw_data_update.mag_y;
         ahrs->cal_mag_z      = raw_data_update.mag_z;
         ahrs->mpu_temp_c     = raw_data_update.temp_c;
-        ahrs->last_sensor_timestamp	= sensor_timestamp;
+        ahrs->last_sensor_timestamp = sensor_timestamp;
     }
 
     void SetAHRSData(AHRSProtocol::AHRSUpdate& ahrs_update, long sensor_timestamp) {
@@ -199,17 +199,17 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
         ahrs->quaternionY                = ahrs_update.quat_y;
         ahrs->quaternionZ                = ahrs_update.quat_z;
 
-        ahrs->last_sensor_timestamp	= sensor_timestamp;
+        ahrs->last_sensor_timestamp = sensor_timestamp;
 
         /* Notify external data arrival subscribers, if any. */
         for (int i = 0; i < MAX_NUM_CALLBACKS; i++) {
             ITimestampedDataSubscriber *callback = ahrs->callbacks[i];
             if (callback != NULL) {
-            	long system_timestamp = (long)(Timer::GetFPGATimestamp() * 1000);
+                long system_timestamp = (long)(Timer::GetFPGATimestamp() * 1000);
                 callback->timestampedDataReceived(system_timestamp,
-                		sensor_timestamp,
-                		ahrs_update,
-                		ahrs->callback_contexts[i]);
+                        sensor_timestamp,
+                        ahrs_update,
+                        ahrs->callback_contexts[i]);
             }
         }
 
@@ -239,9 +239,9 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
         ahrs->selftest_status = board_state.selftest_status;
     }
 
-	void YawResetComplete() {
-		ahrs->yaw_angle_tracker->Reset();
-	}
+    void YawResetComplete() {
+        ahrs->yaw_angle_tracker->Reset();
+    }
 
     /***********************************************************/
     /* IBoardCapabilities Interface Implementation        */
@@ -263,7 +263,7 @@ class AHRSInternal : public IIOCompleteNotification, public IBoardCapabilities {
 
     bool IsAHRSPosTimestampSupported()
     {
-    	return (((ahrs->capability_flags & NAVX_CAPABILITY_FLAG_AHRSPOS_TS) != 0) ? true : false);
+        return (((ahrs->capability_flags & NAVX_CAPABILITY_FLAG_AHRSPOS_TS) != 0) ? true : false);
     }
 };
 
@@ -461,9 +461,9 @@ void AHRS::ZeroYaw() {
         io->ZeroYaw();
         /* Notification is deferred until action is complete. */
     } else {
-		yaw_offset_tracker->SetOffset();
-		/* Notification occurs immediately. */
-		ahrs_internal->YawResetComplete();
+        yaw_offset_tracker->SetOffset();
+        /* Notification occurs immediately. */
+        ahrs_internal->YawResetComplete();
     }
 }
 
@@ -535,7 +535,7 @@ double AHRS::GetUpdateCount() {
  * @return The sensor timestamp corresponding to the current AHRS sensor data.
  */
 long AHRS::GetLastSensorTimestamp() {
-	return this->last_sensor_timestamp;
+    return this->last_sensor_timestamp;
 }
 
 /**
@@ -889,17 +889,17 @@ float AHRS::GetDisplacementZ() {
  * @param enable
  */
 void AHRS::EnableLogging(bool enable) {
-	if ( this->io != NULL) {
-		io->EnableLogging(enable);
-	}
+    if ( this->io != NULL) {
+        io->EnableLogging(enable);
+    }
 }
 
 int16_t AHRS::GetGyroFullScaleRangeDPS() {
-	return gyro_fsr_dps;
+    return gyro_fsr_dps;
 }
 
 int16_t AHRS::GetAccelFullScaleRangeG() {
-	return accel_fsr_g;
+    return accel_fsr_g;
 }
 
 #define NAVX_IO_THREAD_NAME "navXIOThread"
@@ -995,8 +995,8 @@ void AHRS::commonInit( uint8_t update_rate_hz ) {
     io = 0;
 
     for ( int i = 0; i < MAX_NUM_CALLBACKS; i++) {
-    	callbacks[i] = NULL;
-    	callback_contexts[i] = NULL;
+        callbacks[i] = NULL;
+        callback_contexts[i] = NULL;
     }
 }
 
@@ -1049,7 +1049,7 @@ double AHRS::GetRate() {
  * @param adjustment, in degrees (range:  -360 to 360)
  */
 void AHRS::SetAngleAdjustment(double adjustment) {
-	yaw_angle_tracker->SetAngleAdjustment(adjustment);
+    yaw_angle_tracker->SetAngleAdjustment(adjustment);
 }
 
 /**
@@ -1061,7 +1061,7 @@ void AHRS::SetAngleAdjustment(double adjustment) {
  * @param adjustment, in degrees (range:  -360 to 360)
  */
 double AHRS::GetAngleAdjustment() {
-	return yaw_angle_tracker->GetAngleAdjustment();
+    return yaw_angle_tracker->GetAngleAdjustment();
 }
 
 /**
@@ -1280,8 +1280,8 @@ std::string AHRS::GetFirmwareVersion() {
     /***********************************************************/
 
 void AHRS::InitSendable(SendableBuilder& builder) {
-	builder.SetSmartDashboardType("Gyro");
-	builder.AddDoubleProperty("Value", [=]() { return GetYaw(); }, nullptr);
+    builder.SetSmartDashboardType("Gyro");
+    builder.AddDoubleProperty("Value", [=]() { return GetYaw(); }, nullptr);
 }
 
 /***********************************************************/

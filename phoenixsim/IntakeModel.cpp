@@ -28,13 +28,13 @@ namespace xero {
             void IntakeModel::run(double dt) {                
             }
 
-	        void IntakeModel::inputChanged(SimulatedObject *obj) {              
-			    std::lock_guard<std::mutex> lock(getLockMutex()) ;
+            void IntakeModel::inputChanged(SimulatedObject *obj) {              
+                std::lock_guard<std::mutex> lock(getLockMutex()) ;
                 VictorSP *victor = dynamic_cast<VictorSP *>(obj) ;
                 if (victor != nullptr) {
-    			    if (victor == motor1_)
+                    if (victor == motor1_)
                         voltage1_ = victor->Get() ;
-			        else if (victor == motor2_)
+                    else if (victor == motor2_)
                         voltage2_ = victor->Get() ;
                 }
             }    

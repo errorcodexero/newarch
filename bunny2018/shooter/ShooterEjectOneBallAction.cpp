@@ -136,9 +136,9 @@ namespace xero {
 
                 result += " staged=";
                 if (getSubsystem().getBallIsStaged())
-					result += "true";
-				else
-					result += "false";
+                    result += "true";
+                else
+                    result += "false";
 
                 result += " state=";
                 switch (state_) {

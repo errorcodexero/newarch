@@ -19,15 +19,15 @@ namespace xero {
             ml_ = std::make_shared<MessageListener>(robot, socket_port_number) ;
             addChild(ml_) ;
 
-			//
-			// Add the tank drive.  This is handled by the base class RobotSubsystem since all robots have a drivebase
-			// and for now they are all tank drives
-			//
-			addTankDrive() ;
+            //
+            // Add the tank drive.  This is handled by the base class RobotSubsystem since all robots have a drivebase
+            // and for now they are all tank drives
+            //
+            addTankDrive() ;
 
-			//
-			// Add the OI to the robot.  The OI is specific to this robot.
-			//
+            //
+            // Add the OI to the robot.  The OI is specific to this robot.
+            //
             oi_ = std::make_shared<BunnyOISubsystem>(robot) ;
             addChild(oi_) ;
 

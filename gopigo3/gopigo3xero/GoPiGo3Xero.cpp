@@ -20,48 +20,48 @@ using namespace xero::misc ;
 using namespace xero::base ;
 
 namespace xero {
-	namespace gopigo {
+    namespace gopigo {
 
-		GoPiGo3Xero::GoPiGo3Xero() : xero::base::Robot("gopigo3", 0.02) {
-		}
+        GoPiGo3Xero::GoPiGo3Xero() : xero::base::Robot("gopigo3", 0.02) {
+        }
 
-		std::shared_ptr<GoPiGo3Subsystem> GoPiGo3Xero::getGoPiGoSubsystem() {
-			auto sub = getRobotSubsystem() ;
-			return std::dynamic_pointer_cast<GoPiGo3Subsystem>(sub) ;
-		}
+        std::shared_ptr<GoPiGo3Subsystem> GoPiGo3Xero::getGoPiGoSubsystem() {
+            auto sub = getRobotSubsystem() ;
+            return std::dynamic_pointer_cast<GoPiGo3Subsystem>(sub) ;
+        }
 
-		void GoPiGo3Xero::enableSpecificMessages() {
+        void GoPiGo3Xero::enableSpecificMessages() {
             MessageLogger& logger = getMessageLogger();
 
             //
             // Decide what message groups (incl. subsystems) you want to see
-			//
-            // logger.enableSubsystem(MSG_GROUP_ALL) ;			
-			logger.enableSubsystem(MSG_GROUP_TANKDRIVE);			
-		}
+            //
+            // logger.enableSubsystem(MSG_GROUP_ALL) ;          
+            logger.enableSubsystem(MSG_GROUP_TANKDRIVE);            
+        }
 
-		void GoPiGo3Xero::RobotHardwareInit() {
-			auto robot_p = std::make_shared<GoPiGo3Subsystem>(*this) ;
-			auto oi = robot_p->getOI() ;
-			auto db = robot_p->getTankDrive() ;
-			assert(oi != nullptr) ;
-			assert(db != nullptr) ;
+        void GoPiGo3Xero::RobotHardwareInit() {
+            auto robot_p = std::make_shared<GoPiGo3Subsystem>(*this) ;
+            auto oi = robot_p->getOI() ;
+            auto db = robot_p->getTankDrive() ;
+            assert(oi != nullptr) ;
+            assert(db != nullptr) ;
 
-			setRobotSubsystem(robot_p, oi, db) ;
-		}
+            setRobotSubsystem(robot_p, oi, db) ;
+        }
 
-		std::shared_ptr<ControllerBase> GoPiGo3Xero::createAutoController() {
-			return std::make_shared<GoPiGo3AutoModeController>(*this) ;
-		}
-		
-		std::shared_ptr<ControllerBase> GoPiGo3Xero::createTeleopController() {
-			return std::make_shared<TeleopController>(*this) ;
-		}
-		 
-		std::shared_ptr<ControllerBase> GoPiGo3Xero::createTestController() {
-			return std::make_shared<TestController>(*this) ;
-		}
-	}
+        std::shared_ptr<ControllerBase> GoPiGo3Xero::createAutoController() {
+            return std::make_shared<GoPiGo3AutoModeController>(*this) ;
+        }
+        
+        std::shared_ptr<ControllerBase> GoPiGo3Xero::createTeleopController() {
+            return std::make_shared<TeleopController>(*this) ;
+        }
+         
+        std::shared_ptr<ControllerBase> GoPiGo3Xero::createTestController() {
+            return std::make_shared<TestController>(*this) ;
+        }
+    }
 }
 
 //

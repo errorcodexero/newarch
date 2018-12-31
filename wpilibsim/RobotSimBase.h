@@ -70,29 +70,29 @@ namespace xero {
             bool hasProperty(const std::string &name) ;
             const std::string &getProperty(const std::string &name) ;
 
-			std::shared_ptr<SubsystemModel> getModelByName(const std::string &name) ;
+            std::shared_ptr<SubsystemModel> getModelByName(const std::string &name) ;
 
-			double getRobotXPos() {
-				if (tank_drive_model_ == nullptr)
-					return 0.0 ;
+            double getRobotXPos() {
+                if (tank_drive_model_ == nullptr)
+                    return 0.0 ;
 
-				return tank_drive_model_->getXPos() ;
-			}
+                return tank_drive_model_->getXPos() ;
+            }
 
-			double getRobotYPos() {
-				if (tank_drive_model_ == nullptr)
-					return 0.0 ;
+            double getRobotYPos() {
+                if (tank_drive_model_ == nullptr)
+                    return 0.0 ;
 
-				return tank_drive_model_->getYPos() ;
-			}			
+                return tank_drive_model_->getYPos() ;
+            }           
 
         protected:
             void addModel(std::shared_ptr<SubsystemModel> model) {
                 models_.push_back(model) ;
 
-				auto tank = std::dynamic_pointer_cast<TankDriveModel>(model) ;
-				if (tank != nullptr)
-					tank_drive_model_ = tank ;
+                auto tank = std::dynamic_pointer_cast<TankDriveModel>(model) ;
+                if (tank != nullptr)
+                    tank_drive_model_ = tank ;
             }
 
             std::list<std::shared_ptr<SubsystemModel>> &getModels() {
@@ -103,7 +103,7 @@ namespace xero {
                 visualizers_.push_back(vis) ;
             }
 
-			void readJoysticks() ;
+            void readJoysticks() ;
 
         private:
             void simLoop() ;
@@ -114,7 +114,7 @@ namespace xero {
 
             std::list<std::shared_ptr<SubsystemModel>> models_ ;
 
-			std::shared_ptr<TankDriveModel> tank_drive_model_ ;
+            std::shared_ptr<TankDriveModel> tank_drive_model_ ;
 
             std::thread model_thread_ ;
             bool running_ ;
@@ -138,7 +138,7 @@ namespace xero {
 
             frc::SampleRobot *robot_ ;
 
-			JoystickManager *joysticks_ ;
+            JoystickManager *joysticks_ ;
         } ;
     }
 }

@@ -28,7 +28,7 @@ THE SOFTWARE.
 /*****************************************************************************/
 /* This protocol, introduced first with the navX MXP, expands upon the IMU   */
 /* protocol by adding the following new functionality:                       */
-/*         																	 */
+/*                                                                           */
 /* AHRS Update:  Includes Fused Heading and Altitude Info                    */
 /* Magnetometer Calibration:  Enables configuration of coefficients from PC  */
 /* Board Identity:  Enables retrieval of Board Identification Info           */
@@ -64,10 +64,10 @@ THE SOFTWARE.
 typedef enum
 {
     UNSPECIFIED = 0,
-    MOTION_THRESHOLD = 1,			/* In G */
-    YAW_STABLE_THRESHOLD = 2,		/* In Degrees */
-    MAG_DISTURBANCE_THRESHOLD =3,	/* Ratio */
-    SEA_LEVEL_PRESSURE = 4,			/* Millibars */
+    MOTION_THRESHOLD = 1,           /* In G */
+    YAW_STABLE_THRESHOLD = 2,       /* In Degrees */
+    MAG_DISTURBANCE_THRESHOLD =3,   /* Ratio */
+    SEA_LEVEL_PRESSURE = 4,         /* Millibars */
     MIN_TUNING_VAR_ID = MOTION_THRESHOLD,
     MAX_TUNING_VAR_ID = SEA_LEVEL_PRESSURE,
 } AHRS_TUNING_VAR_ID;
@@ -86,8 +86,8 @@ typedef enum
     DATA_SET_TO_DEFAULT = 2,
 } AHRS_DATA_ACTION;
 
-#define DATA_GETSET_SUCCESS	0
-#define DATA_GETSET_ERROR	1
+#define DATA_GETSET_SUCCESS 0
+#define DATA_GETSET_ERROR   1
 
 // AHRS Update Packet - e.g., !a[yaw][pitch][roll][heading][altitude][fusedheading][accelx/y/z][angular rot x/y/z][opstatus][fusionstatus][cr][lf]
 
@@ -182,7 +182,7 @@ typedef enum
 #define AHRSPOS_TS_UPDATE_SENSOR_STATUS_VALUE_INDEX     83 /* NAVX_SENSOR_STATUS_XXX */
 #define AHRSPOS_TS_UPDATE_CAL_STATUS_VALUE_INDEX        84 /* NAVX_CAL_STATUS_XXX */
 #define AHRSPOS_TS_UPDATE_SELFTEST_STATUS_VALUE_INDEX   85 /* NAVX_SELFTEST_STATUS_XXX */
-#define AHRSPOS_TS_UPDATE_TIMESTAMP_INDEX				86 /* UINT32 Timestamp, in milliseconds */
+#define AHRSPOS_TS_UPDATE_TIMESTAMP_INDEX               86 /* UINT32 Timestamp, in milliseconds */
 #define AHRSPOS_TS_UPDATE_MESSAGE_CHECKSUM_INDEX        90
 #define AHRSPOS_TS_UPDATE_MESSAGE_TERMINATOR_INDEX      92
 #define AHRSPOS_TS_UPDATE_MESSAGE_LENGTH                94
@@ -283,7 +283,7 @@ class AHRSProtocol : public IMUProtocol
 {
 public:
 
-	struct AHRSUpdateBase {
+    struct AHRSUpdateBase {
         float yaw;
         float pitch;
         float roll;
@@ -292,7 +292,7 @@ public:
         float fused_heading;
         float linear_accel_x;
         float linear_accel_y;
-        float linear_accel_z;    	
+        float linear_accel_z;       
         float mpu_temp;
         float quat_w;
         float quat_x;
@@ -303,8 +303,8 @@ public:
         uint8_t op_status;
         uint8_t  sensor_status;
         uint8_t  cal_status;
-        uint8_t  selftest_status;       	
-	};
+        uint8_t  selftest_status;           
+    };
 
     struct AHRSUpdate : public AHRSUpdateBase {
         short   cal_mag_x;
@@ -530,7 +530,7 @@ public:
             update.raw_mag_x = IMURegisters::decodeProtocolInt16(&buffer[AHRS_UPDATE_RAW_MAG_X_VALUE_INDEX]);
             update.raw_mag_y = IMURegisters::decodeProtocolInt16(&buffer[AHRS_UPDATE_RAW_MAG_Y_VALUE_INDEX]);
             update.raw_mag_z = IMURegisters::decodeProtocolInt16(&buffer[AHRS_UPDATE_RAW_MAG_Z_VALUE_INDEX]);
-			/* AHRSPosUpdate:  Quaternions are signed int (16-bit resolution); divide by 16384 to yield +/- 2 radians */            
+            /* AHRSPosUpdate:  Quaternions are signed int (16-bit resolution); divide by 16384 to yield +/- 2 radians */            
             update.quat_w = ((float)IMURegisters::decodeProtocolInt16(&buffer[AHRS_UPDATE_QUAT_W_VALUE_INDEX]) / 16384.0f);
             update.quat_x = ((float)IMURegisters::decodeProtocolInt16(&buffer[AHRS_UPDATE_QUAT_X_VALUE_INDEX]) / 16384.0f);
             update.quat_y = ((float)IMURegisters::decodeProtocolInt16(&buffer[AHRS_UPDATE_QUAT_Y_VALUE_INDEX]) / 16384.0f);
@@ -620,7 +620,7 @@ public:
             update.disp_y = IMURegisters::decodeProtocol1616Float(&buffer[AHRSPOS_UPDATE_DISP_Y_VALUE_INDEX]);
             update.disp_z = IMURegisters::decodeProtocol1616Float(&buffer[AHRSPOS_UPDATE_DISP_Z_VALUE_INDEX]);
             update.mpu_temp = IMURegisters::decodeProtocolSignedHundredthsFloat(&buffer[AHRSPOS_UPDATE_MPU_TEMP_VAUE_INDEX]);
-			/* AHRSPosUpdate:  Quaternions are signed int (16-bit resolution); divide by 16384 to yield +/- 2 radians */            
+            /* AHRSPosUpdate:  Quaternions are signed int (16-bit resolution); divide by 16384 to yield +/- 2 radians */            
             update.quat_w = ((float)IMURegisters::decodeProtocolInt16(&buffer[AHRSPOS_UPDATE_QUAT_W_VALUE_INDEX]) / 16384.0f);
             update.quat_x = ((float)IMURegisters::decodeProtocolInt16(&buffer[AHRSPOS_UPDATE_QUAT_X_VALUE_INDEX]) / 16384.0f);
             update.quat_y = ((float)IMURegisters::decodeProtocolInt16(&buffer[AHRSPOS_UPDATE_QUAT_Y_VALUE_INDEX]) / 16384.0f);
@@ -738,7 +738,7 @@ public:
         // Data
         protocol_buffer[MAG_CAL_DATA_ACTION_VALUE_INDEX] = action;
         for ( int i = 0; i < 3; i++ ) {
-            IMURegisters::encodeProtocolInt16(	bias[i],
+            IMURegisters::encodeProtocolInt16(  bias[i],
                     &protocol_buffer[MAG_X_BIAS_VALUE_INDEX + (i * sizeof(int16_t))]);
         }
         for ( int i = 0; i < 9; i++ ) {

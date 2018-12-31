@@ -45,42 +45,42 @@ namespace xero {
             /// \brief set the value for the button
             /// \param ds the driver station class to get button values
             /// \param index the index of the joystick
-			virtual void setValue(frc::DriverStation &ds, int index) {
-				setValue(ds.GetStickButton(index, getItem())) ;
-			}
+            virtual void setValue(frc::DriverStation &ds, int index) {
+                setValue(ds.GetStickButton(index, getItem())) ;
+            }
 
 private:
             void setValue(bool value) {
-				switch(type_) {
-				case ButtonType::Level:
-					value_ = value ;
-					break ;
+                switch(type_) {
+                case ButtonType::Level:
+                    value_ = value ;
+                    break ;
 
-				case ButtonType::LevelInv:
-					value_ = !value ;
-					break ;
+                case ButtonType::LevelInv:
+                    value_ = !value ;
+                    break ;
 
-				case ButtonType::LowToHigh:
-					if (!prev_ && value)
-						value_ = true ;
-					else
-						value_ = false ;
-					break ;
+                case ButtonType::LowToHigh:
+                    if (!prev_ && value)
+                        value_ = true ;
+                    else
+                        value_ = false ;
+                    break ;
 
-				case ButtonType::HighToLow:
-					if (prev_ && !value)
-						value_ = true ;
-					else
-						value_ = false ;
-					break ;					
-				}
+                case ButtonType::HighToLow:
+                    if (prev_ && !value)
+                        value_ = true ;
+                    else
+                        value_ = false ;
+                    break ;                 
+                }
 
-				prev_ = value ;
+                prev_ = value ;
             }
 
         private:
             bool value_ ;
-			bool prev_ ;
+            bool prev_ ;
             ButtonType type_ ;
         } ;
     }

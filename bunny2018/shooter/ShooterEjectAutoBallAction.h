@@ -25,7 +25,7 @@ namespace xero {
             virtual bool ejectTrigger() ;
             virtual bool repeatEjectOne() ;
 
-			size_t getClosestCrate(double pos, bool fwd) ;
+            size_t getClosestCrate(double pos, bool fwd) ;
 
         private:
             std::shared_ptr<xero::base::DriveBase> db_ ;
@@ -34,9 +34,9 @@ namespace xero {
             std::vector<double> crates_ ;
             std::vector<bool> filled_ ;
 
-			double offset_ ;
-			double window_ ;
-			double crate_width_ ;
+            double offset_ ;
+            double window_ ;
+            double crate_width_ ;
         };
     }
 }

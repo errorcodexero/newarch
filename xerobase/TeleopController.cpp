@@ -8,17 +8,17 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
         TeleopController::TeleopController(Robot &robot) : ControllerBase(robot) {
-			seq_ = std::make_shared<ActionSequence>(robot.getMessageLogger(), "teleop") ;
+            seq_ = std::make_shared<ActionSequence>(robot.getMessageLogger(), "teleop") ;
         }
 
         TeleopController::~TeleopController() {            
         }
 
         void TeleopController::run() {
-			auto oi = getRobot().getOI() ;
+            auto oi = getRobot().getOI() ;
 
-			seq_->clear() ;
-			oi->generateActions(seq_) ;
+            seq_->clear() ;
+            oi->generateActions(seq_) ;
             seq_->start() ;
             seq_->run() ;
             if (!seq_->isDone()) {
@@ -29,7 +29,7 @@ namespace xero {
                 logger.startMessage(MessageLogger::MessageType::error) ;
                 logger << "Sequence: " << seq_->toString() ;
                 logger.endMessage() ;
-            }			
+            }           
         }
     }
 }

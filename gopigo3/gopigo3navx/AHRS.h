@@ -78,10 +78,10 @@ private:
     volatile bool       altitude_valid;
     volatile bool       is_magnetometer_calibrated;
     volatile bool       magnetic_disturbance;
-    volatile float    	quaternionW;
-    volatile float    	quaternionX;
-    volatile float    	quaternionY;
-    volatile float    	quaternionZ;
+    volatile float      quaternionW;
+    volatile float      quaternionX;
+    volatile float      quaternionY;
+    volatile float      quaternionZ;
 
     /* Integrated Data */
     float velocity[3];

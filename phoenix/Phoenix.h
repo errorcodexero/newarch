@@ -11,38 +11,38 @@
 #include <Robot.h>
 
 namespace xero {
-	namespace phoenix {
+    namespace phoenix {
 
-		/// \brief the concrete class that represents the robot Phoenix
-		class Phoenix : public xero::base::Robot {
-		public:
-			Phoenix() ;
+        /// \brief the concrete class that represents the robot Phoenix
+        class Phoenix : public xero::base::Robot {
+        public:
+            Phoenix() ;
 
-			/// \brief return the robot subsystem cast to the phoenix specific type
-			/// \returns the robot subsystem cast to the phoenix specific type
-			std::shared_ptr<PhoenixRobotSubsystem> getPhoenixRobotSubsystem() {
-				return std::dynamic_pointer_cast<PhoenixRobotSubsystem>(getRobotSubsystem()) ;
-			}
+            /// \brief return the robot subsystem cast to the phoenix specific type
+            /// \returns the robot subsystem cast to the phoenix specific type
+            std::shared_ptr<PhoenixRobotSubsystem> getPhoenixRobotSubsystem() {
+                return std::dynamic_pointer_cast<PhoenixRobotSubsystem>(getRobotSubsystem()) ;
+            }
 
-		protected:
+        protected:
 
-			/// \brief called to initialize the robot, basically creating the subsystems
-			virtual void RobotHardwareInit() ;
+            /// \brief called to initialize the robot, basically creating the subsystems
+            virtual void RobotHardwareInit() ;
 
-			/// \brief called to create the autonomous controller
-			/// \returns a robot controller
-			virtual std::shared_ptr<xero::base::ControllerBase> createAutoController() ;
-			
-			/// \brief called to create the teleop controller
-			/// \returns a robot controller
-			virtual std::shared_ptr<xero::base::ControllerBase> createTeleopController() ;
+            /// \brief called to create the autonomous controller
+            /// \returns a robot controller
+            virtual std::shared_ptr<xero::base::ControllerBase> createAutoController() ;
+            
+            /// \brief called to create the teleop controller
+            /// \returns a robot controller
+            virtual std::shared_ptr<xero::base::ControllerBase> createTeleopController() ;
 
-			/// \brief called to create the test controller
-			/// \returns a robot controller
-			virtual std::shared_ptr<xero::base::ControllerBase> createTestController() ;
+            /// \brief called to create the test controller
+            /// \returns a robot controller
+            virtual std::shared_ptr<xero::base::ControllerBase> createTestController() ;
 
-			/// \brief enable specific message for logging
-			virtual void enableSpecificMessages() ;	
-		} ;
-	}
+            /// \brief enable specific message for logging
+            virtual void enableSpecificMessages() ; 
+        } ;
+    }
 }

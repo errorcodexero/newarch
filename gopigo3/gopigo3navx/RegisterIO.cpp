@@ -20,8 +20,8 @@ RegisterIO::RegisterIO( IRegisterIO *io_provider,
     this->board_capabilities    = board_capabilities;
     this->notify_sink           = notify_sink;
     this->last_sensor_timestamp = 0;
-    this->update_count 			= 0;
-    this->byte_count			= 0;
+    this->update_count          = 0;
+    this->byte_count            = 0;
     this->last_update_time      = 0;
     this->stop                  = false;
 
@@ -69,25 +69,25 @@ void RegisterIO::ZeroDisplacement() {
 }
 
 void RegisterIO::Run() {
-	bool b ;
-	std::cout << "Entering Register IO::Run" << std::endl ;
+    bool b ;
+    std::cout << "Entering Register IO::Run" << std::endl ;
     io_provider->Init();
 
-	std::cout << "    After Init()" << std::endl ;
+    std::cout << "    After Init()" << std::endl ;
 
     /* Initial Device Configuration */
     SetUpdateRateHz(this->update_rate_hz);
-	std::cout << "    After SetUpdateRateHz()" << std::endl ;
+    std::cout << "    After SetUpdateRateHz()" << std::endl ;
 
     b = GetConfiguration();
-	if (b)
-		std::cout << "    After GetConfiguration()" << std::endl ;
-	else
-		std::cout << "    Could not retreive configuration" << std::endl ;
+    if (b)
+        std::cout << "    After GetConfiguration()" << std::endl ;
+    else
+        std::cout << "    Could not retreive configuration" << std::endl ;
 
     double update_rate_ms = 1.0/(double)this->update_rate_hz;
     if ( update_rate_ms > DELAY_OVERHEAD_MILLISECONDS) {
-    	update_rate_ms -= DELAY_OVERHEAD_MILLISECONDS;
+        update_rate_ms -= DELAY_OVERHEAD_MILLISECONDS;
     }
 
     /* IO Loop */
@@ -105,7 +105,7 @@ void RegisterIO::Stop() {
 }
 
 void RegisterIO::EnableLogging(bool enable) {
-	io_provider->EnableLogging(enable);
+    io_provider->EnableLogging(enable);
 }
 
 bool RegisterIO::GetConfiguration() {
@@ -152,9 +152,9 @@ void RegisterIO::GetCurrentData() {
         buffer_len = NAVX_REG_QUAT_OFFSET_Z_H + 1 - first_address;
     }
     if ( io_provider->Read(first_address,(uint8_t *)curr_data, buffer_len) ) {
-    	long sensor_timestamp = IMURegisters::decodeProtocolUint32(curr_data + NAVX_REG_TIMESTAMP_L_L-first_address);
+        long sensor_timestamp = IMURegisters::decodeProtocolUint32(curr_data + NAVX_REG_TIMESTAMP_L_L-first_address);
         if ( sensor_timestamp == last_sensor_timestamp ) {
-        	return;
+            return;
         }
         last_sensor_timestamp = sensor_timestamp;
         ahrspos_update.op_status       = curr_data[NAVX_REG_OP_STATUS - first_address];

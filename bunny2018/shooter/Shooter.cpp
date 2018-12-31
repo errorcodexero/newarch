@@ -26,33 +26,33 @@ namespace xero {
         void Shooter::computeState() {
             if (ball_sensor_->Get()) {
                 ball_is_staged_ = true ;
-        		frc::SmartDashboard::PutBoolean("Staged", true) ;
+                frc::SmartDashboard::PutBoolean("Staged", true) ;
             }
 
             auto& logger = getRobot().getMessageLogger() ;
 
-			if (getBallIsStaged()) {
-	            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SHOOTER_VERBOSE) ;
-            	logger << "Shooter: ball is staged\n" ;
-	            logger.endMessage() ;
-			}
+            if (getBallIsStaged()) {
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SHOOTER_VERBOSE) ;
+                logger << "Shooter: ball is staged\n" ;
+                logger.endMessage() ;
+            }
             else {
             }
 
 
         }
     
-		bool Shooter::canAcceptAction(ActionPtr action) {
+        bool Shooter::canAcceptAction(ActionPtr action) {
             // Allow action to to set motor power that's derived from the base class
             if (SingleMotorSubsystem::canAcceptAction(action)) {
                 return true;
             }
 
-			std::shared_ptr<ShooterAction> act_p = std::dynamic_pointer_cast<ShooterAction>(action) ;
-			if (act_p == nullptr)
-				return false ;
+            std::shared_ptr<ShooterAction> act_p = std::dynamic_pointer_cast<ShooterAction>(action) ;
+            if (act_p == nullptr)
+                return false ;
 
-			return true ;
-		}
+            return true ;
+        }
     }
 }

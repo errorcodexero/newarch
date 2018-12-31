@@ -33,14 +33,14 @@ namespace xero {
 
             void CubeSensorModel::init() {
                 if (getSimulator().hasProperty("cube")) {
-					std::vector<double> values ;
+                    std::vector<double> values ;
                     const std::string &prop = getSimulator().getProperty("cube") ;
                     if (parseDoubleList(prop, values)) {
-						for(double t : values) {
-                        	OnTime tm(t) ;
-                        	ontimes_.push_back(tm) ;
-                    	}
-					}
+                        for(double t : values) {
+                            OnTime tm(t) ;
+                            ontimes_.push_back(tm) ;
+                        }
+                    }
                 }
             }
 
@@ -65,30 +65,30 @@ namespace xero {
             }
 
             void CubeSensorModel::run(double dt) {
-				auto &phoenix = dynamic_cast<PhoenixSimulator &>(getSimulator()) ;
+                auto &phoenix = dynamic_cast<PhoenixSimulator &>(getSimulator()) ;
 
                 evalSensor() ;
 
                 double now = phoenix.getTime() ;
 
                 if (cube_sensed_ == false) {
-					//
-					// Cubes based on time
-					//
+                    //
+                    // Cubes based on time
+                    //
                     for(const auto &entry: ontimes_) {
                         if (entry.start > last_time_ && entry.start <= now)
                             cube_sensed_ = true ;
                     }
 
-					//
-					// Cubes based on position
-					//
-					double x = phoenix.getRobotXPos() ;
-					double y = phoenix.getRobotYPos() ;
-					if (phoenix.isCubeAtPosition(x, y)) {
-						phoenix.removeCube(x, y) ;
-						cube_sensed_ = true ;
-					}
+                    //
+                    // Cubes based on position
+                    //
+                    double x = phoenix.getRobotXPos() ;
+                    double y = phoenix.getRobotYPos() ;
+                    if (phoenix.isCubeAtPosition(x, y)) {
+                        phoenix.removeCube(x, y) ;
+                        cube_sensed_ = true ;
+                    }
                 }
 
                 if (input_ != nullptr)
@@ -99,8 +99,8 @@ namespace xero {
 
             }
 
-	        void CubeSensorModel::inputChanged(SimulatedObject *obj) {   
-			    std::lock_guard<std::mutex> lock(getLockMutex()) ;
+            void CubeSensorModel::inputChanged(SimulatedObject *obj) {   
+                std::lock_guard<std::mutex> lock(getLockMutex()) ;
                 VictorSP *victor = dynamic_cast<VictorSP *>(obj) ;
                 if (victor != nullptr)
                     duty_ = victor->Get() ;

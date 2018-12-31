@@ -14,29 +14,29 @@ namespace xero {
         PhoenixAutoController::~PhoenixAutoController() {
         }
 
-    	void PhoenixAutoController::updateAutoMode(int sel, const std::string &gamedata) {
-			Robot &robot = getRobot() ;
-			Phoenix &phoenix = dynamic_cast<Phoenix &>(robot) ;
+        void PhoenixAutoController::updateAutoMode(int sel, const std::string &gamedata) {
+            Robot &robot = getRobot() ;
+            Phoenix &phoenix = dynamic_cast<Phoenix &>(robot) ;
             ActionSequencePtr mode = nullptr ;
 
-			auto &ds = frc::DriverStation::GetInstance() ;
-			std::string game = ds.GetGameSpecificMessage() ;
-			char myswitch = game[0] ;
+            auto &ds = frc::DriverStation::GetInstance() ;
+            std::string game = ds.GetGameSpecificMessage() ;
+            char myswitch = game[0] ;
 
-			switch(sel) {
-			case 0:
-				mode = std::make_shared<CrossTheLine>(phoenix) ;
-				break ;
+            switch(sel) {
+            case 0:
+                mode = std::make_shared<CrossTheLine>(phoenix) ;
+                break ;
 
-			case 1:
-				if (myswitch == 'L')
-					mode = std::make_shared<CenterSwitchLeft>(phoenix) ;
-				else
-					mode = std::make_shared<CenterSwitchRight>(phoenix) ;
-				break ;
-			}
+            case 1:
+                if (myswitch == 'L')
+                    mode = std::make_shared<CenterSwitchLeft>(phoenix) ;
+                else
+                    mode = std::make_shared<CenterSwitchRight>(phoenix) ;
+                break ;
+            }
 
-			setAction(mode) ;
-		}
-	}
+            setAction(mode) ;
+        }
+    }
 }

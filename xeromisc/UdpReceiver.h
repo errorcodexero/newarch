@@ -31,7 +31,7 @@ namespace xero
             /// \brief open the broadcast receiver
             /// \param addr the address to bind the socket to, if empty bind to the INADDR_ANY address
             /// \param port the port to bind the socket to
-			/// \param broadcast if true this receiver recieves broadcast packets
+            /// \param broadcast if true this receiver recieves broadcast packets
             /// \returns true if the socket was created, otherwise false
             bool open(const std::string &addr, uint16_t port, bool broadcast = false)
             {
@@ -40,10 +40,10 @@ namespace xero
 
 
                 if (!bind(addr, port))
-				{
-					destroySocket();
-					return false;
-				}
+                {
+                    destroySocket();
+                    return false;
+                }
 
                 return true;
             }
@@ -96,32 +96,32 @@ namespace xero
                 memset(&m_saddr, 0, sizeof(m_saddr));
                 m_saddr.sin_family = AF_INET;
                 if (addr.length() == 0)
-				{
-					m_saddr.sin_addr.s_addr = INADDR_ANY;
-				}
+                {
+                    m_saddr.sin_addr.s_addr = INADDR_ANY;
+                }
                 else
-				{
-					if (inet_aton(addr.c_str(), &m_saddr.sin_addr) == 0)
-					{
-						destroySocket();
-						return false;
-					}
-				}
+                {
+                    if (inet_aton(addr.c_str(), &m_saddr.sin_addr) == 0)
+                    {
+                        destroySocket();
+                        return false;
+                    }
+                }
                 m_saddr.sin_port = htons(port);
 
                 if (::bind(getSocket(), (struct sockaddr *)&m_saddr, sizeof(m_saddr)) == -1)
-				{
-					destroySocket();
-					return false;
-				}
+                {
+                    destroySocket();
+                    return false;
+                }
 
                 return true;
             }
 
 
-	private:
+    private:
             struct sockaddr_in m_saddr;
             bool blocking;
-	};
+    };
     }
 }

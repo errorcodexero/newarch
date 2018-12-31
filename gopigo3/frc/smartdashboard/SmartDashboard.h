@@ -6,8 +6,8 @@
 #include <memory>
 
 namespace frc {
-	class SmartDashboard {
-	public:
+    class SmartDashboard {
+    public:
       static void PutString(wpi::StringRef key, wpi::StringRef value);
       static void PutNumber(wpi::StringRef key, double value);
       static void PutBoolean(wpi::StringRef key, bool value);

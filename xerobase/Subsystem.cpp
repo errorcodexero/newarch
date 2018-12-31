@@ -10,8 +10,8 @@ namespace xero {
     namespace base {
 
         Subsystem::Subsystem(Robot &robot, const std::string &name) : robot_(robot) , name_(name) {
-			action_ = nullptr ;
-		}
+            action_ = nullptr ;
+        }
 
         Subsystem::~Subsystem() {
         }
@@ -23,19 +23,19 @@ namespace xero {
             
             if (action_ != nullptr)
                 action_->run() ;
-		}
-		
+        }
+        
         void Subsystem::computeState() {
             for(auto sub: children_)
                 sub->computeState() ;     
         }
 
-		void Subsystem::cancelAction() {
-			if (action_ != nullptr)
-				action_->cancel() ;
+        void Subsystem::cancelAction() {
+            if (action_ != nullptr)
+                action_->cancel() ;
 
-			action_ = nullptr ;
-		}
+            action_ = nullptr ;
+        }
 
         bool Subsystem::setAction(ActionPtr action) {
 
@@ -54,26 +54,26 @@ namespace xero {
                 return false ;
             }
 
-			//
-			// And now start the Action
-			//
+            //
+            // And now start the Action
+            //
             action_ = action ;
             if (action_ != nullptr) {
                 action_->start() ;
-			}
-			return true ;
+            }
+            return true ;
         }
 
-		void Subsystem::reset() {
-			action_ = nullptr ;
+        void Subsystem::reset() {
+            action_ = nullptr ;
 
-			for(auto child: children_)
-				child->reset() ;
-		}
+            for(auto child: children_)
+                child->reset() ;
+        }
 
-		void Subsystem::init(LoopType ltype) {
-			for(auto child: children_)
-				child->init(ltype) ;			
-		}
+        void Subsystem::init(LoopType ltype) {
+            for(auto child: children_)
+                child->init(ltype) ;            
+        }
     }
 }

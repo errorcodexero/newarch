@@ -30,8 +30,8 @@ public:
     void NextAngle( float newAngle );
     double GetAngle();
     double GetRate();
-	void SetAngleAdjustment(double adjustment);
-	double GetAngleAdjustment();
+    void SetAngleAdjustment(double adjustment);
+    double GetAngleAdjustment();
 };
 
 #endif /* SRC_CONTINUOUSANGLETRACKER_H_ */

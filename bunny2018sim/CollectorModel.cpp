@@ -27,11 +27,11 @@ namespace xero {
             void CollectorModel::run(double dt) {                
             }
 
-	        void CollectorModel::inputChanged(SimulatedObject *obj) {              
-			    std::lock_guard<std::mutex> lock(getLockMutex()) ;
+            void CollectorModel::inputChanged(SimulatedObject *obj) {              
+                std::lock_guard<std::mutex> lock(getLockMutex()) ;
                 TalonSRX *talon = dynamic_cast<TalonSRX *>(obj) ;
                 if (talon != nullptr) {
-    			    if (talon == motor_)
+                    if (talon == motor_)
                         voltage_ = talon->Get() ;
                 }
             }    

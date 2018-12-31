@@ -8,7 +8,7 @@ namespace xero {
         public:
             GoPiGo3OISubsystem(xero::base::Robot &robot) ;
             virtual ~GoPiGo3OISubsystem() ;
-			
+            
         private:
         } ;
     }

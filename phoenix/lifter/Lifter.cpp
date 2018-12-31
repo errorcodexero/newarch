@@ -55,27 +55,27 @@ namespace xero {
             return true ;
         }
 
-		void Lifter::setMotorDutyCycle(double v) {
-			if (is_calibrated_) {
-				if (v < 0 && height_ <= min_height_)
-					v = 0.0 ;
-				else if (v > 0 && height_ >= max_height_)
-					v = 0.0 ;
-			}
+        void Lifter::setMotorDutyCycle(double v) {
+            if (is_calibrated_) {
+                if (v < 0 && height_ <= min_height_)
+                    v = 0.0 ;
+                else if (v > 0 && height_ >= max_height_)
+                    v = 0.0 ;
+            }
 
-			if (v > 0 && isAtTop())
-				v = 0.0 ;
-			else if (v < 0 && isAtBottom())
-				v = 0.0 ;
+            if (v > 0 && isAtTop())
+                v = 0.0 ;
+            else if (v < 0 && isAtBottom())
+                v = 0.0 ;
 
-			motor1_->Set(v) ;
-			motor2_->Set(v) ;
-		}
+            motor1_->Set(v) ;
+            motor2_->Set(v) ;
+        }
 
         bool Lifter::isAtBottom() {
             if (is_calibrated_ && height_ <= min_height_) {
                 return true ;
-			}
+            }
 
             return !bottom_limit_->Get() ;
         }
@@ -90,13 +90,13 @@ namespace xero {
         void Lifter::computeState() {
             encoder_value_ = encoder_->Get() ;
 
-			if (!bottom_limit_->Get() && high_gear_) {
-				//
-				// The bottom limit switch is is true, reset the encoders and
-				// effectively recalibrate
-				//
-				calibrate() ;
-			}			
+            if (!bottom_limit_->Get() && high_gear_) {
+                //
+                // The bottom limit switch is is true, reset the encoders and
+                // effectively recalibrate
+                //
+                calibrate() ;
+            }           
 
             if (is_calibrated_) {
                 height_ = encoder_value_ * inches_per_tick_high_ + collector_offset_ ;
@@ -112,15 +112,15 @@ namespace xero {
             // and the calibration activity is just remembering the encoder value
             // at this lifter position
             //
-			if (is_calibrated_ == false) {
-            	is_calibrated_ = true ;
-				MessageLogger &logger = getRobot().getMessageLogger() ;
-				logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LIFTER) ;
-				logger << "Lifter: lifter calibrated" ;
-				logger.endMessage() ;
-			}
+            if (is_calibrated_ == false) {
+                is_calibrated_ = true ;
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LIFTER) ;
+                logger << "Lifter: lifter calibrated" ;
+                logger.endMessage() ;
+            }
             encoder_->Reset() ;
-			last_height_ = collector_offset_ ;
+            last_height_ = collector_offset_ ;
         }
 
         void Lifter::setLowGear() {

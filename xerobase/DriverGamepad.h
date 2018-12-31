@@ -60,13 +60,13 @@ namespace xero {
             /// \brief compute the state of the gamepad
             virtual void computeState() ;
 
-			/// \brief genreation actions based on the HID device
+            /// \brief genreation actions based on the HID device
             /// \param seq the action sequence for storing created actions
-			virtual void generateActions(ActionSequence &seq) ;
+            virtual void generateActions(ActionSequence &seq) ;
 
             /// \brief associate the driver gamepad with a drive base
             /// \param db the drivebase to control
-			void init(std::shared_ptr<TankDrive> db) ;
+            void init(std::shared_ptr<TankDrive> db) ;
 
         private:
             double scalePower(double axis, double boost, bool slow) ;

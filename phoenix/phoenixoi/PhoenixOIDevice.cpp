@@ -70,15 +70,15 @@ namespace xero {
 
         }
 
-		void PhoenixOIDevice::createActions() {
+        void PhoenixOIDevice::createActions() {
             Phoenix &ph = dynamic_cast<Phoenix &>(getSubsystem().getRobot()) ;
             auto lifter = ph.getPhoenixRobotSubsystem()->getLiftingCollector()->getLifter() ;
             auto grabber = ph.getPhoenixRobotSubsystem()->getLiftingCollector()->getCollector()->getGrabber() ;
-			auto collector = ph.getPhoenixRobotSubsystem()->getLiftingCollector()->getCollector() ;
+            auto collector = ph.getPhoenixRobotSubsystem()->getLiftingCollector()->getCollector() ;
 
-			//
-			// Prebuilt actions
-			//
+            //
+            // Prebuilt actions
+            //
             to_floor_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:floor") ;
             to_exchange_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:exchange") ;
             to_switch_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:switch") ;
@@ -87,10 +87,10 @@ namespace xero {
             lifter_up_low_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:low:up") ;
             lifter_down_low_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:low:down") ;
             lifter_up_high_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:high:up") ;
-            lifter_down_high_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:high:down") ;			
+            lifter_down_high_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:high:down") ;          
             lifter_climb_up_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:climb:up", true) ;
-            lifter_climb_down_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:climb:down", true) ;			
-            lifter_hold_climb_ = std::make_shared<LifterHoldClimbAction>(*lifter, "lifter:climbhold:delta") ;			
+            lifter_climb_down_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:climb:down", true) ;            
+            lifter_hold_climb_ = std::make_shared<LifterHoldClimbAction>(*lifter, "lifter:climbhold:delta") ;           
             lifter_calibrate_ = std::make_shared<LifterCalibrateAction>(*lifter) ;
             grabber_calibrate_ = std::make_shared<GrabberCalibrateAction>(*grabber) ;
             grabber_stow_ = std::make_shared<GrabberToAngleAction>(*grabber, "grabber:angle:stowed") ;
@@ -98,18 +98,18 @@ namespace xero {
             eject_normal_ = std::make_shared<CollectorEjectCubeAction>(*collector, "collector:eject:fast") ;
             eject_medium_ = std::make_shared<CollectorEjectCubeAction>(*collector, "collector:eject:middle") ;
             eject_slow_action_ = std::make_shared<CollectorEjectCubeAction>(*collector, "collector:eject:slow") ;
-			lifter_zero_ = std::make_shared<LifterPowerAction>(*lifter, 0.0) ;
-		}
+            lifter_zero_ = std::make_shared<LifterPowerAction>(*lifter, 0.0) ;
+        }
 
         void PhoenixOIDevice::generateActions(ActionSequence &seq) {
-			if (to_floor_ == nullptr)
-				createActions() ;
+            if (to_floor_ == nullptr)
+                createActions() ;
 
             Phoenix &ph = dynamic_cast<Phoenix &>(getSubsystem().getRobot()) ;
             auto lifter = ph.getPhoenixRobotSubsystem()->getLiftingCollector()->getLifter() ;
             auto grabber = ph.getPhoenixRobotSubsystem()->getLiftingCollector()->getCollector()->getGrabber() ;
             auto collector = ph.getPhoenixRobotSubsystem()->getLiftingCollector()->getCollector() ;
-			auto wings = ph.getPhoenixRobotSubsystem()->getWings() ;
+            auto wings = ph.getPhoenixRobotSubsystem()->getWings() ;
 
             if (getValue(climb_disabled_)) {
                 prev_climb_enabled_ = false ;
@@ -135,18 +135,18 @@ namespace xero {
                     lifter_stop_ = false ;                    
                 }
                 else if (getValue(lifter_up_)) {
-					if (getValue(lifter_high_power_))
-	                    seq.pushSubActionPair(lifter, lifter_up_high_power_) ;
-					else
-	                    seq.pushSubActionPair(lifter, lifter_up_low_power_) ;
+                    if (getValue(lifter_high_power_))
+                        seq.pushSubActionPair(lifter, lifter_up_high_power_) ;
+                    else
+                        seq.pushSubActionPair(lifter, lifter_up_low_power_) ;
 
                     lifter_stop_ = true ;
                 } else if (getValue(lifter_down_)) {
-					if (getValue(lifter_high_power_))
-	                    seq.pushSubActionPair(lifter, lifter_down_high_power_) ;
-					else
-	                    seq.pushSubActionPair(lifter, lifter_down_low_power_) ;					
-						
+                    if (getValue(lifter_high_power_))
+                        seq.pushSubActionPair(lifter, lifter_down_high_power_) ;
+                    else
+                        seq.pushSubActionPair(lifter, lifter_down_low_power_) ;                 
+                        
                     lifter_stop_ = true ;
                 }
                 else if (lifter_stop_) {
@@ -163,10 +163,10 @@ namespace xero {
                     seq.pushSubActionPair(lifter, lifter_calibrate_) ;
                     seq.pushSubActionPair(grabber, grabber_calibrate_) ;
                 }
-				else if (getValue(collect_)) {
-					//
-					// TODO: This button should toggle collect mode
-					//
+                else if (getValue(collect_)) {
+                    //
+                    // TODO: This button should toggle collect mode
+                    //
                     seq.pushSubActionPair(collector, collect_cube_) ;
                 }
                 else if (getValue(eject_)) {
@@ -202,10 +202,10 @@ namespace xero {
                     seq.pushSubActionPair(lifter, lifter_hold_climb_) ;
                 }
 
-				if (getValue(wings_)) {
-					auto act = std::make_shared<WingsDeployAction>(*wings) ;
-					seq.pushSubActionPair(wings, act) ;
-				}
+                if (getValue(wings_)) {
+                    auto act = std::make_shared<WingsDeployAction>(*wings) ;
+                    seq.pushSubActionPair(wings, act) ;
+                }
             }
         }
     }

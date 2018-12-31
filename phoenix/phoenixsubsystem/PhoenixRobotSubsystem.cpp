@@ -17,16 +17,16 @@ namespace xero {
             std::list<int> left, right ;
             int index = 1 ;
 
-			//
-			// Create the wings subsystem
-			//
-			wings_ = std::make_shared<Wings>(robot) ;
+            //
+            // Create the wings subsystem
+            //
+            wings_ = std::make_shared<Wings>(robot) ;
             addChild(wings_) ;
 
-			//
-			// Create the lifting collector subsystem
-			//
-			lifting_collector_ = std::make_shared<LiftingCollector>(robot) ;
+            //
+            // Create the lifting collector subsystem
+            //
+            lifting_collector_ = std::make_shared<LiftingCollector>(robot) ;
             addChild(lifting_collector_) ;
             lifting_collector_->createNamedSequences() ;
 
@@ -80,24 +80,24 @@ namespace xero {
                 addChild(db_) ;
             }
 
-			//
-			// Create the Phoenix OI subsystem.  It is created last as it may
-			// refer to the other subsystems
-			//
-			oi_ = std::make_shared<PhoenixOISubsystem>(robot) ;
-            addChild(oi_) ;			
+            //
+            // Create the Phoenix OI subsystem.  It is created last as it may
+            // refer to the other subsystems
+            //
+            oi_ = std::make_shared<PhoenixOISubsystem>(robot) ;
+            addChild(oi_) ;         
         }
 
         PhoenixRobotSubsystem::~PhoenixRobotSubsystem() {
-			oi_ = nullptr ;
-			wings_ = nullptr ;
-			lifting_collector_ = nullptr ;
-			db_ = nullptr ;
+            oi_ = nullptr ;
+            wings_ = nullptr ;
+            lifting_collector_ = nullptr ;
+            db_ = nullptr ;
         }
 
-		bool PhoenixRobotSubsystem::canAcceptAction(xero::base::ActionPtr action) {
-			auto ptr = std::dynamic_pointer_cast<PhoenixRobotSubsystemAction>(action) ;
-			return ptr != nullptr ;
-		}
+        bool PhoenixRobotSubsystem::canAcceptAction(xero::base::ActionPtr action) {
+            auto ptr = std::dynamic_pointer_cast<PhoenixRobotSubsystemAction>(action) ;
+            return ptr != nullptr ;
+        }
     }
 }

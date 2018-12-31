@@ -24,15 +24,15 @@ namespace xero {
             GrabberModel::~GrabberModel() {
             }
 
-			void GrabberModel::init() {
+            void GrabberModel::init() {
                 if (getSimulator().hasProperty("grabber")) {
                     const std::string &prop = getSimulator().getProperty("grabber") ;
-					double value ;
-					if (parseDouble(prop, value)) {
-						angle_ = value ;
-					}
-                }				
-			}
+                    double value ;
+                    if (parseDouble(prop, value)) {
+                        angle_ = value ;
+                    }
+                }               
+            }
 
             std::string GrabberModel::toString() {
                 std::string result("grabber: " ) ;
@@ -56,19 +56,19 @@ namespace xero {
             void GrabberModel::inputChanged(SimulatedObject *obj) {
                 std::lock_guard<std::mutex> lock(getLockMutex()) ;
                 VictorSP *victor = dynamic_cast<VictorSP *>(obj) ;
-			    if (victor != nullptr) {
+                if (victor != nullptr) {
                     voltage_ = victor->Get() ;
                 }
             }
 
-	        void GrabberModel::addVictorSP(frc::VictorSP *motor) {
+            void GrabberModel::addVictorSP(frc::VictorSP *motor) {
                 if (motor->GetChannel() == motor_channel_) {
                     motor_ = motor ;
                     motor_->addModel(this) ;
                 }
             }
 
-	        void GrabberModel::addEncoder(frc::Encoder *encoder) {
+            void GrabberModel::addEncoder(frc::Encoder *encoder) {
                 int first, second ;
 
                 encoder->SimulatorGetDigitalIOs(first, second) ;

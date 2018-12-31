@@ -23,8 +23,8 @@ namespace xero {
             /// \brief returns true if this action is valid for this subsystem
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
 
-			void createNamedSequences() {
-			}
+            void createNamedSequences() {
+            }
 
         private:
             /// The first motor

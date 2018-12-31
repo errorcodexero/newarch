@@ -201,7 +201,7 @@ int Cube::getPosition(detectionMode mode) {
         filtered.copyTo(mWorkingFrame);
         int ret;
         std::vector<cv::Rect> recs = Rects(filtered);
-	//cv::namedWindow("Target", cv::WINDOW_AUTOSIZE);
+    //cv::namedWindow("Target", cv::WINDOW_AUTOSIZE);
         cv::Mat target(paintTarget(recs));
         //cv::imshow("Target", target);
         return ret;

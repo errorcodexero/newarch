@@ -5,17 +5,17 @@
 
 namespace frc
 {
-	class PWMSpeedController : public SpeedController
-	{
-	public:
-		PWMSpeedController()
-		{
-		}
+    class PWMSpeedController : public SpeedController
+    {
+    public:
+        PWMSpeedController()
+        {
+        }
 
-		virtual ~PWMSpeedController()
-		{
-		}
+        virtual ~PWMSpeedController()
+        {
+        }
 
-	};
+    };
 }
 

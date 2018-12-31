@@ -4,8 +4,8 @@
 
 namespace frc
 {
-	class ErrorBase
-	{
+    class ErrorBase
+    {
 
-	} ;
+    } ;
 }

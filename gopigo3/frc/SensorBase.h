@@ -2,15 +2,15 @@
 
 namespace frc
 {
-	class SensorBase
-	{
-	public:
-		SensorBase()
-		{
-		}
+    class SensorBase
+    {
+    public:
+        SensorBase()
+        {
+        }
 
-		virtual ~SensorBase()
-		{
-		}
-	};
+        virtual ~SensorBase()
+        {
+        }
+    };
 }

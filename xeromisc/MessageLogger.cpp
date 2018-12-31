@@ -18,7 +18,7 @@ MessageLogger::MessageLogger()
 
 void MessageLogger::clear() 
 {
-	destinations_.clear() ;
+    destinations_.clear() ;
 }
 
 void MessageLogger::enableType(const MessageType &type)

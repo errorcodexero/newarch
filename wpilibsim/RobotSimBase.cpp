@@ -22,14 +22,14 @@ namespace xero {
         }
 
         RobotSimBase::RobotSimBase(const std::string &paramfile) {
-			joysticks_ = nullptr ;
+            joysticks_ = nullptr ;
 
 #ifdef __CYGWIN__
-			joysticks_ = new DIJoystickManager() ;
-#endif			
+            joysticks_ = new DIJoystickManager() ;
+#endif          
 
             assert(xero::sim::RobotSimBase::theOne == nullptr) ;
-			xero::sim::RobotSimBase::theOne = this ;
+            xero::sim::RobotSimBase::theOne = this ;
             
             speed_ = 1.0 ;
 
@@ -47,17 +47,17 @@ namespace xero {
                 delete filestrm_ ;
 
             delete parser_ ;
-			if (joysticks_ != nullptr)
-				delete joysticks_ ;
+            if (joysticks_ != nullptr)
+                delete joysticks_ ;
         }
 
-		std::shared_ptr<SubsystemModel> RobotSimBase::getModelByName(const std::string &name) {
-			auto it = std::find_if(models_.begin(), models_.end(), [name](std::shared_ptr<SubsystemModel> model) { return model->getName() == name ; }) ;
-			if (it == models_.end())
-				return nullptr ;
+        std::shared_ptr<SubsystemModel> RobotSimBase::getModelByName(const std::string &name) {
+            auto it = std::find_if(models_.begin(), models_.end(), [name](std::shared_ptr<SubsystemModel> model) { return model->getName() == name ; }) ;
+            if (it == models_.end())
+                return nullptr ;
 
-			return *it ;
-		}
+            return *it ;
+        }
 
         void RobotSimBase::enablePrinting() {
             std::shared_ptr<PrintVisualizer> vis = std::make_shared<PrintVisualizer>(*this, std::cerr) ;
@@ -115,48 +115,48 @@ namespace xero {
         }
 
         void RobotSimBase::connect(SimulatedObject *device) {
-				
-			TalonSRX *talon = dynamic_cast<TalonSRX *>(device) ;
-			if (talon != nullptr) {
-				for(auto model : getModels())
-					model->addTalonSRX(talon) ;
-			}
+                
+            TalonSRX *talon = dynamic_cast<TalonSRX *>(device) ;
+            if (talon != nullptr) {
+                for(auto model : getModels())
+                    model->addTalonSRX(talon) ;
+            }
 
-			DigitalInput *input = dynamic_cast<DigitalInput *>(device) ;
-			if (input != nullptr) {
-				for(auto model : getModels())
-					model->addDigitalInput(input) ;					
-			}				
+            DigitalInput *input = dynamic_cast<DigitalInput *>(device) ;
+            if (input != nullptr) {
+                for(auto model : getModels())
+                    model->addDigitalInput(input) ;                 
+            }               
 
-			Encoder *encoder = dynamic_cast<Encoder *>(device) ;
-			if (encoder != nullptr) {
-				for(auto model : getModels())
-					model->addEncoder(encoder) ;					
-			}
+            Encoder *encoder = dynamic_cast<Encoder *>(device) ;
+            if (encoder != nullptr) {
+                for(auto model : getModels())
+                    model->addEncoder(encoder) ;                    
+            }
 
-			VictorSP *victor = dynamic_cast<VictorSP *>(device) ;
-			if (victor != nullptr) {
-				for(auto model : getModels())
-					model->addVictorSP(victor) ;
-			}
+            VictorSP *victor = dynamic_cast<VictorSP *>(device) ;
+            if (victor != nullptr) {
+                for(auto model : getModels())
+                    model->addVictorSP(victor) ;
+            }
 
-			Solenoid * solenoid = dynamic_cast<Solenoid *>(device) ;
-			if (solenoid != nullptr) {
-				for(auto model : getModels())
-					model->addSolenoid(solenoid) ;
-			}			
+            Solenoid * solenoid = dynamic_cast<Solenoid *>(device) ;
+            if (solenoid != nullptr) {
+                for(auto model : getModels())
+                    model->addSolenoid(solenoid) ;
+            }           
 
-			AHRS *navx = dynamic_cast<AHRS *>(device) ;
-			if (navx != nullptr) {
-				for(auto model : getModels())
-					model->addNavX(navx) ;					
-			}	
+            AHRS *navx = dynamic_cast<AHRS *>(device) ;
+            if (navx != nullptr) {
+                for(auto model : getModels())
+                    model->addNavX(navx) ;                  
+            }   
 
-			DriverStation *ds = dynamic_cast<DriverStation *>(device) ;
-			if (ds != nullptr) {
-				for(auto model: getModels())
-					model->addDriverStation(ds) ;
-			}
+            DriverStation *ds = dynamic_cast<DriverStation *>(device) ;
+            if (ds != nullptr) {
+                for(auto model: getModels())
+                    model->addDriverStation(ds) ;
+            }
         }
 
         void RobotSimBase::disconnect(SimulatedObject *device) {
@@ -191,33 +191,33 @@ namespace xero {
             return it->second ;
         }        
 
-		void RobotSimBase::readJoysticks() {
-			frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
+        void RobotSimBase::readJoysticks() {
+            frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
 
-			joysticks_->poll() ;
+            joysticks_->poll() ;
 
-			for(size_t i = 0 ; i < joysticks_->getCount() ; i++) {
-				if (i >= ds.getStickCount())
-					continue ;
+            for(size_t i = 0 ; i < joysticks_->getCount() ; i++) {
+                if (i >= ds.getStickCount())
+                    continue ;
 
-				auto &stick = ds.getStick(i) ;
+                auto &stick = ds.getStick(i) ;
 
-				for(size_t j = 0 ; j < joysticks_->getButtonCount(i) ; j++) {
-					bool v = joysticks_->getButtonValue(i, j) ;
-					stick.setButtonValue(j + 1, v) ;
-				}
+                for(size_t j = 0 ; j < joysticks_->getButtonCount(i) ; j++) {
+                    bool v = joysticks_->getButtonValue(i, j) ;
+                    stick.setButtonValue(j + 1, v) ;
+                }
 
-				for(size_t j = 0 ; j < joysticks_->getPOVCount(i) ; j++) {
-					int v = joysticks_->getPOVValue(i, j) ;
-					stick.setPOVValue(j, v) ;
-				}
+                for(size_t j = 0 ; j < joysticks_->getPOVCount(i) ; j++) {
+                    int v = joysticks_->getPOVValue(i, j) ;
+                    stick.setPOVValue(j, v) ;
+                }
 
-				for(size_t j = 0 ; j < joysticks_->getAxisCount(i) ; j++) {
-					double v = joysticks_->getAxisValue(i, j) ;
-					stick.setAxisValue(j, v) ;
-				}
-			}
-		}
+                for(size_t j = 0 ; j < joysticks_->getAxisCount(i) ; j++) {
+                    double v = joysticks_->getAxisValue(i, j) ;
+                    stick.setAxisValue(j, v) ;
+                }
+            }
+        }
 
         //
         // This method is run from the simulator thread and not from
@@ -229,7 +229,7 @@ namespace xero {
             incrCurrentTime(sim_time_step_) ;
 
             for(auto model : models_)
-                model->init() ;			
+                model->init() ;         
 
             while (running_) {
                 auto start = std::chrono::high_resolution_clock::now() ;
@@ -249,8 +249,8 @@ namespace xero {
                 for(auto v:visualizers_)
                     v->endCycle() ;
 
-				if (joysticks_ != nullptr && joysticks_->getCount() > 0)
-					readJoysticks() ;
+                if (joysticks_ != nullptr && joysticks_->getCount() > 0)
+                    readJoysticks() ;
 
                 last = now ;
                 incrCurrentTime(sim_time_step_) ;

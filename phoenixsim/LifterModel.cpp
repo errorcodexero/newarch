@@ -67,38 +67,38 @@ namespace xero {
                 if (!brake_value_) {
                     double dh = voltage_ * inch_per_sec_per_volt_ * dt ;
                     height_ += dh ;
-				}
-				
-				if (height_ <= bottom_limit_height_) {
-					height_ = bottom_limit_height_ ;
-					if (bottom_limit_ != nullptr)
-						bottom_limit_->SimulatorSetValue(false) ;
-				}
-				else {
-					if (bottom_limit_ != nullptr)
-						bottom_limit_->SimulatorSetValue(true) ;
-				}
+                }
+                
+                if (height_ <= bottom_limit_height_) {
+                    height_ = bottom_limit_height_ ;
+                    if (bottom_limit_ != nullptr)
+                        bottom_limit_->SimulatorSetValue(false) ;
+                }
+                else {
+                    if (bottom_limit_ != nullptr)
+                        bottom_limit_->SimulatorSetValue(true) ;
+                }
 
-				if (height_ >= top_limit_height_) {
-					height_ = top_limit_height_ ;
-					if (top_limit_ != nullptr)
-						top_limit_->SimulatorSetValue(false) ;
-				}
-				else {
-					if (top_limit_ != nullptr)
-						top_limit_->SimulatorSetValue(true) ;
-				}
+                if (height_ >= top_limit_height_) {
+                    height_ = top_limit_height_ ;
+                    if (top_limit_ != nullptr)
+                        top_limit_->SimulatorSetValue(false) ;
+                }
+                else {
+                    if (top_limit_ != nullptr)
+                        top_limit_->SimulatorSetValue(true) ;
+                }
 
-				int encval = static_cast<int>((height_ - bottom_limit_height_) / in_per_tick_) + encoder_base_ ;
-				if (enc_ != nullptr)
-					enc_->SimulatorSetValue(encval) ;
+                int encval = static_cast<int>((height_ - bottom_limit_height_) / in_per_tick_) + encoder_base_ ;
+                if (enc_ != nullptr)
+                    enc_->SimulatorSetValue(encval) ;
             }
 
-	        void LifterModel::inputChanged(SimulatedObject *obj) {
+            void LifterModel::inputChanged(SimulatedObject *obj) {
               
-			    std::lock_guard<std::mutex> lock(getLockMutex()) ;
+                std::lock_guard<std::mutex> lock(getLockMutex()) ;
                 VictorSP *victor = dynamic_cast<VictorSP *>(obj) ;
-			    if (victor != nullptr) {
+                if (victor != nullptr) {
                     voltage_ = victor->Get() ;
                 }
 
@@ -113,7 +113,7 @@ namespace xero {
                 }
             }
 
-	        void LifterModel::addVictorSP(frc::VictorSP *motor) {
+            void LifterModel::addVictorSP(frc::VictorSP *motor) {
                 if (motor->GetChannel() == motor_1_) {
                     motor1_ = motor ;
                     motor1_->addModel(this) ;
@@ -124,7 +124,7 @@ namespace xero {
                 }
             }
 
-	        void LifterModel::addEncoder(frc::Encoder *encoder) {
+            void LifterModel::addEncoder(frc::Encoder *encoder) {
                 int first, second ;
 
                 encoder->SimulatorGetDigitalIOs(first, second) ;

@@ -30,7 +30,7 @@ namespace xero {
 
             std::shared_ptr<xero::base::SingleMotorSubsystem> getIntake() {
                 return intake_ ;
-            }   			
+            }               
 
             std::shared_ptr<Shooter> getShooter() {
                 return shooter_ ;
@@ -39,7 +39,7 @@ namespace xero {
             std::shared_ptr<BunnyOISubsystem> getOI() {
                 return oi_ ;
             }
-			
+            
             std::shared_ptr<xero::base::MessageListener> getMessageListener() {
                 return ml_ ;
             }
@@ -49,7 +49,7 @@ namespace xero {
             std::shared_ptr<xero::base::MessageListener> ml_ ;
             std::shared_ptr<xero::base::SingleMotorSubsystem> collector_ ;
             std::shared_ptr<xero::base::SingleMotorSubsystem> hopper_ ;
-	    	std::shared_ptr<xero::base::SingleMotorSubsystem> intake_ ;
+            std::shared_ptr<xero::base::SingleMotorSubsystem> intake_ ;
             std::shared_ptr<Shooter> shooter_ ;
         } ;
     }

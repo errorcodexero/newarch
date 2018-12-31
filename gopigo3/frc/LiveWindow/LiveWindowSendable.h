@@ -2,15 +2,15 @@
 
 namespace frc
 {
-	class LiveWindowSendable
-	{
-	public:
-		LiveWindowSendable()
-		{
-		}
+    class LiveWindowSendable
+    {
+    public:
+        LiveWindowSendable()
+        {
+        }
 
-		virtual ~LiveWindowSendable()
-		{
-		}
-	};
+        virtual ~LiveWindowSendable()
+        {
+        }
+    };
 }

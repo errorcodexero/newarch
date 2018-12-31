@@ -40,7 +40,7 @@ namespace xero {
             /// \brief Determine if the Wings subsystem can accept the given action.
             /// For this subsystem the only critera is that the action be derived from
             /// the WingsAction type.
-			virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
+            virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
 
         private:
             //

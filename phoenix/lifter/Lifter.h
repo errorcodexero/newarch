@@ -36,20 +36,20 @@ namespace xero {
 
             bool isAtTop() ;
             bool isAtBottom() ;
-			bool isCalibrated() {
-				return is_calibrated_ ;
-			}
+            bool isCalibrated() {
+                return is_calibrated_ ;
+            }
 
-			void createNamedSequences() {
-			}
+            void createNamedSequences() {
+            }
 
-		private:            
+        private:            
             void calibrate() ;
             void setLowGear() ;
             void setHighGear() ;
             void setBrakeOn() ;
             void setBrakeOff() ;
-			void setMotorDutyCycle(double v) ;
+            void setMotorDutyCycle(double v) ;
 
         private:
             std::shared_ptr<frc::VictorSP> motor1_ ;

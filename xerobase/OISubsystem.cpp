@@ -12,11 +12,11 @@ namespace xero {
         OISubsystem::OISubsystem(Robot &robot, const std::string &name, bool adddriver) 
                                 : Subsystem(robot, name) {
             inited_ = false ;
-			if (adddriver) {
-				int driver = robot.getSettingsParser().getInteger("hw:driverstation:hid:driver") ;                
-				driver_ = std::make_shared<DriverGamepad>(*this, driver);
-				addHIDDevice(driver_) ;
-			}
+            if (adddriver) {
+                int driver = robot.getSettingsParser().getInteger("hw:driverstation:hid:driver") ;                
+                driver_ = std::make_shared<DriverGamepad>(*this, driver);
+                addHIDDevice(driver_) ;
+            }
 
             std::string sequence_name = "OIsubsystem";
         }
@@ -52,10 +52,10 @@ namespace xero {
                 dev->computeState() ;
         }
 
-		void OISubsystem::generateActions(ActionSequencePtr seq) {
+        void OISubsystem::generateActions(ActionSequencePtr seq) {
             for(auto dev: hiddevices_)
-				dev->generateActions(*seq) ;
-		}
+                dev->generateActions(*seq) ;
+        }
 
         void OISubsystem::run() {
         }

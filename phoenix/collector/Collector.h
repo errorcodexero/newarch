@@ -34,8 +34,8 @@ namespace xero {
                 return collected_cube_ ;
             }
 
-			void createNamedSequences() {
-			}
+            void createNamedSequences() {
+            }
 
         private:
             void setCollectedCubeState(bool st) {

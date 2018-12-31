@@ -3,13 +3,13 @@
 #include "ServoAction.h"
 
 namespace xero {
-	namespace gopigo {
-		class ServoSubsystem ;
+    namespace gopigo {
+        class ServoSubsystem ;
 
-		class ServoGoToAngle : public ServoAction {
-		public:
-			ServoGoToAngle(ServoSubsystem &sub, double angle) ;
-			virtual ~ServoGoToAngle() ;
+        class ServoGoToAngle : public ServoAction {
+        public:
+            ServoGoToAngle(ServoSubsystem &sub, double angle) ;
+            virtual ~ServoGoToAngle() ;
 
             /// \brief Start the duty cycle action.  This method actually sets the
             /// motor duty cycles.
@@ -25,11 +25,11 @@ namespace xero {
             virtual void cancel() ;
 
             /// \brief Returns a human readable string for the action
-            virtual std::string toString() ;			
+            virtual std::string toString() ;            
 
-		private:
-			ServoSubsystem &subsystem_ ;
-			double angle_ ;
-		} ;
-	}
+        private:
+            ServoSubsystem &subsystem_ ;
+            double angle_ ;
+        } ;
+    }
 }

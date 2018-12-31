@@ -2,15 +2,15 @@
 
 namespace frc
 {
-	class PIDSource
-	{
-	public:
-		PIDSource()
-		{
-		}
+    class PIDSource
+    {
+    public:
+        PIDSource()
+        {
+        }
 
-		virtual ~PIDSource()
-		{
-		}
-	};
+        virtual ~PIDSource()
+        {
+        }
+    };
 }

@@ -17,9 +17,9 @@
 #define MSG_GROUP_LIFTER                    (1ull << 33)
 
 /// \brief the message lgoger group ID for the intake
-#define MSG_GROUP_INTAKE					(1ull << 34)
+#define MSG_GROUP_INTAKE                    (1ull << 34)
 
 /// \brief the message logger group ID for the collector
-#define MSG_GROUP_COLLECTOR					(1ull << 35)
+#define MSG_GROUP_COLLECTOR                 (1ull << 35)
 
 

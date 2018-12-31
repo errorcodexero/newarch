@@ -13,92 +13,92 @@
 
 namespace frc
 {
-	class SerialPort
-	{
-	public:
-		enum class Port
-		{
-			Port_0 = 0,
-			Port_1 = 1,
-			kMXP,
-			kOnboard,
-			kUSB
-		};
+    class SerialPort
+    {
+    public:
+        enum class Port
+        {
+            Port_0 = 0,
+            Port_1 = 1,
+            kMXP,
+            kOnboard,
+            kUSB
+        };
 
-	public:
-		SerialPort(Port port);
-		SerialPort(int baud, Port port);
+    public:
+        SerialPort(Port port);
+        SerialPort(int baud, Port port);
 
-		virtual ~SerialPort()
-		{
-			if (m_handle != -1)
-				::close(m_handle);
-		}
+        virtual ~SerialPort()
+        {
+            if (m_handle != -1)
+                ::close(m_handle);
+        }
 
-		void Flush()
-		{
-		}
+        void Flush()
+        {
+        }
 
-		int GetBytesReceived();
+        int GetBytesReceived();
 
-		int Read(char *buffer, int count);
-		int Write(char *buffer, int count);
+        int Read(char *buffer, int count);
+        int Write(char *buffer, int count);
 
-		void SetReadBufferSize(int size)
-		{
-			m_buffer.resize(size);
-			m_used = 0;
-		}
+        void SetReadBufferSize(int size)
+        {
+            m_buffer.resize(size);
+            m_used = 0;
+        }
 
-		void SetTimeout(double timeout)
-		{
-			m_timeout = timeout;
-		}
+        void SetTimeout(double timeout)
+        {
+            m_timeout = timeout;
+        }
 
-		void EnableTermination(char terminator = '\n')
-		{
-			m_term_mode = true;
-			m_term = terminator;
-		}
+        void EnableTermination(char terminator = '\n')
+        {
+            m_term_mode = true;
+            m_term = terminator;
+        }
 
-		void Reset();
+        void Reset();
 
-	private:
-		void GetData();
+    private:
+        void GetData();
 
-	private:
+    private:
 
-		const char *PortToName(Port p)
-		{
-			const char *name_p = nullptr;
+        const char *PortToName(Port p)
+        {
+            const char *name_p = nullptr;
 
-			switch (m_port)
-			{
-			case Port::Port_0:
-				name_p = "/dev/ttyACM0";
-				break;
+            switch (m_port)
+            {
+            case Port::Port_0:
+                name_p = "/dev/ttyACM0";
+                break;
 
-			default:
-				name_p = nullptr;
-				break;
-			}
+            default:
+                name_p = nullptr;
+                break;
+            }
 
-			return name_p;
-		}
+            return name_p;
+        }
 
-		void open();
+        void open();
 
 
 
-	private:
-		Port m_port;
-		int m_baud;
-		int m_handle;
-		bool m_term_mode;
-		char m_term;
-		size_t m_used;
-		double m_timeout;
-		std::vector<uint8_t> m_buffer;
-	};
+    private:
+        Port m_port;
+        int m_baud;
+        int m_handle;
+        bool m_term_mode;
+        char m_term;
+        size_t m_used;
+        double m_timeout;
+        std::vector<uint8_t> m_buffer;
+    };
 }
 

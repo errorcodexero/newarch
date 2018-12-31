@@ -6,9 +6,9 @@ namespace motorcontrol {
 
 class SensorCollection {
 public:
-	double GetQuadraturePosition() {
-		return 0.0 ;
-	}
+    double GetQuadraturePosition() {
+        return 0.0 ;
+    }
 } ;
 
 }

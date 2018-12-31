@@ -7,7 +7,7 @@
 
 
 class paramsInput {
-	
+    
 public:
     /// \brief create a new params parsing object
     paramsInput();

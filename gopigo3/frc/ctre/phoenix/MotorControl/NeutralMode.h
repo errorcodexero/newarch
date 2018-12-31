@@ -4,8 +4,8 @@ namespace ctre {
 namespace phoenix{
 namespace motorcontrol {
 enum class NeutralMode {
-	Brake,
-	Coast
+    Brake,
+    Coast
 } ;
 }
 }

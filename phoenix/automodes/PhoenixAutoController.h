@@ -11,7 +11,7 @@ namespace xero {
             PhoenixAutoController(xero::base::Robot &robot) ;
             virtual ~PhoenixAutoController() ;
 
-			virtual void updateAutoMode(int sel, const std::string &gamedata) ;
+            virtual void updateAutoMode(int sel, const std::string &gamedata) ;
         } ;
     }
 }

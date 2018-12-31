@@ -33,12 +33,12 @@ namespace xero {
                 lifter.setBrakeOff() ;
                 lifter.setLowGear() ;
                 if (lifter.getEncoderValue() < encoder_value_) {
-					lifter.setMotorDutyCycle(1.0) ;
+                    lifter.setMotorDutyCycle(1.0) ;
                 }
             }
             else
             {
-				lifter.setMotorDutyCycle(0.0) ;
+                lifter.setMotorDutyCycle(0.0) ;
                 lifter.setBrakeOn() ;
             }
         }

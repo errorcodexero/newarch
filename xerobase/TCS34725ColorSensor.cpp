@@ -69,32 +69,32 @@ namespace xero {
             if (!setGain(gain_))
                 return false ;
 
-			frc::Wait(0.100) ;
+            frc::Wait(0.100) ;
 
             return true ;
         }
 
         bool TCS34725ColorSensor::enable(void)
         {
-			int v ;
+            int v ;
 
             if (!write8(TCS34725_ENABLE, TCS34725_ENABLE_PON))
                 return false ;
 
             frc::Wait(0.100) ;
 
-			v = read8(TCS34725_ENABLE) ;
-			if ((v & TCS34725_ENABLE_PON) != TCS34725_ENABLE_PON)
-				return false ;
+            v = read8(TCS34725_ENABLE) ;
+            if ((v & TCS34725_ENABLE_PON) != TCS34725_ENABLE_PON)
+                return false ;
 
             if (!write8(TCS34725_ENABLE, TCS34725_ENABLE_PON | TCS34725_ENABLE_AEN))
                 return false ;
 
             frc::Wait(0.100) ;
 
-			v = read8(TCS34725_ENABLE) ;
-			if ((v & (TCS34725_ENABLE_PON | TCS34725_ENABLE_AEN)) != (TCS34725_ENABLE_PON  | TCS34725_ENABLE_AEN))
-				return false ;			
+            v = read8(TCS34725_ENABLE) ;
+            if ((v & (TCS34725_ENABLE_PON | TCS34725_ENABLE_AEN)) != (TCS34725_ENABLE_PON  | TCS34725_ENABLE_AEN))
+                return false ;          
             
             return true ;
         }

@@ -2,7 +2,7 @@
 class dummy
 {
 public:
-	dummy();
-	~dummy();
+    dummy();
+    ~dummy();
 };
 
