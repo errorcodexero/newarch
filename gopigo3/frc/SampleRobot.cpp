@@ -3,6 +3,8 @@
 #include <chrono>
 #include <iostream>
 #include <csignal>
+#include <pthread.h>
+#include <sys/syscall.h>
 
 namespace frc
 {
@@ -13,16 +15,25 @@ namespace frc
     {
         std::cout << "Control-C detected, shutting down robot" << std::endl;
         SampleRobot &robot = SampleRobot::GetInstance();
-        std::cout << "    Got robot instance - shutting down motors" << std::endl;
-        robot.stopAll();
-        std::cout << "    Shut down motors - performaing a hard exit" << std::endl;
-        exit(0);
-        std::cout << "    Should never get here" << std::endl;
+
+        nt::NetworkTableInstance::GetDefault().StopServer();
+
+        robot.m_driver_station_run = false;
+        robot.setRobotMode(RobotBase::RobotMode::Finished);
+
+
+        std::cout << "    Shuting down robot outputs" << std::endl;
+        robot.stopAll(true);
+        std::cout << "    Exit From Robot Program" << std::endl;
+        _exit(0);
     }
 
     SampleRobot::SampleRobot() {
-		m_robotMainOverridden = true;
-		m_start_delay = 1.0;
+        assert(theone == nullptr);
+
+        theone = this;
+        m_robotMainOverridden = true;
+        m_start_delay = 1.0;
 		m_auto_period = 15.0;
 		m_teleop_period = 0.0;
 
@@ -30,11 +41,10 @@ namespace frc
     }
 
     SampleRobot::~SampleRobot() {
-	}
+        theone = nullptr;
+    }
 
-   
-
-	void SampleRobot::RobotMain() {
+    void SampleRobot::RobotMain() {
 		m_robotMainOverridden = false;
 	}
 
@@ -59,7 +69,18 @@ namespace frc
 	{
 		int ms;
 
-		if (m_start_delay < 0.5)
+#ifdef DEBUG_PRINT_THREAD_ID
+        int pid = syscall(SYS_gettid);
+        std::cout << "Internal controller thread id " << pid << std::endl;
+#endif
+
+        //
+        // This ensures we mimic field behavior a little.  The robot is
+        // ensured to be in the disabled state for at least 500 milliseconds
+        // before moving into any other state.  Any work that is to be done
+        // while in the disabled state will happen here.
+        //
+        if (m_start_delay < 0.5)
 			m_start_delay = 0.5 ;
 
 		setEnabled(false);
@@ -67,19 +88,36 @@ namespace frc
 		ms = static_cast<int>(m_start_delay * 1000);
 		std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 
-		setEnabled(true);
+        if (getRobotMode() == RobotBase::RobotMode::Finished) {
+            std::cout << "DEBUG: skipping out of internal control" << std::endl;
+            return;
+        }
+
+        setEnabled(true);
 		ms = static_cast<int>(m_auto_period * 1000);
 		std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 
-		setEnabled(false);
+        if (getRobotMode() == RobotBase::RobotMode::Finished)
+        {
+            std::cout << "DEBUG: skipping out of internal control" << std::endl;
+            return;
+        }
+
+        setEnabled(false);
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 		setRobotMode(RobotBase::RobotMode::Operator);
 		setEnabled(true);
 
-		ms = static_cast<int>(m_teleop_period * 1000);
+        if (getRobotMode() == RobotBase::RobotMode::Finished)
+        {
+            std::cout << "DEBUG: skipping out of internal control" << std::endl;
+            return;
+        }
+
+        ms = static_cast<int>(m_teleop_period * 1000);
 		std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 
-		setEnabled(false);
+        setEnabled(false);
 		stopAll();
 
 		m_running = false;
@@ -88,12 +126,21 @@ namespace frc
 
 	void SampleRobot::DriverStationControl()
 	{
-		DriverStation &st = DriverStation::GetInstance();
+#ifdef DEBUG_PRINT_THREAD_ID
+        int pid = syscall(SYS_gettid);
+        std::cout << "Driver station  thread id " << pid << std::endl;
+#endif
+
+        DriverStation &st = DriverStation::GetInstance();
 		setRobotMode(RobotBase::RobotMode::Operator);
 		setEnabled(false);
 
-		while (true)
-		{
+
+
+        m_driver_station_run = true;
+
+        while (m_driver_station_run)
+        {
 			if (st.IsTest() && getRobotMode() != RobotMode::Test)
 				setRobotMode(RobotMode::Test);
 			else if (st.IsAutonomous() && getRobotMode() != RobotMode::Autonomous)
@@ -108,9 +155,11 @@ namespace frc
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		}
-	}
 
-	bool SampleRobot::ProcessCmdLineArgs()
+        std::cout << "DEBUG: exiting down driver station control thread" << std::endl;
+    }
+
+    bool SampleRobot::ProcessCmdLineArgs()
 	{
 		bool ret = true;
 		const std::vector<std::string> &args = getArgs();
@@ -209,7 +258,9 @@ namespace frc
 		else
 			m_controller = std::thread(&SampleRobot::InternalControl, this);
 
-		//
+
+
+        //
 		// If the main loop was not taken over, supply a main loop where
 		// we ask the robot to handle specific modes
 		//

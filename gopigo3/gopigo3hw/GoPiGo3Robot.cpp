@@ -12,24 +12,28 @@ namespace gopigo3
 
 	GoPiGo3Robot::~GoPiGo3Robot()
 	{
-		reset();
-		uint8_t target = LED_BLINKER_LEFT | LED_BLINKER_RIGHT | LED_EYE_LEFT | LED_EYE_RIGHT;
-		setLed(target, 0, 0, 0);
+		reset(false);
 	}
 
-	void GoPiGo3Robot::reset()
+	void GoPiGo3Robot::reset(bool verbose)
 	{
 		uint8_t target;
-		
-		target = LED_BLINKER_LEFT | LED_BLINKER_RIGHT | LED_EYE_LEFT | LED_EYE_RIGHT;
-		setLed(target, 0, 0, 0);
 
-		target = MOTOR_LEFT | MOTOR_RIGHT;
+        std::cout << "        Turning off LEDs ... " << std::flush;
+        target = LED_BLINKER_LEFT | LED_BLINKER_RIGHT | LED_EYE_LEFT | LED_EYE_RIGHT;
+        setLed(target, 0, 0, 0);
+        std::cout << "done." << std::endl;
+
+        std::cout << "        Turning off drivebase motors ... " << std::flush;
+        target = MOTOR_LEFT | MOTOR_RIGHT;
 		setMotorPower(target, 0);
+        std::cout << "done." << std::endl;
 
-		target = SERVO_1 | SERVO_2;
+        std::cout << "        Turning off servos ... " << std::flush;
+        target = SERVO_1 | SERVO_2;
 		setServo(target, 0);
-	}
+        std::cout << "done." << std::endl;
+    }
 
 	void GoPiGo3Robot::init(bool strict)
 	{

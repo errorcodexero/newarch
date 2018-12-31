@@ -3,6 +3,7 @@
 #include <thread>
 #include <iomanip>
 #include <cmath>
+#include <sys/syscall.h>
 
 namespace frc
 {
@@ -285,7 +286,12 @@ namespace frc
 
 	void DriverStation::dsRecvCommThread()
 	{
-		std::vector<uint8_t> data(128);
+#ifdef DEBUG_PRINT_THREAD_ID
+        int pid = syscall(SYS_gettid);
+        std::cout << "Drive station receive thread id " << pid << std::endl;
+#endif
+
+        std::vector<uint8_t> data(128);
 		size_t index;
 
 		while (m_running)
@@ -352,7 +358,12 @@ namespace frc
 
 	void DriverStation::dsSendCommThread()
 	{
-		std::chrono::milliseconds sleeptime(100);
+#ifdef DEBUG_PRINT_THREAD_ID
+        int pid = syscall(SYS_gettid);
+        std::cout << "Drive station send thread id " << pid << std::endl;
+#endif
+
+        std::chrono::milliseconds sleeptime(100);
 		std::vector<uint8_t> data(7);
 		size_t count;
 

@@ -74,9 +74,9 @@ namespace frc
 			m_enabled = b;
 		}
 
-		void stopAll()
+		void stopAll(bool verbose = false)
 		{
-			m_hardware.reset();
+			m_hardware.reset(verbose);
 		}
 
 		const std::vector<std::string> &getArgs()

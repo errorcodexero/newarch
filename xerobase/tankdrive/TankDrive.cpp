@@ -2,6 +2,7 @@
 #include "TankDriveAction.h"
 #include "Robot.h"
 #include "LoopType.h"
+#include <smartdashboard/SmartDashboard.h>
 #include <cassert>
 #include <cmath>
 
@@ -184,6 +185,6 @@ namespace xero {
 		void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
 			left_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent);
 			right_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
-		}
-	}
+        }
+    }
 }

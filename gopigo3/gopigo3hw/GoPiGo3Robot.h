@@ -159,7 +159,7 @@ namespace gopigo3
 		void setServo(uint8_t which, uint16_t angle);
 
 		/// \brief turn off all robot functions, motor LEDs, etc.
-		void reset();
+		void reset(bool verbose);
 
 	private:
 		//

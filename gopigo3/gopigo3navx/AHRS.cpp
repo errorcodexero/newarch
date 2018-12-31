@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string>
 #include <iomanip>
+#include <sys/syscall.h>
 #include <AHRS.h>
 #include <AHRSProtocol.h>
 #include "IIOProvider.h"
@@ -1298,6 +1299,11 @@ double AHRS::PIDGet() {
 }
 
 int AHRS::ThreadFunc(IIOProvider *io_provider) {
+#ifdef DEBUG_PRINT_THREAD_ID
+    int pid = syscall(SYS_gettid);
+    std::cout << "NavX commuincations thread id " << pid << std::endl;
+#endif
+
     io_provider->Run();
     return 0;
 }

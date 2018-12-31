@@ -7,7 +7,8 @@ namespace frc
 
     void SmartDashboard::init()
     {
-        table_ = nt::NetworkTableInstance::GetDefault().GetTable("SmartDashboard");
+        if (table_ == nullptr)
+            table_ = nt::NetworkTableInstance::GetDefault().GetTable("SmartDashboard");
     }
 
     void SmartDashboard::PutString(wpi::StringRef key, wpi::StringRef value)
@@ -20,5 +21,17 @@ namespace frc
     {
         init();
         table_->GetEntry(key).SetDouble(value);
+    }
+
+    void SmartDashboard::PutNumberArray(wpi::StringRef key, wpi::ArrayRef<double> value)
+    {
+        init();
+        table_->GetEntry(key).SetDoubleArray(value);
+    }
+
+    void SmartDashboard::PutBoolean(wpi::StringRef key, bool value)
+    {
+        init();
+        table_->GetEntry(key).SetBoolean(value);
     }
 }

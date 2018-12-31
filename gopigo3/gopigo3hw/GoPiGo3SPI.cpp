@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <memory.h>
 #include <unistd.h>
+#include <iostream>
 
 namespace gopigo3
 {
@@ -135,8 +136,8 @@ namespace gopigo3
 
 
 	void GoPiGo3SPI::sendMessage(uint8_t msg_type, std::vector<uint8_t> &packet) {
-		if (packet.size() + 2 > m_out_buf.size())
-		{
+        if (packet.size() + 2 > m_out_buf.size())
+        {
 			std::runtime_error err("packet size too larger for transfer via SPI");
 			throw err;
 		}
@@ -154,9 +155,9 @@ namespace gopigo3
 			std::runtime_error err("SPI device returned an valid response");
 			throw err;
 		}
-	}
+    }
 
-	void GoPiGo3SPI::sendMessage(uint8_t msg_type, std::vector<uint8_t> &packet, std::vector<uint8_t> &result)
+    void GoPiGo3SPI::sendMessage(uint8_t msg_type, std::vector<uint8_t> &packet, std::vector<uint8_t> &result)
 	{
 		if (packet.size() + 2 > m_out_buf.size())
 		{

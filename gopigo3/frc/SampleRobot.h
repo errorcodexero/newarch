@@ -37,9 +37,10 @@ namespace frc
 		bool m_robotMainOverridden;
 		std::thread m_controller;
 
-		bool m_running;
+        bool m_driver_station_run;
+        bool m_running;
 
-		// If true, we wait for a driver station to connect
+        // If true, we wait for a driver station to connect
 		bool m_station;
 
 		//

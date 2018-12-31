@@ -390,8 +390,10 @@ namespace xero {
 				if (sel != automode_ || msg != gamedata_) {
 					automode_ = sel ;
 					gamedata_ = msg ;
-					auto_controller_->updateAutoMode(sel, gamedata_) ;
-					displayAutoModeState() ;
+                    frc::SmartDashboard::PutBoolean("ready", false);
+                    auto_controller_->updateAutoMode(sel, gamedata_);
+                    frc::SmartDashboard::PutBoolean("ready", true);
+                    displayAutoModeState() ;
 				}
 			}			
 		}
