@@ -10,7 +10,7 @@
 #include <MessageDestSeqFile.h>
 #include <MessageDestStream.h>
 
-#ifdef ENABLE_SIMULATOR
+#ifdef SIMULATOR
 #include <PhoenixSimulator.h>
 #endif
 
@@ -67,7 +67,7 @@ namespace xero {
 	}
 }
 
-#ifdef ENABLE_SIMULATOR
+#ifdef SIMULATOR
 xero::sim::phoenix::PhoenixSimulator sim("phoenix/sim.dat") ;
 #endif
 

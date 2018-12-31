@@ -10,7 +10,7 @@
 #include <MessageLogger.h>
 #include <SmartDashboard/SmartDashboard.h>
 
-#ifdef ENABLE_SIMULATOR
+#ifdef SIMULATOR
 #include <Bunny2018Simulator.h>
 #endif
 
@@ -99,7 +99,7 @@ namespace xero {
 	}
 }
 
-#ifdef ENABLE_SIMULATOR
+#ifdef SIMULATOR
 xero::sim::bunny2018::Bunny2018Simulator sim("bunny2018/sim.dat") ;
 #endif
 

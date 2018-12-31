@@ -11,7 +11,11 @@ namespace frc
 		SampleRobot();
 		virtual ~SampleRobot();
 
-		virtual void StartCompetition();
+        static SampleRobot &GetInstance() {
+            return *theone;
+        }
+
+        virtual void StartCompetition();
 
 		virtual void RobotInit();
 		virtual void Disabled();
@@ -20,12 +24,16 @@ namespace frc
 		virtual void Test();
 		virtual void RobotMain();
 
-	private:
+        static void ControlCHandler(int v);
+
+      private:
 		void InternalControl();
 		void DriverStationControl();
 		bool ProcessCmdLineArgs();
 
 	private:
+        static SampleRobot *theone ;
+
 		bool m_robotMainOverridden;
 		std::thread m_controller;
 

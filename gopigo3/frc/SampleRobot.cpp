@@ -4,7 +4,18 @@
 
 namespace frc
 {
-	SampleRobot::SampleRobot() {
+
+    SampleRobot *SampleRobot::theone = nullptr;
+
+    void SampleRobot::ControlCHandler(int sig)
+    {
+        std::cout << "Control-C detected, shutting down robot" << std::endl;
+        SampleRobot &robot = SampleRobot::GetInstance();
+        robot.stopAll();
+        exit(0);
+    }
+
+    SampleRobot::SampleRobot() {
 		m_robotMainOverridden = true;
 		m_start_delay = 1.0;
 		m_auto_period = 15.0;
@@ -13,6 +24,8 @@ namespace frc
 
 	SampleRobot::~SampleRobot() {
 	}
+
+   
 
 	void SampleRobot::RobotMain() {
 		m_robotMainOverridden = false;

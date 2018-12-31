@@ -17,19 +17,22 @@ CXXFLAGS = -g $(LOCAL_CFLAGS) -Wno-psabi -DGOPIGO $(CXXINCS) -DDEBUG
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
-
 ifdef NEED_XERO
 PILIBS += \
 	../../xerobase/gopigo3xerobase.a\
 	../../xeromisc/gopigo3xeromisc.a\
 	../../xeromath/gopigo3xeromath.a
-
 endif
 
 PILIBS += \
+	-L../frc/libs\
 	../gopigo3navx/gopigo3navx.a\
 	../frc/wpilib.a\
 	../gopigo3hw/gopigo3hw.a\
+	-lntcore\
+	-lwpiutil
+
+DEPLOYLIBS=$(wildcard ../frc/libs/*)
 
 
 $(TARGET) : $(PILIBS) $(OBJECTS)
@@ -41,14 +44,23 @@ deploy: $(TARGET)
 ifdef GOPIGOIP
 	scp $(DEPLOYFILES) pi@$(GOPIGOIP):/home/pi
 else
-	echo GOPIGOIP is not defined
+	@echo GOPIGOIP is not defined
+endif
+
+deploylibs:
+ifdef GOPIGOIP
+	ssh -t pi@$(GOPIGOIP) 'mkdir ~/libxfer'
+	scp $(DEPLOYLIBS) 'pi@$(GOPIGOIP):~/libxfer'
+	ssh -t pi@$(GOPIGOIP) 'sudo cp ~/libxfer/* /usr/lib ; rm -rf ~/libxfer'
+else
+	@echo GOPIGOIP is not defined
 endif
 
 deploydata:
 ifdef GOPIGOIP
 	scp $(DEPLOY_EXTRA) pi@$(GOPIGOIP):/home/pi
 else
-	echo GOPIGOIP is not defined
+	@echo GOPIGOIP is not defined
 endif
 
 run:

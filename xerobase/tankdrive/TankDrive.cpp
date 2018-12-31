@@ -5,7 +5,7 @@
 #include <cassert>
 #include <cmath>
 
-#ifdef ENABLE_SIMULATOR
+#ifdef SIMULATOR
 #include <SensorCollection.h>
 #else
 #include <ctre/phoenix/MotorControl/SensorCollection.h>

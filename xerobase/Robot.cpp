@@ -17,7 +17,8 @@ namespace xero {
 	namespace base {
 		
 		Robot::Robot(const std::string &name, double looptime) {
-			name_ = name ;
+            frc::SmartDashboard::PutString("State", "Creation");
+            name_ = name ;
 
 			target_loop_time_ = looptime ;
 
@@ -57,7 +58,7 @@ namespace xero {
 			// Set up message logger destination(s)
             std::shared_ptr<MessageLoggerDest> dest_p ;
 
-#if defined(ENABLE_SIMULATOR)
+#if defined(SIMULATOR)
 			if (!isScreen())
 			{
 				dest_p = std::make_shared<MessageDestStream>(std::cout);
@@ -78,7 +79,7 @@ namespace xero {
 			std::string logname("logfile_");
 			dest_p = std::make_shared<MessageDestSeqFile>(flashdrive, logname);
 			logger.addDestination(dest_p);
-#else
+#elif defined(XEROROBORIO)
 			//
 			// This is where the roborio places the first USB flash drive it
 			// finds.  Other drives are placed at /V, /W, /X.  The devices are
@@ -89,9 +90,11 @@ namespace xero {
 			std::string logname("logfile_");
 			dest_p = std::make_shared<MessageDestSeqFile>(flashdrive, logname);
 			logger.addDestination(dest_p);
+#else
+#error Either SIMULATOR, GOPIGO, or ROBORIO must be defined
 #endif
 
-#ifndef ENABLE_SIMULATOR
+#ifndef SIMULATOR
 			//
 			// Send warnings and errors to the driver station
 			//
@@ -131,7 +134,7 @@ namespace xero {
 			//
 			// Setup access to the parameter file
 			//
-#if defined(ENABLE_SIMULATOR)
+#if defined(SIMULATOR)
 			//
 			// In the simulation environment, we look in the robot sourc code specific
 			// directory for the parameter files
@@ -143,12 +146,14 @@ namespace xero {
 			// the home directory of the PI user
 			//
 			filename = "/home/pi/" + name_ + ".dat" ;
-#else
+#elif defined(XEROROBORIO)
 			//
 			// This is the robo rio, get the parameters file from the home directory of the
 			// robot application user (e.g. lvuser)
 			//
 			filename = "/home/lvuser/" + name_ + ".dat" ;
+#else
+#error Error either SIMULATOR, GOPIGO< or XEROROBORIO must be 
 #endif
 			if (!readParamsFile(filename)) {
 				std::cerr << "Robot  Initialization failed - could not read robot data file '" ;

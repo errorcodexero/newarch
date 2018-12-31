@@ -1,4 +1,4 @@
-#ifdef ENABLE_SIMULATOR
+#ifdef SIMULATOR
 #include <TalonSRX.h>
 #include <SensorCollection.h>
 #else

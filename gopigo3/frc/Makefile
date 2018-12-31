@@ -10,7 +10,8 @@ SOURCES = \
 	SerialPort.cpp\
 	Servo.cpp\
 	Timer.cpp\
-	ctre/phoenix/MotorControl/CAN/TalonSRX.cpp
+	ctre/phoenix/MotorControl/CAN/TalonSRX.cpp\
+	smartdashboard/SmartDashboard.cpp
 
 TARGET=wpilib
 
