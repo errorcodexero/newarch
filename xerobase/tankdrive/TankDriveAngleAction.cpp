@@ -56,7 +56,6 @@ namespace xero
 
 		void TankDriveAngleAction::start()
 		{
-			SettingsParser &parser = getTankDrive().getRobot().getSettingsParser();
 			MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
 
 			profile_start_time_ = getTankDrive().getRobot().getTime();

@@ -7,6 +7,12 @@
 #include <string>
 #include <fstream>
 
+//
+// TODO - the roborio build was not working without this.  Need to find out
+//        what haader file has this for the roborio
+//
+extern int symlink(const char *, const char *);
+
 namespace xero {
 
     namespace file {
