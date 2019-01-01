@@ -10,6 +10,7 @@ hw:tankdrive:rightenc:1												2
 hw:tankdrive:rightenc:2												3
 
 hw:driverstation:hid:driver 										0
+hw:driverstation:hid:oi                                             2
 
 #
 # 6 ticks per motor rotation

@@ -4,7 +4,8 @@ SOURCES = \
 	ServoSubsystem.cpp\
 	GoPiGo3Subsystem.cpp\
 	GoPiGo3AutoModeController.cpp\
-	GoPiGo3OISubsystem.cpp
+	GoPiGo3OISubsystem.cpp\
+	GoPiGo3OIDevice.cpp
 
 TARGET=GoPiGo3Xero
 
