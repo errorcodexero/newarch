@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ServoSubsystem.h"
+#include "LEDSubsystem.h"
 #include "GoPiGo3OISubsystem.h"
 #include <subsystem.h>
 #include <tankdrive/TankDrive.h>
@@ -16,6 +17,10 @@ namespace xero {
                 return servo_ ;
             }
 
+            std::shared_ptr<LEDSubsystem> getLEDSubsystem() {
+                return led_;
+            }
+
             std::shared_ptr<xero::base::TankDrive> getTankDrive() {
                 return tankdrive_ ;
             }
@@ -26,6 +31,7 @@ namespace xero {
 
         private:
             std::shared_ptr<ServoSubsystem> servo_ ;
+            std::shared_ptr<LEDSubsystem> led_;
             std::shared_ptr<xero::base::TankDrive> tankdrive_ ;
             std::shared_ptr<GoPiGo3OISubsystem> oi_ ;
         } ;

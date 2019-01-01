@@ -72,6 +72,8 @@ namespace frc
         void setEnabled(bool b)
         {
             m_enabled = b;
+            if (!b)
+                m_hardware.reset(false);
         }
 
         void stopAll(bool verbose = false)

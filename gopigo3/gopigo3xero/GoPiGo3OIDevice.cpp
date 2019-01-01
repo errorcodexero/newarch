@@ -1,5 +1,12 @@
 #include "GoPiGo3OIDevice.h"
+#include "GoPiGo3Xero.h"
+#include "GoPiGo3Subsystem.h"
 #include "GoPiGo3OISubsystem.h"
+#include "Servo.h"
+#include "ServoGoToAngle.h"
+#include <cmath>
+#include <iostream>
+
 using namespace xero::base;
 
 namespace xero
@@ -20,6 +27,8 @@ void GoPiGo3OIDevice::initialize()
 {
     std::vector<double> mapping = {-0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0};
     automode_ = mapAxisScale(6, mapping);
+
+    angle_ = std::numeric_limits<double>::max();
 }
 
 int GoPiGo3OIDevice::getAutoModeSelector()
@@ -29,6 +38,20 @@ int GoPiGo3OIDevice::getAutoModeSelector()
 }
 
 void GoPiGo3OIDevice::generateActions(xero::base::ActionSequence &seq) {
+
+    frc::DriverStation &ds = frc::DriverStation::GetInstance();
+    double axisv = ds.GetStickAxis(getIndex(), 0);
+    double desired = (axisv + 1.0) * 90.0;
+
+    GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getSubsystem().getRobot());
+    auto sub = xerorobot.getGoPiGoSubsystem();
+    auto servo = sub->getServoSubsystem();
+
+    if (std::fabs(desired - angle_) > 1) {
+        ActionPtr action = std::make_shared<ServoGoToAngle>(*servo, desired);
+        angle_ = desired;
+        seq.pushSubActionPair(servo, action);
+    }
 }
 
 } // namespace bunny2018

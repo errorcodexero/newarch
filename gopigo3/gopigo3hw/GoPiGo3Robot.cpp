@@ -8,6 +8,17 @@ namespace gopigo3
 {
     GoPiGo3Robot::GoPiGo3Robot()
     {
+        led_left_blink_.resize(3);
+        std::fill(led_left_blink_.begin(), led_left_blink_.end(), 0);
+
+        led_right_blink_.resize(3);
+        std::fill(led_right_blink_.begin(), led_right_blink_.end(), 0);
+
+        led_left_eye_.resize(3);
+        std::fill(led_left_eye_.begin(), led_left_eye_.end(), 0);
+
+        led_right_eye_.resize(3);
+        std::fill(led_right_eye_.begin(), led_right_eye_.end(), 0);
     }
 
     GoPiGo3Robot::~GoPiGo3Robot()
@@ -19,20 +30,23 @@ namespace gopigo3
     {
         uint8_t target;
 
-        std::cout << "        Turning off LEDs ... " << std::flush;
-        target = LED_BLINKER_LEFT | LED_BLINKER_RIGHT | LED_EYE_LEFT | LED_EYE_RIGHT;
-        setLed(target, 0, 0, 0);
-        std::cout << "done." << std::endl;
+        if (m_spi_p != nullptr)
+        {
+            std::cout << "        Turning off LEDs ... " << std::flush;
+            target = LED_BLINKER_LEFT | LED_BLINKER_RIGHT | LED_EYE_LEFT | LED_EYE_RIGHT;
+            setLed(target, 0, 0, 0);
+            std::cout << "done." << std::endl;
 
-        std::cout << "        Turning off drivebase motors ... " << std::flush;
-        target = MOTOR_LEFT | MOTOR_RIGHT;
-        setMotorPower(target, 0);
-        std::cout << "done." << std::endl;
+            std::cout << "        Turning off drivebase motors ... " << std::flush;
+            target = MOTOR_LEFT | MOTOR_RIGHT;
+            setMotorPower(target, 0);
+            std::cout << "done." << std::endl;
 
-        std::cout << "        Turning off servos ... " << std::flush;
-        target = SERVO_1 | SERVO_2;
-        setServo(target, 0);
-        std::cout << "done." << std::endl;
+            std::cout << "        Turning off servos ... " << std::flush;
+            target = SERVO_1 | SERVO_2;
+            setServo(target, 0);
+            std::cout << "done." << std::endl;
+        }
     }
 
     void GoPiGo3Robot::init(bool strict)
@@ -95,6 +109,49 @@ namespace gopigo3
         buf[2] = green;
         buf[3] = blue;
         m_spi_p->sendMessage(GPGSPI_MESSAGE_SET_LED, buf);
+
+        switch(led)
+        {
+        case LED_BLINKER_LEFT:
+            led_left_blink_[0] = red;
+            led_left_blink_[1] = green;
+            led_left_blink_[2] = blue;
+            break;
+        case LED_BLINKER_RIGHT:
+            led_right_blink_[0] = red;
+            led_right_blink_[1] = green;
+            led_right_blink_[2] = blue;
+            break;
+        case LED_EYE_LEFT:
+            led_left_eye_[0] = red;
+            led_left_eye_[1] = green;
+            led_left_eye_[2] = blue;
+            break;
+        case LED_EYE_RIGHT:
+            led_right_eye_[0] = red;
+            led_right_eye_[1] = green;
+            led_right_eye_[2] = blue;
+            break;
+        }
+    }
+
+    std::vector<uint8_t> GoPiGo3Robot::getLastLedSetting(uint8_t led)
+    {
+        std::vector<uint8_t> result;
+
+        switch (led)
+        {
+        case LED_BLINKER_LEFT:
+            return led_left_blink_;
+        case LED_BLINKER_RIGHT:
+            return led_right_blink_;
+        case LED_EYE_LEFT:
+            return led_left_eye_;
+        case LED_EYE_RIGHT:
+            return led_right_eye_;
+        }
+
+        return result;
     }
 
     float GoPiGo3Robot::getVoltage5V()

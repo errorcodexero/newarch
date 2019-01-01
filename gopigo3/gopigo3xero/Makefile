@@ -5,7 +5,9 @@ SOURCES = \
 	GoPiGo3Subsystem.cpp\
 	GoPiGo3AutoModeController.cpp\
 	GoPiGo3OISubsystem.cpp\
-	GoPiGo3OIDevice.cpp
+	GoPiGo3OIDevice.cpp\
+	LEDSubsystem.cpp\
+	LEDSubsystemOnOffAction.cpp
 
 TARGET=GoPiGo3Xero
 

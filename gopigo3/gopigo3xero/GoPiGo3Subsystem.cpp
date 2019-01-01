@@ -17,6 +17,9 @@ namespace xero {
             servo_ = std::make_shared<ServoSubsystem>(robot) ;
             addChild(servo_) ;
 
+            led_ = std::make_shared<LEDSubsystem>(robot);
+            addChild(led_);
+
             oi_ = std::make_shared<GoPiGo3OISubsystem>(robot) ;
             addChild(oi_) ;
 

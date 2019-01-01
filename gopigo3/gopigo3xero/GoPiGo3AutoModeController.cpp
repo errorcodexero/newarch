@@ -2,6 +2,10 @@
 #include "ServoGoToAngle.h"
 #include "GoPiGo3Subsystem.h"
 #include "GoPiGo3Xero.h"
+#include "ServoSubsystem.h"
+#include "ServoGoToAngle.h"
+#include "LEDSubsystem.h"
+#include "LEDSubsystemOnOffAction.h"
 #include <tankdrive/TankDriveAngleCharAction.h>
 #include <tankdrive/TankDriveAngleAction.h>
 #include <ActionSequence.h>
@@ -24,8 +28,10 @@ namespace xero {
             switch(sel)
             {
             case 0:
+                ptr = createLEDAutoMode();
                 break ;
             case 1:
+                ptr = createServoAutoMode();
                 break ;
             case 2:
                 ptr = createRotatePos90() ;
@@ -41,6 +47,43 @@ namespace xero {
                 break ;
             }
             setAction(ptr) ;
+        }
+
+        ActionSequencePtr GoPiGo3AutoModeController::createLEDAutoMode()
+        {
+            ActionPtr action;
+            GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot());
+            auto sub = xerorobot.getGoPiGoSubsystem();
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "LED");
+            auto servo = sub->getLEDSubsystem();
+
+            action = std::make_shared<LEDSubsystemOnOffAction>(*servo, LEDSubsystem::LED::LeftEye, 0.0, 0.0, 0.0);
+            seq->pushSubActionPair(servo, action);
+
+            action = std::make_shared<LEDSubsystemOnOffAction>(*servo, LEDSubsystem::LED::RightEye, 0.0, 0.0, 0.0);
+            seq->pushSubActionPair(servo, action);
+
+            action = std::make_shared<LEDSubsystemOnOffAction>(*servo, LEDSubsystem::LED::LeftBlinker, 0.0, 0.0, 0.0);
+            seq->pushSubActionPair(servo, action);
+
+            action = std::make_shared<LEDSubsystemOnOffAction>(*servo, LEDSubsystem::LED::RightBlinker, 1.0, 1.0, 1.0);
+            seq->pushSubActionPair(servo, action);
+
+            return seq;
+        }
+
+        ActionSequencePtr GoPiGo3AutoModeController::createServoAutoMode()
+        {
+            ActionPtr action;
+            GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot());
+            auto sub = xerorobot.getGoPiGoSubsystem();
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "Servo");
+            auto servo = sub->getServoSubsystem();
+
+            action = std::make_shared<ServoGoToAngle>(*servo, 0);
+            seq->pushSubActionPair(servo, action);
+
+            return seq;
         }
 
         ActionSequencePtr GoPiGo3AutoModeController::createRotateNeg90() {

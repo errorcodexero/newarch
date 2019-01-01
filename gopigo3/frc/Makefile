@@ -10,6 +10,8 @@ SOURCES = \
 	SerialPort.cpp\
 	Servo.cpp\
 	Timer.cpp\
+	DigitalOutput.cpp\
+	AnalogOutput.cpp\
 	ctre/phoenix/MotorControl/CAN/TalonSRX.cpp\
 	smartdashboard/SmartDashboard.cpp
 

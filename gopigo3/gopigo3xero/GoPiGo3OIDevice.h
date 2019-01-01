@@ -23,6 +23,8 @@ class GoPiGo3OIDevice : public xero::base::OIDevice
 
   private:
     size_t automode_;
+    size_t servo_ ;
+    double angle_;
 };
 } // namespace gopigo
 } // namespace xero

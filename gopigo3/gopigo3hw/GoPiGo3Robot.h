@@ -118,6 +118,11 @@ namespace gopigo3
         /// \param the blue value of the led
         void setLed(uint8_t led, uint8_t red, uint8_t green, uint8_t blue);
 
+        /// \brief Return the last RGB setting for the given LED
+        /// \param the led index for the index to update
+        /// \returns a constant vector with the RGB settings
+        std::vector<uint8_t> getLastLedSetting(uint8_t led);
+
         /// \brief Return the actual voltage of the 5v supply
         float getVoltage5V();
 
@@ -282,5 +287,10 @@ namespace gopigo3
         //
         uint32_t m_hw_version;
         uint32_t m_fw_version;
+
+        std::vector<uint8_t> led_left_eye_;
+        std::vector<uint8_t> led_right_eye_;
+        std::vector<uint8_t> led_left_blink_;
+        std::vector<uint8_t> led_right_blink_;
     };
 }

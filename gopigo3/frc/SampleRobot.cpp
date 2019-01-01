@@ -21,9 +21,8 @@ namespace frc
         robot.m_driver_station_run = false;
         robot.setRobotMode(RobotBase::RobotMode::Finished);
 
-
         std::cout << "    Shuting down robot outputs" << std::endl;
-        robot.stopAll(true);
+        robot.stopAll(false);
         std::cout << "    Exit From Robot Program" << std::endl;
         _exit(0);
     }
