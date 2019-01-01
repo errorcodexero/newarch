@@ -57,7 +57,7 @@ namespace xero {
             auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "LED");
             auto servo = sub->getLEDSubsystem();
 
-            action = std::make_shared<LEDSubsystemOnOffAction>(*servo, LEDSubsystem::LED::LeftEye, 0.0, 0.0, 0.0);
+            action = std::make_shared<LEDSubsystemOnOffAction>(*servo, LEDSubsystem::LED::LeftEye, 0.0, 1.0, 0.0);
             seq->pushSubActionPair(servo, action);
 
             action = std::make_shared<LEDSubsystemOnOffAction>(*servo, LEDSubsystem::LED::RightEye, 0.0, 0.0, 0.0);
@@ -66,7 +66,7 @@ namespace xero {
             action = std::make_shared<LEDSubsystemOnOffAction>(*servo, LEDSubsystem::LED::LeftBlinker, 0.0, 0.0, 0.0);
             seq->pushSubActionPair(servo, action);
 
-            action = std::make_shared<LEDSubsystemOnOffAction>(*servo, LEDSubsystem::LED::RightBlinker, 1.0, 1.0, 1.0);
+            action = std::make_shared<LEDSubsystemOnOffAction>(*servo, LEDSubsystem::LED::RightBlinker, 0.0, 0.0, 0.0);
             seq->pushSubActionPair(servo, action);
 
             return seq;

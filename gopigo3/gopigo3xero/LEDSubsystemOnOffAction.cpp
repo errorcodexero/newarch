@@ -26,11 +26,11 @@ namespace xero
             switch(led_)
             {
             case LEDSubsystem::LED::LeftEye:
-                subsystem_.multi_[0]->setColor(r_, g_, b_);
+                subsystem_.multi_[1]->setColor(r_, g_, b_);
                 break;
 
             case LEDSubsystem::LED::RightEye:
-                subsystem_.multi_[1]->setColor(r_, g_, b_);
+                subsystem_.multi_[0]->setColor(r_, g_, b_);
                 break;
 
             case LEDSubsystem::LED::LeftBlinker:
