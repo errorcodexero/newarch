@@ -95,33 +95,33 @@ endif
 clean:
 	rm -f $(OBJECTS)
 ifdef NEED_XERO
-	(cd ../../xerobase ; make clean)
-	(cd ../../xeromisc ; make clean)
-	(cd ../../xeromath ; make clean)
+	bash -c "(cd ../../xerobase ; make clean)"
+	bash -c "(cd ../../xeromisc ; make clean)"
+	bash -c "(cd ../../xeromath ; make clean)"
 endif
-	(cd ../gopigo3navx ; make clean)
-	(cd ../frc ; make clean)
-	(cd ../gopigo3hw ; make clean)
+	bash -c "(cd ../gopigo3navx ; make clean)"
+	bash -c "(cd ../frc ; make clean)"
+	bash -c "(cd ../gopigo3hw ; make clean)"
 
 ifdef NEED_XERO
 ../../xerobase/gopigo3xerobase.a:
-	(cd ../../xerobase ; make)
+	bash -c "(cd ../../xerobase ; make)"
 
 ../../xeromisc/gopigo3xeromisc.a:
-	(cd ../../xeromisc ; make)
+	bash -c "(cd ../../xeromisc ; make)"
 
 ../../xeromath/gopigo3xeromath.a:
-	(cd ../../xeromath ; make)
+	bash -c "(cd ../../xeromath ; make)"
 endif
 
 ../gopigo3navx/gopigo3navx.a:
-	(cd ../gopigo3navx ; make)
+	bash -c "(cd ../gopigo3navx ; make)"
 
 ../frc/wpilib.a:
-	(cd ../frc ; make)
+	bash -c "(cd ../frc ; make)"
 
 ../gopigo3hw/gopigo3hw.a:
-	(cd ../gopigo3hw ; make)
+	bash -c "(cd ../gopigo3hw ; make)"
 
 .PHONY: $(PILIBS)
 
