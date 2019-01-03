@@ -6,6 +6,7 @@
 #include "ServoGoToAngle.h"
 #include "LEDSubsystem.h"
 #include "LEDSubsystemOnOffAction.h"
+#include "LEDSubsystemBlinkAction.h"
 #include <tankdrive/TankDriveAngleCharAction.h>
 #include <tankdrive/TankDriveAngleAction.h>
 #include <ActionSequence.h>
@@ -45,8 +46,25 @@ namespace xero {
             case 5:
                 ptr = createRotateNeg90() ;
                 break ;
+            case 6:
+                ptr = createBlinkEyes();
+                break;
             }
             setAction(ptr) ;
+        }
+
+        ActionSequencePtr GoPiGo3AutoModeController::createBlinkEyes()
+        {
+            ActionPtr action;
+            GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot());
+            auto sub = xerorobot.getGoPiGoSubsystem();
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "LED");
+            auto servo = sub->getLEDSubsystem();
+
+            action = std::make_shared<LEDSubsystemBlinkAction>(*servo, LEDSubsystem::LED::LeftEye, 0.5, 0.5, 0.0, 1.0, 1.0);
+            seq->pushSubActionPair(servo, action, false);
+
+            return seq;
         }
 
         ActionSequencePtr GoPiGo3AutoModeController::createLEDAutoMode()

@@ -11,8 +11,9 @@ namespace xero
         class LEDSubsystem : public xero::base::Subsystem
         {
             friend class LEDSubsystemOnOffAction;
+            friend class LEDSubsystemBlinkAction;
 
-        public:
+          public:
             enum class LED
             {
                 LeftEye = 0,
@@ -21,7 +22,7 @@ namespace xero
                 RightBlinker = 3
             };
 
-        public:
+          public:
             LEDSubsystem(xero::base::Robot &robot);
 
             virtual ~LEDSubsystem();

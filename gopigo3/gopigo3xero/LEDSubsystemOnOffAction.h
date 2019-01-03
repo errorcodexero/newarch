@@ -7,8 +7,6 @@ namespace xero
 {
     namespace gopigo
     {
-        class LEDSubsystem;
-
         class LEDSubsystemOnOffAction : public LEDSubsystemAction
         {
         public:
@@ -32,7 +30,6 @@ namespace xero
             virtual std::string toString();
 
         private:
-            LEDSubsystem &subsystem_;
             LEDSubsystem::LED led_;
             double r_;
             double g_;

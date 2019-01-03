@@ -19,6 +19,7 @@ namespace xero {
             xero::base::ActionSequencePtr createRotateNeg90() ;
             xero::base::ActionSequencePtr createServoAutoMode();
             xero::base::ActionSequencePtr createLEDAutoMode();
+            xero::base::ActionSequencePtr createBlinkEyes();
         } ;
     }
 }

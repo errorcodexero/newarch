@@ -7,7 +7,8 @@ SOURCES = \
 	GoPiGo3OISubsystem.cpp\
 	GoPiGo3OIDevice.cpp\
 	LEDSubsystem.cpp\
-	LEDSubsystemOnOffAction.cpp
+	LEDSubsystemOnOffAction.cpp\
+	LEDSubsystemBlinkAction.cpp
 
 TARGET=GoPiGo3Xero
 
