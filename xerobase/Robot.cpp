@@ -8,6 +8,7 @@
 #include <MessageDestSeqFile.h>
 #include <MessageDestDS.h>
 #include <frc/DriverStation.h>
+#include <frc/Filesystem.h>
 #include <iostream>
 #include <cassert>
 
@@ -149,12 +150,12 @@ namespace xero {
             // the home directory of the PI user
             //
             filename = "/home/pi/" + name_ + ".dat" ;
+
 #elif defined(XEROROBORIO)
-            //
-            // This is the robo rio, get the parameters file from the home directory of the
-            // robot application user (e.g. lvuser)
-            //
-            filename = "/home/lvuser/" + name_ + ".dat" ;
+            wpi::SmallVector<char, ' '> dir ;
+            frc::filesystem::GetDeployDirectory(dir) ;
+            filename = &dir[0] ;
+            filename += "/" + name_ + ".dat" ;
 #else
 #error Error either SIMULATOR, GOPIGO< or XEROROBORIO must be 
 #endif
