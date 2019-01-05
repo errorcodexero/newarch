@@ -2,8 +2,8 @@
 
 #include "Subsystem.h" 
 #include "SingleMotorSubsystemAction.h" 
-#include "XeroTalonSRX.h"
-#include <VictorSP.h>
+#include <ctre/Phoenix.h>
+#include <frc/VictorSP.h>
 #include <iostream>
 
 /// \file

@@ -45,7 +45,7 @@ namespace xero {
 
             /// \brief return a human readable string representing the action
             /// \returns a human readable string representing the action
-            virtual std::string toString() ;;
+            virtual std::string toString() ;
 
         private:
             double start_time_ ;

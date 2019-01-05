@@ -2,8 +2,7 @@
 #include <TalonSRX.h>
 #include <SensorCollection.h>
 #else
-#include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
-#include <ctre/phoenix/MotorControl/SensorCollection.h>
+#include "ctre/Phoenix.h"
 #endif
 
 /// \file

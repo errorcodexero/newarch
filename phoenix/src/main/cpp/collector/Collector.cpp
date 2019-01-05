@@ -4,7 +4,7 @@
 #include "grabber/Grabber.h"
 #include <ActionSequence.h>
 #include <Robot.h>
-#include <DigitalInput.h>
+#include <frc/DigitalInput.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;

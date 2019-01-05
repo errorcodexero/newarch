@@ -1,5 +1,5 @@
 #pragma once
-#include <I2C.h>
+#include <frc/I2C.h>
 #include <memory>
 
 /// \file

@@ -1,69 +1,21 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "(gdb) Launch Phoenix Simulator",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/exe/frcUserProgramPhoenixSim/frcUserProgramPhoenixSim.exe",
-            "args": ["--start","0","--auto","0","--oper","0", "--test", "0", "--simprop", "pos=17.0,115.0","--simfile","SIM","--robotfile","ROBOT", "--simprop", "autovalue=-0.8", "--simprop", "gamedata=RRR"],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": true,
-            "MIMode": "gdb",
-            "miDebuggerPath": "C:\\cygwin64\\bin\\gdb.exe",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-		},
-        {
-            "name": "(gdb) Launch Bunny2018 Simulator",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/exe/frcUserProgramSim/frcUserProgramSim.exe",
-            "args": ["--start","0","--auto","0","--oper","0", "--test", "0", "--simprop", "pos=17.0,115.0","--simfile","SIM","--robotfile","ROBOT", "--simprop", "autovalue=-0.8"],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": true,
-            "MIMode": "gdb",
-            "miDebuggerPath": "C:\\cygwin64\\bin\\gdb.exe",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-		},
-        {
-            "name": "(gdb) Launch GoPiGO3",
-            "type": "cppdbg",
-            "request": "launch",
-			"program": "${workspaceFolder}/gopigo3/gopigo3xero/GoPiGo3Xero",
-			"targetArchitecture": "arm",
-            "args": ["--station"],
-            "stopAtEntry": true,
-            "cwd": "${workspaceFolder}/gopigo3/gopigo3xero",
-            "environment": [],
-            "externalConsole": true,
-            "MIMode": "gdb",
-            "miDebuggerPath": "C:\\SysGCC\\raspberry\\bin\\arm-linux-gnueabihf-gdb.exe",
-            "customLaunchSetupCommands": [
-                {
-                    "text": "target remote 192.168.1.86:3333",
-                    "description": "connect to remote target",
-                    "ignoreFailures": false
-                }
-            ]
-		}		
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+
+    {
+      "type": "wpilib",
+      "name": "WPILib Desktop Debug",
+      "request": "launch",
+      "desktop": true,
+    },
+    {
+      "type": "wpilib",
+      "name": "WPILib roboRIO Debug",
+      "request": "launch",
+      "desktop": false,
+    }
+  ]
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Subsystem.h" 
-#include <VictorSP.h>
+#include <frc/VictorSP.h>
 #include <memory>
 
 namespace xero {

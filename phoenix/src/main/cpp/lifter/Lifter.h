@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Subsystem.h>
-#include <VictorSP.h>
-#include <Encoder.h>
-#include <DigitalInput.h>
-#include <Solenoid.h>
+#include <frc/VictorSP.h>
+#include <frc/Encoder.h>
+#include <frc/DigitalInput.h>
+#include <frc/Solenoid.h>
 
 namespace xero {
     namespace phoenix {

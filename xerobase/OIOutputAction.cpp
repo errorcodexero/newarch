@@ -1,6 +1,6 @@
 #include "OIOutputAction.h"
-#include <DriverStation.h>
-#include <Joystick.h>
+#include <frc/DriverStation.h>
+#include <frc/Joystick.h>
 
 namespace xero {
     namespace base {

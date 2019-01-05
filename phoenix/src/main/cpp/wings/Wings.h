@@ -2,7 +2,7 @@
 
 #include <Subsystem.h>
 #include <memory>
-#include <Solenoid.h>
+#include <frc/Solenoid.h>
 
 namespace xero {
     namespace phoenix {

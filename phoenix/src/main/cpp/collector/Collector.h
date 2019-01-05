@@ -2,7 +2,7 @@
 
 #include <Subsystem.h>
 #include <DebounceBoolean.h>
-#include <DigitalInput.h>
+#include <frc/DigitalInput.h>
 
 namespace xero {
     namespace phoenix {
