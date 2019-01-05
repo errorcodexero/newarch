@@ -67,12 +67,4 @@ namespace xero {
     }
 }
 
-#ifdef SIMULATOR
-xero::sim::phoenix::PhoenixSimulator sim("phoenix/sim.dat") ;
-#endif
 
-//
-// This macro call is defined by the WPI library.  It is the call that connects
-// the class xero::phoenix::Phoenix to physical robot
-//
-START_ROBOT_CLASS(xero::phoenix::Phoenix) ;

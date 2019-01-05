@@ -5,7 +5,7 @@
 #include "SettingsParser.h"
 #include "LoopType.h"
 #include "basegroups.h"
-#include <WPILib.h>
+#include <frc/SampleRobot.h>
 #include <memory>
 #include <list>
 #include <fstream>

@@ -1,6 +1,6 @@
 #include "ActionSequence.h"
 #include "basegroups.h"
-#include <smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::misc ;
 
@@ -43,7 +43,7 @@ void ActionSequence::startNextAction()
         //
         isDone_ = true ;
     }
-};
+}
 
 void ActionSequence::run()
 {

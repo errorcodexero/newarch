@@ -2,14 +2,13 @@
 
 #include <list>
 
-#include "XeroTalonSRX.h"
-#include <Encoder.h>
-#include <AHRS.h>
-#include <Solenoid.h>
 #include <Kinematics.h>
 #include <DriveBase.h>
 #include <Speedometer.h>
-
+#include <AHRS.h>
+#include <ctre/Phoenix.h>
+#include <frc/Solenoid.h>
+#include <frc/Encoder.h>
 
 /// \file
 

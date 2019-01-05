@@ -2,7 +2,7 @@
 #include "TankDriveAction.h"
 #include "Robot.h"
 #include "LoopType.h"
-#include <smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <cassert>
 #include <cmath>
 

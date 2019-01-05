@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Subsystem.h>
-#include <VictorSP.h>
-#include <Encoder.h>
+#include <frc/VictorSP.h>
+#include <frc/Encoder.h>
 #include <PIDCtrl.h>
 #include <limits>
 #include <vector>

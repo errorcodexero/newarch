@@ -1,76 +1,87 @@
 plugins {
-	id "cpp"
-	id "visual-studio"
-	id "jaci.openrio.gradle.GradleRIO" version "2018.03.06"
+    id "cpp"
+    id "google-test-test-suite"
+    id "edu.wpi.first.GradleRIO" version "2019.1.1"
 }
-
-def TEAM = 1425
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
-// This is added by GradleRIO"s backing project EmbeddedTools.
+// This is added by GradleRIO's backing project EmbeddedTools.
 deploy {
-	targets {
-		target("roborio", jaci.openrio.gradle.frc.RoboRIO) {
-			team = TEAM
-		}
-	}
-	artifacts {
-		artifact("frcNative", jaci.openrio.gradle.frc.FRCNativeArtifact) {
-			targets << "roborio"
-			component = "frcUserProgram"
-		}
-	}
+    targets {
+        roboRIO("roborio") {
+            // Team number is loaded either from the .wpilib/wpilib_preferences.json
+            // or from command line. If not found an exception will be thrown.
+            // You can use getTeamOrDefault(team) instead of getTeamNumber if you
+            // want to store a team number in this file.
+            team = frc.getTeamNumber()
+        }
+    }
+    artifacts {
+        frcNativeArtifact('frcCpp') {
+            targets << "roborio"
+            component = 'frcUserProgram'
+            // Debug can be overridden by command line, for use with VSCode
+            debug = frc.getDebugOrDefault(false)
+        }
+        // Built in artifact to deploy arbitrary files to the roboRIO.
+        fileTreeArtifact('frcStaticFileDeploy') {
+            // The directory below is the local directory to deploy
+            files = fileTree(dir: 'src/main/deploy')
+            // Deploy to RoboRIO target, into /home/lvuser/deploy
+            targets << "roborio"
+            directory = '/home/lvuser/deploy'
+        }
+    }
 }
 
-// Defining my C++ project. In this case, it is called "frcUserProgram",
-// and is of the language C++.
+// Set this to true to include the src folder in the include directories passed
+// to the compiler. Some eclipse project imports depend on this behavior.
+// We recommend leaving this disabled if possible. Note for eclipse project
+// imports this is enabled by default. For new projects, its disabled
+def includeSrcInIncludeRoot = false
+
+// Set this to true to enable desktop support.
+def includeDesktopSupport = false
+
 model {
-	platforms {
-		x86_64 {
-			architecture "x86_64"
-		}
-	}	
-
-	components {
-
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		//
-		// Base libraries for the roborio (real hardware robot)
-		//
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		xeromath(NativeLibrarySpec) {
-			targetPlatform "roborio"
+    components {
+        frcUserProgram(NativeExecutableSpec) {
+            targetPlatform wpi.platforms.roborio
 			binaries.all {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
-			sources.cpp {
-			    source {
-				    srcDirs = ["xeromath"]
-					include "**/*.cpp"
-				}
-				exportedHeaders {
-				    srcDirs = ["xeromath"]
-					include "**/*.h"
-				}
+				lib library: "xerobase", linkage: "static"
+				lib library: "xeromisc", linkage: "static"                
+				lib library: "xeromath", linkage: "static"                
+			}            
+            if (includeDesktopSupport) {
+                targetPlatform wpi.platforms.desktop
+            }
 
-				lib library: "wpilib"
-				lib library: "ctre"
-				lib library: "navx"
-			}
-		}
+            sources.cpp {
+                source {
+                    srcDir 'dylan/src/main/cpp'
+                    include '**/*.cpp'
+                }
+                exportedHeaders {
+                    srcDir 'dylan/src/main/cpp'
+                    include '**/*.h'
+                }
+                                
+            }
+
+            // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
+            useLibrary(it, "wpilib")
+            wpi.deps.vendor.cpp(it)
+        }
 
 		xeromisc(NativeLibrarySpec) {
-			targetPlatform "roborio"
+            targetPlatform wpi.platforms.roborio
 			binaries.all {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
 			}
-			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
+			//binaries.withType(SharedLibraryBinarySpec) {
+				//buildable = false
+			//}
 			sources.cpp {
 			    source {
 				    srcDirs = ["xeromisc"]
@@ -82,20 +93,40 @@ model {
 				}
 
 				lib library: "xeromath", linkage: "static"
-				lib library: "wpilib"
-				lib library: "ctre"
-				lib library: "navx"
 			}
+            useLibrary(it, "wpilib")       
+            wpi.deps.vendor.cpp(it)                           
 		}
 
-		xerobase(NativeLibrarySpec) {
-			targetPlatform "roborio"
+		xeromath(NativeLibrarySpec) {
+            targetPlatform wpi.platforms.roborio
 			binaries.all {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
 			}
-			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
+			//binaries.withType(SharedLibraryBinarySpec) {
+				//buildable = false
+			//}
+			sources.cpp {
+			    source {
+				    srcDirs = ["xeromath"]
+					include "**/*.cpp"
+				}
+				exportedHeaders {
+				    srcDirs = ["xeromath"]
+					include "**/*.h"
+				}
 			}
+            wpi.deps.vendor.cpp(it)            
+		}        
+
+		xerobase(NativeLibrarySpec) {
+            targetPlatform wpi.platforms.roborio
+			binaries.all {
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+			}
+			//binaries.withType(SharedLibraryBinarySpec) {
+				//buildable = false
+			//}
 			sources.cpp {
 			    source {
 				    srcDirs = ["xerobase"]
@@ -103,283 +134,30 @@ model {
 				}
 				exportedHeaders {
 				    srcDirs = ["xerobase"]
-					include "**/*.h"
+					include "*.h", "**/*.h"
 				}
 
 				lib library: "xeromath", linkage: "static"
 				lib library: "xeromisc", linkage: "static"
-				lib library: "wpilib"
-				lib library: "ctre"
-				lib library: "navx"
 			}
-		}
+            useLibrary(it, "wpilib")
+            wpi.deps.vendor.cpp(it)            
+		}        
+    }
 
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		//
-		// Base libraries for the simulator
-		//
-		/////////////////////////////////////////////////////////////////////////////////////////////////////		
+    testSuites {
+        frcUserProgramTest(GoogleTestTestSuiteSpec) {
+            testing $.components.frcUserProgram
 
-		wpilibsim(NativeLibrarySpec) {
-			targetPlatform "x86_64"
-			binaries.all {
-				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-fPIC", "-DSIMULATOR"
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
-			sources.cpp {
-				source {
-					srcDirs = ["wpilibsim"]
-					include "**/*.cpp"
-				}
-				exportedHeaders {
-					srcDirs = ["wpilibsim"]
-					include "**/*.h"
-				}
-				
-				lib library: "xeromiscsim", linkage: "static"
-				lib library: "xeromathsim", linkage: "static"				
-			}
-		}
-
-		xeromathsim(NativeLibrarySpec) {
-			targetPlatform "x86_64"
-			binaries.all {
-				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DSIMULATOR"
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
-			sources.cpp {
-				source {
-					srcDirs = ["xeromath"]
-					include "**/*.cpp"
-				}
-				exportedHeaders {
-					srcDirs = ["xeromath"]
-					include "**/*.h"
-				}
-
-				lib library: "wpilibsim", linkage: "static"
-			}
-		}		
-
-		xeromiscsim(NativeLibrarySpec) {
-			targetPlatform "x86_64"
-			binaries.all {
-				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DSIMULATOR"
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
-			sources.cpp {
-				source {
-					srcDirs = ["xeromisc"]
-					include "**/*.cpp"
-				}
-				exportedHeaders {
-					srcDirs = ["xeromisc"]
-					include "**/*.h"
-				}
-
-				lib library: "xeromathsim", linkage: "static"
-				lib library: "wpilibsim", linkage: "static"
-			}
-		}
-
-		xerobasesim(NativeLibrarySpec) {
-			targetPlatform "x86_64"
-			binaries.all {
-				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-fPIC", "-DSIMULATOR"
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
-                buildable = false
+            sources.cpp {
+                source {
+                    srcDir 'src/test/cpp'
+                    include '**/*.cpp'
+                }
             }
-			sources.cpp {
-				source {
-					srcDirs = ["xerobase"]
-					include "**/*.cpp"
-				}
-				exportedHeaders {
-					srcDirs = ["xerobase"]
-					include "**/*.h"
-				}
 
-				lib library: "xeromathsim", linkage: "static"				
-				lib library: "xeromiscsim", linkage: "static"
-				lib library: "wpilibsim", linkage: "static"				
-			}
-		}
-
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		//
-		// Bunny bots 2018
-		//
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		frcUserProgram(NativeExecutableSpec) {
-			targetPlatform "roborio"
-			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-DXEROROBORIO"
-			}
-			sources.cpp {
-				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
-				source {
-					srcDirs = ["bunny2018"]
-					include "**/*.cpp"
-				}
-				exportedHeaders{
-					srcDirs = ["bunny2018"]
-					include "**/*.h"
-				}
-
-				lib library: "xerobase", linkage: "static"
-				lib library: "xeromisc", linkage: "static"				
-				lib library: "xeromath", linkage: "static"				
-				lib library: "wpilib"
-				lib library: "ctre"
-				lib library: "navx"
-			}
-		}
-
-		bunny2018sim(NativeLibrarySpec) {
-			targetPlatform "x86_64"
-			binaries.all {
-				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-DXEROSCREEN"
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
-			sources.cpp {
-				source {
-					srcDirs = ["bunny2018sim"]
-					include "**/*.cpp"
-				}
-				exportedHeaders {
-					srcDirs = ["bunny2018sim"]
-					include "**/*.h"
-				}
-
-				lib library: "xeromiscsim", linkage: "static"
-				lib library: "xeromathsim", linkage: "static"				
-				lib library: "wpilibsim", linkage: "static"				
-			}
-		}
-
-		frcUserProgramSim(NativeExecutableSpec) {
-			targetPlatform "x86_64"
-			binaries.all {
-				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-DSIMULATOR", "-DDEBUG", "-DXEROSCREEN"
-				linker.args "-lpthread", "-lncurses", "external/dinput/dxguid.lib", "external/dinput/dinput8.lib"
-			}
-			sources.cpp {
-				source {
-					srcDirs = ["bunny2018"]
-					include "**/*.cpp"
-				}
-				exportedHeaders{
-					srcDirs = ["bunny2018"]
-					include "**/*.h"
-				}
-
-				lib library: "bunny2018sim", linkage: "static"				
-				lib library: "xerobasesim", linkage: "static"
-				lib library: "xeromiscsim", linkage: "static"
-				lib library: "xeromathsim", linkage: "static"								
-				lib library: "wpilibsim", linkage: "static"
-			}
-		}		
-
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		//
-		// Phoenix (2017 robot) ported to new software framework
-		//
-		/////////////////////////////////////////////////////////////////////////////////////////////////////		
-
-		frcUserProgramPhoenix(NativeExecutableSpec) {
-			targetPlatform "roborio"
-			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-DXEROROBORIO"
-			}
-			sources.cpp {
-				// This is where our source files are located (src/cpp for C++ files, src/include for headers)
-				source {
-					srcDirs = ["phoenix"]
-					include "**/*.cpp"
-				}
-				exportedHeaders{
-					srcDirs = ["phoenix"]
-					include "**/*.h"
-				}
-
-				lib library: "xerobase", linkage: "static"
-				lib library: "xeromisc", linkage: "static"				
-				lib library: "xeromath", linkage: "static"				
-				lib library: "wpilib"
-				lib library: "ctre"
-				lib library: "navx"
-			}
-		}
-
-		phoenixsim(NativeLibrarySpec) {
-			targetPlatform "x86_64"
-			binaries.all {
-				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-DXEROSCREEN"
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
-			sources.cpp {
-				source {
-					srcDirs = ["phoenixsim"]
-					include "**/*.cpp"
-				}
-				exportedHeaders {
-					srcDirs = ["phoenixsim"]
-					include "**/*.h"
-				}
-
-				lib library: "xeromiscsim", linkage: "static"
-				lib library: "xeromathsim", linkage: "static"				
-				lib library: "wpilibsim", linkage: "static"				
-			}
-		}		
-
-		frcUserProgramPhoenixSim(NativeExecutableSpec) {
-			targetPlatform "x86_64"
-			binaries.all {
-				toolChain = toolChains["gcc"]
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-pthread", "-DSIMULATOR", "-DDEBUG", "-DXEROSCREEN"
-				linker.args "-lpthread", "-lncurses", "external/dinput/dxguid.lib", "external/dinput/dinput8.lib"
-			}
-			sources.cpp {
-				source {
-					srcDirs = ["phoenix"]
-					include "**/*.cpp"
-				}
-				exportedHeaders{
-					srcDirs = ["phoenix"]
-					include "**/*.h"
-				}
-
-				lib library: "phoenixsim", linkage: "static"				
-				lib library: "xerobasesim", linkage: "static"
-				lib library: "xeromiscsim", linkage: "static"
-				lib library: "xeromathsim", linkage: "static"								
-				lib library: "wpilibsim", linkage: "static"
-			}
-		}		
-	}
-}
-
-task wrapper(type: Wrapper) {
-	gradleVersion = "4.9"
+            useLibrary(it, "wpilib", "googletest")
+            wpi.deps.vendor.cpp(it)
+        }
+    }
 }

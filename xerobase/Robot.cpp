@@ -7,7 +7,7 @@
 #include <MessageDestStream.h>
 #include <MessageDestSeqFile.h>
 #include <MessageDestDS.h>
-#include <DriverStation.h>
+#include <frc/DriverStation.h>
 #include <iostream>
 #include <cassert>
 
@@ -16,6 +16,8 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
         
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         Robot::Robot(const std::string &name, double looptime) {
             frc::SmartDashboard::PutString("State", "Creation");
             name_ = name ;
@@ -33,6 +35,7 @@ namespace xero {
             iterations_.resize(static_cast<int>(LoopType::MaxValue)) ;
             std::fill(iterations_.begin(), iterations_.end(), 0) ;
         }
+#pragma GCC diagnostic pop
 
         Robot::~Robot() {
             delete parser_ ;

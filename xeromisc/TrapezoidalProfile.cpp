@@ -19,7 +19,7 @@ namespace xero {
         }
         
         double TrapezoidalProfile::getAccel(double t) const {
-            double ret ;
+            double ret = 0.0 ;
 
             if (t < 0.0)
                 ret = max_accel_ ;

@@ -1,5 +1,4 @@
 #include "DriverGamepad.h"
-#include <DriverStation.h>
 #include "OISubsystem.h"
 #include "Robot.h"
 #include "ActionSequence.h"
@@ -8,6 +7,7 @@
 #include "tankdrive/TankDrivePowerAction.h"
 #include "tankdrive/TankDriveTimedPowerAction.h"
 #include <MessageLogger.h>
+#include <frc/DriverStation.h>
 #include <cmath>
 #include <iostream>
 
@@ -97,6 +97,8 @@ namespace xero {
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
             if (pov_ != -1)
                 pov = ds.GetStickPOV(getIndex(), pov_) ;
+            else
+                pov = POVAngle::NONE ;
 
             double ly = ds.GetStickAxis(getIndex(),AxisNumber::LEFTY) ;
             double rx = ds.GetStickAxis(getIndex(),AxisNumber::RIGHTX) ;
