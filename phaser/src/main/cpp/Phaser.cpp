@@ -1,5 +1,5 @@
-#include "Dylan.h"
-#include "dylangroups.h"
+#include "Phaser.h"
+#include "phaserids.h"
 #include <ActionSequence.h>
 #include <DelayAction.h>
 #include <TeleopController.h>
@@ -10,7 +10,7 @@
 #include <MessageDestStream.h>
 
 #ifdef SIMULATOR
-#include <DylanSimulator.h>
+#include <PhaserSimulator.h>
 #endif
 
 #include <memory>
@@ -20,12 +20,12 @@ using namespace xero::misc ;
 using namespace xero::base ;
 
 namespace xero {
-    namespace dylan {
+    namespace phaser {
 
-        Dylan::Dylan() : xero::base::Robot("Dylan", 0.02) {           
+        Phaser::Phaser() : xero::base::Robot("Phaser", 0.02) {           
         }
 
-        void Dylan::enableSpecificMessages() {
+        void Phaser::enableSpecificMessages() {
             MessageLogger& logger = getMessageLogger();
                         
             //
@@ -40,29 +40,23 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_ALL) ;         
         }
         
-        void Dylan::RobotHardwareInit() {
-#ifdef NOTYET
-            auto sub_p = std::make_shared<DylanRobotSubsystem>(*this) ;
+        void Phaser::RobotHardwareInit() {
+            auto sub_p = std::make_shared<PhaserRobotSubsystem>(*this) ;
             setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getTankDrive()) ;
-#endif
         }
 
-        std::shared_ptr<ControllerBase> Dylan::createAutoController() {
-#ifdef NOTYET
-            auto ctrl = std::make_shared<DylanAutoController>(*this) ;
-            return ctrl ;
-#endif 
+        std::shared_ptr<ControllerBase> Phaser::createAutoController() {
             return nullptr ;
         }
         
-        std::shared_ptr<ControllerBase> Dylan::createTeleopController() {
+        std::shared_ptr<ControllerBase> Phaser::createTeleopController() {
             //
             // The base teleop controller is sufficient
             //
             return std::make_shared<xero::base::TeleopController>(*this) ;
         }
          
-        std::shared_ptr<ControllerBase> Dylan::createTestController() {
+        std::shared_ptr<ControllerBase> Phaser::createTestController() {
             //
             // This is where the test controller is created
             //

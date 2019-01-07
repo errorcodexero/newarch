@@ -1,23 +1,22 @@
 #pragma once
 
+#include <phaserrobotsubsystem/PhaserRobotSubsystem.h>
 #include <tankdrive/TankDrive.h>
 #include <Robot.h>
 
 namespace xero {
-    namespace dylan {
+    namespace phaser {
 
         /// \brief the concrete class that represents the robot Phoenix
-        class Dylan : public xero::base::Robot {
+        class Phaser : public xero::base::Robot {
         public:
-            Dylan() ;
+            Phaser() ;
 
-#ifdef NOTYET
             /// \brief return the robot subsystem cast to the phoenix specific type
             /// \returns the robot subsystem cast to the phoenix specific type
-            std::shared_ptr<DylanRobotSubsystem> getDylanRobotSubsystem() {
-                return std::dynamic_pointer_cast<DylanRobotSubsystem>(getRobotSubsystem()) ;
+            std::shared_ptr<PhaserRobotSubsystem> getPhaserRobotSubsystem() {
+                return std::dynamic_pointer_cast<PhaserRobotSubsystem>(getRobotSubsystem()) ;
             }
-#endif
 
         protected:
 
