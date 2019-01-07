@@ -1,7 +1,7 @@
 #pragma once
 
 #include <singlemotorsubsystem/SingleMotorSubsystem.h>
-#include <DigitalInput.h>
+#include <frc/DigitalInput.h>
 
 namespace xero {
     namespace bunny2018 {

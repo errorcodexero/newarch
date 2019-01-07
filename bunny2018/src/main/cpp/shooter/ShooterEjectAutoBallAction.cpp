@@ -54,8 +54,8 @@ namespace xero {
         }
 
         bool ShooterEjectAutoBallAction::ejectTrigger() {
-            double loc ;
-            double offloc ;
+            double loc = 0.0 ;
+            double offloc = 0.0 ;
             size_t index = 0 ;
             double curpos = db_->getDist() - base_location_ ;
             bool ret = false ;
