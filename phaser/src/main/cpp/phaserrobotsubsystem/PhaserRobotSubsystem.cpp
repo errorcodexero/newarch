@@ -1,5 +1,5 @@
-#include "GrondSubsystem.h"
-#include "grondids.h"
+#include "PhaserRobotSubsystem.h"
+#include "phaserids.h"
 #include <Robot.h>
 #include <list>
 
@@ -7,8 +7,8 @@ using namespace xero::base ;
 using namespace xero::misc ;
 
 namespace xero {
-    namespace grond {
-        GrondSubsystem::GrondSubsystem(Robot &robot) : RobotSubsystem(robot, "grond") {
+    namespace phaser {
+        PhaserRobotSubsystem::PhaserRobotSubsystem(Robot &robot) : RobotSubsystem(robot, "phaser") {
             auto &settings = robot.getSettingsParser() ;
 
             // Register message listener *before* any sub-system like the drive base which needs vision information.
@@ -27,11 +27,11 @@ namespace xero {
             //
             // Add the OI to the robot.  The OI is specific to this robot.
             //
-            oi_ = std::make_shared<GrondOISubsystem>(robot) ;
+            oi_ = std::make_shared<PhaserOISubsystem>(robot) ;
             addChild(oi_) ;            
         }
 
-        GrondSubsystem::~GrondSubsystem() {
+        PhaserRobotSubsystem::~PhaserRobotSubsystem() {
         }
     }
 }

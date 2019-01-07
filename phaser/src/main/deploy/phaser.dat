@@ -1,7 +1,13 @@
 #
-# This file describes the grond robot
+# This file describes the phaser robot.  For now
+# it describes Grond as we are using grond as a base
+# for starting development.  Going forward this will base
+# update to reflect phaser (the 2019 robot)
 #
 
+#
+# The definition of the drivebase
+#
 hw:tankdrive:motortype              "victor"
 hw:tankdrive:leftmotor1             1
 hw:tankdrive:leftmotor2             2
@@ -13,3 +19,14 @@ hw:tankdrive:leftencoder1           0
 hw:tankdrive:leftencoder2           1
 hw:tankdrive:rightencoder1          2
 hw:tankdrive:rightencoder2          3
+
+#
+# The definiton of the OI
+#
+hw:driverstation:hid:oi
+
+#
+# The message listener from the vision processor
+#
+messagelistener:port
+
