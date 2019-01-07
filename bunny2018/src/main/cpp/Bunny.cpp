@@ -8,7 +8,7 @@
 #include <basegroups.h>
 #include <DelayAction.h>
 #include <MessageLogger.h>
-#include <SmartDashboard/SmartDashboard.h>
+#include <frc/SmartDashboard/SmartDashboard.h>
 
 #ifdef SIMULATOR
 #include <Bunny2018Simulator.h>
@@ -98,13 +98,3 @@ namespace xero {
 
     }
 }
-
-#ifdef SIMULATOR
-xero::sim::bunny2018::Bunny2018Simulator sim("bunny2018/sim.dat") ;
-#endif
-
-//
-// This macro call is defined by the WPI library.  It is the call that connects
-// the class xero::Bunny::Phoenix to physical robot
-//
-START_ROBOT_CLASS(xero::bunny2018::Bunny) ;

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <singlemotorsubsystem/SingleMotorSubsystem.h>
-#include <SmartDashboard/SmartDashboard.h>
-#include <DigitalInput.h>
+#include <frc/SmartDashboard/SmartDashboard.h>
+#include <frc/DigitalInput.h>
 
 namespace xero {
     namespace bunny2018 {

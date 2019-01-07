@@ -1,0 +1,16 @@
+#
+# This file describes the grond robot
+#
+
+hw:tankdrive:motortype              "victor"
+hw:tankdrive:leftmotor1             1
+hw:tankdrive:leftmotor2             2
+hw:tankdrive:leftmotor3             3
+hw:tankdrive:rightmotor1            12
+hw:tankdrive:rightmotor2            13
+hw:tankdrive:rightmotor3            14
+hw:tankdrive:leftencoder1           0
+hw:tankdrive:leftencoder2           1
+hw:tankdrive:rightencoder1          2
+hw:tankdrive:rightencoder2          3
+hw:tankdrive:shifter                0

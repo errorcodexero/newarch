@@ -59,6 +59,35 @@ model {
 
             sources.cpp {
                 source {
+                    srcDir 'grond/src/main/cpp'
+                    include '**/*.cpp'
+                }
+                exportedHeaders {
+                    srcDir 'grond/src/main/cpp'
+                    include '**/*.h'
+                }
+                                
+            }
+
+            // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
+            useLibrary(it, "wpilib")
+            wpi.deps.vendor.cpp(it)
+        }
+
+        frcUserDylanProgram(NativeExecutableSpec) {
+            targetPlatform wpi.platforms.roborio
+			binaries.all {
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+				lib library: "xerobase", linkage: "static"
+				lib library: "xeromisc", linkage: "static"                
+				lib library: "xeromath", linkage: "static"                
+			}            
+            if (includeDesktopSupport) {
+                targetPlatform wpi.platforms.desktop
+            }
+
+            sources.cpp {
+                source {
                     srcDir 'dylan/src/main/cpp'
                     include '**/*.cpp'
                 }
@@ -69,10 +98,68 @@ model {
                                 
             }
 
-            // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
+            // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
             useLibrary(it, "wpilib")
             wpi.deps.vendor.cpp(it)
-        }
+        }       
+
+        frcUserBunny2018Program(NativeExecutableSpec) {
+            targetPlatform wpi.platforms.roborio
+			binaries.all {
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+				lib library: "xerobase", linkage: "static"
+				lib library: "xeromisc", linkage: "static"                
+				lib library: "xeromath", linkage: "static"                
+			}            
+            if (includeDesktopSupport) {
+                targetPlatform wpi.platforms.desktop
+            }
+
+            sources.cpp {
+                source {
+                    srcDir 'bunny2018/src/main/cpp'
+                    include '**/*.cpp'
+                }
+                exportedHeaders {
+                    srcDir 'bunny2018/src/main/cpp'
+                    include '**/*.h'
+                }
+                                
+            }
+
+            // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
+            useLibrary(it, "wpilib")
+            wpi.deps.vendor.cpp(it)
+        }        
+
+        frcUserPhoenixProgram(NativeExecutableSpec) {
+            targetPlatform wpi.platforms.roborio
+			binaries.all {
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+				lib library: "xerobase", linkage: "static"
+				lib library: "xeromisc", linkage: "static"                
+				lib library: "xeromath", linkage: "static"                
+			}            
+            if (includeDesktopSupport) {
+                targetPlatform wpi.platforms.desktop
+            }
+
+            sources.cpp {
+                source {
+                    srcDir 'phoenix/src/main/cpp'
+                    include '**/*.cpp'
+                }
+                exportedHeaders {
+                    srcDir 'phoenix/src/main/cpp'
+                    include '**/*.h'
+                }
+                                
+            }
+
+            // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
+            useLibrary(it, "wpilib")
+            wpi.deps.vendor.cpp(it)
+        }             
 
 		xeromisc(NativeLibrarySpec) {
             targetPlatform wpi.platforms.roborio
