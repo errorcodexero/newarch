@@ -25,7 +25,7 @@ SOURCES = \
 	lifter/Lifter.cpp\
 	lifter/LifterCalibrateAction.cpp\
 	lifter/LifterGoToHeightAction.cpp\
-	lifter.LifterPowerAction.cpp
+	lifter/LifterPowerAction.cpp
 
 TARGET=gopigo3xerobase
 

@@ -17,6 +17,6 @@ SOURCES = \
 
 TARGET=wpilib
 
-LOCAL_CFLAGS=-I../gopigo3hw -I../../xeromisc -I.
+LOCAL_CFLAGS=-I../gopigo3hw -I../../xeromisc -I. -I..
 
 include ../../makefiles/gopilib.mk
