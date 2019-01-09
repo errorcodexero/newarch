@@ -2,6 +2,7 @@
 
 #include "phaseroi/PhaserOISubsystem.h"
 #include <tankdrive/TankDrive.h>
+#include <lifter/Lifter.h>
 #include <RobotSubsystem.h>
 #include <MessageListener/MessageListener.h>
 
@@ -27,6 +28,7 @@ namespace xero {
         private:
             std::shared_ptr<xero::base::MessageListener> ml_ ;
             std::shared_ptr<PhaserOISubsystem> oi_ ;
+            std::shared_ptr<xero::base::Lifter> lifter_ ;
         } ;
     }
 }
