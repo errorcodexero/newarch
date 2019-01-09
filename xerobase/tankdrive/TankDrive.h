@@ -10,7 +10,7 @@
 #include <frc/Solenoid.h>
 #include <frc/Encoder.h>
 #include <frc/VictorSP.h>
-
+#include "XeroTalonSRX.h"
 /// \file
 
 
