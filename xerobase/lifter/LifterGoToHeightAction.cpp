@@ -1,6 +1,5 @@
 #include "LifterGoToHeightAction.h"
 #include "Lifter.h"
-#include "phoenixgroups.h"
 #include <Robot.h>
 #include <MessageLogger.h>
 #include <cmath>
@@ -8,7 +7,7 @@
 using namespace xero::misc ;
 
 namespace xero {
-    namespace phoenix {
+    namespace base {
         LifterGoToHeightAction::LifterGoToHeightAction(Lifter &lifter, double target) : LifterAction(lifter) {
             height_threshold_ = getLifter().getRobot().getSettingsParser().getDouble("lifter:goto:distance_threshold") ;
             speed_threshold_ = getLifter().getRobot().getSettingsParser().getDouble("lifter:goto:speed_threshold") ;
@@ -31,7 +30,7 @@ namespace xero {
             if (is_done_) {
                 Lifter &lifter = getLifter() ;
                 MessageLogger &logger = lifter.getRobot().getMessageLogger() ;              
-                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LIFTER) ;
+                logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
                 logger << "GoToHeight: start - already at desired target" ;
                 logger << ", height " << getLifter().getHeight() ;
                 logger << ", speed " << getLifter().getVelocity() ;
@@ -50,7 +49,7 @@ namespace xero {
 
             if (is_done_ || atTarget()) {
                 if (!is_done_) {        
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LIFTER) ;
+                    logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
                     logger << "GoToHeight: complete" ;
                     logger << ", time " << elapsed ;
                     logger << ", height " << height ;
@@ -58,23 +57,21 @@ namespace xero {
                     logger.endMessage() ;
                 }
 
-                lifter.setBrakeOn() ;
-                lifter.setMotorDutyCycle(0.0) ;
+                lifter.setMotorPower(0.0) ;
                 is_done_ = true ;
             }
             else {
                 if (!lifter.isCalibrated()) {
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LIFTER) ;
+                    logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
                     logger << "GoToHeight: lifter not calibrated, aborting go to height" ;
                     logger.endMessage() ;
                     is_done_ = true ;
                 }
                 else {
                     output_ = pidctrl_.getOutput(target_, height, 0, dt) ;
-                    lifter.setBrakeOff() ;
-                    lifter.setMotorDutyCycle(output_) ;
+                    lifter.setMotorPower(output_) ;
 
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LIFTER) ;
+                    logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
                     logger << "GoToHeight: running" ;
                     logger << ", time " << elapsed ;
                     logger << ", output " << output_ ;

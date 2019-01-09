@@ -21,7 +21,11 @@ SOURCES = \
 	tankdrive/TankDriveAngleAction.cpp\
 	tankdrive/TankDriveAngleCharAction.cpp\
 	tankdrive/TankDrivePowerAction.cpp\
-	tankdrive/TankDriveTimedPowerAction.cpp
+	tankdrive/TankDriveTimedPowerAction.cpp\
+	lifter/Lifter.cpp\
+	lifter/LifterCalibrateAction.cpp\
+	lifter/LifterGoToHeightAction.cpp\
+	lifter.LifterPowerAction.cpp
 
 TARGET=gopigo3xerobase
 

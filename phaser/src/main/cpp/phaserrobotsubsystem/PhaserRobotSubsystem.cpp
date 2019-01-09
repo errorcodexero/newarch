@@ -25,6 +25,11 @@ namespace xero {
             addTankDrive() ;
 
             //
+            // Add the lifter for now, this will probably be eventually replaced by a lifting manipulator
+            //
+            lifter_ = std::make_shared<Lifter>(robot, MGR_GROUP_PHASER_LIFTER) ;
+
+            //
             // Add the OI to the robot.  The OI is specific to this robot.
             //
             oi_ = std::make_shared<PhaserOISubsystem>(robot) ;
