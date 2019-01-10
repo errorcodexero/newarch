@@ -7,7 +7,7 @@ namespace xero
 {
     namespace gopigo
     {
-        LEDSubsystemOnOffAction::LEDSubsystemOnOffAction(LEDSubsystem &sub, LEDSubsystem::LED led, double r, double g, double b) : subsystem_(sub)
+        LEDSubsystemOnOffAction::LEDSubsystemOnOffAction(LEDSubsystem &sub, LEDSubsystem::LED led, double r, double g, double b) : LEDSubsystemAction(sub)
         {
             led_ = led;
             r_ = r;
@@ -26,25 +26,25 @@ namespace xero
             switch(led_)
             {
             case LEDSubsystem::LED::LeftEye:
-                subsystem_.multi_[1]->setColor(r_, g_, b_);
+                getSubsystem().multi_[1]->setColor(r_, g_, b_);
                 break;
 
             case LEDSubsystem::LED::RightEye:
-                subsystem_.multi_[0]->setColor(r_, g_, b_);
+                getSubsystem().multi_[0]->setColor(r_, g_, b_);
                 break;
 
             case LEDSubsystem::LED::LeftBlinker:
                 if (r_ > 0.1)
-                    subsystem_.singles_[0]->Set(true);
+                    getSubsystem().singles_[0]->Set(true);
                 else
-                    subsystem_.singles_[0]->Set(false);
+                    getSubsystem().singles_[0]->Set(false);
                 break;
 
             case LEDSubsystem::LED::RightBlinker:
                 if (r_ > 0.1)
-                    subsystem_.singles_[1]->Set(true);
+                    getSubsystem().singles_[1]->Set(true);
                 else
-                    subsystem_.singles_[1]->Set(false);
+                    getSubsystem().singles_[1]->Set(false);
                 break;
             }
 
