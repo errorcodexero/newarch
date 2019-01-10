@@ -152,10 +152,12 @@ namespace xero {
             filename = "/home/pi/" + name_ + ".dat" ;
 
 #elif defined(XEROROBORIO)
-            wpi::SmallVector<char, ' '> dir ;
+            wpi::SmallVector<char, '\0'> dir ;
             frc::filesystem::GetDeployDirectory(dir) ;
             filename = &dir[0] ;
-            filename += "/" + name_ + ".dat" ;
+            filename += "/" ;
+            filename += name_ ;
+            filename += ".dat" ;
 #else
 #error Error either SIMULATOR, GOPIGO< or XEROROBORIO must be 
 #endif

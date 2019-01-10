@@ -9,11 +9,15 @@ hw:tankdrive:leftmotor3             3
 hw:tankdrive:rightmotor1            4
 hw:tankdrive:rightmotor2            5
 hw:tankdrive:rightmotor3            6
-hw:tankdrive:shifter                0
 hw:tankdrive:leftencoder1           0
 hw:tankdrive:leftencoder2           1
 hw:tankdrive:rightencoder1          2
 hw:tankdrive:rightencoder2          3
+hw:tankdrive:shifter                0
+
+hw:follower:left                    10
+hw:follower:middle                  11
+hw:follower:right                   12
 
 hw:lifter:motor1                    0
 hw:lifter:motor2                    1
@@ -31,9 +35,9 @@ hw:grabber:motor                    2
 hw:grabber:encoder1                 6
 hw:grabber:encoder2                 7
 
-hw:collector:cubesensor             12
+hw:collector:cubesensor             23
 
-hw:wings:solenoid                   1
+hw:wings:solenoid                   2
 
 hw:driverstation:hid:oi             2
 hw:driverstation:hid:driver         0

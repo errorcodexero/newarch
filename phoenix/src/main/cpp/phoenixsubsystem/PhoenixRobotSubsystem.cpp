@@ -30,6 +30,9 @@ namespace xero {
             addChild(lifting_collector_) ;
             lifting_collector_->createNamedSequences() ;
 
+            follower_ = std::make_shared<xero::phaser::LineFollower>(robot, 99) ;
+            addChild(follower_) ;
+
             if (!settings.isDefined("hw:tankdrive:disable")) {
 
                 while (true) {
@@ -74,8 +77,6 @@ namespace xero {
                     db_->invertRightMotors() ;
                     db_->invertRightEncoder() ;                
                 }
-
-                db_->setEncoders(0, 1, 2, 3) ;
 
                 addChild(db_) ;
             }

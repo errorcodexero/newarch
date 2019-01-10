@@ -38,7 +38,7 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_OI) ;
             //
             
-            logger.enableSubsystem(MSG_GROUP_ALL) ;         
+            logger.enableSubsystem(99) ;         
         }
         
         void Phoenix::RobotHardwareInit() {

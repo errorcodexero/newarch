@@ -1,5 +1,6 @@
 #pragma once
 
+#include "follower/LineFollower.h"
 #include <tankdrive/TankDrive.h>
 #include <Subsystem.h>
 
@@ -37,6 +38,7 @@ namespace xero {
             std::shared_ptr<Wings> wings_ ;
             std::shared_ptr<LiftingCollector> lifting_collector_ ;
             std::shared_ptr<xero::base::TankDrive> db_ ;
+            std::shared_ptr<xero::phaser::LineFollower> follower_ ;
         } ;
     }
 }
