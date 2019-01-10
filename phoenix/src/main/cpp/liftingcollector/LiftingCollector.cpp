@@ -1,6 +1,6 @@
 #include "LiftingCollector.h"
-#include "lifter/Lifter.h"
-#include "lifter/LifterGoToHeightAction.h"
+#include "phlifter/Lifter.h"
+#include "phlifter/LifterGoToHeightAction.h"
 #include "collector/Collector.h"
 #include "collector/CollectCubeAction.h"
 #include "LiftingCollectCubeAction.h"

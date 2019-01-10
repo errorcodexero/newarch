@@ -2,8 +2,8 @@
 #include "LiftingCollector.h"
 #include "collector/Collector.h"
 #include "collector/CollectCubeAction.h"
-#include "lifter/Lifter.h"
-#include "lifter/LifterGoToHeightAction.h"
+#include "phlifter/Lifter.h"
+#include "phlifter/LifterGoToHeightAction.h"
 #include <Robot.h>
 
 using namespace xero::base ;
