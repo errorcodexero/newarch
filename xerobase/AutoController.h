@@ -3,7 +3,7 @@
 #include "ControllerBase.h"
 #include "ActionSequence.h"
 #include "OISubsystem.h"
-#include <SmartDashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <iostream>
 #include <cassert>
 #include <string>

@@ -46,6 +46,7 @@ namespace xero {
                 DOWNLEFT = 225,         ///< DownLeft, 225 degrees
                 LEFT = 270,             ///< Left, 270 degrees
                 UPLEFT = 315,           ///< UpLeft, 315 degrees
+                NONE = -1,              ///< Not pressed in any direction
             } ;
 
         public:

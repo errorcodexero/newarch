@@ -2,15 +2,15 @@
 
 #include <list>
 
-#include "XeroTalonSRX.h"
-#include <Encoder.h>
-#include <AHRS.h>
-#include <Solenoid.h>
 #include <Kinematics.h>
 #include <DriveBase.h>
 #include <Speedometer.h>
-
-
+#include <AHRS.h>
+#include <ctre/Phoenix.h>
+#include <frc/Solenoid.h>
+#include <frc/Encoder.h>
+#include <frc/VictorSP.h>
+#include "XeroTalonSRX.h"
 /// \file
 
 
@@ -18,6 +18,7 @@ namespace xero {
     namespace base {
         /// \brief a convience type for a shared pointer to a TalonSRX object
         typedef std::shared_ptr<TalonSRX> TalonPtr;
+        typedef std::shared_ptr<frc::VictorSP> VictorPtr ;
 
         /// \brief a tank-style drivebase
         class TankDrive : public DriveBase {
@@ -203,9 +204,11 @@ namespace xero {
             void setMotorsToPercents(double left_percent, double right_percent);
 
             static void initTalonList(const std::list<int>& ids, std::list<TalonPtr>& talons) ;
+            static void initVictorList(const std::list<int> &ids, std::list<VictorPtr> &victors) ;
 
         private:
-            std::list<TalonPtr> left_motors_, right_motors_;
+            std::list<TalonPtr> left_talon_motors_, right_talon_motors_;
+            std::list<VictorPtr> left_victor_motors_, right_victor_motors_ ;
 
             std::shared_ptr<frc::Encoder> left_enc_ ;
             std::shared_ptr<frc::Encoder> right_enc_ ;

@@ -7,7 +7,8 @@
 #include <MessageDestStream.h>
 #include <MessageDestSeqFile.h>
 #include <MessageDestDS.h>
-#include <DriverStation.h>
+#include <frc/DriverStation.h>
+#include <frc/Filesystem.h>
 #include <iostream>
 #include <cassert>
 
@@ -16,6 +17,8 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
         
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         Robot::Robot(const std::string &name, double looptime) {
             frc::SmartDashboard::PutString("State", "Creation");
             name_ = name ;
@@ -33,6 +36,7 @@ namespace xero {
             iterations_.resize(static_cast<int>(LoopType::MaxValue)) ;
             std::fill(iterations_.begin(), iterations_.end(), 0) ;
         }
+#pragma GCC diagnostic pop
 
         Robot::~Robot() {
             delete parser_ ;
@@ -146,12 +150,12 @@ namespace xero {
             // the home directory of the PI user
             //
             filename = "/home/pi/" + name_ + ".dat" ;
+
 #elif defined(XEROROBORIO)
-            //
-            // This is the robo rio, get the parameters file from the home directory of the
-            // robot application user (e.g. lvuser)
-            //
-            filename = "/home/lvuser/" + name_ + ".dat" ;
+            wpi::SmallVector<char, ' '> dir ;
+            frc::filesystem::GetDeployDirectory(dir) ;
+            filename = &dir[0] ;
+            filename += "/" + name_ + ".dat" ;
 #else
 #error Error either SIMULATOR, GOPIGO< or XEROROBORIO must be 
 #endif

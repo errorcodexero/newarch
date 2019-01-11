@@ -1,4 +1,4 @@
-#include <smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <iostream>
 
 namespace frc

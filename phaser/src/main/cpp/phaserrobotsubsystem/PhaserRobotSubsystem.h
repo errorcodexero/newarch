@@ -1,0 +1,34 @@
+#pragma once
+
+#include "phaseroi/PhaserOISubsystem.h"
+#include <tankdrive/TankDrive.h>
+#include <lifter/Lifter.h>
+#include <RobotSubsystem.h>
+#include <MessageListener/MessageListener.h>
+
+namespace xero {
+    namespace phaser {
+
+        class PhaserRobotSubsystem : public xero::base::RobotSubsystem {
+        public:
+            PhaserRobotSubsystem(xero::base::Robot &robot) ;
+            virtual ~PhaserRobotSubsystem() ;
+
+            std::shared_ptr<xero::base::TankDrive> getTankDrive() {
+                return std::dynamic_pointer_cast<xero::base::TankDrive>(getDriveBase()) ;
+            }
+
+            std::shared_ptr<xero::base::MessageListener> getMessageListener() {
+                return ml_ ;
+            }
+            
+            std::shared_ptr<PhaserOISubsystem> getOI() {
+                return oi_ ;
+            }    
+        private:
+            std::shared_ptr<xero::base::MessageListener> ml_ ;
+            std::shared_ptr<PhaserOISubsystem> oi_ ;
+            std::shared_ptr<xero::base::Lifter> lifter_ ;
+        } ;
+    }
+}
