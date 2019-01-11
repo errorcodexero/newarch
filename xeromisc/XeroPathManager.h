@@ -14,7 +14,7 @@ namespace xero {
             XeroPathManager(MessageLogger &logger, const std::string &location) ;
             virtual ~XeroPathManager() ;
 
-            bool readPath(const std::string &pathname) ;
+            bool loadPath(const std::string &pathname) ;
             bool hasPath(const std::string &pathname) ;
             std::shared_ptr<XeroPath> getPath(const std::string &pathname) ;
 

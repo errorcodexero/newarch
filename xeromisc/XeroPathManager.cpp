@@ -12,13 +12,15 @@ namespace xero {
         XeroPathManager::~XeroPathManager() {            
         }
 
-        bool XeroPathManager::readPath(const std::string &pathname) {
+        bool XeroPathManager::loadPath(const std::string &pathname) {
             std::string filename ;
             
             filename = basedir_ + "/" + pathname ;
-            std::shared_ptr<XeroPath> path = XeroPathReader::readPath(logger_, pathname, filename) ;
+            std::shared_ptr<XeroPath> path = XeroPathReader::loadPath(logger_, pathname, filename) ;
             if (path == nullptr)
                 return false ;
+
+            paths_[pathname] = path ;
 
             return true ;
         }

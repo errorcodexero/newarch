@@ -41,9 +41,9 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_FOLLOWER) ;         
         }
 
-        void Phoenix::readPaths() {
+        void Phoenix::loadPaths() {
             auto paths = getPathManager() ;
-            paths->readPath("HabCenterToShipFromLeft") ;
+            paths->loadPath("HabCenterToShipFromLeft") ;
         }
         
         void Phoenix::RobotHardwareInit() {

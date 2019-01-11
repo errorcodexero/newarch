@@ -40,6 +40,8 @@ namespace xero {
             friend class TankDriveAngleAction ;
             /// \brief class for tank drive actions         
             friend class TankDriveAngleCharAction ;
+            /// \brief class for tank drive actions
+            friend class TankDriveFollowPathAction ;
 
         public:
             /// \brief Create a new tank drive object

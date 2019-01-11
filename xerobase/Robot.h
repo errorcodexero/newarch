@@ -132,6 +132,11 @@ namespace xero {
                 return oi_subsystem_ ;
             }           
 
+            /// \brief return the path manager
+            std::shared_ptr<xero::misc::XeroPathManager> getPathManager() {
+                return paths_ ;
+            }            
+
         protected:
 
             /// \brief initialize the message logger subsystem
@@ -142,7 +147,7 @@ namespace xero {
             }
 
             /// \brief read paths needed for this robot
-            virtual void readPaths() {                
+            virtual void loadPaths() {                
             }
 
             /// \brief add a subsystem to the robot
@@ -206,10 +211,6 @@ namespace xero {
             /// \brief return the auto mode selection
             virtual int getAutoModelSelection() ;
 
-            /// \brief return the path manager
-            std::shared_ptr<xero::misc::XeroPathManager> getPathManager() {
-                return paths_ ;
-            }
 
         private:
             void logAutoModeState() ;

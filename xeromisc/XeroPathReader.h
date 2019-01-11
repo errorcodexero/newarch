@@ -20,7 +20,7 @@ namespace xero {
             XeroPathReader() = delete ;
             ~XeroPathReader() = delete ;
 
-            static std::shared_ptr<XeroPath> readPath(MessageLogger &logger, const std::string &pathname, const std::string &filename, PathType type = PathType::PathFinderV1) ;
+            static std::shared_ptr<XeroPath> loadPath(MessageLogger &logger, const std::string &pathname, const std::string &filename, PathType type = PathType::PathFinderV1) ;
 
         private:
             static const std::string v1_left_side_suffix_ ;

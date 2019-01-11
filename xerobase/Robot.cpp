@@ -231,10 +231,10 @@ namespace xero {
             // Reading required paths
             //
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
-            message_logger_ << ".... reading path files" ;
+            message_logger_ << ".... loading path files" ;
             message_logger_.endMessage() ;     
             paths_ = std::make_shared<XeroPathManager>(message_logger_, deploy_dir_ + "/output") ;
-            readPaths() ;
+            loadPaths() ;
 
             //
             // Initialize the robot hardware

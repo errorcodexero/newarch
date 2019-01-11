@@ -19,8 +19,12 @@ namespace xero {
                 while (i < line.length() && std::isspace(line[i]))
                     i++ ;
 
-                while (i < line.length() && line[i] != ',')
+                number.clear() ;
+                while (i < line.length() && line[i] != ',' && !std::isspace(line[i]))
                     number += line[i++] ;
+
+                while (i < line.length() && std::isspace(line[i]))
+                    i++ ;                    
 
                 try {
                     d = std::stod(number, &pos) ;
@@ -83,7 +87,7 @@ namespace xero {
             return true ;            
         }
 
-        std::shared_ptr<XeroPath> XeroPathReader::readPath(MessageLogger &logger, const std::string &pathname, const std::string &filename, XeroPathReader::PathType type) {
+        std::shared_ptr<XeroPath> XeroPathReader::loadPath(MessageLogger &logger, const std::string &pathname, const std::string &filename, XeroPathReader::PathType type) {
             if (type != PathType::PathFinderV1)
                 return nullptr ;
 

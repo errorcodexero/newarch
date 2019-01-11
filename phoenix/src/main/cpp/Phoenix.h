@@ -30,7 +30,7 @@ namespace xero {
             virtual void RobotHardwareInit() ;
 
             /// \brief read the paths required for the robot
-            virtual void readPaths() ;
+            virtual void loadPaths() ;
 
             /// \brief called to create the autonomous controller
             /// \returns a robot controller
