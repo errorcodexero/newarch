@@ -1,6 +1,7 @@
 TESTFILES = \
 	PIDCtrlTest.cpp\
-	xeromathtest.cpp\
-	TrapezoidProfileTest.cpp	
+	TrapezoidProfileTest.cpp
+
+LOCALFLAGS = -I../xeromath
 
 include ../makefiles/test.mk

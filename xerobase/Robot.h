@@ -5,6 +5,7 @@
 #include "SettingsParser.h"
 #include "LoopType.h"
 #include "basegroups.h"
+#include <XeroPathManager.h>
 #include <frc/SampleRobot.h>
 #include <memory>
 #include <list>
@@ -140,6 +141,10 @@ namespace xero {
             virtual void enableSpecificMessages() {
             }
 
+            /// \brief read paths needed for this robot
+            virtual void readPaths() {                
+            }
+
             /// \brief add a subsystem to the robot
             /// \param sub the subsystem to add to the robot
             /// \param oi the subsystem for the OI
@@ -201,10 +206,16 @@ namespace xero {
             /// \brief return the auto mode selection
             virtual int getAutoModelSelection() ;
 
+            /// \brief return the path manager
+            std::shared_ptr<xero::misc::XeroPathManager> getPathManager() {
+                return paths_ ;
+            }
+
         private:
             void logAutoModeState() ;
             void displayAutoModeState() ;
             void updateAutoMode() ;
+            void setupPaths() ;
 
         private:
             // The time per robot loop in seconds
@@ -255,6 +266,15 @@ namespace xero {
 
             // The battery voltage
             double voltage_ ;
+
+            // The path follower paths for the robot
+            std::shared_ptr<xero::misc::XeroPathManager> paths_ ;
+
+            // The deploy directory for the robot
+            std::string deploy_dir_ ;
+
+            // The log directory for the robot
+            std::string log_dir_ ;
         } ;
     }
 }

@@ -35,6 +35,10 @@ namespace xero {
 
             iterations_.resize(static_cast<int>(LoopType::MaxValue)) ;
             std::fill(iterations_.begin(), iterations_.end(), 0) ;
+
+            setupPaths() ;
+
+       
         }
 #pragma GCC diagnostic pop
 
@@ -43,6 +47,22 @@ namespace xero {
             message_logger_.clear() ;
             if (output_stream_ != nullptr)
                 delete output_stream_ ;
+        }
+
+        void Robot::setupPaths() {
+#if defined(SIMULATOR)
+            log_dir_ = "." ;
+            deploy_dir_ = "./deploy" ;
+#elif defined(GOPIGO)
+            log_dir_ = "/home/pi/logs/" ;
+            deploy_dir_ = "/home/pi/deploy" ;
+#elif defined(XEROROBORIO)
+            wpi::SmallVector<char, '\0'> dir ;
+            frc::filesystem::GetDeployDirectory(dir) ;     
+            deploy_dir_ = &dir[0] ;
+#else
+#error SIMULATOR, GOPIGO, or XEROROBORIO must be defined
+#endif
         }
 
         void Robot::initializeMessageLogger() {
@@ -68,43 +88,21 @@ namespace xero {
                 dest_p = std::make_shared<MessageDestStream>(std::cout);
                 logger.addDestination(dest_p);
             }
-
-            const std::string outfile = getRobotOutputFile();
-            if (outfile.length() > 0)
-                setupRobotOutputFile(outfile);
-#elif defined(GOPIGO)
-            //
-            // This is where the roborio places the first USB flash drive it
-            // finds.  Other drives are placed at /V, /W, /X.  The devices are
-            // actually mounted at /media/sd*, and a symbolic link is created
-            // to /U.
-            //
-            std::string flashdrive("/home/pi/logs/");
-            std::string logname("logfile_");
-            dest_p = std::make_shared<MessageDestSeqFile>(flashdrive, logname);
-            logger.addDestination(dest_p);
-#elif defined(XEROROBORIO)
-            //
-            // This is where the roborio places the first USB flash drive it
-            // finds.  Other drives are placed at /V, /W, /X.  The devices are
-            // actually mounted at /media/sd*, and a symbolic link is created
-            // to /U.
-            //
-            std::string flashdrive("/u/");
-            std::string logname("logfile_");
-            dest_p = std::make_shared<MessageDestSeqFile>(flashdrive, logname);
-            logger.addDestination(dest_p);
 #else
-#error Either SIMULATOR, GOPIGO, or ROBORIO must be defined
-#endif
-
-#ifndef SIMULATOR
-            //
-            // Send warnings and errors to the driver station
-            //
             dest_p = std::make_shared<MessageDestDS>();
             logger.addDestination(dest_p);
-#endif          
+#endif            
+
+            //
+            // This is where the roborio places the first USB flash drive it
+            // finds.  Other drives are placed at /V, /W, /X.  The devices are
+            // actually mounted at /media/sd*, and a symbolic link is created
+            // to /U.
+            //
+
+            std::string logname("logfile_");
+            dest_p = std::make_shared<MessageDestSeqFile>(log_dir_, logname);
+            logger.addDestination(dest_p);
         }       
 
         void Robot::RobotHardwareInit() {
@@ -138,29 +136,7 @@ namespace xero {
             //
             // Setup access to the parameter file
             //
-#if defined(SIMULATOR)
-            //
-            // In the simulation environment, we look in the robot sourc code specific
-            // directory for the parameter files
-            //
-            filename = name_ + "/" + name_ + ".dat" ;
-#elif defined(GOPIGO)
-            //
-            // This is the gopigo3, Raspberry PI based robot.  Get the parameters file from
-            // the home directory of the PI user
-            //
-            filename = "/home/pi/" + name_ + ".dat" ;
-
-#elif defined(XEROROBORIO)
-            wpi::SmallVector<char, '\0'> dir ;
-            frc::filesystem::GetDeployDirectory(dir) ;
-            filename = &dir[0] ;
-            filename += "/" ;
-            filename += name_ ;
-            filename += ".dat" ;
-#else
-#error Error either SIMULATOR, GOPIGO< or XEROROBORIO must be 
-#endif
+            filename = deploy_dir_ + "/" + name_ + ".dat" ;
             if (!readParamsFile(filename)) {
                 std::cerr << "Robot  Initialization failed - could not read robot data file '" ;
                 std::cerr << filename << "'" << std::endl ;
@@ -246,11 +222,26 @@ namespace xero {
             //
             // Read parameters from the parameters file
             // 
-            readParamsFile() ;          
+            message_logger_.startMessage(MessageLogger::MessageType::info) ;
+            message_logger_ << ".... reading parameter file" ;
+            message_logger_.endMessage() ;            
+            readParamsFile() ;
+
+            //
+            // Reading required paths
+            //
+            message_logger_.startMessage(MessageLogger::MessageType::info) ;
+            message_logger_ << ".... reading path files" ;
+            message_logger_.endMessage() ;     
+            paths_ = std::make_shared<XeroPathManager>(message_logger_, deploy_dir_ + "/output") ;
+            readPaths() ;
 
             //
             // Initialize the robot hardware
             //
+            message_logger_.startMessage(MessageLogger::MessageType::info) ;
+            message_logger_ << ".... initializing hardware" ;
+            message_logger_.endMessage() ;              
             RobotHardwareInit() ;
 
             //

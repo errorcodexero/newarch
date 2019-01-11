@@ -29,6 +29,9 @@ namespace xero {
             /// \brief called to initialize the robot, basically creating the subsystems
             virtual void RobotHardwareInit() ;
 
+            /// \brief read the paths required for the robot
+            virtual void readPaths() ;
+
             /// \brief called to create the autonomous controller
             /// \returns a robot controller
             virtual std::shared_ptr<xero::base::ControllerBase> createAutoController() ;

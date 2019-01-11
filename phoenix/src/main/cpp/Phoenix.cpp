@@ -40,6 +40,11 @@ namespace xero {
             
             logger.enableSubsystem(MSG_GROUP_FOLLOWER) ;         
         }
+
+        void Phoenix::readPaths() {
+            auto paths = getPathManager() ;
+            paths->readPath("HabCenterToShipFromLeft") ;
+        }
         
         void Phoenix::RobotHardwareInit() {
             auto sub_p = std::make_shared<PhoenixRobotSubsystem>(*this) ;
