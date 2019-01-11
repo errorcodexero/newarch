@@ -22,4 +22,4 @@
 /// \brief the message logger group ID for the collector
 #define MSG_GROUP_COLLECTOR                 (1ull << 35)
 
-
+#define MSG_GROUP_FOLLOWER                  (1ull << 36)

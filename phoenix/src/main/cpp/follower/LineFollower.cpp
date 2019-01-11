@@ -13,7 +13,7 @@ namespace xero {
 
             msg_id_ = mid ;
 
-            std::cout << "Building line follower" << std::endl ;
+            std::cout << "Building line follower " << mid << std::endl ;
 
             inid = robot.getSettingsParser().getInteger("hw:follower:left") ;
             left_ = std::make_shared<frc::DigitalInput>(inid) ;
@@ -37,6 +37,12 @@ namespace xero {
             left_state_ = left_->Get() ;
             middle_state_ = middle_->Get() ;
             right_state_ = right_->Get() ;
+
+            std::cout << "Line Follower State: " ;
+            std::cout << " " << (left_state_ ? "on" : "off") ;
+            std::cout << " " << (middle_state_ ? "on" : "off") ;
+            std::cout << " " << (right_state_ ? "on" : "off") ; 
+            std::cout << std::endl ;  
 
             MessageLogger &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, msg_id_) ;
