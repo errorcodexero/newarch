@@ -21,8 +21,8 @@ namespace xero {
         }
 
         void TankDriveFollowPathAction::start() {
-            xstart_ = (path_->getLeft(0).getX() + path_->getRight(0).getX()) / 2.0 ;
-            ystart_ = (path_->getLeft(0).getY() + path_->getRight(0).getY()) / 2.0 ;
+            left_start_ = path_->getLeftStartPos() ;
+            right_start_ = path_->getRightStartPos() ;
             index_ = 0 ;            
         }
 
@@ -35,9 +35,9 @@ namespace xero {
                 const XeroPathSegment &lseg = path_->getLeft(index_) ;
                 const XeroPathSegment &rseg = path_->getRight(index_) ;
                 double lout = left_follower_->getOutput(lseg.getAcceleration(), lseg.getVelocity(), lseg.getPOS(), 
-                                        getTankDrive().getLeftDistance(), dt) ;
+                                        left_start_ + getTankDrive().getLeftDistance(), dt) ;
                 double rout = right_follower_->getOutput(rseg.getAcceleration(), rseg.getVelocity(), rseg.getPOS(), 
-                                        getTankDrive().getRightDistance(), dt) ;
+                                        right_start_ + getTankDrive().getRightDistance(), dt) ;
 
                 getTankDrive().setMotorsToPercents(lout, rout) ;                        
             }

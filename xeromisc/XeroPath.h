@@ -28,6 +28,14 @@ namespace xero {
                 return right_segments_[i] ;
             }
 
+            double getLeftStartPos() const {
+                return left_segments_[0].getPOS() ;
+            }
+
+            double getRightStartPos() const {
+                return right_segments_[0].getPOS() ;
+            }
+
         private:
             std::string name_ ;
             std::vector<XeroPathSegment> left_segments_ ;

@@ -38,8 +38,8 @@ namespace xero {
                         
         private:
             size_t index_ ;
-            double xstart_ ;
-            double ystart_ ;
+            double left_start_ ;
+            double right_start_ ;
             std::shared_ptr<xero::misc::XeroPath> path_ ;
             std::shared_ptr<xero::misc::PIDACtrl> left_follower_ ;
             std::shared_ptr<xero::misc::PIDACtrl> right_follower_ ;            
