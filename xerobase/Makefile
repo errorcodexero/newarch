@@ -1,3 +1,5 @@
+TOPDIR=..
+
 SOURCES = \
 	ActionSequence.cpp\
 	ControllerBase.cpp\
@@ -27,8 +29,14 @@ SOURCES = \
 	lifter/LifterGoToHeightAction.cpp\
 	lifter/LifterPowerAction.cpp
 
-TARGET=gopigo3xerobase
+TARGET=xerobase
 
-LOCAL_CFLAGS = -I. -I../gopigo3 -I../gopigo3/gopigo3navx -I../gopigo3/gopigo3hw -I../gopigo3/frc -I../xeromath -I../xeromisc
+NEED_WPIUTIL=true
+NEED_WPILIB=true
+NEED_NAVX=true
+NEED_CTRE=true
 
-include ../makefiles/gopilib.mk
+LOCAL_CFLAGS = -I. -I../xeromath -I../xeromisc -DSIMULATOR
+
+include ../makefiles/buildlib.mk
+

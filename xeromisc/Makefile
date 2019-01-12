@@ -1,3 +1,5 @@
+TOPDIR=..
+
 SOURCES = \
 	Kinematics.cpp\
 	MessageDestFile.cpp\
@@ -9,8 +11,15 @@ SOURCES = \
 	StallMonitor.cpp\
 	TrapezoidalProfile.cpp
 
-TARGET=gopigo3xeromisc
+TARGET=xeromisc
 
-LOCAL_CFLAGS = -I../gopigo3/gopigo3frc -I../xeromath
+NEED_WPILIB=true
 
-include ../makefiles/gopilib.mk
+ifeq ($(PLATFORM),GOPIGO)
+LOCAL_CFLAGS = -I../gopigo3/gopigo3frc
+endif
+
+LOCAL_CFLAGS += -I../xeromath
+
+include $(TOPDIR)/makefiles/buildlib.mk
+

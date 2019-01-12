@@ -1,11 +1,16 @@
+TOPDIR=..
+
 SOURCES = \
 	Point.cpp\
 	PointAngle.cpp\
 	Polar.cpp\
 	QuadraticSolver.cpp
 
-TARGET=gopigo3xeromath
+TARGET=xeromath
 
+ifeq ($(PLATFORM),gopigo)
 LOCAL_CFLAGS = -I../gopigo3frc
+endif
 
-include ../makefiles/gopilib.mk
+include $(TOPDIR)/makefiles/buildlib.mk
+
