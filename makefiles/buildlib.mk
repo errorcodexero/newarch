@@ -58,6 +58,6 @@ $(TARGETFILE): $(OBJECTS)
 
 clean:
 	@echo Cleaning library target $(TARGET).a
-	$(QUIET)rm -rf $(OBJECTS) $(TARGET).a
+	$(QUIET)rm -rf $(OBJECTS) $(TARGETFILE)
 
 $(foreach srcfile,$(SOURCES),$(eval $(call BUILD_C_FILE,$(srcfile),$(BUILDTARGETDIR)/$(srcfile:%.cpp=%.o))))

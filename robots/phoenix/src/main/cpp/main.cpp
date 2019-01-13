@@ -2,6 +2,7 @@
 #include "Phoenix.h"
 
 #ifdef SIMULATOR
+#include <PhoenixSimulator.h>
 xero::sim::phoenix::PhoenixSimulator sim("phoenix/sim.dat") ;
 #endif
 

@@ -15,10 +15,6 @@ hw:tankdrive:rightencoder1          2
 hw:tankdrive:rightencoder2          3
 hw:tankdrive:shifter                0
 
-hw:follower:left                    10
-hw:follower:middle                  11
-hw:follower:right                   12
-
 hw:lifter:motor1                    0
 hw:lifter:motor2                    1
 hw:lifter:encoder1                  4

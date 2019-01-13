@@ -1,7 +1,7 @@
 #pragma once
 
-#include <SubsystemModel.h>
-#include <DriverStation.h>
+#include <frc/SubsystemModel.h>
+#include <frc/DriverStation.h>
 
 namespace xero  {
     namespace sim {

@@ -6,9 +6,9 @@ SOURCES = \
 TARGET=navxsim
 
 NEED_WPILIB=true
-NEED_NAVX=true
+NEED_CTRE=true
 
-LOCAL_CFLAGS += -I. -I$(TOPDIR)/xeromisc
+LOCAL_CFLAGS += -I. -I$(TOPDIR)/xerolibs/xeromisc
 
 include $(TOPDIR)/makefiles/buildlib.mk
 

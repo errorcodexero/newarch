@@ -51,4 +51,4 @@ if [ $2 = "test" ]; then
     testtime=300.0
 fi    
 
-build/exe/frcUserProgramPhoenixSim/frcUserProgramPhoenixSim.exe --simfile SIM --robotfile ROBOT --test $testtime --start 0 --auto $autotime --oper $teleoptime --simscreen --simprop pos=$pos $extra
+makebuild/SIMULATOR/Debug/phoenix/phoenix --simfile SIM --robotfile ROBOT --test $testtime --start 0 --auto $autotime --oper $teleoptime --simscreen --simprop pos=$pos $extra

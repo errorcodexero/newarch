@@ -6,27 +6,23 @@
 #
 
 #
-# The definition of the drivebase
+# The definition of the drivebase (for now this is phoenix)
 #
-hw:tankdrive:motortype              "victor"
 hw:tankdrive:leftmotor1             1
 hw:tankdrive:leftmotor2             2
 hw:tankdrive:leftmotor3             3
-hw:tankdrive:rightmotor1            12
-hw:tankdrive:rightmotor2            13
-hw:tankdrive:rightmotor3            14
+hw:tankdrive:rightmotor1            4
+hw:tankdrive:rightmotor2            5
+hw:tankdrive:rightmotor3            6
 hw:tankdrive:leftencoder1           0
 hw:tankdrive:leftencoder2           1
 hw:tankdrive:rightencoder1          2
 hw:tankdrive:rightencoder2          3
+hw:tankdrive:shifter                0
 
 #
 # The definiton of the OI
 #
 hw:driverstation:hid:oi
-
-#
-# The message listener from the vision processor
-#
-messagelistener:port
+        
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <DigitalInput.h>
-#include <SubsystemModel.h>
+#include <frc/DigitalInput.h>
+#include <frc/SubsystemModel.h>
 #include <vector>
 
 namespace xero  {

@@ -8,6 +8,7 @@ ifeq ($(MYCOMPILER),PI)
 CXX = arm-linux-gnueabihf-g++
 CXXFLAGS=$(LOCAL_CFLAGS) -Wno-psabi
 COMPILERSETUP=true
+EXEEXT=elf
 
 ifdef MAKEDEBUG
 $(info Setting compiler for PI)
@@ -19,6 +20,7 @@ ifeq ($(MYCOMPILER),CYGWIN)
 CXX = g++
 CXXFLAGS = $(LOCAL_CFLAGS) -DCYGWIN
 COMPILERSETUP=true
+EXEEXT=exe
 
 ifdef MAKEDEBUG
 $(info Setting compiler for base CYGWIN configuration)

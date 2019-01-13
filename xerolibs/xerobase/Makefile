@@ -24,6 +24,7 @@ SOURCES = \
 	tankdrive/TankDriveAngleCharAction.cpp\
 	tankdrive/TankDrivePowerAction.cpp\
 	tankdrive/TankDriveTimedPowerAction.cpp\
+	tankdrive/TankDriveFollowPathAction.cpp\
 	lifter/Lifter.cpp\
 	lifter/LifterCalibrateAction.cpp\
 	lifter/LifterGoToHeightAction.cpp\
@@ -35,8 +36,12 @@ NEED_WPIUTIL=true
 NEED_WPILIB=true
 NEED_NAVX=true
 NEED_CTRE=true
+NEED_NETWORKTABLES=true
+NEED_XEROMATH=true
+NEED_XEROMISC=true
 
-LOCAL_CFLAGS = -I. -I../xeromath -I../xeromisc
+LOCAL_CFLAGS = -I.
 
-include ../makefiles/buildlib.mk
+
+include $(TOPDIR)/makefiles/buildlib.mk
 

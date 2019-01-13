@@ -2,6 +2,7 @@
 #include "Phaser.h"
 
 #ifdef SIMULATOR
+#include <PhaserSimulator.h>
 xero::sim::phaser::PhaserSimulator sim("phaser/sim.dat") ;
 #endif
 

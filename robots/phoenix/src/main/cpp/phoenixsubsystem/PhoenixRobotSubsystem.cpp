@@ -31,9 +31,6 @@ namespace xero {
             addChild(lifting_collector_) ;
             lifting_collector_->createNamedSequences() ;
 
-            follower_ = std::make_shared<xero::phaser::LineFollower>(robot, MSG_GROUP_FOLLOWER) ;
-            addChild(follower_) ;
-
             if (!settings.isDefined("hw:tankdrive:disable")) {
 
                 while (true) {
