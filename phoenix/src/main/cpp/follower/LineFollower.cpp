@@ -38,12 +38,13 @@ namespace xero {
             middle_state_ = middle_->Get() ;
             right_state_ = right_->Get() ;
 
+#ifdef NOTYET
             std::cout << "Line Follower State: " ;
             std::cout << " " << (left_state_ ? "on" : "off") ;
             std::cout << " " << (middle_state_ ? "on" : "off") ;
             std::cout << " " << (right_state_ ? "on" : "off") ; 
-            std::cout << std::endl ;  
-
+            std::cout << std::endl ;
+#endif
             MessageLogger &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, msg_id_) ;
             logger << "Line Follower State:";

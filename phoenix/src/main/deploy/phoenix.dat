@@ -192,7 +192,17 @@ tankdrive:angle_action:d                  0.0
 tankdrive:angle_action:f                  0.00126
 tankdrive:angle_action:max                1.0
 tankdrive:angle_action:min                -1.0
-tankdrive:angle_action:imax               6.0
+tankdrive:angle_action:imax               6.
+
+tankdrive:follower:left:kp              0.0
+tankdrive:follower:left:kv              0.0
+tankdrive:follower:left:ka              0.0
+tankdrive:follower:left:kd              0.0
+
+tankdrive:follower:right:kp              0.0
+tankdrive:follower:right:kv              0.0
+tankdrive:follower:right:ka              0.0
+tankdrive:follower:right:kd              0.0
 
 #
 # Wings subsystem constants
