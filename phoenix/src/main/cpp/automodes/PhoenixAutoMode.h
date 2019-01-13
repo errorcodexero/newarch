@@ -18,8 +18,12 @@ namespace xero {
             void lift(const std::string &name, bool block) ;
             void eject(const std::string &name) ;
             void driveAndCollect(const std::string &name) ;
+            void followPath(const std::string &name) ;
 
-        private:
+            Phoenix &getRobot() {
+                return robot_ ;
+            }
+
             void addAction(xero::base::SubsystemPtr sub, xero::base::ActionPtr act, bool block = true) ;
             void addAction(xero::base::ActionPtr act) ;
 

@@ -12,9 +12,11 @@ using namespace xero::base ;
 namespace xero {
     namespace phoenix {
         PhoenixOISubsystem::PhoenixOISubsystem(Robot &robot) : OISubsystem(robot, "phoenixoi") {
+#ifdef NOTYET
             int oi = robot.getSettingsParser().getInteger("hw:driverstation:hid:oi") ;
             auto oidev = std::make_shared<PhoenixOIDevice>(*this, oi) ;
             addHIDDevice(oidev) ;
+#endif
         }
 
         PhoenixOISubsystem::~PhoenixOISubsystem() {

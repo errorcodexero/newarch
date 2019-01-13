@@ -3,6 +3,7 @@
 #include "liftingcollector/LiftingCollector.h"
 #include "tankdrive/TankDriveDistanceAction.h"
 #include "tankdrive/TankDriveAngleAction.h"
+#include "tankdrive/TankDriveFollowPathAction.h"
 #include "phlifter/LifterGoToHeightAction.h"
 #include "phlifter/LifterCalibrateAction.h"
 #include "collector/CollectorEjectCubeAction.h"
@@ -49,6 +50,12 @@ namespace xero {
             auto db = robot_.getPhoenixRobotSubsystem()->getTankDrive() ;
             auto act = std::make_shared<TankDriveDistanceAction>(*db, name) ;
             addAction(db, act) ;
+        }
+
+        void PhoenixAutoMode::followPath(const std::string &name) {
+            auto db = robot_.getPhoenixRobotSubsystem()->getTankDrive() ;
+            auto act = std::make_shared<TankDriveFollowPathAction>(*db, name) ;
+            addAction(db, act) ;            
         }
 
         void PhoenixAutoMode::rotate(const std::string &name) {
