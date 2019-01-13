@@ -1,9 +1,6 @@
 #pragma once
 
 #include "SubsystemModel.h"
-#include <TalonSRX.h>
-#include <Encoder.h>
-#include <AHRS.h>
 #include <vector>
 
 namespace xero

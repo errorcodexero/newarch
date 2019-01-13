@@ -14,7 +14,7 @@ ifeq ($(NEED_WPIUTIL),true)
 ifeq ($(PLATFORM),GOPIGO)
 endif
 
-ifeq ($(PLATFORM),CYGWIN)
+ifeq ($(PLATFORM),SIMULATOR)
 CXXFLAGS += -I$(TOPDIR)/simulator/wpiutilsim/include
 endif
 
@@ -33,7 +33,7 @@ ifeq ($(PLATFORM),GOPIGO)
 CXXFLAGS += -I$(TOPDIR)/gopigo3/gopigo3frc
 endif
 
-ifeq ($(PLATFORM),CYGWIN)
+ifeq ($(PLATFORM),SIMULATOR)
 CXXFLAGS += -I$(TOPDIR)/simulator/wpilibsim
 endif
 
@@ -50,7 +50,7 @@ ifeq ($(PLATFORM),GOPIGO)
 CXXFLAGS += -I$(TOPDIR)/gopigo3/gopigo3navx
 endif
 
-ifeq ($(PLATFORM),CYGWIN)
+ifeq ($(PLATFORM),SIMULATOR)
 CXXFLAGS += -I$(TOPDIR)/simulator/navxsim
 endif
 
@@ -69,7 +69,7 @@ ifeq ($(PLATFORM),GOPIGO)
 #
 endif
 
-ifeq ($(PLATFORM),CYGWIN)
+ifeq ($(PLATFORM),SIMULATOR)
 CXXFLAGS += -I$(TOPDIR)/simulator/ctresim
 endif
 

@@ -1,12 +1,8 @@
 #
-# include the compiler file
+# Check that the CONFIG and PLATFORM variable is set correctly and
+# perform other misc initialization
 #
-include $(TOPDIR)/makefiles/compiler.mk
-
-#
-# Check that the CONFIG variable is set correctly
-#
-include $(TOPDIR)/makefiles/config.mk
+include $(TOPDIR)/makefiles/init.mk
 
 #
 # Define the build directory and associated paths
@@ -14,13 +10,32 @@ include $(TOPDIR)/makefiles/config.mk
 include $(TOPDIR)/makefiles/paths.mk
 
 #
+# include the compiler file (initially defines compiler/linker flags)
+#
+include $(TOPDIR)/makefiles/compiler.mk
+
+#
+# include the platform file (adds to compiler/linker flags)
+#
+include $(TOPDIR)/makefiles/platform.mk
+
+#
+# include the macros needed to build
+#
+include $(TOPDIR)/makefiles/buildmacros.mk
+
+#
+# Add on any standard library support, WPILIB, WPIUTIL, CTRE, NAVX (adds to compiler/linker flags)
+#
+include $(TOPDIR)/makefiles/addons.mk
+
+#
 # Define the build target file
 #
 TARGETFILE=$(BUILDTARGETDIR)/$(TARGET).a
 
 #
-# Create the list of object files, with their full paths to
-# the 
+# Create the list of object files needed in the build directory
 #
 OBJECTS = $(addprefix $(BUILDTARGETDIR)/,$(SOURCES:.cpp=.o))
 
@@ -33,20 +48,16 @@ pre:
 	@echo Building library target $(TARGET).a
 
 mkdirs:
-	@mkdir -p $(BUILDTARGETDIR)
+	$(QUIET)mkdir -p $(BUILDTARGETDIR)
 
 post:
 	@echo Library target $(TARGET).a is complete
 
 $(TARGETFILE): $(OBJECTS)
-	@$(AR) rvs $@ $(OBJECTS) > /dev/null 2>&1
+	$(QUIET)$(AR) rvs $@ $(OBJECTS) $(CMDTERM)
 
 clean:
-ifdef VERBOSE
-	rm -rf $(OBJECTS) $(TARGET).a
-else
 	@echo Cleaning library target $(TARGET).a
-	@rm -rf $(OBJECTS) $(TARGET).a
-endif
+	$(QUIET)rm -rf $(OBJECTS) $(TARGET).a
 
 $(foreach srcfile,$(SOURCES),$(eval $(call BUILD_C_FILE,$(srcfile),$(BUILDTARGETDIR)/$(srcfile:%.cpp=%.o))))

@@ -19,8 +19,13 @@ namespace frc {
             return which_ ;
         }
 
+        void SetInverted(bool b) {
+            inverted_ = b ;
+        }
+
     private:
         int which_ ;
+        bool inverted_ ;
         double value_ ;
     } ;
 }

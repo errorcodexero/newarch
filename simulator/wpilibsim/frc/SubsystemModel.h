@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TalonSRX.h"
+#include <ctre/phoenix/motorcontrol/can/TalonSRX.h>
 #include "Encoder.h"
 #include "DigitalInput.h"
 #include "DriverStation.h"

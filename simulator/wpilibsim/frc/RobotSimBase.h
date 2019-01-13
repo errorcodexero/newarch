@@ -3,7 +3,7 @@
 #include "DriverStation.h"
 #include "Encoder.h"
 #include "Solenoid.h"
-#include "TalonSRX.h"
+#include <ctre/phoenix/motorcontrol/can/TalonSRX.h>
 #include "VictorSP.h"
 #include "AHRS.h"
 #include "Timer.h"

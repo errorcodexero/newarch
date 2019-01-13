@@ -69,43 +69,11 @@ SOURCES = \
 	./cpp/WebSocketServer.cpp\
 	./libuv/fs-poll.cpp\
 	./libuv/inet.cpp\
-	./libuv/threadpool.cpp\
-	./libuv/unix/async.cpp\
-	./libuv/unix/core.cpp\
-	./libuv/unix/dl.cpp\
-	./libuv/unix/fs.cpp\
-	./libuv/unix/getaddrinfo.cpp\
-	./libuv/unix/getnameinfo.cpp\
-	./libuv/unix/linux-core.cpp\
-	./libuv/unix/linux-inotify.cpp\
-	./libuv/unix/linux-syscalls.cpp\
-	./libuv/unix/loop-watcher.cpp\
-	./libuv/unix/loop.cpp\
-	./libuv/unix/no-fsevents.cpp\
-	./libuv/unix/no-proctitle.cpp\
-	./libuv/unix/pipe.cpp\
-	./libuv/unix/poll.cpp\
-	./libuv/unix/posix-hrtime.cpp\
-	./libuv/unix/process.cpp\
-	./libuv/unix/procfs-exepath.cpp\
-	./libuv/unix/proctitle.cpp\
-	./libuv/unix/pthread-fixes.cpp\
-	./libuv/unix/signal.cpp\
-	./libuv/unix/stream.cpp\
-	./libuv/unix/sysinfo-loadavg.cpp\
-	./libuv/unix/sysinfo-memory.cpp\
-	./libuv/unix/tcp.cpp\
-	./libuv/unix/thread.cpp\
-	./libuv/unix/timer.cpp\
-	./libuv/unix/tty.cpp\
-	./libuv/unix/udp.cpp\
-	./libuv/uv-common.cpp\
-	./libuv/uv-data-getter-setters.cpp\
-	./libuv/version.cpp
+	./libuv/threadpool.cpp
 
-TARGET=wpiutil
 
-LOCAL_CFLAGS= -Iinclude -Ilibuv
+TARGET=wpiutilsim
 
-include ../makefiles/gopilib.mk
+LOCAL_CFLAGS += -Iinclude -Ilibuv
 
+include $(TOPDIR)/makefiles/buildlib.mk
