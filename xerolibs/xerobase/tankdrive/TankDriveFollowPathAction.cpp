@@ -10,7 +10,7 @@ namespace xero {
         TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name) : TankDriveAction(db)  {
             path_ = db.getRobot().getPathManager()->getPath(name) ;
             assert(path_ != nullptr) ;
-            //vapd
+            
             left_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), "tankdrive:follower:left:kv", 
                                 "tankdrive:follower:left:ka", "tankdrive:follower:left:kp", "tankdrive:follower:left:kd") ;
             right_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), "tankdrive:follower:right:kv", 
@@ -23,7 +23,25 @@ namespace xero {
         void TankDriveFollowPathAction::start() {
             left_start_ = path_->getLeftStartPos() ;
             right_start_ = path_->getRightStartPos() ;
-            index_ = 0 ;            
+            index_ = 0 ;         
+            start_time_ = getTankDrive().getRobot().getTime() ;   
+
+            auto &logger = getTankDrive().getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
+            logger << "time" ;
+            logger << ",ltpos" ;
+            logger << ",lapos" ;
+            logger << ",ltvel" ;
+            logger << ",lavel";
+            logger << ",ltaccel" ;
+            logger << ",lout" ;
+            logger << ",rtpos" ;
+            logger << ",rapos" ;
+            logger << ",rtvel" ;
+            logger << ",ravel" ;
+            logger << ",rtaccel" ;
+            logger << ",rout" ;
+            logger.endMessage() ;            
         }
 
 
@@ -31,6 +49,8 @@ namespace xero {
             index_++ ;
 
             if (index_ < path_->size()) {
+                auto &logger = getTankDrive().getRobot().getMessageLogger() ;
+
                 double dt = getTankDrive().getRobot().getDeltaTime() ;
                 const XeroPathSegment &lseg = path_->getLeft(index_) ;
                 const XeroPathSegment &rseg = path_->getRight(index_) ;
@@ -40,6 +60,23 @@ namespace xero {
                                         right_start_ + getTankDrive().getRightDistance(), dt) ;
 
                 getTankDrive().setMotorsToPercents(lout, rout) ;                        
+
+
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
+                logger << getTankDrive().getRobot().getTime() - start_time_ ;
+                logger << "," << lseg.getPOS() ;
+                logger << "," << left_start_ + getTankDrive().getLeftDistance() ;
+                logger << "," << lseg.getVelocity() ;
+                logger << "," << getTankDrive().getLeftVelocity() ;
+                logger << "," << lseg.getAcceleration() ;
+                logger << "," << lout ;
+                logger << "," << rseg.getPOS() ;
+                logger << "," << right_start_ + getTankDrive().getRightDistance() ;                
+                logger << "," << lseg.getVelocity() ;
+                logger << "," << getTankDrive().getRightVelocity() ;                
+                logger << "," << lseg.getAcceleration() ;                
+                logger << "," << rout ;
+                logger.endMessage() ;
             }
             else {
                 getTankDrive().setMotorsToPercents(0.0, 0.0) ;

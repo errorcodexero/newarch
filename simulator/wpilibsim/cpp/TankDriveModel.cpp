@@ -226,11 +226,11 @@ namespace xero {
         }
 
         void TankDriveModel::addTalonSRX(TalonSRX *motor) {
-            if (motor->GetDeviceID() == 1 || motor->GetDeviceID() == 2) {
+            if (motor->GetDeviceID() == 1 || motor->GetDeviceID() == 2 || motor->GetDeviceID() == 3) {
                 left_motors_.push_back(motor) ;
                 motor->addModel(this) ;
             }
-            else if (motor->GetDeviceID() == 3 || motor->GetDeviceID() == 4) {
+            else if (motor->GetDeviceID() == 4 || motor->GetDeviceID() == 5 || motor->GetDeviceID() == 6) {
                 right_motors_.push_back(motor) ;
                 motor->addModel(this) ;
             }

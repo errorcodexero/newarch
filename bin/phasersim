@@ -16,7 +16,7 @@ extra=""
 # Set the starting position
 #
 if [ $1 = "C" ]; then
-    pos=17.0,115.0
+    pos=17.0,160.0
 fi
 
 if [ $1 = "L" ]; then

@@ -74,11 +74,19 @@ namespace xero {
             }
 
             //
+            // Check for a solenoid for a shifter
+            //
+            if (settings.isDefined("hw:tankdrive:shifter")) {
+                int sol = settings.getInteger("hw:tankdrive:shifter") ;
+                tank->setGearShifter(sol) ;
+            }
+
+            //
             // Depending on how the robot is wired, these reverse the motor and/or the
             // encoders such that a positive power on the robot moves the robot forward, and
             // forward motion on the robot results in positive encoder values.
             //
-            if (isDefinedAndTrue("hw:tankdrive:invert:motors"))
+            if (isDefinedAndTrue("hw:tankdrive:invert:motors:left"))
                 tank->invertLeftMotors() ;
 
             if (isDefinedAndTrue("hw:tankdrive:invert:motors:right"))
@@ -88,7 +96,7 @@ namespace xero {
                 tank->invertLeftEncoder() ;
 
             if (isDefinedAndTrue("hw:tankdrive:invert:encoders:right"))
-                tank->invertRightEncoder() ;                
+                tank->invertRightEncoder() ;
 
             db_ = tank ;
             addChild(db_) ;

@@ -19,6 +19,8 @@ hw:tankdrive:leftencoder:2          1
 hw:tankdrive:rightencoder:1         2
 hw:tankdrive:rightencoder:2         3
 hw:tankdrive:shifter                0
+hw:tankdrive:invert:motors:left     true
+hw:tankdrive:invert:encoders:left   true
 
 #
 # The definiton of the OI
@@ -31,15 +33,15 @@ hw:driverstation:hid:oi             2
 #
 tankdrive:inches_per_tick           0.02
 
-tankdrive:follower:left:ka          0.0
-tankdrive:follower:left:kv          0.0
+tankdrive:follower:left:ka          0.001153846
+tankdrive:follower:left:kv          0.057692286
 tankdrive:follower:left:kp          0.0
 tankdrive:follower:left:kd          0.0
 
-tankdrive:follower:right:ka          0.0
-tankdrive:follower:right:kv          0.0
-tankdrive:follower:right:kp          0.0
-tankdrive:follower:right:kd          0.0
+tankdrive:follower:right:ka         0.001153846
+tankdrive:follower:right:kv         0.057692286
+tankdrive:follower:right:kp         0.0
+tankdrive:follower:right:kd         0.0
 
 #
 # Variables for the driver gamepad
