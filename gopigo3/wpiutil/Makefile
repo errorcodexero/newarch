@@ -1,0 +1,112 @@
+TOPDIR=../..
+
+SOURCES = \
+	./cpp/Base64.cpp\
+	./cpp/EventLoopRunner.cpp\
+	./cpp/future.cpp\
+	./cpp/hostname.cpp\
+	./cpp/HttpParser.cpp\
+	./cpp/HttpServerConnection.cpp\
+	./cpp/HttpUtil.cpp\
+	./cpp/http_parser.cpp\
+	./cpp/json.cpp\
+	./cpp/json_binary_reader.cpp\
+	./cpp/json_binary_writer.cpp\
+	./cpp/json_parser.cpp\
+	./cpp/json_pointer.cpp\
+	./cpp/json_serializer.cpp\
+	./cpp/leb128.cpp\
+	./cpp/llvm/ConvertUTF.cpp\
+	./cpp/llvm/ConvertUTFWrapper.cpp\
+	./cpp/llvm/ErrorHandling.cpp\
+	./cpp/llvm/Hashing.cpp\
+	./cpp/llvm/NativeFormatting.cpp\
+	./cpp/llvm/Path.cpp\
+	./cpp/llvm/raw_ostream.cpp\
+	./cpp/llvm/raw_os_ostream.cpp\
+	./cpp/llvm/SmallPtrSet.cpp\
+	./cpp/llvm/SmallVector.cpp\
+	./cpp/llvm/StringExtras.cpp\
+	./cpp/llvm/StringMap.cpp\
+	./cpp/llvm/StringRef.cpp\
+	./cpp/llvm/Twine.cpp\
+	./cpp/memory.cpp\
+	./cpp/raw_istream.cpp\
+	./cpp/raw_socket_istream.cpp\
+	./cpp/raw_socket_ostream.cpp\
+	./cpp/raw_uv_ostream.cpp\
+	./cpp/SafeThread.cpp\
+	./cpp/sha1.cpp\
+	./cpp/SocketError.cpp\
+	./cpp/TCPAcceptor.cpp\
+	./cpp/TCPConnector.cpp\
+	./cpp/TCPConnector_parallel.cpp\
+	./cpp/TCPStream.cpp\
+	./cpp/timestamp.cpp\
+	./cpp/UDPClient.cpp\
+	./cpp/uv/Async.cpp\
+	./cpp/uv/Check.cpp\
+	./cpp/uv/FsEvent.cpp\
+	./cpp/uv/GetAddrInfo.cpp\
+	./cpp/uv/GetNameInfo.cpp\
+	./cpp/uv/Handle.cpp\
+	./cpp/uv/Idle.cpp\
+	./cpp/uv/Loop.cpp\
+	./cpp/uv/NameToAddr.cpp\
+	./cpp/uv/NetworkStream.cpp\
+	./cpp/uv/Pipe.cpp\
+	./cpp/uv/Poll.cpp\
+	./cpp/uv/Prepare.cpp\
+	./cpp/uv/Process.cpp\
+	./cpp/uv/Signal.cpp\
+	./cpp/uv/Stream.cpp\
+	./cpp/uv/Tcp.cpp\
+	./cpp/uv/Timer.cpp\
+	./cpp/uv/Tty.cpp\
+	./cpp/uv/Udp.cpp\
+	./cpp/uv/Work.cpp\
+	./cpp/WebSocket.cpp\
+	./cpp/WebSocketServer.cpp\
+	./libuv/fs-poll.cpp\
+	./libuv/inet.cpp\
+	./libuv/threadpool.cpp\
+	./libuv/unix/async.cpp\
+	./libuv/unix/core.cpp\
+	./libuv/unix/dl.cpp\
+	./libuv/unix/fs.cpp\
+	./libuv/unix/getaddrinfo.cpp\
+	./libuv/unix/getnameinfo.cpp\
+	./libuv/unix/linux-core.cpp\
+	./libuv/unix/linux-inotify.cpp\
+	./libuv/unix/linux-syscalls.cpp\
+	./libuv/unix/loop-watcher.cpp\
+	./libuv/unix/loop.cpp\
+	./libuv/unix/no-fsevents.cpp\
+	./libuv/unix/no-proctitle.cpp\
+	./libuv/unix/pipe.cpp\
+	./libuv/unix/poll.cpp\
+	./libuv/unix/posix-hrtime.cpp\
+	./libuv/unix/process.cpp\
+	./libuv/unix/procfs-exepath.cpp\
+	./libuv/unix/proctitle.cpp\
+	./libuv/unix/pthread-fixes.cpp\
+	./libuv/unix/signal.cpp\
+	./libuv/unix/stream.cpp\
+	./libuv/unix/sysinfo-loadavg.cpp\
+	./libuv/unix/sysinfo-memory.cpp\
+	./libuv/unix/tcp.cpp\
+	./libuv/unix/thread.cpp\
+	./libuv/unix/timer.cpp\
+	./libuv/unix/tty.cpp\
+	./libuv/unix/udp.cpp\
+	./libuv/uv-common.cpp\
+	./libuv/uv-data-getter-setters.cpp\
+	./libuv/version.cpp
+
+TARGET=wpiutil
+
+LOCAL_CFLAGS= -Iinclude -Ilibuv
+
+include $(TOPDIR)/makefiles/buildlib.mk
+
+
