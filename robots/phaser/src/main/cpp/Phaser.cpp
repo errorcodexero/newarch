@@ -34,6 +34,11 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_ALL) ;         
             //
         }
+
+        void Phaser::loadPaths() {
+            auto paths = getPathManager() ;
+            paths->loadPath("HabCenterCargoCenterLeft") ;            
+        }
         
         void Phaser::RobotHardwareInit() {
             auto sub_p = std::make_shared<PhaserRobotSubsystem>(*this) ;

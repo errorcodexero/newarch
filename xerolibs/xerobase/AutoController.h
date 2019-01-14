@@ -50,6 +50,16 @@ namespace xero {
                 return ret ;
             }
 
+            virtual std::string getAutoModeDesc() {
+                std::string ret = "None" ;
+
+                if (actionptr_ != nullptr)
+                    ret = actionptr_->getDesc() ;
+
+                return ret ;
+            }
+
+
             /// \brief update the automode as the selector has changed
             /// \param sel the automode selector value
             /// \param gamedata the game specific data from the driver station

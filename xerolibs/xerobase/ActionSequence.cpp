@@ -9,6 +9,12 @@ namespace xero
 namespace base
 {
 
+ActionSequence::ActionSequence(xero::misc::MessageLogger &logger, const std::string &name, const std::string &desc) : logger_(logger) , name_(name), desc_(desc)
+{
+    isDone_ = false;
+    group_ = MSG_GROUP_ACTIONS ;
+}
+
 ActionSequence::ActionSequence(xero::misc::MessageLogger &logger, const std::string &name) : logger_(logger) , name_(name)
 {
     isDone_ = false;

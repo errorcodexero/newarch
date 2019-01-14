@@ -18,6 +18,8 @@ namespace xero {
                 return std::dynamic_pointer_cast<PhaserRobotSubsystem>(getRobotSubsystem()) ;
             }
 
+            virtual void loadPaths() ;
+
         protected:
 
             /// \brief called to initialize the robot, basically creating the subsystems

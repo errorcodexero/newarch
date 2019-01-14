@@ -52,11 +52,6 @@ namespace xero {
             addAction(db, act) ;
         }
 
-        void PhoenixAutoMode::followPath(const std::string &name) {
-            auto db = robot_.getPhoenixRobotSubsystem()->getTankDrive() ;
-            auto act = std::make_shared<TankDriveFollowPathAction>(*db, name) ;
-            addAction(db, act) ;            
-        }
 
         void PhoenixAutoMode::rotate(const std::string &name) {
             auto db = robot_.getPhoenixRobotSubsystem()->getTankDrive() ;

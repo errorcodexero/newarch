@@ -20,7 +20,6 @@ namespace xero {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         Robot::Robot(const std::string &name, double looptime) {
-            frc::SmartDashboard::PutString("State", "Creation");
             name_ = name ;
 
             target_loop_time_ = looptime ;
@@ -261,6 +260,7 @@ namespace xero {
             std::string str = std::to_string(getAutoModelSelection()) ;
             frc::SmartDashboard::PutString("AutoModeNumber", str) ;
             frc::SmartDashboard::PutString("AutoModeName", auto_controller_->getAutoModeName()) ;
+            frc::SmartDashboard::PutString("AutoModeDesc", auto_controller_->getAutoModeDesc()) ;
         }
 
 
@@ -389,9 +389,7 @@ namespace xero {
                 if (sel != automode_ || msg != gamedata_) {
                     automode_ = sel ;
                     gamedata_ = msg ;
-                    frc::SmartDashboard::PutBoolean("ready", false);
                     auto_controller_->updateAutoMode(sel, gamedata_);
-                    frc::SmartDashboard::PutBoolean("ready", true);
                     displayAutoModeState() ;
                 }
             }           

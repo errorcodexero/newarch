@@ -12,6 +12,9 @@ namespace xero {
             virtual ~PhaserAutoModeController() ;
 
             virtual void updateAutoMode(int sel, const std::string &gamedata) ;
+
+        private:
+            xero::base::ActionSequencePtr createHabTwoHatchLeftLS() ;
         } ;
     }
 }

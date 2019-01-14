@@ -23,7 +23,13 @@ namespace xero {
             /// \brief create an empty action sequence 
             /// \param logger the message logger action
             /// \param name the human readable name of this sequence
-            ActionSequence(xero::misc::MessageLogger &logger, const std::string &name);
+            /// \param desc a description of this automode
+            ActionSequence(xero::misc::MessageLogger &logger, const std::string &name, const std::string &desc) ;
+
+            /// \brief create an empty action sequence 
+            /// \param logger the message logger action
+            /// \param name the human readable name of this sequence
+            ActionSequence(xero::misc::MessageLogger &logger, const std::string &name) ;
 
             /// \brief start this sequence of actions
             void start();
@@ -69,6 +75,10 @@ namespace xero {
                 return name_ ;
             }
 
+            const std::string &getDesc() const {
+                return desc_ ;
+            }
+
             /// \brief clear the list of actions
             void clear() {
                 actionSequence_.clear() ;
@@ -101,6 +111,8 @@ namespace xero {
 
             //names the overall objective of the actions in the sequence
             std::string name_;
+
+            std::string desc_ ;
         };
 
         /// \brief convience definition for a shared pointer to an action sequence
