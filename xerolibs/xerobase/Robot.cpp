@@ -278,8 +278,6 @@ namespace xero {
                 oi_subsystem_->computeState() ;         
                 sel = oi_subsystem_->getAutoModeSelector() ;
             }
-
-            sel = 2 ;
             return sel ;
         }       
 
