@@ -4,7 +4,6 @@ SOURCES = \
 	./src/main/cpp/automodes/CenterSwitchLeft.cpp\
 	./src/main/cpp/automodes/CenterSwitchRight.cpp\
 	./src/main/cpp/automodes/CrossTheLine.cpp\
-	./src/main/cpp/automodes/FollowPathAutoMode.cpp\
 	./src/main/cpp/automodes/PhoenixAutoController.cpp\
 	./src/main/cpp/automodes/PhoenixAutoMode.cpp\
 	./src/main/cpp/collector/CollectCubeAction.cpp\

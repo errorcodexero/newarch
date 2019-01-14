@@ -14,14 +14,8 @@ namespace xero {
         }
 
         void PhaserAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
-            Robot &robot = getRobot() ;
-            Phaser &Phaser = dynamic_cast<xero::phaser::Phaser &>(robot) ;
             ActionSequencePtr mode = nullptr ;
-
-
             mode = createHabTwoHatchLeftLS() ;            
-
-
             setAction(mode) ;
         }
 

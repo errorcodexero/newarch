@@ -45,8 +45,7 @@ def includeDesktopSupport = false
 
 model {
     components {
-        
-        frcUserProgram(NativeExecutableSpec) {
+        frcUserPhoenixProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
 			binaries.all {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
@@ -75,7 +74,7 @@ model {
             wpi.deps.vendor.cpp(it)
         }  
 
-        frcUserPhaserProgram(NativeExecutableSpec) {
+        frcUserProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
 			binaries.all {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"

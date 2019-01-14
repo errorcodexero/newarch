@@ -8,6 +8,10 @@ xero::sim::phoenix::PhoenixSimulator sim("phoenix/sim.dat") ;
 
 int main(int ac, char **av)
 {
+#ifdef SIMULATOR
+    frc::StartRobot<xero::phoenix::Phoenix>(ac, av) ;
+#else
     frc::StartRobot<xero::phoenix::Phoenix>() ;
+#endif
     return 0 ;
 }

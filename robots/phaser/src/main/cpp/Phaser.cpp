@@ -33,6 +33,8 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_OI) ;
             // logger.enableSubsystem(MSG_GROUP_ALL) ;         
             //
+
+            logger.enableSubsystem(MSG_GROUP_ACTIONS);            
         }
 
         void Phaser::loadPaths() {

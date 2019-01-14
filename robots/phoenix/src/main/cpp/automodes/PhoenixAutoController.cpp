@@ -2,7 +2,6 @@
 #include "CrossTheLine.h"
 #include "CenterSwitchLeft.h"
 #include "CenterSwitchRight.h"
-#include "FollowPathAutoMode.h"
 #include <frc/DriverStation.h>
 
 using namespace xero::base ;
@@ -36,10 +35,6 @@ namespace xero {
                     mode = std::make_shared<CenterSwitchLeft>(phoenix) ;
                 else
                     mode = std::make_shared<CenterSwitchRight>(phoenix) ;
-                break ;
-
-            case 2:
-                mode = std::make_shared<FollowPathAutoMode>(phoenix) ;
                 break ;
             }
 
