@@ -31,15 +31,15 @@ hw:driverstation:hid:oi             2
 #
 # Variables for the tankdrive subsystem code
 #
-tankdrive:inches_per_tick           0.02
+tankdrive:inches_per_tick           0.078539816
 
-tankdrive:follower:left:ka          0.001153846
-tankdrive:follower:left:kv          0.057692286
+tankdrive:follower:left:ka          0.000294769
+tankdrive:follower:left:kv          0.014738445
 tankdrive:follower:left:kp          0.0
 tankdrive:follower:left:kd          0.0
 
-tankdrive:follower:right:ka         0.001153846
-tankdrive:follower:right:kv         0.057692286
+tankdrive:follower:right:ka         0.000294769
+tankdrive:follower:right:kv         0.014738445
 tankdrive:follower:right:kp         0.0
 tankdrive:follower:right:kd         0.0
 

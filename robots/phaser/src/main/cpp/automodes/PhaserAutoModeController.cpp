@@ -39,7 +39,7 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
 
-            act = std::make_shared<TankDriveCharAction>(*db, 4.0, 0.7) ;
+            act = std::make_shared<TankDriveCharAction>(*db, 4.0, 0.5) ;
             mode->pushSubActionPair(db, act) ;
 
             return mode ;         
