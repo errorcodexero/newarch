@@ -1,0 +1,23 @@
+CargoShipCenterLeftHatch:
+
+Start
+X: 64
+Y: 162
+
+End
+X: 375.673244
+Y: 243.885685
+
+Expected
+X: 203.25
+Y: 139.25
+
+
+Path Start
+X: 75:885657
+Y: 162.513428
+
+Path End
+X: 213.368341
+Y: 151.418353
+

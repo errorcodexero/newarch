@@ -23,7 +23,7 @@ $(info BASENAME $(BASENAME))
 $(info SIMNAME $(SIMNAME))
 endif
 
-CPPFLAGS = -I../$(BASENAME) -I$(GTESTINCDIR) -std=gnu++11
+CPPFLAGS = -I../$(BASENAME) -I$(GTESTINCDIR) -std=gnu++11 $(LOCALFLAGS)
 XEROMISCLIBS=../build/libs/$(SIMNAME)/static/$(SIMNAME).lib
 
 all: $(MYDIR)

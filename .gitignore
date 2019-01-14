@@ -24,3 +24,6 @@ gopigo3/gopigo3xero/GoPiGo3Xero
 html
 rtf
 *.stackdump
+makebuild
+deploy
+logs
