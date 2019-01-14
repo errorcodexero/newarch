@@ -2,7 +2,8 @@ TOPDIR=../..
 
 SOURCES = \
 	PhaserScreenVisualizer.cpp\
-	PhaserSimulator.cpp
+	PhaserSimulator.cpp\
+	OIModel.cpp
 
 TARGET=phasersim
 

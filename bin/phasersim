@@ -34,7 +34,7 @@ if [ $2 = "auto" ]; then
     teleoptime=0.0
     testtime=0.0
     potvalue=${autovalues[$3]}
-    extra="--simprop autovalue=$potvalue --simprop gamedata=$4"
+    extra="--simprop autovalue=$potvalue"
 fi
 
 if [ $2 = "teleop" ]; then
@@ -51,5 +51,4 @@ if [ $2 = "test" ]; then
     testtime=300.0
 fi    
 
-echo --simfile logs/SIM --robotfile logs/ROBOT --test $testtime --start 0 --auto $autotime --oper $teleoptime --simscreen --simprop pos=$pos $extra
 makebuild/SIMULATOR/Debug/phaser/phaser --simfile logs/SIM --robotfile logs/ROBOT --test $testtime --start 0 --auto $autotime --oper $teleoptime --simscreen --simprop pos=$pos $extra

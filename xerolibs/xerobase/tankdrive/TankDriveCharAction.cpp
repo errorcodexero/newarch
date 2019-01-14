@@ -31,7 +31,10 @@ namespace xero {
                 getTankDrive().lowGear() ;
                 
             getTankDrive().setMotorsToPercents(voltage_, voltage_) ;
-            std::cout << "Time,Distance,Velocity,Acceleration,TicksL,TicksR" << std::endl ;
+            auto &logger = getTankDrive().getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;            
+            logger << "Time,Distance,Velocity,Acceleration,TicksL,TicksR" ;
+            logger.endMessage() ;
         }
 
         void TankDriveCharAction::run() {

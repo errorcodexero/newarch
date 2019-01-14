@@ -1,5 +1,6 @@
 #include "PhaserSimulator.h"
 #include "PhaserScreenVisualizer.h"
+#include "OIModel.h"
 #include <frc/TankDriveModel.h>
 #include <cassert>
 #include <iostream>
@@ -19,6 +20,9 @@ namespace xero
             {
                 tankdrive_ = std::make_shared<TankDriveModel>(*this) ;
                 addModel(tankdrive_) ;
+
+                oi_ = std::make_shared<OIModel>(*this) ;
+                addModel(oi_) ;                
 
                 visualizer_ = false ;
             }

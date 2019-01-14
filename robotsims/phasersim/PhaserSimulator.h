@@ -1,5 +1,5 @@
 #pragma once
-
+#include "OIModel.h"
 #include <frc/RobotSimBase.h>
 #include <cstdint>
 #include <thread>
@@ -41,6 +41,7 @@ namespace xero
             private:
                 static constexpr double PI = 3.14159265359;
                 std::shared_ptr<xero::sim::TankDriveModel> tankdrive_ ;
+                std::shared_ptr<xero::sim::phaser::OIModel> oi_ ;
 
                 bool visualizer_ ;
             };

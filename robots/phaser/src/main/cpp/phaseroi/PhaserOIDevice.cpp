@@ -16,11 +16,8 @@ namespace xero {
         }
         
         void PhaserOIDevice::initialize() {
-        }
-
-        
-        int PhaserOIDevice::getAutoModeSelector() {
-            return -1 ;
+            std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
+            automode_ = mapAxisScale(6, mapping) ;         
         }
 
         void PhaserOIDevice::createActions() {
