@@ -3,11 +3,15 @@
 
 #ifdef SIMULATOR
 #include <PhaserSimulator.h>
-xero::sim::phaser::PhaserSimulator sim("phaser/sim.dat") ;
+xero::sim::phaser::PhaserSimulator sim("robots/phaser/sim.dat") ;
 #endif
 
 int main(int ac, char **av)
 {
+#ifdef SIMULATOR
+    frc::StartRobot<xero::phaser::Phaser>(ac, av) ;
+#else
     frc::StartRobot<xero::phaser::Phaser>() ;
+#endif
     return 0 ;
 }

@@ -6,7 +6,8 @@ SOURCES = \
 	src/main/cpp/Phaser.cpp\
 	src/main/cpp/phaseroi/PhaserOIDevice.cpp\
 	src/main/cpp/phaseroi/PhaserOISubsystem.cpp\
-	src/main/cpp/phaserrobotsubsystem/PhaserRobotSubsystem.cpp
+	src/main/cpp/phaserrobotsubsystem/PhaserRobotSubsystem.cpp\
+	src/main/cpp/automodes/PhaserAutoModeController.cpp
 
 TARGET = phaser
 

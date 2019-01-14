@@ -84,7 +84,7 @@ mkdirs:
 post:
 	@echo Executable file $(TARGET).$(EXEEXT) complete
 
-$(TARGETFILE): $(OBJECTS)
+$(TARGETFILE): $(OBJECTS) $(LINKLIBS)
 	@echo Linking ...
 	$(QUIET)$(CXX) -o $@ $(OBJECTS) -Wl,--start-group $(ALLLIBS) -Wl,--end-group
 
@@ -104,8 +104,18 @@ cleanlibs:
 		make --no-print-directory clean ;\
 	done
 
+ifeq ($(PLATFORM),GOPIGO)
 deploy:
 	scp $(TARGETFILE) pi@$(GOPIGOIP):/home/pi
 	scp -r deploy pi$(GOPIGOIP):/home/pi
+endif
+
+ifeq ($(PLATFORM),SIMULATOR)
+deploy:
+	mkdir -p $(TOPDIR)/deploy/$(TARGET)
+	cp -r src/main/deploy $(TOPDIR)/deploy/$(TARGET)
+endif
+
+.PHONY: deploy
 
 $(foreach srcfile,$(SOURCES),$(eval $(call BUILD_C_FILE,$(srcfile),$(BUILDTARGETDIR)/$(srcfile:%.cpp=%.o))))

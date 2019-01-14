@@ -51,8 +51,8 @@ namespace xero {
 
         void Robot::setupPaths() {
 #if defined(SIMULATOR)
-            log_dir_ = "." ;
-            deploy_dir_ = "./deploy" ;
+            log_dir_ = "./logs/" ;
+            deploy_dir_ = "./deploy/" + name_ + "/deploy" ; 
 #elif defined(GOPIGO)
             log_dir_ = "/home/pi/logs/" ;
             deploy_dir_ = "/home/pi/deploy" ;

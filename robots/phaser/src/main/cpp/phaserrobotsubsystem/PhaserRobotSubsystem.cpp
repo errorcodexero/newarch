@@ -9,8 +9,6 @@ using namespace xero::misc ;
 namespace xero {
     namespace phaser {
         PhaserRobotSubsystem::PhaserRobotSubsystem(Robot &robot) : RobotSubsystem(robot, "phaser") {
-            auto &settings = robot.getSettingsParser() ;
-
             //
             // Add the tank drive.  This is handled by the base class RobotSubsystem since all robots have a drivebase
             // and for now they are all tank drives

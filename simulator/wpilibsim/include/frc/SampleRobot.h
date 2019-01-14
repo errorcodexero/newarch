@@ -8,8 +8,12 @@
 
 namespace frc
 {
-    template <class Robot> int StartRobot() {
+    template <class Robot> int StartRobot(int ac, char **av) {
         static Robot robot;
+
+        while (ac-- > 0)
+            robot.addArg(*av++) ;
+
         robot.StartCompetition();
         return 0;
     }
