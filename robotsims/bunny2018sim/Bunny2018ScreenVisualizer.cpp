@@ -1,8 +1,8 @@
 #include "Bunny2018ScreenVisualizer.h"
-#include "SampleRobot.h"
 #include "Bunny2018Simulator.h"
 #include <xeromath.h>
-#include <DriverStation.h>
+#include <frc/SampleRobot.h>
+#include <frc/DriverStation.h>
 #include <cassert>
 #include <csignal>
 #include <memory>

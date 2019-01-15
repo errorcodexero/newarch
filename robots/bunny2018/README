@@ -1,0 +1,7 @@
+This is the bunny bots robot from 2018.
+
+This robot should build for the RoboRio using gradle and for the simuator
+by typing make PLATFORM=SIMULATOR CONFIG=Debug (or Release).
+
+This robot does not build for the GOPIGO platform.
+

@@ -1,0 +1,7 @@
+This is a full fledge robot code base based on the Error code
+Xero software architecture.  It allows for the development and
+testing of code on the GOPIGO platform.
+
+This robot only builds for the GOPIGO platform by typing ...
+
+make PLATFORM=GOPIGO CONFIG=Debug (or Release)

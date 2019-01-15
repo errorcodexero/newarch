@@ -3,7 +3,7 @@
 
 #ifdef SIMULATOR
 #include <PhoenixSimulator.h>
-xero::sim::phoenix::PhoenixSimulator sim("phoenix/sim.dat") ;
+xero::sim::phoenix::PhoenixSimulator sim("robotsims/phoenix/sim.dat") ;
 #endif
 
 int main(int ac, char **av)

@@ -1,0 +1,6 @@
+This is a very simple GOPIGO3 robot.  It uses the FRC emulation software layer
+but does not rely on the Error Code Xero software architecture at all.
+
+This robot only builds for the GOPIGO platform by typing ...
+
+make PLATFORM=GOPIGO CONFIG=Debug (or Release)

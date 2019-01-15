@@ -1,5 +1,5 @@
 #include "CollectorModel.h"
-#include <TalonSRX.h>
+#include <ctre/Phoenix.h>
 #include <frc/RobotSimBase.h>
 
 using namespace frc ;

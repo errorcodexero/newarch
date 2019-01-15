@@ -1,8 +1,8 @@
 #pragma once
 
-#include <SampleRobot.h>
-#include <Encoder.h>
-#include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
+#include <frc/SampleRobot.h>
+#include <frc/Encoder.h>
+#include <ctre/Phoenix.h>
 
 class MyRobot: public frc::SampleRobot {
 public:
