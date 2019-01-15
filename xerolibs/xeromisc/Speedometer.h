@@ -68,8 +68,8 @@ namespace xero {
                     times_.erase(times_.begin()) ;
 
                     double total = 0.0 ;
-                    for(const auto &t : times_)
-                        total += t ;
+                    for(size_t i = 1 ; i < times_.size() ; i++)
+                        total += times_[i] ;
 
                     distances_.push_back(pos) ;
                     distances_.erase(distances_.begin()) ;

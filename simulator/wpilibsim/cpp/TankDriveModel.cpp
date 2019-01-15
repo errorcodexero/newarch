@@ -29,7 +29,6 @@ namespace xero {
             last_xpos_ = 0.0 ;
             last_ypos_ = 0.0 ;
             speed_ = 0.0 ; 
-            max_speed_ = 0.0 ;
             current_left_rps_ = 0.0 ;
             current_right_rps_ = 0.0 ;
 
@@ -37,12 +36,9 @@ namespace xero {
             diameter_ = simbase.getSettingsParser().getDouble("tankdrive:sim:diameter") ;
             scrub_ = simbase.getSettingsParser().getDouble("tankdrive:sim:scrub") ;
             width_ = simbase.getSettingsParser().getDouble("tankdrive:sim:width") ;
-            max_change_ = simbase.getSettingsParser().getDouble("tankdrive:sim:change_per_second") ;
-
-            high_rps_per_volt_per_time_ = simbase.getSettingsParser().getDouble("tankdrive:sim:high:rps_per_volt_per_second") ;
-            low_rps_per_volt_per_time_ = simbase.getSettingsParser().getDouble("tankdrive:sim:low:rps_per_volt_per_second") ;
             left_right_error_ = simbase.getSettingsParser().getDouble("tankdrive:sim:error_per_side") ;
 
+            calcLowLevelParams(simbase) ;
             lowGear() ;
 
             left_enc_ = nullptr ;
@@ -56,40 +52,60 @@ namespace xero {
         TankDriveModel::~TankDriveModel() {
         }
 
+        void TankDriveModel::calcLowLevelParams(RobotSimBase &simbase) {
+            double maxhighvel = simbase.getSettingsParser().getDouble("tankdrive:high:maxvelocity") ;
+            double maxhighaccel = simbase.getSettingsParser().getDouble("tankdrive:high:maxacceleration") ;
+            double maxlowvel = simbase.getSettingsParser().getDouble("tankdrive:low:maxvelocity") ;
+            double maxlowaccel = simbase.getSettingsParser().getDouble("tankdrive:low:maxacceleration") ;
+
+            double circum = diameter_ * PI ;
+
+            high_rps_per_volt_per_time_ = maxhighvel / circum ;
+            low_rps_per_volt_per_time_ = maxlowvel / circum ;
+            high_max_change_ = maxhighaccel / circum ;
+            low_max_change_ = maxlowaccel / circum ;
+        }
+
         void TankDriveModel::lowGear() {
             if (left_right_error_ > 1e-6) {
                 std::uniform_real_distribution<double> unif(0.95, 1.05) ;
                 std::default_random_engine re ;
                 right_rps_per_volt_per_time_ = low_rps_per_volt_per_time_ * unif(re) ;
                 left_rps_per_volt_per_time_ = low_rps_per_volt_per_time_ * unif(re) ;
+                current_max_change_ = low_max_change_ ;                
             }
             else {
                 right_rps_per_volt_per_time_ = low_rps_per_volt_per_time_  ;
                 left_rps_per_volt_per_time_ = low_rps_per_volt_per_time_ ;
+                current_max_change_ = low_max_change_ ;
             }
 
-            gear_ = false ;
+            gear_ = true ;
         }
 
         void TankDriveModel::highGear() {
             if (left_right_error_ > 1e-6) {
                 std::uniform_real_distribution<double> unif(0.95, 1.05) ;
                 std::default_random_engine re ;
-                right_rps_per_volt_per_time_ = low_rps_per_volt_per_time_ * unif(re) ;
-                left_rps_per_volt_per_time_ = low_rps_per_volt_per_time_ * unif(re) ;
+                right_rps_per_volt_per_time_ = high_rps_per_volt_per_time_ * unif(re) ;
+                left_rps_per_volt_per_time_ = high_rps_per_volt_per_time_ * unif(re) ;
+                current_max_change_ = high_max_change_ ;                
             }
             else {
-                right_rps_per_volt_per_time_ = low_rps_per_volt_per_time_  ;
-                left_rps_per_volt_per_time_ = low_rps_per_volt_per_time_ ;
+                right_rps_per_volt_per_time_ = high_rps_per_volt_per_time_  ;
+                left_rps_per_volt_per_time_ = high_rps_per_volt_per_time_ ;
+                current_max_change_ = high_max_change_ ;                  
             }
 
-            gear_ = true ;
+            gear_ = false ;
         }
 
         std::string TankDriveModel::toString() {
             std::string result("TankDrive: ") ;
 
-            result += "left " + std::to_string(left_) ;
+            result += "leftv " + std::to_string(left_volts_) ;
+            result += ", rightv " + std::to_string(right_volts_) ;
+            result += ", left " + std::to_string(left_) ;
             result += ", right " + std::to_string(right_) ;
             result += ", angle " + std::to_string(angle_) ;
             result += ", leftenc " + std::to_string(left_enc_value_) ;
@@ -134,6 +150,12 @@ namespace xero {
         }
 
         void TankDriveModel::run(double dt) {
+            bool b = true ;
+
+            if (std::fabs(left_volts_) > 0.1 || std::fabs(right_volts_) > 0.1) {
+                b = false ;
+            }
+
             //
             // Calculate the new desired revolutions per second (RPS)
             //
@@ -143,8 +165,8 @@ namespace xero {
             //
             // Now, see how much our RPS can actually changes
             //
-            current_left_rps_ = capValue(current_left_rps_, desired_left_rps, max_change_) ;
-            current_right_rps_ = capValue(current_right_rps_, desired_right_rps, max_change_) ;
+            current_left_rps_ = capValue(current_left_rps_, desired_left_rps, current_max_change_) ;
+            current_right_rps_ = capValue(current_right_rps_, desired_right_rps, current_max_change_) ;
 
             //
             // Now, calculate distance each wheel moved based on the actual RPS
@@ -168,9 +190,6 @@ namespace xero {
 
             double dist = std::sqrt((xpos_ - last_xpos_) * (xpos_ - last_xpos_) + (ypos_ - last_ypos_) * (ypos_ - last_ypos_)) ;
             speed_ = dist / dt ;
-
-            if (speed_ > max_speed_)
-                max_speed_ = speed_ ;
 
             last_xpos_ = xpos_ ;
             last_ypos_ = ypos_ ;
@@ -218,9 +237,9 @@ namespace xero {
                 Solenoid *sol = dynamic_cast<Solenoid *>(obj) ;
                 if (sol->Get() != gear_) {
                     if (sol->Get())
-                        highGear() ;
-                    else
                         lowGear() ;
+                    else
+                        highGear() ;
                 }
             }
         }
@@ -254,7 +273,7 @@ namespace xero {
             navx_->addModel(this) ;
         }
 
-        void TankDriveModel::addSolenid(Solenoid *sol) {
+        void TankDriveModel::addSolenoid(Solenoid *sol) {
             if (sol->SimulatorGetChannel() == 0) {
                 shifter_ = sol ;
                 shifter_->addModel(this) ;

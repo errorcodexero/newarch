@@ -1,35 +1,50 @@
 #
 # This section describes the hardware for the simulated subsystems
 #
-hw:tankdrive:leftmotor:1             1
-hw:tankdrive:leftmotor:2             2
-hw:tankdrive:leftmotor:3             3
-hw:tankdrive:rightmotor:1            4
-hw:tankdrive:rightmotor:2            5
-hw:tankdrive:rightmotor:3            6
-hw:tankdrive:leftencoder:1           0
-hw:tankdrive:leftencoder:2           1
-hw:tankdrive:rightencoder:1          2
-hw:tankdrive:rightencoder:2          3
+
+# Drivebase
+hw:tankdrive:leftmotor:1             1                                  # TalonSRX 1
+hw:tankdrive:leftmotor:2             2                                  # TalonSRX 2
+hw:tankdrive:leftmotor:3             3                                  # TalonSRX 3
+hw:tankdrive:rightmotor:1            4                                  # TalonSRX 4
+hw:tankdrive:rightmotor:2            5                                  # TalonSRX 5
+hw:tankdrive:rightmotor:3            6                                  # TalonSRX 6
+hw:tankdrive:leftencoder:1           0                                  # DIO 0
+hw:tankdrive:leftencoder:2           1                                  # DIO 1
+hw:tankdrive:rightencoder:1          2                                  # DIO 2
+hw:tankdrive:rightencoder:2          3                                  # DIO 3
+
+# Turntable
+hw:turntable:encoder1                4                                  # DIO 4
+hw:turntable:encoder2                5                                  # DIO 5
+hw:turntable:motor                   7                                  # TalonSRX 7
+
+# Lifter
+hw:lifter:encoder1                   6                                  # DIO 6
+hw:lifter:encoder2                   7                                  # DIO 7
+hw:lifter:limit:bottom               8                                  # DIO 8
+hw:lifter:limit:top                  9                                  # DIO 9
+hw:lifter:motor                      8                                  # TalonSRX 8
+
+######################################################################################
+#
+# Tankdrive software model description
+#
+######################################################################################
 
 #
-# The revolutions per second per volt on the motors.  This
-# equates to a max speed of about 15 ft per second width
-# five inch diameter wheels
+# These are the real world characteristics of the drivebase
 #
-tankdrive:sim:high:rps_per_volt_per_second              7.639437268
-tankdrive:sim:low:rps_per_volt_per_second               5.72958
-
-#
-# The maximum amount of change per second of the RPS of a motor.
-#
-tankdrive:sim:change_per_second				            7.639437268
+tankdrive:high:maxvelocity                              144             # in / sec
+tankdrive:high:maxacceleration                          72              # in / sec / sec
+tankdrive:low:maxvelocity                               36              # in / sec
+tankdrive:low:maxacceleration                           27              # in / sec
 
 #
 # The maximum random error applied to the left and right
 # side motors on the drivebase.  If this is .05, there can
 # be up to 5% delta applied per side randomly to the
-# rps_per_volt_per_second value above
+# actual velocity of a side for a given voltage
 #
 tankdrive:sim:error_per_side                            0.0
 
@@ -55,3 +70,38 @@ tankdrive:sim:scrub                                     1.0
 # The width of the drivebase for the robot
 #
 tankdrive:sim:width                                     24.0
+
+
+######################################################################################
+#
+# Turntable software model description
+#
+######################################################################################
+
+#
+# If the turntable is physically between 0 and this angle, the limit switch is off
+# (active low) and therefore active
+#
+turntable:sim:limit_window                              5.0
+
+#
+# The number of degrees per encoder tick (assuming 200 ticks per revolution)
+#
+turntable:sim:degrees_per_tick                          1.8
+
+#
+# The number of degrees the turntable rotates per second per volt
+#
+turntable:sim:degrees_per_sec_per_volt                  180.0
+
+######################################################################################
+#
+# Lifter software model description
+#
+######################################################################################
+
+lifter:sim:bottom_limit_height                          0.0
+lifter:sim:top_limit_height                             72.0
+lifter:sim:inches_per_tick                              0.01
+lifter:sim:inches_per_sec_per_volt                      18.0
+

@@ -24,11 +24,14 @@ namespace xero {
             left_start_ = path_->getLeftStartPos() ;
             right_start_ = path_->getRightStartPos() ;
             index_ = 0 ;         
-            start_time_ = getTankDrive().getRobot().getTime() ;   
+            start_time_ = getTankDrive().getRobot().getTime() ;
+
+            getTankDrive().highGear() ;
 
             auto &logger = getTankDrive().getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
             logger << "time" ;
+            logger << ",runtime" ;
             logger << ",ltpos" ;
             logger << ",lapos" ;
             logger << ",ltvel" ;
@@ -46,14 +49,12 @@ namespace xero {
 
 
         void TankDriveFollowPathAction::run() {
-            index_++ ;
-
             if (index_ < path_->size()) {
                 auto &logger = getTankDrive().getRobot().getMessageLogger() ;
 
                 double dt = getTankDrive().getRobot().getDeltaTime() ;
-                const XeroPathSegment &lseg = path_->getLeft(index_) ;
-                const XeroPathSegment &rseg = path_->getRight(index_) ;
+                const XeroPathSegment lseg = path_->getLeft(index_) ;
+                const XeroPathSegment rseg = path_->getRight(index_) ;
                 double lout = left_follower_->getOutput(lseg.getAcceleration(), lseg.getVelocity(), lseg.getPOS(), 
                                         left_start_ + getTankDrive().getLeftDistance(), dt) ;
                 double rout = right_follower_->getOutput(rseg.getAcceleration(), rseg.getVelocity(), rseg.getPOS(), 
@@ -63,7 +64,8 @@ namespace xero {
 
 
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
-                logger << getTankDrive().getRobot().getTime() - start_time_ ;
+                logger << getTankDrive().getRobot().getTime() ;
+                logger << "," << getTankDrive().getRobot().getTime() - start_time_ ;
                 logger << "," << lseg.getPOS() ;
                 logger << "," << left_start_ + getTankDrive().getLeftDistance() ;
                 logger << "," << lseg.getVelocity() ;
@@ -77,6 +79,8 @@ namespace xero {
                 logger << "," << lseg.getAcceleration() ;                
                 logger << "," << rout ;
                 logger.endMessage() ;
+
+                index_++ ;
             }
             else {
                 getTankDrive().setMotorsToPercents(0.0, 0.0) ;

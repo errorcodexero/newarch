@@ -45,9 +45,6 @@ bool SettingsParser::readLine(const std::string &line, std::string &key, std::st
                 logger_.endMessage();
                 return false;
             }
-
-            // Otherwise, set the value to what's come so far and finish
-            value = buffer.str();
             return true;
 
         // Check for string start
@@ -63,9 +60,8 @@ bool SettingsParser::readLine(const std::string &line, std::string &key, std::st
                 key = buffer.str();
                 buffer.str("");
                 continue;
-            } else if (value.length() > 0) {
+            } else if (value.length() == 0) {
                 value = buffer.str();
-                return true;
             }
 
         // If the character is none of these, add it to the buffer

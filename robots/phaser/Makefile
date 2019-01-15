@@ -28,6 +28,10 @@ ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_EXTERNAL_LIBS=$(TOPDIR)/external/dinput/dinput8.lib $(TOPDIR)/external/dinput/dxguid.lib -lcurses
 endif
 
+ifeq ($(PLATFORM),GOPIGO)
+$(error This robot is not supported by the GOPIGO platform)
+endif
+
 include $(TOPDIR)/makefiles/buildexe.mk
 
 

@@ -26,7 +26,7 @@ namespace xero
             virtual void addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
             virtual void addEncoder(frc::Encoder *encoder);
             virtual void addNavX(AHRS *navx);
-            virtual void addSolenid(frc::Solenoid *sol) ;
+            virtual void addSolenoid(frc::Solenoid *sol) ;
 
             double getXPos() { 
               return xpos_ ;
@@ -44,10 +44,6 @@ namespace xero
               return speed_ ;
             }
 
-            double getMaxSpeed() {
-              return max_speed_ ;
-            }
-
         private:
             void updatePosition(double dx, double dy, double angle) ;
 
@@ -55,6 +51,8 @@ namespace xero
 
             void lowGear() ;
             void highGear() ;
+
+            void calcLowLevelParams(RobotSimBase &simbase) ;
 
           private:
             bool inited_ ;
@@ -70,16 +68,20 @@ namespace xero
             double right_volts_;
             double scrub_;
             double width_;
+
             double high_rps_per_volt_per_time_;
             double low_rps_per_volt_per_time_;
+            double high_max_change_ ;
+            double low_max_change_ ;
+            double current_max_change_ ;
+
             double left_right_error_ ;
             double right_rps_per_volt_per_time_;
             double left_rps_per_volt_per_time_;                     
             double time_interval_;
             double last_output_;
             double speed_ ;
-            double max_speed_ ;
-            double max_change_ ;
+
             double current_left_rps_ ;
             double current_right_rps_ ;
 

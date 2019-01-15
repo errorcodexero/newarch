@@ -86,13 +86,6 @@ namespace xero {
                 str += std::to_string(subsystem_p->getSpeed()) ;
                 waddstr(getRobotWindow(),str.substr(0, fieldwidth).c_str()) ;
                 wclrtoeol(getRobotWindow()) ;    
-
-                wmove(getRobotWindow(),tankdrive_row_ + 5, 0 ) ;
-                str = "  Max Speed: " ;
-                str += std::to_string(subsystem_p->getMaxSpeed()) ;
-                waddstr(getRobotWindow(),str.substr(0, fieldwidth).c_str()) ;
-                wclrtoeol(getRobotWindow()) ;                              
-
             }
         }
     }
