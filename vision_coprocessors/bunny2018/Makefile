@@ -1,3 +1,7 @@
+#
+# Compiles on Pi/Ubuntu VM.  Not Windows,
+#
+
 SOURCES = \
 	params_parser.cpp \
 	main.cpp
@@ -9,7 +13,7 @@ LIBS = \
 
 CXXINC = \
 	`pkg-config --cflags opencv` \
-	-I../xeromisc
+	-I../../xerolibs/xeromisc
 
 CXXFLAGS = -g $(CXXINC) -std=c++17 -DDEBUG
 
