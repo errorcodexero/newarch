@@ -6,8 +6,5 @@
 echo "Waiting 5 seconds..."
 sleep 5
 
-# TEMPORARY UNTIL 2019.2.1
-export LD_LIBRARY_PATH=/home/pi/2019.2.1_preview/cpp-multiCameraServer/lib
-
 # Run vision binary
 exec ./vision_phaser2019.exe
