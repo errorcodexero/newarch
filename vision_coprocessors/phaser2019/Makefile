@@ -60,7 +60,8 @@ ${EXE}: ${OBJ_FILES}
 deploy:
 ifdef PIIP
 	ssh -t pi@${PIIP} 'rm -f ${EXE}'
-	scp runCamera ${EXE} 'pi@${PIIP}:/home/pi'
+	#scp runCamera ${EXE} 'pi@${PIIP}:/home/pi'
+	scp ${EXE} 'pi@${PIIP}:/home/pi'
 	ssh -t pi@${PIIP} './runService'
 else
 	@echo PIIP is not defined
