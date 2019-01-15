@@ -15,7 +15,8 @@ namespace xero {
 
         private:
             xero::base::ActionSequencePtr createCharAutoMode() ;
-            xero::base::ActionSequencePtr createHabTwoHatchLeftLS() ;
+            xero::base::ActionSequencePtr createTestOne() ;
+            xero::base::ActionSequencePtr createTestTwo() ;
         } ;
     }
 }

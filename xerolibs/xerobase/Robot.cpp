@@ -59,7 +59,8 @@ namespace xero {
             wpi::SmallVector<char, '\0'> dir ;
             frc::filesystem::GetDeployDirectory(dir) ;     
             deploy_dir_ = &dir[0] ;
-            deploy_dir_ = "/home/lvuser/deploy" ;
+            deploy_dir_ = "/home/lvuser/deploy" ; 
+            log_dir_ = "/u/" ;
 #else
 #error SIMULATOR, GOPIGO, or XEROROBORIO must be defined
 #endif

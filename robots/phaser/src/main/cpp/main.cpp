@@ -8,6 +8,7 @@ xero::sim::phaser::PhaserSimulator sim("robotsims/phaser/sim.dat") ;
 
 int main(int ac, char **av)
 {
+
 #ifdef SIMULATOR
     frc::StartRobot<xero::phaser::Phaser>(ac, av) ;
 #else
