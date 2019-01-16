@@ -3,13 +3,30 @@
 #
 
 hw:tankdrive:motortype              "victor"
-hw:tankdrive:leftmotor1             1
-hw:tankdrive:leftmotor2             2
-hw:tankdrive:leftmotor3             3
-hw:tankdrive:rightmotor1            12
-hw:tankdrive:rightmotor2            13
-hw:tankdrive:rightmotor3            14
-hw:tankdrive:leftencoder1           0
-hw:tankdrive:leftencoder2           1
-hw:tankdrive:rightencoder1          2
-hw:tankdrive:rightencoder2          3
+hw:tankdrive:leftmotor:1             1
+hw:tankdrive:leftmotor:2             2
+hw:tankdrive:leftmotor:3             3
+hw:tankdrive:rightmotor:1            12
+hw:tankdrive:rightmotor:2            13
+hw:tankdrive:rightmotor:3            14
+hw:tankdrive:leftencoder:1           0
+hw:tankdrive:leftencoder:2           1
+hw:tankdrive:rightencoder:1          2
+hw:tankdrive:rightencoder:2          3
+
+#
+# The definiton of the OI
+#
+hw:driverstation:hid:driver         0
+hw:driverstation:hid:oi             2
+
+tankdrive:inches_per_tick           0.01
+
+driver:power:max                                                1.0
+driver:power:default                                            0.6
+driver:power:slowby                                             0.5
+driver:power:tolerance                                          0.05
+driver:power:nudge_straight                                     0.2
+driver:power:nudge_rotate                                       0.2
+driver:nudge_time                                               0.1
+

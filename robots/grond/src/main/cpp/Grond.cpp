@@ -2,6 +2,7 @@
 #include "Grond.h"
 #include "grondsubsystem/GrondSubsystem.h"
 #include "grondids.h"
+#include "automodes/GrondAutoModeController.h"
 #include <ActionSequence.h>
 #include <basegroups.h>
 #include <DelayAction.h>
@@ -17,7 +18,7 @@ using namespace xero::base ;
 namespace xero {
     namespace grond {
 
-        Grond::Grond() : xero::base::Robot("Grond", 0.02) {
+        Grond::Grond() : xero::base::Robot("grond", 0.02) {
         }
 
         //
@@ -51,7 +52,8 @@ namespace xero {
         }
 
         std::shared_ptr<ControllerBase> Grond::createAutoController() {
-            return nullptr ;
+            auto ctrl = std::make_shared<GrondAutoModeController>(*this) ;
+            return ctrl ;
         }
         
         std::shared_ptr<ControllerBase> Grond::createTeleopController() {
