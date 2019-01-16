@@ -3,6 +3,8 @@
 #include <map>
 #include "Setting.h"
 #include "MessageLogger.h"
+#include <vector>
+#include <string>
 
 
 /// \file
@@ -32,7 +34,7 @@ namespace xero {
 
         private:
             bool parseDouble(const std::string &value, double &result);
-            bool readLine(const std::string &line, std::string &key, std::string &value, bool &is_string, const std::string &filename, int line_num);
+            bool readLine(const std::string &line, std::vector<double> &values);
 
             struct path_values
                 {
@@ -49,6 +51,8 @@ namespace xero {
         private:
             static const std::string var_prefix_ ;
             
+            std::vector<path_values> segments_;
+             
             MessageLogger &logger_;
             uint64_t msggroup_;
             

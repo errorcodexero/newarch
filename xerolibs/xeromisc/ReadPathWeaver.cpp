@@ -13,18 +13,18 @@ ReadPathWeaver::ReadPathWeaver(MessageLogger &logger, uint64_t msggroup) : logge
 }
 
 ReadPathWeaver::~ReadPathWeaver() {
-    settings_.clear();
+    
 }
 
-bool SettingsParser::readLine(const std::string &line, std::vector<double> &values) {
+bool ReadPathWeaver::readLine(const std::string &line, std::vector<double> &values) {
     double value ;
     bool success ;
-    std::stringstream buffer ;
+    std::string buffer ;
 
     for(unsigned i = 0; i < line.length(); i++) {
         // Check for comment start
         if(line[i] == ',') {
-            success = parseDouble(buffer, value)
+            success = parseDouble(buffer, value);
 
             if(success == true){
                 values.push_back(value) ;
@@ -34,11 +34,11 @@ bool SettingsParser::readLine(const std::string &line, std::vector<double> &valu
             }
         } 
         else {
-            buffer.put(line[i]);
+            buffer += line[i];
         }
     }
 
-    success = parseDouble(buffer, value)
+    success = parseDouble(buffer, value);
 
     if(success == true){
         values.push_back(value) ;
@@ -50,34 +50,37 @@ bool SettingsParser::readLine(const std::string &line, std::vector<double> &valu
     return true;
 }
 
-bool SettingsParser::readFile(const std::string &filename) {
+bool ReadPathWeaver::readFile(const std::string &filename) {
     std::ifstream file(filename);
     if(file.bad() || file.fail()) {
         return false;
     }
 
-    int line_num = 0;
-
-    bool bool_output;
-    int int_output;
-    double double_output;
-    std::string string_output;
 
     std::string line;
     while(std::getline(file, line)) {
         std::vector<double> values ;
-        bool is_string = false;
 
-        line_num++;
 
-        if(readLine(line,  values) && value.length() == 8) {
-            path_values segment = {}
+        if(readLine(line,  values) && values.size() == 8) {
+            path_values segment;
+            //value 0 is time
+            segment.x = values.at(1);
+            segment.y = values.at(2);
+            segment.position = values.at(3);
+            segment.velocity = values.at(4);
+            segment.acceleration = values.at(5);
+            segment.jerk = values.at(6);
+            segment.heading = values.at(7);
+
+            segments_.push_back(segment);
+
         }
     }
     return true;
 }
 
-bool SettingsParser::parseDouble(const std::string &value, double &result) {
+bool ReadPathWeaver::parseDouble(const std::string &value, double &result) {
     size_t output;
 
     try {
