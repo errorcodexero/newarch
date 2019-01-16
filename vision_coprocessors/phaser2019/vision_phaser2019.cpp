@@ -228,9 +228,9 @@ namespace {
             //hsv_ranges = {0, 180, 100, 255, 50, 255};
             //hsv_ranges = {75, 85, 200, 255, 200, 255};
             //hsv_ranges = {65, 95, 200, 255, 200, 255};
-            //hsv_ranges = {55, 105, 200, 255, 100, 255};
+            hsv_ranges = {45, 118, 0, 65, 78, 255};
             
-            hsv_ranges = {0, 255, 0, 255, 0, 255};
+            //hsv_ranges = {0, 255, 0, 255, 0, 255};
         }
         
         virtual void Process(cv::Mat& frame_in) {
@@ -239,13 +239,13 @@ namespace {
             cv::cvtColor(frame_in, hsv_image, cv::COLOR_BGR2HSV);
 
             cv::inRange(hsv_image, cv::Scalar(hsv_ranges[0], hsv_ranges[2], hsv_ranges[4]), cv::Scalar(hsv_ranges[1], hsv_ranges[3], hsv_ranges[5]), green_only_image_);
-            //cv::inRange(frame_in, cv::Scalar(0, 0, 0), cv::Scalar(0, 255, 0), green_only_image_);
 
-            
+#if 1   // Make frame_out a viewable image            
             cv::cvtColor(green_only_image_, frame_out_, cv::COLOR_GRAY2BGR);
-            //frame_out_ = green_only_image_;
-            //std::cout << frame_in.channels() << "    " << frame_out_.channels() << "\n";
             cv::circle(frame_out_, cv::Point(100,100), 50,  cv::Scalar(0,0,255));
+#else  // Assign binary result to output image for use by contour detection next
+            frame_out_ = green_only_image_;
+#endif
         }
 
     private:
@@ -256,13 +256,56 @@ namespace {
     };
 
     
+    // Pipeline element for: Contour detection
+    class XeroPipelineElementFindContours : public XeroPipelineElement {
+        
+    public:
+        
+        XeroPipelineElementFindContours(std::string name) : XeroPipelineElement(name) {
+        }
+        
+        virtual void Process(cv::Mat& frame_in) {
+            contours.clear();
+            bool externalOnly = true;
+            int mode = externalOnly ? cv::RETR_EXTERNAL : cv::RETR_LIST;
+            int method = cv::CHAIN_APPROX_SIMPLE;
+            cv::findContours(frame_in, contours, hierarchy, mode, method);
+
+            std::cout << "Number of contours: " << contours.size() << "\n";
+
+            cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
+
+            
+            for (std::vector<cv::Point> contour : contours) {
+                if (1 /*cv::iscorrect(contour)*/) {
+                    cv::drawContours(frame_out_,
+                                     std::vector<std::vector<cv::Point> >(1,contour),
+                                     -1,
+                                     cv::Scalar(0,0,255) /*color*/,
+                                     1,
+                                     8);
+                }
+            }                
+            
+            //frame_out_ = frame_in;
+        }
+
+    private:
+
+        std::vector<std::vector<cv::Point> > contours;
+        std::vector<cv::Vec4i> hierarchy;
+
+    };
+
+    
     // Example pipeline
     class XeroPipeline : public frc::VisionPipeline {
     public:
         int val = 0;
 
         XeroPipeline() {
-            pipe_elements_.push_back(new XeroPipelineElementHsvThreshold("test element"));
+            pipe_elements_.push_back(new XeroPipelineElementHsvThreshold("HSV Threshold"));
+            //pipe_elements_.push_back(new XeroPipelineElementFindContours("Find Contours"));
         }
 
         virtual ~XeroPipeline();
@@ -355,7 +398,7 @@ int main(int argc, char* argv[]) {
     if (cameras.size() >= 1) {
 
         std::thread t([&] {
-                frc::VisionRunner<XeroPipeline> runner(cameras[0],
+                frc::VisionRunner<XeroPipeline> runner(cameras[/*0*/ cameras.size()-1],
                                                        pipe.get(),
                                                        VisionPipelineResultProcessor(stream_pipeline_output));
                 runner.RunForever();
