@@ -1,5 +1,6 @@
-#include "opencv2/opencv.hpp"
+#include <opencv2/opencv.hpp>
 #include <iostream>
+#include <StringUtils.h>
  
 int main(int argc, char* argv[]) {
     if (argc == 1) {
@@ -10,14 +11,20 @@ int main(int argc, char* argv[]) {
  
     // Create a VideoCapture object and open the input file
     // If the input is the web camera, pass 0 instead of the video file name
-    cv::VideoCapture cap(video_source); 
+    cv::VideoCapture cap;
+    if (xero::string::hasOnlyDigits(video_source)) {
+        cap.open(std::stoi(video_source));
+    } else {
+        cap.open(video_source);
+    }
     
     // Check if video source opened successfully
     if (!cap.isOpened()){
         std::cout << "Error opening video stream or file" << std::endl;
         return -1;
     }
-     
+
+    std::cout << "Playing...\n";
     cv::Mat frame;
     while (1) {
  
