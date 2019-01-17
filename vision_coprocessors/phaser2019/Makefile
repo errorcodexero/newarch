@@ -58,12 +58,12 @@ LDLIBS = -lwpilibc \
 	-lopencv_flann \
 	-lopencv_core
 
-${VISION}: ${VISION}.o
+${VISION}: ${VISION}.o params_parser.o  #../../xerolibs/xeromisc/SettingsParser.o
 ${PLAYER}: ${PLAYER}.o
 ${RECORDER}: ${RECORDER}.o
 
 .cpp.o:
-	${CXX} -pthread -O -c -o $@ -I/cygwin64/usr/local/frc/include $<
+	${CXX} -pthread -O -c -o $@ -I/cygwin64/usr/local/frc/include -I../../xerolibs/xeromisc $<
 
 # PIIP = IP or hostname of the Raspberry Pi
 

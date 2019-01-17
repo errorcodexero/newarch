@@ -20,12 +20,15 @@
 #include <wpi/raw_istream.h>
 #include <wpi/raw_ostream.h>
 
-#include "cameraserver/CameraServer.h"
+#include <cameraserver/CameraServer.h>
 
-#include "opencv2/core/core.hpp"
-#include "opencv2/opencv.hpp"
-#include "opencv2/highgui.hpp"
-#include "opencv2/features2d.hpp"
+#include <opencv2/core/core.hpp>
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/features2d.hpp>
+
+//#include "SettingsParser.h"
+#include "params_parser.h"
 
 
 
@@ -65,9 +68,12 @@
 */
 
 
-static const char* configFile = "/boot/frc.json";
-
 namespace {
+    
+    static const char* configFile = "/boot/frc.json";
+    
+    paramsInput params;
+
 
     unsigned int team;
     bool nt_server = false;
@@ -223,12 +229,20 @@ namespace {
     public:
         
         XeroPipelineElementHsvThreshold(std::string name) : XeroPipelineElement(name) {
+            int h_min = params.getValue("vision:pipeline:hsv_threshold:h_min");
+            int h_max = params.getValue("vision:pipeline:hsv_threshold:h_max");
+            int s_min = params.getValue("vision:pipeline:hsv_threshold:s_min");
+            int s_max = params.getValue("vision:pipeline:hsv_threshold:s_max");
+            int v_min = params.getValue("vision:pipeline:hsv_threshold:v_min");
+            int v_max = params.getValue("vision:pipeline:hsv_threshold:v_max");
+            
             // Set threshold to only select green
             //hsv_ranges = {40, 70, 40, 255, 40, 255};
             //hsv_ranges = {0, 180, 100, 255, 50, 255};
             //hsv_ranges = {75, 85, 200, 255, 200, 255};
             //hsv_ranges = {65, 95, 200, 255, 200, 255};
-            hsv_ranges = {45, 118, 0, 65, 78, 255};
+            //hsv_ranges = {45, 118, 0, 65, 78, 255};
+            hsv_ranges = {h_min, h_max, s_min, s_max, v_min, v_max};
             
             //hsv_ranges = {0, 255, 0, 255, 0, 255};
         }
@@ -362,10 +376,14 @@ namespace {
 
 int main(int argc, char* argv[]) {
     const bool stream_pipeline_output = true;
+    const std::string params_filename("vision_params.txt");
 
     if (argc >= 2) {
         configFile = argv[1];
     }
+
+    // Read params file
+    params.readFile(params_filename);
 
     // Read configuration
     if (!ReadConfig()) {
