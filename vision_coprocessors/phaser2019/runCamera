@@ -7,4 +7,4 @@ echo "Waiting 5 seconds..."
 sleep 5
 
 # Run vision binary
-exec ./vision_phaser2019.exe
+exec ./vision_phaser2019

@@ -7,50 +7,60 @@
 
 ifeq ($(OS),Windows_NT)
 CXX=arm-raspbian9-linux-gnueabihf-g++
+CC=${CXX}
 endif
 
-SRC_FILES := $(wildcard *.cpp)
-OBJ_FILES := $(patsubst %.cpp,%.o,$(SRC_FILES))
+#SRC_FILES := $(wildcard *.cpp)
+#OBJ_FILES := $(patsubst %.cpp,%.o,$(SRC_FILES))
 
-EXE=vision_phaser2019.exe
+# Binaries to build
+VISION=vision_phaser2019
+PLAYER=video_player
+RECORDER=video_recorder
+
+BINS = ${VISION} ${PLAYER} ${RECORDER}
 
 DESTDIR?=/home/pi/
 
 .PHONY: clean build install deploy import_extlibs
 
-build: import_extlibs ${EXE}
+build: import_extlibs ${BINS}
 
 install: build
-	cp ${EXE} runCamera ${DESTDIR}
+	cp ${BINS} runCamera ${DESTDIR}
 
 clean:
-	rm -f ${EXE} *.o
+	rm -f ${BINS} *.o
 
-${EXE}: ${OBJ_FILES}
-	${CXX} -pthread -o $@ $< \
-	    -L/cygwin64/usr/local/frc/lib \
-	    -lwpilibc \
-	    -lwpiHal \
-	    -lcameraserver \
-	    -lcscore \
-	    -lntcore \
-	    -lwpiutil \
-	    -lopencv_ml \
-	    -lopencv_objdetect \
-	    -lopencv_shape \
-	    -lopencv_stitching \
-	    -lopencv_superres \
-	    -lopencv_videostab \
-	    -lopencv_calib3d \
-	    -lopencv_features2d \
-	    -lopencv_highgui \
-	    -lopencv_videoio \
-	    -lopencv_imgcodecs \
-	    -lopencv_video \
-	    -lopencv_photo \
-	    -lopencv_imgproc \
-	    -lopencv_flann \
-	    -lopencv_core
+LDFLAGS = -pthread \
+	-L/cygwin64/usr/local/frc/lib
+
+LDLIBS = -lwpilibc \
+	-lwpiHal \
+	-lcameraserver \
+	-lcscore \
+	-lntcore \
+	-lwpiutil \
+	-lopencv_ml \
+	-lopencv_objdetect \
+	-lopencv_shape \
+	-lopencv_stitching \
+	-lopencv_superres \
+	-lopencv_videostab \
+	-lopencv_calib3d \
+	-lopencv_features2d \
+	-lopencv_highgui \
+	-lopencv_videoio \
+	-lopencv_imgcodecs \
+	-lopencv_video \
+	-lopencv_photo \
+	-lopencv_imgproc \
+	-lopencv_flann \
+	-lopencv_core
+
+${VISION}: ${VISION}.o
+${PLAYER}: ${PLAYER}.o
+${RECORDER}: ${RECORDER}.o
 
 .cpp.o:
 	${CXX} -pthread -O -c -o $@ -I/cygwin64/usr/local/frc/include $<
@@ -60,8 +70,8 @@ ${EXE}: ${OBJ_FILES}
 deploy:
 ifdef PIIP
 	ssh -t pi@${PIIP} 'rm -f ${EXE}'
-	#scp runCamera ${EXE} 'pi@${PIIP}:/home/pi'
-	scp ${EXE} 'pi@${PIIP}:/home/pi'
+	#scp runCamera ${BINS} 'pi@${PIIP}:/home/pi'
+	scp ${BINS} 'pi@${PIIP}:/home/pi'
 	ssh -t pi@${PIIP} './runService'
 else
 	@echo PIIP is not defined
