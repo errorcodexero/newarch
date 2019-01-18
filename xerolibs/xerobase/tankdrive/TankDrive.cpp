@@ -118,7 +118,15 @@ namespace xero {
             left_enc_ = std::make_shared<frc::Encoder>(l1, l2) ;
             right_enc_ = std::make_shared<frc::Encoder>(r1, r2) ;
 
-            inches_per_tick_ = getRobot().getSettingsParser().getDouble("tankdrive:inches_per_tick") ;
+            SettingsParser &parser = getRobot().getSettingsParser() ;
+            if (parser.isDefined("tankdrive:inches_per_tick")) {
+                left_inches_per_tick_ = getRobot().getSettingsParser().getDouble("tankdrive:inches_per_tick") ;
+                right_inches_per_tick_ = left_inches_per_tick_ ;
+            }
+            else {
+                left_inches_per_tick_ = getRobot().getSettingsParser().getDouble("tankdrive:left_inches_per_tick") ;
+                right_inches_per_tick_ = getRobot().getSettingsParser().getDouble("tankdrive:right_inches_per_tick") ;                
+            }
 
             left_enc_->Reset() ;
             right_enc_->Reset() ;
@@ -177,8 +185,8 @@ namespace xero {
                 ticks_left_ = left_enc_->Get() ;
                 ticks_right_ = right_enc_->Get() ;
 
-                dist_l_ = ticks_left_ * inches_per_tick_ ;
-                dist_r_ = ticks_right_ * inches_per_tick_ ;
+                dist_l_ = ticks_left_ * left_inches_per_tick_ ;
+                dist_r_ = ticks_right_ * right_inches_per_tick_ ;
             }
 
             if (navx_ != nullptr) {
@@ -209,11 +217,13 @@ namespace xero {
                 right_talon_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
             }
             else {
-                for(VictorPtr victor : left_victor_motors_)
+                for(VictorPtr victor : left_victor_motors_) {
                     victor->Set(left_percent) ;
+                }
 
-                for(VictorPtr victor : right_victor_motors_)
+                for(VictorPtr victor : right_victor_motors_) {
                     victor->Set(right_percent) ;
+                }
             }
         }
     }

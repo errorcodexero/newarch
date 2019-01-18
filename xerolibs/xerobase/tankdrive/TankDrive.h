@@ -229,7 +229,8 @@ namespace xero {
             
             double dist_l_, dist_r_;
 
-            double inches_per_tick_ ;
+            double left_inches_per_tick_ ;
+            double right_inches_per_tick_ ;
 
             AHRS *navx_ ;
 
