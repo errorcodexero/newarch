@@ -12,7 +12,9 @@ namespace xero {
             GrondOIDevice(GrondOISubsystem &sub, int index) ;
             virtual ~GrondOIDevice() ;
 
-            virtual int getAutoModeSelector() ;
+            virtual int getAutoModeSelector() {
+                return getValue(automode_) ;
+            }
 
             virtual void generateActions(xero::base::ActionSequence &seq) ;
 
@@ -21,6 +23,7 @@ namespace xero {
             void initialize() ;
             
         private:
+            uint32_t automode_ ;        
         } ;
     }
 }

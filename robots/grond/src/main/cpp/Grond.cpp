@@ -32,14 +32,21 @@ namespace xero {
             // Decide what message groups (incl. subsystems) you want to see
             //
             logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
-            logger.enableSubsystem(MSG_GROUP_ACTIONS);
+            //logger.enableSubsystem(MSG_GROUP_ACTIONS);
             // logger.enableSubsystem(MSG_GROUP_PARSER) ;
             // logger.enableSubsystem(MSG_GROUP_OI) ;
             // logger.enableSubsystem(MSG_GROUP_SORTER) ;
             //
         }
 
+        void Grond::loadPaths() {
+            auto paths = getPathManager() ;
+            paths->loadPath("TestOne");            
+            paths->loadPath("TestTwo") ;     
+        }        
+
         void Grond::RobotHardwareInit() {
+
             //
             // This is where the subsystems for the robot get created
             //
@@ -48,7 +55,7 @@ namespace xero {
             auto db = robot_p->getTankDrive() ;
             assert(oi != nullptr) ;
             assert(db != nullptr) ;
-            setRobotSubsystem(robot_p, oi, db) ;
+            setRobotSubsystem(robot_p, oi, db) ;     
         }
 
         std::shared_ptr<ControllerBase> Grond::createAutoController() {
@@ -57,9 +64,6 @@ namespace xero {
         }
         
         std::shared_ptr<ControllerBase> Grond::createTeleopController() {
-            //
-            // This is where the teleop controller is created
-            //
             return nullptr ;
         }
          

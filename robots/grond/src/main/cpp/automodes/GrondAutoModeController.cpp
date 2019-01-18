@@ -23,11 +23,11 @@ namespace xero {
                 break ;
 
             case 1:
-                // mode = createTestOne() ;
+                mode = createTestOne() ;
                 break ;
 
             case 2:
-                // mode = createTestTwo() ;
+                mode = createTestTwo() ;
                 break ;
             }
             setAction(mode) ;
@@ -43,7 +43,7 @@ namespace xero {
             auto grondrobot = grond.getGrondRobotSubsystem() ;
             auto db = grondrobot->getTankDrive() ;
 
-            act = std::make_shared<TankDriveCharAction>(*db, 2.5, 0.9) ;
+            act = std::make_shared<TankDriveCharAction>(*db, 2.0, 0.7) ;
             mode->pushSubActionPair(db, act) ;
 
             return mode ;         
