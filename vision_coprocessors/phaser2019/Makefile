@@ -71,7 +71,7 @@ deploy:
 ifdef PIIP
 	ssh -t pi@${PIIP} 'rm -f ${EXE}'
 	#scp runCamera ${BINS} 'pi@${PIIP}:/home/pi'
-	scp ${BINS} 'pi@${PIIP}:/home/pi'
+	scp ${BINS} vision_params.txt 'pi@${PIIP}:/home/pi'
 	ssh -t pi@${PIIP} './runService'
 else
 	@echo PIIP is not defined

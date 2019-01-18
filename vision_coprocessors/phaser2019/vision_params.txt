@@ -1,6 +1,14 @@
-vision:pipeline:hsv_threshold:h_min     45
-vision:pipeline:hsv_threshold:h_max     118
+#vision:pipeline:hsv_threshold:h_min     45
+#vision:pipeline:hsv_threshold:h_max     118
+#vision:pipeline:hsv_threshold:s_min     0
+#vision:pipeline:hsv_threshold:s_max     65
+#vision:pipeline:hsv_threshold:v_min     78
+#vision:pipeline:hsv_threshold:v_max     255
+
+
+vision:pipeline:hsv_threshold:h_min     40
+vision:pipeline:hsv_threshold:h_max     110
 vision:pipeline:hsv_threshold:s_min     0
-vision:pipeline:hsv_threshold:s_max     65
-vision:pipeline:hsv_threshold:v_min     78
+vision:pipeline:hsv_threshold:s_max     100
+vision:pipeline:hsv_threshold:v_min     80
 vision:pipeline:hsv_threshold:v_max     255
