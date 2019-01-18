@@ -237,14 +237,7 @@ namespace {
             int v_max = params.getValue("vision:pipeline:hsv_threshold:v_max");
             
             // Set threshold to only select green
-            //hsv_ranges = {40, 70, 40, 255, 40, 255};
-            //hsv_ranges = {0, 180, 100, 255, 50, 255};
-            //hsv_ranges = {75, 85, 200, 255, 200, 255};
-            //hsv_ranges = {65, 95, 200, 255, 200, 255};
-            //hsv_ranges = {45, 118, 0, 65, 78, 255};
             hsv_ranges = {h_min, h_max, s_min, s_max, v_min, v_max};
-            
-            //hsv_ranges = {0, 255, 0, 255, 0, 255};
         }
         
         virtual void Process(cv::Mat& frame_in) {
@@ -254,7 +247,7 @@ namespace {
 
             cv::inRange(hsv_image, cv::Scalar(hsv_ranges[0], hsv_ranges[2], hsv_ranges[4]), cv::Scalar(hsv_ranges[1], hsv_ranges[3], hsv_ranges[5]), green_only_image_);
 
-#if 1   // Make frame_out a viewable image            
+#if 0   // Make frame_out a viewable image            
             cv::cvtColor(green_only_image_, frame_out_, cv::COLOR_GRAY2BGR);
             cv::circle(frame_out_, cv::Point(100,100), 50,  cv::Scalar(0,0,255));
 #else  // Assign binary result to output image for use by contour detection next
@@ -285,6 +278,7 @@ namespace {
             int method = cv::CHAIN_APPROX_SIMPLE;
             cv::findContours(frame_in, contours, hierarchy, mode, method);
 
+            //wpi::outs() << "Number of contours: " << contours.size() << "\n";
             std::cout << "Number of contours: " << contours.size() << "\n";
 
             cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
@@ -292,6 +286,10 @@ namespace {
             
             for (std::vector<cv::Point> contour : contours) {
                 if (1 /*cv::iscorrect(contour)*/) {
+                    std::cout << "   #points: " << contour.size() << std::endl;
+                    for (cv::Point pt : contour) {
+                        std::cout << "        " << pt.x << ", " << pt.y << std::endl;
+                    }
                     cv::drawContours(frame_out_,
                                      std::vector<std::vector<cv::Point> >(1,contour),
                                      -1,
@@ -319,7 +317,7 @@ namespace {
 
         XeroPipeline() {
             pipe_elements_.push_back(new XeroPipelineElementHsvThreshold("HSV Threshold"));
-            //pipe_elements_.push_back(new XeroPipelineElementFindContours("Find Contours"));
+            pipe_elements_.push_back(new XeroPipelineElementFindContours("Find Contours"));
         }
 
         virtual ~XeroPipeline();
@@ -383,7 +381,9 @@ int main(int argc, char* argv[]) {
     }
 
     // Read params file
-    params.readFile(params_filename);
+    if (!params.readFile(params_filename)) {
+        return EXIT_FAILURE;
+    }
 
     // Read configuration
     if (!ReadConfig()) {
