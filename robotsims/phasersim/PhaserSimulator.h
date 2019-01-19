@@ -1,5 +1,9 @@
 #pragma once
+#include "HatchHolderModel.h"
 #include <frc/RobotSimBase.h>
+#include <frc/LifterModel.h>
+#include <frc/TankDriveModel.h>
+#include <frc/TurnTableModel.h>
 #include <cstdint>
 #include <thread>
 #include <mutex>
@@ -15,9 +19,7 @@ namespace xero
 
         namespace phaser
         {
-            class LifterModel ;
             class OIModel ;
-            class TurnTableModel ;
 
             /// \brief A simulator for Phoenix.
             class PhaserSimulator : public xero::sim::RobotSimBase
@@ -44,9 +46,10 @@ namespace xero
             private:
                 static constexpr double PI = 3.14159265359;
                 std::shared_ptr<xero::sim::TankDriveModel> tankdrive_ ;
-                std::shared_ptr<xero::sim::phaser::OIModel> oi_ ;
-                std::shared_ptr<xero::sim::phaser::LifterModel> lifter_ ;
-                std::shared_ptr<xero::sim::phaser::TurnTableModel> table_ ;
+                std::shared_ptr<xero::sim::LifterModel> lifter_ ;
+                std::shared_ptr<xero::sim::TurnTableModel> table_ ;
+                std::shared_ptr<HatchHolderModel> hatch_intake_ ;
+                std::shared_ptr<xero::sim::phaser::OIModel> oi_ ;                
 
                 bool visualizer_ ;
             };

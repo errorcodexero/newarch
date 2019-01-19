@@ -4,8 +4,7 @@ SOURCES = \
 	PhaserScreenVisualizer.cpp\
 	PhaserSimulator.cpp\
 	OIModel.cpp\
-	LifterModel.cpp\
-	TurnTableModel.cpp
+	HatchHolderModel.cpp
 
 TARGET=phasersim
 

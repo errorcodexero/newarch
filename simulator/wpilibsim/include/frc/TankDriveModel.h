@@ -44,6 +44,8 @@ namespace xero
               return speed_ ;
             }
 
+            void generateDisplayInformation(std::list<std::string> &lines) ;
+
         private:
             void updatePosition(double dx, double dy, double angle) ;
 

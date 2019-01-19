@@ -11,6 +11,10 @@ namespace xero {
         SubsystemModel::~SubsystemModel() {
         }
 
+        void SubsystemModel::generateDisplayInformation(std::list<std::string> &lines) {
+            lines.push_back("  No Data") ;            
+        }
+
         std::mutex &SubsystemModel::getLockMutex() {
             RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
             return sim.getLockMutex() ;            

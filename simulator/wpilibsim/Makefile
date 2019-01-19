@@ -19,9 +19,11 @@ SOURCES = \
 	./cpp/smartdashboard/SmartDashboard.cpp\
 	./cpp/Solenoid.cpp\
 	./cpp/SubsystemModel.cpp\
-	./cpp/TankDriveModel.cpp\
 	./cpp/Timer.cpp\
-	./cpp/VictorSP.cpp
+	./cpp/VictorSP.cpp\
+	./cpp/TankDriveModel.cpp\
+	./cpp/LifterModel.cpp\
+	./cpp/TurnTableModel.cpp
 
 TARGET = wpilibsim
 

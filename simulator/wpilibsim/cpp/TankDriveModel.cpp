@@ -52,6 +52,13 @@ namespace xero {
         TankDriveModel::~TankDriveModel() {
         }
 
+        void TankDriveModel::generateDisplayInformation(std::list<std::string> &lines) {
+            lines.push_back("  X: " + std::to_string(getXPos())) ;
+            lines.push_back("  Y: " + std::to_string(getYPos())) ;
+            lines.push_back("  Angle: " + std::to_string(getAngle())) ;
+            lines.push_back("  Speed: " + std::to_string(getSpeed())) ;
+        }
+
         void TankDriveModel::calcLowLevelParams(RobotSimBase &simbase) {
             double maxhighvel = simbase.getSettingsParser().getDouble("tankdrive:high:maxvelocity") ;
             double maxhighaccel = simbase.getSettingsParser().getDouble("tankdrive:high:maxacceleration") ;
