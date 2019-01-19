@@ -41,8 +41,8 @@ namespace xero {
 
         void Grond::loadPaths() {
             auto paths = getPathManager() ;
-            paths->loadPath("TestOne");            
-            paths->loadPath("TestTwo") ;     
+            paths->loadPath("Straight");            
+            paths->loadPath("Curve");     
         }        
 
         void Grond::RobotHardwareInit() {

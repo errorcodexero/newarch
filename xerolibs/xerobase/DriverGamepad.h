@@ -2,6 +2,7 @@
 
 #include "HIDDevice.h"
 #include "Action.h"
+#include <frc/XBoxController.h>
 
 /// \file
 
@@ -69,6 +70,8 @@ namespace xero {
             /// \param db the drivebase to control
             void init(std::shared_ptr<TankDrive> db) ;
 
+            void rumble(bool left, double value) ;
+
         private:
             double scalePower(double axis, double boost, bool slow) ;
             
@@ -80,6 +83,8 @@ namespace xero {
 
         private:
             std::shared_ptr<TankDrive> db_ ;
+            std::shared_ptr<frc::XboxController> controller_ ;
+
             int pov_ ;
             double default_duty_cycle_ ;
             double max_duty_cycle_ ;

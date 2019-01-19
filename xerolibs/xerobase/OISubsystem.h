@@ -43,6 +43,10 @@ namespace xero {
             /// \returns the value of the automodel selection
             int getAutoModeSelector() ;
 
+            void rumble(bool left, double value) {
+                driver_->rumble(left, value) ;
+            }
+
 protected:
             /// \brief Add a HIDDevice to the list of devices managed by the OI
             /// \param dev the HIDDevice to add to the list

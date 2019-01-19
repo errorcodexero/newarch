@@ -1,6 +1,7 @@
 #include "TankDriveFollowPathAction.h"
 #include "TankDrive.h"
 #include "Robot.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <cassert>
 
 using namespace xero::misc ;
@@ -26,7 +27,8 @@ namespace xero {
             index_ = 0 ;         
             start_time_ = getTankDrive().getRobot().getTime() ;
 
-            getTankDrive().highGear() ;
+            if (getTankDrive().hasGearShifter())
+                getTankDrive().highGear() ;
 
             auto &logger = getTankDrive().getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
@@ -79,6 +81,16 @@ namespace xero {
                 logger << "," << lseg.getAcceleration() ;                
                 logger << "," << rout ;
                 logger.endMessage() ;
+
+                frc::SmartDashboard::PutNumber("lapos", left_start_ + getTankDrive().getLeftDistance()) ;
+                frc::SmartDashboard::PutNumber("ltpos", lseg.getPOS()) ;
+                frc::SmartDashboard::PutNumber("lavel", getTankDrive().getLeftVelocity()) ;
+                frc::SmartDashboard::PutNumber("ltvel", lseg.getVelocity()) ;
+
+                frc::SmartDashboard::PutNumber("rapos", right_start_ + getTankDrive().getRightDistance()) ;
+                frc::SmartDashboard::PutNumber("rtpos", rseg.getPOS()) ;
+                frc::SmartDashboard::PutNumber("ravel", getTankDrive().getRightVelocity()) ;
+                frc::SmartDashboard::PutNumber("rtvel", rseg.getVelocity()) ;                
 
                 index_++ ;
             }

@@ -51,7 +51,7 @@ namespace xero {
 
         ActionSequencePtr GrondAutoModeController::createTestOne() {
             std::string name = "Test One" ;
-            std::string desc = "Drive straight" ;
+            std::string desc = "Path following drive straight" ;
             ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
@@ -59,7 +59,7 @@ namespace xero {
             auto grondrobot = grond.getGrondRobotSubsystem() ;
             auto db = grondrobot->getTankDrive() ;
 
-            act = std::make_shared<TankDriveFollowPathAction>(*db, "TestOne") ;
+            act = std::make_shared<TankDriveFollowPathAction>(*db, "Straight") ;
             mode->pushSubActionPair(db, act) ;
 
             return mode ;         
@@ -75,7 +75,7 @@ namespace xero {
             auto grondrobot = grond.getGrondRobotSubsystem() ;
             auto db = grondrobot->getTankDrive() ;
 
-            act = std::make_shared<TankDriveFollowPathAction>(*db, "TestTwo") ;
+            act = std::make_shared<TankDriveFollowPathAction>(*db, "Curve") ;
             mode->pushSubActionPair(db, act) ;
 
             return mode ;         

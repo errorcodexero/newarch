@@ -8,6 +8,7 @@
 #include "tankdrive/TankDriveTimedPowerAction.h"
 #include <MessageLogger.h>
 #include <frc/DriverStation.h>
+#include <frc/GenericHID.h>
 #include <cmath>
 #include <iostream>
 
@@ -34,9 +35,22 @@ namespace xero {
                 logger << "driver gamepad does not have six axis (Left, Right, Buttons), cannot use as driver gamepad" ;
                 logger.endMessage() ;                
             }
+
+            controller_ = std::make_shared<frc::XboxController>(index) ;
         }
 
         DriverGamepad::~DriverGamepad() {            
+        }
+
+        void DriverGamepad::rumble(bool left, double value) {
+            if (controller_ != nullptr) {
+                frc::GenericHID::RumbleType rtype = frc::GenericHID::RumbleType::kLeftRumble ;
+
+                if (!left)
+                    rtype = frc::GenericHID::RumbleType::kRightRumble ;
+
+                controller_->SetRumble(rtype, value) ;
+            }
         }
 
         void DriverGamepad::init(std::shared_ptr<TankDrive> db) {
