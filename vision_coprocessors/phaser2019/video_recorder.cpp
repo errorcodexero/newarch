@@ -10,11 +10,12 @@ int main(int argc, char* argv[]) {
         return -1;
     }
     const std::string video_source(argv[1]);
+    const bool source_is_camera = xero::string::hasOnlyDigits(video_source);
  
     // Create a VideoCapture object and open the input file
     // If the input is the web camera, pass 0 instead of the video file name
     cv::VideoCapture cap;
-    if (xero::string::hasOnlyDigits(video_source)) {
+    if (source_is_camera) {
         cap.open(std::stoi(video_source));
     } else {
         cap.open(video_source);
@@ -33,7 +34,8 @@ int main(int argc, char* argv[]) {
     // Define the codec and create VideoWriter object. 
     cv::VideoWriter video(output_filename,
                           CV_FOURCC('M','J','P','G'),
-                          10,
+                          //CV_FOURCC('M','J','P','2'),
+                          10 /*fps*/,
                           cv::Size(frame_width,frame_height));
 
     std::cout << "Recording...\n";
