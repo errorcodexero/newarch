@@ -12,6 +12,7 @@
 #include <frc/VictorSP.h>
 #include <ctre/Phoenix.h>
 
+
 /// \file
 
 
@@ -45,6 +46,8 @@ namespace xero {
             friend class TankDriveAngleCharAction ;
             /// \brief class for tank drive actions
             friend class TankDriveFollowPathAction ;
+            friend class LineFollowAction ;
+            friend class LineDetectAction ;
 
         public:
             /// \brief Create a new tank drive object
