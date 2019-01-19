@@ -69,7 +69,7 @@ ${RECORDER}: ${RECORDER}.o
 
 deploy:
 ifdef PIIP
-	ssh -t pi@${PIIP} 'rm -f ${EXE}'
+	ssh -t pi@${PIIP} './stopService ; sleep 1'
 	#scp runCamera ${BINS} 'pi@${PIIP}:/home/pi'
 	scp ${BINS} vision_params.txt 'pi@${PIIP}:/home/pi'
 	ssh -t pi@${PIIP} './runService'
