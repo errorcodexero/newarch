@@ -22,7 +22,7 @@ BINS = ${VISION} ${PLAYER} ${RECORDER}
 
 DESTDIR?=/home/pi/
 
-.PHONY: clean build install deploy import_extlibs
+.PHONY: clean build install deploy deploy-norun import_extlibs
 
 build: import_extlibs ${BINS}
 
@@ -67,12 +67,14 @@ ${RECORDER}: ${RECORDER}.o
 
 # PIIP = IP or hostname of the Raspberry Pi
 
-deploy:
+deploy: deploy-norun
+	ssh -t pi@${PIIP} './runService'
+
+deploy-norun:
 ifdef PIIP
 	ssh -t pi@${PIIP} './stopService ; sleep 1'
 	#scp runCamera ${BINS} 'pi@${PIIP}:/home/pi'
 	scp ${BINS} vision_params.txt 'pi@${PIIP}:/home/pi'
-	ssh -t pi@${PIIP} './runService'
 else
 	@echo PIIP is not defined
 endif
