@@ -1,5 +1,5 @@
 #include "TrapezoidalProfile.h"
-#include <QuadraticSolver.h>
+#include "QuadraticSolver.h"
 #include <cmath>
 #include <iostream>
 #include <cassert>

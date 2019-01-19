@@ -8,6 +8,11 @@ SOURCES = \
 	MessageLoggerData.cpp\
 	PIDACtrl.cpp\
 	PIDCtrl.cpp\
+	Point.cpp\
+	PointAngle.cpp\
+	Polar.cpp\
+	QuadraticSolver.cpp\
+	ReadPathWeaver.cpp\
 	SettingsParser.cpp\
 	StallMonitor.cpp\
 	TrapezoidalProfile.cpp\
@@ -16,9 +21,6 @@ SOURCES = \
 	XeroPathReader.cpp
 
 TARGET=xeromisc
-
-NEED_WPILIB=true
-NEED_XEROMATH=true
 
 LOCAL_CFLAGS += 
 

@@ -1,5 +1,4 @@
 #include "Kinematics.h"
-#include "xeromath.h"
 #include <cmath>
 #include <iostream>
 

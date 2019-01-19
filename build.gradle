@@ -51,7 +51,6 @@ model {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
 				lib library: "xerobase", linkage: "static"
 				lib library: "xeromisc", linkage: "static"                
-				lib library: "xeromath", linkage: "static"                
 			}            
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
@@ -80,7 +79,6 @@ model {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
 				lib library: "xerobase", linkage: "static"
 				lib library: "xeromisc", linkage: "static"                
-				lib library: "xeromath", linkage: "static"                
 			}            
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
@@ -109,7 +107,6 @@ model {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
 				lib library: "xerobase", linkage: "static"
 				lib library: "xeromisc", linkage: "static"                
-				lib library: "xeromath", linkage: "static"                
 			}            
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
@@ -138,7 +135,6 @@ model {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
 				lib library: "xerobase", linkage: "static"
 				lib library: "xeromisc", linkage: "static"                
-				lib library: "xeromath", linkage: "static"                
 			}            
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
@@ -178,33 +174,10 @@ model {
 				    srcDirs = ["xerolibs/xeromisc"]
 					include "**/*.h"
 				}
-
-				lib library: "xeromath", linkage: "static"
 			}
             useLibrary(it, "wpilib")       
             wpi.deps.vendor.cpp(it)                           
 		}
-
-		xeromath(NativeLibrarySpec) {
-            targetPlatform wpi.platforms.roborio
-			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
-			sources.cpp {
-			    source {
-				    srcDirs = ["xerolibs/xeromath"]
-					include "**/*.cpp"
-				}
-				exportedHeaders {
-				    srcDirs = ["xerolibs/xeromath"]
-					include "**/*.h"
-				}
-			}
-            wpi.deps.vendor.cpp(it)            
-		}        
 
 		xerobase(NativeLibrarySpec) {
             targetPlatform wpi.platforms.roborio
@@ -224,7 +197,6 @@ model {
 					include "*.h", "**/*.h"
 				}
 
-				lib library: "xeromath", linkage: "static"
 				lib library: "xeromisc", linkage: "static"
 			}
             useLibrary(it, "wpilib")
