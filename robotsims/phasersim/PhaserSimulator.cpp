@@ -30,8 +30,20 @@ namespace xero
                 lifter_ = std::make_shared<LifterModel>(*this) ;  
                 addModel(lifter_) ;  
 
-                hatch_intake_ = std::make_shared<HatchHolderModel>(*this) ;
+                hatch_holder_ = std::make_shared<HatchHolderModel>(*this) ;
+                addModel(hatch_holder_) ;
+
+                cargo_holder_ = std::make_shared<CargoHolderModel>(*this) ;
+                addModel(cargo_holder_) ;                
+
+                hatch_intake_ = std::make_shared<HatchIntakeModel>(*this) ;
                 addModel(hatch_intake_) ;
+
+                cargo_intake_ = std::make_shared<CargoIntakeModel>(*this) ;
+                addModel(cargo_intake_) ;                
+
+                climber_ = std::make_shared<ClimberModel>(*this) ;
+                addModel(climber_) ;
 
                 oi_ = std::make_shared<OIModel>(*this) ;
                 addModel(oi_) ;        

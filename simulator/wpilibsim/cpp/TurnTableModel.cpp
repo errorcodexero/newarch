@@ -38,6 +38,7 @@ namespace xero {
 
             line = "  MaxLimit: " ;
             line += (getMaxLimit() ? "ON" : "OFF") ;
+            lines.push_back(line) ;            
         }
 
         std::string TurnTableModel::toString() {

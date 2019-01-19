@@ -88,6 +88,8 @@
     "cwctype": "cpp",
     "unordered_set": "cpp",
     "future": "cpp",
-    "numeric": "cpp"
+    "numeric": "cpp",
+    "csignal": "cpp",
+    "random": "cpp"
   }
 }

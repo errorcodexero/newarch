@@ -25,12 +25,34 @@ hw:lifter:encoder1                   6                                  # DIO 6
 hw:lifter:encoder2                   7                                  # DIO 7
 hw:lifter:limit:bottom               8                                  # DIO 8
 hw:lifter:limit:top                  9                                  # DIO 9
-hw:lifter:motor                      8                                  # TalonSRX 8
+hw:lifter:motor:1                    8                                  # TalonSRX 8
+hw:lifter:motor:2                    9                                  # TalonSRX 9
 
-# HatchHolder
+# Hatch Holder
 hw:hatchholder:extension             1                                  # Solenoid 1
 hw:hatchholder:finger                2                                  # Solenoid 2
-hw:hatchholder:sensor               10                                  # DIO 10 
+hw:hatchholder:sensor               10                                  # DIO 10
+
+# Cargo Holder
+hw:cargoholder:motor                10                                  # TalonSRX 10
+hw:cargoholder:sensor               11                                  # DIO 11
+
+# Hatch Intake
+hw:hatchintake:motor                11                                  # TalonSRX 11
+hw:hatchintake:sensor               12                                  # DIO 12
+hw:hatchintake:deploy                3                                  # Solenoid 3
+
+# Line Follower
+hw:follower:sensor:1                13                                  # DIO 13
+hw:follower:sensor:2                14                                  # DIO 14
+hw:follower:sensor:3                15                                  # DIO 15
+
+# Cargo Intake
+hw:cargointake:motor                11                                  # TalonSRX 12
+hw:cargointake:deploy                5                                  # Solenoid 5
+
+# Climber
+hw:climber:deploy                    6                                  # Solenoid 6
 
 ######################################################################################
 #

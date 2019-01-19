@@ -51,10 +51,6 @@ namespace xero {
                 return ' ' ;
             }
 
-            virtual std::string getModeString() {
-                return "NoModeDefined" ;
-            }
-
             virtual void drawGameSpecificField(WINDOW *win) {               
             }
 

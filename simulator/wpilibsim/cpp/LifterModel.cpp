@@ -18,7 +18,7 @@ namespace xero {
             encoder_2_ = simbase.getSettingsParser().getInteger("hw:lifter:encoder2") ;
             bottom_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:bottom") ;
             top_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:top") ;
-            motor_1_ = simbase.getSettingsParser().getInteger("hw:lifter:motor") ;
+            motor_1_ = simbase.getSettingsParser().getInteger("hw:lifter:motor:1") ;
 
             top_limit_ = nullptr ;
             bottom_limit_ = nullptr ;

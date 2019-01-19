@@ -1,5 +1,9 @@
 #pragma once
 #include "HatchHolderModel.h"
+#include "CargoHolderModel.h"
+#include "HatchIntakeModel.h"
+#include "CargoIntakeModel.h"
+#include "ClimberModel.h"
 #include <frc/RobotSimBase.h>
 #include <frc/LifterModel.h>
 #include <frc/TankDriveModel.h>
@@ -48,7 +52,11 @@ namespace xero
                 std::shared_ptr<xero::sim::TankDriveModel> tankdrive_ ;
                 std::shared_ptr<xero::sim::LifterModel> lifter_ ;
                 std::shared_ptr<xero::sim::TurnTableModel> table_ ;
-                std::shared_ptr<HatchHolderModel> hatch_intake_ ;
+                std::shared_ptr<HatchHolderModel> hatch_holder_ ;
+                std::shared_ptr<CargoHolderModel> cargo_holder_ ;                
+                std::shared_ptr<HatchIntakeModel> hatch_intake_ ;
+                std::shared_ptr<CargoIntakeModel> cargo_intake_ ;   
+                std::shared_ptr<ClimberModel> climber_ ;             
                 std::shared_ptr<xero::sim::phaser::OIModel> oi_ ;                
 
                 bool visualizer_ ;
