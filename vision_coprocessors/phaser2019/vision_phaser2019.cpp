@@ -27,6 +27,8 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/features2d.hpp>
 
+#include <FileUtils.h>
+
 //#include "SettingsParser.h"
 #include "params_parser.h"
 
@@ -77,6 +79,7 @@ namespace {
 
     unsigned int team;
     bool nt_server = false;
+    const bool stream_pipeline_output = true;
 
     
     struct CameraConfig {
@@ -368,12 +371,77 @@ namespace {
     }
 
 
+    void runPipelineFromCamera(/*std::vector<CameraConfig>& cameraConfigs*/) {
+        // Start camera streaming
+        std::vector<cs::VideoSource> cameras;
+        for (auto&& cameraConfig : cameraConfigs) {
+            cameras.emplace_back(StartCamera(cameraConfig));
+        }
+        
+        // Start image processing on last camera if present
+        auto pipe = std::make_shared<XeroPipeline>();
+        if (cameras.size() >= 1) {
+
+            std::thread t([&] {
+                              frc::VisionRunner<XeroPipeline> runner(cameras[/*0*/ cameras.size()-1],
+                                                                     pipe.get(),
+                                                                     VisionPipelineResultProcessor(stream_pipeline_output));
+                              runner.RunForever();
+                          });
+            t.detach();
+        }
+
+        // Loop forever
+        for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
+    }
+
+    void runPipelineFromVideo(const std::string& video_filename) {
+        if (!xero::file::exists(video_filename)) {
+            std::cout << "Video file '" << video_filename << "' does not exist.\n";
+            exit(-1);
+        }
+
+        VisionPipelineResultProcessor pipe_result_processor(stream_pipeline_output);
+        XeroPipeline pipe;
+
+        bool playVideo = true;
+        char key;
+        std::cout << "DEBUG: Just before cv::VideoCapture\n";
+        cv::VideoCapture capture(video_filename);
+        std::cout << "DEBUG: Just after cv::VideoCapture\n";
+
+        cv::Mat frame;
+        while (capture.get(cv::CAP_PROP_POS_FRAMES) < capture.get(cv::CAP_PROP_FRAME_COUNT)) {
+
+            if (!capture.isOpened()) {
+                std::cout << "Could not read video\n";
+                exit(-1);
+            }
+            if (playVideo) {
+                capture >> frame;
+                pipe.Process(frame);
+                pipe_result_processor(pipe);
+            }
+#if 0
+            key = cv::waitKey(10);
+            if (key == 'p') {
+                playVideo = !playVideo;
+            } else if (key == 'q') {
+                break;
+            }
+#endif
+            //sleep(10);
+        }
+        capture.release();
+        
+    }
+
+
 }  // namespace
 
 
 
 int main(int argc, char* argv[]) {
-    const bool stream_pipeline_output = true;
     const std::string params_filename("vision_params.txt");
 
     if (argc >= 2) {
@@ -405,25 +473,10 @@ int main(int argc, char* argv[]) {
     nt::NetworkTableEntry nt_table_entry = nt_table->GetEntry("MyEntry");
     nt_table_entry.SetDouble(1.5);
 
-    // Start cameras
-    std::vector<cs::VideoSource> cameras;
-    for (auto&& cameraConfig : cameraConfigs) {
-        cameras.emplace_back(StartCamera(cameraConfig));
-    }
+    // Start camera streaming + image processing on last camera if present
+    runPipelineFromCamera(/*cameraConfigs*/);
 
-    // Start image processing on camera 0 if present
-    auto pipe = std::make_shared<XeroPipeline>();
-    if (cameras.size() >= 1) {
-
-        std::thread t([&] {
-                frc::VisionRunner<XeroPipeline> runner(cameras[/*0*/ cameras.size()-1],
-                                                       pipe.get(),
-                                                       VisionPipelineResultProcessor(stream_pipeline_output));
-                runner.RunForever();
-            });
-        t.detach();
-    }
-
-    // Loop forever
-    for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
+    // Start image processing from video file
+    //runPipelineFromVideo("cube1.mp4");
+    //runPipelineFromVideo("capout.avi");
 }
