@@ -1,0 +1,4 @@
+#!/bin/bash
+sudo svc -d /service/camera
+sleep 1
+exec ./runCamera

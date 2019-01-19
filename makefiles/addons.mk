@@ -145,30 +145,6 @@ endif
 #
 
 #
-# These are for the XeroMath
-#
-ifeq ($(NEED_XEROMATH),true)
-
-#
-# WPILIB for the GOPIGO3
-#
-ifeq ($(PLATFORM),GOPIGO)
-CXXFLAGS += -I$(TOPDIR)/xerolibs/xeromath
-LIBLIST += $(TOPDIR)/xerolibs/xeromath
-endif
-
-ifeq ($(PLATFORM),SIMULATOR)
-CXXFLAGS += -I$(TOPDIR)/xerolibs/xeromath
-LIBLIST += $(TOPDIR)/xerolibs/xeromath
-endif
-
-endif
-
-#
-###########################################################################################
-#
-
-#
 # These are for the XeroMisc
 #
 ifeq ($(NEED_XEROMISC),true)

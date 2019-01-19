@@ -1,0 +1,6 @@
+This directory contains the Error Code Xero robot software arhitecture and its unit tests.  The
+directory xeromisc contains code that does not depend on the wpilib library from First and
+therefore can be reused in Raspberrry PI code (and other c++ code).  The directory xerobase contains
+the code in the Error Code Xero robot software that depends either directory or indirectly on
+code from the wpilib library.
+

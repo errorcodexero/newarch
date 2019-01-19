@@ -20,12 +20,17 @@
 #include <wpi/raw_istream.h>
 #include <wpi/raw_ostream.h>
 
-#include "cameraserver/CameraServer.h"
+#include <cameraserver/CameraServer.h>
 
-#include "opencv2/core/core.hpp"
-#include "opencv2/opencv.hpp"
-#include "opencv2/highgui.hpp"
-#include "opencv2/features2d.hpp"
+#include <opencv2/core/core.hpp>
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/features2d.hpp>
+
+#include <FileUtils.h>
+
+//#include "SettingsParser.h"
+#include "params_parser.h"
 
 
 
@@ -65,12 +70,16 @@
 */
 
 
-static const char* configFile = "/boot/frc.json";
-
 namespace {
+    
+    static const char* configFile = "/boot/frc.json";
+    
+    paramsInput params;
+
 
     unsigned int team;
     bool nt_server = false;
+    const bool stream_pipeline_output = true;
 
     
     struct CameraConfig {
@@ -223,14 +232,15 @@ namespace {
     public:
         
         XeroPipelineElementHsvThreshold(std::string name) : XeroPipelineElement(name) {
-            // Set threshold to only select green
-            //hsv_ranges = {40, 70, 40, 255, 40, 255};
-            //hsv_ranges = {0, 180, 100, 255, 50, 255};
-            //hsv_ranges = {75, 85, 200, 255, 200, 255};
-            //hsv_ranges = {65, 95, 200, 255, 200, 255};
-            //hsv_ranges = {55, 105, 200, 255, 100, 255};
+            int h_min = params.getValue("vision:pipeline:hsv_threshold:h_min");
+            int h_max = params.getValue("vision:pipeline:hsv_threshold:h_max");
+            int s_min = params.getValue("vision:pipeline:hsv_threshold:s_min");
+            int s_max = params.getValue("vision:pipeline:hsv_threshold:s_max");
+            int v_min = params.getValue("vision:pipeline:hsv_threshold:v_min");
+            int v_max = params.getValue("vision:pipeline:hsv_threshold:v_max");
             
-            hsv_ranges = {0, 255, 0, 255, 0, 255};
+            // Set threshold to only select green
+            hsv_ranges = {h_min, h_max, s_min, s_max, v_min, v_max};
         }
         
         virtual void Process(cv::Mat& frame_in) {
@@ -239,13 +249,13 @@ namespace {
             cv::cvtColor(frame_in, hsv_image, cv::COLOR_BGR2HSV);
 
             cv::inRange(hsv_image, cv::Scalar(hsv_ranges[0], hsv_ranges[2], hsv_ranges[4]), cv::Scalar(hsv_ranges[1], hsv_ranges[3], hsv_ranges[5]), green_only_image_);
-            //cv::inRange(frame_in, cv::Scalar(0, 0, 0), cv::Scalar(0, 255, 0), green_only_image_);
 
-            
+#if 0   // Make frame_out a viewable image            
             cv::cvtColor(green_only_image_, frame_out_, cv::COLOR_GRAY2BGR);
-            //frame_out_ = green_only_image_;
-            //std::cout << frame_in.channels() << "    " << frame_out_.channels() << "\n";
             cv::circle(frame_out_, cv::Point(100,100), 50,  cv::Scalar(0,0,255));
+#else  // Assign binary result to output image for use by contour detection next
+            frame_out_ = green_only_image_;
+#endif
         }
 
     private:
@@ -256,13 +266,61 @@ namespace {
     };
 
     
+    // Pipeline element for: Contour detection
+    class XeroPipelineElementFindContours : public XeroPipelineElement {
+        
+    public:
+        
+        XeroPipelineElementFindContours(std::string name) : XeroPipelineElement(name) {
+        }
+        
+        virtual void Process(cv::Mat& frame_in) {
+            contours.clear();
+            bool externalOnly = true;
+            int mode = externalOnly ? cv::RETR_EXTERNAL : cv::RETR_LIST;
+            int method = cv::CHAIN_APPROX_SIMPLE;
+            cv::findContours(frame_in, contours, hierarchy, mode, method);
+
+            //wpi::outs() << "Number of contours: " << contours.size() << "\n";
+            std::cout << "Number of contours: " << contours.size() << "\n";
+
+            cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
+
+            
+            for (std::vector<cv::Point> contour : contours) {
+                if (1 /*cv::iscorrect(contour)*/) {
+                    std::cout << "   #points: " << contour.size() << std::endl;
+                    for (cv::Point pt : contour) {
+                        std::cout << "        " << pt.x << ", " << pt.y << std::endl;
+                    }
+                    cv::drawContours(frame_out_,
+                                     std::vector<std::vector<cv::Point> >(1,contour),
+                                     -1,
+                                     cv::Scalar(0,0,255) /*color*/,
+                                     1,
+                                     8);
+                }
+            }                
+            
+            //frame_out_ = frame_in;
+        }
+
+    private:
+
+        std::vector<std::vector<cv::Point> > contours;
+        std::vector<cv::Vec4i> hierarchy;
+
+    };
+
+    
     // Example pipeline
     class XeroPipeline : public frc::VisionPipeline {
     public:
         int val = 0;
 
         XeroPipeline() {
-            pipe_elements_.push_back(new XeroPipelineElementHsvThreshold("test element"));
+            pipe_elements_.push_back(new XeroPipelineElementHsvThreshold("HSV Threshold"));
+            pipe_elements_.push_back(new XeroPipelineElementFindContours("Find Contours"));
         }
 
         virtual ~XeroPipeline();
@@ -313,15 +371,86 @@ namespace {
     }
 
 
+    void runPipelineFromCamera(/*std::vector<CameraConfig>& cameraConfigs*/) {
+        // Start camera streaming
+        std::vector<cs::VideoSource> cameras;
+        for (auto&& cameraConfig : cameraConfigs) {
+            cameras.emplace_back(StartCamera(cameraConfig));
+        }
+        
+        // Start image processing on last camera if present
+        auto pipe = std::make_shared<XeroPipeline>();
+        if (cameras.size() >= 1) {
+
+            std::thread t([&] {
+                              frc::VisionRunner<XeroPipeline> runner(cameras[/*0*/ cameras.size()-1],
+                                                                     pipe.get(),
+                                                                     VisionPipelineResultProcessor(stream_pipeline_output));
+                              runner.RunForever();
+                          });
+            t.detach();
+        }
+
+        // Loop forever
+        for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
+    }
+
+    void runPipelineFromVideo(const std::string& video_filename) {
+        if (!xero::file::exists(video_filename)) {
+            std::cout << "Video file '" << video_filename << "' does not exist.\n";
+            exit(-1);
+        }
+
+        VisionPipelineResultProcessor pipe_result_processor(stream_pipeline_output);
+        XeroPipeline pipe;
+
+        bool playVideo = true;
+        char key;
+        std::cout << "DEBUG: Just before cv::VideoCapture\n";
+        cv::VideoCapture capture(video_filename);
+        std::cout << "DEBUG: Just after cv::VideoCapture\n";
+
+        cv::Mat frame;
+        while (capture.get(cv::CAP_PROP_POS_FRAMES) < capture.get(cv::CAP_PROP_FRAME_COUNT)) {
+
+            if (!capture.isOpened()) {
+                std::cout << "Could not read video\n";
+                exit(-1);
+            }
+            if (playVideo) {
+                capture >> frame;
+                pipe.Process(frame);
+                pipe_result_processor(pipe);
+            }
+#if 0
+            key = cv::waitKey(10);
+            if (key == 'p') {
+                playVideo = !playVideo;
+            } else if (key == 'q') {
+                break;
+            }
+#endif
+            //sleep(10);
+        }
+        capture.release();
+        
+    }
+
+
 }  // namespace
 
 
 
 int main(int argc, char* argv[]) {
-    const bool stream_pipeline_output = true;
+    const std::string params_filename("vision_params.txt");
 
     if (argc >= 2) {
         configFile = argv[1];
+    }
+
+    // Read params file
+    if (!params.readFile(params_filename)) {
+        return EXIT_FAILURE;
     }
 
     // Read configuration
@@ -344,25 +473,10 @@ int main(int argc, char* argv[]) {
     nt::NetworkTableEntry nt_table_entry = nt_table->GetEntry("MyEntry");
     nt_table_entry.SetDouble(1.5);
 
-    // Start cameras
-    std::vector<cs::VideoSource> cameras;
-    for (auto&& cameraConfig : cameraConfigs) {
-        cameras.emplace_back(StartCamera(cameraConfig));
-    }
+    // Start camera streaming + image processing on last camera if present
+    runPipelineFromCamera(/*cameraConfigs*/);
 
-    // Start image processing on camera 0 if present
-    auto pipe = std::make_shared<XeroPipeline>();
-    if (cameras.size() >= 1) {
-
-        std::thread t([&] {
-                frc::VisionRunner<XeroPipeline> runner(cameras[0],
-                                                       pipe.get(),
-                                                       VisionPipelineResultProcessor(stream_pipeline_output));
-                runner.RunForever();
-            });
-        t.detach();
-    }
-
-    // Loop forever
-    for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
+    // Start image processing from video file
+    //runPipelineFromVideo("cube1.mp4");
+    //runPipelineFromVideo("capout.avi");
 }

@@ -56,14 +56,15 @@ namespace xero {
             }
 
             std::string str ;
-
-            wmove (robot_window_, TimeRow, 0) ;
+            subsystem_row_   = 1 ;
+            
+            wmove (robot_window_, subsystem_row_++, 0) ;
             str = "Time: " ;
             str += std::to_string(t) ;
             waddstr(robot_window_, str.substr(0, RobotWindowWidth).c_str()) ;
             wclrtoeol(robot_window_) ;
 
-            wmove(robot_window_, TimeRow + 1, 0) ;
+            wmove(robot_window_, subsystem_row_++, 0) ;
             str = "Mode: " + getModeString() ;
 
             waddstr(robot_window_, str.substr(0, RobotWindowWidth).c_str()) ;
@@ -282,5 +283,23 @@ namespace xero {
             last_angle_ = angle ;
             last_info_valid_ = true ;
         }       
+
+        void ScreenVisualizer::visualizeSubsystem(std::shared_ptr<SubsystemModel> model_p) {
+            std::list<std::string> lines ;
+            int fieldwidth = getRobotWindowWidth() ;            
+
+            subsystem_row_++ ;
+
+            wmove(getRobotWindow(), subsystem_row_++, 0) ;
+            waddstr(getRobotWindow(), model_p->getName().c_str()) ;
+
+            model_p->generateDisplayInformation(lines) ;
+            for(std::string line : lines) {
+                if (line.length() > fieldwidth)
+                    line = line.substr(0, fieldwidth) ;
+                wmove(getRobotWindow(),subsystem_row_++, 0) ;
+                waddstr(getRobotWindow(), line.c_str()) ;
+            }
+        }
     }
 }

@@ -26,7 +26,7 @@ deploy {
         // Built in artifact to deploy arbitrary files to the roboRIO.
         fileTreeArtifact('frcStaticFileDeploy') {
             // The directory below is the local directory to deploy
-            files = fileTree(dir: 'robots/phaser/src/main/deploy')
+            files = fileTree(dir: 'robots/grond/src/main/deploy')
             // Deploy to RoboRIO target, into /home/lvuser/deploy
             targets << "roborio"
             directory = '/home/lvuser/deploy'
@@ -51,7 +51,6 @@ model {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
 				lib library: "xerobase", linkage: "static"
 				lib library: "xeromisc", linkage: "static"                
-				lib library: "xeromath", linkage: "static"                
 			}            
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
@@ -64,6 +63,34 @@ model {
                 }
                 exportedHeaders {
                     srcDir 'robots/phoenix/src/main/cpp'
+                    include '**/*.h'
+                }
+                                
+            }
+
+            // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
+            useLibrary(it, "wpilib")
+            wpi.deps.vendor.cpp(it)
+        }  
+
+        frcUserPhaserProgram(NativeExecutableSpec) {
+            targetPlatform wpi.platforms.roborio
+			binaries.all {
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+				lib library: "xerobase", linkage: "static"
+				lib library: "xeromisc", linkage: "static"                
+			}            
+            if (includeDesktopSupport) {
+                targetPlatform wpi.platforms.desktop
+            }
+
+            sources.cpp {
+                source {
+                    srcDir 'robots/phaser/src/main/cpp'
+                    include '**/*.cpp'
+                }
+                exportedHeaders {
+                    srcDir 'robots/phaser/src/main/cpp'
                     include '**/*.h'
                 }
                                 
@@ -80,36 +107,6 @@ model {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
 				lib library: "xerobase", linkage: "static"
 				lib library: "xeromisc", linkage: "static"                
-				lib library: "xeromath", linkage: "static"                
-			}            
-            if (includeDesktopSupport) {
-                targetPlatform wpi.platforms.desktop
-            }
-
-            sources.cpp {
-                source {
-                    srcDir 'robots/phaser/src/main/cpp'
-                    include '**/*.cpp'
-                }
-                exportedHeaders {
-                    srcDir 'robots/phaser/src/main/cpp'
-                    include '**/*.h'
-                }
-                                
-            }
-
-            // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-            useLibrary(it, "wpilib")
-            wpi.deps.vendor.cpp(it)
-        }  
-
-        frcUserGrondProgram(NativeExecutableSpec) {
-            targetPlatform wpi.platforms.roborio
-			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-				lib library: "xerobase", linkage: "static"
-				lib library: "xeromisc", linkage: "static"                
-				lib library: "xeromath", linkage: "static"                
 			}            
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
@@ -138,7 +135,6 @@ model {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
 				lib library: "xerobase", linkage: "static"
 				lib library: "xeromisc", linkage: "static"                
-				lib library: "xeromath", linkage: "static"                
 			}            
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
@@ -178,33 +174,10 @@ model {
 				    srcDirs = ["xerolibs/xeromisc"]
 					include "**/*.h"
 				}
-
-				lib library: "xeromath", linkage: "static"
 			}
             useLibrary(it, "wpilib")       
             wpi.deps.vendor.cpp(it)                           
 		}
-
-		xeromath(NativeLibrarySpec) {
-            targetPlatform wpi.platforms.roborio
-			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
-			sources.cpp {
-			    source {
-				    srcDirs = ["xerolibs/xeromath"]
-					include "**/*.cpp"
-				}
-				exportedHeaders {
-				    srcDirs = ["xerolibs/xeromath"]
-					include "**/*.h"
-				}
-			}
-            wpi.deps.vendor.cpp(it)            
-		}        
 
 		xerobase(NativeLibrarySpec) {
             targetPlatform wpi.platforms.roborio
@@ -224,7 +197,6 @@ model {
 					include "*.h", "**/*.h"
 				}
 
-				lib library: "xeromath", linkage: "static"
 				lib library: "xeromisc", linkage: "static"
 			}
             useLibrary(it, "wpilib")

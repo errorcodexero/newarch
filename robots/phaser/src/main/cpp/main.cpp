@@ -3,7 +3,7 @@
 
 #ifdef SIMULATOR
 #include <PhaserSimulator.h>
-xero::sim::phaser::PhaserSimulator sim("robotsims/phaser/sim.dat") ;
+xero::sim::phaser::PhaserSimulator sim("robotsims/phasersim/sim.dat") ;
 #endif
 
 int main(int ac, char **av)

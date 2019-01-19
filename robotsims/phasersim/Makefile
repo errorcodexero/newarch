@@ -4,15 +4,17 @@ SOURCES = \
 	PhaserScreenVisualizer.cpp\
 	PhaserSimulator.cpp\
 	OIModel.cpp\
-	LifterModel.cpp\
-	TurnTableModel.cpp
+	HatchHolderModel.cpp\
+	CargoHolderModel.cpp\
+	HatchIntakeModel.cpp\
+	CargoIntakeModel.cpp\
+	ClimberModel.cpp
 
 TARGET=phasersim
 
 NEED_WPILIB=true
 NEED_CTRE=true
 NEED_NAVX=true
-NEED_XEROMATH=true
 NEED_XEROMISC=true
 
 LOCAL_CFLAGS +=

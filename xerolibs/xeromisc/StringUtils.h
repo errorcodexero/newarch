@@ -52,6 +52,13 @@ namespace xero {
             }
         }
 
+        /// \brief returns if a string only has digits (i.e., positive or 0 integer)
+        /// \param s the string to check
+        inline bool hasOnlyDigits(const std::string s) {
+            const bool has_only_digits = (s.find_first_not_of( "0123456789" ) == std::string::npos);
+            return has_only_digits;
+        }
+
     }
         
 }

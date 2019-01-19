@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Visualizer.h"
+#include "TankDriveModel.h"
+#include "LifterModel.h"
+#include "TurnTableModel.h"
 #include <ncurses.h>
 
 namespace xero {
@@ -11,13 +14,16 @@ namespace xero {
             virtual ~ScreenVisualizer() ;
 
             virtual void beginCycle(double time) ;
-            virtual void visualizeSubsystem(std::shared_ptr<SubsystemModel> subsystem_p)  {             
-            }
             virtual void endCycle() ;       
 
             void windowSizeChanged() ;          
+            virtual void visualizeSubsystem(std::shared_ptr<SubsystemModel> subsystem_p)  ;
 
         protected:
+
+            void displayTankDrive(std::shared_ptr<TankDriveModel> subsystem_p, int row) ;
+            void displayLifter(std::shared_ptr<LifterModel> subsystem_p, int row) ;
+            void displayTurnTable(std::shared_ptr<TurnTableModel> subsystem_p, int row) ;
 
             WINDOW *getRobotWindow() {
                 return robot_window_ ;
@@ -35,10 +41,6 @@ namespace xero {
                 return oi_window_ ;
             }
 
-            int getFirstSubsystemRow() const {
-                return TimeRow + 3 ;
-            }
-
             void initScreen() ;
             void deinitScreen() ;
             void drawField() ;
@@ -46,11 +48,7 @@ namespace xero {
             void plotRobot(double x, double y, double angle) ;
 
             virtual char getRobotChar() {
-                return '@' ;
-            }
-
-            virtual std::string getModeString() {
-                return "NoModeDefined" ;
+                return ' ' ;
             }
 
             virtual void drawGameSpecificField(WINDOW *win) {               
@@ -70,7 +68,6 @@ namespace xero {
         private:
             static const int RobotWindowWidth = 20 ;
             static const int OIWindowWidth = 24 ;
-            static const int TimeRow = 1 ;      
             static const char *rotate_chars_ ;              
 
         private:
@@ -80,6 +77,8 @@ namespace xero {
             WINDOW *smart_window_ ;
 
             bool inited_ ;
+
+            int subsystem_row_ ;
 
             // The last position of the robot
             int last_x_ ;

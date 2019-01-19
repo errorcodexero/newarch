@@ -4,6 +4,7 @@
 #include "AutoController.h"
 #include "basegroups.h"
 #include "OISubsystem.h"
+#include "TeleopController.h"
 #include <MessageDestStream.h>
 #include <MessageDestSeqFile.h>
 #include <MessageDestDS.h>
@@ -424,6 +425,8 @@ namespace xero {
             message_logger_.endMessage() ;           
 
             controller_ = createTeleopController() ;
+            if (controller_ == nullptr)
+                controller_ = std::make_shared<TeleopController>(*this) ;
 
             robot_subsystem_->init(LoopType::OperatorControl) ;         
 
