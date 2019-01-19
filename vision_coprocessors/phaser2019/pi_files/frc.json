@@ -1,0 +1,41 @@
+{
+    "cameras": [
+        {
+            "fps": 30,
+            "height": 480,
+            "name": "rPi Camera 0",
+            "path": "/dev/video0",
+            "pixel format": "mjpeg",
+            "stream": {
+                "properties": []
+            },
+            "width": 640
+        },
+        {
+            "exposure": 1,
+            "brightness": 1,
+            "white balance": 0,
+            "fps": 30,
+            "height": 480,
+            "name": "LogitechC270",
+            "path": "/dev/video1",
+            "pixel format": "mjpeg",
+            "properties": [
+                {
+                    "name": "gain",
+                    "value": 0
+                },
+                {
+                    "name": "saturation",
+                    "value": 50
+                }
+            ],
+            "stream": {
+                "properties": []
+            },
+            "width": 640
+        }
+    ],
+    "ntmode": "server",
+    "team": 1425
+}
