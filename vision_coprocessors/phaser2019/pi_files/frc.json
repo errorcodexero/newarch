@@ -1,24 +1,13 @@
 {
     "cameras": [
         {
-            "fps": 30,
-            "height": 480,
-            "name": "rPi Camera 0",
-            "path": "/dev/video0",
-            "pixel format": "mjpeg",
-            "stream": {
-                "properties": []
-            },
-            "width": 640
-        },
-        {
             "exposure": 1,
             "brightness": 1,
             "white balance": 0,
             "fps": 30,
             "height": 480,
             "name": "LogitechC270",
-            "path": "/dev/video1",
+            "path": "/dev/video0",
             "pixel format": "mjpeg",
             "properties": [
                 {
@@ -28,6 +17,10 @@
                 {
                     "name": "saturation",
                     "value": 50
+                },
+                {
+                    "name": "exposure_auto_priority",
+                    "value": false
                 }
             ],
             "stream": {
