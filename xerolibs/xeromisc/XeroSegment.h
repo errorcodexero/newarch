@@ -14,8 +14,8 @@ namespace xero {
                         jerk_(jerk), heading_(heading) {}
 
             XeroSegment(std::array<double, HEADER_COUNT> data) 
-                : x_(data[0]), y_(data[1]), linPos_(data[2]), accel_(data[4]),
-            jerk_(data[5]), heading_(data[6]) {}   
+                : x_(data[0]), y_(data[1]), linPos_(data[2]), vel_(data[3]), accel_(data[4]),
+                    jerk_(data[5]), heading_(data[6]) {}   
 
             double getX() const {
                 return x_ ;

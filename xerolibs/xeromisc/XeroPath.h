@@ -25,11 +25,11 @@ namespace xero {
                 return leftPath_.size() ;
             }
 
-            XeroSegment getLeftSegment(size_t idx) {
+            const XeroSegment &getLeftSegment(size_t idx) {
                 return leftPath_[idx];
             }
 
-            XeroSegment getRightSegment(size_t idx) {
+            const XeroSegment &getRightSegment(size_t idx) {
                 return rightPath_[idx];
             }
 
