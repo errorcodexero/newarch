@@ -11,6 +11,8 @@
 #include <vector>
 
 #include <iostream>
+#include <math.h>
+#include <assert.h>
 
 #include <networktables/NetworkTableInstance.h>
 #include <vision/VisionPipeline.h>
@@ -72,7 +74,10 @@
 
 namespace {
     
-    static const char* configFile = "/boot/frc.json";
+    const char* configFile = "/boot/frc.json";
+    const cv::Scalar color_blue(2550,0);
+    const cv::Scalar color_green(0,255,0);
+    const cv::Scalar color_red(0,0,255);
     
     paramsInput params;
 
@@ -209,6 +214,45 @@ namespace {
         return camera;
     }
 
+    // Return area of cv::RotatedRect
+    double getRectArea(const cv::RotatedRect& rect) {
+        cv::Size2f rect_size = rect.size;
+        return (rect_size.width * rect_size.height);
+    }
+
+    // Return rectangle aspect ratio.  Always >= 1.
+    double getRectAspectRatio(const cv::RotatedRect& rect) {
+        cv::Size2f rect_size = rect.size;
+        double aspect_ratio = rect_size.width / rect_size.height;
+        if (aspect_ratio < 1.0 && aspect_ratio != 0) {
+            aspect_ratio = 1.0/aspect_ratio;
+        }
+        return aspect_ratio;
+    }
+
+    // Check if a number is approximately equal to another, +- some tolerance (percentage/100) of the second number
+    bool isApproxEqual(double num1, double num2, double tolerance /*0->1*/) {
+        const double min = num2 * (1.0 - tolerance);
+        const double max = num2 * (1.0 + tolerance);
+        return (num1 >= min) && (num1 <= max);
+    }
+
+    // Ratio of difference between 2 numbers to the average of the two.
+    // If one if 0, compare to the other.
+    bool ratioOfDifference(double num1, double num2) {
+        double ref = (num1 + num2) / 2.0;
+        if (ref == 0) {
+            ref = (num1 == 0)? num2 : num1;
+            if (ref == 0) {
+                assert(num1 == 0);
+                assert(num2 == 0);
+                return 0;
+            }
+        }
+        const double ratio = (num1 - num2) / ref;
+        return fabs(ratio);
+    }
+
     // One component of a vision pipeline.
     // Takes in an image (cv::Mat) and produces a modified one.
     // Copy the image frame rather than modify it in place in case we later need to show the different pipeline element outputs.
@@ -248,11 +292,14 @@ namespace {
 
             cv::cvtColor(frame_in, hsv_image, cv::COLOR_BGR2HSV);
 
-            cv::inRange(hsv_image, cv::Scalar(hsv_ranges[0], hsv_ranges[2], hsv_ranges[4]), cv::Scalar(hsv_ranges[1], hsv_ranges[3], hsv_ranges[5]), green_only_image_);
+            cv::inRange(hsv_image,
+                        cv::Scalar(hsv_ranges[0], hsv_ranges[2], hsv_ranges[4]),
+                        cv::Scalar(hsv_ranges[1], hsv_ranges[3], hsv_ranges[5]),
+                        green_only_image_);
 
 #if 0   // Make frame_out a viewable image            
             cv::cvtColor(green_only_image_, frame_out_, cv::COLOR_GRAY2BGR);
-            cv::circle(frame_out_, cv::Point(100,100), 50,  cv::Scalar(0,0,255));
+            cv::circle(frame_out_, cv::Point(100,100), 50,  color_red);
 #else  // Assign binary result to output image for use by contour detection next
             frame_out_ = green_only_image_;
 #endif
@@ -275,32 +322,129 @@ namespace {
         }
         
         virtual void Process(cv::Mat& frame_in) {
+            // Perform contour detection
             contours.clear();
-            bool externalOnly = true;
-            int mode = externalOnly ? cv::RETR_EXTERNAL : cv::RETR_LIST;
-            int method = cv::CHAIN_APPROX_SIMPLE;
+            const bool externalOnlyContours = true;
+            const int mode = externalOnlyContours ? cv::RETR_EXTERNAL : cv::RETR_LIST;
+            const int method = cv::CHAIN_APPROX_SIMPLE;
             cv::findContours(frame_in, contours, hierarchy, mode, method);
 
-            //wpi::outs() << "Number of contours: " << contours.size() << "\n";
-            std::cout << "Number of contours: " << contours.size() << "\n";
-
+            // Confirm input binary image to a viewable object.
+            // Further detection will be added to this image.
             cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
-
             
-            for (std::vector<cv::Point> contour : contours) {
-                if (1 /*cv::iscorrect(contour)*/) {
-                    std::cout << "   #points: " << contour.size() << std::endl;
-                    for (cv::Point pt : contour) {
-                        std::cout << "        " << pt.x << ", " << pt.y << std::endl;
-                    }
+            // Unless we have at least 2 contours, nothing further to do
+            if (contours.size() < 2) {
+                return;
+            }
+
+            // Draw contours + find rectangles meeting aspect ratio requirement
+            std::vector<cv::RotatedRect> min_rects(contours.size()), filtered_min_rects;
+            const double expected_aspect_of_target = 5.5/2;
+            const double aspect_ratio_tolerance = 0.15;
+            for (int ix=0; ix < contours.size(); ++ix) {
+                std::vector<cv::Point>& contour = contours[ix];
+
+                // Draw contour in blue
+                if (1 /*cv::iscorrect(contour)*/) {  // TODO: Replace 1 by cv::iscorrect(), ensure it works
                     cv::drawContours(frame_out_,
-                                     std::vector<std::vector<cv::Point> >(1,contour),
-                                     -1,
-                                     cv::Scalar(0,0,255) /*color*/,
-                                     1,
+                                     std::vector<std::vector<cv::Point> >(1,contour),  // TODO: Pass contours + actual index
+                                     -1,          // Negative index ==> draw all contours
+                                     color_blue,  // Color
+                                     1,           // Thickness
                                      8);
                 }
-            }                
+
+                // Find minimum rotated rectangle encapsulating the contour
+                cv::RotatedRect min_rect = min_rects[ix];
+                min_rect = cv::minAreaRect(contour);
+                double aspect_ratio = getRectAspectRatio(min_rect);
+
+                // Keep rectangles that have the expected aspect ratio
+                if (isApproxEqual(aspect_ratio, expected_aspect_of_target, aspect_ratio_tolerance)) {
+                    filtered_min_rects.push_back(min_rect);
+                    cv::Point2f rect_points[4];
+                    min_rect.points(rect_points);
+                    for (int j = 0; j < 4; j++ ) {
+                        cv::line(frame_out_, rect_points[j], rect_points[(j+1)%4], color_red, 2);
+                    }
+                }
+            }
+
+            // Only continue if we have at least 2 filtered rectangles
+            if (filtered_min_rects.size() < 2) {
+                return;
+            }
+            
+            // Sort rectangles on descending area
+            std::sort(filtered_min_rects.begin(),
+                      filtered_min_rects.end(),
+                      [](const cv::RotatedRect& a, const cv::RotatedRect& b) -> bool
+                      { 
+                          return (getRectArea(a) > getRectArea(b));
+                      });
+
+            // Only accept rectangles if top 2 rectangles close in area
+            const double area1 = getRectArea(filtered_min_rects[0]);
+            const double area2 = getRectArea(filtered_min_rects[1]);
+            double relative_area = ratioOfDifference(area1, area2);
+            //std::cout << "    Relative area = " << relative_area << "\n";
+            if (relative_area > 0.45) {
+                return;
+            }
+
+            cv::RotatedRect left_rect(filtered_min_rects[0]);
+            cv::RotatedRect right_rect(filtered_min_rects[1]);
+            if (left_rect.center.x > right_rect.center.x) {
+                std::swap(left_rect, right_rect);
+            }
+
+            // Top 2 rectangles must have centers almost at same height.
+            // Note origin (0,0) is top left corner so Y axis is reversed.
+            cv::Point2f left_center = left_rect.center;
+            cv::Point2f right_center = right_rect.center;
+            const double delta_x = right_center.x - left_center.x;
+            const double delta_y = -(right_center.y - left_center.y);
+            assert(delta_x >= 0);
+            double tangent = delta_y / delta_x;
+            double angle_in_rad = atan(tangent);
+            double angle_in_deg = angle_in_rad * 57.2958;
+            if (fabs(angle_in_deg) > 15) {
+                return;
+            }
+
+            cv::Point2f center_point = (left_center + right_center) * 0.5;
+            double dist_between_centers = hypot(delta_x, delta_y);
+
+            // At this point, top 2 rectangles have right aspect ratio, almost equal size, and almost same height
+            // So likely a valid target.
+            // Draw them in green.
+            for (int ix=0; ix<2; ++ix) {
+                cv::RotatedRect rect = filtered_min_rects[ix];
+                cv::Point2f rect_points[4];
+                rect.points(rect_points);
+                for (int j = 0; j < 4; j++ ) {
+                    cv::line(frame_out_, rect_points[j], rect_points[(j+1)%4], color_green, 2);
+                }
+            }
+
+            // Draw line between centres
+            cv::line(frame_out_, left_center, right_center, color_green, 2);
+
+            // Draw marker through center
+            cv::drawMarker(frame_out_, center_point, color_green, cv::MARKER_CROSS, 20 /*marker size*/, 2 /*thickness*/);
+
+            // TODO: Filter on angle of rectangles?
+            //       Filter on area vs. distance between centres?
+            //       Measure angle and distance.
+
+#if 0
+            std::cout << "Contours: Total=" << contours.size() << ", filtered=" << filtered_min_rects.size() << "\n";
+            for (cv::RotatedRect& rect : filtered_min_rects) {
+                cv::Size2f rect_size = rect.size;
+                std::cout << "    " << (rect_size.width * rect_size.height) << "\n";
+            }
+#endif
             
             //frame_out_ = frame_in;
         }
@@ -381,6 +525,7 @@ namespace {
         // Start image processing on last camera if present
         auto pipe = std::make_shared<XeroPipeline>();
         if (cameras.size() >= 1) {
+            std::cout << "Starting vision pipeline\n";
 
             std::thread t([&] {
                               frc::VisionRunner<XeroPipeline> runner(cameras[/*0*/ cameras.size()-1],
