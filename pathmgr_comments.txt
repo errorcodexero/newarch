@@ -1,0 +1,6 @@
+1. Put classes into .h and .cpp files, they keep the definition (mostly) separated from the implementation
+2. Put each class into a separate file, it makes it easier on the people coming from behind you.
+3. You have a variable named count in the CSVData class that is always the same as data.size().  Since you have
+   the size already with data.size(), don't keep a parallel variable.  It is just a place for bugs to creep in.
+4. Should have told you, our coding convention is trailing underscore on member variables
+5. While its true in C# and Java, in C++ you dont have to initialize something like std::map<std::string, std::shared_ptr<XeroPath>>

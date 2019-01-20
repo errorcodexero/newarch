@@ -44,10 +44,10 @@ namespace xero {
 
         void DriverGamepad::rumble(bool left, double value) {
             if (controller_ != nullptr) {
-                frc::GenericHID::RumbleType rtype = frc::GenericHID::RumbleType::kLeftRumble ;
+                frc::XboxController::RumbleType rtype = frc::XboxController::RumbleType::kLeftRumble ;
 
                 if (!left)
-                    rtype = frc::GenericHID::RumbleType::kRightRumble ;
+                    rtype = frc::XboxController::RumbleType::kRightRumble ;
 
                 controller_->SetRumble(rtype, value) ;
             }

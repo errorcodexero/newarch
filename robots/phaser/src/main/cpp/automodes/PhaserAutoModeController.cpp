@@ -59,26 +59,14 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
 
-            act = std::make_shared<TankDriveFollowPathAction>(*db, "TestOne") ;
+            act = std::make_shared<TankDriveFollowPathAction>(*db, "HabLeftCargoLeftOne") ;
             mode->pushSubActionPair(db, act) ;
 
             return mode ;         
         }
 
         ActionSequencePtr PhaserAutoModeController::createTestTwo() {
-            std::string name = "Test Two" ;
-            std::string desc = "Drive Curve" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
-            ActionPtr act ;
-
-            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
-            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto db = phaserrobot->getTankDrive() ;
-
-            act = std::make_shared<TankDriveFollowPathAction>(*db, "TestTwo") ;
-            mode->pushSubActionPair(db, act) ;
-
-            return mode ;         
+            return nullptr ;
         }        
     }
 }

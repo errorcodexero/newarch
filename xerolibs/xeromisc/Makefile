@@ -1,6 +1,7 @@
 TOPDIR=../..
 
 SOURCES = \
+	CSVData.cpp\
 	Kinematics.cpp\
 	MessageDestFile.cpp\
 	MessageDestSeqFile.cpp\
@@ -12,13 +13,10 @@ SOURCES = \
 	PointAngle.cpp\
 	Polar.cpp\
 	QuadraticSolver.cpp\
-	ReadPathWeaver.cpp\
 	SettingsParser.cpp\
 	StallMonitor.cpp\
 	TrapezoidalProfile.cpp\
-	XeroPath.cpp\
-	XeroPathManager.cpp\
-	XeroPathReader.cpp
+	XeroPathManager.cpp
 
 TARGET=xeromisc
 

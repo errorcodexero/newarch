@@ -1,41 +1,50 @@
-#include "XeroPathManager.h"
-#include "XeroPathReader.h"
-#include <cassert>
+﻿#include "XeroPathManager.h"
+#include "CSVData.h"
 
 namespace xero {
     namespace misc {
+        constexpr const char* leftSuffix  = ".left.pf1.csv";
+        constexpr const char* rightSuffix = ".right.pf1.csv";
 
-        XeroPathManager::XeroPathManager(MessageLogger &logger, const std::string &loc) : logger_(logger) {
-            basedir_ = loc ;
+        XeroPathManager::XeroPathManager(const std::string &basedir) : basedir_(basedir) {
         }
 
-        XeroPathManager::~XeroPathManager() {            
-        }
+        bool XeroPathManager::loadPath(const std::string & pathName) {
+            std::string filename = basedir_ + "/" + pathName + leftSuffix ;
+            auto leftData = CSVData(filename);
+            if (!leftData.isLoaded()) {
+                return false;
+            }
 
-        bool XeroPathManager::loadPath(const std::string &pathname) {
-            std::string filename ;
-            
-            filename = basedir_ + "/" + pathname ;
-            std::shared_ptr<XeroPath> path = XeroPathReader::loadPath(logger_, pathname, filename) ;
-            if (path == nullptr)
+            filename = basedir_ + "/" + pathName + rightSuffix ;
+            auto rightData = CSVData(filename);
+            if (!rightData.isLoaded()) {
+                return false;
+            }
+
+            if(rightData.size() != leftData.size()) {
+                return false;
+            }
+
+            if (leftData.size() == 0)
                 return false ;
 
-            paths_[pathname] = path ;
+            paths_[pathName] = std::make_shared<XeroPath>(pathName, leftData, rightData);
 
-            return true ;
+            return true;
         }
 
-        bool XeroPathManager::hasPath(const std::string &pathname) {
-            auto it = paths_.find(pathname) ;
-            return it != paths_.end() ;
+        bool XeroPathManager::hasPath(const std::string & pathName) {
+            auto iter = paths_.find(pathName);
+            return iter != std::end(paths_);
         }
 
-        std::shared_ptr<XeroPath> XeroPathManager::getPath(const std::string &pathname) {            
-            auto it = paths_.find(pathname) ;
-            if (it == paths_.end())
-                return nullptr ;
-
-            return it->second ;
+        std::shared_ptr<XeroPath> XeroPathManager::getPath(const std::string &pathName) {
+            if(hasPath(pathName)) {
+                return paths_[pathName];
+            } else {
+                return nullptr;
+            }
         }
     }
 }

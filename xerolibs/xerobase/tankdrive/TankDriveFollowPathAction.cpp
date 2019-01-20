@@ -55,11 +55,11 @@ namespace xero {
                 auto &logger = getTankDrive().getRobot().getMessageLogger() ;
 
                 double dt = getTankDrive().getRobot().getDeltaTime() ;
-                const XeroPathSegment lseg = path_->getLeft(index_) ;
-                const XeroPathSegment rseg = path_->getRight(index_) ;
-                double lout = left_follower_->getOutput(lseg.getAcceleration(), lseg.getVelocity(), lseg.getPOS(), 
+                const XeroSegment lseg = path_->getLeftSegment(index_) ;
+                const XeroSegment rseg = path_->getRightSegment(index_) ;
+                double lout = left_follower_->getOutput(lseg.getAccel(), lseg.getVelocity(), lseg.getPOS(), 
                                         left_start_ + getTankDrive().getLeftDistance(), dt) ;
-                double rout = right_follower_->getOutput(rseg.getAcceleration(), rseg.getVelocity(), rseg.getPOS(), 
+                double rout = right_follower_->getOutput(rseg.getAccel(), rseg.getVelocity(), rseg.getPOS(), 
                                         right_start_ + getTankDrive().getRightDistance(), dt) ;
 
                 getTankDrive().setMotorsToPercents(lout, rout) ;                        
@@ -72,13 +72,13 @@ namespace xero {
                 logger << "," << left_start_ + getTankDrive().getLeftDistance() ;
                 logger << "," << lseg.getVelocity() ;
                 logger << "," << getTankDrive().getLeftVelocity() ;
-                logger << "," << lseg.getAcceleration() ;
+                logger << "," << lseg.getAccel() ;
                 logger << "," << lout ;
                 logger << "," << rseg.getPOS() ;
                 logger << "," << right_start_ + getTankDrive().getRightDistance() ;                
                 logger << "," << lseg.getVelocity() ;
                 logger << "," << getTankDrive().getRightVelocity() ;                
-                logger << "," << lseg.getAcceleration() ;                
+                logger << "," << lseg.getAccel() ;                
                 logger << "," << rout ;
                 logger.endMessage() ;
 

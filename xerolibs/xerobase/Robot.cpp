@@ -235,7 +235,7 @@ namespace xero {
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
             message_logger_ << ".... loading path files" ;
             message_logger_.endMessage() ;     
-            paths_ = std::make_shared<XeroPathManager>(message_logger_, deploy_dir_ + "/output") ;
+            paths_ = std::make_shared<XeroPathManager>(deploy_dir_ + "/output") ;
             loadPaths() ;
 
             //

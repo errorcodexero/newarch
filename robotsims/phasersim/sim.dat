@@ -1,6 +1,8 @@
+#####################################################################################
 #
 # This section describes the hardware for the simulated subsystems
 #
+#####################################################################################
 
 # Drivebase
 hw:tankdrive:leftmotor:1             1                                  # TalonSRX 1
