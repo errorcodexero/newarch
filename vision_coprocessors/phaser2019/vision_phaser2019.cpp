@@ -84,7 +84,14 @@ namespace {
 
     unsigned int team;
     bool nt_server = false;
+
+    // Whether to stream the output image from the pipeline.
+    // Should just be needed for debug.
+    // To enable, set param in param fie.
     static bool stream_pipeline_output = false;
+
+    // Network table entries where results from tracking will be posted.
+    nt::NetworkTableEntry nt_target_dist_pixels, nt_target_dist_inches, nt_target_yaw_deg, nt_target_valid;
 
     
     struct CameraConfig {
@@ -335,6 +342,7 @@ namespace {
             
             // Unless we have at least 2 contours, nothing further to do
             if (contours.size() < 2) {
+                nt_target_valid.SetBoolean(false);                
                 return;
             }
 
@@ -373,6 +381,7 @@ namespace {
 
             // Only continue if we have at least 2 filtered rectangles
             if (filtered_min_rects.size() < 2) {
+                nt_target_valid.SetBoolean(false);                
                 return;
             }
             
@@ -390,6 +399,7 @@ namespace {
             double relative_area = ratioOfDifference(area1, area2);
             //std::cout << "    Relative area = " << relative_area << "\n";
             if (relative_area > 0.45) {
+                nt_target_valid.SetBoolean(false);                
                 return;
             }
 
@@ -410,6 +420,7 @@ namespace {
             double angle_in_rad = atan(tangent);
             double angle_in_deg = angle_in_rad * 57.2958;
             if (fabs(angle_in_deg) > 15) {
+                nt_target_valid.SetBoolean(false);                
                 return;
             }
 
@@ -437,6 +448,13 @@ namespace {
             // TODO: Filter on angle of rectangles?
             //       Filter on area vs. distance between centres?
             //       Measure angle and distance.
+
+            // Publish results on network table
+            nt_target_dist_pixels.SetDouble(dist_between_centers);
+            //nt_target_dist_inches.SetDouble(TO BE DONE);
+            //nt_target_yaw_deg.SetDouble(TO BE DONE);
+            nt_target_valid.SetBoolean(true);                
+
 
 #if 0
             std::cout << "Contours: Total=" << contours.size() << ", filtered=" << filtered_min_rects.size() << "\n";
@@ -620,10 +638,16 @@ int main(int argc, char* argv[]) {
         ntinst.StartClientTeam(team);
     }
 
-    // Send sample parameter to network table
-    std::shared_ptr<NetworkTable> nt_table = ntinst.GetTable("ObjectDetection");
-    nt::NetworkTableEntry nt_table_entry = nt_table->GetEntry("MyEntry");
-    nt_table_entry.SetDouble(1.5);
+    // Prepare network table variables that tracker will populate
+    std::shared_ptr<NetworkTable> nt_table = ntinst.GetTable("TargetTracking");
+    nt_target_dist_pixels = nt_table->GetEntry("dist_pixels");
+    nt_target_dist_pixels.SetDefaultDouble(0);
+    nt_target_dist_inches = nt_table->GetEntry("dist_inch");
+    nt_target_dist_inches.SetDefaultDouble(0);
+    nt_target_yaw_deg = nt_table->GetEntry("yaw_deg");
+    nt_target_yaw_deg.SetDefaultDouble(0);
+    nt_target_valid = nt_table->GetEntry("valid");
+    nt_target_valid.SetDefaultBoolean(false);
 
     // Start camera streaming + image processing on last camera if present
     runPipelineFromCamera(/*cameraConfigs*/);
