@@ -33,9 +33,9 @@ namespace xero {
             dumpstate_ = false ;
 
 #ifdef GOPIGO
-            navx_ = new AHRS(frc::SerialPort::Port::Port_0) ;
+            navx_ = std::make_shared<AHRS>(frc::SerialPort::Port::Port_0) ;
 #else
-            navx_ = new AHRS(frc::SPI::Port::kMXP) ;        
+            navx_ = std::make_shared<AHRS>(frc::SPI::Port::kMXP) ;        
 #endif
 
             if (!navx_->IsConnected()) {
@@ -45,6 +45,7 @@ namespace xero {
                 logger .endMessage() ;
                 navx_ = nullptr ;
             }
+
         }
 
         TankDrive::~TankDrive() {   

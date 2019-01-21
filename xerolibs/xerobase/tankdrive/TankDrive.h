@@ -1,7 +1,5 @@
 #pragma once
 
-#include <list>
-
 #include <Kinematics.h>
 #include <DriveBase.h>
 #include <Speedometer.h>
@@ -11,7 +9,7 @@
 #include <frc/Encoder.h>
 #include <frc/VictorSP.h>
 #include <ctre/Phoenix.h>
-
+#include <list>
 
 /// \file
 
@@ -222,7 +220,9 @@ namespace xero {
             std::shared_ptr<frc::Encoder> right_enc_ ;
 
             std::shared_ptr<frc::Solenoid> gear_ ;
-            
+
+            std::shared_ptr<AHRS> navx_ ;
+
             xero::misc::Speedometer angular_ ;
             xero::misc::Speedometer left_linear_ ;
             xero::misc::Speedometer right_linear_ ;
@@ -235,11 +235,10 @@ namespace xero {
             double left_inches_per_tick_ ;
             double right_inches_per_tick_ ;
 
-            AHRS *navx_ ;
-
             xero::misc::Kinematics *kin_ ;
 
             bool dumpstate_ ;
+
         };
     }
 }

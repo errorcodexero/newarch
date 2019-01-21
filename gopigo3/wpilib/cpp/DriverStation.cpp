@@ -162,7 +162,7 @@ namespace frc
             throw ex;
         }
 
-        m_server_out_p = new xero::misc::UdpBroadcastSender();
+        m_server_out_p = new xero::misc::UdpSender();
         if (!m_server_out_p->open(ROBOT_OUT_PORT))
         {
             std::string err("could not connect to driver station - out port");

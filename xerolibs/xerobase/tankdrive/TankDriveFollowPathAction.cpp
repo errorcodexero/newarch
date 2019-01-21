@@ -8,6 +8,9 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
+
+        const std::string TankDriveFollowPathAction::action_name_("follow") ;
+
         TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name) : TankDriveAction(db)  {
             path_ = db.getRobot().getPathManager()->getPath(name) ;
             assert(path_ != nullptr) ;
@@ -46,57 +49,73 @@ namespace xero {
             logger << ",ravel" ;
             logger << ",rtaccel" ;
             logger << ",rout" ;
-            logger.endMessage() ;            
+            logger.endMessage() ;
+
+            getTankDrive().getRobot().startPlot(action_name_, 13) ;
         }
 
 
         void TankDriveFollowPathAction::run() {
-            if (index_ < path_->size()) {
-                auto &logger = getTankDrive().getRobot().getMessageLogger() ;
+            auto &td = getTankDrive() ;
+            auto &rb = td.getRobot() ;
 
-                double dt = getTankDrive().getRobot().getDeltaTime() ;
+            if (index_ < path_->size()) {
+                auto &logger = td.getRobot().getMessageLogger() ;
+
+                double dt = td.getRobot().getDeltaTime() ;
                 const XeroSegment lseg = path_->getLeftSegment(index_) ;
                 const XeroSegment rseg = path_->getRightSegment(index_) ;
                 double lout = left_follower_->getOutput(lseg.getAccel(), lseg.getVelocity(), lseg.getPOS(), 
-                                        left_start_ + getTankDrive().getLeftDistance(), dt) ;
+                                        left_start_ + td.getLeftDistance(), dt) ;
                 double rout = right_follower_->getOutput(rseg.getAccel(), rseg.getVelocity(), rseg.getPOS(), 
-                                        right_start_ + getTankDrive().getRightDistance(), dt) ;
+                                        right_start_ + td.getRightDistance(), dt) ;
 
-                getTankDrive().setMotorsToPercents(lout, rout) ;                        
+                td.setMotorsToPercents(lout, rout) ;                        
 
 
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
-                logger << getTankDrive().getRobot().getTime() ;
-                logger << "," << getTankDrive().getRobot().getTime() - start_time_ ;
+                logger << td.getRobot().getTime() ;
+                logger << "," << td.getRobot().getTime() - start_time_ ;
                 logger << "," << lseg.getPOS() ;
-                logger << "," << left_start_ + getTankDrive().getLeftDistance() ;
+                logger << "," << left_start_ + td.getLeftDistance() ;
                 logger << "," << lseg.getVelocity() ;
-                logger << "," << getTankDrive().getLeftVelocity() ;
+                logger << "," << td.getLeftVelocity() ;
                 logger << "," << lseg.getAccel() ;
                 logger << "," << lout ;
                 logger << "," << rseg.getPOS() ;
-                logger << "," << right_start_ + getTankDrive().getRightDistance() ;                
+                logger << "," << right_start_ + td.getRightDistance() ;                
                 logger << "," << lseg.getVelocity() ;
-                logger << "," << getTankDrive().getRightVelocity() ;                
+                logger << "," << td.getRightVelocity() ;                
                 logger << "," << lseg.getAccel() ;                
                 logger << "," << rout ;
                 logger.endMessage() ;
 
-                frc::SmartDashboard::PutNumber("lapos", left_start_ + getTankDrive().getLeftDistance()) ;
-                frc::SmartDashboard::PutNumber("ltpos", lseg.getPOS()) ;
-                frc::SmartDashboard::PutNumber("lavel", getTankDrive().getLeftVelocity()) ;
-                frc::SmartDashboard::PutNumber("ltvel", lseg.getVelocity()) ;
+                rb.addPlotData(action_name_, index_, "time", rb.getTime() - start_time_) ;
 
-                frc::SmartDashboard::PutNumber("rapos", right_start_ + getTankDrive().getRightDistance()) ;
-                frc::SmartDashboard::PutNumber("rtpos", rseg.getPOS()) ;
-                frc::SmartDashboard::PutNumber("ravel", getTankDrive().getRightVelocity()) ;
-                frc::SmartDashboard::PutNumber("rtvel", rseg.getVelocity()) ;                
+                // Left side
+                rb.addPlotData(action_name_, index_, "ltpos", lseg.getPOS()) ;
+                rb.addPlotData(action_name_, index_, "lapos", left_start_ + td.getLeftDistance()) ;
+                rb.addPlotData(action_name_, index_, "ltvel", lseg.getVelocity()) ;
+                rb.addPlotData(action_name_, index_, "lavel", td.getLeftVelocity()) ;
+                rb.addPlotData(action_name_, index_, "ltaccel", lseg.getAccel()) ;
+                rb.addPlotData(action_name_, index_, "lout", lout) ;
 
-                index_++ ;
+                // Right side
+                rb.addPlotData(action_name_, index_, "rtpos", rseg.getPOS()) ;
+                rb.addPlotData(action_name_, index_, "rapos", right_start_ + td.getRightDistance()) ;
+                rb.addPlotData(action_name_, index_, "rtvel", rseg.getVelocity()) ;
+                rb.addPlotData(action_name_, index_, "ravel", td.getRightVelocity()) ;
+                rb.addPlotData(action_name_, index_, "rtaccel", rseg.getAccel()) ;
+                rb.addPlotData(action_name_, index_, "rout", rout) ;                
             }
             else {
-                getTankDrive().setMotorsToPercents(0.0, 0.0) ;
+                if (index_ == path_->size())
+                    rb.endPlot(action_name_) ;
+
+                td.setMotorsToPercents(0.0, 0.0) ;
             }
+
+            index_++ ;            
         }
 
         bool TankDriveFollowPathAction::isDone() {

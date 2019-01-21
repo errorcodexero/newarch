@@ -28,7 +28,7 @@ namespace xero
             }
 
             /// \brief destroy this socket object, closing any open socket
-            virtual ~UdpSocket()
+            virtual ~UdpSocket() noexcept
             {
                 if (m_socket != -1)
                     destroySocket();
@@ -51,16 +51,12 @@ namespace xero
             }
 
             /// \brief create a new UDP (datagram) socket
-            /// \param broadcast if true put the socket in state to receive broadcast packets
             /// \returns true if the socket is created, otherwise false
-            bool createSocket(bool broadcast=false)
+            bool createSocket()
             {
                 m_socket = socket(AF_INET, SOCK_DGRAM, 0);
                 if (m_socket < 0)
                     return false;
-
-                if (broadcast)
-                    setBroadcast();
 
                 return true;
             }

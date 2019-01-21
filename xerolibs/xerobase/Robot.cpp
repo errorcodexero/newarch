@@ -38,7 +38,7 @@ namespace xero {
 
             setupPaths() ;
 
-       
+            sender_ = nullptr ;
         }
 #pragma GCC diagnostic pop
 
@@ -228,6 +228,14 @@ namespace xero {
             message_logger_ << ".... reading parameter file" ;
             message_logger_.endMessage() ;            
             readParamsFile() ;
+
+            //
+            // Setup the data plotting
+            //
+            message_logger_.startMessage(MessageLogger::MessageType::info) ;
+            message_logger_ << ".... starting plotting system" ;
+            message_logger_.endMessage() ;               
+            startPlotSubsystem() ;
 
             //
             // Reading required paths
@@ -480,6 +488,51 @@ namespace xero {
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
             message_logger_ << "Leaving Robot Disabled" ;
             message_logger_.endMessage() ;
+        }
+
+        void Robot::startPlotSubsystem() {
+            static const char *propname = "plotter:port" ;
+            if (getSettingsParser().isDefined(propname)) {
+                int port = getSettingsParser().getInteger(propname) ;
+                sender_ = std::make_shared<UdpSender>() ;
+                if (!sender_->open(port))
+                    sender_ = nullptr ;
+            }
+        }
+
+        void Robot::startPlot(const std::string &name, int cols) {
+            if (sender_ != nullptr) {
+                std::string data("$start,") ;
+                data += name ;
+                data += "," ;
+                data += std::to_string(cols) ;                
+                data += "$" ;
+                sender_->send(data) ;          
+            }
+        }
+
+        void Robot::addPlotData(const std::string &name, size_t row, const std::string &colname, double value) {
+            if (sender_ != nullptr) {
+                std::string data("$data,") ;
+                data += name ;
+                data += "," ;
+                data += std::to_string(row) ;
+                data += "," ;
+                data += colname ;
+                data += "," ;
+                data += std::to_string(value) ;
+                data += "$" ;
+                sender_->send(data) ;
+            }
+        }        
+
+        void Robot::endPlot(const std::string &name) {
+            if (sender_ != nullptr) {
+                std::string data("$end,") ;
+                data += name ;
+                data += "$" ;
+                sender_->send(data) ;              
+            }
         }
     }
 }

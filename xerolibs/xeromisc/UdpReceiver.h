@@ -24,7 +24,7 @@ namespace xero
             }
 
             /// \brief destroy the UDP broadcast receiver
-            virtual ~UdpReceiver()
+            virtual ~UdpReceiver() noexcept
             {
             }
 
@@ -35,9 +35,15 @@ namespace xero
             /// \returns true if the socket was created, otherwise false
             bool open(const std::string &addr, uint16_t port, bool broadcast = false)
             {
-                if (!createSocket(broadcast))
+                if (!createSocket())
                     return false;
-
+                
+                if (broadcast) {
+                    if (!setBroadcast()) {
+                        destroySocket() ;
+                        return false ;
+                    }
+                }
 
                 if (!bind(addr, port))
                 {

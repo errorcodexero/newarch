@@ -11,16 +11,16 @@ namespace xero
 {
     namespace misc {
         /// \brief this class sends messages on a UDP socket
-        class UdpBroadcastSender : public UdpSocket
+        class UdpSender : public UdpSocket
         {
         public:
             /// \brief create the new UDP socket sender objects
-            UdpBroadcastSender()
+            UdpSender()
             {
             }
 
             /// \brief destroy the new UDP socket sender object
-            virtual ~UdpBroadcastSender()
+            virtual ~UdpSender() noexcept
             {
             }
 
@@ -98,11 +98,23 @@ namespace xero
                 if (ret == -1 || static_cast<size_t>(ret) != count)
                 {
                     int err = errno;
-                    std::cout << "cannot send broadcast packet - error " << err << std::endl;
+                    std::cout << "cannot send udp packet - error " << err << std::endl;
                     return false;
                 }
 
                 return true;
+            }
+
+            bool send(const std::string &str) {
+                ssize_t ret = ::sendto(getSocket(), str.c_str(), str.length(), 0, (struct sockaddr *)&m_saddr, sizeof(m_saddr));
+                if (ret == -1 || static_cast<size_t>(ret) != str.length())
+                {
+                    int err = errno;
+                    std::cout << "cannot send udp packet - error " << err << std::endl;
+                    return false;
+                }
+
+                return true; 
             }
 
         private:

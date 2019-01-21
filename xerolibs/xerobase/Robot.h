@@ -5,6 +5,7 @@
 #include "SettingsParser.h"
 #include "LoopType.h"
 #include "basegroups.h"
+#include <UdpSender.h>
 #include <XeroPathManager.h>
 #include <frc/SampleRobot.h>
 #include <memory>
@@ -135,7 +136,12 @@ namespace xero {
             /// \brief return the path manager
             std::shared_ptr<xero::misc::XeroPathManager> getPathManager() {
                 return paths_ ;
-            }            
+            }          
+
+            void startPlotSubsystem() ;
+            void startPlot(const std::string &name, int cols) ;
+            void addPlotData(const std::string &name, size_t row, const std::string &colname, double value) ;
+            void endPlot(const std::string &name) ;
 
         protected:
 
@@ -276,6 +282,9 @@ namespace xero {
 
             // The log directory for the robot
             std::string log_dir_ ;
+
+            // The UDP sender for plot data
+            std::shared_ptr<xero::misc::UdpSender> sender_ ;            
         } ;
     }
 }

@@ -55,3 +55,8 @@ driver:power:tolerance                                          0.05
 driver:power:nudge_straight                                     0.2
 driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
+
+#
+# Setup the data plotter
+#
+plotter:port                                                    5555
