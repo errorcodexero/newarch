@@ -239,7 +239,7 @@ namespace {
 
     // Ratio of difference between 2 numbers to the average of the two.
     // If one if 0, compare to the other.
-    bool ratioOfDifference(double num1, double num2) {
+    double ratioOfDifference(double num1, double num2) {
         double ref = (num1 + num2) / 2.0;
         if (ref == 0) {
             ref = (num1 == 0)? num2 : num1;
