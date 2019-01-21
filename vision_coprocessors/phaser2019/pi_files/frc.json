@@ -20,7 +20,15 @@
                 },
                 {
                     "name": "exposure_auto_priority",
-                    "value": false
+                    "value": 0
+                },
+                {
+                    "name": "exposure_absolute",
+                    "value": 1
+                },
+                {
+                    "name": "white_balance_temperature_auto",
+                    "value": 0
                 }
             ],
             "stream": {
