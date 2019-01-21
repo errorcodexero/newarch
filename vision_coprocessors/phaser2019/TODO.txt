@@ -1,0 +1,28 @@
+- Capability
+  - Fix exposure, etc. at startup.  Make independent of current light conditions.
+  - Add window dimensions to param file, import and set, use for yaw calc.
+  - Param for converting pixels between centres (horizontal) to distance.
+  - Compute estimated distance and yaw, publish to network table.
+  - Detect if running on robot, operare network tables in client vs. server mode automatically.
+  - Measure pipeline+detection latency *and* fps.  With both raspicam and USB cam.
+  - Support separate cameras for viewing vs. tracking.
+  - Tracking cargo.
+
+- Accuracy
+  - Check consistency of areas of rectangles vs. each other vs. distance.  Facing straight.  Vary distance.
+  - Filter rectangles on their tilt + confirm left vs. right tilt within ranges.
+  - Tune HSV thresholds.  Add ability to tune interactively on Pi with trackbars.
+  - Ratio of real distance vs. #pixels assumed to be the same in both dimensions.
+    Characterize and handle differences for accuracy.
+
+- Efficiency
+  - Minimize temp objects.
+  - Don't annotate image if not going to stream output.
+
+- Maintainability
+  - Fix communication between network elements.
+  - Split generic parts into xerolib + split both generic and game-specific parts into multiple files.
+
+- Pi
+  - Change back to read-only by default.
+
