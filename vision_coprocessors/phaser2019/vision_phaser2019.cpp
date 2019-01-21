@@ -84,7 +84,7 @@ namespace {
 
     unsigned int team;
     bool nt_server = false;
-    const bool stream_pipeline_output = true;
+    static bool stream_pipeline_output = false;
 
     
     struct CameraConfig {
@@ -602,6 +602,13 @@ int main(int argc, char* argv[]) {
     if (!ReadConfig()) {
         return EXIT_FAILURE;
     }
+
+    // Import global settings from param file
+    const std::string stream_output_param_name("vision:pipeline:stream_output");
+    if (params.hasParam(stream_output_param_name)) {
+        stream_pipeline_output = (params.getValue(stream_output_param_name) != 0);
+    }
+    
 
     // Start NetworkTables
     auto ntinst = nt::NetworkTableInstance::GetDefault();
