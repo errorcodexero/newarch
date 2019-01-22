@@ -9,7 +9,7 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
 
-        const std::string TankDriveFollowPathAction::action_name_("follow") ;
+        const std::string TankDriveFollowPathAction::action_name_("PathFollow") ;
 
         TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name) : TankDriveAction(db)  {
             path_ = db.getRobot().getPathManager()->getPath(name) ;

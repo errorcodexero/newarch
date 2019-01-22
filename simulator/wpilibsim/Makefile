@@ -20,22 +20,20 @@ SOURCES = \
 	./cpp/Solenoid.cpp\
 	./cpp/SubsystemModel.cpp\
 	./cpp/Timer.cpp\
-	./cpp/VictorSP.cpp\
-	./cpp/TankDriveModel.cpp\
-	./cpp/LifterModel.cpp\
-	./cpp/TurnTableModel.cpp
+	./cpp/VictorSP.cpp
 
 TARGET = wpilibsim
+
+NEED_WPIUTIL=true
+NEED_NETWORKTABLES = true
+NEED_NAVX = true
+NEED_CTRE = true
+NEED_XEROMISC=true
+NEED_MODELS=true
 
 LOCAL_CFLAGS += \
 	-Iinclude\
 	-Icpp\
-	-I$(TOPDIR)/xerolibs/xeromath\
-	-I$(TOPDIR)/xerolibs/xeromisc\
-	-I$(TOPDIR)/simulator/wpiutilsim/include\
-	-I$(TOPDIR)/simulator/ctresim\
-	-I$(TOPDIR)/simulator/navxsim\
-	-I$(TOPDIR)/simulator/ntsim/include
 
 include $(TOPDIR)/makefiles/buildlib.mk
 

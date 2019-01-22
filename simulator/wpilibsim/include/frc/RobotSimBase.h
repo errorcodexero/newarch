@@ -8,7 +8,7 @@
 #include "AHRS.h"
 #include "Timer.h"
 #include "JoystickManager.h"
-#include "TankDriveModel.h"
+#include <TankDriveModel.h>
 #include <SettingsParser.h>
 #include <list>
 #include <memory>

@@ -1,10 +1,7 @@
 #include "PhaserSimulator.h"
 #include "PhaserScreenVisualizer.h"
 #include "OIModel.h"
-
-#include <frc/TurnTableModel.h>
-#include <frc/LifterModel.h>
-#include <frc/TankDriveModel.h>
+#include <TankDriveModel.h>
 #include <cassert>
 #include <iostream>
 #include <cmath>

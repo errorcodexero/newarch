@@ -8,6 +8,7 @@ TARGET=ctresim
 
 NEED_WPILIB=true
 NEED_NAVX=true
+NEED_MODELS=true
 
 LOCAL_CFLAGS += -I. -I$(TOPDIR)/xerolibs/xeromisc
 

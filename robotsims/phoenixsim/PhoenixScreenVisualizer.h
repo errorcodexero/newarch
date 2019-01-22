@@ -1,6 +1,6 @@
 #pragma once
 #include <frc/ScreenVisualizer.h>
-#include <frc/TankDriveModel.h>
+#include <TankDriveModel.h>
 #include "LifterModel.h"
 #include "IntakeModel.h"
 #include "GrabberModel.h"

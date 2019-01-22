@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SubsystemModel.h"
+#include <frc/SubsystemModel.h>
 #include <vector>
 
 namespace xero

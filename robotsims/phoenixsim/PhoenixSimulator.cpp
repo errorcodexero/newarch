@@ -5,7 +5,7 @@
 #include "CubeSensorModel.h"
 #include "IntakeModel.h"
 #include "PhoenixScreenVisualizer.h"
-#include <frc/TankDriveModel.h>
+#include <TankDriveModel.h>
 #include <cassert>
 #include <iostream>
 #include <cmath>

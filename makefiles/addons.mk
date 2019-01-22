@@ -76,6 +76,30 @@ endif
 #
 
 #
+# These are for the WPIlib
+#
+ifeq ($(NEED_MODELS),true)
+
+#
+# WPILIB for the GOPIGO3
+#
+ifeq ($(PLATFORM),GOPIGO)
+$(error Simulation models are not supported by GOPIGO platform)
+endif
+
+ifeq ($(PLATFORM),SIMULATOR)
+CXXFLAGS += -I$(TOPDIR)/simulator/models/include
+CXXFLAGS += -I$(TOPDIR)/simulator/models/cpp
+LIBLIST += $(TOPDIR)/simulator/models
+endif
+
+endif
+
+#
+###########################################################################################
+#
+
+#
 # These are for the Network Tables
 #
 ifeq ($(NEED_NETWORKTABLES),true)

@@ -5,9 +5,9 @@
 #include "CargoIntakeModel.h"
 #include "ClimberModel.h"
 #include <frc/RobotSimBase.h>
-#include <frc/LifterModel.h>
-#include <frc/TankDriveModel.h>
-#include <frc/TurnTableModel.h>
+#include <LifterModel.h>
+#include <TankDriveModel.h>
+#include <TurnTableModel.h>
 #include <cstdint>
 #include <thread>
 #include <mutex>
