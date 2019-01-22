@@ -1,11 +1,11 @@
 - Capability
-  - Fix exposure, etc. at startup.  Make independent of current light conditions.
+  - Fix exposure, etc. at startup.  Make independent of current light conditions. (Initially sub-invoke v4l2-ctl, then do directly from C if effective. Also get device path from json.)
   - Add window dimensions to param file, import and set, use for yaw calc.
   - Param for converting pixels between centres (horizontal) to distance.
   - Compute estimated distance and yaw, publish to network table.
   - Detect if running on robot, operare network tables in client vs. server mode automatically.
   - Measure pipeline+detection latency *and* fps.  With both raspicam and USB cam.
-  - Support separate cameras for viewing vs. tracking.
+  - Support separate cameras for viewing vs. tracking. Parameterize which used for what.
   - Tracking cargo.
 
 - Accuracy

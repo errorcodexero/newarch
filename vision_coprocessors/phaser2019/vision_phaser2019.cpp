@@ -11,6 +11,7 @@
 #include <vector>
 
 #include <iostream>
+#include <stdlib.h>    // For system()
 #include <math.h>
 #include <assert.h>
 
@@ -539,7 +540,7 @@ namespace {
         for (auto&& cameraConfig : cameraConfigs) {
             cameras.emplace_back(StartCamera(cameraConfig));
         }
-        
+
         // Start image processing on last camera if present
         auto pipe = std::make_shared<XeroPipeline>();
         if (cameras.size() >= 1) {
@@ -554,6 +555,15 @@ namespace {
             t.detach();
         }
 
+        // Manually set camera controls directly using v2l4-ctl.
+        // Apparently only works after starting the pipeline + small delay.
+        // TODO: Don't hardcode device id.  Get it from json.
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        int sysret = system("v4l2-ctl -d /dev/video0 -c exposure_auto=1 -c exposure_absolute=100 -c brightness=1");
+        if (sysret != 0) {
+            std::cout << "ERROR: Failed to call v4l2-ctl\n";
+        }
+        
         // Loop forever
         for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
     }
