@@ -1,0 +1,6 @@
+#!/bin/bash
+sudo svc -d /service/camera
+sleep 1
+
+# Run vision binary
+exec ./vision_phaser2019
