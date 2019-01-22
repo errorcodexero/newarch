@@ -51,7 +51,8 @@ namespace xero {
             logger << ",rout" ;
             logger.endMessage() ;
 
-            getTankDrive().getRobot().startPlot(action_name_, 13) ;
+            local_action_name_ = action_name_ + "-" + path_->getName() ;
+            getTankDrive().getRobot().startPlot(local_action_name_, 13) ;
         }
 
 
@@ -90,27 +91,27 @@ namespace xero {
                 logger << "," << rout ;
                 logger.endMessage() ;
 
-                rb.addPlotData(action_name_, index_, "time", rb.getTime() - start_time_) ;
+                rb.addPlotData(local_action_name_, index_, "time", rb.getTime() - start_time_) ;
 
                 // Left side
-                rb.addPlotData(action_name_, index_, "ltpos", lseg.getPOS()) ;
-                rb.addPlotData(action_name_, index_, "lapos", left_start_ + td.getLeftDistance()) ;
-                rb.addPlotData(action_name_, index_, "ltvel", lseg.getVelocity()) ;
-                rb.addPlotData(action_name_, index_, "lavel", td.getLeftVelocity()) ;
-                rb.addPlotData(action_name_, index_, "ltaccel", lseg.getAccel()) ;
-                rb.addPlotData(action_name_, index_, "lout", lout) ;
+                rb.addPlotData(local_action_name_, index_, "ltpos", lseg.getPOS()) ;
+                rb.addPlotData(local_action_name_, index_, "lapos", left_start_ + td.getLeftDistance()) ;
+                rb.addPlotData(local_action_name_, index_, "ltvel", lseg.getVelocity()) ;
+                rb.addPlotData(local_action_name_, index_, "lavel", td.getLeftVelocity()) ;
+                rb.addPlotData(local_action_name_, index_, "ltaccel", lseg.getAccel()) ;
+                rb.addPlotData(local_action_name_, index_, "lout", lout) ;
 
                 // Right side
-                rb.addPlotData(action_name_, index_, "rtpos", rseg.getPOS()) ;
-                rb.addPlotData(action_name_, index_, "rapos", right_start_ + td.getRightDistance()) ;
-                rb.addPlotData(action_name_, index_, "rtvel", rseg.getVelocity()) ;
-                rb.addPlotData(action_name_, index_, "ravel", td.getRightVelocity()) ;
-                rb.addPlotData(action_name_, index_, "rtaccel", rseg.getAccel()) ;
-                rb.addPlotData(action_name_, index_, "rout", rout) ;                
+                rb.addPlotData(local_action_name_, index_, "rtpos", rseg.getPOS()) ;
+                rb.addPlotData(local_action_name_, index_, "rapos", right_start_ + td.getRightDistance()) ;
+                rb.addPlotData(local_action_name_, index_, "rtvel", rseg.getVelocity()) ;
+                rb.addPlotData(local_action_name_, index_, "ravel", td.getRightVelocity()) ;
+                rb.addPlotData(local_action_name_, index_, "rtaccel", rseg.getAccel()) ;
+                rb.addPlotData(local_action_name_, index_, "rout", rout) ;                
             }
             else {
                 if (index_ == path_->size())
-                    rb.endPlot(action_name_) ;
+                    rb.endPlot(local_action_name_) ;
 
                 td.setMotorsToPercents(0.0, 0.0) ;
             }
