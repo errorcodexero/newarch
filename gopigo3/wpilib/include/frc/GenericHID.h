@@ -45,7 +45,7 @@ namespace frc
         virtual ~GenericHID();
 
         virtual double GetX(JoystickHand hand = JoystickHand::kRightHand) = 0;
-        virtual double GetY(JoystickHand hand = JoystickHand::kLeftHand) = 0;
+        virtual double GetY(JoystickHand hand = JoystickHand::kLeftHand)  = 0;
 
         bool GetRawButton(int button) const;
         bool GetRawButtonPressed(int button) const;

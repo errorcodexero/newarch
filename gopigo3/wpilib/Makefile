@@ -14,6 +14,7 @@ SOURCES = \
 	cpp/Timer.cpp\
 	cpp/DigitalOutput.cpp\
 	cpp/AnalogOutput.cpp\
+	cpp/XboxController.cpp\
 	cpp/smartdashboard/NamedSendable.cpp\
 	cpp/smartdashboard/SendableBase.cpp\
 	cpp/smartdashboard/SendableBuilderImpl.cpp\

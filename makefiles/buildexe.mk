@@ -105,8 +105,12 @@ cleanlibs:
 	done
 
 ifeq ($(PLATFORM),GOPIGO)
+ifeq ($(GOPIGOIP),)
+$(error GOPIGO make variable not defined)
+endif
+CYGTARGETFILE=$(shell cygpath -a -u $(TARGETFILE))
 deploy:
-	scp $(TARGETFILE) pi@$(GOPIGOIP):/home/pi
+	scp $(CYGTARGETFILE) pi@$(GOPIGOIP):/home/pi
 	scp -r deploy pi$(GOPIGOIP):/home/pi
 endif
 

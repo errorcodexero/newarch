@@ -2,7 +2,7 @@
 
 #include "HIDDevice.h"
 #include "Action.h"
-#include <frc/XBoxController.h>
+#include <frc/XboxController.h>
 
 /// \file
 

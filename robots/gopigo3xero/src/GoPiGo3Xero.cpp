@@ -40,6 +40,11 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_TANKDRIVE);            
         }
 
+        void GoPiGo3Xero::LoadPaths() {
+            auto pathmgr = getPathManager() ;
+            pathmgr->loadPath("TestPathOne") ;
+        }
+
         void GoPiGo3Xero::RobotHardwareInit() {
             auto robot_p = std::make_shared<GoPiGo3Subsystem>(*this) ;
             auto oi = robot_p->getOI() ;

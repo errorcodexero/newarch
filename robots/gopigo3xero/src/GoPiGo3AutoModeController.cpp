@@ -9,6 +9,7 @@
 #include "LEDSubsystemBlinkAction.h"
 #include <tankdrive/TankDriveAngleCharAction.h>
 #include <tankdrive/TankDriveAngleAction.h>
+#include <tankdrive/TankDriveFollowPathAction.h>
 #include <ActionSequence.h>
 #include <DelayAction.h>
 #include <Robot.h>
@@ -49,9 +50,27 @@ namespace xero {
             case 6:
                 ptr = createBlinkEyes();
                 break;
+            case 7:
+                ptr = createFollowPath() ;
+                break ;
             }
             setAction(ptr) ;
         }
+
+
+        ActionSequencePtr GoPiGo3AutoModeController::createFollowPath()
+        {
+            ActionPtr action ;
+            GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot()) ;
+            auto sub = xerorobot.getGoPiGoSubsystem() ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "RotateNeg90") ;
+            auto db = sub->getTankDrive() ;
+
+            action = std::make_shared<TankDriveFollowPathAction>(*db, "TestPathOne") ;
+            seq->pushSubActionPair(db, action) ;            
+
+            return seq ;            
+        }        
 
         ActionSequencePtr GoPiGo3AutoModeController::createBlinkEyes()
         {
