@@ -159,12 +159,6 @@ namespace xero {
         }
 
         void TankDriveModel::run(double dt) {
-            bool b = true ;
-
-            if (std::fabs(left_volts_) > 0.1 || std::fabs(right_volts_) > 0.1) {
-                b = false ;
-            }
-
             //
             // Calculate the new desired revolutions per second (RPS)
             //
@@ -204,7 +198,7 @@ namespace xero {
             last_ypos_ = ypos_ ;
 
             left_enc_value_ = static_cast<int32_t>(lrevs * ticks_per_rev_) ;
-            right_enc_value_ = static_cast<int32_t>(rrevs * ticks_per_rev_) ;
+            right_enc_value_ = -static_cast<int32_t>(rrevs * ticks_per_rev_) ;
 
             if (left_enc_ != nullptr)
                 left_enc_->SimulatorSetValue(-left_enc_value_) ;

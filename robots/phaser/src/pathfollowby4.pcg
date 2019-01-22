@@ -1,0 +1,66 @@
+[
+  {
+    "Title": "",
+    "XVariable": "time",
+    "Variables": [
+      {
+        "XVariable": "time",
+        "YVariable": "ltpos",
+        "SessionName": "TankDriveFollowPathAction-Straight"
+      },
+      {
+        "XVariable": "time",
+        "YVariable": "lapos",
+        "SessionName": "TankDriveFollowPathAction-Straight"
+      }
+    ]
+  },
+  {
+    "Title": "",
+    "XVariable": "time",
+    "Variables": [
+      {
+        "XVariable": "time",
+        "YVariable": "rtpos",
+        "SessionName": "TankDriveFollowPathAction-Straight"
+      },
+      {
+        "XVariable": "time",
+        "YVariable": "rapos",
+        "SessionName": "TankDriveFollowPathAction-Straight"
+      }
+    ]
+  },
+  {
+    "Title": "",
+    "XVariable": "time",
+    "Variables": [
+      {
+        "XVariable": "time",
+        "YVariable": "ltvel",
+        "SessionName": "TankDriveFollowPathAction-Straight"
+      },
+      {
+        "XVariable": "time",
+        "YVariable": "lavel",
+        "SessionName": "TankDriveFollowPathAction-Straight"
+      }
+    ]
+  },
+  {
+    "Title": "",
+    "XVariable": "time",
+    "Variables": [
+      {
+        "XVariable": "time",
+        "YVariable": "rtvel",
+        "SessionName": "TankDriveFollowPathAction-Straight"
+      },
+      {
+        "XVariable": "time",
+        "YVariable": "ravel",
+        "SessionName": "TankDriveFollowPathAction-Straight"
+      }
+    ]
+  }
+]

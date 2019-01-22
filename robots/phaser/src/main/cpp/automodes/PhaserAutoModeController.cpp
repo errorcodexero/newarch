@@ -2,6 +2,7 @@
 #include "Phaser.h"
 #include <tankdrive/TankDriveFollowPathAction.h>
 #include <tankdrive/TankDriveCharAction.h>
+#include <tankdrive/TankDriveScrubCharAction.h>
 #include <frc/DriverStation.h>
 
 using namespace xero::base ;
@@ -19,21 +20,25 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = createCharAutoMode() ;
+                mode = createStraightCharAutoMode() ;
                 break ;
 
             case 1:
-                mode = createTestOne() ;
+                mode = createScrubCharAutoMode() ;
                 break ;
 
             case 2:
+                mode = createTestOne() ;
+                break ;
+
+            case 3:
                 mode = createTestTwo() ;
                 break ;
             }
             setAction(mode) ;
         }
 
-        ActionSequencePtr PhaserAutoModeController::createCharAutoMode() {
+        ActionSequencePtr PhaserAutoModeController::createStraightCharAutoMode() {
             std::string name = "Char Drive Base" ;
             std::string desc = "Characterize the drive base" ;
             ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
@@ -48,6 +53,22 @@ namespace xero {
 
             return mode ;         
         }        
+
+        ActionSequencePtr PhaserAutoModeController::createScrubCharAutoMode() {
+            std::string name = "Char Drive Base" ;
+            std::string desc = "Characterize the drive base" ;
+            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto db = phaserrobot->getTankDrive() ;
+
+            act = std::make_shared<TankDriveScrubCharAction>(*db, 3.0, 0.3, 0.5) ;
+            mode->pushSubActionPair(db, act) ;
+
+            return mode ;         
+        }  
 
         ActionSequencePtr PhaserAutoModeController::createTestOne() {
             std::string name = "Test One" ;
@@ -66,7 +87,19 @@ namespace xero {
         }
 
         ActionSequencePtr PhaserAutoModeController::createTestTwo() {
-            return nullptr ;
+            std::string name = "Test Two" ;
+            std::string desc = "Drive Curve" ;
+            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto db = phaserrobot->getTankDrive() ;
+
+            act = std::make_shared<TankDriveFollowPathAction>(*db, "Curve") ;
+            mode->pushSubActionPair(db, act) ;
+
+            return mode ; 
         }        
     }
 }

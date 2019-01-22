@@ -11,24 +11,17 @@ namespace xero {
         /// \brief This action applies a fixed power to the drivebase for a given amount of time
         /// The same voltage is applied to the left and right side.  This action is generally used to characterize
         /// the drivebase for tuning.  The power to velocity ratio can be determined.
-        class TankDriveCharAction : public TankDriveAction {
+        class TankDriveScrubCharAction : public TankDriveAction {
         public:
             /// \brief create the action
             /// \param db the drivebase for the action
             /// \param duration the duraction to apply the power
             /// \param power the power to apply to the drive base.  This is applied to the right and left side.
             /// \param highgear if true shift to high gear if possible
-            TankDriveCharAction(TankDrive &db, double duration, double power, bool highgear = true) ;
-
-            /// \brief create the action
-            /// \param db the drivebase for the action
-            /// \param duration the name of the parameter containing the duration to apply power
-            /// \param power the name of the parameter containing the power to apply
-            /// \param highgear if true shift to high gear if possible            
-            TankDriveCharAction(TankDrive &db, const std::string &duration, const std::string &power, bool highgear = true) ;           
+            TankDriveScrubCharAction(TankDrive &db, double duration, double lpower, double rpower, bool highgear = true) ;
 
             /// \brief destroy the action
-            virtual ~TankDriveCharAction() ;
+            virtual ~TankDriveScrubCharAction() ;
 
             /// \brief Start the action; called once per action when it starts
             virtual void start() ;
@@ -49,9 +42,11 @@ namespace xero {
 
         private:
             double start_time_ ;
+            double start_angle_ ;
             double duration_ ;
             bool is_done_ ;
-            double voltage_;
+            double lvoltage_;
+            double rvoltage_;
             bool high_gear_ ;
             size_t index_ ;
         } ;

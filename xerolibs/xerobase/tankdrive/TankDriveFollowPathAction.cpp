@@ -9,8 +9,6 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
 
-        const std::string TankDriveFollowPathAction::action_name_("PathFollow") ;
-
         TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name) : TankDriveAction(db)  {
             path_ = db.getRobot().getPathManager()->getPath(name) ;
             assert(path_ != nullptr) ;
@@ -51,8 +49,7 @@ namespace xero {
             logger << ",rout" ;
             logger.endMessage() ;
 
-            local_action_name_ = action_name_ + "-" + path_->getName() ;
-            getTankDrive().getRobot().startPlot(local_action_name_, 13) ;
+            getTankDrive().getRobot().startPlot(toString(), 17) ;
         }
 
 
@@ -73,7 +70,6 @@ namespace xero {
 
                 td.setMotorsToPercents(lout, rout) ;                        
 
-
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << td.getRobot().getTime() ;
                 logger << "," << td.getRobot().getTime() - start_time_ ;
@@ -91,27 +87,33 @@ namespace xero {
                 logger << "," << rout ;
                 logger.endMessage() ;
 
-                rb.addPlotData(local_action_name_, index_, "time", rb.getTime() - start_time_) ;
+                rb.addPlotData(toString(), index_, "time", rb.getTime() - start_time_) ;
 
                 // Left side
-                rb.addPlotData(local_action_name_, index_, "ltpos", lseg.getPOS()) ;
-                rb.addPlotData(local_action_name_, index_, "lapos", left_start_ + td.getLeftDistance()) ;
-                rb.addPlotData(local_action_name_, index_, "ltvel", lseg.getVelocity()) ;
-                rb.addPlotData(local_action_name_, index_, "lavel", td.getLeftVelocity()) ;
-                rb.addPlotData(local_action_name_, index_, "ltaccel", lseg.getAccel()) ;
-                rb.addPlotData(local_action_name_, index_, "lout", lout) ;
+                rb.addPlotData(toString(), index_, "ltpos", lseg.getPOS()) ;
+                rb.addPlotData(toString(), index_, "lapos", left_start_ + td.getLeftDistance()) ;
+                rb.addPlotData(toString(), index_, "ltvel", lseg.getVelocity()) ;
+                rb.addPlotData(toString(), index_, "lavel", td.getLeftVelocity()) ;
+                rb.addPlotData(toString(), index_, "ltaccel", lseg.getAccel()) ;
+                rb.addPlotData(toString(), index_, "lout", lout) ;
 
                 // Right side
-                rb.addPlotData(local_action_name_, index_, "rtpos", rseg.getPOS()) ;
-                rb.addPlotData(local_action_name_, index_, "rapos", right_start_ + td.getRightDistance()) ;
-                rb.addPlotData(local_action_name_, index_, "rtvel", rseg.getVelocity()) ;
-                rb.addPlotData(local_action_name_, index_, "ravel", td.getRightVelocity()) ;
-                rb.addPlotData(local_action_name_, index_, "rtaccel", rseg.getAccel()) ;
-                rb.addPlotData(local_action_name_, index_, "rout", rout) ;                
+                rb.addPlotData(toString(), index_, "rtpos", rseg.getPOS()) ;
+                rb.addPlotData(toString(), index_, "rapos", right_start_ + td.getRightDistance()) ;
+                rb.addPlotData(toString(), index_, "rtvel", rseg.getVelocity()) ;
+                rb.addPlotData(toString(), index_, "ravel", td.getRightVelocity()) ;
+                rb.addPlotData(toString(), index_, "rtaccel", rseg.getAccel()) ;
+                rb.addPlotData(toString(), index_, "rout", rout) ;                
+
+                // XY data
+                rb.addPlotData(toString(), index_, "xa", getTankDrive().getX()) ;
+                rb.addPlotData(toString(), index_, "ya", getTankDrive().getY()) ;
+                rb.addPlotData(toString(), index_, "xt", (lseg.getX() + rseg.getX())/ 2.0) ;
+                rb.addPlotData(toString(), index_, "yt", (lseg.getY() + rseg.getY())/ 2.0) ;                                     
             }
             else {
                 if (index_ == path_->size())
-                    rb.endPlot(local_action_name_) ;
+                    rb.endPlot(toString()) ;
 
                 td.setMotorsToPercents(0.0, 0.0) ;
             }
@@ -129,7 +131,7 @@ namespace xero {
         }
 
         std::string TankDriveFollowPathAction::toString() {
-            return "TankDriveFollowPathAction " + path_->getName() ;
+            return "TankDriveFollowPathAction-" + path_->getName() ;
         }
     }
 }

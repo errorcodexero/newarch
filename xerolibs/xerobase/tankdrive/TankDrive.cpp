@@ -30,6 +30,8 @@ namespace xero {
 
             dist_l_ = 0.0 ;
             dist_r_ = 0.0 ;
+            last_dist_l_ = 0.0 ;
+            last_dist_r_ = 0.0 ;
             dumpstate_ = false ;
 
 #ifdef GOPIGO
@@ -45,6 +47,10 @@ namespace xero {
                 logger .endMessage() ;
                 navx_ = nullptr ;
             }
+
+            double width = settings.getDouble("tankdrive:width") ;
+            double scrub = settings.getDouble("tankdrive:scrub") ;
+            kin_ = std::make_shared<xero::misc::Kinematics>(width, scrub) ;
 
         }
 
@@ -179,6 +185,7 @@ namespace xero {
         }       
 
         void TankDrive::computeState() {
+            double angle ;
 
             if (left_enc_ != nullptr) {
                 assert(right_enc_ != nullptr) ;
@@ -191,7 +198,7 @@ namespace xero {
             }
 
             if (navx_ != nullptr) {
-                double angle = navx_->GetYaw() ;
+                angle = navx_->GetYaw() ;
                 angular_.update(getRobot().getDeltaTime(), angle) ;
             }
 
@@ -210,6 +217,11 @@ namespace xero {
             logger << ", ticks " << ticks_left_ << " " << ticks_right_ ;
             logger << ", dist " << dist_l_ << " " << dist_r_ ;
             logger.endMessage();    
+
+            kin_->move(dist_r_ - last_dist_r_, dist_l_ - last_dist_l_, angle) ;
+
+            last_dist_l_ = dist_l_ ;
+            last_dist_r_ = dist_r_ ;
         }
 
         void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {

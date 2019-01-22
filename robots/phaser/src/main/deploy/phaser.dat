@@ -34,6 +34,8 @@ hw:driverstation:hid:oi             2
 # a Phaser drivebase
 #
 tankdrive:inches_per_tick           0.010471976
+tankdrive:width                     24.5
+tankdrive:scrub                     0.9
 
 tankdrive:follower:left:ka          0.0040590016
 tankdrive:follower:left:kv          0.005295008

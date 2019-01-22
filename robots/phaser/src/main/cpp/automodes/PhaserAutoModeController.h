@@ -14,7 +14,8 @@ namespace xero {
             virtual void updateAutoMode(int sel, const std::string &gamedata) ;
 
         private:
-            xero::base::ActionSequencePtr createCharAutoMode() ;
+            xero::base::ActionSequencePtr createStraightCharAutoMode() ;
+            xero::base::ActionSequencePtr createScrubCharAutoMode() ;
             xero::base::ActionSequencePtr createTestOne() ;
             xero::base::ActionSequencePtr createTestTwo() ;
         } ;

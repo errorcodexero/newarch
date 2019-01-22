@@ -44,6 +44,8 @@ namespace xero {
             friend class TankDriveAngleCharAction ;
             /// \brief class for tank drive actions
             friend class TankDriveFollowPathAction ;
+            friend class TankDriveScrubCharAction ;
+            
             friend class LineFollowAction ;
             friend class LineDetectAction ;
 
@@ -203,6 +205,14 @@ namespace xero {
             /// \param ltype the type of loop being enabled (e.g. teleop, auto, test)
             virtual void init(LoopType ltype) ;
 
+            double getX() const {
+                return kin_->getX() ;
+            }
+
+            double getY() const {
+                return kin_->getY() ;
+            }
+
         private:
             /// \brief Set the motors to output at the given percentages
             /// \param left_percent the percent output for the left motors
@@ -231,11 +241,12 @@ namespace xero {
             int ticks_right_ ;
             
             double dist_l_, dist_r_;
+            double last_dist_l_, last_dist_r_ ;
 
             double left_inches_per_tick_ ;
             double right_inches_per_tick_ ;
 
-            xero::misc::Kinematics *kin_ ;
+            std::shared_ptr<xero::misc::Kinematics> kin_ ;
 
             bool dumpstate_ ;
 

@@ -44,9 +44,6 @@ namespace xero {
             std::shared_ptr<xero::misc::XeroPath> path_ ;
             std::shared_ptr<xero::misc::PIDACtrl> left_follower_ ;
             std::shared_ptr<xero::misc::PIDACtrl> right_follower_ ;
-
-            std::string local_action_name_ ;
-            static const std::string action_name_ ;
         } ;
     }
 }
