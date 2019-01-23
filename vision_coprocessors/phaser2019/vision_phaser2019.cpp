@@ -559,7 +559,7 @@ namespace {
         // Apparently only works after starting the pipeline + small delay.
         // TODO: Don't hardcode device id.  Get it from json.
         std::this_thread::sleep_for(std::chrono::seconds(2));
-        int sysret = system("v4l2-ctl -d /dev/video0 -c exposure_auto=1 -c exposure_absolute=100 -c brightness=1");
+        int sysret = system("v4l2-ctl -d /dev/video0 -c exposure_auto=1 -c exposure_absolute=100 -c brightness=1 -c gain=30");
         if (sysret != 0) {
             std::cout << "ERROR: Failed to call v4l2-ctl\n";
         }
