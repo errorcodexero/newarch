@@ -74,7 +74,8 @@
 
 
 namespace {
-    
+
+    nt::NetworkTableInstance ntinst;
     const char* configFile = "/boot/frc.json";
     const cv::Scalar color_blue(2550,0);
     const cv::Scalar color_green(0,255,0);
@@ -358,7 +359,8 @@ namespace {
             
             // Unless we have at least 2 contours, nothing further to do
             if (contours.size() < 2) {
-                nt_target_valid.SetBoolean(false);                
+                nt_target_valid.SetBoolean(false);
+                ntinst.Flush();
                 return;
             }
 
@@ -398,6 +400,7 @@ namespace {
             // Only continue if we have at least 2 filtered rectangles
             if (filtered_min_rects.size() < 2) {
                 nt_target_valid.SetBoolean(false);                
+                ntinst.Flush();
                 return;
             }
             
@@ -416,6 +419,7 @@ namespace {
             //std::cout << "    Relative area = " << relative_area << "\n";
             if (relative_area > 0.45) {
                 nt_target_valid.SetBoolean(false);                
+                ntinst.Flush();
                 return;
             }
 
@@ -437,6 +441,7 @@ namespace {
             double angle_in_deg = angle_in_rad * 180.0 / M_PI;
             if (fabs(angle_in_deg) > 15) {
                 nt_target_valid.SetBoolean(false);                
+                ntinst.Flush();
                 return;
             }
 
@@ -487,7 +492,10 @@ namespace {
             // Publish results on network table
             nt_target_dist_pixels.SetDouble(dist_between_centers);
             //nt_target_dist_inches.SetDouble(TO BE DONE);
-            nt_target_valid.SetBoolean(true);                
+            nt_target_valid.SetBoolean(true);
+
+            // Flush NT updates after all data has been posted.
+            ntinst.Flush();
 
 
 #if 0
@@ -672,7 +680,7 @@ int main(int argc, char* argv[]) {
     
 
     // Start NetworkTables
-    auto ntinst = nt::NetworkTableInstance::GetDefault();
+    ntinst = nt::NetworkTableInstance::GetDefault();
     if (nt_server) {
         wpi::outs() << "Setting up NetworkTables server\n";
         ntinst.StartServer();
@@ -680,6 +688,12 @@ int main(int argc, char* argv[]) {
         wpi::outs() << "Setting up NetworkTables client for team " << team << '\n';
         ntinst.StartClientTeam(team);
     }
+
+    // Change default update rate from 100ms to 10ms.
+    // Will flush update anyway to try and reduce latency after posting set of results,
+    // but it's rate-limited to prevent flooding newwork. Unclear whether this affects the cap.
+    // Changing it anyway in case it does + in case flush() is not called.
+    ntinst.SetUpdateRate(0.01);    // Allowed range per docs is 0.01 -> 1.0 (rate in seconds)
 
     // Prepare network table variables that tracker will populate
     std::shared_ptr<NetworkTable> nt_table = ntinst.GetTable("TargetTracking");
