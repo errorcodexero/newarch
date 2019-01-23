@@ -20,16 +20,17 @@ hw:driverstation:hid:oi                     2
 
 tankdrive:left_inches_per_tick              0.235619449
 tankdrive:right_inches_per_tick             0.011504856
+tankdrive:width                             24.5
+tankdrive:scrub                             0.95
 
-
-tankdrive:follower:left:ka          0.0001
+tankdrive:follower:left:ka          0.003
 tankdrive:follower:left:kv          0.010267631
-tankdrive:follower:left:kp          0.001
+tankdrive:follower:left:kp          0.0
 tankdrive:follower:left:kd          0.0
 
-tankdrive:follower:right:ka         0.0001
+tankdrive:follower:right:ka         0.003
 tankdrive:follower:right:kv         0.010267631
-tankdrive:follower:right:kp         0.01
+tankdrive:follower:right:kp         0.0
 tankdrive:follower:right:kd         0.0
 
 driver:power:max                                                1.0
@@ -39,4 +40,6 @@ driver:power:tolerance                                          0.05
 driver:power:nudge_straight                                     0.2
 driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
+
+plotter:port                                5555
 

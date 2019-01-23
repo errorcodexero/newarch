@@ -12,7 +12,7 @@ namespace xero {
     namespace base {
 
         TankDrive::TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids) : 
-                        DriveBase(robot, "tankdrive"), angular_(4, true), left_linear_(4), right_linear_(4) {
+                        DriveBase(robot, "tankdrive"), angular_(2, true), left_linear_(2), right_linear_(2) {
             //The two sides should always have the same number of motors and at least one motor each
             assert((left_motor_ids.size() == right_motor_ids.size()) && (left_motor_ids.size() > 0));
 
@@ -185,7 +185,7 @@ namespace xero {
         }       
 
         void TankDrive::computeState() {
-            double angle ;
+            double angle = 0.0 ;
 
             if (left_enc_ != nullptr) {
                 assert(right_enc_ != nullptr) ;

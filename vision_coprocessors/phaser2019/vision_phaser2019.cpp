@@ -74,11 +74,21 @@
 
 
 namespace {
-    
+
+    nt::NetworkTableInstance ntinst;
     const char* configFile = "/boot/frc.json";
     const cv::Scalar color_blue(2550,0);
     const cv::Scalar color_green(0,255,0);
     const cv::Scalar color_red(0,0,255);
+
+    // Vision targets should be 8in apart at closest point.
+    // 5.5in x 2in strips.
+    // Angled about 14.5 degrees.
+    double dist_bet_centers_inches = 11.0;  // APPROXIMATE.  TODO: Calculate accurately.
+        
+    int width_pixels = 640;
+    int height_pixels = 480;
+    double camera_hfov_deg = 60;  // Camera horizontal Field Of View, in degrees.  For C270, TBD if 60 spec is horizontal or diagonal.
     
     paramsInput params;
 
@@ -92,7 +102,13 @@ namespace {
     static bool stream_pipeline_output = false;
 
     // Network table entries where results from tracking will be posted.
-    nt::NetworkTableEntry nt_target_dist_pixels, nt_target_dist_inches, nt_target_yaw_deg, nt_target_valid;
+    nt::NetworkTableEntry nt_target_dist_pixels;
+    nt::NetworkTableEntry nt_target_dist_inches;
+    nt::NetworkTableEntry nt_target_yaw_deg;
+    nt::NetworkTableEntry nt_target_offset;
+    nt::NetworkTableEntry nt_l_rect_angle_deg;
+    nt::NetworkTableEntry nt_r_rect_angle_deg;
+    nt::NetworkTableEntry nt_target_valid;
 
     
     struct CameraConfig {
@@ -343,7 +359,8 @@ namespace {
             
             // Unless we have at least 2 contours, nothing further to do
             if (contours.size() < 2) {
-                nt_target_valid.SetBoolean(false);                
+                nt_target_valid.SetBoolean(false);
+                ntinst.Flush();
                 return;
             }
 
@@ -383,6 +400,7 @@ namespace {
             // Only continue if we have at least 2 filtered rectangles
             if (filtered_min_rects.size() < 2) {
                 nt_target_valid.SetBoolean(false);                
+                ntinst.Flush();
                 return;
             }
             
@@ -401,6 +419,7 @@ namespace {
             //std::cout << "    Relative area = " << relative_area << "\n";
             if (relative_area > 0.45) {
                 nt_target_valid.SetBoolean(false);                
+                ntinst.Flush();
                 return;
             }
 
@@ -419,9 +438,10 @@ namespace {
             assert(delta_x >= 0);
             double tangent = delta_y / delta_x;
             double angle_in_rad = atan(tangent);
-            double angle_in_deg = angle_in_rad * 57.2958;
+            double angle_in_deg = angle_in_rad * 180.0 / M_PI;
             if (fabs(angle_in_deg) > 15) {
                 nt_target_valid.SetBoolean(false);                
+                ntinst.Flush();
                 return;
             }
 
@@ -446,15 +466,36 @@ namespace {
             // Draw marker through center
             cv::drawMarker(frame_out_, center_point, color_green, cv::MARKER_CROSS, 20 /*marker size*/, 2 /*thickness*/);
 
+            // Calculate offset = ratio right rectangle / left rectangle.
+            // If ratio > 1 ==> robot right of target
+            // If ratio < 1 ==> robot left of target
+            double offset = getRectArea(right_rect) / getRectArea(left_rect);
+            nt_target_offset.SetDouble(offset);
+
+            // Publish angles of the 2 rectangles.
+            nt_l_rect_angle_deg.SetDouble(left_rect.angle);
+            nt_r_rect_angle_deg.SetDouble(right_rect.angle);
+
+            // Estimate yaw.  Assume both rectangles at equal height.
+            double pixels_off_center = center_point.x - (width_pixels/2);
+            //double inches_to_pixels = dist_between_centers / dist_bet_centers_inches;
+            //double inches_off_center = pixels_off_center * inches_to_pixels;
+            double yaw = pixels_off_center * (camera_hfov_deg / width_pixels);
+            nt_target_yaw_deg.SetDouble(yaw);
+            
+
             // TODO: Filter on angle of rectangles?
             //       Filter on area vs. distance between centres?
             //       Measure angle and distance.
+            //       Measure offset.  Based on relative sizes of rectangles?
 
             // Publish results on network table
             nt_target_dist_pixels.SetDouble(dist_between_centers);
             //nt_target_dist_inches.SetDouble(TO BE DONE);
-            //nt_target_yaw_deg.SetDouble(TO BE DONE);
-            nt_target_valid.SetBoolean(true);                
+            nt_target_valid.SetBoolean(true);
+
+            // Flush NT updates after all data has been posted.
+            ntinst.Flush();
 
 
 #if 0
@@ -559,7 +600,7 @@ namespace {
         // Apparently only works after starting the pipeline + small delay.
         // TODO: Don't hardcode device id.  Get it from json.
         std::this_thread::sleep_for(std::chrono::seconds(2));
-        int sysret = system("v4l2-ctl -d /dev/video0 -c exposure_auto=1 -c exposure_absolute=100 -c brightness=1");
+        int sysret = system("v4l2-ctl -d /dev/video0 -c exposure_auto=1 -c exposure_absolute=100 -c brightness=1 -c gain=30");
         if (sysret != 0) {
             std::cout << "ERROR: Failed to call v4l2-ctl\n";
         }
@@ -639,7 +680,7 @@ int main(int argc, char* argv[]) {
     
 
     // Start NetworkTables
-    auto ntinst = nt::NetworkTableInstance::GetDefault();
+    ntinst = nt::NetworkTableInstance::GetDefault();
     if (nt_server) {
         wpi::outs() << "Setting up NetworkTables server\n";
         ntinst.StartServer();
@@ -647,6 +688,12 @@ int main(int argc, char* argv[]) {
         wpi::outs() << "Setting up NetworkTables client for team " << team << '\n';
         ntinst.StartClientTeam(team);
     }
+
+    // Change default update rate from 100ms to 10ms.
+    // Will flush update anyway to try and reduce latency after posting set of results,
+    // but it's rate-limited to prevent flooding newwork. Unclear whether this affects the cap.
+    // Changing it anyway in case it does + in case flush() is not called.
+    ntinst.SetUpdateRate(0.01);    // Allowed range per docs is 0.01 -> 1.0 (rate in seconds)
 
     // Prepare network table variables that tracker will populate
     std::shared_ptr<NetworkTable> nt_table = ntinst.GetTable("TargetTracking");
@@ -656,6 +703,12 @@ int main(int argc, char* argv[]) {
     nt_target_dist_inches.SetDefaultDouble(0);
     nt_target_yaw_deg = nt_table->GetEntry("yaw_deg");
     nt_target_yaw_deg.SetDefaultDouble(0);
+    nt_target_offset = nt_table->GetEntry("offset");
+    nt_target_offset.SetDefaultDouble(0);
+    nt_l_rect_angle_deg = nt_table->GetEntry("l_rect_angle_deg");
+    nt_l_rect_angle_deg.SetDefaultDouble(0);
+    nt_r_rect_angle_deg = nt_table->GetEntry("r_rect_angle_deg");
+    nt_r_rect_angle_deg.SetDefaultDouble(0);
     nt_target_valid = nt_table->GetEntry("valid");
     nt_target_valid.SetDefaultBoolean(false);
 
