@@ -10,6 +10,7 @@
 #include <tankdrive/TankDriveAngleCharAction.h>
 #include <tankdrive/TankDriveAngleAction.h>
 #include <tankdrive/TankDriveFollowPathAction.h>
+#include <tankdrive/TankDriveCharAction.h>
 #include <ActionSequence.h>
 #include <DelayAction.h>
 #include <Robot.h>
@@ -63,10 +64,10 @@ namespace xero {
             ActionPtr action ;
             GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot()) ;
             auto sub = xerorobot.getGoPiGoSubsystem() ;
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "RotateNeg90") ;
+            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "FollowPath") ;
             auto db = sub->getTankDrive() ;
 
-            action = std::make_shared<TankDriveFollowPathAction>(*db, "TestPathOne") ;
+            action = std::make_shared<TankDriveCharAction>(*db, 4.0, 0.5) ;
             seq->pushSubActionPair(db, action) ;            
 
             return seq ;            

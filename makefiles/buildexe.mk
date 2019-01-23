@@ -33,7 +33,7 @@ include $(TOPDIR)/makefiles/addons.mk
 #
 # Define the build target file
 #
-TARGETFILE=$(BUILDTARGETDIR)/$(TARGET).$(EXEEXT)
+TARGETFILE=$(BUILDTARGETDIR)/$(TARGET)$(EXEEXT)
 
 #
 # Create the list of object files needed in the build directory
@@ -76,20 +76,20 @@ buildexe: buildlibs apponly
 apponly: pre mkdirs $(TARGETFILE) post
 
 pre:
-	@echo Building executable file $(TARGET).$(EXEEXT)
+	@echo Building executable file $(TARGET)$(EXEEXT)
 
 mkdirs:
 	$(QUIET)mkdir -p $(BUILDTARGETDIR)
 
 post:
-	@echo Executable file $(TARGET).$(EXEEXT) complete
+	@echo Executable file $(TARGET)$(EXEEXT) complete
 
 $(TARGETFILE): $(OBJECTS) $(LINKLIBS)
 	@echo Linking ...
 	$(QUIET)$(CXX) -o $@ $(OBJECTS) -Wl,--start-group $(ALLLIBS) -Wl,--end-group
 
 clean: cleanlibs
-	@echo Cleaning executable target $(TARGET).$(EXEEXT)
+	@echo Cleaning executable target $(TARGET)$(EXEEXT)
 	$(QUIET)rm -rf $(OBJECTS) $(TARGETFILE)
 
 buildlibs:
@@ -111,7 +111,7 @@ endif
 CYGTARGETFILE=$(shell cygpath -a -u $(TARGETFILE))
 deploy:
 	scp $(CYGTARGETFILE) pi@$(GOPIGOIP):/home/pi
-	scp -r deploy pi$(GOPIGOIP):/home/pi
+	scp -r deploy pi@$(GOPIGOIP):/home/pi
 endif
 
 ifeq ($(PLATFORM),SIMULATOR)

@@ -21,6 +21,8 @@ hw:driverstation:hid:oi                                             2
 #
 tankdrive:inches_per_tick											0.01142366
 tankdrive:straight:maxa												1.0
+tankdrive:width														4.5
+tankdrive:scrub														0.85
 
 #
 # The gamepad driver
@@ -51,3 +53,8 @@ tankdrive:angle_action:angle_threshold								3
 tankdrive:angle_action:profile_outdated_error_long					10
 tankdrive:angle_action:profile_outdated_error_short					5
 tankdrive:angle_action:profile_outdated_error_angle					20
+
+#
+# Setup the data plotter
+#
+plotter:port                                                    5555

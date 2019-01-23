@@ -32,20 +32,14 @@ namespace gopigo3
 
         if (m_spi_p != nullptr)
         {
-            std::cout << "        Turning off LEDs ... " << std::flush;
             target = LED_BLINKER_LEFT | LED_BLINKER_RIGHT | LED_EYE_LEFT | LED_EYE_RIGHT;
             setLed(target, 0, 0, 0);
-            std::cout << "done." << std::endl;
 
-            std::cout << "        Turning off drivebase motors ... " << std::flush;
             target = MOTOR_LEFT | MOTOR_RIGHT;
             setMotorPower(target, 0);
-            std::cout << "done." << std::endl;
 
-            std::cout << "        Turning off servos ... " << std::flush;
             target = SERVO_1 | SERVO_2;
             setServo(target, 0);
-            std::cout << "done." << std::endl;
         }
     }
 

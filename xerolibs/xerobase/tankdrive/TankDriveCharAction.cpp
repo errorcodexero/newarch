@@ -25,11 +25,13 @@ namespace xero {
         void TankDriveCharAction::start() {
             is_done_ = false ;
             start_time_ = frc::Timer::GetFPGATimestamp() ;
-            if (high_gear_)
-                getTankDrive().highGear() ;
-            else
-                getTankDrive().lowGear() ;
-                
+            if (getTankDrive().hasGearShifter())
+            {
+                if (high_gear_)
+                    getTankDrive().highGear() ;
+                else
+                    getTankDrive().lowGear() ;
+            }   
             getTankDrive().setMotorsToPercents(voltage_, voltage_) ;
             auto &logger = getTankDrive().getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;            
