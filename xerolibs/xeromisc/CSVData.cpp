@@ -17,7 +17,7 @@ namespace xero {
             int lineno = 0 ;
             std::string line, word ;
 
-            int dataIdx ;
+            size_t dataIdx ;
             while (std::getline(file_, line)) {
                 ++lineno ;
                 dataIdx = 0 ;
