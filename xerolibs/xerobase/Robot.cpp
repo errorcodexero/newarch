@@ -37,6 +37,7 @@ namespace xero {
             std::fill(iterations_.begin(), iterations_.end(), 0) ;
 
             setupPaths() ;
+            srand(time(NULL)) ;
 
             sender_ = nullptr ;
         }
@@ -500,38 +501,49 @@ namespace xero {
             }
         }
 
-        void Robot::startPlot(const std::string &name, int cols) {
+        int Robot::startPlot(const std::string &name, const std::list<std::string> &cols) {
+            int id = rand() ;            
             if (sender_ != nullptr) {
+                columns_ = cols.size() ;
                 std::string data("$start,") ;
                 data += name ;
                 data += "," ;
-                data += std::to_string(cols) ;                
+                data += std::to_string(id) ;
+                for(const std::string &col: cols)
+                {
+                    data +="," ;
+                    data += col ;
+                }
                 data += "$" ;
-                sender_->send(data) ;          
+                for(int i = 0 ; i < 5 ; i++)
+                    sender_->send(data) ;
             }
+            return id ;
         }
 
-        void Robot::addPlotData(const std::string &name, size_t row, const std::string &colname, double value) {
+        void Robot::addPlotData(int id, size_t row, size_t col, double value) {
             if (sender_ != nullptr) {
                 std::string data("$data,") ;
-                data += name ;
+                data += std::to_string(id) ;
                 data += "," ;
                 data += std::to_string(row) ;
                 data += "," ;
-                data += colname ;
+                data += std::to_string(col) ;
                 data += "," ;
                 data += std::to_string(value) ;
                 data += "$" ;
                 sender_->send(data) ;
+                // sender_->send(data) ;                
             }
         }        
 
-        void Robot::endPlot(const std::string &name) {
+        void Robot::endPlot(int id) {
             if (sender_ != nullptr) {
                 std::string data("$end,") ;
-                data += name ;
+                data += std::to_string(id) ;                
                 data += "$" ;
-                sender_->send(data) ;              
+                for(int i = 0 ; i < 5 ; i++)
+                    sender_->send(data) ;
             }
         }
     }

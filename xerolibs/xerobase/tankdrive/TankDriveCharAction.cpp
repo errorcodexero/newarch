@@ -7,6 +7,8 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
+        std::list<std::string> TankDriveCharAction::plot_columns_ = { "time", "dist", "velocity", "acceleration", "ltick", "rtick", "power" } ;
+
         TankDriveCharAction::TankDriveCharAction(TankDrive &drive, double duration, double voltage, bool highgear) : TankDriveAction(drive) {
             duration_ = duration ;
             voltage_ = voltage ;
@@ -39,7 +41,7 @@ namespace xero {
             logger.endMessage() ;
 
             index_ = 0 ;
-            getTankDrive().getRobot().startPlot(toString(), 7) ;            
+            plotid_ = getTankDrive().getRobot().startPlot(toString(), plot_columns_) ;           
         }
 
         void TankDriveCharAction::run() {
@@ -50,7 +52,7 @@ namespace xero {
                 if (now - start_time_ >= duration_) {
                     is_done_ = true ;
                     getTankDrive().setMotorsToPercents(0.0, 0.0) ;
-                    rb.endPlot(toString()) ;
+                    rb.endPlot(plotid_) ;
                 } else {
                     auto &logger = getTankDrive().getRobot().getMessageLogger() ;
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
@@ -63,13 +65,13 @@ namespace xero {
                     logger << ", " << voltage_ ;
                     logger.endMessage() ;
 
-                    rb.addPlotData(toString(), index_, "time", now - start_time_) ;
-                    rb.addPlotData(toString(), index_, "dist", getTankDrive().getDist()) ;
-                    rb.addPlotData(toString(), index_, "velocity", getTankDrive().getVelocity()) ;
-                    rb.addPlotData(toString(), index_, "acceleration", getTankDrive().getAcceleration()) ;
-                    rb.addPlotData(toString(), index_, "ltick", getTankDrive().getLeftTickCount()) ;
-                    rb.addPlotData(toString(), index_, "rtick", getTankDrive().getRightTickCount()) ;
-                    rb.addPlotData(toString(), index_, "power", voltage_) ;
+                    rb.addPlotData(plotid_, index_, 0, now - start_time_) ;
+                    rb.addPlotData(plotid_, index_, 1, getTankDrive().getDist()) ;
+                    rb.addPlotData(plotid_, index_, 2, getTankDrive().getVelocity()) ;
+                    rb.addPlotData(plotid_, index_, 3, getTankDrive().getAcceleration()) ;
+                    rb.addPlotData(plotid_, index_, 4, getTankDrive().getLeftTickCount()) ;
+                    rb.addPlotData(plotid_, index_, 5, getTankDrive().getRightTickCount()) ;
+                    rb.addPlotData(plotid_, index_, 6, voltage_) ;
 
                     index_++ ;
 

@@ -7,6 +7,11 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
+
+        std::list<std::string> TankDriveScrubCharAction::plot_columns_ = {
+            "time", "ldist", "rdist", "lvel", "rvel", "angle", "lpower", "rpower"
+        } ;
+
         TankDriveScrubCharAction::TankDriveScrubCharAction(TankDrive &drive, double duration, double lpower, double rpower, bool highgear) : TankDriveAction(drive) {
             duration_ = duration ;
             lvoltage_ = lpower ;
@@ -28,7 +33,7 @@ namespace xero {
             getTankDrive().setMotorsToPercents(lvoltage_, rvoltage_) ;
 
             index_ = 0 ;
-            getTankDrive().getRobot().startPlot(toString(), 8) ;            
+            plotid_ = getTankDrive().getRobot().startPlot(toString(), plot_columns_) ;
         }
 
         void TankDriveScrubCharAction::run() {
@@ -39,16 +44,16 @@ namespace xero {
                 if (now - start_time_ >= duration_) {
                     is_done_ = true ;
                     getTankDrive().setMotorsToPercents(0.0, 0.0) ;
-                    rb.endPlot(toString()) ;
+                    rb.endPlot(plotid_) ;
                 } else {
-                    rb.addPlotData(toString(), index_, "time", now - start_time_) ;
-                    rb.addPlotData(toString(), index_, "ldist", getTankDrive().getLeftDistance()) ;
-                    rb.addPlotData(toString(), index_, "rdist", getTankDrive().getRightDistance()) ;
-                    rb.addPlotData(toString(), index_, "lvel", getTankDrive().getLeftVelocity()) ;
-                    rb.addPlotData(toString(), index_, "rvel", getTankDrive().getRightVelocity()) ;
-                    rb.addPlotData(toString(), index_, "angle", getTankDrive().getAngle()) ;
-                    rb.addPlotData(toString(), index_, "lpower", lvoltage_) ;
-                    rb.addPlotData(toString(), index_, "rpower", rvoltage_) ;                    
+                    rb.addPlotData(plotid_, index_, 0, now - start_time_) ;
+                    rb.addPlotData(plotid_, index_, 1, getTankDrive().getLeftDistance()) ;
+                    rb.addPlotData(plotid_, index_, 2, getTankDrive().getRightDistance()) ;
+                    rb.addPlotData(plotid_, index_, 3, getTankDrive().getLeftVelocity()) ;
+                    rb.addPlotData(plotid_, index_, 4, getTankDrive().getRightVelocity()) ;
+                    rb.addPlotData(plotid_, index_, 5, getTankDrive().getAngle()) ;
+                    rb.addPlotData(plotid_, index_, 6, lvoltage_) ;
+                    rb.addPlotData(plotid_, index_, 7, rvoltage_) ;                    
                     index_++ ;
                 }
             }

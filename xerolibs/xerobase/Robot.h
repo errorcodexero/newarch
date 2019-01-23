@@ -10,6 +10,7 @@
 #include <frc/SampleRobot.h>
 #include <memory>
 #include <list>
+#include <string>
 #include <fstream>
 
 /// \file
@@ -139,9 +140,9 @@ namespace xero {
             }          
 
             void startPlotSubsystem() ;
-            void startPlot(const std::string &name, int cols) ;
-            void addPlotData(const std::string &name, size_t row, const std::string &colname, double value) ;
-            void endPlot(const std::string &name) ;
+            int startPlot(const std::string &name, const std::list<std::string> &cols) ;
+            void addPlotData(int id, size_t row, size_t col, double value) ;
+            void endPlot(int id) ;
 
         protected:
 
@@ -284,7 +285,10 @@ namespace xero {
             std::string log_dir_ ;
 
             // The UDP sender for plot data
-            std::shared_ptr<xero::misc::UdpSender> sender_ ;            
+            std::shared_ptr<xero::misc::UdpSender> sender_ ;    
+
+            // The total number of columns for plot data
+            int columns_ ;        
         } ;
     }
 }

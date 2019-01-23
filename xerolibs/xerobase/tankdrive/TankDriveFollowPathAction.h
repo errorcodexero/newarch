@@ -44,6 +44,9 @@ namespace xero {
             std::shared_ptr<xero::misc::XeroPath> path_ ;
             std::shared_ptr<xero::misc::PIDACtrl> left_follower_ ;
             std::shared_ptr<xero::misc::PIDACtrl> right_follower_ ;
+
+            int plotid_ ;
+            static std::list<std::string> plot_columns_ ;            
         } ;
     }
 }

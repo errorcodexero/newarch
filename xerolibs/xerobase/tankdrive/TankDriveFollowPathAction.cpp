@@ -8,6 +8,12 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
+        std::list<std::string> TankDriveFollowPathAction::plot_columns_ = {
+            "time", 
+            "ltpos", "lapos", "ltvel", "lavel", "ltaccel", "lout",
+            "rtpos", "rapos", "rtvel", "ravel", "rtaccel", "rout",
+            "xa", "ya", "xt", "yt"
+        } ;
 
         TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name) : TankDriveAction(db)  {
             path_ = db.getRobot().getPathManager()->getPath(name) ;
@@ -49,7 +55,7 @@ namespace xero {
             logger << ",rout" ;
             logger.endMessage() ;
 
-            getTankDrive().getRobot().startPlot(toString(), 17) ;
+            plotid_ = getTankDrive().getRobot().startPlot(toString(), plot_columns_) ;
         }
 
 
@@ -87,33 +93,33 @@ namespace xero {
                 logger << "," << rout ;
                 logger.endMessage() ;
 
-                rb.addPlotData(toString(), index_, "time", rb.getTime() - start_time_) ;
+                rb.addPlotData(plotid_, index_, 0, rb.getTime() - start_time_) ;
 
                 // Left side
-                rb.addPlotData(toString(), index_, "ltpos", lseg.getPOS()) ;
-                rb.addPlotData(toString(), index_, "lapos", left_start_ + td.getLeftDistance()) ;
-                rb.addPlotData(toString(), index_, "ltvel", lseg.getVelocity()) ;
-                rb.addPlotData(toString(), index_, "lavel", td.getLeftVelocity()) ;
-                rb.addPlotData(toString(), index_, "ltaccel", lseg.getAccel()) ;
-                rb.addPlotData(toString(), index_, "lout", lout) ;
+                rb.addPlotData(plotid_, index_, 1, lseg.getPOS()) ;
+                rb.addPlotData(plotid_, index_, 2, left_start_ + td.getLeftDistance()) ;
+                rb.addPlotData(plotid_, index_, 3, lseg.getVelocity()) ;
+                rb.addPlotData(plotid_, index_, 4, td.getLeftVelocity()) ;
+                rb.addPlotData(plotid_, index_, 5, lseg.getAccel()) ;
+                rb.addPlotData(plotid_, index_, 6, lout) ;
 
                 // Right side
-                rb.addPlotData(toString(), index_, "rtpos", rseg.getPOS()) ;
-                rb.addPlotData(toString(), index_, "rapos", right_start_ + td.getRightDistance()) ;
-                rb.addPlotData(toString(), index_, "rtvel", rseg.getVelocity()) ;
-                rb.addPlotData(toString(), index_, "ravel", td.getRightVelocity()) ;
-                rb.addPlotData(toString(), index_, "rtaccel", rseg.getAccel()) ;
-                rb.addPlotData(toString(), index_, "rout", rout) ;                
+                rb.addPlotData(plotid_, index_, 7, rseg.getPOS()) ;
+                rb.addPlotData(plotid_, index_, 8, right_start_ + td.getRightDistance()) ;
+                rb.addPlotData(plotid_, index_, 9, rseg.getVelocity()) ;
+                rb.addPlotData(plotid_, index_, 10, td.getRightVelocity()) ;
+                rb.addPlotData(plotid_, index_, 11, rseg.getAccel()) ;
+                rb.addPlotData(plotid_, index_, 12, rout) ;                
 
                 // XY data
-                rb.addPlotData(toString(), index_, "xa", getTankDrive().getX()) ;
-                rb.addPlotData(toString(), index_, "ya", getTankDrive().getY()) ;
-                rb.addPlotData(toString(), index_, "xt", (lseg.getX() + rseg.getX())/ 2.0) ;
-                rb.addPlotData(toString(), index_, "yt", (lseg.getY() + rseg.getY())/ 2.0) ;                                     
+                rb.addPlotData(plotid_, index_, 13, getTankDrive().getX()) ;
+                rb.addPlotData(plotid_, index_, 14, getTankDrive().getY()) ;
+                rb.addPlotData(plotid_, index_, 15, (lseg.getX() + rseg.getX())/ 2.0) ;
+                rb.addPlotData(plotid_, index_, 16, (lseg.getY() + rseg.getY())/ 2.0) ;                                     
             }
             else {
                 if (index_ == path_->size())
-                    rb.endPlot(toString()) ;
+                    rb.endPlot(plotid_) ;
 
                 td.setMotorsToPercents(0.0, 0.0) ;
             }

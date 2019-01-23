@@ -49,6 +49,9 @@ namespace xero {
             double rvoltage_;
             bool high_gear_ ;
             size_t index_ ;
+            
+            int plotid_ ;
+            static std::list<std::string> plot_columns_ ;          
         } ;
     }
 }
