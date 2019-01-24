@@ -3,8 +3,13 @@
 
 namespace xero {
     namespace misc {
-        constexpr const char* leftSuffix  = ".left.pf1.csv";
-        constexpr const char* rightSuffix = ".right.pf1.csv";
+        //
+        // Note, this reversal of left and right is intentional.  I am pretty sure that the
+        // PathWeaver is reversing these when writing out the paths (or their nomemclature
+        // is backward and I don't understand it).
+        //
+        constexpr const char* rightSuffix  = ".left.pf1.csv";
+        constexpr const char* leftSuffix = ".right.pf1.csv";
 
         XeroPathManager::XeroPathManager(const std::string &basedir) : basedir_(basedir) {
         }

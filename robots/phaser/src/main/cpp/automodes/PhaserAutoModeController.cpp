@@ -96,7 +96,7 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
 
-            act = std::make_shared<TankDriveFollowPathAction>(*db, "Curve") ;
+            act = std::make_shared<TankDriveFollowPathAction>(*db, "SCurve") ;
             mode->pushSubActionPair(db, act) ;
 
             return mode ; 
