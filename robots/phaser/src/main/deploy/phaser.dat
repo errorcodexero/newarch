@@ -37,14 +37,14 @@ tankdrive:inches_per_tick           0.010471976
 tankdrive:width                     24.5
 tankdrive:scrub                     0.9
 
-tankdrive:follower:left:ka          0.0040590016
-tankdrive:follower:left:kv          0.005295008
-tankdrive:follower:left:kp          0.001
+tankdrive:follower:left:ka          0.0005
+tankdrive:follower:left:kv          0.00555555555555
+tankdrive:follower:left:kp          0.05
 tankdrive:follower:left:kd          0.0
 
-tankdrive:follower:right:ka         0.0040590016
-tankdrive:follower:right:kv         0.005295008
-tankdrive:follower:right:kp         0.001
+tankdrive:follower:right:ka         0.0005
+tankdrive:follower:right:kv         0.00555555555555
+tankdrive:follower:right:kp         0.05
 tankdrive:follower:right:kd         0.0
 
 #

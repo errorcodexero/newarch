@@ -48,7 +48,7 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
 
-            act = std::make_shared<TankDriveCharAction>(*db, 2.5, 0.9) ;
+            act = std::make_shared<TankDriveCharAction>(*db, 3.0, 0.5) ;
             mode->pushSubActionPair(db, act) ;
 
             return mode ;         
@@ -80,7 +80,7 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
 
-            act = std::make_shared<TankDriveFollowPathAction>(*db, "Straight") ;
+            act = std::make_shared<TankDriveFollowPathAction>(*db, "TestOne") ;
             mode->pushSubActionPair(db, act) ;
 
             return mode ;         
@@ -88,7 +88,7 @@ namespace xero {
 
         ActionSequencePtr PhaserAutoModeController::createTestTwo() {
             std::string name = "Test Two" ;
-            std::string desc = "Drive Curve" ;
+            std::string desc = "S Curve" ;
             ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
@@ -96,7 +96,7 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
 
-            act = std::make_shared<TankDriveFollowPathAction>(*db, "Curve") ;
+            act = std::make_shared<TankDriveFollowPathAction>(*db, "SCurve") ;
             mode->pushSubActionPair(db, act) ;
 
             return mode ; 

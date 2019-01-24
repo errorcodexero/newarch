@@ -515,7 +515,7 @@ namespace xero {
                     data += col ;
                 }
                 data += "$" ;
-                for(int i = 0 ; i < 5 ; i++)
+                for(int i = 0 ; i < 2 ; i++)
                     sender_->send(data) ;
             }
             return id ;
@@ -542,7 +542,7 @@ namespace xero {
                 std::string data("$end,") ;
                 data += std::to_string(id) ;                
                 data += "$" ;
-                for(int i = 0 ; i < 5 ; i++)
+                for(int i = 0 ; i < 2 ; i++)
                     sender_->send(data) ;
             }
         }
