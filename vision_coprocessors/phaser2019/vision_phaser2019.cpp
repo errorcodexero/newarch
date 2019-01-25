@@ -105,9 +105,9 @@ namespace {
     nt::NetworkTableEntry nt_target_dist_pixels;
     nt::NetworkTableEntry nt_target_dist_inches;
     nt::NetworkTableEntry nt_target_yaw_deg;
-    nt::NetworkTableEntry nt_target_offset;
-    nt::NetworkTableEntry nt_l_rect_angle_deg;
-    nt::NetworkTableEntry nt_r_rect_angle_deg;
+    nt::NetworkTableEntry nt_target_rect_ratio;
+    nt::NetworkTableEntry nt_rect_l_angle_deg;
+    nt::NetworkTableEntry nt_rect_r_angle_deg;
     nt::NetworkTableEntry nt_target_valid;
 
     
@@ -469,12 +469,12 @@ namespace {
             // Calculate offset = ratio right rectangle / left rectangle.
             // If ratio > 1 ==> robot right of target
             // If ratio < 1 ==> robot left of target
-            double offset = getRectArea(right_rect) / getRectArea(left_rect);
-            nt_target_offset.SetDouble(offset);
+            double rect_ratio = getRectArea(right_rect) / getRectArea(left_rect);
+            nt_target_rect_ratio.SetDouble(rect_ratio);
 
             // Publish angles of the 2 rectangles.
-            nt_l_rect_angle_deg.SetDouble(left_rect.angle);
-            nt_r_rect_angle_deg.SetDouble(right_rect.angle);
+            nt_rect_l_angle_deg.SetDouble(left_rect.angle);
+            nt_rect_r_angle_deg.SetDouble(right_rect.angle);
 
             // Estimate yaw.  Assume both rectangles at equal height.
             double pixels_off_center = center_point.x - (width_pixels/2);
@@ -487,7 +487,6 @@ namespace {
             // TODO: Filter on angle of rectangles?
             //       Filter on area vs. distance between centres?
             //       Measure angle and distance.
-            //       Measure offset.  Based on relative sizes of rectangles?
 
             // Publish results on network table
             nt_target_dist_pixels.SetDouble(dist_between_centers);
@@ -703,12 +702,12 @@ int main(int argc, char* argv[]) {
     nt_target_dist_inches.SetDefaultDouble(0);
     nt_target_yaw_deg = nt_table->GetEntry("yaw_deg");
     nt_target_yaw_deg.SetDefaultDouble(0);
-    nt_target_offset = nt_table->GetEntry("offset");
-    nt_target_offset.SetDefaultDouble(0);
-    nt_l_rect_angle_deg = nt_table->GetEntry("l_rect_angle_deg");
-    nt_l_rect_angle_deg.SetDefaultDouble(0);
-    nt_r_rect_angle_deg = nt_table->GetEntry("r_rect_angle_deg");
-    nt_r_rect_angle_deg.SetDefaultDouble(0);
+    nt_target_rect_ratio = nt_table->GetEntry("rect_ratio");
+    nt_target_rect_ratio.SetDefaultDouble(0);
+    nt_rect_l_angle_deg = nt_table->GetEntry("rect_l_angle_deg");
+    nt_rect_l_angle_deg.SetDefaultDouble(0);
+    nt_rect_r_angle_deg = nt_table->GetEntry("rect_r_angle_deg");
+    nt_rect_r_angle_deg.SetDefaultDouble(0);
     nt_target_valid = nt_table->GetEntry("valid");
     nt_target_valid.SetDefaultBoolean(false);
 
