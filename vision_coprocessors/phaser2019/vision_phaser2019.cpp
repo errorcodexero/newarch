@@ -96,9 +96,13 @@ namespace {
     unsigned int team;
     bool nt_server = false;
 
+    // Whether to stream camera's direct output
+    // Configurable in param fie.
+    static bool stream_camera = true;
+
     // Whether to stream the output image from the pipeline.
     // Should just be needed for debug.
-    // To enable, set param in param fie.
+    // Configurable in param fie.
     static bool stream_pipeline_output = false;
 
     // Network table entries where results from tracking will be posted.
@@ -226,13 +230,18 @@ namespace {
         
         auto inst = frc::CameraServer::GetInstance();
         cs::UsbCamera camera{config.name, config.path};
-        auto server = inst->StartAutomaticCapture(camera);
+        cs::MjpegServer server;
+        if (stream_camera) {
+            server = inst->StartAutomaticCapture(camera);
+        }
 
         camera.SetConfigJson(config.config);
         camera.SetConnectionStrategy(cs::VideoSource::kConnectionKeepOpen);
 
         if (config.streamConfig.is_object()) {
-            server.SetConfigJson(config.streamConfig);
+            if (stream_camera) {
+                server.SetConfigJson(config.streamConfig);
+            }
         }
 
         return camera;
@@ -679,9 +688,13 @@ int main(int argc, char* argv[]) {
     }
 
     // Import global settings from param file
-    const std::string stream_output_param_name("vision:pipeline:stream_output");
-    if (params.hasParam(stream_output_param_name)) {
-        stream_pipeline_output = (params.getValue(stream_output_param_name) != 0);
+    const std::string stream_camera_param_name("vision:stream_camera");
+    if (params.hasParam(stream_camera_param_name)) {
+        stream_camera = (params.getValue(stream_camera_param_name) != 0);
+    }
+    const std::string stream_pipeline_output_param_name("vision:stream_pipeline_output");
+    if (params.hasParam(stream_pipeline_output_param_name)) {
+        stream_pipeline_output = (params.getValue(stream_pipeline_output_param_name) != 0);
     }
     
 
