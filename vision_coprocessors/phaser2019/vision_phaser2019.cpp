@@ -376,7 +376,7 @@ namespace {
             // Draw contours + find rectangles meeting aspect ratio requirement
             std::vector<cv::RotatedRect> min_rects(contours.size()), filtered_min_rects;
             const double expected_aspect_of_target = 5.5/2;
-            const double aspect_ratio_tolerance = 0.15;
+            const double aspect_ratio_tolerance = 0.25;   //0.15;
             for (int ix=0; ix < contours.size(); ++ix) {
                 std::vector<cv::Point>& contour = contours[ix];
 
