@@ -575,9 +575,16 @@ namespace {
 
 
     void runPipelineFromCamera(/*std::vector<CameraConfig>& cameraConfigs*/) {
+        
         // Start camera streaming
         std::vector<cs::VideoSource> cameras;
         for (auto&& cameraConfig : cameraConfigs) {
+            // Wait for camera device to be readable otherwise starting camera will fail
+            while (!xero::file::is_readable("/dev/video0")) {
+                std::cout << "Waiting for camera device " << cameraConfig.path << " to become readable\n";
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            }
+        
             cameras.emplace_back(StartCamera(cameraConfig));
         }
 
