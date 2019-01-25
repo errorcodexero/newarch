@@ -19,7 +19,10 @@ namespace xero {
             // Add the OI to the robot.  The OI is specific to this robot.
             //
             oi_ = std::make_shared<PhaserOISubsystem>(robot) ;
-            addChild(oi_) ;            
+            addChild(oi_) ;        
+
+            light_sensor_ = std::make_shared<LightSensorSubsystem>(robot, "linesensor", "linesensor", 3) ;    
+            addChild(light_sensor_) ;
         }
 
         PhaserRobotSubsystem::~PhaserRobotSubsystem() {

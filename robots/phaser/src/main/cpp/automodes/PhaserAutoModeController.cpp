@@ -3,6 +3,8 @@
 #include <tankdrive/TankDriveFollowPathAction.h>
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveScrubCharAction.h>
+#include <tankdrive/LineDetectAction.h>
+#include <tankdrive/LineFollowAction.h>
 #include <frc/DriverStation.h>
 
 using namespace xero::base ;
@@ -34,9 +36,33 @@ namespace xero {
             case 3:
                 mode = createTestTwo() ;
                 break ;
+
+            case 4:
+                mode = createFollowLine() ;
+                break ;
             }
             setAction(mode) ;
         }
+
+        ActionSequencePtr PhaserAutoModeController::createFollowLine() {
+            std::string name = "Line Follow Test" ;
+            std::string desc = "Test the line follower" ;
+            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto db = phaserrobot->getTankDrive() ;
+            auto ls = phaserrobot->getLightSensor() ;
+
+            act = std::make_shared<LineDetectAction>(*ls, *db) ;
+            mode->pushSubActionPair(db, act) ;
+
+            act = std::make_shared<LineFollowAction>(*ls, *db, "linefollow:power", "linefollow:distance", "linefollow:adjust") ;
+            mode->pushSubActionPair(db, act) ;            
+
+            return mode ;         
+        }             
 
         ActionSequencePtr PhaserAutoModeController::createStraightCharAutoMode() {
             std::string name = "Char Drive Base" ;

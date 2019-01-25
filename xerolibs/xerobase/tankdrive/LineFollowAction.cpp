@@ -32,7 +32,6 @@ namespace xero {
             }
 
             void LineFollowAction::run() {
-                ls_subsystem_.scanSensors() ;
                 bool is_detected = ls_subsystem_.detectedObject() ;
 
                 if(is_detected == true){

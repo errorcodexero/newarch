@@ -47,7 +47,7 @@ namespace xero {
                 return angle_;
             }
 
-            bool scanSensors() ;
+            virtual void computeState() ;
 
             bool detectedObject() {
                 return something_detected_ ;

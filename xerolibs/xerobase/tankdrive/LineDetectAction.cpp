@@ -7,19 +7,16 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
             LineDetectAction::LineDetectAction(LightSensorSubsystem &ls_subsystem, TankDrive &db_subsystem) : TankDriveAction(db_subsystem), ls_subsystem_(ls_subsystem) {
-            
-
             }
 
+            LineDetectAction::~LineDetectAction() {                
+            }
 
             void LineDetectAction::start() {
-               
             }
 
             void LineDetectAction::run() {
-                ls_subsystem_.scanSensors() ;
                 is_done_ = ls_subsystem_.detectedObject() ;
-
             }
 
             bool LineDetectAction::isDone() {

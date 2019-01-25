@@ -1,7 +1,7 @@
 #pragma once
 
 #include "phaseroi/PhaserOISubsystem.h"
-#include "linefollower/LineFollower.h"
+#include "lightsensor/LightSensorSubsystem.h"
 #include <tankdrive/TankDrive.h>
 #include <lifter/Lifter.h>
 #include <RobotSubsystem.h>
@@ -21,9 +21,14 @@ namespace xero {
             std::shared_ptr<PhaserOISubsystem> getOI() {
                 return oi_ ;
             }    
+
+            std::shared_ptr<xero::base::LightSensorSubsystem> getLightSensor() {
+                return light_sensor_ ;
+            }
+
         private:
             std::shared_ptr<PhaserOISubsystem> oi_ ;
-            std::shared_ptr<LineFollower> follower_ ;
+            std::shared_ptr<xero::base::LightSensorSubsystem> light_sensor_ ;
         } ;
     }
 }
