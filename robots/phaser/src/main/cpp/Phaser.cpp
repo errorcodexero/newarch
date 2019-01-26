@@ -35,12 +35,13 @@ namespace xero {
             //
 
             logger.enableSubsystem(MSG_GROUP_TANKDRIVE);            
-            logger.enableSubsystem(MSG_GROUP_TANKDRIVE_VERBOSE);            
+            //logger.enableSubsystem(MSG_GROUP_TANKDRIVE_VERBOSE);  
+            logger.enableSubsystem(MSG_GROUP_ACTIONS);          
         }
 
         void Phaser::loadPaths() {
             auto paths = getPathManager() ;
-            paths->loadPath("SCurve") ;
+            // paths->loadPath("SCurve") ;
         }
         
         void Phaser::RobotHardwareInit() {

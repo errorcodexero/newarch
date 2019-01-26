@@ -44,7 +44,7 @@ namespace xero {
             
         private:
         
-        LightSensorSubsystem ls_subsystem_ ;
+        LightSensorSubsystem &ls_subsystem_ ;
         bool is_done_ ;
 
         };

@@ -1,6 +1,8 @@
 #include "LightSensorSubsystem.h"
 #include "Robot.h"
 #include <cassert>
+#include <String>
+#include <iostream>
 
 using namespace xero::misc;
 
@@ -32,13 +34,16 @@ namespace xero {
             double midpoint = light_sensors_.size()/2 ;
             for(unsigned int i = 0; i<light_sensors_.size(); i++) {
 
-                bool light_sensor = light_sensors_[i]->Get() ;
+                bool light_sensor = !light_sensors_[i]->Get() ;
                 sensor_data_[i] = light_sensor ;
                 something_detected_ |= light_sensor ;
                 if(light_sensor == true) {
                     angle_+= (i-midpoint/light_sensors_.size()) ;
                 } 
             }
+            getRobot().getMessageLogger().startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
+            getRobot().getMessageLogger() << "sensor data: " << std::to_string(sensor_data_[0]) << ", " << std::to_string(sensor_data_[1]) << ", " << std::to_string(sensor_data_[2]) << " detected: " << std::to_string(something_detected_) << " angle: " << std::to_string(angle_) ;
+            getRobot().getMessageLogger().endMessage() ;
         }
     }
 }

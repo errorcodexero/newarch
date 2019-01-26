@@ -34,6 +34,12 @@ namespace xero {
             void LineFollowAction::run() {
                 bool is_detected = ls_subsystem_.detectedObject() ;
 
+                std::vector<bool> sensor_data_ = ls_subsystem_.sensorData() ;
+
+                getTankDrive().getRobot().getMessageLogger().startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
+                getTankDrive().getRobot().getMessageLogger() << "light sensor values"<<std::to_string(sensor_data_[0])<<" "<< std::to_string(sensor_data_[1]) <<" "<< std::to_string(sensor_data_[2])<<" "<< std::to_string(is_detected)  ;
+                getTankDrive().getRobot().getMessageLogger().endMessage() ;
+
                 if(is_detected == true){
 
                     double guidance_angle = ls_subsystem_.guidanceAngle() ;

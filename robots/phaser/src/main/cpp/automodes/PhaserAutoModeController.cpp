@@ -5,9 +5,12 @@
 #include <tankdrive/TankDriveScrubCharAction.h>
 #include <tankdrive/LineDetectAction.h>
 #include <tankdrive/LineFollowAction.h>
+#include <tankdrive/TankDrivePowerAction.h>
 #include <frc/DriverStation.h>
+#include <MessageLogger.h>
 
 using namespace xero::base ;
+using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
@@ -19,6 +22,11 @@ namespace xero {
 
         void PhaserAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             ActionSequencePtr mode = nullptr ;
+
+            
+            getRobot().getMessageLogger().startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
+            getRobot().getMessageLogger() << "creating automode" ;
+            getRobot().getMessageLogger().endMessage() ;
 
             switch(sel) {
             case 0:
@@ -45,6 +53,11 @@ namespace xero {
         }
 
         ActionSequencePtr PhaserAutoModeController::createFollowLine() {
+
+            getRobot().getMessageLogger().startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
+            getRobot().getMessageLogger() << "createFollowLine" ;
+            getRobot().getMessageLogger().endMessage() ;
+
             std::string name = "Line Follow Test" ;
             std::string desc = "Test the line follower" ;
             ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
@@ -54,6 +67,9 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
             auto ls = phaserrobot->getLightSensor() ;
+
+            act = std::make_shared<TankDrivePowerAction>(*db, "linefollow:power", "linefollow:power") ;
+            mode->pushSubActionPair(db, act) ;
 
             act = std::make_shared<LineDetectAction>(*ls, *db) ;
             mode->pushSubActionPair(db, act) ;

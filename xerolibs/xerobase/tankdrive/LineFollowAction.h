@@ -51,7 +51,7 @@ namespace xero {
             virtual std::string toString() ;
             
         private:
-            LightSensorSubsystem ls_subsystem_ ;
+            LightSensorSubsystem &ls_subsystem_ ;
             double distance_ ;
             double power_;
             double power_adjust_;
