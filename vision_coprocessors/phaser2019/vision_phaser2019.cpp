@@ -248,6 +248,24 @@ namespace {
         return camera;
     }
 
+    int setTrackingExposure(const std::string& device_name) {
+        std::string command = std::string("v4l2-ctl -d ") + device_name + " -c exposure_auto=1 -c exposure_absolute=100 -c brightness=1 -c gain=30";
+        int sysret = system(command.c_str());
+        if (sysret != 0) {
+            std::cout << "ERROR: Failed to call v4l2-ctl\n";
+        }
+        return sysret;
+    }
+
+    int setViewingExposure(const std::string& device_name) {
+        std::string command = std::string("v4l2-ctl -d ") + device_name + " -c exposure_auto=3 -c brightness=128";
+        int sysret = system(command.c_str());
+        if (sysret != 0) {
+            std::cout << "ERROR: Failed to call v4l2-ctl\n";
+        }
+        return sysret;
+    }
+
     // Return area of cv::RotatedRect
     double getRectArea(const cv::RotatedRect& rect) {
         cv::Size2f rect_size = rect.size;
@@ -661,10 +679,7 @@ namespace {
         // Apparently only works after starting the pipeline + small delay.
         // TODO: Don't hardcode device id.  Get it from json.
         std::this_thread::sleep_for(std::chrono::seconds(2));
-        int sysret = system("v4l2-ctl -d /dev/video0 -c exposure_auto=1 -c exposure_absolute=100 -c brightness=1 -c gain=30");
-        if (sysret != 0) {
-            std::cout << "ERROR: Failed to call v4l2-ctl\n";
-        }
+        (void)setTrackingExposure("/dev/video0");
         
         // Loop forever
         for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
