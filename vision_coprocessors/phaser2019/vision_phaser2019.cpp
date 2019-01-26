@@ -537,6 +537,7 @@ namespace {
     // Example pipeline
     class XeroPipeline : public frc::VisionPipeline {
     public:
+        const int frames_to_sample_per_report = 20;
         int frames_processed = 0;
         double total_processing_time = 0;
 
@@ -560,9 +561,12 @@ namespace {
             const double end_time = frc::Timer::GetFPGATimestamp();
             total_processing_time += (end_time - start_time);
 
-            // Report average processing time every 20 calls
-            if ((frames_processed % 20) == 0) {
+            // Report average processing time every X calls,
+            //then reset metrics for next window to measure and report
+            if (frames_processed == frames_to_sample_per_report) {
                 std::cout << "Average pipe processing time per frame = " << total_processing_time / frames_processed << " (" << frames_processed << " frames)\n";
+                frames_processed = 0;
+                total_processing_time = 0;
             }
         }
 
