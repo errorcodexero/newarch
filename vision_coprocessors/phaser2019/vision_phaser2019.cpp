@@ -380,20 +380,31 @@ namespace {
             std::vector<cv::RotatedRect> min_rects(contours.size()), filtered_min_rects;
             const double expected_aspect_of_target = 5.5/2;
             const double aspect_ratio_tolerance = 0.25;   //0.15;
+
+            // Draw all contours in blue
+            if (stream_pipeline_output) {
+                cv::drawContours(frame_out_,
+                                 contours,
+                                 -1,          // Negative index ==> draw all contours
+                                 color_blue,  // Color
+                                 1,           // Thickness
+                                 8);
+            }
+            
             for (int ix=0; ix < contours.size(); ++ix) {
                 std::vector<cv::Point>& contour = contours[ix];
 
                 // Draw contour in blue
+                /*
                 if (stream_pipeline_output) {
-                    if (1 /*cv::iscorrect(contour)*/) {  // TODO: Replace 1 by cv::iscorrect(), ensure it works
-                        cv::drawContours(frame_out_,
-                                         std::vector<std::vector<cv::Point> >(1,contour),  // TODO: Pass contours + actual index
-                                         -1,          // Negative index ==> draw all contours
-                                         color_blue,  // Color
-                                         1,           // Thickness
-                                         8);
-                    }
+                    cv::drawContours(frame_out_,
+                                     std::vector<std::vector<cv::Point> >(1,contour),  // TODO: Pass contours + actual index
+                                     -1,          // Negative index ==> draw all contours
+                                     color_blue,  // Color
+                                     1,           // Thickness
+                                     8);
                 }
+                */
 
                 // Find minimum rotated rectangle encapsulating the contour
                 cv::RotatedRect min_rect = min_rects[ix];
