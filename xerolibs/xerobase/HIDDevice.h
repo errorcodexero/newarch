@@ -47,8 +47,17 @@ namespace xero {
                 return -1 ;
             }
 
+            virtual void enable(bool b) {
+                enabled_ = b ;
+            }
+
+            virtual bool isEnabled() const {
+                return enabled_ ;
+            }
+
         private:
             OISubsystem &subsystem_ ;
+            bool enabled_ ;
             int index_ ;
         } ;
     }

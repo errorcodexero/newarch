@@ -47,6 +47,10 @@ namespace xero {
                 driver_->rumble(left, value) ;
             }
 
+            std::shared_ptr<DriverGamepad> getDriverGamepad() {
+                return driver_ ;
+            }
+
 protected:
             /// \brief Add a HIDDevice to the list of devices managed by the OI
             /// \param dev the HIDDevice to add to the list

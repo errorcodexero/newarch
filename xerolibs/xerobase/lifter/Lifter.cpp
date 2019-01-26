@@ -9,54 +9,64 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
         Lifter::Lifter(Robot &robot, uint64_t id) : Subsystem(robot, "lifter") {
+            SettingsParser &parser = robot.getSettingsParser() ;
 
             msg_id_ = id ;
             
             getMotors(robot) ;
 
-            int e1 = robot.getSettingsParser().getInteger("hw:lifter:encoder1");
-            int e2 = robot.getSettingsParser().getInteger("hw:lifter:encoder2");
-            int lbottom = robot.getSettingsParser().getInteger("hw:lifter:limit:bottom");
-            int ltop = robot.getSettingsParser().getInteger("hw:lifter:limit:top");
+            int e1 = parser.getInteger("hw:lifter:encoder1");
+            int e2 = parser.getInteger("hw:lifter:encoder2");
+            encoder_ = std::make_shared<frc::Encoder>(e1, e2) ;
+
+            if (parser.isDefined("hw:lifter:limit:bottom")) {
+                int lbottom = parser.getInteger("hw:lifter:limit:bottom");
+                bottom_limit_ = std::make_shared<frc::DigitalInput>(lbottom) ;
+            }
+
+            if (parser.isDefined("hw:lifter:limit:top")) {
+                int ltop = parser.getInteger("hw:lifter:limit:top");
+                top_limit_ = std::make_shared<frc::DigitalInput>(ltop) ;
+            }
 
             calibrate_from_limit_switch_ = false ;
             std::string limit = "lifter:calibrate_limit_switch" ;
-            if (robot.getSettingsParser().isDefined(limit)) {
-                if (robot.getSettingsParser().get(limit).isBoolean()) {
-                    if (robot.getSettingsParser().getBoolean(limit))
+            if (parser.isDefined(limit)) {
+                if (parser.get(limit).isBoolean()) {
+                    if (parser.getBoolean(limit))
                         calibrate_from_limit_switch_ = true ;
                 }
             }
 
-            encoder_ = std::make_shared<frc::Encoder>(e1, e2) ;
-            bottom_limit_ = std::make_shared<frc::DigitalInput>(lbottom) ;
-            top_limit_ = std::make_shared<frc::DigitalInput>(ltop) ;
-
             //
             // The height of the lifter when it is at the bottom of travel, relative to 
-            // the floow
+            // the floor
             //
-            lifter_offset = robot.getSettingsParser().getDouble("lifter:base") ;
+            lifter_offset = parser.getDouble("lifter:base") ;
             
             //
             // The nubmer of inches per encoder tick
             //
-            inches_per_tick_ = robot.getSettingsParser().getDouble("lifter:inches_per_tick") ;
+            inches_per_tick_ = parser.getDouble("lifter:inches_per_tick") ;
 
             //
             // The maximum height of the lifter independent of the limit switches
             //
-            max_height_ = robot.getSettingsParser().getDouble("lifter:max_height") ;
+            max_height_ = parser.getDouble("lifter:max_height") ;
 
             //
             // The minimum height of the lifter independent of limit switches
-            min_height_ = robot.getSettingsParser().getDouble("lifter:min_height") ;
+            min_height_ = parser.getDouble("lifter:min_height") ;
 
             // And we start without calibration
             is_calibrated_ = false ;
 
             // The base encoder value
             encoder_value_ = 0 ;
+
+            // Initialize to false, only gets reset if we have a limit switch
+            bottom_limit_switch_ = false ;
+            top_limit_switch_ = false ;
         }
 
         Lifter::~Lifter() {
@@ -115,19 +125,24 @@ namespace xero {
                     v = 0.0 ;
             }
 
+            //
+            // Now check the raw limit switch states
+            //
             if (v > 0 && isAtTop())
                 v = 0.0 ;
             else if (v < 0 && isAtBottom())
                 v = 0.0 ;
-
 
             motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v);
         }
 
         void Lifter::computeState() {
             encoder_value_ = encoder_->Get() ;
-            bottom_limit_switch_ = bottom_limit_->Get() ;
-            top_limit_switch_ = top_limit_->Get() ;
+            if (bottom_limit_ != nullptr)
+                bottom_limit_switch_ = bottom_limit_->Get() ;
+
+            if (top_limit_ != nullptr)
+                top_limit_switch_ = top_limit_->Get() ;
 
             if (bottom_limit_switch_ && calibrate_from_limit_switch_)
                 calibrate() ;
@@ -141,18 +156,12 @@ namespace xero {
 
         void Lifter::calibrate() {
             //
-            // The calibrate action assumes the lifter starts the match
-            // at the bottom most position.  This position is the floor position
-            // and the calibration activity is just remembering the encoder value
-            // at this lifter position
+            // The calibrate action assumes the lifter is at the bottom of travel
+            // This may be because the lifter put there at the start of the match
+            // and calibrate is called.  It may also be because the bottom limit
+            // has activated and we are recalibrating to the limit switch
             //
-            if (is_calibrated_ == false) {
-                is_calibrated_ = true ;
-                MessageLogger &logger = getRobot().getMessageLogger() ;
-                logger.startMessage(MessageLogger::MessageType::debug, msg_id_) ;
-                logger << "Lifter: lifter calibrated" ;
-                logger.endMessage() ;
-            }
+            is_calibrated_ = true ;
             encoder_->Reset() ;
             last_height_ = lifter_offset ;
         }

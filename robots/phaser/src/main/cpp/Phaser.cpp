@@ -35,7 +35,7 @@ namespace xero {
             //
 
             logger.enableSubsystem(MSG_GROUP_TANKDRIVE);            
-            // logger.enableSubsystem(MSG_GROUP_TANKDRIVE_VERBOSE);            
+            logger.enableSubsystem(MSG_GROUP_TANKDRIVE_VERBOSE);            
         }
 
         void Phaser::loadPaths() {

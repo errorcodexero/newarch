@@ -54,7 +54,10 @@ namespace xero {
 
         void OISubsystem::generateActions(ActionSequencePtr seq) {
             for(auto dev: hiddevices_)
-                dev->generateActions(*seq) ;
+            {
+                if (dev->isEnabled())
+                    dev->generateActions(*seq) ;
+            }
         }
 
         void OISubsystem::run() {

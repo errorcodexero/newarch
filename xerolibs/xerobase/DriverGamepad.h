@@ -72,6 +72,8 @@ namespace xero {
 
             void rumble(bool left, double value) ;
 
+            bool isCancelPressed() ;
+
         private:
             double scalePower(double axis, double boost, bool slow) ;
             

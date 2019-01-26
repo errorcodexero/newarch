@@ -21,7 +21,7 @@ namespace xero {
             oi_ = std::make_shared<PhaserOISubsystem>(robot) ;
             addChild(oi_) ;        
 
-            light_sensor_ = std::make_shared<LightSensorSubsystem>(robot, "linesensor", "linesensor", 3) ;    
+            light_sensor_ = std::make_shared<LightSensorSubsystem>(robot, "linesensor", "linesensor:", 3) ;    
             addChild(light_sensor_) ;
         }
 

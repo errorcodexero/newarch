@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Subsystem.h>
-#include <frc/VictorSP.h>
 #include <frc/Encoder.h>
 #include <frc/DigitalInput.h>
 #include <frc/Solenoid.h>
@@ -13,9 +12,6 @@ namespace xero {
         /// \brief a convience type for a shared pointer to a TalonSRX object
         typedef std::shared_ptr<ctre::phoenix::motorcontrol::can::TalonSRX> TalonPtr;
         
-        /// \brief a convience type for a shared pointer to a Victor SP object        
-        typedef std::shared_ptr<frc::VictorSP> VictorPtr ;
-
         class Lifter : public xero::base::Subsystem {
             friend class LifterGoToHeightAction ;
             friend class LifterPowerAction ;

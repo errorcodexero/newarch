@@ -8,7 +8,7 @@
 #
 # The definition of the drivebase (for now this is phoenix)
 #
-hw:tankdrive:leftmotor:1            1
+hw:tankdrive:leftmotor:1            1               # TALON SRX
 hw:tankdrive:leftmotor:2            2
 hw:tankdrive:leftmotor:3            3
 hw:tankdrive:rightmotor:1           4
@@ -21,6 +21,13 @@ hw:tankdrive:rightencoder:2         3
 hw:tankdrive:shifter                0
 hw:tankdrive:invert:motors:left     true
 hw:tankdrive:invert:encoders:left   true
+
+#
+# Line sensor
+#
+linesensor:0                        6
+linesensor:1                        7
+linesensor:2                        8
 
 #
 # The definiton of the OI
