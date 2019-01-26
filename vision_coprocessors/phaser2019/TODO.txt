@@ -1,9 +1,10 @@
 - Capability
-  - Sometimes repeated "CS: LogitechC270: Connecting to USB camera on /dev/video0"
-    Check that already connected and block before executing next commands.
+  - Calibrate extracted params.  Calculate dist, yaw, and angle off center.  Get overall coordinates.
+  - Measure latency  
+  - Camera start-up errors due to ioctl  
   - Try another camera for better consistency with v4l2 controls
   - Move v4l2 settings to param file + use local frc.json file.
-  - Wrapper to detect of start-up fail and retry it.  Or do so from within program.
+  - Wrapper to detect start-up fail and retry it.  Or do so from within program.
   - Replace v4l2-ctl with C calls.  Also get device path from json.)
   - Add window dimensions to param file, import and set, use for yaw calc.
   - Param for converting pixels between centres (horizontal) to distance.
@@ -12,7 +13,6 @@
   - Measure pipeline+detection latency *and* fps.  With both raspicam and USB cam.
   - Support separate cameras for viewing vs. tracking. Parameterize which used for what.
   - Tracking cargo.
-  - ShuffleBoard setup and reliability for streaming.
 
 - Accuracy
   - Check consistency of areas of rectangles vs. each other vs. distance.  Facing straight.  Vary distance.

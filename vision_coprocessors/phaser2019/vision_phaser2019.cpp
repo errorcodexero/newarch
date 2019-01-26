@@ -96,18 +96,22 @@ namespace {
     unsigned int team;
     bool nt_server = false;
 
+    // Whether to stream camera's direct output
+    // Configurable in param fie.
+    static bool stream_camera = true;
+
     // Whether to stream the output image from the pipeline.
     // Should just be needed for debug.
-    // To enable, set param in param fie.
+    // Configurable in param fie.
     static bool stream_pipeline_output = false;
 
     // Network table entries where results from tracking will be posted.
     nt::NetworkTableEntry nt_target_dist_pixels;
     nt::NetworkTableEntry nt_target_dist_inches;
     nt::NetworkTableEntry nt_target_yaw_deg;
-    nt::NetworkTableEntry nt_target_offset;
-    nt::NetworkTableEntry nt_l_rect_angle_deg;
-    nt::NetworkTableEntry nt_r_rect_angle_deg;
+    nt::NetworkTableEntry nt_target_rect_ratio;
+    nt::NetworkTableEntry nt_rect_l_angle_deg;
+    nt::NetworkTableEntry nt_rect_r_angle_deg;
     nt::NetworkTableEntry nt_target_valid;
 
     
@@ -224,15 +228,20 @@ namespace {
         wpi::outs() << "Starting camera '" << config.name << "' on " << config.path
                     << '\n';
         
-        cs::UsbCamera camera{config.name, config.path};
         auto inst = frc::CameraServer::GetInstance();
-        auto server = inst->StartAutomaticCapture(camera);
+        cs::UsbCamera camera{config.name, config.path};
+        cs::MjpegServer server;
+        if (stream_camera) {
+            server = inst->StartAutomaticCapture(camera);
+        }
 
         camera.SetConfigJson(config.config);
         camera.SetConnectionStrategy(cs::VideoSource::kConnectionKeepOpen);
 
         if (config.streamConfig.is_object()) {
-            server.SetConfigJson(config.streamConfig);
+            if (stream_camera) {
+                server.SetConfigJson(config.streamConfig);
+            }
         }
 
         return camera;
@@ -367,7 +376,7 @@ namespace {
             // Draw contours + find rectangles meeting aspect ratio requirement
             std::vector<cv::RotatedRect> min_rects(contours.size()), filtered_min_rects;
             const double expected_aspect_of_target = 5.5/2;
-            const double aspect_ratio_tolerance = 0.15;
+            const double aspect_ratio_tolerance = 0.25;   //0.15;
             for (int ix=0; ix < contours.size(); ++ix) {
                 std::vector<cv::Point>& contour = contours[ix];
 
@@ -469,12 +478,12 @@ namespace {
             // Calculate offset = ratio right rectangle / left rectangle.
             // If ratio > 1 ==> robot right of target
             // If ratio < 1 ==> robot left of target
-            double offset = getRectArea(right_rect) / getRectArea(left_rect);
-            nt_target_offset.SetDouble(offset);
+            double rect_ratio = getRectArea(right_rect) / getRectArea(left_rect);
+            nt_target_rect_ratio.SetDouble(rect_ratio);
 
             // Publish angles of the 2 rectangles.
-            nt_l_rect_angle_deg.SetDouble(left_rect.angle);
-            nt_r_rect_angle_deg.SetDouble(right_rect.angle);
+            nt_rect_l_angle_deg.SetDouble(left_rect.angle);
+            nt_rect_r_angle_deg.SetDouble(right_rect.angle);
 
             // Estimate yaw.  Assume both rectangles at equal height.
             double pixels_off_center = center_point.x - (width_pixels/2);
@@ -487,7 +496,6 @@ namespace {
             // TODO: Filter on angle of rectangles?
             //       Filter on area vs. distance between centres?
             //       Measure angle and distance.
-            //       Measure offset.  Based on relative sizes of rectangles?
 
             // Publish results on network table
             nt_target_dist_pixels.SetDouble(dist_between_centers);
@@ -576,9 +584,16 @@ namespace {
 
 
     void runPipelineFromCamera(/*std::vector<CameraConfig>& cameraConfigs*/) {
+        
         // Start camera streaming
         std::vector<cs::VideoSource> cameras;
         for (auto&& cameraConfig : cameraConfigs) {
+            // Wait for camera device to be readable otherwise starting camera will fail
+            while (!xero::file::is_readable("/dev/video0")) {
+                std::cout << "Waiting for camera device " << cameraConfig.path << " to become readable\n";
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            }
+        
             cameras.emplace_back(StartCamera(cameraConfig));
         }
 
@@ -673,9 +688,13 @@ int main(int argc, char* argv[]) {
     }
 
     // Import global settings from param file
-    const std::string stream_output_param_name("vision:pipeline:stream_output");
-    if (params.hasParam(stream_output_param_name)) {
-        stream_pipeline_output = (params.getValue(stream_output_param_name) != 0);
+    const std::string stream_camera_param_name("vision:stream_camera");
+    if (params.hasParam(stream_camera_param_name)) {
+        stream_camera = (params.getValue(stream_camera_param_name) != 0);
+    }
+    const std::string stream_pipeline_output_param_name("vision:stream_pipeline_output");
+    if (params.hasParam(stream_pipeline_output_param_name)) {
+        stream_pipeline_output = (params.getValue(stream_pipeline_output_param_name) != 0);
     }
     
 
@@ -703,12 +722,12 @@ int main(int argc, char* argv[]) {
     nt_target_dist_inches.SetDefaultDouble(0);
     nt_target_yaw_deg = nt_table->GetEntry("yaw_deg");
     nt_target_yaw_deg.SetDefaultDouble(0);
-    nt_target_offset = nt_table->GetEntry("offset");
-    nt_target_offset.SetDefaultDouble(0);
-    nt_l_rect_angle_deg = nt_table->GetEntry("l_rect_angle_deg");
-    nt_l_rect_angle_deg.SetDefaultDouble(0);
-    nt_r_rect_angle_deg = nt_table->GetEntry("r_rect_angle_deg");
-    nt_r_rect_angle_deg.SetDefaultDouble(0);
+    nt_target_rect_ratio = nt_table->GetEntry("rect_ratio");
+    nt_target_rect_ratio.SetDefaultDouble(0);
+    nt_rect_l_angle_deg = nt_table->GetEntry("rect_l_angle_deg");
+    nt_rect_l_angle_deg.SetDefaultDouble(0);
+    nt_rect_r_angle_deg = nt_table->GetEntry("rect_r_angle_deg");
+    nt_rect_r_angle_deg.SetDefaultDouble(0);
     nt_target_valid = nt_table->GetEntry("valid");
     nt_target_valid.SetDefaultBoolean(false);
 

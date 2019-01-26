@@ -13,5 +13,8 @@ vision:pipeline:hsv_threshold:s_max     255
 vision:pipeline:hsv_threshold:v_min     100
 vision:pipeline:hsv_threshold:v_max     255
 
-# Set to non-0 to stream the pipeline output, to suppress
-vision:pipeline:stream_output           1
+# Set to non-0 to stream the camera, 0 to disable
+vision:stream_camera                    1
+
+# Set to non-0 to stream the pipeline output, 0 to disable
+vision:stream_pipeline_output           1
