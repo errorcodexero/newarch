@@ -1,8 +1,0 @@
-
-- Predicting distance to center point.  Pointing at center point
-
-  Pixels between centers        Actual dist (ft)    Product
-  ----------------------        ----------------    -------
-  330                           2.28                752.4
-  399                           1.90                758.1
-  294                           2.59                761.5
