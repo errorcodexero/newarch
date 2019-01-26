@@ -22,6 +22,7 @@
 #include <wpi/json.h>
 #include <wpi/raw_istream.h>
 #include <wpi/raw_ostream.h>
+#include <frc/Timer.h>
 
 #include <cameraserver/CameraServer.h>
 
@@ -364,7 +365,9 @@ namespace {
 
             // Confirm input binary image to a viewable object.
             // Further detection will be added to this image.
-            cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
+            if (stream_pipeline_output) {
+                cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
+            }
             
             // Unless we have at least 2 contours, nothing further to do
             if (contours.size() < 2) {
@@ -381,13 +384,15 @@ namespace {
                 std::vector<cv::Point>& contour = contours[ix];
 
                 // Draw contour in blue
-                if (1 /*cv::iscorrect(contour)*/) {  // TODO: Replace 1 by cv::iscorrect(), ensure it works
-                    cv::drawContours(frame_out_,
-                                     std::vector<std::vector<cv::Point> >(1,contour),  // TODO: Pass contours + actual index
-                                     -1,          // Negative index ==> draw all contours
-                                     color_blue,  // Color
-                                     1,           // Thickness
-                                     8);
+                if (stream_pipeline_output) {
+                    if (1 /*cv::iscorrect(contour)*/) {  // TODO: Replace 1 by cv::iscorrect(), ensure it works
+                        cv::drawContours(frame_out_,
+                                         std::vector<std::vector<cv::Point> >(1,contour),  // TODO: Pass contours + actual index
+                                         -1,          // Negative index ==> draw all contours
+                                         color_blue,  // Color
+                                         1,           // Thickness
+                                         8);
+                    }
                 }
 
                 // Find minimum rotated rectangle encapsulating the contour
@@ -398,10 +403,12 @@ namespace {
                 // Keep rectangles that have the expected aspect ratio
                 if (isApproxEqual(aspect_ratio, expected_aspect_of_target, aspect_ratio_tolerance)) {
                     filtered_min_rects.push_back(min_rect);
-                    cv::Point2f rect_points[4];
-                    min_rect.points(rect_points);
-                    for (int j = 0; j < 4; j++ ) {
-                        cv::line(frame_out_, rect_points[j], rect_points[(j+1)%4], color_red, 2);
+                    if (stream_pipeline_output) {
+                        cv::Point2f rect_points[4];
+                        min_rect.points(rect_points);
+                        for (int j = 0; j < 4; j++ ) {
+                            cv::line(frame_out_, rect_points[j], rect_points[(j+1)%4], color_red, 2);
+                        }
                     }
                 }
             }
@@ -460,20 +467,22 @@ namespace {
             // At this point, top 2 rectangles have right aspect ratio, almost equal size, and almost same height
             // So likely a valid target.
             // Draw them in green.
-            for (int ix=0; ix<2; ++ix) {
-                cv::RotatedRect rect = filtered_min_rects[ix];
-                cv::Point2f rect_points[4];
-                rect.points(rect_points);
-                for (int j = 0; j < 4; j++ ) {
-                    cv::line(frame_out_, rect_points[j], rect_points[(j+1)%4], color_green, 2);
+            if (stream_pipeline_output) {
+                for (int ix=0; ix<2; ++ix) {
+                    cv::RotatedRect rect = filtered_min_rects[ix];
+                    cv::Point2f rect_points[4];
+                    rect.points(rect_points);
+                    for (int j = 0; j < 4; j++ ) {
+                        cv::line(frame_out_, rect_points[j], rect_points[(j+1)%4], color_green, 2);
+                    }
                 }
+
+                // Draw line between centres
+                cv::line(frame_out_, left_center, right_center, color_green, 2);
+
+                // Draw marker through center
+                cv::drawMarker(frame_out_, center_point, color_green, cv::MARKER_CROSS, 20 /*marker size*/, 2 /*thickness*/);
             }
-
-            // Draw line between centres
-            cv::line(frame_out_, left_center, right_center, color_green, 2);
-
-            // Draw marker through center
-            cv::drawMarker(frame_out_, center_point, color_green, cv::MARKER_CROSS, 20 /*marker size*/, 2 /*thickness*/);
 
             // Calculate offset = ratio right rectangle / left rectangle.
             // If ratio > 1 ==> robot right of target
@@ -528,7 +537,8 @@ namespace {
     // Example pipeline
     class XeroPipeline : public frc::VisionPipeline {
     public:
-        int val = 0;
+        int frames_processed = 0;
+        double total_processing_time = 0;
 
         XeroPipeline() {
             pipe_elements_.push_back(new XeroPipelineElementHsvThreshold("HSV Threshold"));
@@ -538,6 +548,7 @@ namespace {
         virtual ~XeroPipeline();
 
         virtual void Process(cv::Mat& mat) override {
+            const double start_time = frc::Timer::GetFPGATimestamp();
             //std::cout << "Process  " << mat.cols << "   " << mat.rows << "\n";
             cv::Mat* frame_out_p = &mat;
             for (auto& elem : pipe_elements_) {
@@ -545,7 +556,14 @@ namespace {
                 frame_out_p = &(elem->getFrameOut());
             }
             output_frame_ = *frame_out_p;
-            ++val;
+            ++frames_processed;
+            const double end_time = frc::Timer::GetFPGATimestamp();
+            total_processing_time += (end_time - start_time);
+
+            // Report average processing time every 20 calls
+            if ((frames_processed % 20) == 0) {
+                std::cout << "Average pipe processing time per frame = " << total_processing_time / frames_processed << " (" << frames_processed << " frames)\n";
+            }
         }
 
         cv::Mat output_frame_;
