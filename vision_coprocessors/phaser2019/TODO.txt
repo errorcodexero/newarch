@@ -1,6 +1,6 @@
 - Capability
   - Calibrate extracted params.  Calculate dist, yaw, and angle off center.  Get overall coordinates.
-  - Measure latency  
+  - Assess latency/fps and accuracy at 640x480 vs 320x240.  
   - Camera start-up errors due to ioctl  
   - Try another camera for better consistency with v4l2 controls
   - Move v4l2 settings to param file + use local frc.json file.
