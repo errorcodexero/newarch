@@ -28,20 +28,21 @@ namespace xero {
             // Decide what message groups (incl. subsystems) you want to see
             //
             // logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
+            // logger.enableSubsystem(MSG_GROUP_TANKDRIVE_VERBOSE);            
             // logger.enableSubsystem(MSG_GROUP_ACTIONS);
             // logger.enableSubsystem(MSG_GROUP_PARSER) ;
             // logger.enableSubsystem(MSG_GROUP_OI) ;
             // logger.enableSubsystem(MSG_GROUP_ALL) ;         
             //
 
-            logger.enableSubsystem(MSG_GROUP_TANKDRIVE);            
-            //logger.enableSubsystem(MSG_GROUP_TANKDRIVE_VERBOSE);  
+            logger.enableSubsystem(MSG_GROUP_LINE_FOLLOWER);            
             logger.enableSubsystem(MSG_GROUP_ACTIONS);          
+            logger.enableSubsystem(MSG_GROUP_TANKDRIVE);            
         }
 
         void Phaser::loadPaths() {
             auto paths = getPathManager() ;
-            // paths->loadPath("SCurve") ;
+            paths->loadPath("CurveLeft") ;
         }
         
         void Phaser::RobotHardwareInit() {

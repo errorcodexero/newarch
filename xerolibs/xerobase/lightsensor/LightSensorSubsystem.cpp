@@ -3,6 +3,7 @@
 #include <cassert>
 #include <String>
 #include <iostream>
+#include <iomanip>
 
 using namespace xero::misc;
 
@@ -14,7 +15,6 @@ namespace xero {
                 int sensor_address = settings_parser.getInteger(base + std::to_string(i)) ;
                 std::shared_ptr <frc::DigitalInput> sensor = std::make_shared <frc::DigitalInput>(sensor_address) ;
                 light_sensors_.push_back(sensor) ;
-                sensor_data_.push_back(false) ;
             }
         }
 
@@ -22,28 +22,37 @@ namespace xero {
             for (const int &sensorAddress : sensor_numbers){
                 std::shared_ptr <frc::DigitalInput> sensor = std::make_shared <frc::DigitalInput>(sensorAddress) ;
                 light_sensors_.push_back(sensor) ;
-                sensor_data_.push_back(false) ;                
             }
         }        
 
-        void LightSensorSubsystem::computeState(){
-            assert(sensor_data_.size() == light_sensors_.size()) ;
-            something_detected_ = false ;
+        void LightSensorSubsystem::computeState() { 
             angle_ = 0 ;
 
             double midpoint = light_sensors_.size()/2 ;
+            uint32_t data = 0 ;
             for(unsigned int i = 0; i<light_sensors_.size(); i++) {
-
-                bool light_sensor = !light_sensors_[i]->Get() ;
-                sensor_data_[i] = light_sensor ;
-                something_detected_ |= light_sensor ;
-                if(light_sensor == true) {
-                    angle_+= (i-midpoint/light_sensors_.size()) ;
-                } 
+                bool light_sensor = light_sensors_[i]->Get() ;
+                if (!light_sensor) {
+                    data |= (1 << i) ;
+                    angle_ += (i-midpoint)/light_sensors_.size() ;
+                }
             }
-            getRobot().getMessageLogger().startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
-            getRobot().getMessageLogger() << "sensor data: " << std::to_string(sensor_data_[0]) << ", " << std::to_string(sensor_data_[1]) << ", " << std::to_string(sensor_data_[2]) << " detected: " << std::to_string(something_detected_) << " angle: " << std::to_string(angle_) ;
-            getRobot().getMessageLogger().endMessage() ;
+
+            bool adddata = true ;
+
+            if (light_sensors_.size() == 3 && sensor_data_.size() > 0 && data == 0 && sensor_data_.front() == 2)
+                adddata = false ;
+
+            if (adddata)
+            {
+                sensor_data_.push_front(data) ;
+
+                while (sensor_data_.size() > 4)
+                    sensor_data_.pop_back() ;
+            }
+
+            if (detectedObject())
+                std::cout << "Detected object" << std::endl ;
         }
     }
 }

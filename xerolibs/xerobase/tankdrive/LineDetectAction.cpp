@@ -7,13 +7,13 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
             LineDetectAction::LineDetectAction(LightSensorSubsystem &ls_subsystem, TankDrive &db_subsystem) : TankDriveAction(db_subsystem), ls_subsystem_(ls_subsystem) {
-                is_done_ = false ;
             }
 
             LineDetectAction::~LineDetectAction() {                
             }
 
             void LineDetectAction::start() {
+                is_done_ = false ;
             }
 
             void LineDetectAction::run() {
@@ -22,6 +22,7 @@ namespace xero {
 
                 getTankDrive().getRobot().getMessageLogger().startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 getTankDrive().getRobot().getMessageLogger() << "line detect action is " <<(is_done_?" done" :" not done");
+                getTankDrive().getRobot().getMessageLogger() << " state is " << ls_subsystem_.getSensorsState() ;                
                 getTankDrive().getRobot().getMessageLogger().endMessage() ;
 
             }

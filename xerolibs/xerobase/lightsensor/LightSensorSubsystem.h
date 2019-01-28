@@ -5,6 +5,8 @@
 #include <frc/DigitalInput.h>
 #include <SettingsParser.h>
 #include <vector>
+#include <list>
+
 /// \file
 
 
@@ -50,19 +52,37 @@ namespace xero {
             virtual void computeState() ;
 
             bool detectedObject() {
-                return something_detected_ ;
+                if (sensor_data_.size() > 0 && sensor_data_.front() != 0) {
+                    std::cout << "SensorData " << sensor_data_.front() ;
+                    return true ;
+                }
+
+                return false ;
             }
 
-            std::vector<bool> sensorData() {
-                return sensor_data_ ;
+            bool getSensorState(uint32_t index) {
+                if (sensor_data_.size() == 0)
+                    return false ;
+
+                uint32_t data = sensor_data_.front() ;
+                return (data & (1 << index)) ? true : false ;
             }
-     
+
+            uint32_t getSensorsState() {
+                if (sensor_data_.size() == 0)
+                    return 0 ;
+                    
+                return sensor_data_.front() ;
+            }
+
+            size_t getSensorCount() const {
+                return light_sensors_.size() ;
+            }
 
         private:
             std::vector <std::shared_ptr<frc::DigitalInput>> light_sensors_ ;
-            bool something_detected_ ;
             double angle_ ;
-            std::vector<bool> sensor_data_ ;
+            std::list<uint32_t> sensor_data_ ;
         }  ;
     }
 }

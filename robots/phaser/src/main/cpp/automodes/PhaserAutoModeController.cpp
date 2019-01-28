@@ -68,14 +68,14 @@ namespace xero {
             auto db = phaserrobot->getTankDrive() ;
             auto ls = phaserrobot->getLightSensor() ;
 
-            act = std::make_shared<TankDrivePowerAction>(*db, "linefollow:power", "linefollow:power") ;
+            act = std::make_shared<TankDriveFollowPathAction>(*db, "CurveLeft") ;
             mode->pushSubActionPair(db, act) ;
 
             act = std::make_shared<LineDetectAction>(*ls, *db) ;
-            mode->pushSubActionPair(db, act) ;
+            // mode->pushSubActionPair(db, act) ;
 
             act = std::make_shared<LineFollowAction>(*ls, *db, "linefollow:power", "linefollow:distance", "linefollow:adjust") ;
-            mode->pushSubActionPair(db, act) ;            
+            // mode->pushSubActionPair(db, act) ;            
 
             return mode ;         
         }             

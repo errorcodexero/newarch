@@ -38,5 +38,7 @@
 /// used cautiously and never during a competition.
 #define MSG_GROUP_TANKDRIVE_VERBOSE     (1ull << 8)
 
+#define MSG_GROUP_LINE_FOLLOWER         (1ull << 9)
+
 /// \brief ID to get all messages
 #define MSG_GROUP_ALL                   (0xffffffffffffffffull)

@@ -48,14 +48,15 @@ tankdrive:inches_per_tick           0.010471976
 tankdrive:width                     24.5
 tankdrive:scrub                     0.9
 
-tankdrive:follower:left:ka          0.0005
-tankdrive:follower:left:kv          0.00555555555555
-tankdrive:follower:left:kp          0.05
+
+tankdrive:follower:left:ka         0.0005
+tankdrive:follower:left:kv         0.00555555555555
+tankdrive:follower:left:kp         0.1
 tankdrive:follower:left:kd          0.0
 
 tankdrive:follower:right:ka         0.0005
 tankdrive:follower:right:kv         0.00555555555555
-tankdrive:follower:right:kp         0.05
+tankdrive:follower:right:kp         0.1
 tankdrive:follower:right:kd         0.0
 
 #
@@ -77,6 +78,6 @@ plotter:port                                                    5555
 #
 #Variables for the linefollower
 #
-linefollow:power                                                .25
+linefollow:power                                                .15
 linefollow:distance                                             18
-linefollow:adjust                                               .015
+linefollow:adjust                                               .4

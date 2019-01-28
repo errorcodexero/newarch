@@ -88,26 +88,30 @@ namespace xero {
         }
 
 
-        /// \brief set the drive base to low gear
         void TankDrive::lowGear() {
-            if (gear_ != nullptr)
+            if (gear_ != nullptr) {
                 gear_->Set(true) ;
-            else {
+                auto &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
+                logger << "Shifted tankdrive to low gear" ;
+                logger.endMessage() ;                
+            } else {
                 auto &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::warning) ;
-                logger << "tankdrive: attempting to shift to low gear when the tank drive does not have a gear box" ;
                 logger.endMessage() ;
             }
         }
 
-        /// \brief set the drive base to high gear
         void TankDrive::highGear() {
-            if (gear_ != nullptr)
+            if (gear_ != nullptr) {
                 gear_->Set(false) ;
-            else {
+                auto &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
+                logger << "Shifted tankdrive to high gear" ;
+                logger.endMessage() ;                
+            } else {
                 auto &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::warning) ;
-                logger << "tankdrive: attempting to shift to high gear when the tank drive does not have a gear box" ;
                 logger.endMessage() ;               
             }
         }       
