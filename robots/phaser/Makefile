@@ -1,7 +1,6 @@
 TOPDIR=../..
 
 SOURCES = \
-	src/main/cpp/linefollower/LineFollower.cpp\
 	src/main/cpp/main.cpp\
 	src/main/cpp/Phaser.cpp\
 	src/main/cpp/phaseroi/PhaserOIDevice.cpp\

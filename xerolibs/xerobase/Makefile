@@ -26,8 +26,11 @@ SOURCES = \
 	tankdrive/TankDriveTimedPowerAction.cpp\
 	tankdrive/TankDriveFollowPathAction.cpp\
 	tankdrive/TankDriveScrubCharAction.cpp\
+	tankdrive/LineDetectAction.cpp\
+	tankdrive/LineFollowAction.cpp\
 	singlemotorsubsystem/SingleMotorPowerAction.cpp\
 	singlemotorsubsystem/SingleMotorSubsystem.cpp\
+	lightsensor/LightSensorSubsystem.cpp\
 	lifter/Lifter.cpp\
 	lifter/LifterCalibrateAction.cpp\
 	lifter/LifterGoToHeightAction.cpp\

@@ -50,9 +50,6 @@ namespace xero {
                 while (sensor_data_.size() > 4)
                     sensor_data_.pop_back() ;
             }
-
-            if (detectedObject())
-                std::cout << "Detected object" << std::endl ;
         }
     }
 }
