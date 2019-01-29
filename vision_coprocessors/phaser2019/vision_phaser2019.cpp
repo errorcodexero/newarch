@@ -85,7 +85,7 @@ namespace {
     // Vision targets should be 8in apart at closest point.
     // 5.5in x 2in strips.
     // Angled about 14.5 degrees.
-    double dist_bet_centers_inches = 11.0;  // APPROXIMATE.  TODO: Calculate accurately.
+    double dist_bet_centers_inches = 11.5;  // APPROXIMATE.  TODO: Calculate accurately.
         
     int width_pixels = 640;
     int height_pixels = 480;
@@ -491,7 +491,11 @@ namespace {
             }
 
             cv::Point2f center_point = (left_center + right_center) * 0.5;
-            double dist_between_centers = hypot(delta_x, delta_y);
+            double dist_bet_centers = hypot(delta_x, delta_y);
+
+            // Distance to target in inches
+            // At 640x460 of C270, pixels_bet_centres * dist_to_target_in_FEET ~ 760
+            double dist_to_target = (760.0/dist_bet_centers) * 12.0;
 
             // At this point, top 2 rectangles have right aspect ratio, almost equal size, and almost same height
             // So likely a valid target.
@@ -523,21 +527,23 @@ namespace {
             nt_rect_l_angle_deg.SetDouble(left_rect.angle);
             nt_rect_r_angle_deg.SetDouble(right_rect.angle);
 
-            // Estimate yaw.  Assume both rectangles at equal height.
+            // Estimate yaw.  Assume both rectangles at equal height (among other things).
+            //double yaw = pixels_off_center * (camera_hfov_deg / width_pixels);
             double pixels_off_center = center_point.x - (width_pixels/2);
-            //double inches_to_pixels = dist_between_centers / dist_bet_centers_inches;
-            //double inches_off_center = pixels_off_center * inches_to_pixels;
-            double yaw = pixels_off_center * (camera_hfov_deg / width_pixels);
-            nt_target_yaw_deg.SetDouble(yaw);
+            double pixels_per_inch = dist_bet_centers / dist_bet_centers_inches;
+            double inches_off_center = pixels_off_center / pixels_per_inch;
+            double yaw_in_rad = atan(inches_off_center / dist_to_target);
+            double yaw_in_deg = yaw_in_rad * 180.0 / M_PI;
+            nt_target_yaw_deg.SetDouble(yaw_in_deg);
             
 
             // TODO: Filter on angle of rectangles?
-            //       Filter on area vs. distance between centres?
-            //       Measure angle and distance.
+            //       Measure angle vs. perpendicular to target
+            //       Measure coordinates & orientation vs. target.
 
             // Publish results on network table
-            nt_target_dist_pixels.SetDouble(dist_between_centers);
-            //nt_target_dist_inches.SetDouble(TO BE DONE);
+            nt_target_dist_pixels.SetDouble(dist_bet_centers);
+            nt_target_dist_inches.SetDouble(dist_to_target);
             nt_target_valid.SetBoolean(true);
 
             // Flush NT updates after all data has been posted.

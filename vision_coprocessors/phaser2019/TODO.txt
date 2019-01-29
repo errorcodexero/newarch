@@ -1,5 +1,4 @@
 - Capabilities
-  - Test vision's ability to detect target with hatch partly obstructing it.
   - Test vision with field images.  Esp. from distance and multiple targets visible.  Filter on rect angles?
   - Change resolution to 320x240.  Adjust distance mapping.  Increase compression to lower bandwidth.  (shuffleboard vs. browser?)
   - Dual cam:
@@ -9,7 +8,7 @@
     - Switch between viewing and tracking (exposure, brightness, etc).  
   - Performance: Disable pipeline when viewing.  Measure fps.  Also on B+.
   - Cam choice: Logitech C920 vs Lifecam3000
-  - Calibrate extracted params.  Calculate dist, yaw, and angle off center.  Get overall coordinates.
+  - Calibrate extracted params for 320x480 and for C920.  Calculate coordinates vs. target + angle vs. target.
   - Assess latency/fps and accuracy at 640x480 vs 320x240.  
   - Move v4l2 settings to param file + use local frc.json file.
   - Wrapper to detect start-up fail and retry it?
