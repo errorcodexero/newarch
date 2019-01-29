@@ -6,7 +6,9 @@ SOURCES = \
 	src/main/cpp/phaseroi/PhaserOIDevice.cpp\
 	src/main/cpp/phaseroi/PhaserOISubsystem.cpp\
 	src/main/cpp/phaserrobotsubsystem/PhaserRobotSubsystem.cpp\
-	src/main/cpp/automodes/PhaserAutoModeController.cpp
+	src/main/cpp/automodes/PhaserAutoModeController.cpp\
+	src/main/cpp/hatchholder/HatchHolder.cpp\
+	src/main/cpp/hatchholder/HatchHolderAction.cpp
 
 TARGET = phaser
 
@@ -26,6 +28,8 @@ ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_LIBS = $(TOPDIR)/robotsims/phasersim
 	LOCAL_EXTERNAL_LIBS=$(TOPDIR)/external/dinput/dinput8.lib $(TOPDIR)/external/dinput/dxguid.lib -lcurses
 endif
+
+SUPPORTED_PLATFORMS=ROBORIO SIMULATOR
 
 ifeq ($(PLATFORM),GOPIGO)
 $(error This robot is not supported by the GOPIGO platform)

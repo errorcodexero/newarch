@@ -9,7 +9,7 @@ namespace xero {
         namespace phaser {
             HatchHolderModel::HatchHolderModel(RobotSimBase &simbase) : SubsystemModel(simbase, "hatchholder") {
 
-                extension_channel_ = simbase.getSettingsParser().getInteger("hw:hatchholder:extension") ;
+                extension_channel_ = simbase.getSettingsParser().getInteger("hw:hatchholder:arm") ;
                 finger_channel_ = simbase.getSettingsParser().getInteger("hw:hatchholder:finger") ;
                 hatch_sensor_channel_ = simbase.getSettingsParser().getInteger("hw:hatchholder:sensor") ;
 

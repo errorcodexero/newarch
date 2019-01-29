@@ -9,16 +9,16 @@ namespace xero {
     namespace phaser {
             void HatchHolderAction::start() {
                 switch(operation_){
-                    case EXTEND_ARM:
+                    case Operation::EXTEND_ARM:
                         subsystem_.extendArm() ;
                         break;
-                    case RETRACT_ARM:
+                    case Operation::RETRACT_ARM:
                         subsystem_.retractArm() ;
                         break;
-                    case EXTEND_FINGER:
+                    case Operation::EXTEND_FINGER:
                         subsystem_.extendFinger() ;
                         break;
-                    case RETRACT_FINGER:
+                    case Operation::RETRACT_FINGER:
                         subsystem_.retractFinger() ;
                         break;
                     default:
@@ -41,9 +41,32 @@ namespace xero {
             void HatchHolderAction::cancel() {
             }
 
+            std::string HatchHolderAction::toString(Operation oper)
+            {
+                std::string ret = "Unknown" ;
+                
+                switch(oper)
+                {
+                case Operation::EXTEND_ARM:
+                    ret = "EXTEND_ARM" ;
+                    break;
+                case Operation::RETRACT_ARM:
+                    ret = "RETRACT_ARM" ;
+                    break;
+                case Operation::EXTEND_FINGER:
+                    ret = "EXTEND_FINGER" ;
+                    break;
+                case Operation::RETRACT_FINGER:
+                    ret = "RETRACT_FINGER" ;
+                    break;  
+                }
+
+                return ret ;              
+            }
+
             std::string HatchHolderAction::toString() {
                 std::string result = "HatchHolderAction " ;
-                result += std::to_string(operation_) ;
+                result += toString(operation_) ;
                 return result ;
             }
     }

@@ -18,7 +18,7 @@ namespace xero {
         
         public:
 
-            enum Operation{
+            enum class Operation{
                     EXTEND_ARM,
                     RETRACT_ARM,
                     EXTEND_FINGER,
@@ -40,6 +40,7 @@ namespace xero {
             virtual bool isDone() ;
             virtual void cancel() ;
             virtual std::string toString() ;
+            virtual std::string toString(Operation oper) ;
             
         private:
             /// The tank drive subsystem

@@ -2,6 +2,7 @@
 
 #include "phaseroi/PhaserOISubsystem.h"
 #include "lightsensor/LightSensorSubsystem.h"
+#include "hatchholder/HatchHolder.h"
 #include <tankdrive/TankDrive.h>
 #include <lifter/Lifter.h>
 #include <RobotSubsystem.h>
@@ -9,6 +10,10 @@
 namespace xero {
     namespace phaser {
 
+        //
+        // Add gamemanipulator
+        // Add climber
+        //
         class PhaserRobotSubsystem : public xero::base::RobotSubsystem {
         public:
             PhaserRobotSubsystem(xero::base::Robot &robot) ;
@@ -26,9 +31,15 @@ namespace xero {
                 return light_sensor_ ;
             }
 
+            std::shared_ptr<HatchHolder> getHatchHolder() {
+                return hatch_holder_ ;
+            }            
+
         private:
             std::shared_ptr<PhaserOISubsystem> oi_ ;
             std::shared_ptr<xero::base::LightSensorSubsystem> light_sensor_ ;
+            std::shared_ptr<HatchHolder> hatch_holder_ ;
+
         } ;
     }
 }

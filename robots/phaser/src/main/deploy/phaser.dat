@@ -18,11 +18,11 @@ hw:tankdrive:leftencoder:1          0
 hw:tankdrive:leftencoder:2          1
 hw:tankdrive:rightencoder:1         2
 hw:tankdrive:rightencoder:2         3
-hw:tankdrive:shifter                0
+hw:tankdrive:shifter                0               # Solenoid 0
 hw:tankdrive:invert:motors:right    true
 hw:tankdrive:invert:encoders:right  true
-hw:hatchholder:arm                  0
-hw:hatchholder:finger               0
+hw:hatchholder:arm                  1               # Solenoid 1
+hw:hatchholder:finger               2               # Solenoid 2
 hw:hatchholder:sensor               0
 
 #

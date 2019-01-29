@@ -107,14 +107,31 @@ MessageLogger &MessageLogger::operator<<(const char *value_p)
     return *this;
 }
 
-MessageLogger &MessageLogger::operator<<(int value)
+MessageLogger &MessageLogger::operator<<(int32_t value)
 {
     if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
         current_message_.append(std::to_string(value));
     return *this;
 }
 
-MessageLogger &MessageLogger::operator<<(size_t value)
+
+MessageLogger &MessageLogger::operator<<(int64_t value)
+{
+    if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
+        current_message_.append(std::to_string(value));
+    return *this;
+}
+
+
+MessageLogger &MessageLogger::operator<<(uint32_t value)
+{
+    if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
+        current_message_.append(std::to_string(value));
+    return *this;
+}
+
+
+MessageLogger &MessageLogger::operator<<(uint64_t value)
 {
     if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
         current_message_.append(std::to_string(value));

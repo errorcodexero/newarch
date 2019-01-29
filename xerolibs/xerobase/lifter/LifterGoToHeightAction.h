@@ -2,7 +2,8 @@
 
 #include "LifterAction.h"
 #include "Lifter.h"
-#include <PIDCtrl.h>
+#include <PIDACtrl.h>
+#include <TrapezoidalProfile.h>
 
 namespace xero {
     namespace base {
@@ -19,15 +20,11 @@ namespace xero {
             virtual std::string toString() ;
 
         private:
-            bool atTarget() ;
-
-        private:
             bool is_done_ ;
             double target_ ;
-            double height_threshold_ ;
-            double speed_threshold_ ;
-            xero::misc::PIDCtrl pidctrl_ ;
-            double output_ ;
+            double threshold_ ;
+            std::shared_ptr<xero::misc::PIDACtrl> ctrl_ ;
+            std::shared_ptr<xero::misc::TrapezoidalProfile> profile_ ;
             double start_time_ ;
         } ;
     }

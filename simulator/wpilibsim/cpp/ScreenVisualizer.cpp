@@ -299,6 +299,7 @@ namespace xero {
                     line = line.substr(0, fieldwidth) ;
                 wmove(getRobotWindow(),subsystem_row_++, 0) ;
                 waddstr(getRobotWindow(), line.c_str()) ;
+                wclrtoeol(getRobotWindow()) ;
             }
         }
     }

@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cassert>
 #include <memory>
+#include <cstdint>
 
 #include "MessageLoggerData.h"
 
@@ -90,12 +91,22 @@ class MessageLogger
     /// \brief operator overload the output an integer value
     /// \param value the integer to output
     /// \returns a copy of the message logger
-    MessageLogger &operator<<(int value);
+    MessageLogger &operator<<(int32_t value);
 
     /// \brief operator overload the output an integer value
     /// \param value the integer to output
     /// \returns a copy of the message logger
-    MessageLogger &operator<<(size_t value);
+    MessageLogger &operator<<(int64_t value);    
+
+    /// \brief operator overload the output an integer value
+    /// \param value the integer to output
+    /// \returns a copy of the message logger
+    MessageLogger &operator<<(uint32_t value);    
+
+    /// \brief operator overload the output an integer value
+    /// \param value the integer to output
+    /// \returns a copy of the message logger
+    MessageLogger &operator<<(uint64_t value);       
 
     /// \brief operator overload the output a floating point value
     /// \param value the floating point number to output

@@ -1,11 +1,13 @@
 #include "PhaserAutoModeController.h"
 #include "Phaser.h"
+#include "hatchholder/HatchHolderAction.h"
 #include <tankdrive/TankDriveFollowPathAction.h>
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveScrubCharAction.h>
 #include <tankdrive/LineDetectAction.h>
 #include <tankdrive/LineFollowAction.h>
 #include <tankdrive/TankDrivePowerAction.h>
+#include <DelayAction.h>
 #include <frc/DriverStation.h>
 #include <MessageLogger.h>
 
@@ -48,7 +50,12 @@ namespace xero {
             case 4:
                 mode = createFollowLine() ;
                 break ;
+
+            case 5:
+                mode = testHatchHolder() ;
+                break ;
             }
+
             setAction(mode) ;
         }
 
@@ -143,5 +150,42 @@ namespace xero {
 
             return mode ; 
         }        
+
+        ActionSequencePtr PhaserAutoModeController::testHatchHolder() {
+            std::string name = "Test Hatch Holder" ;
+            std::string desc = "Cycle through the combinations of the hatch holder" ;
+            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto hatchholder = phaserrobot->getHatchHolder() ;
+
+            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::EXTEND_ARM) ;
+            mode->pushSubActionPair(hatchholder, act) ;
+
+            act = std::make_shared<DelayAction>(2.0) ;
+            mode->pushAction(act) ;
+
+            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::EXTEND_FINGER) ;
+            mode->pushSubActionPair(hatchholder, act) ;
+
+            act = std::make_shared<DelayAction>(2.0) ;
+            mode->pushAction(act) ;           
+
+            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::RETRACT_ARM) ;
+            mode->pushSubActionPair(hatchholder, act) ;
+
+            act = std::make_shared<DelayAction>(2.0) ;
+            mode->pushAction(act) ;
+
+            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::RETRACT_FINGER) ;
+            mode->pushSubActionPair(hatchholder, act) ;
+
+            act = std::make_shared<DelayAction>(2.0) ;
+            mode->pushAction(act) ;               
+
+            return mode ;             
+        }
     }
 }

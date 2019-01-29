@@ -78,6 +78,12 @@ namespace xero {
                 return td_ ;
             }
 
+            /// \brief get the total time for the profile
+            /// \returns total time for the profile
+            double getTotalTime() const {
+                return ta_ + tc_ + td_ ;
+            }
+
             /// \brief get the actual maximum velocity of this profile
             /// If the distance is small enough, the profile will never reach the max
             /// velocity specified when the profile was created.  This method returns the

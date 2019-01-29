@@ -31,7 +31,7 @@ hw:lifter:motor:1                    8                                  # TalonS
 hw:lifter:motor:2                    9                                  # TalonSRX 9
 
 # Hatch Holder
-hw:hatchholder:extension             1                                  # Solenoid 1
+hw:hatchholder:arm                   1                                  # Solenoid 1
 hw:hatchholder:finger                2                                  # Solenoid 2
 hw:hatchholder:sensor               10                                  # DIO 10
 

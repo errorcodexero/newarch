@@ -23,6 +23,10 @@ namespace xero {
 
             light_sensor_ = std::make_shared<LightSensorSubsystem>(robot, "linesensor", "linesensor:", 3) ;    
             addChild(light_sensor_) ;
+
+            // TODO move to the game manipulator when it is ready
+            hatch_holder_ = std::make_shared<HatchHolder>(robot) ;
+            addChild(hatch_holder_) ;
         }
 
         PhaserRobotSubsystem::~PhaserRobotSubsystem() {
