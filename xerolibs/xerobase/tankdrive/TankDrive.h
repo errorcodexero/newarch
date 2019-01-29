@@ -25,29 +25,8 @@ namespace xero {
         /// \brief a tank-style drivebase
         class TankDrive : public DriveBase {
             /// \brief class for tank drive actions
-            friend class TankDriveAction;
-            /// \brief class for tank drive actions         
-            friend class TankDriveDistanceAction;
-            /// \brief class for tank drive actions         
-            friend class TankDriveVelocityAction;
-            /// \brief class for tank drive actions         
-            friend class TankDriveCharAction ;
-            /// \brief class for tank drive actions         
-            friend class TankDrivePowerAction ;
-            /// \brief class for tank drive actions         
-            friend class TankDriveCharAction ;
-            /// \brief class for tank drive actions         
-            friend class TankDriveTimedPowerAction ;
-            /// \brief class for tank drive actions         
-            friend class TankDriveAngleAction ;
-            /// \brief class for tank drive actions         
-            friend class TankDriveAngleCharAction ;
-            /// \brief class for tank drive actions
-            friend class TankDriveFollowPathAction ;
-            friend class TankDriveScrubCharAction ;
-            
-            friend class LineFollowAction ;
-            friend class LineDetectAction ;
+            friend class TankDriveAction;      
+        
 
         public:
             /// \brief Create a new tank drive object

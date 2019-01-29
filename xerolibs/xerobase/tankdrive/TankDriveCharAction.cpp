@@ -34,7 +34,7 @@ namespace xero {
                 else
                     getTankDrive().lowGear() ;
             }   
-            getTankDrive().setMotorsToPercents(voltage_, voltage_) ;
+            setMotorsToPercents(voltage_, voltage_) ;
             auto &logger = getTankDrive().getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;            
             logger << "Time,Distance,Velocity,Acceleration,TicksL,TicksR" ;
@@ -51,7 +51,7 @@ namespace xero {
                 double now = frc::Timer::GetFPGATimestamp() ;
                 if (now - start_time_ >= duration_) {
                     is_done_ = true ;
-                    getTankDrive().setMotorsToPercents(0.0, 0.0) ;
+                    setMotorsToPercents(0.0, 0.0) ;
                     rb.endPlot(plotid_) ;
                 } else {
                     auto &logger = getTankDrive().getRobot().getMessageLogger() ;

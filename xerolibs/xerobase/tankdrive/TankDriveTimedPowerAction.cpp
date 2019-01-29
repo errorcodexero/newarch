@@ -23,13 +23,13 @@ namespace xero {
         void TankDriveTimedPowerAction::start() {
             isdone_ = false ;
             start_ = getTankDrive().getRobot().getTime() ;
-            getTankDrive().setMotorsToPercents(left_, right_) ;
+            setMotorsToPercents(left_, right_) ;
         }
 
         void TankDriveTimedPowerAction::run() {                
             isdone_ = (getTankDrive().getRobot().getTime() > start_ + duration_) ;
             if (isdone_) {
-                getTankDrive().setMotorsToPercents(0.0, 0.0) ;
+                setMotorsToPercents(0.0, 0.0) ;
             }
         }
 

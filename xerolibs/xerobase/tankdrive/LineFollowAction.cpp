@@ -50,7 +50,7 @@ namespace xero {
                     double left_m = power_ + guidance_angle*power_adjust_ ;
                     double right_m = power_ - guidance_angle*power_adjust_ ;
 
-                    getTankDrive().setMotorsToPercents(left_m, right_m) ;
+                    setMotorsToPercents(left_m, right_m) ;
 
                     is_done_ = getTankDrive().getDist() - start_distance_ >= distance_ ;
 
@@ -78,7 +78,7 @@ namespace xero {
                 }
             }
             else {
-                getTankDrive().setMotorsToPercents(0, 0) ;
+                setMotorsToPercents(0, 0) ;
             }
             index_++ ;
         }

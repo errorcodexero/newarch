@@ -22,7 +22,7 @@ namespace xero {
             is_done_ = false ;
             start_time_ = frc::Timer::GetFPGATimestamp() ;
             current_ = start_ ;
-            getTankDrive().setMotorsToPercents(current_, -current_) ;
+            setMotorsToPercents(current_, -current_) ;
         }
 
         void TankDriveAngleCharAction::run() {
@@ -44,13 +44,13 @@ namespace xero {
                     }
                     else {
                         start_time_ = frc::Timer::GetFPGATimestamp() ;
-                        getTankDrive().setMotorsToPercents(current_, -current_) ;
+                        setMotorsToPercents(current_, -current_) ;
                     }
                 }
             }
             else
             {
-                getTankDrive().setMotorsToPercents(0.0, 0.0) ;
+                setMotorsToPercents(0.0, 0.0) ;
             }
         }
 

@@ -143,13 +143,13 @@ namespace xero
                     logger << ", motor " << base_power;
                     logger.endMessage();
 
-                    getTankDrive().setMotorsToPercents(base_power, -base_power);
+                    setMotorsToPercents(base_power, -base_power);
                 }
                 else
                 {
                     is_done_ = true;
 
-                    getTankDrive().setMotorsToPercents(0, 0);
+                    setMotorsToPercents(0, 0);
 
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
                     logger << "TankDriveAngleAction";
@@ -164,7 +164,7 @@ namespace xero
             }
             else
             {
-                getTankDrive().setMotorsToPercents(0.0, 0.0);
+                setMotorsToPercents(0.0, 0.0);
             }
         }
 
