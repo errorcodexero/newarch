@@ -1,5 +1,5 @@
 
-- Predicting distance to center point.  Pointing at center point
+- Predicting distance to center point.  Pointing at center point.  (Using Logitech C270)
 
   Pixels between centers        Actual dist to board(ft)    Product
   ----------------------        ------------------------    -------

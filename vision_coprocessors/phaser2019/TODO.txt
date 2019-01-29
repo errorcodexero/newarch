@@ -1,11 +1,19 @@
-- Capability
+- Capabilities
+  - Test vision's ability to detect target with hatch partly obstructing it.
+  - Test vision with field images.  Esp. from distance and multiple targets visible.  Filter on rect angles?
+  - Change resolution to 320x240.  Adjust distance mapping.  Increase compression to lower bandwidth.  (shuffleboard vs. browser?)
+  - Dual cam:
+    - External util to change network table values.  Use to control camera viewing + viewing/tracking mode.
+    - Abiity to switch camera used for streaming.  Fast?  Maintains port no?  Interrupts client stream?
+    - Switch camera used for tracking.
+    - Switch between viewing and tracking (exposure, brightness, etc).  
+  - Performance: Disable pipeline when viewing.  Measure fps.  Also on B+.
+  - Cam choice: Logitech C920 vs Lifecam3000
   - Calibrate extracted params.  Calculate dist, yaw, and angle off center.  Get overall coordinates.
   - Assess latency/fps and accuracy at 640x480 vs 320x240.  
-  - Camera start-up errors due to ioctl  
-  - Try another camera for better consistency with v4l2 controls
   - Move v4l2 settings to param file + use local frc.json file.
-  - Wrapper to detect start-up fail and retry it.  Or do so from within program.
-  - Replace v4l2-ctl with C calls.  Also get device path from json.)
+  - Wrapper to detect start-up fail and retry it?
+  - Replace v4l2-ctl with C calls.  Also get device path from json - don't hardcode /dev/video0.
   - Add window dimensions to param file, import and set, use for yaw calc.
   - Param for converting pixels between centres (horizontal) to distance.
   - Compute estimated distance and yaw, publish to network table.
@@ -23,6 +31,7 @@
     Characterize and handle differences for accuracy.
 
 - Efficiency
+  - Video fps, latency seems better in browser than shuffleboard.  Compare bandwidth too.
   - Minimize temp objects.
   - Don't annotate image if not going to stream output.
 
