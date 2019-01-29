@@ -8,6 +8,11 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
+        std::list<std::string> LifterGoToHeightAction::plot_columns_ = {
+            "time", 
+            "tpos", "apos", "tvel", "avel", "out"
+        } ;
+
         LifterGoToHeightAction::LifterGoToHeightAction(Lifter &lifter, double target) : LifterAction(lifter) {
             target_ = target ;
             threshold_ = getLifter().getRobot().getSettingsParser().getDouble("lifter:threshold") ;
@@ -35,6 +40,9 @@ namespace xero {
                 is_done_ = false ;
                 profile_->update(dist, 0.0, 0.0) ;
                 start_time_ = getLifter().getRobot().getTime() ;
+                start_height_ = getLifter().getHeight() ;
+                plotid_ = getLifter().getRobot().startPlot("LifterGoToHeight", plot_columns_) ;
+                index_ = 0 ;
             }
         }
 
@@ -43,18 +51,24 @@ namespace xero {
             double dt = lifter.getRobot().getDeltaTime() ;
             double elapsed = lifter.getRobot().getTime() - start_time_ ;
             double speed = lifter.getVelocity() ;
-            double dist = target_ - getLifter().getHeight() ;
+            double traveled = getLifter().getHeight() - start_height_ ;
+            double delta = target_ - getLifter().getHeight() ;
 
             if (elapsed > profile_->getTotalTime())
             {
-                if (std::fabs(dist) < threshold_)
+                if (std::fabs(delta) < threshold_) {
                     is_done_ = true ;
-                else {
+                    lifter.getRobot().endPlot(plotid_) ;
+                } else {
                     //
                     // We reached the end of the profile, but are not where we
-                    // want to be.
+                    // want to be.  Create a new profile to get us there.
                     //
-                    profile_->update(dist, speed, 0.0) ;
+                    profile_->update(delta, speed, 0.0) ;
+                    start_height_ = getLifter().getHeight() ;
+                    start_time_ = getLifter().getRobot().getTime() ;
+                    elapsed = 0 ;
+                    traveled = 0 ;
                 }
             }
 
@@ -64,8 +78,17 @@ namespace xero {
                 double tvel = profile_->getVelocity(elapsed) ;
                 double tacc = profile_->getAccel(elapsed) ;
 
-                double out = ctrl_->getOutput(tacc, tvel, tdist, dist, dt) ;
+                double out = ctrl_->getOutput(tacc, tvel, tdist, traveled, dt) ;
                 lifter.setMotorPower(out) ;
+
+                lifter.getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
+                lifter.getRobot().addPlotData(plotid_, index_, 1, tdist) ;
+                lifter.getRobot().addPlotData(plotid_, index_, 2, traveled) ;
+                lifter.getRobot().addPlotData(plotid_, index_, 3, tvel) ;
+                lifter.getRobot().addPlotData(plotid_, index_, 4, speed) ;
+                lifter.getRobot().addPlotData(plotid_, index_, 5, out) ;
+
+                index_++ ;
             }
         }
 

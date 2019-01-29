@@ -26,6 +26,11 @@ namespace xero {
             std::shared_ptr<xero::misc::PIDACtrl> ctrl_ ;
             std::shared_ptr<xero::misc::TrapezoidalProfile> profile_ ;
             double start_time_ ;
+            double start_height_ ;
+            size_t index_ ;
+
+            int plotid_ ;
+            static std::list<std::string> plot_columns_ ;                
         } ;
     }
 }
