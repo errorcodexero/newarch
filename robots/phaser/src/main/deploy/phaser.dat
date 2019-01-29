@@ -21,6 +21,9 @@ hw:tankdrive:rightencoder:2         3
 hw:tankdrive:shifter                0
 hw:tankdrive:invert:motors:right    true
 hw:tankdrive:invert:encoders:right  true
+hw:hatchholder:arm                  0
+hw:hatchholder:finger               0
+hw:hatchholder:sensor               0
 
 #
 # This is a comment
@@ -81,3 +84,8 @@ plotter:port                                                    5555
 linefollow:power                                                .15
 linefollow:distance                                             18
 linefollow:adjust                                               .4
+
+#
+#Variables for the Hatch Holder
+#
+
