@@ -27,15 +27,20 @@ namespace xero {
 
         void LightSensorSubsystem::computeState() { 
             angle_ = 0 ;
+            int sensors_on = 0;
 
-            double midpoint = light_sensors_.size()/2 ;
+            double midpoint = (light_sensors_.size()-1)/2.0 ;
             uint32_t data = 0 ;
             for(unsigned int i = 0; i<light_sensors_.size(); i++) {
                 bool light_sensor = light_sensors_[i]->Get() ;
                 if (!light_sensor) {
+                    sensors_on++ ;
                     data |= (1 << i) ;
-                    angle_ += (i-midpoint)/light_sensors_.size() ;
+                    angle_ = angle_ + ((i-midpoint)/midpoint) ;
                 }
+            }
+            if(sensors_on > 0){
+                angle_= angle_/sensors_on ;
             }
 
             bool adddata = true ;
