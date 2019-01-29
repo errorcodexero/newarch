@@ -74,7 +74,7 @@ namespace xero {
                 double rout = right_follower_->getOutput(rseg.getAccel(), rseg.getVelocity(), rseg.getPOS(), 
                                         right_start_ + td.getRightDistance(), dt) ;
 
-                td.setMotorsToPercents(lout, rout) ;                        
+                setMotorsToPercents(lout, rout) ;                        
 
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << td.getRobot().getTime() ;
@@ -121,7 +121,7 @@ namespace xero {
                 if (index_ == path_->size())
                     rb.endPlot(plotid_) ;
 
-                td.setMotorsToPercents(0.0, 0.0) ;
+                setMotorsToPercents(0.0, 0.0) ;
             }
 
             index_++ ;            
@@ -133,7 +133,7 @@ namespace xero {
 
         void TankDriveFollowPathAction::cancel()  {
             index_ = path_->size() ;
-            getTankDrive().setMotorsToPercents(0.0, 0.0) ;            
+            setMotorsToPercents(0.0, 0.0) ;            
         }
 
         std::string TankDriveFollowPathAction::toString() {

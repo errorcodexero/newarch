@@ -27,7 +27,7 @@ namespace xero {
                 else
                     getTankDrive().lowGear() ;
             }
-            getTankDrive().setMotorsToPercents(left_, right_) ;
+            setMotorsToPercents(left_, right_) ;
         }
 
         void TankDrivePowerAction::run() {                

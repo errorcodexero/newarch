@@ -30,7 +30,7 @@ namespace xero {
             else
                 getTankDrive().lowGear() ;
                 
-            getTankDrive().setMotorsToPercents(lvoltage_, rvoltage_) ;
+            setMotorsToPercents(lvoltage_, rvoltage_) ;
 
             index_ = 0 ;
             plotid_ = getTankDrive().getRobot().startPlot(toString(), plot_columns_) ;
@@ -43,7 +43,7 @@ namespace xero {
                 double now = frc::Timer::GetFPGATimestamp() ;
                 if (now - start_time_ >= duration_) {
                     is_done_ = true ;
-                    getTankDrive().setMotorsToPercents(0.0, 0.0) ;
+                    setMotorsToPercents(0.0, 0.0) ;
                     rb.endPlot(plotid_) ;
                 } else {
                     rb.addPlotData(plotid_, index_, 0, now - start_time_) ;

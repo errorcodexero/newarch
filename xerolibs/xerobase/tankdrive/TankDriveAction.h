@@ -28,6 +28,11 @@ namespace xero {
                 return tank_drive_ ;
             }
 
+            
+            void setMotorsToPercents(double left_percent, double right_percent){
+                tank_drive_.setMotorsToPercents(left_percent, right_percent) ;
+            }
+
         private:
             /// \brief The tank drive subsystem
             TankDrive &tank_drive_;

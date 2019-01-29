@@ -51,7 +51,7 @@ void TankDriveVelocityAction::run() {
             logger << ", left " << left_power << ", right " << right_power ;
             logger.endMessage();            
 
-            getTankDrive().setMotorsToPercents(left_power, right_power);
+            setMotorsToPercents(left_power, right_power);
         } 
         
         else {
