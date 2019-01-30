@@ -20,6 +20,7 @@ namespace xero {
             xero::base::ActionSequencePtr createTestTwo() ;
             xero::base::ActionSequencePtr createFollowLine() ;
             xero::base::ActionSequencePtr testHatchHolder() ;
+            xero::base::ActionSequencePtr testLifter() ;            
         } ;
     }
 }

@@ -12,6 +12,7 @@ namespace xero {
             in_per_tick_ = simbase.getSettingsParser().getDouble("lifter:sim:inches_per_tick") ;
 
             inch_per_sec_per_volt_ = simbase.getSettingsParser().getDouble("lifter:sim:inches_per_sec_per_volt") ;
+            gravity_equivalent_speed_ = simbase.getSettingsParser().getDouble("lifter:sim:gravity_equivalent_speed") ;
             encoder_base_ = 0  ;
 
             encoder_1_ = simbase.getSettingsParser().getInteger("hw:lifter:encoder1") ;
@@ -37,7 +38,7 @@ namespace xero {
 
             std::string line ;
 
-            lines.push_back("  Angle: " + std::to_string(getHeight())) ;
+            lines.push_back("  Height: " + std::to_string(getHeight())) ;
             lines.push_back("  Motor: " + std::to_string(getPower())) ;
 
             line = "  TopLimit: " ;
@@ -69,7 +70,7 @@ namespace xero {
         }
 
         void LifterModel::run(double dt) {
-            double dh = power_ * inch_per_sec_per_volt_ * dt ;
+            double dh = power_ * inch_per_sec_per_volt_* dt - gravity_equivalent_speed_ * dt ;
             height_ += dh ;
 
             if (height_ <= bottom_limit_height_) {
@@ -104,6 +105,7 @@ namespace xero {
             if (talon != nullptr)
                 power_ = talon->Get() ;
         }
+        
         void LifterModel::addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *motor) {
             if (motor->GetDeviceID() == motor_1_) {
                 motor1_ = motor ;

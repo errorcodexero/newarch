@@ -7,6 +7,8 @@
 #include <tankdrive/LineDetectAction.h>
 #include <tankdrive/LineFollowAction.h>
 #include <tankdrive/TankDrivePowerAction.h>
+#include <lifter/LifterGoToHeightAction.h>
+#include <lifter/LifterHoldHeightAction.h>
 #include <DelayAction.h>
 #include <frc/DriverStation.h>
 #include <MessageLogger.h>
@@ -54,10 +56,35 @@ namespace xero {
             case 5:
                 mode = testHatchHolder() ;
                 break ;
+
+            case 6:
+                mode = testLifter() ;
+                break ;
             }
 
             setAction(mode) ;
         }
+
+        
+        ActionSequencePtr PhaserAutoModeController::testLifter() {
+            std::string name = "Test Lifter" ;
+            std::string desc = "Test the lifter go to height and hold" ;
+            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto lifter = phaserrobot->getLifter() ;
+
+            act = std::make_shared<LifterGoToHeightAction>(*lifter, 45.0) ;
+            mode->pushSubActionPair(lifter, act) ;
+
+            act = std::make_shared<LifterHoldHeightAction>(*lifter, 45.0) ;
+            mode->pushSubActionPair(lifter, act) ;            
+
+            return mode ;                
+        }
+
 
         ActionSequencePtr PhaserAutoModeController::createFollowLine() {
 
