@@ -12,16 +12,20 @@ namespace xero {
             is_done_ = action_->isDone() ;
         }
 
-        void TerminateAction::run(){
-            action_->run() ;
-            is_done_ = action_->isDone() ;
-            if(!is_done_ && term_.shouldTerminate()) 
-                is_done_ = true;
+        void TerminateAction::run() {
+            if (!is_done_) {
+                action_->run() ;
+                is_done_ = action_->isDone() ;
+                if(!is_done_ && term_.shouldTerminate()) 
+                    is_done_ = true;
+            }
         }
 
-        void TerminateAction::cancel(){
-            action_->cancel() ;
-            is_done_ = true ;
+        void TerminateAction::cancel() {
+            if (!is_done_) {
+                action_->cancel() ;
+                is_done_ = true ;
+            }
         }
 
         bool TerminateAction::isDone(){
