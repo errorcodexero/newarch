@@ -25,6 +25,10 @@ namespace xero {
 
         }  
 
+        void HatchHolder::computeState() {
+            has_hatch_ = sensor_->Get() ;
+        }
+
         void HatchHolder::extendArm() {
             arm_->Set(true) ;
         }
