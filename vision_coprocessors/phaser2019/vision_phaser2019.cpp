@@ -659,7 +659,7 @@ namespace {
         std::vector<cs::VideoSource> cameras;
         for (auto&& cameraConfig : cameraConfigs) {
             // Wait for camera device to be readable otherwise starting camera will fail
-            while (!xero::file::is_readable("/dev/video0")) {
+            while (!xero::file::is_readable(cameraConfig.path)) {
                 std::cout << "Waiting for camera device " << cameraConfig.path << " to become readable\n";
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
@@ -667,13 +667,13 @@ namespace {
             cameras.emplace_back(StartCamera(cameraConfig));
         }
 
-        // Start image processing on last camera if present
+        // Start image processing if present.  First one only.
         auto pipe = std::make_shared<XeroPipeline>();
         if (cameras.size() >= 1) {
             std::cout << "Starting vision pipeline\n";
 
             std::thread t([&] {
-                              frc::VisionRunner<XeroPipeline> runner(cameras[/*0*/ cameras.size()-1],
+                              frc::VisionRunner<XeroPipeline> runner(cameras[0],
                                                                      pipe.get(),
                                                                      VisionPipelineResultProcessor(stream_pipeline_output));
                               runner.RunForever();
@@ -685,8 +685,23 @@ namespace {
         // Apparently only works after starting the pipeline + small delay.
         // TODO: Don't hardcode device id.  Get it from json.
         std::this_thread::sleep_for(std::chrono::seconds(2));
-        (void)setTrackingExposure("/dev/video0");
-        
+        for (auto&& cameraConfig : cameraConfigs) {
+            //(void)setTrackingExposure(cameraConfig.path);
+            (void)setViewingExposure(cameraConfig.path);
+        }
+
+        /*
+        // Select one of the cameras for streaming for now and toggle.  Just for testing.
+        cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
+        server.SetSource(cameras[0]);
+        std::this_thread::sleep_for(std::chrono::seconds(4));
+        server.SetSource(cameras[1]);
+        std::this_thread::sleep_for(std::chrono::seconds(4));
+        server.SetSource(cameras[0]);
+        std::this_thread::sleep_for(std::chrono::seconds(4));
+        server.SetSource(cameras[1]);
+        */
+
         // Loop forever
         for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
     }
