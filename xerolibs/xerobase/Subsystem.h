@@ -108,14 +108,6 @@ namespace xero {
                 return false ;
             }
 
-            /// \brief define a named sequence of actions
-            /// \param name_p the name of the named sequence
-            /// \param action the action for the named sequence
-            void defineNamedSequence(const char *name_p, ActionPtr action) {
-                named_sequences_[name_p] = action ;
-            }
-
-
         private:
             //
             // A reference to the robot object that contains this subsystem
@@ -136,11 +128,6 @@ namespace xero {
             // The set of child subsystems
             //
             std::list<SubsystemPtr> children_ ;
-
-            //
-            // The set of named sequences
-            //
-            std::map<std::string, ActionPtr> named_sequences_ ;
         } ;
 
         typedef std::shared_ptr<Subsystem> SubsystemPtr ;
