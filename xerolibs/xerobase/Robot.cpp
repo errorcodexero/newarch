@@ -523,17 +523,22 @@ namespace xero {
 
         void Robot::addPlotData(int id, size_t row, size_t col, double value) {
             if (sender_ != nullptr) {
-                std::string data("$data,") ;
-                data += std::to_string(id) ;
-                data += "," ;
-                data += std::to_string(row) ;
-                data += "," ;
-                data += std::to_string(col) ;
-                data += "," ;
-                data += std::to_string(value) ;
-                data += "$" ;
+                std::vector<uint8_t> data ;
+                data.push_back(0xFF) ;
+                data.push_back(static_cast<uint8_t>(id >> 24)) ;
+                data.push_back(static_cast<uint8_t>(id >> 16)) ;                
+                data.push_back(static_cast<uint8_t>(id >> 8)) ;                
+                data.push_back(static_cast<uint8_t>(id)) ;
+                data.push_back(static_cast<uint8_t>(row>> 24)) ;
+                data.push_back(static_cast<uint8_t>(row >> 16)) ;                
+                data.push_back(static_cast<uint8_t>(row >> 8)) ;                
+                data.push_back(static_cast<uint8_t>(row)) ;                
+                data.push_back(static_cast<uint8_t>(col)) ;
+                size_t current = data.size() ;
+                data.resize(current + sizeof(double)) ;
+                memcpy(&data[current], reinterpret_cast<void *>(&value), sizeof(value)) ;
+                data.push_back(0xFE) ;
                 sender_->send(data) ;
-                // sender_->send(data) ;                
             }
         }        
 
