@@ -616,7 +616,7 @@ namespace {
 
         VisionPipelineResultProcessor(bool stream_output) : stream_output_(stream_output) {
             if (stream_output_) {
-                output_stream_ = frc::CameraServer::GetInstance()->PutVideo("Pipeline Output", 640, 480);
+                output_stream_ = frc::CameraServer::GetInstance()->PutVideo("Pipeline Output", 320, 240);
             }
             start_time = frc::Timer::GetFPGATimestamp();
             times_called = 0;
