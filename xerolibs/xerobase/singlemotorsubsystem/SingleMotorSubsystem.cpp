@@ -12,9 +12,9 @@ namespace xero {
             msg_id_ = mid ;
 
             if (victor)
-                vmotor_ = std::make_shared<frc::VictorSP>(m) ;
+                motor_ = std::make_shared<VictorSPX>(m) ;
             else
-                tmotor_ = std::make_shared<TalonSRX>(m);
+                motor_ = std::make_shared<TalonSRX>(m);
 
             current_power_ = 0.0 ;
         }
@@ -25,9 +25,9 @@ namespace xero {
             msg_id_ = mid ;
             
             if (victor)
-                vmotor_ = std::make_shared<frc::VictorSP>(m) ;
+                motor_ = std::make_shared<VictorSPX>(m) ;
             else
-                tmotor_ = std::make_shared<TalonSRX>(m);
+                motor_ = std::make_shared<TalonSRX>(m);
 
             current_power_ = 0.0 ;
         }        

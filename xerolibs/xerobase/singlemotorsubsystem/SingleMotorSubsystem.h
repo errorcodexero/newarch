@@ -10,6 +10,8 @@
 
 /// \brief a short cut type for specifying a TalonSRX motor controller
 typedef ctre::phoenix::motorcontrol::can::TalonSRX TalonSRX;
+typedef ctre::phoenix::motorcontrol::can::VictorSPX VictorSPX;
+
 
 namespace xero {
     namespace base {
@@ -66,26 +68,17 @@ namespace xero {
         protected:
             /// \brief set the power (PWM) percentage for the motor.
             /// \param power the power to apply to the motor, between -1.0 and 1.0
-            void setMotor(double power)
-            {
-                if (vmotor_ != nullptr) 
-                {
-                    vmotor_->Set(power) ;
-                }
-                else
-                {
-                    tmotor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, power) ;
-                }
+            void setMotor(double power){
+            
+                    motor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, power) ;
+            
 
                 current_power_ = power ;
             }       
 
         private:
-            // The victor motor controller if a victor is used
-            std::shared_ptr<frc::VictorSP> vmotor_;
-
             // The TalonSRX motor controller is a talon is used
-            std::shared_ptr<TalonSRX> tmotor_;
+            std::shared_ptr<IMotorController> motor_;
 
             // The current power applied to the motor (-1 to 1)
             double current_power_ ;
