@@ -606,7 +606,7 @@ namespace {
             // Report average processing time every X calls,
             //then reset metrics for next window to measure and report
             if (frames_processed == frames_to_sample_per_report) {
-                std::cout << "Average pipe processing time per frame = " << total_processing_time / frames_processed << " (" << frames_processed << " frames)\n";
+                //std::cout << "Average pipe processing time per frame = " << total_processing_time / frames_processed << " (" << frames_processed << " frames)\n";
                 frames_processed = 0;
                 total_processing_time = 0;
             }
@@ -638,7 +638,7 @@ namespace {
                 const double current_time = frc::Timer::GetFPGATimestamp();
                 double elapsed_time = current_time - start_time;
                 double fps = static_cast<double>(times_called) / elapsed_time;
-                std::cout << "fps = " << fps << "\n";
+                //std::cout << "fps = " << fps << "\n";
                 start_time = current_time;
                 times_called = 0;
             }
