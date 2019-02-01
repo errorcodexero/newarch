@@ -693,8 +693,8 @@ namespace {
         // TODO: Don't hardcode device id.  Get it from json.
         std::this_thread::sleep_for(std::chrono::seconds(2));
         for (auto&& cameraConfig : cameraConfigs) {
-            //(void)setTrackingExposure(cameraConfig.path);
-            (void)setViewingExposure(cameraConfig.path);
+            (void)setTrackingExposure(cameraConfig.path);
+            //(void)setViewingExposure(cameraConfig.path);
         }
 
         /*
