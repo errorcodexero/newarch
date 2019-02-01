@@ -84,6 +84,8 @@ namespace xero  {
             double top_limit_height_ ;
 
             double inch_per_sec_per_volt_ ;
+            double gravity_equivalent_speed_ ;
+
             double height_ ;
             double in_per_tick_ ;
             double power_ ;

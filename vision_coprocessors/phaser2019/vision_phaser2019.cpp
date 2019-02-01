@@ -31,7 +31,10 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/features2d.hpp>
 
+// From xerolib
 #include <FileUtils.h>
+#include <StringUtils.h>
+#include <GetHostIpAddresses.h>
 
 //#include "SettingsParser.h"
 #include "params_parser.h"
@@ -86,24 +89,23 @@ namespace {
     // 5.5in x 2in strips.
     // Angled about 14.5 degrees.
     double dist_bet_centers_inches = 11.5;  // APPROXIMATE.  TODO: Calculate accurately.
-        
-    int width_pixels = 640;
-    int height_pixels = 480;
-    double camera_hfov_deg = 60;  // Camera horizontal Field Of View, in degrees.  For C270, TBD if 60 spec is horizontal or diagonal.
-    
+
     paramsInput params;
 
 
+    // Team number read from frc.json file
     unsigned int team;
-    bool nt_server = false;
+    //bool nt_server = false;
 
+    // Read from param file
+    int width_pixels;
+    int height_pixels;
+    
     // Whether to stream camera's direct output
-    // Configurable in param fie.
     static bool stream_camera = true;
 
     // Whether to stream the output image from the pipeline.
     // Should just be needed for debug.
-    // Configurable in param fie.
     static bool stream_pipeline_output = false;
 
     // Network table entries where results from tracking will be posted.
@@ -194,6 +196,7 @@ namespace {
             return false;
         }
 
+#if 0  // Network table server vs. client mode depends on detecting if running on robot.
         // ntmode (optional)
         if (j.count("ntmode") != 0) {
             try {
@@ -210,6 +213,7 @@ namespace {
                 ParseError() << "Could not read ntmode: " << e.what() << '\n';
             }
         }
+#endif
 
         // Cameras
         try {
@@ -244,6 +248,9 @@ namespace {
                 server.SetConfigJson(config.streamConfig);
             }
         }
+            
+        // Force resolution from param file
+        camera.SetResolution(width_pixels, height_pixels);
 
         return camera;
     }
@@ -494,8 +501,8 @@ namespace {
             double dist_bet_centers = hypot(delta_x, delta_y);
 
             // Distance to target in inches
-            // At 640x460 of C270, pixels_bet_centres * dist_to_target_in_FEET ~ 760
-            double dist_to_target = (760.0/dist_bet_centers) * 12.0;
+            // At 640x460 of C270 and 640x480 resolution, pixels_bet_centres * dist_to_target_in_FEET ~ 760
+            double dist_to_target = (760.0/dist_bet_centers) * 12.0/*inches_per_foot*/ * static_cast<double>(width_pixels)/640.0;
 
             // At this point, top 2 rectangles have right aspect ratio, almost equal size, and almost same height
             // So likely a valid target.
@@ -599,7 +606,7 @@ namespace {
             // Report average processing time every X calls,
             //then reset metrics for next window to measure and report
             if (frames_processed == frames_to_sample_per_report) {
-                std::cout << "Average pipe processing time per frame = " << total_processing_time / frames_processed << " (" << frames_processed << " frames)\n";
+                //std::cout << "Average pipe processing time per frame = " << total_processing_time / frames_processed << " (" << frames_processed << " frames)\n";
                 frames_processed = 0;
                 total_processing_time = 0;
             }
@@ -616,7 +623,7 @@ namespace {
 
         VisionPipelineResultProcessor(bool stream_output) : stream_output_(stream_output) {
             if (stream_output_) {
-                output_stream_ = frc::CameraServer::GetInstance()->PutVideo("Pipeline Output", 640, 480);
+                output_stream_ = frc::CameraServer::GetInstance()->PutVideo("Pipeline Output", width_pixels, height_pixels);
             }
             start_time = frc::Timer::GetFPGATimestamp();
             times_called = 0;
@@ -631,7 +638,7 @@ namespace {
                 const double current_time = frc::Timer::GetFPGATimestamp();
                 double elapsed_time = current_time - start_time;
                 double fps = static_cast<double>(times_called) / elapsed_time;
-                std::cout << "fps = " << fps << "\n";
+                //std::cout << "fps = " << fps << "\n";
                 start_time = current_time;
                 times_called = 0;
             }
@@ -659,7 +666,7 @@ namespace {
         std::vector<cs::VideoSource> cameras;
         for (auto&& cameraConfig : cameraConfigs) {
             // Wait for camera device to be readable otherwise starting camera will fail
-            while (!xero::file::is_readable("/dev/video0")) {
+            while (!xero::file::is_readable(cameraConfig.path)) {
                 std::cout << "Waiting for camera device " << cameraConfig.path << " to become readable\n";
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
@@ -667,13 +674,13 @@ namespace {
             cameras.emplace_back(StartCamera(cameraConfig));
         }
 
-        // Start image processing on last camera if present
+        // Start image processing if present.  First one only.
         auto pipe = std::make_shared<XeroPipeline>();
         if (cameras.size() >= 1) {
             std::cout << "Starting vision pipeline\n";
 
             std::thread t([&] {
-                              frc::VisionRunner<XeroPipeline> runner(cameras[/*0*/ cameras.size()-1],
+                              frc::VisionRunner<XeroPipeline> runner(cameras[0],
                                                                      pipe.get(),
                                                                      VisionPipelineResultProcessor(stream_pipeline_output));
                               runner.RunForever();
@@ -685,8 +692,23 @@ namespace {
         // Apparently only works after starting the pipeline + small delay.
         // TODO: Don't hardcode device id.  Get it from json.
         std::this_thread::sleep_for(std::chrono::seconds(2));
-        (void)setTrackingExposure("/dev/video0");
-        
+        for (auto&& cameraConfig : cameraConfigs) {
+            (void)setTrackingExposure(cameraConfig.path);
+            //(void)setViewingExposure(cameraConfig.path);
+        }
+
+        /*
+        // Select one of the cameras for streaming for now and toggle.  Just for testing.
+        cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
+        server.SetSource(cameras[0]);
+        std::this_thread::sleep_for(std::chrono::seconds(4));
+        server.SetSource(cameras[1]);
+        std::this_thread::sleep_for(std::chrono::seconds(4));
+        server.SetSource(cameras[0]);
+        std::this_thread::sleep_for(std::chrono::seconds(4));
+        server.SetSource(cameras[1]);
+        */
+
         // Loop forever
         for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
     }
@@ -763,9 +785,22 @@ int main(int argc, char* argv[]) {
     if (params.hasParam(stream_pipeline_output_param_name)) {
         stream_pipeline_output = (params.getValue(stream_pipeline_output_param_name) != 0);
     }
+    width_pixels = params.getValue("vision:camera:width_pixels");
+    height_pixels = params.getValue("vision:camera:height_pixels");
+
+    // Figure out if running on robot
+    bool running_on_robot = false;
+    std::vector<std::string> ip_addresses = xero::misc::get_host_ip_addresses();
+    for (auto addr : ip_addresses) {
+        if (xero::string::startsWith(addr, "10.14.25")) {
+            running_on_robot = true;
+            break;
+        }
+    }
     
 
     // Start NetworkTables
+    const bool nt_server = !running_on_robot;
     ntinst = nt::NetworkTableInstance::GetDefault();
     if (nt_server) {
         wpi::outs() << "Setting up NetworkTables server\n";

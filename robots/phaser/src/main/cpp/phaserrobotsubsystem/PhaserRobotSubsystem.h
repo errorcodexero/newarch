@@ -35,11 +35,15 @@ namespace xero {
                 return hatch_holder_ ;
             }            
 
+            std::shared_ptr<xero::base::Lifter> getLifter() {
+                return lifter_ ;
+            }
+
         private:
             std::shared_ptr<PhaserOISubsystem> oi_ ;
             std::shared_ptr<xero::base::LightSensorSubsystem> light_sensor_ ;
             std::shared_ptr<HatchHolder> hatch_holder_ ;
-
+            std::shared_ptr<xero::base::Lifter> lifter_ ;
         } ;
     }
 }

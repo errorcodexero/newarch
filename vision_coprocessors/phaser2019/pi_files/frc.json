@@ -1,12 +1,11 @@
 {
     "cameras": [
         {
-            "exposure": 1,
             "brightness": 1,
-            "white balance": 0,
+            "exposure": 1,
             "fps": 30,
-            "height": 480,
-            "name": "LogitechC270",
+            "height": 240,
+            "name": "LogitechC920-0",
             "path": "/dev/video0",
             "pixel format": "mjpeg",
             "properties": [
@@ -31,10 +30,41 @@
                     "value": 0
                 }
             ],
-            "stream": {
-                "properties": []
-            },
-            "width": 640
+            "white balance": 0,
+            "width": 320
+        },
+        {
+            "brightness": 1,
+            "exposure": 1,
+            "fps": 30,
+            "height": 240,
+            "name": "LogitechC920-1",
+            "path": "/dev/video1",
+            "pixel format": "mjpeg",
+            "properties": [
+                {
+                    "name": "gain",
+                    "value": 0
+                },
+                {
+                    "name": "saturation",
+                    "value": 50
+                },
+                {
+                    "name": "exposure_auto_priority",
+                    "value": 0
+                },
+                {
+                    "name": "exposure_absolute",
+                    "value": 1
+                },
+                {
+                    "name": "white_balance_temperature_auto",
+                    "value": 0
+                }
+            ],
+            "white balance": 0,
+            "width": 320
         }
     ],
     "ntmode": "server",

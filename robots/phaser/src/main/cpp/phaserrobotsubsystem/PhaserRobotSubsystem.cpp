@@ -27,6 +27,10 @@ namespace xero {
             // TODO move to the game manipulator when it is ready
             hatch_holder_ = std::make_shared<HatchHolder>(robot) ;
             addChild(hatch_holder_) ;
+
+            // TODO move to the game manipulator when it is ready
+            lifter_ = std::make_shared<Lifter>(robot, MGR_GROUP_PHASER_LIFTER) ;
+            addChild(lifter_) ;
         }
 
         PhaserRobotSubsystem::~PhaserRobotSubsystem() {

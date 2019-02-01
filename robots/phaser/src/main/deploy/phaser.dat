@@ -9,21 +9,28 @@
 # The definition of the drivebase (for now this is phoenix)
 #
 hw:tankdrive:leftmotor:1            1               # TALON SRX
-hw:tankdrive:leftmotor:2            2
-hw:tankdrive:leftmotor:3            3
-hw:tankdrive:rightmotor:1           4
-hw:tankdrive:rightmotor:2           5
-hw:tankdrive:rightmotor:3           6
-hw:tankdrive:leftencoder:1          0
-hw:tankdrive:leftencoder:2          1
-hw:tankdrive:rightencoder:1         2
-hw:tankdrive:rightencoder:2         3
+hw:tankdrive:leftmotor:2            2               # TALON SRX
+hw:tankdrive:leftmotor:3            3               # TALON SRX
+hw:tankdrive:rightmotor:1           4               # TALON SRX
+hw:tankdrive:rightmotor:2           5               # TALON SRX
+hw:tankdrive:rightmotor:3           6               # TALON SRX
+hw:tankdrive:leftencoder:1          0               # Digital IO
+hw:tankdrive:leftencoder:2          1               # Digital IO
+hw:tankdrive:rightencoder:1         2               # Digital IO
+hw:tankdrive:rightencoder:2         3               # Digital IO
 hw:tankdrive:shifter                0               # Solenoid 0
 hw:tankdrive:invert:motors:right    true
 hw:tankdrive:invert:encoders:right  true
 hw:hatchholder:arm                  1               # Solenoid 1
 hw:hatchholder:finger               2               # Solenoid 2
-hw:hatchholder:sensor               0
+hw:hatchholder:sensor               4               # Digital IO
+
+hw:lifter:encoder1                  5               # Digital IO
+hw:lifter:encoder2                  6               # Digital IO
+hw:lifter:limit:bottom              8               # Digital IO
+hw:lifter:limit:top                 9               # Digital IO
+hw:lifter:motor:1                   8               # TalonSRX 8
+hw:lifter:motor:2                   9               # TalonSRX 9
 
 #
 # This is a comment

@@ -14,8 +14,12 @@ namespace xero {
             HatchHolder(xero::base::Robot &robot) ;
             virtual ~HatchHolder() ;
             
-            void createNamedSequences() ;
             virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
+            virtual void computeState() ;
+
+            bool hasHatch() const {
+                return has_hatch_ ;
+            }
 
             void extendArm() ;
             void retractArm() ;
@@ -25,7 +29,7 @@ namespace xero {
 
 
         private:
-
+            bool has_hatch_ ;
             std::shared_ptr<frc::DigitalInput> sensor_ ;
             std::shared_ptr<frc::Solenoid> arm_ ;
             std::shared_ptr<frc::Solenoid> finger_ ;
