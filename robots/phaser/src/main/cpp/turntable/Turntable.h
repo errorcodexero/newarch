@@ -9,6 +9,10 @@
 namespace xero {
     namespace phaser{
         class Turntable: public xero::base::Subsystem {
+
+            friend class TurntableCalibrateAction ;
+            friend class TurntableGoToAngleAction ;
+            friend class TurntablePowerAction ;
         
         public:
              Turntable(xero::base::Robot &robot, uint64_t id) ;
