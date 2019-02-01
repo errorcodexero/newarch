@@ -89,24 +89,23 @@ namespace {
     // 5.5in x 2in strips.
     // Angled about 14.5 degrees.
     double dist_bet_centers_inches = 11.5;  // APPROXIMATE.  TODO: Calculate accurately.
-        
-    int width_pixels = 640;
-    int height_pixels = 480;
-    double camera_hfov_deg = 60;  // Camera horizontal Field Of View, in degrees.  For C270, TBD if 60 spec is horizontal or diagonal.
-    
+
     paramsInput params;
 
 
+    // Team number read from frc.json file
     unsigned int team;
     //bool nt_server = false;
 
+    // Read from param file
+    int width_pixels;
+    int height_pixels;
+    
     // Whether to stream camera's direct output
-    // Configurable in param fie.
     static bool stream_camera = true;
 
     // Whether to stream the output image from the pipeline.
     // Should just be needed for debug.
-    // Configurable in param fie.
     static bool stream_pipeline_output = false;
 
     // Network table entries where results from tracking will be posted.
@@ -249,6 +248,9 @@ namespace {
                 server.SetConfigJson(config.streamConfig);
             }
         }
+            
+        // Force resolution from param file
+        camera.SetResolution(width_pixels, height_pixels);
 
         return camera;
     }
@@ -499,8 +501,8 @@ namespace {
             double dist_bet_centers = hypot(delta_x, delta_y);
 
             // Distance to target in inches
-            // At 640x460 of C270, pixels_bet_centres * dist_to_target_in_FEET ~ 760
-            double dist_to_target = (760.0/dist_bet_centers) * 12.0;
+            // At 640x460 of C270 and 640x480 resolution, pixels_bet_centres * dist_to_target_in_FEET ~ 760
+            double dist_to_target = (760.0/dist_bet_centers) * 12.0/*inches_per_foot*/ * static_cast<double>(width_pixels)/640.0;
 
             // At this point, top 2 rectangles have right aspect ratio, almost equal size, and almost same height
             // So likely a valid target.
@@ -621,7 +623,7 @@ namespace {
 
         VisionPipelineResultProcessor(bool stream_output) : stream_output_(stream_output) {
             if (stream_output_) {
-                output_stream_ = frc::CameraServer::GetInstance()->PutVideo("Pipeline Output", 320, 240);
+                output_stream_ = frc::CameraServer::GetInstance()->PutVideo("Pipeline Output", width_pixels, height_pixels);
             }
             start_time = frc::Timer::GetFPGATimestamp();
             times_called = 0;
@@ -783,6 +785,8 @@ int main(int argc, char* argv[]) {
     if (params.hasParam(stream_pipeline_output_param_name)) {
         stream_pipeline_output = (params.getValue(stream_pipeline_output_param_name) != 0);
     }
+    width_pixels = params.getValue("vision:camera:width_pixels");
+    height_pixels = params.getValue("vision:camera:height_pixels");
 
     // Figure out if running on robot
     bool running_on_robot = false;
