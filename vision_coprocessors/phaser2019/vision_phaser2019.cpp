@@ -31,7 +31,10 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/features2d.hpp>
 
+// From xerolib
 #include <FileUtils.h>
+#include <StringUtils.h>
+#include <GetHostIpAddresses.h>
 
 //#include "SettingsParser.h"
 #include "params_parser.h"
@@ -95,7 +98,7 @@ namespace {
 
 
     unsigned int team;
-    bool nt_server = false;
+    //bool nt_server = false;
 
     // Whether to stream camera's direct output
     // Configurable in param fie.
@@ -194,6 +197,7 @@ namespace {
             return false;
         }
 
+#if 0  // Network table server vs. client mode depends on detecting if running on robot.
         // ntmode (optional)
         if (j.count("ntmode") != 0) {
             try {
@@ -210,6 +214,7 @@ namespace {
                 ParseError() << "Could not read ntmode: " << e.what() << '\n';
             }
         }
+#endif
 
         // Cameras
         try {
@@ -778,9 +783,20 @@ int main(int argc, char* argv[]) {
     if (params.hasParam(stream_pipeline_output_param_name)) {
         stream_pipeline_output = (params.getValue(stream_pipeline_output_param_name) != 0);
     }
+
+    // Figure out if running on robot
+    bool running_on_robot = false;
+    std::vector<std::string> ip_addresses = xero::misc::get_host_ip_addresses();
+    for (auto addr : ip_addresses) {
+        if (xero::string::startsWith(addr, "10.14.25")) {
+            running_on_robot = true;
+            break;
+        }
+    }
     
 
     // Start NetworkTables
+    const bool nt_server = !running_on_robot;
     ntinst = nt::NetworkTableInstance::GetDefault();
     if (nt_server) {
         wpi::outs() << "Setting up NetworkTables server\n";
