@@ -422,18 +422,6 @@ namespace {
             for (int ix=0; ix < contours.size(); ++ix) {
                 std::vector<cv::Point>& contour = contours[ix];
 
-                // Draw contour in blue
-                /*
-                if (stream_pipeline_output) {
-                    cv::drawContours(frame_out_,
-                                     std::vector<std::vector<cv::Point> >(1,contour),  // TODO: Pass contours + actual index
-                                     -1,          // Negative index ==> draw all contours
-                                     color_blue,  // Color
-                                     1,           // Thickness
-                                     8);
-                }
-                */
-
                 // Find minimum rotated rectangle encapsulating the contour
                 cv::RotatedRect min_rect = min_rects[ix];
                 min_rect = cv::minAreaRect(contour);
