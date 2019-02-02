@@ -81,9 +81,13 @@ namespace {
 
     nt::NetworkTableInstance ntinst;
     const char* configFile = "/boot/frc.json";
-    const cv::Scalar color_blue(2550,0);
+    const cv::Scalar color_blue(255,0,0);
     const cv::Scalar color_green(0,255,0);
     const cv::Scalar color_red(0,0,255);
+    const cv::Scalar color_cyan(255,255,0);
+    const cv::Scalar color_orange(0,165,255);
+    const cv::Scalar color_yellow(0,255,255);
+    const cv::Scalar color_white(255,255,255);
 
     // Vision targets should be 8in apart at closest point.
     // 5.5in x 2in strips.
@@ -100,6 +104,7 @@ namespace {
     // Read from param file
     int width_pixels;
     int height_pixels;
+    double dist_cam_to_front_of_bot;
     
     // Whether to stream camera's direct output
     static bool stream_camera = true;
@@ -315,6 +320,18 @@ namespace {
         return fabs(ratio);
     }
 
+    // Draw ractangle
+    void drawRectangle(cv::Mat& frame,
+                       const cv::RotatedRect& rect,
+                       const cv::Scalar color,
+                       int width) {
+        cv::Point2f rect_points[4];
+        rect.points(rect_points);
+        for (int j = 0; j < 4; j++ ) {
+            cv::line(frame, rect_points[j], rect_points[(j+1)%4], color, width);
+        }
+    }
+
     // One component of a vision pipeline.
     // Takes in an image (cv::Mat) and produces a modified one.
     // Copy the image frame rather than modify it in place in case we later need to show the different pipeline element outputs.
@@ -401,15 +418,17 @@ namespace {
             if (contours.size() < 2) {
                 nt_target_valid.SetBoolean(false);
                 ntinst.Flush();
+                //std::cout << "FALSE: Fewer than 2 contours\n";
                 return;
             }
 
             // Draw contours + find rectangles meeting aspect ratio requirement
             std::vector<cv::RotatedRect> min_rects(contours.size()), filtered_min_rects;
             const double expected_aspect_of_target = 5.5/2;
-            const double aspect_ratio_tolerance = 0.25;   //0.15;
+            const double aspect_ratio_tolerance = 0.3;   //0.15;
 
             // Draw all contours in blue
+            /*
             if (stream_pipeline_output) {
                 cv::drawContours(frame_out_,
                                  contours,
@@ -418,6 +437,7 @@ namespace {
                                  1,           // Thickness
                                  8);
             }
+            */
             
             for (int ix=0; ix < contours.size(); ++ix) {
                 std::vector<cv::Point>& contour = contours[ix];
@@ -427,18 +447,33 @@ namespace {
                 min_rect = cv::minAreaRect(contour);
                 double aspect_ratio = getRectAspectRatio(min_rect);
 
+                // Draw rectangle
+                drawRectangle(frame_out_, min_rect, color_cyan, 4);
+
                 // Discard rectangles that don't have the expected aspect ratio
                 if (!isApproxEqual(aspect_ratio, expected_aspect_of_target, aspect_ratio_tolerance)) {
                     continue;
                 }
 
                 // Discard rectangles that don't have the expected angle
-                if (!isApproxEqual(min_rect.angle, -75, 0.1) &&
-                    !isApproxEqual(min_rect.angle, -15, 0.1)) {
+                const double rotate_angle_tol = 0.25;
+                if (!isApproxEqual(min_rect.angle, -75, rotate_angle_tol) &&
+                    !isApproxEqual(min_rect.angle, -15, rotate_angle_tol)) {
+                    //std::cout << "FALSE: Rect angle = " << min_rect.angle << "\n";
                     continue;
                 }
+                
+                // Discard rectangles off vertical center.  Discard top and bottom of fov.
+                const double half_height = height_pixels/2;
+                const double pixels_from_vertical_middle = abs(min_rect.center.y - half_height);
+                if (pixels_from_vertical_middle/half_height > 0.5) {
+                    continue;
+                }
+                
+                // Draw rectangle
+                drawRectangle(frame_out_, min_rect, color_orange, 4);
 
-                // Add filtered rectangle + color it
+                // Add filtered rectangle to list
                 filtered_min_rects.push_back(min_rect);
                 if (stream_pipeline_output) {
                     cv::Point2f rect_points[4];
@@ -453,6 +488,7 @@ namespace {
             if (filtered_min_rects.size() < 2) {
                 nt_target_valid.SetBoolean(false);                
                 ntinst.Flush();
+                //std::cout << "FALSE: Fewer than 2 filtered rect\n";
                 return;
             }
             
@@ -464,22 +500,28 @@ namespace {
                           return (getRectArea(a) > getRectArea(b));
                       });
 
-            // Only accept rectangles if top 2 rectangles close in area
-            const double area1 = getRectArea(filtered_min_rects[0]);
-            const double area2 = getRectArea(filtered_min_rects[1]);
-            double relative_area = ratioOfDifference(area1, area2);
-            //std::cout << "    Relative area = " << relative_area << "\n";
-            if (relative_area > 0.45) {
-                nt_target_valid.SetBoolean(false);                
-                ntinst.Flush();
-                return;
-            }
-
+            // Focus on 2 largest rectangles
             cv::RotatedRect left_rect(filtered_min_rects[0]);
             cv::RotatedRect right_rect(filtered_min_rects[1]);
             if (left_rect.center.x > right_rect.center.x) {
                 std::swap(left_rect, right_rect);
             }
+
+            // Only accept rectangles if top 2 rectangles close in area
+            const double l_area = getRectArea(left_rect);
+            const double r_area = getRectArea(right_rect);
+            double relative_area = ratioOfDifference(l_area, r_area);
+            //std::cout << "    Relative area = " << relative_area << "\n";
+            if (relative_area > 0.5) {
+                nt_target_valid.SetBoolean(false);                
+                ntinst.Flush();
+                //std::cout << "FALSE: Relative area " << relative_area << " (" << l_area << ", " << r_area << ")\n";
+                return;
+            }
+
+            // Draw 2 largest rectangles rectangle
+            drawRectangle(frame_out_, left_rect, color_yellow, 4);
+            drawRectangle(frame_out_, right_rect, color_yellow, 4);
 
             // Top 2 rectangles must have centers almost at same height.
             // Note origin (0,0) is top left corner so Y axis is reversed.
@@ -491,9 +533,12 @@ namespace {
             double tangent = delta_y / delta_x;
             double angle_in_rad = atan(tangent);
             double angle_in_deg = angle_in_rad * 180.0 / M_PI;
-            if (fabs(angle_in_deg) > 15) {
+            angle_in_deg = fabs(angle_in_deg);
+            //std::cout << "    Angle (centers) in deg = " << angle_in_deg << "\n";
+            if (angle_in_deg > 15) {
                 nt_target_valid.SetBoolean(false);                
                 ntinst.Flush();
+                //std::cout << "FALSE: Angle in deg << " << angle_in_deg << "\n";
                 return;
             }
 
@@ -504,17 +549,16 @@ namespace {
             // At 640x460 of C270 and 640x480 resolution, pixels_bet_centres * dist_to_target_in_FEET ~ 760
             double dist_to_target = (760.0/dist_bet_centers) * 12.0/*inches_per_foot*/ * static_cast<double>(width_pixels)/640.0;
 
+            // For distance, subtract distance from camera to front of robot (in inched)
+            dist_to_target -= dist_cam_to_front_of_bot;
+
             // At this point, top 2 rectangles have right aspect ratio, almost equal size, and almost same height
             // So likely a valid target.
             // Draw them in green.
             if (stream_pipeline_output) {
                 for (int ix=0; ix<2; ++ix) {
                     cv::RotatedRect rect = filtered_min_rects[ix];
-                    cv::Point2f rect_points[4];
-                    rect.points(rect_points);
-                    for (int j = 0; j < 4; j++ ) {
-                        cv::line(frame_out_, rect_points[j], rect_points[(j+1)%4], color_green, 2);
-                    }
+                    drawRectangle(frame_out_, rect, color_green, 2);
                 }
 
                 // Draw line between centres
@@ -787,7 +831,8 @@ int main(int argc, char* argv[]) {
     }
     width_pixels = params.getValue("vision:camera:width_pixels");
     height_pixels = params.getValue("vision:camera:height_pixels");
-
+    dist_cam_to_front_of_bot = params.getValue("vision:dist_cam_to_front_of_bot");
+    
     // Figure out if running on robot
     bool running_on_robot = false;
     std::vector<std::string> ip_addresses = xero::misc::get_host_ip_addresses();
