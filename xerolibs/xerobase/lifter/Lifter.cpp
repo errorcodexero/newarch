@@ -141,10 +141,10 @@ namespace xero {
         void Lifter::computeState() {
             encoder_value_ = encoder_->Get() ;
             if (bottom_limit_ != nullptr)
-                bottom_limit_switch_ = bottom_limit_->Get() ;
+                bottom_limit_switch_ = !bottom_limit_->Get() ;
 
             if (top_limit_ != nullptr)
-                top_limit_switch_ = top_limit_->Get() ;
+                top_limit_switch_ = !top_limit_->Get() ;
 
             if (bottom_limit_switch_ && calibrate_from_limit_switch_)
                 calibrate() ;
@@ -166,6 +166,7 @@ namespace xero {
             is_calibrated_ = true ;
             encoder_->Reset() ;
             last_height_ = lifter_offset ;
+            height_ = lifter_offset ;
         }
     }
 }

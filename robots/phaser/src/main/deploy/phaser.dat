@@ -108,10 +108,9 @@ lifter:inches_per_tick                                          0.08327
 lifter:max_height                                               86.0
 lifter:min_height                                               11.375
 lifter:threshold                                                3.0
-
-lifter:follower:kp                                              0.0
-lifter:follower:ka                                              0.0
-lifter:follower:kv                                              0.0
+lifter:follower:kp                                              0.12
+lifter:follower:ka                                              0.001
+lifter:follower:kv                                              0.011
 lifter:follower:kd                                              0.0
 lifter:hold:p                                                   0.0
 lifter:hold:i                                                   0.0

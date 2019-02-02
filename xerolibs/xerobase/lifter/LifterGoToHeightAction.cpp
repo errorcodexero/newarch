@@ -33,16 +33,27 @@ namespace xero {
         }
 
         void LifterGoToHeightAction::start() {
-            double dist = target_ - getLifter().getHeight() ;
-            if (std::fabs(dist) < threshold_)
+            Lifter &lifter = getLifter() ;
+
+            if (!lifter.isCalibrated()) {
+                MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << "requested LifterGoToHeightAction when the lifter was not calibrated" ;
+                logger.endMessage() ;
                 is_done_ = true ;
+            }
             else {
-                is_done_ = false ;
-                profile_->update(dist, 0.0, 0.0) ;
-                start_time_ = getLifter().getRobot().getTime() ;
-                start_height_ = getLifter().getHeight() ;
-                plotid_ = getLifter().getRobot().startPlot("LifterGoToHeight", plot_columns_) ;
-                index_ = 0 ;
+                double dist = target_ - getLifter().getHeight() ;
+                if (std::fabs(dist) < threshold_)
+                    is_done_ = true ;
+                else {
+                    is_done_ = false ;
+                    profile_->update(dist, 0.0, 0.0) ;
+                    start_time_ = getLifter().getRobot().getTime() ;
+                    start_height_ = getLifter().getHeight() ;
+                    plotid_ = getLifter().getRobot().startPlot("LifterGoToHeight", plot_columns_) ;
+                    index_ = 0 ;
+                }
             }
         }
 
@@ -60,6 +71,7 @@ namespace xero {
                     is_done_ = true ;
                     lifter.getRobot().endPlot(plotid_) ;
                 } else {
+                    is_done_ = true ;
                     //
                     // We reached the end of the profile, but are not where we
                     // want to be.  Create a new profile to get us there.
@@ -82,8 +94,8 @@ namespace xero {
                 lifter.setMotorPower(out) ;
 
                 lifter.getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
-                lifter.getRobot().addPlotData(plotid_, index_, 1, tdist) ;
-                lifter.getRobot().addPlotData(plotid_, index_, 2, traveled) ;
+                lifter.getRobot().addPlotData(plotid_, index_, 1, tdist + start_height_) ;
+                lifter.getRobot().addPlotData(plotid_, index_, 2, traveled + start_height_) ;
                 lifter.getRobot().addPlotData(plotid_, index_, 3, tvel) ;
                 lifter.getRobot().addPlotData(plotid_, index_, 4, speed) ;
                 lifter.getRobot().addPlotData(plotid_, index_, 5, out) ;

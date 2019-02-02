@@ -7,6 +7,7 @@
 #include <tankdrive/LineDetectAction.h>
 #include <tankdrive/LineFollowAction.h>
 #include <tankdrive/TankDrivePowerAction.h>
+#include <lifter/LifterCalibrateAction.h>
 #include <lifter/LifterGoToHeightAction.h>
 #include <lifter/LifterHoldHeightAction.h>
 #include <DelayAction.h>
@@ -75,6 +76,9 @@ namespace xero {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto lifter = phaserrobot->getLifter() ;
+
+            act = std::make_shared<LifterCalibrateAction>(*lifter) ;
+            mode->pushSubActionPair(lifter, act) ;
 
             act = std::make_shared<LifterGoToHeightAction>(*lifter, 45.0) ;
             mode->pushSubActionPair(lifter, act) ;

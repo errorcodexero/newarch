@@ -23,6 +23,7 @@ namespace xero {
         private:
             double target_ ;
             double threshold_ ;
+            bool is_done_ ;
             xero::misc::PIDCtrl pid_ctrl_ ;
         } ;
     }

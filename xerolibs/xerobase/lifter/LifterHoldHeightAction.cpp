@@ -24,6 +24,17 @@ namespace xero {
         }
 
         void LifterHoldHeightAction::start() {
+            Lifter &lifter = getLifter() ;            
+            if (!lifter.isCalibrated()) {
+                MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << "requested LifterGoToHeightAction when the lifter was not calibrated" ;
+                logger.endMessage() ;
+                is_done_ = true ;
+            }           
+            else {
+                is_done_ = false ;
+            } 
         }
 
         void LifterHoldHeightAction::run() {
@@ -33,7 +44,7 @@ namespace xero {
         }
 
         bool LifterHoldHeightAction::isDone() {
-            return false ;
+            return is_done_ ;
         }
 
         void LifterHoldHeightAction::cancel() {
