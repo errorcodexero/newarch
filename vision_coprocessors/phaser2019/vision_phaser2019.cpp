@@ -291,8 +291,11 @@ namespace {
 
     // Check if a number is approximately equal to another, +- some tolerance (percentage/100) of the second number
     bool isApproxEqual(double num1, double num2, double tolerance /*0->1*/) {
-        const double min = num2 * (1.0 - tolerance);
-        const double max = num2 * (1.0 + tolerance);
+        double min = num2 * (1.0 - tolerance);
+        double max = num2 * (1.0 + tolerance);
+        if (min > max) {  // Needed to handle negative numbers
+            std::swap(min, max);
+        }
         return (num1 >= min) && (num1 <= max);
     }
 
@@ -436,15 +439,24 @@ namespace {
                 min_rect = cv::minAreaRect(contour);
                 double aspect_ratio = getRectAspectRatio(min_rect);
 
-                // Keep rectangles that have the expected aspect ratio
-                if (isApproxEqual(aspect_ratio, expected_aspect_of_target, aspect_ratio_tolerance)) {
-                    filtered_min_rects.push_back(min_rect);
-                    if (stream_pipeline_output) {
-                        cv::Point2f rect_points[4];
-                        min_rect.points(rect_points);
-                        for (int j = 0; j < 4; j++ ) {
-                            cv::line(frame_out_, rect_points[j], rect_points[(j+1)%4], color_red, 2);
-                        }
+                // Discard rectangles that don't have the expected aspect ratio
+                if (!isApproxEqual(aspect_ratio, expected_aspect_of_target, aspect_ratio_tolerance)) {
+                    continue;
+                }
+
+                // Discard rectangles that don't have the expected angle
+                if (!isApproxEqual(min_rect.angle, -75, 0.1) &&
+                    !isApproxEqual(min_rect.angle, -15, 0.1)) {
+                    continue;
+                }
+
+                // Add filtered rectangle + color it
+                filtered_min_rects.push_back(min_rect);
+                if (stream_pipeline_output) {
+                    cv::Point2f rect_points[4];
+                    min_rect.points(rect_points);
+                    for (int j = 0; j < 4; j++ ) {
+                        cv::line(frame_out_, rect_points[j], rect_points[(j+1)%4], color_red, 2);
                     }
                 }
             }
@@ -544,7 +556,7 @@ namespace {
             nt_target_yaw_deg.SetDouble(yaw_in_deg);
             
 
-            // TODO: Filter on angle of rectangles?
+            // TODO: Filter on vertical distance of rect from center?
             //       Measure angle vs. perpendicular to target
             //       Measure coordinates & orientation vs. target.
 
