@@ -33,7 +33,7 @@ namespace xero  {
 
                 /// \brief Add a solenoid to the model.
                 /// \param solenoid the solenoid to add
-                virtual void addSolenoid(frc::Solenoid *solenoid) ;
+                virtual void addDevice(frc::Solenoid *solenoid) ;
 
                 /// \brief Get the state of the wings' locking piston.
                 /// \returns the state of the wings' locking piston

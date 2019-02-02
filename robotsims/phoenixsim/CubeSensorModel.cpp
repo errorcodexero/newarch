@@ -106,7 +106,7 @@ namespace xero {
                     duty_ = victor->Get() ;
             }
 
-            void CubeSensorModel::addDigitalInput(frc::DigitalInput *input) {
+            void CubeSensorModel::addDevice(frc::DigitalInput *input) {
                 if (input->GetChannel() == cube_sensor_input_) {
                     input_ = input ;
                     input_->SimulatorSetValue(false) ;
@@ -114,7 +114,7 @@ namespace xero {
                 }
             }
 
-            void CubeSensorModel::addVictorSP(frc::VictorSP *motor) {
+            void CubeSensorModel::addDevice(frc::VictorSP *motor) {
                 if (motor->GetChannel() == motor_channel_1_) {
                     motor1_ = motor ;
                     motor1_->addModel(this) ;

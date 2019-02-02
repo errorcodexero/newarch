@@ -40,5 +40,7 @@
 
 #define MSG_GROUP_LINE_FOLLOWER         (1ull << 9)
 
+#define MSG_GROUP_CAMERA_TRACKER        (1ull << 10)
+
 /// \brief ID to get all messages
 #define MSG_GROUP_ALL                   (0xffffffffffffffffull)

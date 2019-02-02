@@ -12,3 +12,4 @@
 
 #define MGR_GROUP_PHASER_LIFTER                     (1ull << 32)
 
+#define MGR_GROUP_PHASER_TURNTABLE                  (1ull << 33)

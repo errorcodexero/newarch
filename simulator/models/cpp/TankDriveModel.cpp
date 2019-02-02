@@ -247,7 +247,7 @@ namespace xero {
             }
         }
 
-        void TankDriveModel::addTalonSRX(TalonSRX *motor) {
+        void TankDriveModel::addDevice(TalonSRX *motor) {
             if (motor->GetDeviceID() == 1 || motor->GetDeviceID() == 2 || motor->GetDeviceID() == 3) {
                 left_motors_.push_back(motor) ;
                 motor->addModel(this) ;
@@ -258,7 +258,7 @@ namespace xero {
             }
         }
 
-        void TankDriveModel::addEncoder(Encoder *encoder) {
+        void TankDriveModel::addDevice(Encoder *encoder) {
             int first, second ;
             encoder->SimulatorGetDigitalIOs(first, second) ;
             if (first == 0 && second == 1) {
@@ -271,12 +271,12 @@ namespace xero {
             }
         }
 
-        void TankDriveModel::addNavX(AHRS *navx) {
+        void TankDriveModel::addDevice(AHRS *navx) {
             navx_ = navx ;
             navx_->addModel(this) ;
         }
 
-        void TankDriveModel::addSolenoid(Solenoid *sol) {
+        void TankDriveModel::addDevice(Solenoid *sol) {
             if (sol->SimulatorGetChannel() == 0) {
                 shifter_ = sol ;
                 shifter_->addModel(this) ;

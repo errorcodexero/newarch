@@ -88,14 +88,14 @@ namespace xero {
                 power_ = talon->Get() ;
         }
 
-        void TurnTableModel::addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *motor) {
+        void TurnTableModel::addDevice(ctre::phoenix::motorcontrol::can::TalonSRX *motor) {
             if (motor->GetDeviceID() == motor_1_) {
                 motor1_ = motor ;
                 motor1_->addModel(this) ;
             }
         }
 
-        void TurnTableModel::addEncoder(frc::Encoder *encoder) {
+        void TurnTableModel::addDevice(frc::Encoder *encoder) {
             int first, second ;
 
             encoder->SimulatorGetDigitalIOs(first, second) ;
@@ -106,7 +106,7 @@ namespace xero {
             }
         }
 
-        void TurnTableModel::addDigitalInput(frc::DigitalInput *input)  {
+        void TurnTableModel::addDevice(frc::DigitalInput *input)  {
             if (input->GetChannel() == min_limit_channel_) {
                 min_limit_switch_ = input ;
                 min_limit_switch_->addModel(this) ;

@@ -44,6 +44,6 @@ QUIET=
 CMDTERM=
 else
 QUIET=@
-CMDTERM=> /dev/null 2>&1
+CMDTERM= > /dev/null 2>&1
 endif
 

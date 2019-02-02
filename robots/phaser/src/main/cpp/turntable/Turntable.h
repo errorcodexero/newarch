@@ -5,6 +5,7 @@
 #include <frc/Encoder.h>
 #include <frc/DigitalInput.h>
 
+typedef ctre::phoenix::motorcontrol::can::TalonSRX TalonSRX;
 
 namespace xero {
     namespace phaser{
@@ -66,15 +67,20 @@ namespace xero {
             int encoder_value_;
             bool is_min_angle_;
             bool is_max_angle_;
-            bool calibrate_from_angle_;
             double min_angle_;
             double max_angle_;
             double degrees_per_tick_;
             double angle_;
             bool is_calibrated_;
             double speed_;
+
+            //
+            // This is the angle of the turntable when the encoder is at
+            // zero.  This angle gets added to the calculated angle when
+            // encoder values are converted to angle.
+            //
             double turntable_offset_;
-            double inches_per_tick_;
+
             double last_angle_;
 
             uint64_t msg_id_ ;

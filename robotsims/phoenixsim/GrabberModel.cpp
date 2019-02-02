@@ -61,14 +61,14 @@ namespace xero {
                 }
             }
 
-            void GrabberModel::addVictorSP(frc::VictorSP *motor) {
+            void GrabberModel::addDevice(frc::VictorSP *motor) {
                 if (motor->GetChannel() == motor_channel_) {
                     motor_ = motor ;
                     motor_->addModel(this) ;
                 }
             }
 
-            void GrabberModel::addEncoder(frc::Encoder *encoder) {
+            void GrabberModel::addDevice(frc::Encoder *encoder) {
                 int first, second ;
 
                 encoder->SimulatorGetDigitalIOs(first, second) ;

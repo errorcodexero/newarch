@@ -82,7 +82,7 @@ namespace xero {
                 }
             }    
 
-            void SorterModel::addTalonSRX(TalonSRX *motor) {
+            void SorterModel::addDevice(TalonSRX *motor) {
                 if (motor->GetDeviceID() == sorter_motor_channel_) {
                     sortermotor_ = motor ;
                     sortermotor_->addModel(this) ;
@@ -97,7 +97,7 @@ namespace xero {
                 }               
             }
 
-            void SorterModel::addEncoder(frc::Encoder *encoder) {
+            void SorterModel::addDevice(frc::Encoder *encoder) {
                 int first, second ;
 
                 encoder->SimulatorGetDigitalIOs(first, second) ;
@@ -108,7 +108,7 @@ namespace xero {
                 }
             }           
 
-            void SorterModel::addDigitalInput(frc::DigitalInput *input) {
+            void SorterModel::addDevice(frc::DigitalInput *input) {
                 if (input->GetChannel() == index_sensor_) {
                     index_ = input ;
                     index_->SimulatorSetValue(false) ;

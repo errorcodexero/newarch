@@ -25,9 +25,9 @@ namespace xero {
 
                 /// \brief Add a digital input to the model.
                 /// \param input the digital input to add
-                virtual void addDigitalInput(frc::DigitalInput *input) ;
+                virtual void addDevice(frc::DigitalInput *input) ;
 
-                virtual void addSolenoid(frc::Solenoid *solenoid) ;
+                virtual void addDevice(frc::Solenoid *solenoid) ;
 
                 bool hasHatch() const  {
                     return has_hatch_ ;

@@ -35,7 +35,7 @@ namespace xero {
                 }
             }    
 
-            void HopperModel::addTalonSRX(TalonSRX *motor) {
+            void HopperModel::addDevice(TalonSRX *motor) {
                 if (motor->GetDeviceID() == motor_channel_) {
                     motor_ = motor ;
                     motor_->addModel(this) ;

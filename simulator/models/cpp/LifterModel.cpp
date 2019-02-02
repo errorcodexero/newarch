@@ -20,6 +20,7 @@ namespace xero {
             bottom_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:bottom") ;
             top_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:top") ;
             motor_1_ = simbase.getSettingsParser().getInteger("hw:lifter:motor:1") ;
+            motor_2_ = simbase.getSettingsParser().getInteger("hw:lifter:motor:2") ;
 
             top_limit_ = nullptr ;
             bottom_limit_ = nullptr ;
@@ -70,7 +71,7 @@ namespace xero {
         }
 
         void LifterModel::run(double dt) {
-            double dh = power_ * inch_per_sec_per_volt_* dt - gravity_equivalent_speed_ * dt ;
+            double dh = power_ * inch_per_sec_per_volt_* dt + gravity_equivalent_speed_ * dt ;
             height_ += dh ;
 
             if (height_ <= bottom_limit_height_) {
@@ -106,14 +107,18 @@ namespace xero {
                 power_ = talon->Get() ;
         }
         
-        void LifterModel::addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *motor) {
+        void LifterModel::addDevice(ctre::phoenix::motorcontrol::can::TalonSRX *motor) {
             if (motor->GetDeviceID() == motor_1_) {
                 motor1_ = motor ;
                 motor1_->addModel(this) ;
             }
+            else if (motor->GetDeviceID() == motor_2_) {
+                motor2_ = motor ;
+                motor2_->addModel(this) ;
+            }
         }
 
-        void LifterModel::addEncoder(frc::Encoder *encoder) {
+        void LifterModel::addDevice(frc::Encoder *encoder) {
             int first, second ;
 
             encoder->SimulatorGetDigitalIOs(first, second) ;
@@ -124,7 +129,7 @@ namespace xero {
             }
         }
 
-        void LifterModel::addDigitalInput(frc::DigitalInput *input)  {
+        void LifterModel::addDevice(frc::DigitalInput *input)  {
             if (input->GetChannel() == top_limit_channel_) {
                 top_limit_ = input ;
                 top_limit_->addModel(this) ;

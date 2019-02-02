@@ -119,43 +119,43 @@ namespace xero {
             TalonSRX *talon = dynamic_cast<TalonSRX *>(device) ;
             if (talon != nullptr) {
                 for(auto model : getModels())
-                    model->addTalonSRX(talon) ;
+                    model->addDevice(talon) ;
             }
 
             DigitalInput *input = dynamic_cast<DigitalInput *>(device) ;
             if (input != nullptr) {
                 for(auto model : getModels())
-                    model->addDigitalInput(input) ;                 
+                    model->addDevice(input) ;                 
             }               
 
             Encoder *encoder = dynamic_cast<Encoder *>(device) ;
             if (encoder != nullptr) {
                 for(auto model : getModels())
-                    model->addEncoder(encoder) ;                    
+                    model->addDevice(encoder) ;                    
             }
 
             VictorSP *victor = dynamic_cast<VictorSP *>(device) ;
             if (victor != nullptr) {
                 for(auto model : getModels())
-                    model->addVictorSP(victor) ;
+                    model->addDevice(victor) ;
             }
 
             Solenoid * solenoid = dynamic_cast<Solenoid *>(device) ;
             if (solenoid != nullptr) {
                 for(auto model : getModels())
-                    model->addSolenoid(solenoid) ;
+                    model->addDevice(solenoid) ;
             }           
 
             AHRS *navx = dynamic_cast<AHRS *>(device) ;
             if (navx != nullptr) {
                 for(auto model : getModels())
-                    model->addNavX(navx) ;                  
+                    model->addDevice(navx) ;                  
             }   
 
             DriverStation *ds = dynamic_cast<DriverStation *>(device) ;
             if (ds != nullptr) {
                 for(auto model: getModels())
-                    model->addDriverStation(ds) ;
+                    model->addDevice(ds) ;
             }
         }
 

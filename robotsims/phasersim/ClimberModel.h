@@ -23,7 +23,7 @@ namespace xero {
                 /// \param obj the input object which changed state
                 virtual void inputChanged(SimulatedObject *obj);
 
-                virtual void addSolenoid(frc::Solenoid *solenoid) ;
+                virtual void addDevice(frc::Solenoid *solenoid) ;
 
                 bool isDeployed() const {
                     return deploy_state_ ;

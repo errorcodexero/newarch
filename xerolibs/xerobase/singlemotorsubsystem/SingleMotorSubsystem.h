@@ -3,7 +3,6 @@
 #include "Subsystem.h" 
 #include "SingleMotorSubsystemAction.h" 
 #include <ctre/Phoenix.h>
-#include <frc/VictorSP.h>
 #include <iostream>
 
 /// \file
@@ -11,7 +10,7 @@
 /// \brief a short cut type for specifying a TalonSRX motor controller
 typedef ctre::phoenix::motorcontrol::can::TalonSRX TalonSRX;
 typedef ctre::phoenix::motorcontrol::can::VictorSPX VictorSPX;
-
+typedef ctre::phoenix::motorcontrol::IMotorController IMotorController ;
 
 namespace xero {
     namespace base {
@@ -27,6 +26,7 @@ namespace xero {
 
             /// \brief Action class for this subsystem          
             friend class SingleMotorPowerAction ;
+
         private:
             constexpr static double epsilon = 1e-3 ;
 
@@ -69,10 +69,7 @@ namespace xero {
             /// \brief set the power (PWM) percentage for the motor.
             /// \param power the power to apply to the motor, between -1.0 and 1.0
             void setMotor(double power){
-            
-                    motor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, power) ;
-            
-
+                motor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, power) ;
                 current_power_ = power ;
             }       
 

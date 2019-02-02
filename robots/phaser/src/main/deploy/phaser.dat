@@ -8,66 +8,66 @@
 #
 # The definition of the drivebase (for now this is phoenix)
 #
-hw:tankdrive:leftmotor:1            1               # TALON SRX
-hw:tankdrive:leftmotor:2            2               # TALON SRX
-hw:tankdrive:leftmotor:3            3               # TALON SRX
-hw:tankdrive:rightmotor:1           4               # TALON SRX
-hw:tankdrive:rightmotor:2           5               # TALON SRX
-hw:tankdrive:rightmotor:3           6               # TALON SRX
-hw:tankdrive:leftencoder:1          0               # Digital IO
-hw:tankdrive:leftencoder:2          1               # Digital IO
-hw:tankdrive:rightencoder:1         2               # Digital IO
-hw:tankdrive:rightencoder:2         3               # Digital IO
-hw:tankdrive:shifter                0               # Solenoid 0
-hw:tankdrive:invert:motors:right    true
-hw:tankdrive:invert:encoders:right  true
-hw:hatchholder:arm                  1               # Solenoid 1
-hw:hatchholder:finger               2               # Solenoid 2
-hw:hatchholder:sensor               4               # Digital IO
+hw:tankdrive:leftmotor:1                                        1               # TALON SRX
+hw:tankdrive:leftmotor:2                                        2               # TALON SRX
+hw:tankdrive:leftmotor:3                                        3               # TALON SRX
+hw:tankdrive:rightmotor:1                                       4               # TALON SRX
+hw:tankdrive:rightmotor:2                                       5               # TALON SRX
+hw:tankdrive:rightmotor:3                                       6               # TALON SRX
+hw:tankdrive:leftencoder:1                                      0               # Digital IO
+hw:tankdrive:leftencoder:2                                      1               # Digital IO
+hw:tankdrive:rightencoder:1                                     2               # Digital IO
+hw:tankdrive:rightencoder:2                                     3               # Digital IO
+hw:tankdrive:shifter                                            0               # Solenoid 0
+hw:tankdrive:invert:motors:right                                true
+hw:tankdrive:invert:encoders:right                              true
 
-hw:lifter:encoder1                  5               # Digital IO
-hw:lifter:encoder2                  6               # Digital IO
-hw:lifter:limit:bottom              8               # Digital IO
-hw:lifter:limit:top                 9               # Digital IO
-hw:lifter:motor:1                   8               # TalonSRX 8
-hw:lifter:motor:2                   9               # TalonSRX 9
+hw:hatchholder:arm                                              1               # Solenoid 1
+hw:hatchholder:finger                                           2               # Solenoid 2
+hw:hatchholder:sensor                                           10               # Digital IO
 
-#
-# This is a comment
-#
+hw:lifter:encoder1                                              6               # Digital IO
+hw:lifter:encoder2                                              7               # Digital IO
+hw:lifter:limit:bottom                                          8               # Digital IO
+hw:lifter:limit:top                                             9               # Digital IO
+hw:lifter:motor:1                                               8               # TalonSRX 8
+hw:lifter:motor:2                                               9               # TalonSRX 9
 
-#
-# Line sensor
-#
-linesensor:0                        21
-linesensor:1                        22
-linesensor:2                        23
+hw:turntable:encoder1                                           4               # Digital IO
+hw:turntable:encoder2                                           5               # Ditigal IO
 
+hw:linesensor:0                                                 21              # Digital IO
+hw:linesensor:1                                                 22              # Digital IO
+hw:linesensor:2                                                 23              # Digital IO
+
+hw:driverstation:hid:driver                                     0
+hw:driverstation:hid:oi                                         2
+
+###################################################################
 #
-# The definiton of the OI
+# The sections below describe the software parameters for the various
+# robot subsystems
 #
-hw:driverstation:hid:driver         0
-hw:driverstation:hid:oi             2
+###################################################################
 
 #
 # Variables for the tankdrive subsystem code.  These are currently
 # aligned with Phoenix as the basis for the Phaser code until we get
 # a Phaser drivebase
 #
-tankdrive:inches_per_tick           0.010471976
-tankdrive:width                     24.5
-tankdrive:scrub                     0.9
+tankdrive:inches_per_tick                                       0.010471976
+tankdrive:width                                                 24.5
+tankdrive:scrub                                                 0.9
 
+tankdrive:follower:left:ka                                      0.0005
+tankdrive:follower:left:kv                                      0.00555555555555
+tankdrive:follower:left:kp                                      0.1
+tankdrive:follower:left:kd                                      0.0
 
-tankdrive:follower:left:ka         0.0005
-tankdrive:follower:left:kv         0.00555555555555
-tankdrive:follower:left:kp         0.1
-tankdrive:follower:left:kd          0.0
-
-tankdrive:follower:right:ka         0.0005
-tankdrive:follower:right:kv         0.00555555555555
-tankdrive:follower:right:kp         0.1
-tankdrive:follower:right:kd         0.0
+tankdrive:follower:right:ka                                     0.0005
+tankdrive:follower:right:kv                                     0.00555555555555
+tankdrive:follower:right:kp                                     0.1
+tankdrive:follower:right:kd                                     0.0
 
 #
 # Variables for the driver gamepad
@@ -93,6 +93,31 @@ linefollow:distance                                             18
 linefollow:adjust                                               .4
 
 #
-#Variables for the Hatch Holder
+# Variables for the turntable
 #
+turntable:minimum                                               -20
+turntable:maximum                                               -40
+turntable:degrees_per_tick                                      0.5
+turntable:base                                                  0.0
 
+#
+# Variables for the lifter
+#
+lifter:base							                            11.375
+lifter:inches_per_tick                                          0.08327
+lifter:max_height                                               86.0
+lifter:min_height                                               11.375
+lifter:threshold                                                3.0
+
+lifter:follower:kp                                              0.0
+lifter:follower:ka                                              0.0
+lifter:follower:kv                                              0.0
+lifter:follower:kd                                              0.0
+lifter:hold:p                                                   0.0
+lifter:hold:i                                                   0.0
+lifter:hold:d                                                   0.0
+lifter:hold:f                                                   0.0
+lifter:hold:a                                                   0.0
+lifter:hold:min                                                 0.0
+lifter:hold:max                                                 0.0
+lifter:hold:imax                                                0.0

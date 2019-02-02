@@ -41,7 +41,7 @@ namespace xero {
                     deploy_state_ = sol->Get() ;
             }
 
-            void ClimberModel::addSolenoid(frc::Solenoid *sol) {
+            void ClimberModel::addDevice(frc::Solenoid *sol) {
                 if (sol->SimulatorGetChannel() == deploy_channel_) {
                     deploy_solenoid_ = sol ;
                     deploy_solenoid_->addModel(this) ;

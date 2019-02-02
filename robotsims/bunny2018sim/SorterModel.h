@@ -33,15 +33,15 @@ namespace xero  {
 
                 /// \brief Add a Victor SP to the model.
                 /// \param victor the Victor SP to add
-                virtual void addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *talon) ;
+                virtual void addDevice(ctre::phoenix::motorcontrol::can::TalonSRX *talon) ;
 
                 /// \brief Add a ball sorter inde sensor to the subsystem
                 /// \param victor the digital IO to add
-                virtual void addDigitalInput(frc::DigitalInput *input) ;
+                virtual void addDevice(frc::DigitalInput *input) ;
 
                 /// \brief Add an encoder to the model.
                 /// \param encoder the encoder to add to the model
-                virtual void addEncoder(frc::Encoder *encoder) ;                
+                virtual void addDevice(frc::Encoder *encoder) ;                
 
                 /// \brief Get the voltage applied to the first motor.
                 /// \returns the voltage applied to the first motor

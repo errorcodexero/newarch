@@ -15,7 +15,7 @@ namespace xero  {
                 virtual std::string toString() ;
                 virtual void init()  ;          
 
-                virtual void addDriverStation(frc::DriverStation *station) ;
+                virtual void addDevice(frc::DriverStation *station) ;
                 virtual void inputChanged(SimulatedObject *obj) ;
 
                 void setButton(int which, int button, bool value) ;

@@ -35,7 +35,7 @@ namespace xero {
                     wings_solenoid_state = sol->Get() ;
             }
 
-            void WingsModel::addSolenoid(frc::Solenoid *sol) {
+            void WingsModel::addDevice(frc::Solenoid *sol) {
                 if (sol->SimulatorGetChannel() == sol_channel_) {
                     wings_ = sol ;
                     wings_->addModel(this) ;

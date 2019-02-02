@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ctre/phoenix/motorcontrol/can/TalonSRX.h>
+#include <ctre/Phoenix.h>
 #include "Encoder.h"
 #include "DigitalInput.h"
 #include "DriverStation.h"
@@ -29,28 +29,28 @@ namespace xero {
             virtual void inputChanged(SimulatedObject *obj) = 0 ;
             virtual std::string toString() = 0 ;
 
-            virtual void addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *talon)  {                
+            virtual void addDevice(ctre::phoenix::motorcontrol::can::TalonSRX *talon)  {                
             }
 
-            virtual void addEncoder(frc::Encoder *encoder) {                
+            virtual void addDevice(frc::Encoder *encoder) {                
             }
 
-            virtual void addDigitalInput(frc::DigitalInput *input) {                
+            virtual void addDevice(frc::DigitalInput *input) {                
             }
 
-            virtual void addDriverStation(frc::DriverStation *station) {
+            virtual void addDevice(frc::DriverStation *station) {
             }
 
-            virtual void addSolenoid(frc::Solenoid *sol) {
+            virtual void addDevice(frc::Solenoid *sol) {
             }
 
-            virtual void addVictorSP(frc::VictorSP *victor) {
+            virtual void addDevice(frc::VictorSP *victor) {
             }
 
-            virtual void addTimer(frc::Timer *timer) {                
+            virtual void addDevice(ctre::phoenix::motorcontrol::can::VictorSPX *victor) {                
             }
 
-            virtual void addNavX(AHRS *navx) {                
+            virtual void addDevice(AHRS *navx) {                
             }
 
             std::mutex &getLockMutex() ;

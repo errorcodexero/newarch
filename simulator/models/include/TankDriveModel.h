@@ -23,10 +23,10 @@ namespace xero
             virtual std::string toString()  ;
             virtual void init() ;           
 
-            virtual void addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
-            virtual void addEncoder(frc::Encoder *encoder);
-            virtual void addNavX(AHRS *navx);
-            virtual void addSolenoid(frc::Solenoid *sol) ;
+            virtual void addDevice(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
+            virtual void addDevice(frc::Encoder *encoder);
+            virtual void addDevice(AHRS *navx);
+            virtual void addDevice(frc::Solenoid *sol) ;
 
             double getXPos() { 
               return xpos_ ;

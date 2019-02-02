@@ -36,7 +36,7 @@ namespace xero {
                 std::lock_guard<std::mutex> lock(getLockMutex()) ;
             }    
 
-            void OIModel::addDriverStation(frc::DriverStation *ds) {
+            void OIModel::addDevice(frc::DriverStation *ds) {
                 ds_ = ds ;
                 auto &stick = ds_->getStick(2) ;
                 //

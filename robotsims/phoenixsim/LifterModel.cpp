@@ -113,7 +113,7 @@ namespace xero {
                 }
             }
 
-            void LifterModel::addVictorSP(frc::VictorSP *motor) {
+            void LifterModel::addDevice(frc::VictorSP *motor) {
                 if (motor->GetChannel() == motor_1_) {
                     motor1_ = motor ;
                     motor1_->addModel(this) ;
@@ -124,7 +124,7 @@ namespace xero {
                 }
             }
 
-            void LifterModel::addEncoder(frc::Encoder *encoder) {
+            void LifterModel::addDevice(frc::Encoder *encoder) {
                 int first, second ;
 
                 encoder->SimulatorGetDigitalIOs(first, second) ;
@@ -135,7 +135,7 @@ namespace xero {
                 }
             }
 
-            void LifterModel::addDigitalInput(frc::DigitalInput *input)  {
+            void LifterModel::addDevice(frc::DigitalInput *input)  {
                 if (input->GetChannel() == top_limit_channel_) {
                     top_limit_ = input ;
                     top_limit_->addModel(this) ;
@@ -149,7 +149,7 @@ namespace xero {
                 }
             }
 
-            void LifterModel::addSolenoid(frc::Solenoid *solenoid) {
+            void LifterModel::addDevice(frc::Solenoid *solenoid) {
                 if (solenoid->SimulatorGetChannel() == gear_sol_) {
                     gear_ = solenoid ;
                     gear_->addModel(this) ;

@@ -23,7 +23,9 @@ namespace xero {
             void initialize() ;
             
         private:
-            uint32_t automode_ ;
+            size_t automode_ ;
+            size_t camera_switch_ ;
+            size_t camera_mode_ ;   
         } ;
     }
 }

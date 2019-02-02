@@ -32,15 +32,15 @@ namespace xero  {
 
             /// \brief Add a Victor SP to the model.
             /// \param motor the Victor SP to add
-            virtual void addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
+            virtual void addDevice(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
 
             /// \brief Add an encoder to the model.
             /// \param encoder the encoder to add
-            virtual void addEncoder(frc::Encoder *encoder);
+            virtual void addDevice(frc::Encoder *encoder);
 
             /// \brief Add a digital input to the model.
             /// \param input the digital input to add
-            virtual void addDigitalInput(frc::DigitalInput *input) ;
+            virtual void addDevice(frc::DigitalInput *input) ;
 
             /// \brief Get the height of the lifter in inches.
             /// \returns the height of the lifter in inches
@@ -73,12 +73,14 @@ namespace xero  {
             frc::DigitalInput *bottom_limit_ ;
             frc::DigitalInput *top_limit_ ;
             ctre::phoenix::motorcontrol::can::TalonSRX *motor1_ ;
+            ctre::phoenix::motorcontrol::can::TalonSRX *motor2_ ;            
 
             int encoder_1_ ;
             int encoder_2_ ;
             int bottom_limit_channel_ ;
             int top_limit_channel_ ;
             int motor_1_ ;
+            int motor_2_ ;
 
             double bottom_limit_height_ ;
             double top_limit_height_ ;

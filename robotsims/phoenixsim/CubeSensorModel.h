@@ -34,11 +34,11 @@ namespace xero  {
 
                 /// \brief Add a digital input to the model.
                 /// \param input the digital input to all
-                virtual void addDigitalInput(frc::DigitalInput *input) ;
+                virtual void addDevice(frc::DigitalInput *input) ;
 
                 /// \brief Add a Victor SP to the model.
                 /// \param victor the Victor SP to add
-                virtual void addVictorSP(frc::VictorSP *victor) ;                
+                virtual void addDevice(frc::VictorSP *victor) ;                
 
                 /// \brief Get whether a cube is sensed by the cube sensor.
                 /// \returns true if a cube is sensed by the cube sensor

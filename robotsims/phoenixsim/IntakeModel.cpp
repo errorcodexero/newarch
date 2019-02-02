@@ -39,7 +39,7 @@ namespace xero {
                 }
             }    
 
-            void IntakeModel::addVictorSP(frc::VictorSP *motor) {
+            void IntakeModel::addDevice(frc::VictorSP *motor) {
                 if (motor->GetChannel() == motor_channel_1_) {
                     motor1_ = motor ;
                     motor1_->addModel(this) ;

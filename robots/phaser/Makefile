@@ -8,7 +8,11 @@ SOURCES = \
 	src/main/cpp/phaserrobotsubsystem/PhaserRobotSubsystem.cpp\
 	src/main/cpp/automodes/PhaserAutoModeController.cpp\
 	src/main/cpp/hatchholder/HatchHolder.cpp\
-	src/main/cpp/hatchholder/HatchHolderAction.cpp
+	src/main/cpp/hatchholder/HatchHolderAction.cpp\
+	src/main/cpp/turntable/Turntable.cpp\
+	src/main/cpp/turntable/TurntableCalibrateAction.cpp\
+	src/main/cpp/turntable/TurntableGoToAngleAction.cpp\
+	src/main/cpp/turntable/TurntablePowerAction.cpp
 
 TARGET = phaser
 

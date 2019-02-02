@@ -23,8 +23,8 @@ namespace xero {
                 /// \param obj the input object which changed state
                 virtual void inputChanged(SimulatedObject *obj);
 
-                virtual void addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *motor);      
-                virtual void addSolenoid(frc::Solenoid *solenoid) ;
+                virtual void addDevice(ctre::phoenix::motorcontrol::can::VictorSPX *motor);      
+                virtual void addDevice(frc::Solenoid *solenoid) ;
 
                 bool isDeployed() const {
                     return deploy_state_ ;
@@ -38,7 +38,7 @@ namespace xero {
 
             private:
                 frc::Solenoid *deploy_solenoid_ ;
-                ctre::phoenix::motorcontrol::can::TalonSRX * motor_ ;                
+                ctre::phoenix::motorcontrol::can::VictorSPX * motor_ ;                
 
                 int deploy_channel_ ;
                 int motor_channel_ ;

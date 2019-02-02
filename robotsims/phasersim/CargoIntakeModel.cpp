@@ -41,23 +41,23 @@ namespace xero {
 
             void CargoIntakeModel::inputChanged(SimulatedObject *obj) {
                 std::lock_guard<std::mutex> lock(getLockMutex()) ;
-                TalonSRX *talon = dynamic_cast<TalonSRX *>(obj) ;
-                if (talon != nullptr)
-                    power_ = talon->Get() ;
+                VictorSPX *victor = dynamic_cast<VictorSPX *>(obj) ;
+                if (victor != nullptr)
+                    power_ = victor->Get() ;
 
                 frc::Solenoid *sol = dynamic_cast<frc::Solenoid *>(obj) ;
                 if (sol != nullptr) 
                     deploy_state_ = sol->Get() ;                    
             }
 
-            void CargoIntakeModel::addTalonSRX(TalonSRX *motor) {
+            void CargoIntakeModel::addDevice(VictorSPX *motor) {
                 if (motor->GetDeviceID() == motor_channel_) {
                     motor_ = motor ;
                     motor->addModel(this) ;
                 }            
             }
             
-            void CargoIntakeModel::addSolenoid(frc::Solenoid *sol) {
+            void CargoIntakeModel::addDevice(frc::Solenoid *sol) {
                 if (sol->SimulatorGetChannel() == deploy_channel_) {
                     deploy_solenoid_ = sol ;
                     deploy_solenoid_->addModel(this) ;

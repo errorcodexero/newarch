@@ -32,11 +32,11 @@ namespace xero  {
 
                 /// \brief Add a Victor SP to the model.
                 /// \param victor the Victor SP to add
-                virtual void addVictorSP(frc::VictorSP *victor) ;
+                virtual void addDevice(frc::VictorSP *victor) ;
 
                 /// \brief Add an encoder to the model.
                 /// \param encoder the encoder to add to the model
-                virtual void addEncoder(frc::Encoder *encoder) ;
+                virtual void addDevice(frc::Encoder *encoder) ;
 
                 /// \brief Get the angle of the grabber arms.
                 /// \returns the angle of the grabber arms

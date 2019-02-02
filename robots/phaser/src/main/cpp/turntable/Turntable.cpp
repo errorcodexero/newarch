@@ -2,8 +2,7 @@
 #include "TurntableAction.h"
 #include <Robot.h>
 #include <MessageLogger.h>
-
-
+#include <xeromath.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -18,16 +17,13 @@ namespace xero{
             
             getMotors(robot) ;
 
-
             int enc1 = robot.getSettingsParser().getInteger("hw:turntable:encoder1") ;
-            int enc2 = robot.getSettingsParser().getInteger("hw:turntable:encoder2") ;
-            
+            int enc2 = robot.getSettingsParser().getInteger("hw:turntable:encoder2") ;           
             encoder_ = std::make_shared<frc::Encoder>(enc1, enc2) ;
 
-            min_angle_ = robot.getSettingsParser().getDouble("grabber:turntable:minimum") ;
-            max_angle_ = robot.getSettingsParser().getDouble("grabber:turntable:maximum") ;
+            min_angle_ = robot.getSettingsParser().getDouble("turntable:minimum") ;
+            max_angle_ = robot.getSettingsParser().getDouble("turntable:maximum") ;
             degrees_per_tick_ = robot.getSettingsParser().getDouble("turntable:degrees_per_tick") ;
-
             if (parser.isDefined("hw:turntable:limit:min_angle")) {
                 int lbottom = parser.getInteger("hw:turntable:limit:min_angle");
                 min_angle_switch_ = std::make_shared<frc::DigitalInput>(lbottom) ;
@@ -38,27 +34,12 @@ namespace xero{
                 max_angle_switch_ = std::make_shared<frc::DigitalInput>(ltop) ;
             }
 
-
             //
             // The height of the turntable when it is at the bottom of travel, relative to 
             // the floor
             //
             turntable_offset_ = parser.getDouble("turntable:base") ;
             
-            //
-            // The nubmer of inches per encoder tick
-            //
-            inches_per_tick_ = parser.getDouble("turntable:inches_per_tick") ;
-
-            //
-            // The maximum height of the turntable independent of the limit switches
-            //
-            max_angle_ = parser.getDouble("turntable:max_angle") ;
-
-            //
-            // The minimum height of the turntable independent of limit switches
-            min_angle_ = parser.getDouble("turntable:min_angle") ;
-
             // And we start without calibration
             is_calibrated_ = false ;
 
@@ -112,9 +93,12 @@ namespace xero{
                 // the maximum allow height and we are trying to move up, we set the
                 // power to zero
                 //
-                if (v < 0 && angle_ <= min_angle_)
+                double angdiff = xero::math::normalizeAngleDegrees(angle_ - min_angle_) ;
+                if (v < 0.0 && angdiff < 0.0)
                     v = 0.0 ;
-                else if (v > 0 && angle_ >= max_angle_)
+
+                angdiff = xero::math::normalizeAngleDegrees(max_angle_ - angle_) ;
+                if (v > 0 && angdiff < 0.0)
                     v = 0.0 ;
             }
 
@@ -145,11 +129,8 @@ namespace xero{
             if (max_angle_switch_ != nullptr)
                 is_max_angle_ = max_angle_switch_->Get() ;
 
-            if (is_min_angle_ && calibrate_from_angle_)
-                calibrate() ;
-
             if (is_calibrated_) {
-                angle_ = encoder_value_ * inches_per_tick_ + turntable_offset_ ;
+                angle_ = xero::math::normalizeAngleDegrees(encoder_value_ * degrees_per_tick_ + turntable_offset_) ;
                 speed_ = (angle_ - last_angle_) / getRobot().getDeltaTime() ;
                 last_angle_ = angle_ ;
             }

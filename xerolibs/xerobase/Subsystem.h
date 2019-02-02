@@ -104,7 +104,7 @@ namespace xero {
             /// \brief check that a Action is valid for a subsystem
             /// \param Action the Action to check for a subsystem
             /// \return true if the action is valid for a subsystem
-            virtual bool canAcceptAction(ActionPtr Action) {
+            virtual bool canAcceptAction(ActionPtr action) {
                 return false ;
             }
 

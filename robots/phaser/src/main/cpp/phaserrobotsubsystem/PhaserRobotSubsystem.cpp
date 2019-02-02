@@ -21,16 +21,23 @@ namespace xero {
             oi_ = std::make_shared<PhaserOISubsystem>(robot) ;
             addChild(oi_) ;        
 
-            light_sensor_ = std::make_shared<LightSensorSubsystem>(robot, "linesensor", "linesensor:", 3) ;    
+            light_sensor_ = std::make_shared<LightSensorSubsystem>(robot, "linesensor", "hw:linesensor:", 3) ;    
             addChild(light_sensor_) ;
 
-            // TODO move to the game manipulator when it is ready
+#ifdef SIMULATOR
             hatch_holder_ = std::make_shared<HatchHolder>(robot) ;
             addChild(hatch_holder_) ;
 
-            // TODO move to the game manipulator when it is ready
             lifter_ = std::make_shared<Lifter>(robot, MGR_GROUP_PHASER_LIFTER) ;
             addChild(lifter_) ;
+
+            turntable_ = std::make_shared<Turntable>(robot, MGR_GROUP_PHASER_TURNTABLE) ;
+            addChild(turntable_) ;
+#endif
+
+            tracker_ = std::make_shared<CameraTracker>(robot) ;\
+            tracker_->setCameraIndex(0) ;
+            addChild(tracker_) ;
         }
 
         PhaserRobotSubsystem::~PhaserRobotSubsystem() {

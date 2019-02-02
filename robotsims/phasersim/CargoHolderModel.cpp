@@ -9,7 +9,6 @@ namespace xero {
     namespace sim {
         namespace phaser {
             CargoHolderModel::CargoHolderModel(RobotSimBase &simbase) : SubsystemModel(simbase, "cargoholder") {
-
                 motor_channel_ = simbase.getSettingsParser().getInteger("hw:cargoholder:motor") ;
                 cargo_sensor_channel_ = simbase.getSettingsParser().getInteger("hw:cargoholder:sensor") ;
 
@@ -21,7 +20,6 @@ namespace xero {
             }
 
             void CargoHolderModel::generateDisplayInformation(std::list<std::string> &lines) {
-
                 std::string line ;
 
                 lines.push_back("  Motor: " + std::to_string(getPower())) ;
@@ -40,19 +38,19 @@ namespace xero {
 
             void CargoHolderModel::inputChanged(SimulatedObject *obj) {
                 std::lock_guard<std::mutex> lock(getLockMutex()) ;
-                TalonSRX *talon = dynamic_cast<TalonSRX *>(obj) ;
-                if (talon != nullptr)
-                    power_ = talon->Get() ;
+                VictorSPX *victor = dynamic_cast<VictorSPX *>(obj) ;
+                if (victor != nullptr)
+                    power_ = victor->Get() ;
             }
 
-            void CargoHolderModel::addTalonSRX(TalonSRX *motor) {
+            void CargoHolderModel::addDevice(VictorSPX *motor) {
                 if (motor->GetDeviceID() == motor_channel_) {
                     motor_ = motor ;
                     motor->addModel(this) ;
                 }            
             }
             
-            void CargoHolderModel::addDigitalInput(frc::DigitalInput *input)  {
+            void CargoHolderModel::addDevice(frc::DigitalInput *input)  {
                 if (input->GetChannel() == cargo_sensor_channel_) {
                     cargo_sensor_ = input ;
                     cargo_sensor_->addModel(this) ;

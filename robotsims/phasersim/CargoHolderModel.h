@@ -25,9 +25,11 @@ namespace xero {
 
                 /// \brief Add a digital input to the model.
                 /// \param input the digital input to add
-                virtual void addDigitalInput(frc::DigitalInput *input) ;
+                virtual void addDevice(frc::DigitalInput *input) ;
 
-                virtual void addTalonSRX(ctre::phoenix::motorcontrol::can::TalonSRX *motor);                
+                /// \brief Process when VictorSPX motor controllers are added to the robot
+                /// \param motor the VictorSPX motor controller being added
+                virtual void addDevice(ctre::phoenix::motorcontrol::can::VictorSPX *motor);                
 
                 bool hasCargo() const  {
                     return has_cargo_ ;
@@ -40,7 +42,7 @@ namespace xero {
                 virtual void generateDisplayInformation(std::list<std::string> &lines) ;
 
             private:
-                ctre::phoenix::motorcontrol::can::TalonSRX * motor_ ;
+                ctre::phoenix::motorcontrol::can::VictorSPX * motor_ ;
                 frc::DigitalInput *cargo_sensor_ ;
 
                 int motor_channel_ ;

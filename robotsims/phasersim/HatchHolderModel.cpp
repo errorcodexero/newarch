@@ -55,7 +55,7 @@ namespace xero {
                 }
             }
             
-            void HatchHolderModel::addDigitalInput(frc::DigitalInput *input)  {
+            void HatchHolderModel::addDevice(frc::DigitalInput *input)  {
                 if (input->GetChannel() == hatch_sensor_channel_) {
                     hatch_sensor_ = input ;
                     hatch_sensor_->addModel(this) ;
@@ -63,7 +63,7 @@ namespace xero {
                 }
             }
 
-            void HatchHolderModel::addSolenoid(frc::Solenoid *sol) {
+            void HatchHolderModel::addDevice(frc::Solenoid *sol) {
                 if (sol->SimulatorGetChannel() == extension_channel_) {
                     extension_solenoid_ = sol ;
                     extension_solenoid_->addModel(this) ;

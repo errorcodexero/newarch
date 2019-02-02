@@ -36,7 +36,7 @@ namespace xero {
                 }
             }    
 
-            void CollectorModel::addTalonSRX(TalonSRX *motor) {
+            void CollectorModel::addDevice(TalonSRX *motor) {
                 if (motor->GetDeviceID() == motor_channel_) {
                     motor_ = motor ;
                     motor_->addModel(this) ;

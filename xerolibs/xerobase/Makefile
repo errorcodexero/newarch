@@ -35,7 +35,9 @@ SOURCES = \
 	lifter/LifterCalibrateAction.cpp\
 	lifter/LifterGoToHeightAction.cpp\
 	lifter/LifterHoldHeightAction.cpp\
-	lifter/LifterPowerAction.cpp
+	lifter/LifterPowerAction.cpp\
+	cameratracker/CameraTracker.cpp\
+	cameratracker/CameraChangeAction.cpp
 
 TARGET=xerobase
 

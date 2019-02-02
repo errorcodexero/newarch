@@ -11,13 +11,13 @@ namespace xero {
         LifterHoldHeightAction::LifterHoldHeightAction(Lifter &lifter, double target) : LifterAction(lifter) {
             target_ = target ;
             threshold_ = getLifter().getRobot().getSettingsParser().getDouble("lifter:threshold") ;
-            pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold:") ;            
+            pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold") ;            
         }
 
         LifterHoldHeightAction::LifterHoldHeightAction(Lifter &lifter, const std::string &name) : LifterAction(lifter) {
             target_ = getLifter().getRobot().getSettingsParser().getDouble(name) ;
             threshold_ = getLifter().getRobot().getSettingsParser().getDouble("lifter:threshold") ;
-            pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold:") ;
+            pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold") ;
         }
 
         LifterHoldHeightAction::~LifterHoldHeightAction() {

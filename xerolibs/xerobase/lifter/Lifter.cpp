@@ -101,6 +101,8 @@ namespace xero {
                     talon->Follow(*motors_.front()) ;
 
                 motors_.push_back(talon) ;
+
+                i++ ;
             }
         }
 
