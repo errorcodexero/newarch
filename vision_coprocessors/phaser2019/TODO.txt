@@ -1,3 +1,7 @@
+- Bugs:
+  - Losing valid==true
+  - Streaming errors
+  - Pi streaming/NT table not always started with robot
 - Capabilities
   - Test vision with field images.  Esp. from distance and multiple targets visible.  Filter on rect angles?
   - Change resolution to 320x240.  Adjust distance mapping.  Increase compression to lower bandwidth.  (shuffleboard vs. browser?)

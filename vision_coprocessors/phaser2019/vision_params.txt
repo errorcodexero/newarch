@@ -7,14 +7,18 @@
 
 
 vision:pipeline:hsv_threshold:h_min     40
-vision:pipeline:hsv_threshold:h_max     150
+vision:pipeline:hsv_threshold:h_max     100
 vision:pipeline:hsv_threshold:s_min     0
 vision:pipeline:hsv_threshold:s_max     255
 vision:pipeline:hsv_threshold:v_min     100
 vision:pipeline:hsv_threshold:v_max     255
 
-vision:camera:width_pixels              320
+#vision:camera:width_pixels              640
+#vision:camera:height_pixels             480
+vision:camera:width_pixels              432
 vision:camera:height_pixels             240
+
+vision:dist_cam_to_front_of_bot         19
 
 # Set to non-0 to stream the camera, 0 to disable
 vision:stream_camera                    1
