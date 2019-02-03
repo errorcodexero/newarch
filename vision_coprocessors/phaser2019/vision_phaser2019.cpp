@@ -320,6 +320,38 @@ namespace {
         return fabs(ratio);
     }
 
+    // Start network table in client vs. server mode depending whether running on robot or not
+    // Also speed up update rate.
+    void startNetworkTable(nt::NetworkTableInstance& ntinst) {
+        // Figure out if running on robot so network table can be started in server vs. client mode
+        bool running_on_robot = false;
+        std::vector<std::string> ip_addresses = xero::misc::get_host_ip_addresses();
+        for (auto addr : ip_addresses) {
+            if (xero::string::startsWith(addr, "10.14.25")) {
+                // TODO: Don't hardcode IP address.  Derive from team number.
+                running_on_robot = true;
+                break;
+            }
+        }
+    
+        // Start NetworkTables
+        const bool nt_server = !running_on_robot;
+        ntinst = nt::NetworkTableInstance::GetDefault();
+        if (nt_server) {
+            wpi::outs() << "Setting up NetworkTables server\n";
+            ntinst.StartServer();
+        } else {
+            wpi::outs() << "Setting up NetworkTables client for team " << team << '\n';
+            ntinst.StartClientTeam(team);
+        }
+
+        // Change default update rate from 100ms to 10ms.
+        // Will flush update anyway to try and reduce latency after posting set of results,
+        // but it's rate-limited to prevent flooding newwork. Unclear whether this affects the cap.
+        // Changing it anyway in case it does + in case flush() is not called.
+        ntinst.SetUpdateRate(0.01);    // Allowed range per docs is 0.01 -> 1.0 (rate in seconds)
+    }
+
     // Draw ractangle
     void drawRectangle(cv::Mat& frame,
                        const cv::RotatedRect& rect,
@@ -447,14 +479,28 @@ namespace {
                 min_rect = cv::minAreaRect(contour);
                 double aspect_ratio = getRectAspectRatio(min_rect);
 
-                // Draw rectangle
-                drawRectangle(frame_out_, min_rect, color_cyan, 4);
+                // Discard rectangles off vertical center.  Discard top and bottom of fov.
+                const double half_height = height_pixels/2;
+                const double pixels_from_vertical_middle = abs(min_rect.center.y - half_height);
+                if (pixels_from_vertical_middle/half_height > 0.5) {
+                    continue;
+                }
+                
+                // Draw rectangle (cyan) after excluding those in top or bottom of frame
+                if (stream_pipeline_output) {
+                    drawRectangle(frame_out_, min_rect, color_cyan, 4);
+                }
 
                 // Discard rectangles that don't have the expected aspect ratio
                 if (!isApproxEqual(aspect_ratio, expected_aspect_of_target, aspect_ratio_tolerance)) {
                     continue;
                 }
 
+                // Draw rectangle (orange) after filtering based on aspect ratio
+                if (stream_pipeline_output) {
+                    drawRectangle(frame_out_, min_rect, color_orange, 4);
+                }
+                
                 // Discard rectangles that don't have the expected angle
                 const double rotate_angle_tol = 0.25;
                 if (!isApproxEqual(min_rect.angle, -75, rotate_angle_tol) &&
@@ -463,25 +509,13 @@ namespace {
                     continue;
                 }
                 
-                // Discard rectangles off vertical center.  Discard top and bottom of fov.
-                const double half_height = height_pixels/2;
-                const double pixels_from_vertical_middle = abs(min_rect.center.y - half_height);
-                if (pixels_from_vertical_middle/half_height > 0.5) {
-                    continue;
+                // Draw rectangle (red) after filtering based on angle of rotation
+                if (stream_pipeline_output) {
+                    drawRectangle(frame_out_, min_rect, color_red, 4);
                 }
-                
-                // Draw rectangle
-                drawRectangle(frame_out_, min_rect, color_orange, 4);
 
                 // Add filtered rectangle to list
                 filtered_min_rects.push_back(min_rect);
-                if (stream_pipeline_output) {
-                    cv::Point2f rect_points[4];
-                    min_rect.points(rect_points);
-                    for (int j = 0; j < 4; j++ ) {
-                        cv::line(frame_out_, rect_points[j], rect_points[(j+1)%4], color_red, 2);
-                    }
-                }
             }
 
             // Only continue if we have at least 2 filtered rectangles
@@ -519,12 +553,14 @@ namespace {
                 return;
             }
 
-            // Draw 2 largest rectangles rectangle
-            drawRectangle(frame_out_, left_rect, color_yellow, 4);
-            drawRectangle(frame_out_, right_rect, color_yellow, 4);
+            // Draw 2 largest rectangles (yellow)
+            if (stream_pipeline_output) {
+                drawRectangle(frame_out_, left_rect, color_yellow, 4);
+                drawRectangle(frame_out_, right_rect, color_yellow, 4);
+            }
 
             // Top 2 rectangles must have centers almost at same height.
-            // Note origin (0,0) is top left corner so Y axis is reversed.
+            // Note pixel origin (0,0) is top left corner so Y axis is reversed.
             cv::Point2f left_center = left_rect.center;
             cv::Point2f right_center = right_rect.center;
             const double delta_x = right_center.x - left_center.x;
@@ -549,11 +585,10 @@ namespace {
             // At 640x460 of C270 and 640x480 resolution, pixels_bet_centres * dist_to_target_in_FEET ~ 760
             double dist_to_target = (760.0/dist_bet_centers) * 12.0/*inches_per_foot*/ * static_cast<double>(width_pixels)/640.0;
 
-            // For distance, subtract distance from camera to front of robot (in inched)
+            // For distance, subtract distance from camera to front of robot (in inches)
             dist_to_target -= dist_cam_to_front_of_bot;
 
-            // At this point, top 2 rectangles have right aspect ratio, almost equal size, and almost same height
-            // So likely a valid target.
+            // At this point, top 2 rectangles meet all the criteria so likely have a valid target.
             // Draw them in green.
             if (stream_pipeline_output) {
                 for (int ix=0; ix<2; ++ix) {
@@ -599,17 +634,6 @@ namespace {
 
             // Flush NT updates after all data has been posted.
             ntinst.Flush();
-
-
-#if 0
-            std::cout << "Contours: Total=" << contours.size() << ", filtered=" << filtered_min_rects.size() << "\n";
-            for (cv::RotatedRect& rect : filtered_min_rects) {
-                cv::Size2f rect_size = rect.size;
-                std::cout << "    " << (rect_size.width * rect_size.height) << "\n";
-            }
-#endif
-            
-            //frame_out_ = frame_in;
         }
 
     private:
@@ -832,35 +856,11 @@ int main(int argc, char* argv[]) {
     width_pixels = params.getValue("vision:camera:width_pixels");
     height_pixels = params.getValue("vision:camera:height_pixels");
     dist_cam_to_front_of_bot = params.getValue("vision:dist_cam_to_front_of_bot");
-    
-    // Figure out if running on robot
-    bool running_on_robot = false;
-    std::vector<std::string> ip_addresses = xero::misc::get_host_ip_addresses();
-    for (auto addr : ip_addresses) {
-        if (xero::string::startsWith(addr, "10.14.25")) {
-            running_on_robot = true;
-            break;
-        }
-    }
-    
 
-    // Start NetworkTables
-    const bool nt_server = !running_on_robot;
+    // Start network table in client or server mode + configure it
     ntinst = nt::NetworkTableInstance::GetDefault();
-    if (nt_server) {
-        wpi::outs() << "Setting up NetworkTables server\n";
-        ntinst.StartServer();
-    } else {
-        wpi::outs() << "Setting up NetworkTables client for team " << team << '\n';
-        ntinst.StartClientTeam(team);
-    }
-
-    // Change default update rate from 100ms to 10ms.
-    // Will flush update anyway to try and reduce latency after posting set of results,
-    // but it's rate-limited to prevent flooding newwork. Unclear whether this affects the cap.
-    // Changing it anyway in case it does + in case flush() is not called.
-    ntinst.SetUpdateRate(0.01);    // Allowed range per docs is 0.01 -> 1.0 (rate in seconds)
-
+    startNetworkTable(ntinst);
+    
     // Prepare network table variables that tracker will populate
     std::shared_ptr<NetworkTable> nt_table = ntinst.GetTable("TargetTracking");
     nt_target_dist_pixels = nt_table->GetEntry("dist_pixels");
