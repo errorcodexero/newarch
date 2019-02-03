@@ -114,12 +114,18 @@ namespace {
     static bool stream_pipeline_output = false;
 
     // Network table entries where results from tracking will be posted.
+    nt::NetworkTableEntry nt_pipe_fps;
+    nt::NetworkTableEntry nt_pipe_runtime_ms;
     nt::NetworkTableEntry nt_target_dist_pixels;
     nt::NetworkTableEntry nt_target_dist_inches;
     nt::NetworkTableEntry nt_target_yaw_deg;
     nt::NetworkTableEntry nt_target_rect_ratio;
     nt::NetworkTableEntry nt_rect_l_angle_deg;
     nt::NetworkTableEntry nt_rect_r_angle_deg;
+    nt::NetworkTableEntry nt_rect_l_height;
+    nt::NetworkTableEntry nt_rect_r_height;
+    nt::NetworkTableEntry nt_rect_l_width;
+    nt::NetworkTableEntry nt_rect_r_width;
     nt::NetworkTableEntry nt_target_valid;
 
     
@@ -609,9 +615,13 @@ namespace {
             double rect_ratio = getRectArea(right_rect) / getRectArea(left_rect);
             nt_target_rect_ratio.SetDouble(rect_ratio);
 
-            // Publish angles of the 2 rectangles.
+            // Publish info on the 2 rectangles.
             nt_rect_l_angle_deg.SetDouble(left_rect.angle);
             nt_rect_r_angle_deg.SetDouble(right_rect.angle);
+            nt_rect_l_height.SetDouble(left_rect.size.height);
+            nt_rect_r_height.SetDouble(right_rect.size.height);
+            nt_rect_l_width.SetDouble(left_rect.size.width);
+            nt_rect_r_width.SetDouble(right_rect.size.width);
 
             // Estimate yaw.  Assume both rectangles at equal height (among other things).
             //double yaw = pixels_off_center * (camera_hfov_deg / width_pixels);
@@ -672,9 +682,11 @@ namespace {
             total_processing_time += (end_time - start_time);
 
             // Report average processing time every X calls,
-            //then reset metrics for next window to measure and report
+            // then reset metrics for next window to measure and report
             if (frames_processed == frames_to_sample_per_report) {
-                //std::cout << "Average pipe processing time per frame = " << total_processing_time / frames_processed << " (" << frames_processed << " frames)\n";
+                double runtime_ms = 1000.0 * total_processing_time / frames_processed;
+                nt_pipe_runtime_ms.SetDouble(runtime_ms);
+                //std::cout << "Average pipe processing time per frame (ms) = " << runtime_ms << " (" << frames_processed << " frames)\n";
                 frames_processed = 0;
                 total_processing_time = 0;
             }
@@ -706,6 +718,7 @@ namespace {
                 const double current_time = frc::Timer::GetFPGATimestamp();
                 double elapsed_time = current_time - start_time;
                 double fps = static_cast<double>(times_called) / elapsed_time;
+                nt_pipe_fps.SetDouble(fps);
                 //std::cout << "fps = " << fps << "\n";
                 start_time = current_time;
                 times_called = 0;
@@ -863,6 +876,10 @@ int main(int argc, char* argv[]) {
     
     // Prepare network table variables that tracker will populate
     std::shared_ptr<NetworkTable> nt_table = ntinst.GetTable("TargetTracking");
+    nt_pipe_fps = nt_table->GetEntry("pipe_fps");
+    nt_pipe_fps.SetDefaultDouble(0);
+    nt_pipe_runtime_ms = nt_table->GetEntry("pipe_runtime_ms");
+    nt_pipe_runtime_ms.SetDefaultDouble(0);
     nt_target_dist_pixels = nt_table->GetEntry("dist_pixels");
     nt_target_dist_pixels.SetDefaultDouble(0);
     nt_target_dist_inches = nt_table->GetEntry("dist_inch");
@@ -875,6 +892,14 @@ int main(int argc, char* argv[]) {
     nt_rect_l_angle_deg.SetDefaultDouble(0);
     nt_rect_r_angle_deg = nt_table->GetEntry("rect_r_angle_deg");
     nt_rect_r_angle_deg.SetDefaultDouble(0);
+    nt_rect_l_height = nt_table->GetEntry("rect_l_height");
+    nt_rect_l_height.SetDefaultDouble(0);
+    nt_rect_r_height = nt_table->GetEntry("rect_r_height");
+    nt_rect_r_height.SetDefaultDouble(0);
+    nt_rect_l_width = nt_table->GetEntry("rect_l_width");
+    nt_rect_l_width.SetDefaultDouble(0);
+    nt_rect_r_width = nt_table->GetEntry("rect_r_width");
+    nt_rect_r_width.SetDefaultDouble(0);
     nt_target_valid = nt_table->GetEntry("valid");
     nt_target_valid.SetDefaultBoolean(false);
 
