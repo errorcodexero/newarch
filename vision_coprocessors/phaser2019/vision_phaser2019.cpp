@@ -9,6 +9,7 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <algorithm>
 
 #include <iostream>
 #include <stdlib.h>    // For system()
@@ -92,7 +93,7 @@ namespace {
     // Vision targets should be 8in apart at closest point.
     // 5.5in x 2in strips.
     // Angled about 14.5 degrees.
-    double dist_bet_centers_inches = 11.5;  // APPROXIMATE.  TODO: Calculate accurately.
+    double dist_bet_centers_inch = 11.5;  // APPROXIMATE.  TODO: Calculate accurately.
 
     paramsInput params;
 
@@ -117,7 +118,7 @@ namespace {
     nt::NetworkTableEntry nt_pipe_fps;
     nt::NetworkTableEntry nt_pipe_runtime_ms;
     nt::NetworkTableEntry nt_target_dist_pixels;
-    nt::NetworkTableEntry nt_target_dist_inches;
+    nt::NetworkTableEntry nt_target_dist_inch;
     nt::NetworkTableEntry nt_target_yaw_deg;
     nt::NetworkTableEntry nt_target_rect_ratio;
     nt::NetworkTableEntry nt_rect_l_angle_deg;
@@ -126,6 +127,10 @@ namespace {
     nt::NetworkTableEntry nt_rect_r_height;
     nt::NetworkTableEntry nt_rect_l_width;
     nt::NetworkTableEntry nt_rect_r_width;
+    nt::NetworkTableEntry nt_rect_l_dist_inch;
+    nt::NetworkTableEntry nt_rect_r_dist_inch;
+    nt::NetworkTableEntry nt_bot_x_offset_inch;
+    nt::NetworkTableEntry nt_bot_z_offset_inch;
     nt::NetworkTableEntry nt_target_valid;
 
     
@@ -488,7 +493,7 @@ namespace {
                 // Discard rectangles off vertical center.  Discard top and bottom of fov.
                 const double half_height = height_pixels/2;
                 const double pixels_from_vertical_middle = abs(min_rect.center.y - half_height);
-                if (pixels_from_vertical_middle/half_height > 0.5) {
+                if (pixels_from_vertical_middle/half_height > 0.7) {
                     continue;
                 }
                 
@@ -508,9 +513,10 @@ namespace {
                 }
                 
                 // Discard rectangles that don't have the expected angle
+                // Expected angles are -15 for one and -75 for the other.
                 const double rotate_angle_tol = 0.25;
-                if (!isApproxEqual(min_rect.angle, -75, rotate_angle_tol) &&
-                    !isApproxEqual(min_rect.angle, -15, rotate_angle_tol)) {
+                if (!isApproxEqual(min_rect.angle+90, 15, rotate_angle_tol) &&
+                    !isApproxEqual(min_rect.angle+90, 75, rotate_angle_tol)) {
                     //std::cout << "FALSE: Rect angle = " << min_rect.angle << "\n";
                     continue;
                 }
@@ -615,31 +621,46 @@ namespace {
             double rect_ratio = getRectArea(right_rect) / getRectArea(left_rect);
             nt_target_rect_ratio.SetDouble(rect_ratio);
 
-            // Publish info on the 2 rectangles.
-            nt_rect_l_angle_deg.SetDouble(left_rect.angle);
-            nt_rect_r_angle_deg.SetDouble(right_rect.angle);
-            nt_rect_l_height.SetDouble(left_rect.size.height);
-            nt_rect_r_height.SetDouble(right_rect.size.height);
-            nt_rect_l_width.SetDouble(left_rect.size.width);
-            nt_rect_r_width.SetDouble(right_rect.size.width);
-
             // Estimate yaw.  Assume both rectangles at equal height (among other things).
             //double yaw = pixels_off_center * (camera_hfov_deg / width_pixels);
             double pixels_off_center = center_point.x - (width_pixels/2);
-            double pixels_per_inch = dist_bet_centers / dist_bet_centers_inches;
+            double pixels_per_inch = dist_bet_centers / dist_bet_centers_inch;
             double inches_off_center = pixels_off_center / pixels_per_inch;
             double yaw_in_rad = atan(inches_off_center / dist_to_target);
             double yaw_in_deg = yaw_in_rad * 180.0 / M_PI;
             nt_target_yaw_deg.SetDouble(yaw_in_deg);
-            
 
-            // TODO: Filter on vertical distance of rect from center?
+            // Estimate distance to each rectangle based on its height + coordinate of bot rel to target
+            double l_rect_height = std::max(left_rect.size.height, left_rect.size.width);
+            double r_rect_height = std::max(right_rect.size.height, right_rect.size.width);
+            double l_rect_width = std::min(left_rect.size.height, left_rect.size.width);
+            double r_rect_width = std::min(right_rect.size.height, right_rect.size.width);
+            double l_rect_dist_inch = 12.0*(206.0/l_rect_height);
+            double r_rect_dist_inch = 12.0*(206.0/r_rect_height);
+            double bot_x_offset_inch = (pow(r_rect_dist_inch,2) - pow(l_rect_dist_inch,2))/(2*dist_bet_centers_inch);
+            double bot_z_offset_inch = sqrt(pow(l_rect_dist_inch,2) - pow(bot_x_offset_inch - 0.5*dist_bet_centers_inch,2));
+            bot_x_offset_inch = -bot_x_offset_inch;  // Flip X coordinate to negative if bot on left of target, not opposite.
+            nt_rect_l_dist_inch.SetDouble(l_rect_dist_inch);
+            nt_rect_r_dist_inch.SetDouble(r_rect_dist_inch);
+            nt_bot_x_offset_inch.SetDouble(bot_x_offset_inch);
+            nt_bot_z_offset_inch.SetDouble(bot_z_offset_inch);
+            
+            // Publish info on the 2 rectangles.
+            nt_rect_l_angle_deg.SetDouble(left_rect.angle);
+            nt_rect_r_angle_deg.SetDouble(right_rect.angle);
+            nt_rect_l_height.SetDouble(l_rect_height);
+            nt_rect_r_height.SetDouble(r_rect_height);
+            nt_rect_l_width.SetDouble(l_rect_width);
+            nt_rect_r_width.SetDouble(r_rect_width);
+
+
+            // TODO: Filter on vertical distance of rect from center?  Only keep pairs of rectangles meeting other critria that are at similar height.
             //       Measure angle vs. perpendicular to target
             //       Measure coordinates & orientation vs. target.
 
-            // Publish results on network table
+            // Publish other results on network table
             nt_target_dist_pixels.SetDouble(dist_bet_centers);
-            nt_target_dist_inches.SetDouble(dist_to_target);
+            nt_target_dist_inch.SetDouble(dist_to_target);
             nt_target_valid.SetBoolean(true);
 
             // Flush NT updates after all data has been posted.
@@ -882,8 +903,8 @@ int main(int argc, char* argv[]) {
     nt_pipe_runtime_ms.SetDefaultDouble(0);
     nt_target_dist_pixels = nt_table->GetEntry("dist_pixels");
     nt_target_dist_pixels.SetDefaultDouble(0);
-    nt_target_dist_inches = nt_table->GetEntry("dist_inch");
-    nt_target_dist_inches.SetDefaultDouble(0);
+    nt_target_dist_inch = nt_table->GetEntry("dist_inch");
+    nt_target_dist_inch.SetDefaultDouble(0);
     nt_target_yaw_deg = nt_table->GetEntry("yaw_deg");
     nt_target_yaw_deg.SetDefaultDouble(0);
     nt_target_rect_ratio = nt_table->GetEntry("rect_ratio");
@@ -900,6 +921,14 @@ int main(int argc, char* argv[]) {
     nt_rect_l_width.SetDefaultDouble(0);
     nt_rect_r_width = nt_table->GetEntry("rect_r_width");
     nt_rect_r_width.SetDefaultDouble(0);
+    nt_rect_l_dist_inch = nt_table->GetEntry("rect_l_dist_inch");
+    nt_rect_l_dist_inch.SetDefaultDouble(0);
+    nt_rect_r_dist_inch = nt_table->GetEntry("rect_r_dist_inch");
+    nt_rect_r_dist_inch.SetDefaultDouble(0);
+    nt_bot_x_offset_inch = nt_table->GetEntry("bot_x_offset_inch");
+    nt_bot_x_offset_inch.SetDefaultDouble(0);
+    nt_bot_z_offset_inch = nt_table->GetEntry("bot_z_offset_inch");
+    nt_bot_z_offset_inch.SetDefaultDouble(0);
     nt_target_valid = nt_table->GetEntry("valid");
     nt_target_valid.SetDefaultBoolean(false);
 
