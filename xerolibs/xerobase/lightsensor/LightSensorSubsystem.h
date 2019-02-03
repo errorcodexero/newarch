@@ -61,7 +61,7 @@ namespace xero {
             }
 
             virtual bool shouldTerminate() {
-                return detectedObject() ;
+                return is_detected_ ;
             }
 
             bool getSensorState(uint32_t index) {
@@ -87,6 +87,8 @@ namespace xero {
             std::vector <std::shared_ptr<frc::DigitalInput>> light_sensors_ ;
             double angle_ ;
             std::list<uint32_t> sensor_data_ ;
+            int detect_count_ ;
+            bool is_detected_ ;
         }  ;
     }
 }

@@ -1,7 +1,7 @@
 #include "PhaserAutoModeController.h"
 #include "Phaser.h"
 #include "hatchholder/HatchHolderAction.h"
-#include "phasercameratracker/DriveByVisionHier1Action.h"
+#include "phasercameratracker/DriveByVisionHier2Action.h"
 #include <tankdrive/TankDriveFollowPathAction.h>
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveScrubCharAction.h>
@@ -118,7 +118,7 @@ namespace xero {
             mode->pushAction(act) ;
 #endif            
 
-            childact = std::make_shared<DriveByVisionHier1Action>(*db, *cm) ;
+            childact = std::make_shared<DriveByVisionHier2Action>(*db, *cm) ;
             dispatch = std::make_shared<DispatchAction>(db, childact) ;    
             act = std::make_shared<TerminateAction>(dispatch, *ls, getRobot().getMessageLogger()) ;        
             mode->pushAction(act) ;
@@ -139,7 +139,7 @@ namespace xero {
             auto db = phaserrobot->getTankDrive() ;
             auto cm = phaserrobot->getCameraTracker() ;
 
-            act = std::make_shared<DriveByVisionHier1Action>(*db, *cm) ;
+            act = std::make_shared<DriveByVisionHier2Action>(*db, *cm) ;
             mode->pushSubActionPair(db, act) ;
 
             return mode ;

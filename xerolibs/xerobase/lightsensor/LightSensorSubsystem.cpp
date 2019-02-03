@@ -16,6 +16,8 @@ namespace xero {
                 std::shared_ptr <frc::DigitalInput> sensor = std::make_shared <frc::DigitalInput>(sensor_address) ;
                 light_sensors_.push_back(sensor) ;
             }
+
+            is_detected_ = false ;
         }
 
         LightSensorSubsystem::LightSensorSubsystem(Robot &robot, const std::string &name, std::vector<int> sensor_numbers) : Subsystem(robot,name) {
@@ -23,6 +25,8 @@ namespace xero {
                 std::shared_ptr <frc::DigitalInput> sensor = std::make_shared <frc::DigitalInput>(sensorAddress) ;
                 light_sensors_.push_back(sensor) ;
             }
+
+            is_detected_ = false ;
         }        
 
         void LightSensorSubsystem::computeState() { 
@@ -54,6 +58,23 @@ namespace xero {
 
                 while (sensor_data_.size() > 4)
                     sensor_data_.pop_back() ;
+            }
+
+            if (is_detected_ == false) {
+                if (detectedObject()) {
+                    detect_count_++ ;
+                    if (detect_count_ == 4)
+                        is_detected_ = true ;
+                }
+                else {
+                    detect_count_ = 0 ;
+                }
+            }
+            else {
+                if (!detectedObject()) {
+                    detect_count_ = 0 ;
+                    is_detected_ = false ;
+                }
             }
         }
     }

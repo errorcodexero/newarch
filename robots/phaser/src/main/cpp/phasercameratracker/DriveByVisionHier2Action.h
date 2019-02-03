@@ -34,7 +34,10 @@ namespace xero {
         private:
             enum class State {
                 TrackingYaw,
-                TrackingCenter,
+                FirstCurve,
+                DrivingStraight,
+                SecondCurve,
+                Done,
             } ;
 
         private:
@@ -42,12 +45,17 @@ namespace xero {
             double yaw_adjust_power_ ;
             double base_power_ ;
             double yaw_switch_threshold_ ;
+            double yaw_max_threshold_ ;
             double turn_offset_ ;
             double rect_threshold_ ;
+            double fast_factor_ ;
             bool is_done_ ;
             double left_offset_ ;
             double right_offset_ ;
             int cycles_ ;
+            int turn_cycles_ ;
+            int this_turn_cycles_ ;
+            int turn_straight_ ;
             State state_ ;
             bool fast_ ;
         } ;
