@@ -18,9 +18,11 @@ namespace xero {
             xero::base::ActionSequencePtr createScrubCharAutoMode() ;
             xero::base::ActionSequencePtr createTestOne() ;
             xero::base::ActionSequencePtr createTestTwo() ;
-            xero::base::ActionSequencePtr createFollowLine() ;
+            xero::base::ActionSequencePtr testHatchDeposit() ;
+            xero::base::ActionSequencePtr testLineFollower() ;
             xero::base::ActionSequencePtr testHatchHolder() ;
-            xero::base::ActionSequencePtr testLifter() ;            
+            xero::base::ActionSequencePtr testLifter() ;        
+            xero::base::ActionSequencePtr testVision() ;    
         } ;
     }
 }

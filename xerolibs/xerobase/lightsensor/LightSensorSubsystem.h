@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Subsystem.h"
+#include "ITerminator.h"
 #include <iostream>
 #include <frc/DigitalInput.h>
 #include <SettingsParser.h>
@@ -20,7 +21,7 @@ namespace xero {
         class Subsystem ;
 
         /// \brief This class is a subsystem that consists of an array of light sensors.
-        class LightSensorSubsystem : public Subsystem {
+        class LightSensorSubsystem : public Subsystem, public ITerminator {
 
         private:
             constexpr static double epsilon = 1e-3 ;
@@ -53,11 +54,14 @@ namespace xero {
 
             bool detectedObject() {
                 if (sensor_data_.size() > 0 && sensor_data_.front() != 0) {
-                    std::cout << "SensorData " << sensor_data_.front() ;
                     return true ;
                 }
 
                 return false ;
+            }
+
+            virtual bool shouldTerminate() {
+                return detectedObject() ;
             }
 
             bool getSensorState(uint32_t index) {

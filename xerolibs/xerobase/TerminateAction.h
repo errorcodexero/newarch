@@ -1,11 +1,12 @@
 #include "Action.h"
 #include "ITerminator.h"
+#include "MessageLogger.h"
 
 namespace xero{
     namespace base {
-        class TerminateAction:public Action{
+        class TerminateAction : public Action {
         public:
-            TerminateAction(ActionPtr a, ITerminator &t) ;
+            TerminateAction(ActionPtr a, ITerminator &t, xero::misc::MessageLogger &logger) ;
 
             virtual void start() ;
 
@@ -21,6 +22,7 @@ namespace xero{
             ActionPtr action_ ;
             ITerminator& term_ ;
             bool is_done_ ;
+            xero::misc::MessageLogger &logger_ ;
         };
     }
 }

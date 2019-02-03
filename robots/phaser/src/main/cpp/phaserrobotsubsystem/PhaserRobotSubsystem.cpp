@@ -28,14 +28,13 @@ namespace xero {
             hatch_holder_ = std::make_shared<HatchHolder>(robot) ;
             addChild(hatch_holder_) ;
 
-            lifter_ = std::make_shared<Lifter>(robot, MGR_GROUP_PHASER_LIFTER) ;
+            lifter_ = std::make_shared<Lifter>(robot, MSG_GROUP_PHASER_LIFTER) ;
             addChild(lifter_) ;
 
-            turntable_ = std::make_shared<Turntable>(robot, MGR_GROUP_PHASER_TURNTABLE) ;
+            turntable_ = std::make_shared<Turntable>(robot, MSG_GROUP_PHASER_TURNTABLE) ;
             addChild(turntable_) ;
 #endif
-
-            tracker_ = std::make_shared<CameraTracker>(robot) ;\
+            tracker_ = std::make_shared<PhaserCameraTracker>(robot) ;
             tracker_->setCameraIndex(0) ;
             addChild(tracker_) ;
         }

@@ -1,6 +1,0 @@
-This will be a tank driver class, derived from the xero::base::tankdrive that has actions
-to follow objects that implement the ISteerAngle and ISteerDistance interfaces
-
-actions
--------
-Follow Steering Subsystem

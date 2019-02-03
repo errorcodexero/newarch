@@ -33,11 +33,14 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_PARSER) ;
             // logger.enableSubsystem(MSG_GROUP_OI) ;
             // logger.enableSubsystem(MSG_GROUP_ALL) ;         
-            //
+            // logger.enableSubsystem(MSG_GROUP_CAMERA_TRACKER); 
 
-            logger.enableSubsystem(MGR_GROUP_PHASER_LIFTER);            
+            logger.enableSubsystem(MSG_GROUP_LINE_FOLLOWER);  
+            logger.enableSubsystem(MSG_GROUP_VISION_DRIVING);
+ 
+            logger.enableSubsystem(MSG_GROUP_ACTIONS);                      
         }
-
+        
         void Phaser::loadPaths() {
             auto paths = getPathManager() ;
             paths->loadPath("CurveLeft") ;

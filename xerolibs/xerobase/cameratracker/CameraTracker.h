@@ -25,6 +25,22 @@ namespace xero {
             void setCameraIndex(size_t which)  ;
             void setCameraMode(CameraMode mode) ;
 
+            bool isValid() const {
+                return is_valid_ ;
+            }
+
+            double getDistance() const {
+                return dist_inch_ ;
+            }
+
+            double getYaw() const {
+                return yaw_deg_ ;
+            }
+
+            double getRectRatio() const {
+                return rect_ratio_ ;
+            }
+
         private:
             static const char *NetworkTableName ;
             static const char *TargetDetected ;

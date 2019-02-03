@@ -1,6 +1,0 @@
-This directory will contains the vision target subsystem.  The vision target will likely
-find the targets and return the targeting angle as well as look at the distance between
-the target in pixels and scale to distance to target
-
-Actions
-Enable/disable

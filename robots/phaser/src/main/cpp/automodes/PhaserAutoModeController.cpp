@@ -1,6 +1,7 @@
 #include "PhaserAutoModeController.h"
 #include "Phaser.h"
 #include "hatchholder/HatchHolderAction.h"
+#include "phasercameratracker/DriveByVisionHier1Action.h"
 #include <tankdrive/TankDriveFollowPathAction.h>
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveScrubCharAction.h>
@@ -11,6 +12,7 @@
 #include <lifter/LifterGoToHeightAction.h>
 #include <lifter/LifterHoldHeightAction.h>
 #include <DelayAction.h>
+#include <TerminateAction.h>
 #include <frc/DriverStation.h>
 #include <MessageLogger.h>
 
@@ -51,7 +53,7 @@ namespace xero {
                 break ;
 
             case 4:
-                mode = createFollowLine() ;
+                mode = testHatchDeposit() ;
                 break ;
 
             case 5:
@@ -61,8 +63,15 @@ namespace xero {
             case 6:
                 mode = testLifter() ;
                 break ;
-            }
 
+            case 7:
+                mode = testLineFollower() ;
+                break ;
+
+            case 8:
+                mode = testVision() ;
+                break ;
+            }
             setAction(mode) ;
         }
 
@@ -90,33 +99,74 @@ namespace xero {
         }
 
 
-        ActionSequencePtr PhaserAutoModeController::createFollowLine() {
+        ActionSequencePtr PhaserAutoModeController::testHatchDeposit() {
+            std::string name = "Test Deposit Hatch" ;
+            std::string desc = "Test the deposit hatch sequence" ;
+            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr childact, act, dispatch ;
 
-            getRobot().getMessageLogger().startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
-            getRobot().getMessageLogger() << "createFollowLine" ;
-            getRobot().getMessageLogger().endMessage() ;
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto db = phaserrobot->getTankDrive() ;
+            auto ls = phaserrobot->getLightSensor() ;
+            auto cm = phaserrobot->getCameraTracker() ;
 
-            std::string name = "Line Follow Test" ;
+#ifdef NOTYET
+            childact = std::make_shared<TankDriveFollowPathAction>(*db, "CurveLeft") ;
+            dispatch = std::make_shared<DispatchAction>(db, childact) ;
+            act = std::make_shared<TerminateAction>(dispatch, *cm, getRobot().getMessageLogger()) ;
+            mode->pushAction(act) ;
+#endif            
+
+            childact = std::make_shared<DriveByVisionHier1Action>(*db, *cm) ;
+            dispatch = std::make_shared<DispatchAction>(db, childact) ;    
+            act = std::make_shared<TerminateAction>(dispatch, *ls, getRobot().getMessageLogger()) ;        
+            mode->pushAction(act) ;
+
+            act = std::make_shared<LineFollowAction>(*ls, *db, "linefollow:power", "linefollow:distance", "linefollow:adjust") ;
+            mode->pushSubActionPair(db, act) ;            
+            return mode ;         
+        }        
+
+        ActionSequencePtr PhaserAutoModeController::testVision() {
+            std::string name = "Test Vision" ;
+            std::string desc = "Test the vision system" ;
+            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr childact, act, dispatch ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto db = phaserrobot->getTankDrive() ;
+            auto cm = phaserrobot->getCameraTracker() ;
+
+            act = std::make_shared<DriveByVisionHier1Action>(*db, *cm) ;
+            mode->pushSubActionPair(db, act) ;
+
+            return mode ;
+        }         
+
+        ActionSequencePtr PhaserAutoModeController::testLineFollower() {
+            std::string name = "Test Line Follower" ;
             std::string desc = "Test the line follower" ;
             ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
-            ActionPtr act ;
+            ActionPtr childact, act, dispatch ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
             auto ls = phaserrobot->getLightSensor() ;
 
-            act = std::make_shared<TankDriveFollowPathAction>(*db, "CurveLeft") ;
+            act = std::make_shared<TankDrivePowerAction>(*db, 0.2, 0.2, false) ;
             mode->pushSubActionPair(db, act) ;
 
             act = std::make_shared<LineDetectAction>(*ls, *db) ;
-            // mode->pushSubActionPair(db, act) ;
-
+            mode->pushSubActionPair(db, act) ;
+                
             act = std::make_shared<LineFollowAction>(*ls, *db, "linefollow:power", "linefollow:distance", "linefollow:adjust") ;
-            // mode->pushSubActionPair(db, act) ;            
+            mode->pushSubActionPair(db, act) ;
 
-            return mode ;         
-        }             
+            return mode ;
+        }
 
         ActionSequencePtr PhaserAutoModeController::createStraightCharAutoMode() {
             std::string name = "Char Drive Base" ;

@@ -69,6 +69,9 @@ tankdrive:follower:right:kv                                     0.00555555555555
 tankdrive:follower:right:kp                                     0.1
 tankdrive:follower:right:kd                                     0.0
 
+tankdrive:follower:turn_correction                              0.0
+tankdrive:follower:angle_decay                                  0.0
+
 #
 # Variables for the driver gamepad
 #
@@ -86,11 +89,11 @@ driver:nudge_time                                               0.1
 plotter:port                                                    5555
 
 #
-#Variables for the linefollower
+# Variables for the linefollower
 #
-linefollow:power                                                .15
-linefollow:distance                                             18
-linefollow:adjust                                               .4
+linefollow:power                                                .4
+linefollow:distance                                             16
+linefollow:adjust                                               .35
 
 #
 # Variables for the turntable
@@ -120,3 +123,20 @@ lifter:hold:a                                                   0.0
 lifter:hold:min                                                 0.0
 lifter:hold:max                                                 0.0
 lifter:hold:imax                                                0.0
+
+cameratracker:distance_threshold                                0.0
+cameratracker:yaw_threshold                                     0.0
+cameratracker:rect_ratio_min                                    0.0
+cameratracker:rect_ratio_max                                    0.0
+
+drivevision:base_power                                          0.25
+drivevision:yaw_adjust_power                                    -0.003
+drivevision:rect_adjust_power                                   0.25
+drivevision:yaw_limit                                           20
+drivevision:dist_yaw_limit                                      120
+
+drivevision:2:yaw_adjust_power                                  -0.003
+drivevision:2:base_power                                        0.3
+drivevision:2:yaw_switch_threshold                              5.0
+drivevision:2:turn_offset                                       0.1
+drivevision:2:rect_threshold                                    0.075

@@ -12,7 +12,7 @@ namespace xero {
         const char *CameraTracker::TargetDetected = "valid" ;
         const char *CameraTracker::TargetDistance = "dist_inch" ;
         const char *CameraTracker::TargetAngle = "yaw_deg" ;
-        const char *CameraTracker::TargetRectRatio = "rect_ration" ;
+        const char *CameraTracker::TargetRectRatio = "rect_ratio" ;
         const char *CameraTracker::CameraNumber = "camera_number" ;
         const char *CameraTracker::CameraModeName = "camera_mode" ;
 
@@ -35,13 +35,16 @@ namespace xero {
                 rect_ratio_ = table_->GetNumber(TargetRectRatio, 0.0) ;
             }
 
+            bool is_enabled = getRobot().IsEnabled() ;
+
             MessageLogger &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CAMERA_TRACKER) ;
             logger << "CameraTracker" ;
             logger << " is_valid " << is_valid_ ;
+            logger << " enabled " << is_enabled ;
             logger << " dist_inch " << dist_inch_ ;
             logger << " yaw_deg " << yaw_deg_ ;
-            logger << " rect_ration " << rect_ratio_ ;
+            logger << " rect_ratio " << rect_ratio_ ;
             logger.endMessage() ;
         }
 

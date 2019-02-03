@@ -4,6 +4,7 @@
 #include "lightsensor/LightSensorSubsystem.h"
 #include "hatchholder/HatchHolder.h"
 #include "turntable/TurnTable.h"
+#include "phasercameratracker/PhaserCameraTracker.h"
 #include <tankdrive/TankDrive.h>
 #include <lifter/Lifter.h>
 #include <cameratracker/CameraTracker.h>
@@ -41,7 +42,7 @@ namespace xero {
                 return lifter_ ;
             }
 
-            std::shared_ptr<xero::base::CameraTracker> getCameraTracker() {
+            std::shared_ptr<PhaserCameraTracker> getCameraTracker() {
                 return tracker_ ;
             }            
 
@@ -54,7 +55,7 @@ namespace xero {
             std::shared_ptr<xero::base::LightSensorSubsystem> light_sensor_ ;
             std::shared_ptr<HatchHolder> hatch_holder_ ;
             std::shared_ptr<xero::base::Lifter> lifter_ ;
-            std::shared_ptr<xero::base::CameraTracker> tracker_ ;
+            std::shared_ptr<PhaserCameraTracker> tracker_ ;
             std::shared_ptr<Turntable> turntable_ ;
         } ;
     }

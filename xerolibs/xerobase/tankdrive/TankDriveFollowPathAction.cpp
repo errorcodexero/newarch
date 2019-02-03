@@ -23,6 +23,9 @@ namespace xero {
                                 "tankdrive:follower:left:ka", "tankdrive:follower:left:kp", "tankdrive:follower:left:kd") ;
             right_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), "tankdrive:follower:right:kv", 
                                 "tankdrive:follower:right:ka", "tankdrive:follower:right:kp", "tankdrive:follower:right:kd") ;                                
+
+            turn_correction_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:turn_correction") ;
+            angle_decay_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:angle_decay") ;
         }
 
         TankDriveFollowPathAction::~TankDriveFollowPathAction() {                
@@ -74,7 +77,15 @@ namespace xero {
                 double rout = right_follower_->getOutput(rseg.getAccel(), rseg.getVelocity(), rseg.getPOS(), 
                                         right_start_ + td.getRightDistance(), dt) ;
 
-                setMotorsToPercents(lout, rout) ;                        
+                double dv = std::fabs(lseg.getVelocity() - rseg.getVelocity()) ;
+                double correct = dv * turn_correction_ ;
+                lout += dv * correct ;
+                rout += dv * correct ;
+
+                double angerr = lseg.getHeading() - td.getAngle() ;
+                angle_error_ = angle_error_ * angle_decay_ + angerr ;
+
+                setMotorsToPercents(lout, rout) ;
 
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << td.getRobot().getTime() ;
