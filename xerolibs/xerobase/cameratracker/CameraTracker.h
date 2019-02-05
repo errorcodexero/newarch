@@ -29,33 +29,32 @@ namespace xero {
                 return is_valid_ ;
             }
 
-            double getDistance() const {
+            virtual double getDistance() const {
                 return dist_inch_ ;
             }
 
-            double getYaw() const {
+            virtual double getYaw() const {
                 return yaw_deg_ ;
             }
 
-            double getRectRatio() const {
-                return rect_ratio_ ;
+        protected:
+            std::shared_ptr<nt::NetworkTable> getNetworkTable() {
+                return table_ ;
             }
 
         private:
-            static const char *NetworkTableName ;
-            static const char *TargetDetected ;
-            static const char *TargetDistance ;
-            static const char *TargetAngle ;
-            static const char *TargetRectRatio ;
-            static const char *CameraNumber ;
-            static const char *CameraModeName ;
+            constexpr static const char *NetworkTableName = "TargetTracking" ;
+            constexpr static const char *TargetDetected = "valid" ;
+            constexpr static const char *TargetDistance = "dist_inch" ;
+            constexpr static const char *TargetAngle = "yaw_deg" ;
+            constexpr static const char *CameraNumber ="camera_number";
+            constexpr static const char *CameraModeName = "camera_mode" ;
 
         private:
             std::shared_ptr<nt::NetworkTable> table_ ;
             bool is_valid_ ;
             double dist_inch_ ;
             double yaw_deg_ ;
-            double rect_ratio_ ;
             size_t camera_ ;
             CameraMode mode_ ;
         } ;

@@ -1,4 +1,5 @@
 #include "CameraTracker.h"
+#include "CameraChangeAction.h"
 #include "Robot.h"
 #include "basegroups.h"
 #include <networktables/NetworkTableInstance.h>
@@ -8,14 +9,6 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        const char *CameraTracker::NetworkTableName = "TargetTracking" ;
-        const char *CameraTracker::TargetDetected = "valid" ;
-        const char *CameraTracker::TargetDistance = "dist_inch" ;
-        const char *CameraTracker::TargetAngle = "yaw_deg" ;
-        const char *CameraTracker::TargetRectRatio = "rect_ratio" ;
-        const char *CameraTracker::CameraNumber = "camera_number" ;
-        const char *CameraTracker::CameraModeName = "camera_mode" ;
-
         CameraTracker::CameraTracker(Robot &robot) : Subsystem(robot, "CameraTracker")
         {
             nt::NetworkTableInstance ntinst = nt::NetworkTableInstance::GetDefault() ;
@@ -32,7 +25,6 @@ namespace xero {
             if (is_valid_) {
                 dist_inch_ = table_->GetNumber(TargetDistance, 0.0) ;
                 yaw_deg_ = table_->GetNumber(TargetAngle, 0.0) ;
-                rect_ratio_ = table_->GetNumber(TargetRectRatio, 0.0) ;
             }
 
             bool is_enabled = getRobot().IsEnabled() ;
@@ -44,10 +36,8 @@ namespace xero {
             logger << " enabled " << is_enabled ;
             logger << " dist_inch " << dist_inch_ ;
             logger << " yaw_deg " << yaw_deg_ ;
-            logger << " rect_ratio " << rect_ratio_ ;
             logger.endMessage() ;
         }
-
 
         void CameraTracker::run()
         {            
@@ -55,7 +45,8 @@ namespace xero {
 
         bool CameraTracker::canAcceptAction(ActionPtr action)
         {            
-            return false ;
+            std::shared_ptr<CameraChangeAction> camact = std::dynamic_pointer_cast<CameraChangeAction>(action) ;
+            return camact != nullptr ;
         }
 
         void CameraTracker::setCameraIndex(size_t which)

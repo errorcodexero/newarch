@@ -36,6 +36,7 @@ namespace xero {
 #endif
             tracker_ = std::make_shared<PhaserCameraTracker>(robot) ;
             tracker_->setCameraIndex(0) ;
+            tracker_->setCameraMode(CameraTracker::CameraMode::TargetTracking) ;            
             addChild(tracker_) ;
         }
 

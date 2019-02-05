@@ -17,6 +17,11 @@ namespace xero {
         PhaserCameraTracker::~PhaserCameraTracker() {            
         }
 
+        void PhaserCameraTracker::computeState() {
+            rect_ratio_ = getNetworkTable()->GetNumber(TargetRectRatio, 0.0) ;
+            CameraTracker::computeState() ;
+        }
+
         bool PhaserCameraTracker::shouldTerminate() {
             if (!isValid())
                 return false ;
