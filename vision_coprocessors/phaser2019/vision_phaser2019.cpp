@@ -105,7 +105,6 @@ namespace {
     // Read from param file
     int width_pixels;
     int height_pixels;
-    double dist_cam_to_front_of_bot;
     
     // Whether to stream camera's direct output
     static bool stream_camera = true;
@@ -597,9 +596,6 @@ namespace {
             // At 640x460 of C270 and 640x480 resolution, pixels_bet_centres * dist_to_target_in_FEET ~ 760
             double dist_to_target = (760.0/dist_bet_centers) * 12.0/*inches_per_foot*/ * static_cast<double>(width_pixels)/640.0;
 
-            // For distance, subtract distance from camera to front of robot (in inches)
-            dist_to_target -= dist_cam_to_front_of_bot;
-
             // At this point, top 2 rectangles meet all the criteria so likely have a valid target.
             // Draw them in green.
             if (stream_pipeline_output) {
@@ -889,7 +885,6 @@ int main(int argc, char* argv[]) {
     }
     width_pixels = params.getValue("vision:camera:width_pixels");
     height_pixels = params.getValue("vision:camera:height_pixels");
-    dist_cam_to_front_of_bot = params.getValue("vision:dist_cam_to_front_of_bot");
 
     // Start network table in client or server mode + configure it
     ntinst = nt::NetworkTableInstance::GetDefault();
