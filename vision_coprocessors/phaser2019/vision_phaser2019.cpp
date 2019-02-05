@@ -631,8 +631,8 @@ namespace {
             double r_rect_height = std::max(right_rect.size.height, right_rect.size.width);
             double l_rect_width = std::min(left_rect.size.height, left_rect.size.width);
             double r_rect_width = std::min(right_rect.size.height, right_rect.size.width);
-            double l_rect_dist_inch = 12.0*(206.0/l_rect_height);
-            double r_rect_dist_inch = 12.0*(206.0/r_rect_height);
+            double l_rect_dist_inch = 12.0 * (206.0/l_rect_height) * (height_pixels/240.0);
+            double r_rect_dist_inch = 12.0 * (206.0/r_rect_height) * (height_pixels/240.0);
             double bot_x_offset_inch = (pow(r_rect_dist_inch,2) - pow(l_rect_dist_inch,2))/(2*dist_bet_centers_inch);
             double bot_z_offset_inch = sqrt(pow(l_rect_dist_inch,2) - pow(bot_x_offset_inch - 0.5*dist_bet_centers_inch,2));
             bot_x_offset_inch = -bot_x_offset_inch;  // Flip X coordinate to negative if bot on left of target, not opposite.
