@@ -12,6 +12,7 @@ namespace xero {
             yaw_base_power_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_base_power") ;
             yaw_p_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_p") ;
             yaw_threshold_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_threshold") ;
+            lost_target_threshold_ = tank_drive.getRobot().getSettingsParser().getInteger("drivebyvision:lost_target_threshold") ;
 
             outer_dist_threshold_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:outer_distance") ;
 
@@ -56,6 +57,7 @@ namespace xero {
 
         void DriveByVisionAction::start() {
             state_ = State::InitialDriveByYaw ;
+            lost_target_count_ = 0 ;
         }
 
         void DriveByVisionAction::driveByYaw() {
@@ -67,6 +69,18 @@ namespace xero {
             double right = yaw_base_power_ - yawadj ;
             setMotorsToPercents(left, right) ;
 
+            if (!camera_.isValid()) {
+                lost_target_count_++ ;
+                if (lost_target_count_ == lost_target_threshold_) {
+                    state_ = State::Done ;
+                    left = 0 ;
+                    right = 0 ;
+                }
+            }
+            else {
+                lost_target_count_ = 0 ;
+            }
+
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
             logger << "DriveByVision:" ;
             logger << " state " << toString(state_) ;
@@ -74,6 +88,7 @@ namespace xero {
             logger << " yawadj " << yawadj ;
             logger << " left " << left ;
             logger << " right " << right ;
+            logger << " valid " << camera_.isValid() ;
             logger.endMessage() ;
         }
 

@@ -51,6 +51,8 @@ namespace xero {
             // Drive by Yaw constants
             double yaw_base_power_ ;
             double yaw_p_ ;
+            int lost_target_threshold_ ;
+            int lost_target_count_ ;
 
             // Threshold for evaluation quadrant
             double yaw_threshold_ ;
