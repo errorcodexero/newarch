@@ -15,8 +15,12 @@ vision:pipeline:hsv_threshold:v_max     255
 
 #vision:camera:width_pixels              640
 #vision:camera:height_pixels             480
+#vision:camera:width_pixels              320
+#vision:camera:height_pixels             240
 vision:camera:width_pixels              432
 vision:camera:height_pixels             240
+#vision:camera:width_pixels              1280
+#vision:camera:height_pixels             960
 
 # Set to non-0 to stream the camera, 0 to disable
 vision:stream_camera                    1
