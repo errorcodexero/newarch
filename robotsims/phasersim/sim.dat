@@ -118,7 +118,7 @@ turntable:sim:min_limit_boundary                        -60
 #
 # The number of degrees per encoder tick (assuming 200 ticks per revolution)
 #
-turntable:sim:degrees_per_tick                          1.8
+turntable:sim:degrees_per_tick                          0.5
 
 #
 # The number of degrees the turntable rotates per second per volt

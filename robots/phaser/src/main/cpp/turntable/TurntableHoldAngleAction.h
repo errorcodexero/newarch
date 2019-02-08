@@ -6,11 +6,11 @@
 
 namespace xero {
     namespace phaser {
-        class TurntableHoldAction : public TurntableAction {
+        class TurntableHoldAngleAction : public TurntableAction {
         public:
-            TurntableHoldAction(Turntable &turntable, double target) ;
-            TurntableHoldAction(Turntable &turntable, const std::string &name) ;
-            virtual ~TurntableHoldAction() ;
+            TurntableHoldAngleAction(Turntable &turntable, double target) ;
+            TurntableHoldAngleAction(Turntable &turntable, const std::string &name) ;
+            virtual ~TurntableHoldAngleAction() ;
 
             virtual void start() ;
             virtual void run() ;

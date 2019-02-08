@@ -17,6 +17,7 @@ namespace xero{
             msg_id_ = id ;
             
             getMotors(robot) ;
+            assert(motors_.size() > 0) ;
 
             int enc1 = robot.getSettingsParser().getInteger("hw:turntable:encoder1") ;
             int enc2 = robot.getSettingsParser().getInteger("hw:turntable:encoder2") ;           
@@ -68,6 +69,8 @@ namespace xero{
                     talon->Follow(*motors_.front()) ;
 
                 motors_.push_back(talon) ;
+
+                i++ ;
             }
         }
 
@@ -94,7 +97,8 @@ namespace xero{
                 }
             }
 
-            motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v);
+            if (motors_.size() > 0)
+                motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v);
         }
 
         bool Turntable::canAcceptAction(ActionPtr action) {

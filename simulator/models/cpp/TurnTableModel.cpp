@@ -40,7 +40,11 @@ namespace xero {
 
             line = "  MaxLimit: " ;
             line += (getMaxLimit() ? "ON" : "OFF") ;
-            lines.push_back(line) ;            
+            lines.push_back(line) ;
+            
+            line = "  Encoder: " ;
+            line += std::to_string(encoder_value_) ;
+            lines.push_back(line) ;
         }
 
         std::string TurnTableModel::toString() {
@@ -56,12 +60,19 @@ namespace xero {
         }
 
         void TurnTableModel::run(double dt) {
+            //
+            // Note, this only works for the phaser turntable
+            //
             double ddeg = power_ * degrees_per_sec_per_volt_ * dt ;
             angle_ = xero::math::normalizeAngleDegrees(angle_ + ddeg) ;
 
-            int encval = static_cast<int>(angle_ / degrees_per_tick_) ;
+            double encangle = angle_ ;
+            if (angle_ < max_limit_boundary_)
+                encangle += 360.0 ;
+
+            encoder_value_ = static_cast<int>(encangle / degrees_per_tick_) ;
             if (enc_ != nullptr)
-                enc_->SimulatorSetValue(encval) ;
+                enc_->SimulatorSetValue(encoder_value_) ;
 
             min_limit_ = false ;
             max_limit_ = false ;

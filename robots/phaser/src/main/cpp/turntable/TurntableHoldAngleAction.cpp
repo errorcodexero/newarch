@@ -1,4 +1,4 @@
-#include "TurntableHoldAction.h"
+#include "TurntableHoldAngleAction.h"
 #include "Turntable.h"
 #include <Robot.h>
 #include <MessageLogger.h>
@@ -8,24 +8,24 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
-        TurntableHoldAction::TurntableHoldAction(Turntable &turntable, double target) : TurntableAction(turntable) {
+        TurntableHoldAngleAction::TurntableHoldAngleAction(Turntable &turntable, double target) : TurntableAction(turntable) {
             angle_threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:goto:angle_threshold") ;
             speed_threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:goto:speed_threshold") ;
             target_ = target ;
             pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:goto") ;          
         }
 
-        TurntableHoldAction::TurntableHoldAction(Turntable &turntable, const std::string &name) : TurntableAction(turntable) {
+        TurntableHoldAngleAction::TurntableHoldAngleAction(Turntable &turntable, const std::string &name) : TurntableAction(turntable) {
             angle_threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:goto:angle_threshold") ;
             speed_threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:goto:speed_threshold") ;
             target_ = getTurntable().getRobot().getSettingsParser().getDouble(name) ;
             pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:goto") ;          
         }
 
-        TurntableHoldAction::~TurntableHoldAction() {
+        TurntableHoldAngleAction::~TurntableHoldAngleAction() {
         }
 
-        void TurntableHoldAction::start() {
+        void TurntableHoldAngleAction::start() {
             is_done_ = atTarget() ;
             if (is_done_) {
                 Turntable &turntable = getTurntable() ;
@@ -39,7 +39,7 @@ namespace xero {
             start_time_ = getTurntable().getRobot().getTime() ;
         }
 
-        void TurntableHoldAction::run() {
+        void TurntableHoldAngleAction::run() {
             Turntable &turntable = getTurntable() ;
             MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
             double dt = turntable.getRobot().getDeltaTime() ;
@@ -83,21 +83,21 @@ namespace xero {
             }
         }
 
-        bool TurntableHoldAction::isDone() {
+        bool TurntableHoldAngleAction::isDone() {
             return is_done_ ;
         }
 
-        void TurntableHoldAction::cancel() {
+        void TurntableHoldAngleAction::cancel() {
             is_done_ = true ;
         }
 
-        bool TurntableHoldAction::atTarget() {
+        bool TurntableHoldAngleAction::atTarget() {
             return 
                 std::fabs(getTurntable().getAngleValue() - target_) < angle_threshold_ &&
                 std::fabs(getTurntable().getVelocity()) < speed_threshold_ ;
         }
 
-        std::string TurntableHoldAction::toString() {
+        std::string TurntableHoldAngleAction::toString() {
             std::string result = "TurntableGoToAngle " + std::to_string(target_) ;
             return result ;
         }

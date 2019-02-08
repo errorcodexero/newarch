@@ -83,7 +83,8 @@ namespace xero  {
 
             double angle_ ;
             double power_ ;
-
+            int encoder_value_ ;
+            
             bool min_limit_ ;
             bool max_limit_ ;
         } ;

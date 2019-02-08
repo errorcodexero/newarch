@@ -13,6 +13,7 @@ namespace xero {
 
             friend class TurntableCalibrateAction ;
             friend class TurntableGoToAngleAction ;
+            friend class TurntableHoldAngleAction ;            
             friend class TurntablePowerAction ;
         
         public:

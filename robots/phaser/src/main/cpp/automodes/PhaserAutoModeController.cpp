@@ -13,7 +13,7 @@
 #include <lifter/LifterHoldHeightAction.h>
 #include <turntable/TurntableCalibrateAction.h>
 #include <turntable/TurntableGoToAngleAction.h>
-#include <turntable/TurnTableHoldAngle.h>
+#include <turntable/TurnTableHoldAngleAction.h>
 #include <turntable/TurntablePowerAction.h>
 #include <DelayAction.h>
 #include <TerminateAction.h>
@@ -119,12 +119,13 @@ namespace xero {
             act = std::make_shared<TurntableCalibrateAction>(*turntable) ;
             mode->pushSubActionPair(turntable, act) ;
 
-            act = std::make_shared<TurntablePowerAction>(*turntable, 1.0) ;
+            act = std::make_shared<TurntablePowerAction>(*turntable, 0.05) ;
             mode->pushSubActionPair(turntable, act) ;
 
-            act = std::make_shared<DelayAction>(5.0) ;
+            act = std::make_shared<DelayAction>(60.0) ;
+            mode->pushAction(act) ;
 
-            act = std::make_shared<TurntablePowerAction>(*turntable, -1.0) ;
+            act = std::make_shared<TurntablePowerAction>(*turntable, -0.05) ;
             mode->pushSubActionPair(turntable, act) ;           
 
             return mode ;             
