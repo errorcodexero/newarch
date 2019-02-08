@@ -129,18 +129,20 @@ cameratracker:yaw_threshold                                     0.0
 cameratracker:rect_ratio_min                                    0.0
 cameratracker:rect_ratio_max                                    0.0
 
-drivevision:base_power                                          0.25
-drivevision:yaw_adjust_power                                    -0.003
-drivevision:rect_adjust_power                                   0.25
-drivevision:yaw_limit                                           20
-drivevision:dist_yaw_limit                                      120
-
-drivevision:2:yaw_adjust_power                                  -0.008
-drivevision:2:base_power                                        0.2
-drivevision:2:fast_factor                                       1.2
-drivevision:2:yaw_switch_threshold                              2.0
-drivevision:2:yaw_max_threshold                                 14
-drivevision:2:turn_offset                                       0.1
-drivevision:2:turn_cycles                                       100
-drivevision:2:turn_straight                                     0
-drivevision:2:rect_threshold                                    0.01
+drivebyvision:yaw_base_power                  0.2                  
+drivebyvision:yaw_p                           -0.003
+drivebyvision:yaw_threshold                   3.0
+drivebyvision:lost_target_threshold           4
+drivebyvision:outer_distance                  96.0
+drivebyvision:inner:0                         0.90
+drivebyvision:inner:1                         0.98
+drivebyvision:inner:2                         1.02
+drivebyvision:inner:3                         1.1
+drivebyvision:outer:0                         0.90
+drivebyvision:outer:1                         0.98
+drivebyvision:outer:2                         1.02
+drivebyvision:outer:3                         1.10
+drivebyvision:scurve_base_power                 0.2
+drivebyvision:scurve_turn_offset                0.1
+drivebyvision:scurve_cycles                     100
+drivebyvision:quit_threshold                   31.0

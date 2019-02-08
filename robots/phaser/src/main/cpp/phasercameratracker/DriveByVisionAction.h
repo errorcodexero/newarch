@@ -71,6 +71,8 @@ namespace xero {
             double scurve_right_offset_ ;
             int scurve_cycles_ ;
             int cycles_ ;
+
+            double quit_threshold_ ;
         } ;
     }
 }

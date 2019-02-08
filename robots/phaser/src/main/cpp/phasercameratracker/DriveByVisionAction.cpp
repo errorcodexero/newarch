@@ -26,9 +26,11 @@ namespace xero {
             outer_boundaries_[2] = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:outer:2") ;
             outer_boundaries_[3] = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:outer:3") ;  
 
-            scurve_base_power_ =  tank_drive.getRobot().getSettingsParser().getDouble("drivebyvisiion:scurve_base_power") ;
-            scurve_turn_offset_ =  tank_drive.getRobot().getSettingsParser().getDouble("drivebyvisiion:scurve_turn_offset") ;
-            scurve_cycles_ = tank_drive.getRobot().getSettingsParser().getInteger("drivebyvision:scruve_cycles") ;
+            scurve_base_power_ =  tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:scurve_base_power") ;
+            scurve_turn_offset_ =  tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:scurve_turn_offset") ;
+            scurve_cycles_ = tank_drive.getRobot().getSettingsParser().getInteger("drivebyvision:scurve_cycles") ;
+
+            quit_threshold_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:quit_threshold") ;
         }
 
         std::string DriveByVisionAction::toString(DriveByVisionAction::State st) {
@@ -72,6 +74,10 @@ namespace xero {
             if (!camera_.isValid()) {
                 lost_target_count_++ ;
                 if (lost_target_count_ == lost_target_threshold_) {
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
+                    logger << "DriveByVision: going to done, lost target" ;
+                    logger << ", lost_target_count " << lost_target_count_  ;
+                    logger.endMessage() ;                    
                     state_ = State::Done ;
                     left = 0 ;
                     right = 0 ;
@@ -123,6 +129,12 @@ namespace xero {
             double rect = camera_.getRectRatio() ;
             int quad = -1 ;
 
+            MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
+            logger << "dist " << dist << " rect " << rect ;
+            logger.endMessage() ;
+
+
             if (dist > outer_dist_threshold_) {
                 //
                 // We are in the outer quadrants (1, 2, or 3)
@@ -173,6 +185,11 @@ namespace xero {
 
             default:
                 state_ = State::Done ;
+                setMotorsToPercents(0.0, 0.0) ;
+                MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
+                logger << "quit due to quadrant " << quad ;
+                logger.endMessage() ;                
                 break ;
             }
         }
@@ -184,7 +201,7 @@ namespace xero {
             switch(state_) {
             case State::InitialDriveByYaw:
                 driveByYaw() ;
-                if (camera_.getYaw() < yaw_threshold_) {
+                if (std::fabs(camera_.getYaw()) < yaw_threshold_) {
                     //
                     // We are pointing enough at the target that we can evaluate our position
                     //
@@ -208,7 +225,7 @@ namespace xero {
 
             case State::FinalDriveByYaw:
                 driveByYaw() ;
-                if (dist < 6.0) {
+                if (dist < quit_threshold_) {
                     state_ = State::Done ;
                     setMotorsToPercents(0.0, 0.0) ;
                 }
@@ -219,7 +236,7 @@ namespace xero {
                 break ;                
             }
         }
-
+        
         /// \brief Cancel the action
         void DriveByVisionAction::cancel() {            
         }

@@ -15,9 +15,11 @@ namespace xero {
             action_->start() ;
             is_done_ = action_->isDone() ;
 
-            logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
-            logger_ << "Child action finished in start" ;
-            logger_.endMessage() ;            
+            if (is_done_) {
+                logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
+                logger_ << "Child action finished in start" ;
+                logger_.endMessage() ;            
+            }
         }
 
         void TerminateAction::run() {
