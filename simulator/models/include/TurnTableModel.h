@@ -76,12 +76,12 @@ namespace xero  {
             int max_limit_channel_ ;
             int motor_1_ ;
 
-            double limit_window_ ;
             double max_limit_boundary_ ;
-
+            double min_limit_boundary_ ;
             double degrees_per_sec_per_volt_ ;
-            double angle_ ;
             double degrees_per_tick_ ;
+
+            double angle_ ;
             double power_ ;
 
             bool min_limit_ ;

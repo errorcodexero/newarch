@@ -22,7 +22,8 @@ namespace xero {
             xero::base::ActionSequencePtr testLineFollower() ;
             xero::base::ActionSequencePtr testHatchHolder() ;
             xero::base::ActionSequencePtr testLifter() ;        
-            xero::base::ActionSequencePtr testVision() ;    
+            xero::base::ActionSequencePtr testVision() ;   
+            xero::base::ActionSequencePtr testTurbtable() ; 
         } ;
     }
 }

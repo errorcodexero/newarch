@@ -12,7 +12,10 @@ SOURCES = \
 	src/main/cpp/turntable/Turntable.cpp\
 	src/main/cpp/turntable/TurntableCalibrateAction.cpp\
 	src/main/cpp/turntable/TurntableGoToAngleAction.cpp\
-	src/main/cpp/turntable/TurntablePowerAction.cpp
+	src/main/cpp/turntable/TurntableHoldAngleAction.cpp\
+	src/main/cpp/turntable/TurntablePowerAction.cpp\
+	src/main/cpp/phasercameratracker/PhaserCameraTracker.cpp\
+	src/main/cpp/phasercameratracker/DriveByVisionAction.cpp
 
 TARGET = phaser
 
