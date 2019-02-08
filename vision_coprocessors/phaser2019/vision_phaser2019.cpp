@@ -271,6 +271,31 @@ namespace {
         return camera;
     }
 
+    void waitForIpAddressOnRobot(bool verbose = false) {
+        if (verbose) {
+            std::cout << "Waiting for network interface...";
+        }
+        const double start_time = frc::Timer::GetFPGATimestamp();
+        for (bool net_detected=false; !net_detected; ) {
+            std::vector<std::string> ip_addresses = xero::misc::get_host_ip_addresses();
+            for (auto addr : ip_addresses) {
+                if (xero::string::startsWith(addr, "10.14.25")) {
+                    // TODO: Don't hardcode IP address.  Derive from team number.
+                    net_detected = true;
+                    break;
+                }
+            }
+            if (!net_detected) {
+                // Wait before checking network interfaces again.
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+        }
+        const double wait_time = frc::Timer::GetFPGATimestamp() - start_time;
+        if (verbose) {
+            std::cout << "done. (" << wait_time << " sec wait time)\n";
+        }
+    }
+
     int setTrackingExposure(const std::string& device_name) {
         std::string command = std::string("v4l2-ctl -d ") + device_name + " -c exposure_auto=1 -c exposure_absolute=100 -c brightness=1 -c gain=30";
         int sysret = system(command.c_str());
@@ -340,15 +365,15 @@ namespace {
     // Start network table in client vs. server mode depending whether running on robot or not
     // Also speed up update rate.
     void startNetworkTable(nt::NetworkTableInstance& ntinst) {
+        
         // Figure out if running on robot so network table can be started in server vs. client mode
-        bool running_on_robot = false;
-        std::vector<std::string> ip_addresses = xero::misc::get_host_ip_addresses();
-        for (auto addr : ip_addresses) {
-            if (xero::string::startsWith(addr, "10.14.25")) {
-                // TODO: Don't hardcode IP address.  Derive from team number.
-                running_on_robot = true;
-                break;
-            }
+        const bool running_on_robot = true;
+        if (running_on_robot) {
+            waitForIpAddressOnRobot(true);
+            
+            // After network connected detected, wait a few more seconds
+            // so NT server starts up on the Rio.
+            std::this_thread::sleep_for(std::chrono::seconds(5));
         }
     
         // Start NetworkTables
