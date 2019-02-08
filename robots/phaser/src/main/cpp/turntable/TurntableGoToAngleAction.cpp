@@ -24,9 +24,6 @@ namespace xero {
         }
 
         void TurntableGoToAngleAction::run() {
-            Turntable &turntable = getTurntable() ;
-            MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
-            double dt = turntable.getRobot().getDeltaTime() ;
         }
 
         bool TurntableGoToAngleAction::isDone() {
