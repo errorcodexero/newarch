@@ -3,6 +3,7 @@
 #include <Robot.h>
 #include <MessageLogger.h>
 #include <xeromath.h>
+#include <cmath>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -16,6 +17,7 @@ namespace xero{
             msg_id_ = id ;
             
             getMotors(robot) ;
+            assert(motors_.size() > 0) ;
 
             int enc1 = robot.getSettingsParser().getInteger("hw:turntable:encoder1") ;
             int enc2 = robot.getSettingsParser().getInteger("hw:turntable:encoder2") ;           
@@ -24,31 +26,15 @@ namespace xero{
             min_angle_ = robot.getSettingsParser().getDouble("turntable:minimum") ;
             max_angle_ = robot.getSettingsParser().getDouble("turntable:maximum") ;
             degrees_per_tick_ = robot.getSettingsParser().getDouble("turntable:degrees_per_tick") ;
-            if (parser.isDefined("hw:turntable:limit:min_angle")) {
-                int lbottom = parser.getInteger("hw:turntable:limit:min_angle");
-                min_angle_switch_ = std::make_shared<frc::DigitalInput>(lbottom) ;
-            }
-
-            if (parser.isDefined("hw:turntable:limit:max_angle")) {
-                int ltop = parser.getInteger("hw:turntable:limit:max_angle");
-                max_angle_switch_ = std::make_shared<frc::DigitalInput>(ltop) ;
-            }
 
             //
-            // The height of the turntable when it is at the bottom of travel, relative to 
-            // the floor
+            // The angle of the turntable when the encoders are at zero, the calibration
+            // point.
             //
             turntable_offset_ = parser.getDouble("turntable:base") ;
             
             // And we start without calibration
             is_calibrated_ = false ;
-
-            // The base encoder value
-            encoder_value_ = 0 ;
-
-            // Initialize to false, only gets reset if we have a limit switch
-            is_max_angle_ = false ;
-            is_min_angle_ = false ;
         }
 
         Turntable::~Turntable() {
@@ -83,34 +69,36 @@ namespace xero{
                     talon->Follow(*motors_.front()) ;
 
                 motors_.push_back(talon) ;
+
+                i++ ;
             }
         }
 
         void Turntable::setMotorPower(double v) {
             if (is_calibrated_) {
-                //
-                // If we are calibrated, we know our height.  If our height exceeds
-                // the maximum allow height and we are trying to move up, we set the
-                // power to zero
-                //
-                double angdiff = xero::math::normalizeAngleDegrees(angle_ - min_angle_) ;
-                if (v < 0.0 && angdiff < 0.0)
-                    v = 0.0 ;
+                if (angle_ >= min_angle_ && angle_ <= max_angle_) {
+                    //
+                    // We are in the danger zone.  Should only move the turntable
+                    // to get out of the danger zone
+                    //
+                    double d1 = std::fabs(angle_ - min_angle_) ;
+                    double d2 = std::fabs(angle_ - max_angle_) ;
 
-                angdiff = xero::math::normalizeAngleDegrees(max_angle_ - angle_) ;
-                if (v > 0 && angdiff < 0.0)
-                    v = 0.0 ;
+                    if (d1 < d2) {
+                        // Closest to the min angle point
+                        if (v < 0)
+                            v = 0 ;
+                    }
+                    else {
+                        // closeest to the max angle point
+                        if (v > 0)
+                            v = 0 ;
+                    }
+                }
             }
 
-            //
-            // Now check the raw limit switch states
-            //
-            if (v > 0 && isMaxAngle())
-                v = 0.0 ;
-            else if (v < 0 && isMinAngle())
-                v = 0.0 ;
-
-            motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v);
+            if (motors_.size() > 0)
+                motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v);
         }
 
         bool Turntable::canAcceptAction(ActionPtr action) {
@@ -123,12 +111,6 @@ namespace xero{
 
         void Turntable::computeState(){
             encoder_value_ = encoder_->Get() ;
-            if (min_angle_switch_ != nullptr)
-                is_min_angle_ = min_angle_switch_->Get() ;
-
-            if (max_angle_switch_ != nullptr)
-                is_max_angle_ = max_angle_switch_->Get() ;
-
             if (is_calibrated_) {
                 angle_ = xero::math::normalizeAngleDegrees(encoder_value_ * degrees_per_tick_ + turntable_offset_) ;
                 speed_ = (angle_ - last_angle_) / getRobot().getDeltaTime() ;
@@ -145,7 +127,7 @@ namespace xero{
             //
             is_calibrated_ = true ;
             encoder_->Reset() ;
-            last_angle_ = turntable_offset_ ;
+            last_angle_ = 0.0 ;
         }
     }
 }

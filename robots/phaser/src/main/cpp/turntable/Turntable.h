@@ -13,6 +13,7 @@ namespace xero {
 
             friend class TurntableCalibrateAction ;
             friend class TurntableGoToAngleAction ;
+            friend class TurntableHoldAngleAction ;            
             friend class TurntablePowerAction ;
         
         public:
@@ -56,17 +57,11 @@ namespace xero {
 
             void getMotors(xero::base::Robot &robot) ;
 
-
-
         private:
             std::list<std::shared_ptr<TalonSRX>> motors_ ;
             std::shared_ptr<frc::Encoder> encoder_ ;
-            std::shared_ptr<frc::DigitalInput> min_angle_switch_ ;
-            std::shared_ptr<frc::DigitalInput> max_angle_switch_ ;
 
             int encoder_value_;
-            bool is_min_angle_;
-            bool is_max_angle_;
             double min_angle_;
             double max_angle_;
             double degrees_per_tick_;
@@ -81,6 +76,10 @@ namespace xero {
             //
             double turntable_offset_;
 
+            //
+            // This is the previous angle of the turntable, used to calculate the
+            // angular velocity of the turntable
+            //
             double last_angle_;
 
             uint64_t msg_id_ ;

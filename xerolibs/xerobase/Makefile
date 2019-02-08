@@ -4,6 +4,7 @@ SOURCES = \
 	ActionSequence.cpp\
 	ControllerBase.cpp\
 	DelayAction.cpp\
+	TerminateAction.cpp\
 	DispatchAction.cpp\
 	DriverGamepad.cpp\
 	OIDevice.cpp\

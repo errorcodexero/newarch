@@ -109,20 +109,16 @@ tankdrive:sim:width                                     24.0
 ######################################################################################
 
 #
-# If the turntable is physically between 0 and this angle, the limit switch is off
-# (active low) and therefore active
+# The boundaries for the limit switches and the mechanical hard stop for
+# the turntable
 #
-turntable:sim:limit_window                              5.0
-
-#
-# The boundary for the limit switch when the turntable is at maximum rotation
-#
-turntable:sim:max_limit_boundary                        340
+turntable:sim:max_limit_boundary                        -30
+turntable:sim:min_limit_boundary                        -60
 
 #
 # The number of degrees per encoder tick (assuming 200 ticks per revolution)
 #
-turntable:sim:degrees_per_tick                          1.8
+turntable:sim:degrees_per_tick                          0.5
 
 #
 # The number of degrees the turntable rotates per second per volt

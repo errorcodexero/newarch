@@ -118,6 +118,7 @@ namespace {
     nt::NetworkTableEntry nt_pipe_runtime_ms;
     nt::NetworkTableEntry nt_target_dist_pixels;
     nt::NetworkTableEntry nt_target_dist_inch;
+    nt::NetworkTableEntry nt_target_dist2_inch;
     nt::NetworkTableEntry nt_target_yaw_deg;
     nt::NetworkTableEntry nt_target_rect_ratio;
     nt::NetworkTableEntry nt_rect_l_angle_deg;
@@ -297,7 +298,10 @@ namespace {
     // Return rectangle aspect ratio.  Always >= 1.
     double getRectAspectRatio(const cv::RotatedRect& rect) {
         cv::Size2f rect_size = rect.size;
-        double aspect_ratio = rect_size.width / rect_size.height;
+        double aspect_ratio = 0;
+        if (rect_size.height != 0) {
+            aspect_ratio = rect_size.width / rect_size.height;
+        }
         if (aspect_ratio < 1.0 && aspect_ratio != 0) {
             aspect_ratio = 1.0/aspect_ratio;
         }
@@ -305,13 +309,16 @@ namespace {
     }
 
     // Check if a number is approximately equal to another, +- some tolerance (percentage/100) of the second number
-    bool isApproxEqual(double num1, double num2, double tolerance /*0->1*/) {
+    bool isApproxEqual(double num1, double num2, double tolerance /*0->1*/, double tolerance_abs = 0) {
         double min = num2 * (1.0 - tolerance);
         double max = num2 * (1.0 + tolerance);
         if (min > max) {  // Needed to handle negative numbers
             std::swap(min, max);
         }
-        return (num1 >= min) && (num1 <= max);
+        min = std::min(min, num2 - tolerance_abs);
+        max = std::max(max, num2 + tolerance_abs);
+        int res = (num1 >= min) && (num1 <= max);
+        return res;
     }
 
     // Ratio of difference between 2 numbers to the average of the two.
@@ -513,9 +520,10 @@ namespace {
                 
                 // Discard rectangles that don't have the expected angle
                 // Expected angles are -15 for one and -75 for the other.
-                const double rotate_angle_tol = 0.25;
-                if (!isApproxEqual(min_rect.angle+90, 15, rotate_angle_tol) &&
-                    !isApproxEqual(min_rect.angle+90, 75, rotate_angle_tol)) {
+                const double rot_ang_tol = 0.3;  /*Tolerance as fraction*/
+                const double rot_ang_tol_abs = 7;  /*+- that many degrees */
+                if (!isApproxEqual(min_rect.angle+90, 15, rot_ang_tol, rot_ang_tol_abs) &&
+                    !isApproxEqual(min_rect.angle+90, 75, rot_ang_tol, rot_ang_tol_abs)) {
                     //std::cout << "FALSE: Rect angle = " << min_rect.angle << "\n";
                     continue;
                 }
@@ -594,7 +602,8 @@ namespace {
 
             // Distance to target in inches
             // At 640x460 of C270 and 640x480 resolution, pixels_bet_centres * dist_to_target_in_FEET ~ 760
-            double dist_to_target = (760.0/dist_bet_centers) * 12.0/*inches_per_foot*/ * static_cast<double>(width_pixels)/640.0;
+            // Product at 432x240 is 650.  So not proportional to width.
+            double dist_to_target = (650.0/dist_bet_centers) * 12.0/*inches_per_foot*/ * static_cast<double>(width_pixels)/640.0;
 
             // At this point, top 2 rectangles meet all the criteria so likely have a valid target.
             // Draw them in green.
@@ -635,6 +644,7 @@ namespace {
             double r_rect_dist_inch = 12.0 * (206.0/r_rect_height) * (height_pixels/240.0);
             double bot_x_offset_inch = (pow(r_rect_dist_inch,2) - pow(l_rect_dist_inch,2))/(2*dist_bet_centers_inch);
             double bot_z_offset_inch = sqrt(pow(l_rect_dist_inch,2) - pow(bot_x_offset_inch - 0.5*dist_bet_centers_inch,2));
+            double dist2_inch = sqrt(pow(bot_x_offset_inch,2) + pow(bot_z_offset_inch,2));
             bot_x_offset_inch = -bot_x_offset_inch;  // Flip X coordinate to negative if bot on left of target, not opposite.
             nt_rect_l_dist_inch.SetDouble(l_rect_dist_inch);
             nt_rect_r_dist_inch.SetDouble(r_rect_dist_inch);
@@ -657,6 +667,7 @@ namespace {
             // Publish other results on network table
             nt_target_dist_pixels.SetDouble(dist_bet_centers);
             nt_target_dist_inch.SetDouble(dist_to_target);
+            nt_target_dist2_inch.SetDouble(dist2_inch);
             nt_target_valid.SetBoolean(true);
 
             // Flush NT updates after all data has been posted.
@@ -900,6 +911,8 @@ int main(int argc, char* argv[]) {
     nt_target_dist_pixels.SetDefaultDouble(0);
     nt_target_dist_inch = nt_table->GetEntry("dist_inch");
     nt_target_dist_inch.SetDefaultDouble(0);
+    nt_target_dist2_inch = nt_table->GetEntry("dist2_inch");
+    nt_target_dist2_inch.SetDefaultDouble(0);
     nt_target_yaw_deg = nt_table->GetEntry("yaw_deg");
     nt_target_yaw_deg.SetDefaultDouble(0);
     nt_target_rect_ratio = nt_table->GetEntry("rect_ratio");

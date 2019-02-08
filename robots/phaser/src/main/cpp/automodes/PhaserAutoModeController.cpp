@@ -11,6 +11,10 @@
 #include <lifter/LifterCalibrateAction.h>
 #include <lifter/LifterGoToHeightAction.h>
 #include <lifter/LifterHoldHeightAction.h>
+#include <turntable/TurntableCalibrateAction.h>
+#include <turntable/TurntableGoToAngleAction.h>
+#include <turntable/TurnTableHoldAngleAction.h>
+#include <turntable/TurntablePowerAction.h>
 #include <DelayAction.h>
 #include <TerminateAction.h>
 #include <frc/DriverStation.h>
@@ -71,6 +75,10 @@ namespace xero {
             case 8:
                 mode = testVision() ;
                 break ;
+
+            case 9:
+                mode = testTurntable() ;
+                break ;
             }
             setAction(mode) ;
         }
@@ -96,6 +104,31 @@ namespace xero {
             mode->pushSubActionPair(lifter, act) ;            
 
             return mode ;                
+        }
+
+        ActionSequencePtr PhaserAutoModeController::testTurntable() {
+            std::string name = "Test Turntable" ;
+            std::string desc = "Test the turntable" ;
+            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto turntable = phaserrobot->getTurntable() ;
+
+            act = std::make_shared<TurntableCalibrateAction>(*turntable) ;
+            mode->pushSubActionPair(turntable, act) ;
+
+            act = std::make_shared<TurntablePowerAction>(*turntable, 0.05) ;
+            mode->pushSubActionPair(turntable, act) ;
+
+            act = std::make_shared<DelayAction>(60.0) ;
+            mode->pushAction(act) ;
+
+            act = std::make_shared<TurntablePowerAction>(*turntable, -0.05) ;
+            mode->pushSubActionPair(turntable, act) ;           
+
+            return mode ;             
         }
 
 

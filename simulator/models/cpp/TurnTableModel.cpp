@@ -1,11 +1,13 @@
 #include <TurnTableModel.h>
 #include <frc/RobotSimBase.h>
+#include <xeromath.h>
+#include <cmath>
 using namespace frc ;
 
 namespace xero {
     namespace sim {
         TurnTableModel::TurnTableModel(RobotSimBase &simbase) : SubsystemModel(simbase, "turntable") {
-            limit_window_ = simbase.getSettingsParser().getDouble("turntable:sim:limit_window") ;
+            min_limit_boundary_ = simbase.getSettingsParser().getDouble("turntable:sim:min_limit_boundary") ;
             max_limit_boundary_ = simbase.getSettingsParser().getDouble("turntable:sim:max_limit_boundary") ;
 
             angle_ = 0.0 ;
@@ -38,7 +40,11 @@ namespace xero {
 
             line = "  MaxLimit: " ;
             line += (getMaxLimit() ? "ON" : "OFF") ;
-            lines.push_back(line) ;            
+            lines.push_back(line) ;
+            
+            line = "  Encoder: " ;
+            line += std::to_string(encoder_value_) ;
+            lines.push_back(line) ;
         }
 
         std::string TurnTableModel::toString() {
@@ -54,25 +60,42 @@ namespace xero {
         }
 
         void TurnTableModel::run(double dt) {
-            double dh = power_ * degrees_per_sec_per_volt_ * dt ;
-            angle_ += dh ;
+            //
+            // Note, this only works for the phaser turntable
+            //
+            double ddeg = power_ * degrees_per_sec_per_volt_ * dt ;
+            angle_ = xero::math::normalizeAngleDegrees(angle_ + ddeg) ;
 
-            if (angle_ < 0.0)
-                angle_ = 0.0 ;
+            double encangle = angle_ ;
+            if (angle_ < max_limit_boundary_)
+                encangle += 360.0 ;
 
-            int encval = static_cast<int>(angle_ / degrees_per_tick_) ;
+            encoder_value_ = static_cast<int>(encangle / degrees_per_tick_) ;
             if (enc_ != nullptr)
-                enc_->SimulatorSetValue(encval) ;
+                enc_->SimulatorSetValue(encoder_value_) ;
 
-            if (angle_ < limit_window_)
-                min_limit_ = false ;
-            else
-                min_limit_ = true ;
+            min_limit_ = false ;
+            max_limit_ = false ;
 
-            if (angle_ > max_limit_boundary_ - limit_window_)
-                max_limit_ = false ;
-            else
-                max_limit_ = true ;
+            if (angle_ <= max_limit_boundary_ && angle_ >= min_limit_boundary_) {
+                //
+                // We are at a boundary, set a limit switch and restrict movement
+                // to the mechanical hard stop
+                //
+                double d1 = std::fabs(angle_ - max_limit_boundary_) ;
+                double d2 = std::fabs(angle_ - min_limit_boundary_) ;
+
+                if (d1 < d2) {
+                    // Closest to the max_boundary
+                    angle_ = max_limit_boundary_ ;
+                    min_limit_ = true ;
+                }
+                else {
+                    // Closest to the min_boundary
+                    angle_ = min_limit_boundary_ ;
+                    max_limit_ = true ;
+                }
+            }
 
             if (min_limit_switch_ != nullptr)
                 min_limit_switch_->SimulatorSetValue(min_limit_) ;

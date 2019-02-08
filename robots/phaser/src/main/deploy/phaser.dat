@@ -35,6 +35,7 @@ hw:lifter:motor:2                                               9               
 
 hw:turntable:encoder1                                           4               # Digital IO
 hw:turntable:encoder2                                           5               # Ditigal IO
+hw:turntable:motor:1                                            7               # TALON SRX
 
 hw:linesensor:0                                                 21              # Digital IO
 hw:linesensor:1                                                 22              # Digital IO
