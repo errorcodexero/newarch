@@ -11,6 +11,9 @@ namespace xero {
         /// \brief A class capable of doing work
         class ParallelAction : public Action {
         public:
+            ParallelAction() ;
+            virtual ~ParallelAction() ;
+
             /// \brief add a parallel action
             /// \param action an action to be added to the parallel action
             void addAction(std::shared_ptr<Action> action) {

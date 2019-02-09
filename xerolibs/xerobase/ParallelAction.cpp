@@ -2,6 +2,12 @@
 
 namespace xero {
     namespace base {
+        ParallelAction::ParallelAction() {            
+        }
+
+        ParallelAction::~ParallelAction() {            
+        }
+
         /// \brief Start the action; called once per action when it starts
         /// This method calls the start method on each of the parallel actions to be executed
         void ParallelAction::start() {

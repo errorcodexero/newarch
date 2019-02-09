@@ -1,12 +1,14 @@
 #include "Action.h"
 #include "ITerminator.h"
 #include "MessageLogger.h"
+#include <list>
+#include <memory>
 
 namespace xero{
     namespace base {
         class TerminateAction : public Action {
         public:
-            TerminateAction(ActionPtr a, ITerminator &t, xero::misc::MessageLogger &logger) ;
+            TerminateAction(ActionPtr a, xero::misc::MessageLogger &logger) ;
 
             virtual void start() ;
 
@@ -18,9 +20,13 @@ namespace xero{
 
             virtual std::string toString() ;
 
+            void addTerminator(std::shared_ptr<ITerminator> term) {
+                terminators_.push_back(term) ;
+            }
+
         private: 
             ActionPtr action_ ;
-            ITerminator& term_ ;
+            std::list<std::shared_ptr<ITerminator>> terminators_ ;
             bool is_done_ ;
             xero::misc::MessageLogger &logger_ ;
         };

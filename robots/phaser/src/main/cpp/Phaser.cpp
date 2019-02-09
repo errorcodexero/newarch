@@ -45,7 +45,9 @@ namespace xero {
         
         void Phaser::loadPaths() {
             auto paths = getPathManager() ;
-            paths->loadPath("CurveLeft") ;
+            paths->loadPath("HabCenterCargoFrontLeft") ;
+            paths->loadPath("LSLeftCargoFrontLeft") ;
+            paths->loadPath("LSLeftCargoFrontRight") ;
         }
         
         void Phaser::RobotHardwareInit() {

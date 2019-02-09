@@ -6,7 +6,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base{
-        TerminateAction::TerminateAction(ActionPtr a, ITerminator &t, MessageLogger &logger): term_(t), logger_(logger)
+        TerminateAction::TerminateAction(ActionPtr a, MessageLogger &logger): logger_(logger)
         {
             action_ = a ;
         }
@@ -14,12 +14,6 @@ namespace xero {
         void TerminateAction::start(){
             action_->start() ;
             is_done_ = action_->isDone() ;
-
-            if (is_done_) {
-                logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
-                logger_ << "Child action finished in start" ;
-                logger_.endMessage() ;            
-            }
         }
 
         void TerminateAction::run() {
@@ -27,17 +21,17 @@ namespace xero {
                 action_->run() ;
                 is_done_ = action_->isDone() ;
 
-                if (is_done_) {
-                    logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
-                    logger_ << "Child action finished in run" ;
-                    logger_.endMessage() ;                     
+                bool termstate = false ;
+                for(auto term : terminators_) {
+                    if (term->shouldTerminate())
+                    {
+                        termstate = true ;
+                        break ;
+                    }
                 }
-                if(!is_done_ && term_.shouldTerminate()) {
-                    logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
-                    logger_ << "Terminating action based on terminator" ;
-                    logger_.endMessage() ;
+
+                if(termstate)
                     is_done_ = true;
-                }
             }
         }
 
