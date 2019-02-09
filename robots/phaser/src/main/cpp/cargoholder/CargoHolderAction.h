@@ -26,7 +26,6 @@ namespace xero {
             }
 
             ~CargoHolderAction(){
-
             }
 
             virtual void start() ;

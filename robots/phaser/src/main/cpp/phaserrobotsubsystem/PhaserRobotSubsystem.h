@@ -3,6 +3,8 @@
 #include "phaseroi/PhaserOISubsystem.h"
 #include "lightsensor/LightSensorSubsystem.h"
 #include "hatchholder/HatchHolder.h"
+#include "cargoholder/CargoHolder.h"
+#include "cargointake/CargoIntake.h"
 #include "turntable/TurnTable.h"
 #include "phasercameratracker/PhaserCameraTracker.h"
 #include <tankdrive/TankDrive.h>
@@ -54,6 +56,8 @@ namespace xero {
             std::shared_ptr<PhaserOISubsystem> oi_ ;
             std::shared_ptr<xero::base::LightSensorSubsystem> light_sensor_ ;
             std::shared_ptr<HatchHolder> hatch_holder_ ;
+            std::shared_ptr<CargoHolder> cargo_holder_ ;
+            std::shared_ptr<CargoIntake> cargo_intake_ ;
             std::shared_ptr<xero::base::Lifter> lifter_ ;
             std::shared_ptr<PhaserCameraTracker> tracker_ ;
             std::shared_ptr<Turntable> turntable_ ;

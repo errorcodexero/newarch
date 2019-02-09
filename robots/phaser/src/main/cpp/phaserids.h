@@ -15,3 +15,6 @@
 #define MSG_GROUP_PHASER_TURNTABLE                  (1ull << 33)
 
 #define MSG_GROUP_VISION_DRIVING                    (1ull << 34)
+
+#define MSG_GROUP_CARGO_INTAKE                      (1ull << 35)
+
