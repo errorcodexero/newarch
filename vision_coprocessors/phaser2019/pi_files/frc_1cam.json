@@ -32,39 +32,6 @@
             ],
             "white balance": 0,
             "width": 432
-        },
-        {
-            "brightness": 1,
-            "exposure": 1,
-            "fps": 30,
-            "height": 240,
-            "name": "LogitechC920-2",
-            "path": "/dev/video1",
-            "pixel format": "mjpeg",
-            "properties": [
-                {
-                    "name": "gain",
-                    "value": 0
-                },
-                {
-                    "name": "saturation",
-                    "value": 50
-                },
-                {
-                    "name": "exposure_auto_priority",
-                    "value": 0
-                },
-                {
-                    "name": "exposure_absolute",
-                    "value": 1
-                },
-                {
-                    "name": "white_balance_temperature_auto",
-                    "value": 0
-                }
-            ],
-            "white balance": 0,
-            "width": 432
         }
     ],
     "ntmode": "server",
