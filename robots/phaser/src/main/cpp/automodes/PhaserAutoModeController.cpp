@@ -101,8 +101,18 @@ namespace xero {
             mode->pushSubActionPair(lifter, act) ;
 
             act = std::make_shared<LifterHoldHeightAction>(*lifter, 45.0) ;
-            mode->pushSubActionPair(lifter, act) ;            
+            mode->pushSubActionPair(lifter, act, false) ;   
 
+#ifdef NOTYET
+            act = std::make_shared<DelayAction>(10.0) ;
+            mode->pushAction(act) ;  
+
+            act = std::make_shared<LifterGoToHeightAction>(*lifter, 20.0) ;
+            mode->pushSubActionPair(lifter, act) ;
+
+            act = std::make_shared<LifterHoldHeightAction>(*lifter, 20.0) ;
+            mode->pushSubActionPair(lifter, act, false) ;
+#endif
             return mode ;                
         }
 

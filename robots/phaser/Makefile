@@ -15,7 +15,13 @@ SOURCES = \
 	src/main/cpp/turntable/TurntableHoldAngleAction.cpp\
 	src/main/cpp/turntable/TurntablePowerAction.cpp\
 	src/main/cpp/phasercameratracker/PhaserCameraTracker.cpp\
-	src/main/cpp/phasercameratracker/DriveByVisionAction.cpp
+	src/main/cpp/phasercameratracker/DriveByVisionAction.cpp\
+	src/main/cpp/cargoholder/CargoHolder.cpp\
+	src/main/cpp/cargoholder/CargoHolderAction.cpp\
+	src/main/cpp/cargointake/CargoIntake.cpp\
+	src/main/cpp/cargointake/CargoIntakeAction.cpp\
+	src/main/cpp/cargointake/CargoIntakeDeployAction.cpp\
+	src/main/cpp/cargointake/CargoIntakeRetractAction.cpp
 
 TARGET = phaser
 

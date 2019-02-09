@@ -36,11 +36,11 @@ hw:hatchholder:finger                2                                  # Soleno
 hw:hatchholder:sensor               10                                  # DIO 10
 
 # Cargo Holder
-hw:cargoholder:motor                10                                  # TalonSRX 10
+hw:cargoholder:motor                10                                  # VictorSPX 10
 hw:cargoholder:sensor               11                                  # DIO 11
 
 # Hatch Intake
-hw:hatchintake:motor                11                                  # TalonSRX 11
+hw:hatchintake:motor                11                                  # VictorSPX 11
 hw:hatchintake:sensor               12                                  # DIO 12
 hw:hatchintake:deploy                3                                  # Solenoid 3
 
@@ -50,7 +50,7 @@ hw:follower:sensor:2                22                                  # DIO 14
 hw:follower:sensor:3                23                                  # DIO 15
 
 # Cargo Intake
-hw:cargointake:motor                11                                  # TalonSRX 12
+hw:cargointake:motor                12                                  # VictorSPX 12
 hw:cargointake:deploy                5                                  # Solenoid 5
 
 # Climber
@@ -133,6 +133,6 @@ turntable:sim:degrees_per_sec_per_volt                  90.0
 
 lifter:sim:bottom_limit_height                          11.375
 lifter:sim:top_limit_height                             72.0
-lifter:sim:inches_per_tick                              0.01
+lifter:sim:inches_per_tick                              0.08327
 lifter:sim:inches_per_sec_per_volt                      18.0
-lifter:sim:gravity_equivalent_speed                     -2.0
+lifter:sim:gravity_equivalent_speed                     -1.0

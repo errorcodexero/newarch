@@ -24,7 +24,7 @@ hw:tankdrive:invert:encoders:right                              true
 
 hw:hatchholder:arm                                              1               # Solenoid 1
 hw:hatchholder:finger                                           2               # Solenoid 2
-hw:hatchholder:sensor                                           10               # Digital IO
+hw:hatchholder:sensor                                           10              # Digital IO
 
 hw:lifter:encoder1                                              6               # Digital IO
 hw:lifter:encoder2                                              7               # Digital IO
@@ -43,6 +43,12 @@ hw:linesensor:2                                                 23              
 
 hw:driverstation:hid:driver                                     0
 hw:driverstation:hid:oi                                         2
+
+hw:cargoholder:sensor                                           11              # Digital IO
+hw:cargoholder:motor                                            10              # Victor SPX
+
+hw:cargointake:motor                                            12              # Victor SPX
+hw:cargointake:solenoid                                         5               # Solenoid
 
 ###################################################################
 #
@@ -120,18 +126,21 @@ lifter:base							                            11.375
 lifter:inches_per_tick                                          0.08327
 lifter:max_height                                               86.0
 lifter:min_height                                               11.375
-lifter:threshold                                                3.0
-lifter:follower:kp                                              0.12
-lifter:follower:ka                                              0.001
-lifter:follower:kv                                              0.011
+lifter:threshold                                                1.0
+lifter:maxv                                                     12
+lifter:maxa                                                     12
+lifter:maxd                                                     -12
+lifter:follower:kp                                              0.4
+lifter:follower:ka                                              0.03
+lifter:follower:kv                                              0.018
 lifter:follower:kd                                              0.0
-lifter:hold:p                                                   0.0
+lifter:hold:p                                                   -0.1
 lifter:hold:i                                                   0.0
 lifter:hold:d                                                   0.0
 lifter:hold:f                                                   0.0
 lifter:hold:a                                                   0.0
-lifter:hold:min                                                 0.0
-lifter:hold:max                                                 0.0
+lifter:hold:min                                                 -0.5
+lifter:hold:max                                                 0.5
 lifter:hold:imax                                                0.0
 
 cameratracker:distance_threshold                                0.0

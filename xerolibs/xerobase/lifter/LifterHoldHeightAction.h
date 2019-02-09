@@ -23,8 +23,13 @@ namespace xero {
         private:
             double target_ ;
             double threshold_ ;
+            double start_ ;
             bool is_done_ ;
             xero::misc::PIDCtrl pid_ctrl_ ;
+
+            int plotid_ ;
+            static std::list<std::string> plot_columns_ ;
+            size_t index_ ;
         } ;
     }
 }

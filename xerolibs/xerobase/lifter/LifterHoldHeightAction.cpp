@@ -8,6 +8,11 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
+        std::list<std::string> LifterHoldHeightAction::plot_columns_ = {
+            "time", 
+            "tpos", "apos", "out"
+        } ;
+
         LifterHoldHeightAction::LifterHoldHeightAction(Lifter &lifter, double target) : LifterAction(lifter) {
             target_ = target ;
             threshold_ = getLifter().getRobot().getSettingsParser().getDouble("lifter:threshold") ;
@@ -34,13 +39,26 @@ namespace xero {
             }           
             else {
                 is_done_ = false ;
+                start_ = lifter.getRobot().getTime() ;
+                plotid_ = getLifter().getRobot().startPlot("LifterHoldHeight", plot_columns_) ;
+                index_ = 0 ;                
             } 
         }
 
         void LifterHoldHeightAction::run() {
-            double dist = target_ - getLifter().getHeight() ;
+            Lifter &lifter = getLifter() ;               
+            double dist = target_ - lifter.getHeight() ;
             double out = pid_ctrl_.getOutput(0, dist, 0, getLifter().getRobot().getDeltaTime()) ;
-            getLifter().setMotorPower(out) ;
+            double elapsed = lifter.getRobot().getTime() - start_ ;
+
+            lifter.setMotorPower(out) ;
+
+            lifter.getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
+            lifter.getRobot().addPlotData(plotid_, index_, 1, target_) ;
+            lifter.getRobot().addPlotData(plotid_, index_, 2, lifter.getHeight()) ;
+            lifter.getRobot().addPlotData(plotid_, index_, 3, out) ;
+
+            index_++ ;
         }
 
         bool LifterHoldHeightAction::isDone() {
