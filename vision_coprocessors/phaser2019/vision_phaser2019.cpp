@@ -5,18 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+// C++ lib
 #include <cstdio>
 #include <string>
 #include <thread>
 #include <vector>
 #include <algorithm>
-
 #include <iostream>
-#include <stdlib.h>    // For system()
+
+// C lib
+#include <stdlib.h>    // For system(), getenv()
 #include <math.h>
 #include <assert.h>
 
+// FRC
 #include <networktables/NetworkTableInstance.h>
+#include <cameraserver/CameraServer.h>
 #include <vision/VisionPipeline.h>
 #include <vision/VisionRunner.h>
 #include <wpi/StringRef.h>
@@ -25,8 +29,7 @@
 #include <wpi/raw_ostream.h>
 #include <frc/Timer.h>
 
-#include <cameraserver/CameraServer.h>
-
+// OpenCV
 #include <opencv2/core/core.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
@@ -36,7 +39,6 @@
 #include <FileUtils.h>
 #include <StringUtils.h>
 #include <GetHostIpAddresses.h>
-
 //#include "SettingsParser.h"
 #include "params_parser.h"
 
@@ -273,7 +275,7 @@ namespace {
 
     void waitForIpAddressOnRobot(bool verbose = false) {
         if (verbose) {
-            std::cout << "Waiting for network interface...";
+            std::cout << "Waiting for network interface..." << std::flush;
         }
         const double start_time = frc::Timer::GetFPGATimestamp();
         for (bool net_detected=false; !net_detected; ) {
@@ -292,7 +294,7 @@ namespace {
         }
         const double wait_time = frc::Timer::GetFPGATimestamp() - start_time;
         if (verbose) {
-            std::cout << "done. (" << wait_time << " sec wait time)\n";
+            std::cout << "done. (" << wait_time << " sec wait time)\n" << std::flush;
         }
     }
 
@@ -364,11 +366,12 @@ namespace {
 
     // Start network table in client vs. server mode depending whether running on robot or not
     // Also speed up update rate.
-    void startNetworkTable(nt::NetworkTableInstance& ntinst) {
+    void startNetworkTable(nt::NetworkTableInstance& ntinst, bool server_mode) {
         
-        // Figure out if running on robot so network table can be started in server vs. client mode
+        // If running in client mode, assume on the robot and wait until network interface is up.
+        // (No Gaurantee the Rio is ready, but this is necessary to communicate with the Rio.)
         const bool running_on_robot = true;
-        if (running_on_robot) {
+        if (!server_mode) {
             waitForIpAddressOnRobot(true);
             
             // After network connected detected, wait a few more seconds
@@ -377,9 +380,8 @@ namespace {
         }
     
         // Start NetworkTables
-        const bool nt_server = !running_on_robot;
         ntinst = nt::NetworkTableInstance::GetDefault();
-        if (nt_server) {
+        if (server_mode) {
             wpi::outs() << "Setting up NetworkTables server\n";
             ntinst.StartServer();
         } else {
@@ -923,8 +925,10 @@ int main(int argc, char* argv[]) {
     height_pixels = params.getValue("vision:camera:height_pixels");
 
     // Start network table in client or server mode + configure it
+    const char* nt_server_envar = getenv("NT_SERVER");
+    const bool nt_server_mode = ((nt_server_envar != nullptr) && (std::string(nt_server_envar) == "1"));
     ntinst = nt::NetworkTableInstance::GetDefault();
-    startNetworkTable(ntinst);
+    startNetworkTable(ntinst, nt_server_mode);
     
     // Prepare network table variables that tracker will populate
     std::shared_ptr<NetworkTable> nt_table = ntinst.GetTable("TargetTracking");
