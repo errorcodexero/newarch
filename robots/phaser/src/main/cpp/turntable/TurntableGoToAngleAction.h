@@ -20,10 +20,16 @@ namespace xero {
             virtual std::string toString() ;
 
         private:
+            double getAngleDifference(double start, double end) ;
+
+        private:
             bool is_done_ ;
             double target_ ;
             double output_ ;
             double start_time_ ;
+
+            double min_keepout_angle_ ;
+            double max_keepout_angle_ ;
             
             double threshold_ ;
             std::shared_ptr<xero::misc::PIDACtrl> ctrl_ ;

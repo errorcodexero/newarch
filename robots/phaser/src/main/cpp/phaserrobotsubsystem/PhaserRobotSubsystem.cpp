@@ -24,7 +24,6 @@ namespace xero {
             light_sensor_ = std::make_shared<LightSensorSubsystem>(robot, "linesensor", "hw:linesensor:", 3) ;    
             addChild(light_sensor_) ;
 
-#ifdef SIMULATOR
             hatch_holder_ = std::make_shared<HatchHolder>(robot) ;
             addChild(hatch_holder_) ;
 
@@ -33,7 +32,7 @@ namespace xero {
 
             turntable_ = std::make_shared<Turntable>(robot, MSG_GROUP_PHASER_TURNTABLE) ;
             addChild(turntable_) ;
-#endif
+            
             tracker_ = std::make_shared<PhaserCameraTracker>(robot) ;
             tracker_->setCameraIndex(0) ;
             tracker_->setCameraMode(CameraTracker::CameraMode::TargetTracking) ;            

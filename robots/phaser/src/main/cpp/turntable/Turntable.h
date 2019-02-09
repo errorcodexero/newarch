@@ -35,12 +35,12 @@ namespace xero {
                 return speed_ ;
             }
 
-            bool isMaxAngle() {
-                return max_angle_ ;
+            double getMinKeepOutAngle() const {
+                return min_angle_ ;
             }
 
-            bool isMinAngle() {
-                return min_angle_ ;
+            double gettMaxKeepoutAngle() const {
+                return max_angle_ ;
             }
 
             bool isCalibrated() {

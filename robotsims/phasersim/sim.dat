@@ -123,7 +123,7 @@ turntable:sim:degrees_per_tick                          0.5
 #
 # The number of degrees the turntable rotates per second per volt
 #
-turntable:sim:degrees_per_sec_per_volt                  180.0
+turntable:sim:degrees_per_sec_per_volt                  90.0
 
 ######################################################################################
 #

@@ -16,6 +16,37 @@
       "name": "WPILib roboRIO Debug",
       "request": "launch",
       "desktop": false,
-    }
+    },
+    {
+      "name": "(gdb) Launch",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/phaser/phaser.exe",
+      "args": 
+        [
+          "--simfile","logs/SIM",
+          "--robotfile", "logs/ROBOT",
+          "--test", "0.0",
+          "--start", "0",
+          "--auto","60.0",
+          "--oper", "0.0",
+          "--simscreen",
+          "--simprop", "pos=64,162.0",
+          "--simprop","autovalue=0.9"
+        ],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": true,
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:\\cygwin64\\bin\\gdb.exe",
+      "setupCommands": [
+          {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+          }
+      ],
+    }    
   ]
 }

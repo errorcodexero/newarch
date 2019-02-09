@@ -99,10 +99,19 @@ linefollow:adjust                                               .35
 #
 # Variables for the turntable
 #
-turntable:minimum                                               -20
-turntable:maximum                                               -40
+turntable:keepout:minimum                                       -60
+turntable:keepout:maximum                                       -30
 turntable:degrees_per_tick                                      0.5
+turntable:maxa                                                  45
+turntable:maxd                                                  -45
+turntable:maxv                                                  45
 turntable:base                                                  0.0
+turntable:threshold                                             1.0
+turntable:follower:kv                                           0.011111
+turntable:follower:ka                                           0.0
+turntable:follower:kp                                           0.0
+turntable:follower:kd                                           0.0
+turntable:maxa
 
 #
 # Variables for the lifter

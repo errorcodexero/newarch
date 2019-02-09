@@ -119,14 +119,20 @@ namespace xero {
             act = std::make_shared<TurntableCalibrateAction>(*turntable) ;
             mode->pushSubActionPair(turntable, act) ;
 
-            act = std::make_shared<TurntablePowerAction>(*turntable, 0.05) ;
+            act = std::make_shared<TurntableGoToAngleAction>(*turntable, -20) ;
             mode->pushSubActionPair(turntable, act) ;
 
-            act = std::make_shared<DelayAction>(60.0) ;
+            act = std::make_shared<DelayAction>(10.0) ;
             mode->pushAction(act) ;
 
-            act = std::make_shared<TurntablePowerAction>(*turntable, -0.05) ;
-            mode->pushSubActionPair(turntable, act) ;           
+            act = std::make_shared<TurntableGoToAngleAction>(*turntable, 180) ;
+            mode->pushSubActionPair(turntable, act) ;    
+
+            act = std::make_shared<DelayAction>(10.0) ;
+            mode->pushAction(act) ;
+            
+            act = std::make_shared<TurntableGoToAngleAction>(*turntable, 0) ;
+            mode->pushSubActionPair(turntable, act) ;                        
 
             return mode ;             
         }

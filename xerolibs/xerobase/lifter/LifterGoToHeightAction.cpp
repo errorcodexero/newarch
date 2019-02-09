@@ -71,7 +71,6 @@ namespace xero {
                     is_done_ = true ;
                     lifter.getRobot().endPlot(plotid_) ;
                 } else {
-                    is_done_ = true ;
                     //
                     // We reached the end of the profile, but are not where we
                     // want to be.  Create a new profile to get us there.

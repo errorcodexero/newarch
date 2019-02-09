@@ -308,7 +308,10 @@ const std::string &SettingsParser::getString(const std::string &key, const std::
 }
 
 const Setting &SettingsParser::getSetting(const std::string &key, const std::string &type) const {
-    assert(isDefinedOnGet(key, type));
+    if (!isDefinedOnGet(key, type)) {
+        std::cerr << "missing parameter: " << key << std::endl ;
+        assert(0) ;
+    }
     return settings_.find(key)->second;
 }
 

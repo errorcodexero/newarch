@@ -23,8 +23,8 @@ namespace xero{
             int enc2 = robot.getSettingsParser().getInteger("hw:turntable:encoder2") ;           
             encoder_ = std::make_shared<frc::Encoder>(enc1, enc2) ;
 
-            min_angle_ = robot.getSettingsParser().getDouble("turntable:minimum") ;
-            max_angle_ = robot.getSettingsParser().getDouble("turntable:maximum") ;
+            min_angle_ = robot.getSettingsParser().getDouble("turntable:keepout:minimum") ;
+            max_angle_ = robot.getSettingsParser().getDouble("turntable:keepout:maximum") ;
             degrees_per_tick_ = robot.getSettingsParser().getDouble("turntable:degrees_per_tick") ;
 
             //

@@ -18,18 +18,60 @@ namespace xero {
             threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:threshold") ;
             ctrl_ = std::make_shared<PIDACtrl>(turntable.getRobot().getSettingsParser(), "turntable:follower:kv", 
                                 "turntable:follower:ka", "turntable:follower:kp", "turntable:follower:kd") ;
-            profile_ = std::make_shared<TrapezoidalProfile>(40, -40, 40) ;
+
+            double maxv = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxv")  ;
+            double maxa = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxa")  ;
+            double maxd = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxd")  ;                        
+            profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
         }
 
         TurntableGoToAngleAction::TurntableGoToAngleAction(Turntable &turntable, const std::string &name) : TurntableAction(turntable) {
             target_ = getTurntable().getRobot().getSettingsParser().getDouble(name) ;
             threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:threshold") ;
             ctrl_ = std::make_shared<PIDACtrl>(turntable.getRobot().getSettingsParser(), "turntable:follower:kv", 
-                                "turntable:follower:ka", "turntable:follower:kp", "turntable:follower:kd") ;    
-            profile_ = std::make_shared<TrapezoidalProfile>(40, -40, 40) ;    
+                                "turntable:follower:ka", "turntable:follower:kp", "turntable:follower:kd") ;  
+                                  
+            double maxv = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxv")  ;
+            double maxa = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxa")  ;
+            double maxd = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxd")  ;                        
+            profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;   
         }
 
         TurntableGoToAngleAction::~TurntableGoToAngleAction() {
+        }
+
+        double TurntableGoToAngleAction::getAngleDifference(double start, double end) {
+            double i1, i2, result;
+
+            double minangle = getTurntable().getMinKeepOutAngle() ;
+            double maxangle = getTurntable().gettMaxKeepoutAngle() ;
+
+            if (start <= minangle && (end > minangle || end < start))
+            {
+                i1 = start - maxangle + 360;
+
+                i2 = maxangle - end;
+                if (i2 >= 360.0)
+                    i2 -= 360.0;
+
+                result = -(i1 + i2);
+                if (result <= -360)
+                    result += 360;
+            }
+            else 
+            {
+                i1 = maxangle - start;
+
+                i2 = end - maxangle;
+                if (i2 < 0)
+                    i2 += 360.0;
+
+                result = i1 + i2;
+                if (result >= 360)
+                    result -= 360;
+            }
+
+            return result;            
         }
 
         void TurntableGoToAngleAction::start() {
@@ -45,7 +87,7 @@ namespace xero {
                 is_done_ = true ;
             }
             else {
-                double dist = target_ - getTurntable().getAngleValue() ;
+                double dist = getAngleDifference(getTurntable().getAngleValue(), target_) ;
                 if (std::fabs(dist) < threshold_)
                     is_done_ = true ;
                 else {
@@ -53,6 +95,11 @@ namespace xero {
                     profile_->update(dist, 0.0, 0.0) ;
                     start_time_ = getTurntable().getRobot().getTime() ;
                     start_angle_ = getTurntable().getAngleValue() ;
+
+                    MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::error) ;
+                    logger << "TurntableGoToAngle Velocity Profile: " << profile_->toString() ;
+                    logger.endMessage() ;                    
 
                     plotid_ = getTurntable().getRobot().startPlot("TurntableGoToAngle", plot_columns_) ;
                     index_ = 0 ;
@@ -66,12 +113,13 @@ namespace xero {
             double elapsed = turntable.getRobot().getTime() - start_time_ ;
             double speed = turntable.getVelocity() ;
             double traveled = getTurntable().getAngleValue() - start_angle_ ;
-            double delta = target_ - getTurntable().getAngleValue() ;
+            double delta = getAngleDifference(getTurntable().getAngleValue(), target_) ;
 
             if (elapsed > profile_->getTotalTime())
             {
                 if (std::fabs(delta) < threshold_) {
                     is_done_ = true ;
+                    turntable.setMotorPower(0.0) ;
                     turntable.getRobot().endPlot(plotid_) ;
                 } else {
                     is_done_ = true ;
