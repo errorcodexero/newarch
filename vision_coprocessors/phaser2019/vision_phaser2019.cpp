@@ -567,20 +567,17 @@ namespace {
             cv::inRange(hsv_image,
                         cv::Scalar(hsv_ranges[0], hsv_ranges[2], hsv_ranges[4]),
                         cv::Scalar(hsv_ranges[1], hsv_ranges[3], hsv_ranges[5]),
-                        green_only_image_);
+                        frame_out_ /*green_only_image_*/);
 
-#if 0   // Make frame_out a viewable image            
+#if 0       // Make frame_out a viewable image            
             cv::cvtColor(green_only_image_, frame_out_, cv::COLOR_GRAY2BGR);
-            cv::circle(frame_out_, cv::Point(100,100), 50,  color_red);
-#else  // Assign binary result to output image for use by contour detection next
-            frame_out_ = green_only_image_;
 #endif
         }
 
     private:
 
         std::vector<int> hsv_ranges;
-        cv::Mat hsv_image, green_only_image_;
+        cv::Mat hsv_image;
 
     };
 
