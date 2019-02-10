@@ -15,12 +15,15 @@ namespace xero {
             }
 
             virtual void start() {                
-                Climber &climber = getClimber() ;
-                climber.solenoid_->Set(true);
-                is_done_ = true ;
+                is_done_ = false ;
             }
 
             virtual void run() {
+                if (!is_done_) {
+                    Climber &climber = getClimber() ;
+                    climber.solenoid_->Set(true);
+                    is_done_ = true ;
+                }
             }
 
             virtual bool isDone() {
