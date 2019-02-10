@@ -50,6 +50,8 @@ hw:cargoholder:motor                                            10              
 hw:cargointake:motor                                            12              # Victor SPX
 hw:cargointake:solenoid                                         5               # Solenoid
 
+hw:climber:solenoid                                             6               # Solenoid
+
 ###################################################################
 #
 # The sections below describe the software parameters for the various

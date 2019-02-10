@@ -153,6 +153,7 @@ namespace xero {
             std::string desc = "Test the deposit hatch sequence" ;
             ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr childact, act, dispatch ;
+            TermActionPtr termact ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
@@ -162,8 +163,9 @@ namespace xero {
 
             childact = std::make_shared<TankDriveFollowPathAction>(*db, "CurveLeft") ;
             dispatch = std::make_shared<DispatchAction>(db, childact) ;
-            act = std::make_shared<TerminateAction>(dispatch, *cm, getRobot().getMessageLogger()) ;
-            mode->pushAction(act) ;
+            termact = std::make_shared<TerminateAction>(dispatch, getRobot().getMessageLogger()) ;
+            termact->addTerminator(cm) ;
+            mode->pushAction(termact) ;
 
             childact = std::make_shared<DriveByVisionAction>(*db, *cm) ;
             dispatch = std::make_shared<DispatchAction>(db, childact) ;    
@@ -259,23 +261,6 @@ namespace xero {
             auto db = phaserrobot->getTankDrive() ;
             auto lifter = phaserrobot->getLifter() ;
             auto turntable = phaserrobot->getTurntable() ;
-
-            // Step 1: Calibrate lifter and turntable
-            act = std::make_shared<LifterCalibrateAction>(*lifter) ;
-            mode->pushSubActionPair(lifter, act) ;    
-
-            act = std::make_shared<TurntableCalibrateAction>(*turntable) ;
-            mode->pushSubActionPair(turntable, act) ;                    
-
-            //
-            // Step 2: drive to cargo ship front hatch while ensuring lift and turntable are
-            //         in the right position.  This action can be terminated if we see a target
-            //         in the camera or if the line followers find the line
-            //
-            act = std::make_shared<TankDriveFollowPathAction>(*db, "HabCenterCargoFrontLeft") ;
-
-            termptr = std::make_shared<TerminateAction>(act, 
-            mode->pushAction(termptr) ;
 
             return mode ;         
         }

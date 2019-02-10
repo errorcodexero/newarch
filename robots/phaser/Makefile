@@ -20,8 +20,8 @@ SOURCES = \
 	src/main/cpp/cargoholder/CargoHolderAction.cpp\
 	src/main/cpp/cargointake/CargoIntake.cpp\
 	src/main/cpp/cargointake/CargoIntakeAction.cpp\
-	src/main/cpp/cargointake/CargoIntakeDeployAction.cpp\
-	src/main/cpp/cargointake/CargoIntakeRetractAction.cpp
+	src/main/cpp/climber/Climber.cpp\
+	src/main/cpp/climber/ClimberDeployAction.cpp
 
 TARGET = phaser
 

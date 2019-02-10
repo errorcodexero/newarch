@@ -30,5 +30,7 @@ namespace xero{
             bool is_done_ ;
             xero::misc::MessageLogger &logger_ ;
         };
+
+        typedef std::shared_ptr<TerminateAction> TermActionPtr ;
     }
 }
