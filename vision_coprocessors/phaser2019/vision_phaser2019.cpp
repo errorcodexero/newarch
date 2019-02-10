@@ -5,18 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+// C++ lib
 #include <cstdio>
 #include <string>
 #include <thread>
 #include <vector>
 #include <algorithm>
-
 #include <iostream>
-#include <stdlib.h>    // For system()
+
+// C lib
+#include <stdlib.h>    // For system(), getenv()
 #include <math.h>
 #include <assert.h>
+#include <getopt.h>
 
+// FRC
 #include <networktables/NetworkTableInstance.h>
+#include <cameraserver/CameraServer.h>
 #include <vision/VisionPipeline.h>
 #include <vision/VisionRunner.h>
 #include <wpi/StringRef.h>
@@ -24,9 +29,10 @@
 #include <wpi/raw_istream.h>
 #include <wpi/raw_ostream.h>
 #include <frc/Timer.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
-#include <cameraserver/CameraServer.h>
-
+// OpenCV
 #include <opencv2/core/core.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
@@ -36,7 +42,6 @@
 #include <FileUtils.h>
 #include <StringUtils.h>
 #include <GetHostIpAddresses.h>
-
 //#include "SettingsParser.h"
 #include "params_parser.h"
 
@@ -79,6 +84,14 @@
 
 
 namespace {
+
+    bool viewing_mode;    // Viewing mode if true, else tracking mode
+    bool nt_server_mode;  // Network table in server vs. client mode
+    int  selected_camera; // Currently selected camera for viewing/tracking
+
+    // Chooser(s) from SmartDashboard
+    frc::SendableChooser<int> viewing_mode_chooser;
+    frc::SendableChooser<int> camera_chooser;
 
     nt::NetworkTableInstance ntinst;
     const char* configFile = "/boot/frc.json";
@@ -146,6 +159,59 @@ namespace {
     
     wpi::raw_ostream& ParseError() {
         return wpi::errs() << "config error in '" << configFile << "': ";
+    }
+
+    
+    bool processCommandArgs(int argc, char* argv[]) {
+        bool err = false;
+        int viewing_mode_flag = 0;
+        int nt_server_mode_flag = 0;
+        static struct option long_options[] =
+            {
+             /* These options set a flag. */
+             {"view",    no_argument, &viewing_mode_flag, 1},
+             {"server",  no_argument, &nt_server_mode_flag, 1},
+             {0, 0, 0, 0}
+            };
+
+        // Parse args
+        while (1) {
+            /* getopt_long stores the option index here. */
+            int option_index = 0;
+
+            int opt = getopt_long (argc, argv, "",
+                                   long_options, &option_index);
+
+            /* Detect the end of the options. */
+            if (opt == -1)
+                break;
+
+            switch (opt) {
+            case '?':
+                /* getopt_long already printed an error message. */
+                err = true;
+                break;
+            }
+
+        }
+
+        if (err) {
+            std::cout << "Usage: " << argv[0] << " [--view] [--server]\n";
+            return false;
+        }
+
+        // Set options based on what was parser
+        viewing_mode   = (viewing_mode_flag != 0);
+        nt_server_mode = (nt_server_mode_flag != 0);
+
+        if (viewing_mode_flag) {
+            std::cout << "Enabled viewing mode\n" << std::flush;
+        }
+        if (nt_server_mode_flag) {
+            std::cout << "Enabled NT server mode\n" << std::flush;
+        }
+              
+        return true;
     }
 
     
@@ -273,7 +339,7 @@ namespace {
 
     void waitForIpAddressOnRobot(bool verbose = false) {
         if (verbose) {
-            std::cout << "Waiting for network interface...";
+            std::cout << "Waiting for network interface..." << std::flush;
         }
         const double start_time = frc::Timer::GetFPGATimestamp();
         for (bool net_detected=false; !net_detected; ) {
@@ -292,11 +358,11 @@ namespace {
         }
         const double wait_time = frc::Timer::GetFPGATimestamp() - start_time;
         if (verbose) {
-            std::cout << "done. (" << wait_time << " sec wait time)\n";
+            std::cout << "done. (" << wait_time << " sec wait time)\n" << std::flush;
         }
     }
 
-    int setTrackingExposure(const std::string& device_name) {
+    int setTrackingExposureForDevice(const std::string& device_name) {
         std::string command = std::string("v4l2-ctl -d ") + device_name + " -c exposure_auto=1 -c exposure_absolute=100 -c brightness=1 -c gain=30";
         int sysret = system(command.c_str());
         if (sysret != 0) {
@@ -305,13 +371,50 @@ namespace {
         return sysret;
     }
 
-    int setViewingExposure(const std::string& device_name) {
+    int setViewingExposureForDevice(const std::string& device_name) {
         std::string command = std::string("v4l2-ctl -d ") + device_name + " -c exposure_auto=3 -c brightness=128";
         int sysret = system(command.c_str());
         if (sysret != 0) {
             std::cout << "ERROR: Failed to call v4l2-ctl\n";
         }
         return sysret;
+    }
+
+    void setViewingExposure(bool viewing_mode) {
+        std::cout << "Setting exposure for: " << (viewing_mode ? "viewing" : "tracking") << "\n";
+        for (auto&& cameraConfig : cameraConfigs) {
+            if (viewing_mode) {
+                (void)setViewingExposureForDevice(cameraConfig.path);
+            } else {
+                (void)setTrackingExposureForDevice(cameraConfig.path);
+            }
+        }
+    }
+
+    void processCameraParamChanges(std::vector<cs::VideoSource>& cameras) {
+        // Chooser for viewing mode
+        int chooser_val = viewing_mode_chooser.GetSelected();
+        if (chooser_val != 0) {  // Not unspecified
+            assert(chooser_val == 1 || chooser_val == 2);
+            bool new_viewing_mode = (chooser_val == 2);
+            if (viewing_mode != new_viewing_mode) {
+                viewing_mode = new_viewing_mode;
+                setViewingExposure(viewing_mode);
+            }
+        }
+            
+        // Chooser for camera
+        chooser_val = camera_chooser.GetSelected();
+        if (chooser_val != 0) {  // Not unspecified
+            assert(chooser_val == 1 || chooser_val == 2);
+            int new_selected_camera = chooser_val - 1;
+            if (selected_camera != new_selected_camera) {
+                selected_camera = new_selected_camera;
+                cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
+                server.SetSource(cameras[selected_camera]);
+            }
+        }
+            
     }
 
     // Return area of cv::RotatedRect
@@ -364,11 +467,12 @@ namespace {
 
     // Start network table in client vs. server mode depending whether running on robot or not
     // Also speed up update rate.
-    void startNetworkTable(nt::NetworkTableInstance& ntinst) {
+    void startNetworkTable(nt::NetworkTableInstance& ntinst, bool server_mode) {
         
-        // Figure out if running on robot so network table can be started in server vs. client mode
+        // If running in client mode, assume on the robot and wait until network interface is up.
+        // (No Gaurantee the Rio is ready, but this is necessary to communicate with the Rio.)
         const bool running_on_robot = true;
-        if (running_on_robot) {
+        if (!server_mode) {
             waitForIpAddressOnRobot(true);
             
             // After network connected detected, wait a few more seconds
@@ -377,9 +481,8 @@ namespace {
         }
     
         // Start NetworkTables
-        const bool nt_server = !running_on_robot;
         ntinst = nt::NetworkTableInstance::GetDefault();
-        if (nt_server) {
+        if (server_mode) {
             wpi::outs() << "Setting up NetworkTables server\n";
             ntinst.StartServer();
         } else {
@@ -392,6 +495,13 @@ namespace {
         // but it's rate-limited to prevent flooding newwork. Unclear whether this affects the cap.
         // Changing it anyway in case it does + in case flush() is not called.
         ntinst.SetUpdateRate(0.01);    // Allowed range per docs is 0.01 -> 1.0 (rate in seconds)
+    }
+
+    // Post result of target being identified on network table, and flush immediately.
+    void setTargetIsIdentified(bool target_identified) {
+        nt_target_valid.SetBoolean(target_identified);
+        frc::SmartDashboard::PutBoolean("TargetIdentified", target_identified);
+        ntinst.Flush();
     }
 
     // Draw ractangle
@@ -490,8 +600,7 @@ namespace {
             
             // Unless we have at least 2 contours, nothing further to do
             if (contours.size() < 2) {
-                nt_target_valid.SetBoolean(false);
-                ntinst.Flush();
+                setTargetIsIdentified(false);
                 //std::cout << "FALSE: Fewer than 2 contours\n";
                 return;
             }
@@ -564,8 +673,7 @@ namespace {
 
             // Only continue if we have at least 2 filtered rectangles
             if (filtered_min_rects.size() < 2) {
-                nt_target_valid.SetBoolean(false);                
-                ntinst.Flush();
+                setTargetIsIdentified(false);
                 //std::cout << "FALSE: Fewer than 2 filtered rect\n";
                 return;
             }
@@ -591,8 +699,7 @@ namespace {
             double relative_area = ratioOfDifference(l_area, r_area);
             //std::cout << "    Relative area = " << relative_area << "\n";
             if (relative_area > 0.5) {
-                nt_target_valid.SetBoolean(false);                
-                ntinst.Flush();
+                setTargetIsIdentified(false);
                 //std::cout << "FALSE: Relative area " << relative_area << " (" << l_area << ", " << r_area << ")\n";
                 return;
             }
@@ -616,8 +723,7 @@ namespace {
             angle_in_deg = fabs(angle_in_deg);
             //std::cout << "    Angle (centers) in deg = " << angle_in_deg << "\n";
             if (angle_in_deg > 15) {
-                nt_target_valid.SetBoolean(false);                
-                ntinst.Flush();
+                setTargetIsIdentified(false);
                 //std::cout << "FALSE: Angle in deg << " << angle_in_deg << "\n";
                 return;
             }
@@ -693,10 +799,7 @@ namespace {
             nt_target_dist_pixels.SetDouble(dist_bet_centers);
             nt_target_dist_inch.SetDouble(dist_to_target);
             nt_target_dist2_inch.SetDouble(dist2_inch);
-            nt_target_valid.SetBoolean(true);
-
-            // Flush NT updates after all data has been posted.
-            ntinst.Flush();
+            setTargetIsIdentified(true);  // Also flushed NT, so keep this call at the end of NT updates.
         }
 
     private:
@@ -767,6 +870,7 @@ namespace {
             if (stream_output_) {
                 output_stream_.PutFrame(pipe.output_frame_);
             }
+
             if ((times_called % 20) == 0) {
                 const double current_time = frc::Timer::GetFPGATimestamp();
                 double elapsed_time = current_time - start_time;
@@ -817,7 +921,10 @@ namespace {
                               frc::VisionRunner<XeroPipeline> runner(cameras[0],
                                                                      pipe.get(),
                                                                      VisionPipelineResultProcessor(stream_pipeline_output));
-                              runner.RunForever();
+                              while (1) {
+                                  processCameraParamChanges(cameras);
+                                  runner.RunOnce();
+                              }
                           });
             t.detach();
         }
@@ -826,10 +933,7 @@ namespace {
         // Apparently only works after starting the pipeline + small delay.
         // TODO: Don't hardcode device id.  Get it from json.
         std::this_thread::sleep_for(std::chrono::seconds(2));
-        for (auto&& cameraConfig : cameraConfigs) {
-            (void)setTrackingExposure(cameraConfig.path);
-            //(void)setViewingExposure(cameraConfig.path);
-        }
+        setViewingExposure(viewing_mode);
 
         /*
         // Select one of the cameras for streaming for now and toggle.  Just for testing.
@@ -896,9 +1000,10 @@ namespace {
 int main(int argc, char* argv[]) {
     const std::string params_filename("vision_params.txt");
 
-    if (argc >= 2) {
-        configFile = argv[1];
+    if (!processCommandArgs(argc, argv)) {
+        return 1;
     }
+
 
     // Read params file
     if (!params.readFile(params_filename)) {
@@ -923,8 +1028,13 @@ int main(int argc, char* argv[]) {
     height_pixels = params.getValue("vision:camera:height_pixels");
 
     // Start network table in client or server mode + configure it
+    // nt_server_mode may have been configured via command-line args already. Envar overrides it.
+    const char* nt_server_envar = getenv("NT_SERVER");
+    if (nt_server_envar != nullptr) {
+        nt_server_mode = (std::string(nt_server_envar) == "1");
+    }
     ntinst = nt::NetworkTableInstance::GetDefault();
-    startNetworkTable(ntinst);
+    startNetworkTable(ntinst, nt_server_mode);
     
     // Prepare network table variables that tracker will populate
     std::shared_ptr<NetworkTable> nt_table = ntinst.GetTable("TargetTracking");
@@ -964,7 +1074,18 @@ int main(int argc, char* argv[]) {
     nt_bot_z_offset_inch.SetDefaultDouble(0);
     nt_target_valid = nt_table->GetEntry("valid");
     nt_target_valid.SetDefaultBoolean(false);
+    setTargetIsIdentified(false);
 
+    // Set choosers from SmartDashboard
+    viewing_mode_chooser.SetDefaultOption("1. Unspecified", 0);
+    viewing_mode_chooser.AddOption("2. Track", 1);
+    viewing_mode_chooser.AddOption("3. View", 2);
+    frc::SmartDashboard::PutData("ViewingMode", &viewing_mode_chooser);
+    camera_chooser.SetDefaultOption("1. Unspecified", 0);
+    camera_chooser.AddOption("2. Cam0", 1);
+    camera_chooser.AddOption("3. Cam1", 2);
+    frc::SmartDashboard::PutData("Camera", &camera_chooser);
+    
     // Start camera streaming + image processing on last camera if present
     runPipelineFromCamera(/*cameraConfigs*/);
 
