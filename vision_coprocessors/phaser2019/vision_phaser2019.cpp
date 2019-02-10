@@ -29,6 +29,8 @@
 #include <wpi/raw_istream.h>
 #include <wpi/raw_ostream.h>
 #include <frc/Timer.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 // OpenCV
 #include <opencv2/core/core.hpp>
@@ -85,6 +87,9 @@ namespace {
 
     bool viewing_mode;    // Viewing mode if true, else tracking mode
     bool nt_server_mode;  // Network table in server vs. client mode
+
+    // Chooser(s) from SmartDashboard
+    frc::SendableChooser<int> viewing_mode_chooser;
 
     nt::NetworkTableInstance ntinst;
     const char* configFile = "/boot/frc.json";
@@ -355,7 +360,7 @@ namespace {
         }
     }
 
-    int setTrackingExposure(const std::string& device_name) {
+    int setTrackingExposureForDevice(const std::string& device_name) {
         std::string command = std::string("v4l2-ctl -d ") + device_name + " -c exposure_auto=1 -c exposure_absolute=100 -c brightness=1 -c gain=30";
         int sysret = system(command.c_str());
         if (sysret != 0) {
@@ -364,13 +369,24 @@ namespace {
         return sysret;
     }
 
-    int setViewingExposure(const std::string& device_name) {
+    int setViewingExposureForDevice(const std::string& device_name) {
         std::string command = std::string("v4l2-ctl -d ") + device_name + " -c exposure_auto=3 -c brightness=128";
         int sysret = system(command.c_str());
         if (sysret != 0) {
             std::cout << "ERROR: Failed to call v4l2-ctl\n";
         }
         return sysret;
+    }
+
+    void setViewingExposure(bool viewing_mode) {
+        std::cout << "Setting exposure for: " << (viewing_mode ? "viewing" : "tracking") << "\n";
+        for (auto&& cameraConfig : cameraConfigs) {
+            if (viewing_mode) {
+                (void)setViewingExposureForDevice(cameraConfig.path);
+            } else {
+                (void)setTrackingExposureForDevice(cameraConfig.path);
+            }
+        }
     }
 
     // Return area of cv::RotatedRect
@@ -451,6 +467,13 @@ namespace {
         // but it's rate-limited to prevent flooding newwork. Unclear whether this affects the cap.
         // Changing it anyway in case it does + in case flush() is not called.
         ntinst.SetUpdateRate(0.01);    // Allowed range per docs is 0.01 -> 1.0 (rate in seconds)
+    }
+
+    // Post result of target being identified on network table, and flush immediately.
+    void setTargetIsIdentified(bool target_identified) {
+        nt_target_valid.SetBoolean(target_identified);
+        frc::SmartDashboard::PutBoolean("TargetIdentified", target_identified);
+        ntinst.Flush();
     }
 
     // Draw ractangle
@@ -549,8 +572,7 @@ namespace {
             
             // Unless we have at least 2 contours, nothing further to do
             if (contours.size() < 2) {
-                nt_target_valid.SetBoolean(false);
-                ntinst.Flush();
+                setTargetIsIdentified(false);
                 //std::cout << "FALSE: Fewer than 2 contours\n";
                 return;
             }
@@ -623,8 +645,7 @@ namespace {
 
             // Only continue if we have at least 2 filtered rectangles
             if (filtered_min_rects.size() < 2) {
-                nt_target_valid.SetBoolean(false);                
-                ntinst.Flush();
+                setTargetIsIdentified(false);
                 //std::cout << "FALSE: Fewer than 2 filtered rect\n";
                 return;
             }
@@ -650,8 +671,7 @@ namespace {
             double relative_area = ratioOfDifference(l_area, r_area);
             //std::cout << "    Relative area = " << relative_area << "\n";
             if (relative_area > 0.5) {
-                nt_target_valid.SetBoolean(false);                
-                ntinst.Flush();
+                setTargetIsIdentified(false);
                 //std::cout << "FALSE: Relative area " << relative_area << " (" << l_area << ", " << r_area << ")\n";
                 return;
             }
@@ -675,8 +695,7 @@ namespace {
             angle_in_deg = fabs(angle_in_deg);
             //std::cout << "    Angle (centers) in deg = " << angle_in_deg << "\n";
             if (angle_in_deg > 15) {
-                nt_target_valid.SetBoolean(false);                
-                ntinst.Flush();
+                setTargetIsIdentified(false);
                 //std::cout << "FALSE: Angle in deg << " << angle_in_deg << "\n";
                 return;
             }
@@ -752,10 +771,7 @@ namespace {
             nt_target_dist_pixels.SetDouble(dist_bet_centers);
             nt_target_dist_inch.SetDouble(dist_to_target);
             nt_target_dist2_inch.SetDouble(dist2_inch);
-            nt_target_valid.SetBoolean(true);
-
-            // Flush NT updates after all data has been posted.
-            ntinst.Flush();
+            setTargetIsIdentified(true);  // Also flushed NT, so keep this call at the end of NT updates.
         }
 
     private:
@@ -823,6 +839,15 @@ namespace {
         
         void operator()(XeroPipeline& pipe) {
             ++times_called;
+            int chooser_val = viewing_mode_chooser.GetSelected();
+            if (chooser_val != 0) {  // Specified
+                assert(chooser_val == 1 || chooser_val == 2);
+                bool new_viewing_mode = (chooser_val == 2);
+                if (viewing_mode != new_viewing_mode) {
+                    viewing_mode = new_viewing_mode;
+                    setViewingExposure(viewing_mode);
+                }
+            }
             if (stream_output_) {
                 output_stream_.PutFrame(pipe.output_frame_);
             }
@@ -885,13 +910,7 @@ namespace {
         // Apparently only works after starting the pipeline + small delay.
         // TODO: Don't hardcode device id.  Get it from json.
         std::this_thread::sleep_for(std::chrono::seconds(2));
-        for (auto&& cameraConfig : cameraConfigs) {
-            if (viewing_mode) {
-                (void)setViewingExposure(cameraConfig.path);
-            } else {
-                (void)setTrackingExposure(cameraConfig.path);
-            }
-        }
+        setViewingExposure(viewing_mode);
 
         /*
         // Select one of the cameras for streaming for now and toggle.  Just for testing.
@@ -961,7 +980,8 @@ int main(int argc, char* argv[]) {
     if (!processCommandArgs(argc, argv)) {
         return 1;
     }
-    
+
+
     // Read params file
     if (!params.readFile(params_filename)) {
         return EXIT_FAILURE;
@@ -1031,7 +1051,14 @@ int main(int argc, char* argv[]) {
     nt_bot_z_offset_inch.SetDefaultDouble(0);
     nt_target_valid = nt_table->GetEntry("valid");
     nt_target_valid.SetDefaultBoolean(false);
+    setTargetIsIdentified(false);
 
+    // Set chooser from SmartDashboard
+    viewing_mode_chooser.SetDefaultOption("1. Unspecified", 0);
+    viewing_mode_chooser.AddOption("2. Track", 1);
+    viewing_mode_chooser.AddOption("3. View", 2);
+    frc::SmartDashboard::PutData("ViewingMode", &viewing_mode_chooser);
+    
     // Start camera streaming + image processing on last camera if present
     runPipelineFromCamera(/*cameraConfigs*/);
 
