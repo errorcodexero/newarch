@@ -918,10 +918,10 @@ namespace {
             std::cout << "Starting vision pipeline\n";
 
             std::thread t([&] {
+                              frc::VisionRunner<XeroPipeline> runner(cameras[0],
+                                                                     pipe.get(),
+                                                                     VisionPipelineResultProcessor(stream_pipeline_output));
                               while (1) {
-                                  frc::VisionRunner<XeroPipeline> runner(cameras[0],
-                                                                         pipe.get(),
-                                                                         VisionPipelineResultProcessor(stream_pipeline_output));
                                   processCameraParamChanges(cameras);
                                   runner.RunOnce();
                               }
