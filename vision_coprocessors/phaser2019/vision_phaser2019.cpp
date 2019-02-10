@@ -87,9 +87,11 @@ namespace {
 
     bool viewing_mode;    // Viewing mode if true, else tracking mode
     bool nt_server_mode;  // Network table in server vs. client mode
+    int  selected_camera; // Currently selected camera for viewing/tracking
 
     // Chooser(s) from SmartDashboard
     frc::SendableChooser<int> viewing_mode_chooser;
+    frc::SendableChooser<int> camera_chooser;
 
     nt::NetworkTableInstance ntinst;
     const char* configFile = "/boot/frc.json";
@@ -387,6 +389,32 @@ namespace {
                 (void)setTrackingExposureForDevice(cameraConfig.path);
             }
         }
+    }
+
+    void processCameraParamChanges(std::vector<cs::VideoSource>& cameras) {
+        // Chooser for viewing mode
+        int chooser_val = viewing_mode_chooser.GetSelected();
+        if (chooser_val != 0) {  // Not unspecified
+            assert(chooser_val == 1 || chooser_val == 2);
+            bool new_viewing_mode = (chooser_val == 2);
+            if (viewing_mode != new_viewing_mode) {
+                viewing_mode = new_viewing_mode;
+                setViewingExposure(viewing_mode);
+            }
+        }
+            
+        // Chooser for camera
+        chooser_val = camera_chooser.GetSelected();
+        if (chooser_val != 0) {  // Not unspecified
+            assert(chooser_val == 1 || chooser_val == 2);
+            int new_selected_camera = chooser_val - 1;
+            if (selected_camera != new_selected_camera) {
+                selected_camera = new_selected_camera;
+                cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
+                server.SetSource(cameras[selected_camera]);
+            }
+        }
+            
     }
 
     // Return area of cv::RotatedRect
@@ -839,18 +867,10 @@ namespace {
         
         void operator()(XeroPipeline& pipe) {
             ++times_called;
-            int chooser_val = viewing_mode_chooser.GetSelected();
-            if (chooser_val != 0) {  // Specified
-                assert(chooser_val == 1 || chooser_val == 2);
-                bool new_viewing_mode = (chooser_val == 2);
-                if (viewing_mode != new_viewing_mode) {
-                    viewing_mode = new_viewing_mode;
-                    setViewingExposure(viewing_mode);
-                }
-            }
             if (stream_output_) {
                 output_stream_.PutFrame(pipe.output_frame_);
             }
+
             if ((times_called % 20) == 0) {
                 const double current_time = frc::Timer::GetFPGATimestamp();
                 double elapsed_time = current_time - start_time;
@@ -898,10 +918,13 @@ namespace {
             std::cout << "Starting vision pipeline\n";
 
             std::thread t([&] {
-                              frc::VisionRunner<XeroPipeline> runner(cameras[0],
-                                                                     pipe.get(),
-                                                                     VisionPipelineResultProcessor(stream_pipeline_output));
-                              runner.RunForever();
+                              while (1) {
+                                  frc::VisionRunner<XeroPipeline> runner(cameras[0],
+                                                                         pipe.get(),
+                                                                         VisionPipelineResultProcessor(stream_pipeline_output));
+                                  processCameraParamChanges(cameras);
+                                  runner.RunOnce();
+                              }
                           });
             t.detach();
         }
@@ -1053,11 +1076,15 @@ int main(int argc, char* argv[]) {
     nt_target_valid.SetDefaultBoolean(false);
     setTargetIsIdentified(false);
 
-    // Set chooser from SmartDashboard
+    // Set choosers from SmartDashboard
     viewing_mode_chooser.SetDefaultOption("1. Unspecified", 0);
     viewing_mode_chooser.AddOption("2. Track", 1);
     viewing_mode_chooser.AddOption("3. View", 2);
     frc::SmartDashboard::PutData("ViewingMode", &viewing_mode_chooser);
+    camera_chooser.SetDefaultOption("1. Unspecified", 0);
+    camera_chooser.AddOption("2. Cam0", 1);
+    camera_chooser.AddOption("3. Cam1", 2);
+    frc::SmartDashboard::PutData("Camera", &camera_chooser);
     
     // Start camera streaming + image processing on last camera if present
     runPipelineFromCamera(/*cameraConfigs*/);
