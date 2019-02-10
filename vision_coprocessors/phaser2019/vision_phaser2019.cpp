@@ -17,6 +17,7 @@
 #include <stdlib.h>    // For system(), getenv()
 #include <math.h>
 #include <assert.h>
+#include <getopt.h>
 
 // FRC
 #include <networktables/NetworkTableInstance.h>
@@ -81,6 +82,9 @@
 
 
 namespace {
+
+    bool viewing_mode;    // Viewing mode if true, else tracking mode
+    bool nt_server_mode;  // Network table in server vs. client mode
 
     nt::NetworkTableInstance ntinst;
     const char* configFile = "/boot/frc.json";
@@ -148,6 +152,59 @@ namespace {
     
     wpi::raw_ostream& ParseError() {
         return wpi::errs() << "config error in '" << configFile << "': ";
+    }
+
+    
+    bool processCommandArgs(int argc, char* argv[]) {
+        bool err = false;
+        int viewing_mode_flag = 0;
+        int nt_server_mode_flag = 0;
+        static struct option long_options[] =
+            {
+             /* These options set a flag. */
+             {"view",    no_argument, &viewing_mode_flag, 1},
+             {"server",  no_argument, &nt_server_mode_flag, 1},
+             {0, 0, 0, 0}
+            };
+
+        // Parse args
+        while (1) {
+            /* getopt_long stores the option index here. */
+            int option_index = 0;
+
+            int opt = getopt_long (argc, argv, "",
+                                   long_options, &option_index);
+
+            /* Detect the end of the options. */
+            if (opt == -1)
+                break;
+
+            switch (opt) {
+            case '?':
+                /* getopt_long already printed an error message. */
+                err = true;
+                break;
+            }
+
+        }
+
+        if (err) {
+            std::cout << "Usage: " << argv[0] << " [--view] [--server]\n";
+            return false;
+        }
+
+        // Set options based on what was parser
+        viewing_mode   = (viewing_mode_flag != 0);
+        nt_server_mode = (nt_server_mode_flag != 0);
+
+        if (viewing_mode_flag) {
+            std::cout << "Enabled viewing mode\n" << std::flush;
+        }
+        if (nt_server_mode_flag) {
+            std::cout << "Enabled NT server mode\n" << std::flush;
+        }
+              
+        return true;
     }
 
     
@@ -829,8 +886,11 @@ namespace {
         // TODO: Don't hardcode device id.  Get it from json.
         std::this_thread::sleep_for(std::chrono::seconds(2));
         for (auto&& cameraConfig : cameraConfigs) {
-            (void)setTrackingExposure(cameraConfig.path);
-            //(void)setViewingExposure(cameraConfig.path);
+            if (viewing_mode) {
+                (void)setViewingExposure(cameraConfig.path);
+            } else {
+                (void)setTrackingExposure(cameraConfig.path);
+            }
         }
 
         /*
@@ -898,10 +958,10 @@ namespace {
 int main(int argc, char* argv[]) {
     const std::string params_filename("vision_params.txt");
 
-    if (argc >= 2) {
-        configFile = argv[1];
+    if (!processCommandArgs(argc, argv)) {
+        return 1;
     }
-
+    
     // Read params file
     if (!params.readFile(params_filename)) {
         return EXIT_FAILURE;
@@ -925,8 +985,11 @@ int main(int argc, char* argv[]) {
     height_pixels = params.getValue("vision:camera:height_pixels");
 
     // Start network table in client or server mode + configure it
+    // nt_server_mode may have been configured via command-line args already. Envar overrides it.
     const char* nt_server_envar = getenv("NT_SERVER");
-    const bool nt_server_mode = ((nt_server_envar != nullptr) && (std::string(nt_server_envar) == "1"));
+    if (nt_server_envar != nullptr) {
+        nt_server_mode = (std::string(nt_server_envar) == "1");
+    }
     ntinst = nt::NetworkTableInstance::GetDefault();
     startNetworkTable(ntinst, nt_server_mode);
     
