@@ -5,7 +5,7 @@
             "exposure": 1,
             "fps": 30,
             "height": 240,
-            "name": "LogitechC920",
+            "name": "View",
             "path": "/dev/video0",
             "pixel format": "mjpeg",
             "properties": [
@@ -30,6 +30,14 @@
                     "value": 0
                 }
             ],
+            "stream": {
+                "properties": [
+                    {
+                        "name": "default_compression",
+                        "value": 50
+                    }
+                ]
+            },
             "white balance": 0,
             "width": 432
         },
@@ -38,7 +46,7 @@
             "exposure": 1,
             "fps": 30,
             "height": 240,
-            "name": "LogitechC920-2",
+            "name": "View-2",
             "path": "/dev/video1",
             "pixel format": "mjpeg",
             "properties": [
@@ -63,10 +71,18 @@
                     "value": 0
                 }
             ],
+            "stream": {
+                "properties": [
+                    {
+                        "name": "default_compression",
+                        "value": 50
+                    }
+                ]
+            },
             "white balance": 0,
             "width": 432
         }
     ],
-    "ntmode": "server",
+    "ntmode": "client",
     "team": 1425
 }

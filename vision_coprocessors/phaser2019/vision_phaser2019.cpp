@@ -88,6 +88,7 @@ namespace {
     bool viewing_mode;    // Viewing mode if true, else tracking mode
     bool nt_server_mode;  // Network table in server vs. client mode
     int  selected_camera; // Currently selected camera for viewing/tracking
+    bool no_set_resolution;  // If set, don't explicitly set resolution from param file and use what's in frc.json.
 
     // Chooser(s) from SmartDashboard
     frc::SendableChooser<int> viewing_mode_chooser;
@@ -166,11 +167,13 @@ namespace {
         bool err = false;
         int viewing_mode_flag = 0;
         int nt_server_mode_flag = 0;
+        int nores_flag = 0;
         static struct option long_options[] =
             {
              /* These options set a flag. */
              {"view",    no_argument, &viewing_mode_flag, 1},
              {"server",  no_argument, &nt_server_mode_flag, 1},
+             {"nores",   no_argument, &nores_flag, 1},
              {0, 0, 0, 0}
             };
 
@@ -196,19 +199,23 @@ namespace {
         }
 
         if (err) {
-            std::cout << "Usage: " << argv[0] << " [--view] [--server]\n";
+            std::cout << "Usage: " << argv[0] << " [--view] [--server] [--nores]\n";
             return false;
         }
 
         // Set options based on what was parser
-        viewing_mode   = (viewing_mode_flag != 0);
-        nt_server_mode = (nt_server_mode_flag != 0);
+        viewing_mode      = (viewing_mode_flag != 0);
+        nt_server_mode    = (nt_server_mode_flag != 0);
+        no_set_resolution = (nores_flag != 0);
 
         if (viewing_mode_flag) {
             std::cout << "Enabled viewing mode\n" << std::flush;
         }
         if (nt_server_mode_flag) {
             std::cout << "Enabled NT server mode\n" << std::flush;
+        }
+        if (nores_flag) {
+            std::cout << "Disabling overriding of resolution that's in frc.json\n" << std::flush;
         }
               
         return true;
@@ -332,7 +339,9 @@ namespace {
         }
             
         // Force resolution from param file
-        camera.SetResolution(width_pixels, height_pixels);
+        if (!no_set_resolution) {
+            camera.SetResolution(width_pixels, height_pixels);
+        }
 
         return camera;
     }
@@ -558,20 +567,17 @@ namespace {
             cv::inRange(hsv_image,
                         cv::Scalar(hsv_ranges[0], hsv_ranges[2], hsv_ranges[4]),
                         cv::Scalar(hsv_ranges[1], hsv_ranges[3], hsv_ranges[5]),
-                        green_only_image_);
+                        frame_out_ /*green_only_image_*/);
 
-#if 0   // Make frame_out a viewable image            
+#if 0       // Make frame_out a viewable image            
             cv::cvtColor(green_only_image_, frame_out_, cv::COLOR_GRAY2BGR);
-            cv::circle(frame_out_, cv::Point(100,100), 50,  color_red);
-#else  // Assign binary result to output image for use by contour detection next
-            frame_out_ = green_only_image_;
 #endif
         }
 
     private:
 
         std::vector<int> hsv_ranges;
-        cv::Mat hsv_image, green_only_image_;
+        cv::Mat hsv_image;
 
     };
 
