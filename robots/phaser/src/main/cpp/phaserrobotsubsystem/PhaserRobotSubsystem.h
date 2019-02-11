@@ -2,14 +2,10 @@
 
 #include "phaseroi/PhaserOISubsystem.h"
 #include "lightsensor/LightSensorSubsystem.h"
-#include "hatchholder/HatchHolder.h"
-#include "cargoholder/CargoHolder.h"
-#include "cargointake/CargoIntake.h"
-#include "turntable/TurnTable.h"
 #include "phasercameratracker/PhaserCameraTracker.h"
+#include "gamepiecemanipulator/GamePieceManipulator.h"
+#include "climber/Climber.h"
 #include <tankdrive/TankDrive.h>
-#include <lifter/Lifter.h>
-#include <cameratracker/CameraTracker.h>
 #include <RobotSubsystem.h>
 
 namespace xero {
@@ -36,31 +32,24 @@ namespace xero {
                 return light_sensor_ ;
             }
 
-            std::shared_ptr<HatchHolder> getHatchHolder() {
-                return hatch_holder_ ;
-            }            
-
-            std::shared_ptr<xero::base::Lifter> getLifter() {
-                return lifter_ ;
-            }
-
             std::shared_ptr<PhaserCameraTracker> getCameraTracker() {
                 return tracker_ ;
             }            
 
-            std::shared_ptr<Turntable> getTurntable() {
-                return turntable_ ;
+            std::shared_ptr<Climber> getClimber() {
+                return climber_ ;
+            }
+
+            std::shared_ptr<GamePieceManipulator> getGameManipulator() {
+                return game_piece_man_ ;
             }
 
         private:
             std::shared_ptr<PhaserOISubsystem> oi_ ;
             std::shared_ptr<xero::base::LightSensorSubsystem> light_sensor_ ;
-            std::shared_ptr<HatchHolder> hatch_holder_ ;
-            std::shared_ptr<CargoHolder> cargo_holder_ ;
-            std::shared_ptr<CargoIntake> cargo_intake_ ;
-            std::shared_ptr<xero::base::Lifter> lifter_ ;
             std::shared_ptr<PhaserCameraTracker> tracker_ ;
-            std::shared_ptr<Turntable> turntable_ ;
+            std::shared_ptr<GamePieceManipulator> game_piece_man_ ;
+            std::shared_ptr<Climber> climber_ ;
         } ;
     }
 }
