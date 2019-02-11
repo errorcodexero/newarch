@@ -18,7 +18,15 @@ namespace xero {
             void deployCollector();
             void retractCollector();
 
+            virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
+            virtual void computeState() ;
+
+            bool isDeployed() const {
+                return is_deployed_ ;
+            }
+
         private:
+            bool is_deployed_ ;
             std::shared_ptr<frc::Solenoid> solenoid_ ;
 
          } ;

@@ -25,6 +25,10 @@ namespace xero {
             xero::base::ActionSequencePtr testVision() ;   
             xero::base::ActionSequencePtr testTurntable() ; 
 
+            xero::base::ActionSequencePtr testCargoHolder() ;
+            xero::base::ActionSequencePtr testCargoIntake() ;
+            xero::base::ActionSequencePtr testClimber() ;
+
             xero::base::ActionPtr lifterGoToHeight(double height) ;
             xero::base::ActionPtr turntableGoToAngle(double angle) ;
             xero::base::ActionPtr driveAndPosition(const std::string &path, double height, double angle) ;

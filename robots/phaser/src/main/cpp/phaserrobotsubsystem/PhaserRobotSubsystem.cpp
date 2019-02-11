@@ -38,6 +38,9 @@ namespace xero {
 
             turntable_ = std::make_shared<Turntable>(robot, MSG_GROUP_PHASER_TURNTABLE) ;
             addChild(turntable_) ;
+
+            climber_ = std::make_shared<Climber>(robot) ;
+            addChild(climber_) ;
             
             tracker_ = std::make_shared<PhaserCameraTracker>(robot) ;
             tracker_->setCameraIndex(0) ;

@@ -2,6 +2,10 @@
 #include "Phaser.h"
 #include "hatchholder/HatchHolderAction.h"
 #include "phasercameratracker/DriveByVisionAction.h"
+#include "cargoholder/CargoHolder.h"
+#include "cargoholder/CargoHolderAction.h"
+#include "cargointake/CargoIntake.h"
+#include "cargointake/CargoIntakeAction.h"
 #include <tankdrive/TankDriveFollowPathAction.h>
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveScrubCharAction.h>
@@ -15,6 +19,8 @@
 #include <turntable/TurntableGoToAngleAction.h>
 #include <turntable/TurnTableHoldAngleAction.h>
 #include <turntable/TurntablePowerAction.h>
+#include <climber/Climber.h>
+#include <climber/ClimberDeployAction.h>
 #include <DelayAction.h>
 #include <TerminateAction.h>
 #include <ParallelAction.h>
@@ -34,11 +40,12 @@ namespace xero {
 
         void PhaserAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             ActionSequencePtr mode = nullptr ;
-
             
             getRobot().getMessageLogger().startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
             getRobot().getMessageLogger() << "creating automode" ;
             getRobot().getMessageLogger().endMessage() ;
+
+            sel += 10 ;
 
             switch(sel) {
             case 0:
@@ -62,7 +69,6 @@ namespace xero {
                 break ;
 
             case 5:
-                mode = testHatchHolder() ;
                 break ;
 
             case 6:
@@ -80,11 +86,133 @@ namespace xero {
             case 9:
                 mode = testTurntable() ;
                 break ;
+
+            case 10:
+                mode = testCargoHolder() ;
+                break ;
+
+            case 11: 
+                mode = testCargoIntake() ;
+                break ;
+
+            case 12:
+                mode = testClimber() ;
+                break ;
+
+            case 13:
+                mode = testHatchHolder() ;
+                break ;
             }
             setAction(mode) ;
         }
 
+
+        ActionSequencePtr PhaserAutoModeController::testHatchHolder() {
+            std::string name = "Test Hatch Holder" ;
+            std::string desc = "Cycle through the combinations of the hatch holder" ;
+            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto hatchholder = phaserrobot->getHatchHolder() ;
+
+            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::EXTEND_ARM) ;
+            mode->pushSubActionPair(hatchholder, act) ;
+
+            act = std::make_shared<DelayAction>(2.0) ;
+            mode->pushAction(act) ;
+
+            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::EXTEND_FINGER) ;
+            mode->pushSubActionPair(hatchholder, act) ;
+
+            act = std::make_shared<DelayAction>(2.0) ;
+            mode->pushAction(act) ;           
+
+            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::RETRACT_ARM) ;
+            mode->pushSubActionPair(hatchholder, act) ;
+
+            act = std::make_shared<DelayAction>(2.0) ;
+            mode->pushAction(act) ;
+
+            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::RETRACT_FINGER) ;
+            mode->pushSubActionPair(hatchholder, act) ;
+
+            act = std::make_shared<DelayAction>(2.0) ;
+            mode->pushAction(act) ;               
+
+            return mode ;             
+        }        
+
+        ActionSequencePtr PhaserAutoModeController::testClimber() {
+            std::string name = "Test Climber" ;
+            std::string desc = "Test the climber" ;
+            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto climber = phaserrobot->getClimber() ; 
+
+            act = std::make_shared<DelayAction>(10.0) ;
+            mode->pushAction(act) ;            
+
+            act = std::make_shared<ClimberDeployAction>(*climber) ;
+            mode->pushSubActionPair(climber, act) ;    
+
+            return mode ;                                                    
+        }        
+
+        ActionSequencePtr PhaserAutoModeController::testCargoHolder() {
+            std::string name = "Test Cargo Holder" ;
+            std::string desc = "Test the cargo holder" ;
+            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto cargoholder = phaserrobot->getCargoHolder() ;    
+
+            act = std::make_shared<CargoHolderAction>(*cargoholder, 0.4) ;
+            mode->pushSubActionPair(cargoholder, act) ;
+
+            act = std::make_shared<DelayAction>(10.0) ;
+            mode->pushAction(act) ;
+            
+            act = std::make_shared<CargoHolderAction>(*cargoholder, -0.4) ;
+            mode->pushSubActionPair(cargoholder, act) ;       
+
+            act = std::make_shared<DelayAction>(3.0) ;
+            mode->pushAction(act) ;
+
+            act = std::make_shared<CargoHolderAction>(*cargoholder, 0.0) ;
+            mode->pushSubActionPair(cargoholder, act) ;    
+
+            return mode ;                                                    
+        }
         
+        ActionSequencePtr PhaserAutoModeController::testCargoIntake() {    
+            std::string name = "Test Cargo Intake" ;
+            std::string desc = "Test the cargo intake" ;
+            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto cargointake = phaserrobot->getCargoIntake() ;    
+
+            act = std::make_shared<CargoIntakeAction>(*cargointake, true) ;
+            mode->pushSubActionPair(cargointake, act) ;
+
+            act = std::make_shared<DelayAction>(3.0) ;
+            mode->pushAction(act) ;
+            
+            act = std::make_shared<CargoIntakeAction>(*cargointake, false) ;
+            mode->pushSubActionPair(cargointake, act) ;       
+
+            return mode ;                     
+        }
+
         ActionSequencePtr PhaserAutoModeController::testLifter() {
             std::string name = "Test Lifter" ;
             std::string desc = "Test the lifter go to height and hold" ;
@@ -269,42 +397,6 @@ namespace xero {
             return nullptr ;
         }        
 
-        ActionSequencePtr PhaserAutoModeController::testHatchHolder() {
-            std::string name = "Test Hatch Holder" ;
-            std::string desc = "Cycle through the combinations of the hatch holder" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
-            ActionPtr act ;
-
-            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
-            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto hatchholder = phaserrobot->getHatchHolder() ;
-
-            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::EXTEND_ARM) ;
-            mode->pushSubActionPair(hatchholder, act) ;
-
-            act = std::make_shared<DelayAction>(2.0) ;
-            mode->pushAction(act) ;
-
-            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::EXTEND_FINGER) ;
-            mode->pushSubActionPair(hatchholder, act) ;
-
-            act = std::make_shared<DelayAction>(2.0) ;
-            mode->pushAction(act) ;           
-
-            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::RETRACT_ARM) ;
-            mode->pushSubActionPair(hatchholder, act) ;
-
-            act = std::make_shared<DelayAction>(2.0) ;
-            mode->pushAction(act) ;
-
-            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::RETRACT_FINGER) ;
-            mode->pushSubActionPair(hatchholder, act) ;
-
-            act = std::make_shared<DelayAction>(2.0) ;
-            mode->pushAction(act) ;               
-
-            return mode ;             
-        }
 
         ActionPtr PhaserAutoModeController::lifterGoToHeight(double height) {
             ActionSequencePtr seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "lifter_go_to_height", "") ;

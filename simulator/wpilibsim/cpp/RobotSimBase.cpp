@@ -122,6 +122,12 @@ namespace xero {
                     model->addDevice(talon) ;
             }
 
+            VictorSPX *vicspx = dynamic_cast<VictorSPX *>(device) ;
+            if (vicspx != nullptr) {
+                for(auto model : getModels())
+                    model->addDevice(vicspx) ;
+            }            
+
             DigitalInput *input = dynamic_cast<DigitalInput *>(device) ;
             if (input != nullptr) {
                 for(auto model : getModels())

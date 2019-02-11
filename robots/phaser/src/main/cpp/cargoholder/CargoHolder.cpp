@@ -21,7 +21,6 @@ namespace xero {
         bool CargoHolder::canAcceptAction(xero::base::ActionPtr action) {
             auto coll = std::dynamic_pointer_cast<CargoHolderAction>(action) ;
             return coll != nullptr ;            
-
         }  
 
         void CargoHolder::computeState() {

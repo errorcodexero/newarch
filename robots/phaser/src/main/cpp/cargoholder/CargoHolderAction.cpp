@@ -13,7 +13,6 @@ namespace xero {
             }
 
             void CargoHolderAction::run() {
-            
             }
 
             bool CargoHolderAction::isDone() {

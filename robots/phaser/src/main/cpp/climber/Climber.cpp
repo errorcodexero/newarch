@@ -12,6 +12,7 @@ namespace xero {
             // solenoid 1,2,5 are already assigned
 
             solenoid_ = std::make_shared<frc::Solenoid>(sol) ;
+            solenoid_->Set(false) ;
 
             deployed_ = false ;
         }

@@ -167,3 +167,5 @@ drivebyvision:scurve_base_power                 0.2
 drivebyvision:scurve_turn_offset                0.1
 drivebyvision:scurve_cycles                     100
 drivebyvision:quit_threshold                   31.0
+
+cargointake:collectpower                                        0.5
