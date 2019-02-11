@@ -127,6 +127,10 @@ namespace {
     // Should just be needed for debug.
     static bool stream_pipeline_output = false;
 
+    // Normal pipeline is bypassed and we just pass through camera to pipeline output.
+    // Should just be needed for debug.
+    static bool passthru_pipe = false;
+
     // Network table entries where results from tracking will be posted.
     nt::NetworkTableEntry nt_pipe_fps;
     nt::NetworkTableEntry nt_pipe_runtime_ms;
@@ -834,11 +838,16 @@ namespace {
             const double start_time = frc::Timer::GetFPGATimestamp();
             //std::cout << "Process  " << mat.cols << "   " << mat.rows << "\n";
             cv::Mat* frame_out_p = &mat;
-            for (auto& elem : pipe_elements_) {
-                elem->Process(*frame_out_p);
-                frame_out_p = &(elem->getFrameOut());
+            if (passthru_pipe) {
+                // Debug mode only. Bypass normal pipeline.
+                output_frame_ = mat;
+            } else {
+                for (auto& elem : pipe_elements_) {
+                    elem->Process(*frame_out_p);
+                    frame_out_p = &(elem->getFrameOut());
+                }
+                output_frame_ = *frame_out_p;
             }
-            output_frame_ = *frame_out_p;
             ++frames_processed;
             const double end_time = frc::Timer::GetFPGATimestamp();
             total_processing_time += (end_time - start_time);
@@ -919,17 +928,23 @@ namespace {
         }
 
         // Start image processing if present.  First one only.
-        auto pipe = std::make_shared<XeroPipeline>();
         if (cameras.size() >= 1) {
             std::cout << "Starting vision pipeline\n";
 
             std::thread t([&] {
-                              frc::VisionRunner<XeroPipeline> runner(cameras[0],
-                                                                     pipe.get(),
-                                                                     VisionPipelineResultProcessor(stream_pipeline_output));
+                              auto pipe = std::make_shared<XeroPipeline>();
+                              typedef frc::VisionRunner<XeroPipeline> PipeRunner;
+                              VisionPipelineResultProcessor result_processor(stream_pipeline_output);
+                              std::vector<std::shared_ptr<PipeRunner> > runners(2);
+                              runners[0] = std::make_shared<PipeRunner>(cameras[0],
+                                                                        pipe.get(),
+                                                                        result_processor);
+                              runners[1] = std::make_shared<PipeRunner>(cameras[1],
+                                                                        pipe.get(),
+                                                                        result_processor);
                               while (1) {
                                   processCameraParamChanges(cameras);
-                                  runner.RunOnce();
+                                  runners[selected_camera].get()->RunOnce();
                               }
                           });
             t.detach();
@@ -940,18 +955,6 @@ namespace {
         // TODO: Don't hardcode device id.  Get it from json.
         std::this_thread::sleep_for(std::chrono::seconds(2));
         setViewingExposure(viewing_mode);
-
-        /*
-        // Select one of the cameras for streaming for now and toggle.  Just for testing.
-        cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
-        server.SetSource(cameras[0]);
-        std::this_thread::sleep_for(std::chrono::seconds(4));
-        server.SetSource(cameras[1]);
-        std::this_thread::sleep_for(std::chrono::seconds(4));
-        server.SetSource(cameras[0]);
-        std::this_thread::sleep_for(std::chrono::seconds(4));
-        server.SetSource(cameras[1]);
-        */
 
         // Loop forever
         for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
@@ -1029,6 +1032,10 @@ int main(int argc, char* argv[]) {
     const std::string stream_pipeline_output_param_name("vision:stream_pipeline_output");
     if (params.hasParam(stream_pipeline_output_param_name)) {
         stream_pipeline_output = (params.getValue(stream_pipeline_output_param_name) != 0);
+    }
+    const std::string passthru_pipe_param_name("vision:passthru_pipe");
+    if (params.hasParam(passthru_pipe_param_name)) {
+        passthru_pipe = (params.getValue(passthru_pipe_param_name) != 0);
     }
     width_pixels = params.getValue("vision:camera:width_pixels");
     height_pixels = params.getValue("vision:camera:height_pixels");

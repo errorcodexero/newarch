@@ -27,3 +27,6 @@ vision:stream_camera                    1
 
 # Set to non-0 to stream the pipeline output, 0 to disable
 vision:stream_pipeline_output           1
+
+# When set (debug mode only), pipeline acts as pass-through.  No image processing is done.
+vision:passthru_pipe                    0
