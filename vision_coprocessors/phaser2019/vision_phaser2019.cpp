@@ -85,10 +85,10 @@
 
 namespace {
 
-    bool viewing_mode;    // Viewing mode if true, else tracking mode
-    bool nt_server_mode;  // Network table in server vs. client mode
-    int  selected_camera; // Currently selected camera for viewing/tracking
-    bool no_set_resolution;  // If set, don't explicitly set resolution from param file and use what's in frc.json.
+    bool viewing_mode;        // Viewing mode if true, else tracking mode
+    bool nobot_mode = false;  // When true, running off robot.  Set Network table in server mode, etc.
+    int  selected_camera;     // Currently selected camera for viewing/tracking
+    bool no_set_resolution;   // If set, don't explicitly set resolution from param file and use what's in frc.json.
 
     // Chooser(s) from SmartDashboard
     frc::SendableChooser<int> viewing_mode_chooser;
@@ -170,13 +170,13 @@ namespace {
     bool processCommandArgs(int argc, char* argv[]) {
         bool err = false;
         int viewing_mode_flag = 0;
-        int nt_server_mode_flag = 0;
+        int nobot_mode_flag = 0;
         int nores_flag = 0;
         static struct option long_options[] =
             {
              /* These options set a flag. */
              {"view",    no_argument, &viewing_mode_flag, 1},
-             {"server",  no_argument, &nt_server_mode_flag, 1},
+             {"nobot",   no_argument, &nobot_mode_flag, 1},
              {"nores",   no_argument, &nores_flag, 1},
              {0, 0, 0, 0}
             };
@@ -203,20 +203,20 @@ namespace {
         }
 
         if (err) {
-            std::cout << "Usage: " << argv[0] << " [--view] [--server] [--nores]\n";
+            std::cout << "Usage: " << argv[0] << " [--view] [--nobot] [--nores]\n";
             return false;
         }
 
         // Set options based on what was parser
         viewing_mode      = (viewing_mode_flag != 0);
-        nt_server_mode    = (nt_server_mode_flag != 0);
+        nobot_mode        = (nobot_mode_flag != 0);
         no_set_resolution = (nores_flag != 0);
 
         if (viewing_mode_flag) {
             std::cout << "Enabled viewing mode\n" << std::flush;
         }
-        if (nt_server_mode_flag) {
-            std::cout << "Enabled NT server mode\n" << std::flush;
+        if (nobot_mode_flag) {
+            std::cout << "No-robot mode. NT in server mode. Controls from Shuffleboard choosers.\n" << std::flush;
         }
         if (nores_flag) {
             std::cout << "Disabling overriding of resolution that's in frc.json\n" << std::flush;
@@ -405,6 +405,12 @@ namespace {
     }
 
     void processCameraParamChanges(std::vector<cs::VideoSource>& cameras) {
+        if (!nobot_mode) {
+            // For now, ignore chooser if on bot.
+            // TODO: Read selections from NT values published by bot.
+            return;
+        }
+        
         // Chooser for viewing mode
         int chooser_val = viewing_mode_chooser.GetSelected();
         if (chooser_val != 0) {  // Not unspecified
@@ -1042,12 +1048,12 @@ int main(int argc, char* argv[]) {
 
     // Start network table in client or server mode + configure it
     // nt_server_mode may have been configured via command-line args already. Envar overrides it.
-    const char* nt_server_envar = getenv("NT_SERVER");
-    if (nt_server_envar != nullptr) {
-        nt_server_mode = (std::string(nt_server_envar) == "1");
+    const char* nobot_mode_envar = getenv("NOBOT");
+    if (nobot_mode_envar != nullptr) {
+        nobot_mode = (std::string(nobot_mode_envar) == "1");
     }
     ntinst = nt::NetworkTableInstance::GetDefault();
-    startNetworkTable(ntinst, nt_server_mode);
+    startNetworkTable(ntinst, nobot_mode);
     
     // Prepare network table variables that tracker will populate
     std::shared_ptr<NetworkTable> nt_table = ntinst.GetTable("TargetTracking");
