@@ -115,7 +115,7 @@ namespace xero {
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto hatchholder = phaserrobot->getHatchHolder() ;
+            auto hatchholder = phaserrobot->getGameManipulator()->getHatchHolder() ;
 
             act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::EXTEND_ARM) ;
             mode->pushSubActionPair(hatchholder, act) ;
@@ -171,7 +171,7 @@ namespace xero {
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto cargoholder = phaserrobot->getCargoHolder() ;    
+            auto cargoholder = phaserrobot->getGameManipulator()->getCargoHolder() ;    
 
             act = std::make_shared<CargoHolderAction>(*cargoholder, 0.4) ;
             mode->pushSubActionPair(cargoholder, act) ;
@@ -199,7 +199,7 @@ namespace xero {
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto cargointake = phaserrobot->getCargoIntake() ;    
+            auto cargointake = phaserrobot->getGameManipulator()->getCargoIntake() ;    
 
             act = std::make_shared<CargoIntakeAction>(*cargointake, true) ;
             mode->pushSubActionPair(cargointake, act) ;
@@ -221,7 +221,7 @@ namespace xero {
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto lifter = phaserrobot->getLifter() ;
+            auto lifter = phaserrobot->getGameManipulator()->getLifter() ;
 
             act = std::make_shared<LifterCalibrateAction>(*lifter) ;
             mode->pushSubActionPair(lifter, act) ;
@@ -252,7 +252,7 @@ namespace xero {
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto turntable = phaserrobot->getTurntable() ;
+            auto turntable = phaserrobot->getGameManipulator()->getTurntable() ;
 
             act = std::make_shared<TurntableCalibrateAction>(*turntable) ;
             mode->pushSubActionPair(turntable, act) ;
@@ -387,8 +387,8 @@ namespace xero {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
-            auto lifter = phaserrobot->getLifter() ;
-            auto turntable = phaserrobot->getTurntable() ;
+            auto lifter = phaserrobot->getGameManipulator()->getLifter() ;
+            auto turntable = phaserrobot->getGameManipulator()->getTurntable() ;
 
             return mode ;         
         }
@@ -397,14 +397,13 @@ namespace xero {
             return nullptr ;
         }        
 
-
         ActionPtr PhaserAutoModeController::lifterGoToHeight(double height) {
             ActionSequencePtr seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "lifter_go_to_height", "") ;
             ActionPtr act ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto lifter = phaserrobot->getLifter() ;
+            auto lifter = phaserrobot->getGameManipulator()->getLifter() ;
 
             act = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
             seq->pushSubActionPair(lifter, act) ;
@@ -421,7 +420,7 @@ namespace xero {
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto turntable = phaserrobot->getTurntable() ;
+            auto turntable = phaserrobot->getGameManipulator()->getTurntable() ;
 
             act = std::make_shared<TurntableGoToAngleAction>(*turntable, angle) ;
             seq->pushSubActionPair(turntable, act) ;

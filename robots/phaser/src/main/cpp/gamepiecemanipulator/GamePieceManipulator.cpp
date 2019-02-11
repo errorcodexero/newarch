@@ -8,10 +8,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
-        GamePieceManipulator::GamePieceManipulator(Robot &robot) : RobotSubsystem(robot, "phaser") {
-
-            oi_ = std::make_shared<PhaserOISubsystem>(robot) ;
-            addChild(oi_) ;        
+        GamePieceManipulator::GamePieceManipulator(Robot &robot) : Subsystem(robot, "gamepiecemanipulator") {
 
             hatch_holder_ = std::make_shared<HatchHolder>(robot) ;
             addChild(hatch_holder_) ;

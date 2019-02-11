@@ -7,21 +7,15 @@
 #include "cargointake/CargoIntake.h"
 #include "turntable/TurnTable.h"
 #include <lifter/Lifter.h>
-#include <RobotSubsystem.h>
+#include <Subsystem.h>
 
 namespace xero {
     namespace phaser {
 
-        class GamePieceManipulator : public xero::base::RobotSubsystem {
+        class GamePieceManipulator : public xero::base::Subsystem {
         public:
             GamePieceManipulator(xero::base::Robot &robot) ;
             virtual ~GamePieceManipulator() ;
-
-
-          
-            std::shared_ptr<PhaserOISubsystem> getOI() {
-                return oi_ ;
-            }   
 
             std::shared_ptr<HatchHolder> getHatchHolder() {
                 return hatch_holder_ ;
@@ -48,7 +42,6 @@ namespace xero {
             }
 
         private:
-            std::shared_ptr<PhaserOISubsystem> oi_ ;
             std::shared_ptr<HatchHolder> hatch_holder_ ;
             // std::shared_ptr<HatchIntake> hatch_intake_ ;
             std::shared_ptr<CargoHolder> cargo_holder_ ;

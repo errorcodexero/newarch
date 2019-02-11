@@ -21,7 +21,8 @@ SOURCES = \
 	src/main/cpp/cargointake/CargoIntake.cpp\
 	src/main/cpp/cargointake/CargoIntakeAction.cpp\
 	src/main/cpp/climber/Climber.cpp\
-	src/main/cpp/climber/ClimberDeployAction.cpp
+	src/main/cpp/climber/ClimberDeployAction.cpp\
+	src/main/cpp/gamepiecemanipulator/GamePieceManipulator.cpp
 
 TARGET = phaser
 
