@@ -405,6 +405,13 @@ namespace {
         }
     }
 
+    // Post result of target being identified on network table, and flush immediately.
+    void setTargetIsIdentified(bool target_identified) {
+        nt_target_valid.SetBoolean(target_identified);
+        frc::SmartDashboard::PutBoolean("TargetIdentified", target_identified);
+        ntinst.Flush();
+    }
+
     void processCameraParamChanges(std::vector<cs::VideoSource>& cameras) {
         if (!nobot_mode) {
             // For now, ignore chooser if on bot.
@@ -432,6 +439,7 @@ namespace {
                 selected_camera = new_selected_camera;
                 cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
                 server.SetSource(cameras[selected_camera]);
+                setTargetIsIdentified(false);
             }
         }
             
@@ -515,13 +523,6 @@ namespace {
         // but it's rate-limited to prevent flooding newwork. Unclear whether this affects the cap.
         // Changing it anyway in case it does + in case flush() is not called.
         ntinst.SetUpdateRate(0.01);    // Allowed range per docs is 0.01 -> 1.0 (rate in seconds)
-    }
-
-    // Post result of target being identified on network table, and flush immediately.
-    void setTargetIsIdentified(bool target_identified) {
-        nt_target_valid.SetBoolean(target_identified);
-        frc::SmartDashboard::PutBoolean("TargetIdentified", target_identified);
-        ntinst.Flush();
     }
 
     // Draw ractangle
