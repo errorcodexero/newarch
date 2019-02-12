@@ -28,7 +28,7 @@ hw:hatchholder:sensor                                           10              
 
 hw:hatchintake:motor                                            11              # Victor SPX
 hw:hatchintake:sensor                                           12              # Digital IO
-hw:hatchintake:deploy                                           3               # Solenoid
+hw:hatchintake:solenoid                                         3               # Solenoid
 
 hw:lifter:encoder1                                              6               # Digital IO
 hw:lifter:encoder2                                              7               # Digital IO
