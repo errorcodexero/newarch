@@ -10,7 +10,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
-        CargoHolder::CargoHolder(xero::base::Robot &robot) : Subsystem(robot, "CargoHolder") {
+        CargoHolder::CargoHolder(xero::base::Robot &robot, uint64_t id, bool victor) : SingleMotorSubsystem(robot, "CargoHolder",  "hw:cargoholder:motor", id, victor) {
             sensor_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:cargoholder:sensor"));
             motor_ = std::make_shared<VictorSPX>(robot.getSettingsParser().getInteger("hw:cargoholder:motor"));
         }   

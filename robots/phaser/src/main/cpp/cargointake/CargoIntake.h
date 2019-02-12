@@ -17,7 +17,6 @@ namespace xero {
             ~CargoIntake();
             void deployCollector();
             void retractCollector();
-
             virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
             virtual void computeState() ;
 

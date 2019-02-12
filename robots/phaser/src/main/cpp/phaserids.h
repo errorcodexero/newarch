@@ -18,3 +18,5 @@
 
 #define MSG_GROUP_CARGO_INTAKE                      (1ull << 35)
 
+#define MSG_GROUP_CARGO_HOLDER                      (1ull << 36)
+

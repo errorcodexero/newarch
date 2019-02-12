@@ -16,7 +16,7 @@ namespace xero {
             // hatch_intake_ = std::make_shared<HatchIntake>(robot, MSG_GROUP_HATCH_INTAKE) ;
             // addChild(hatch_intake_) 
 
-            cargo_holder_ = std::make_shared<CargoHolder>(robot) ;
+            cargo_holder_ = std::make_shared<CargoHolder>(robot, MSG_GROUP_CARGO_HOLDER) ;
             addChild(cargo_holder_) ;
 
             cargo_intake_ = std::make_shared<CargoIntake>(robot, MSG_GROUP_CARGO_INTAKE) ;

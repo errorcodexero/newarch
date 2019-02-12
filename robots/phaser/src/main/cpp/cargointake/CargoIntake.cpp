@@ -1,6 +1,7 @@
 #include "CargoIntake.h"
 #include "CargoIntakeAction.h"
 #include "Robot.h"
+#include "CargoIntakeAction.h"
 
 using namespace xero::base ;
 
@@ -21,7 +22,7 @@ namespace xero {
 
         bool CargoIntake::canAcceptAction(xero::base::ActionPtr act) {
             std::shared_ptr<CargoIntakeAction> cargoact = std::dynamic_pointer_cast<CargoIntakeAction>(act) ;
-            return cargoact != nullptr ;
+            return cargoact != nullptr || SingleMotorSubsystem::canAcceptAction(act) ;
         }
 
         void CargoIntake::computeState() {

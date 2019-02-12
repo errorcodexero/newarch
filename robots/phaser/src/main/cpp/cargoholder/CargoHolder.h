@@ -6,14 +6,16 @@
 #include <PIDCtrl.h>
 #include <limits>
 #include <vector>
+#include "singlemotorsubsystem/SingleMotorSubsystem.h"
+
 
 typedef ctre::phoenix::motorcontrol::can::VictorSPX VictorSPX;
 
 namespace xero {
     namespace phaser {
-        class CargoHolder : public xero::base::Subsystem {
+        class CargoHolder : public xero::base::SingleMotorSubsystem {
         public:
-            CargoHolder(xero::base::Robot &robot) ;
+            CargoHolder(xero::base::Robot &robot, uint64_t id, bool victor=false) ;
             virtual ~CargoHolder() ;
             
             virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
