@@ -20,3 +20,10 @@
 
 #define MSG_GROUP_CARGO_HOLDER                      (1ull << 36)
 
+#define MSG_GROUP_HATCH_INTAKE                      (1ull << 37)
+
+#define MSG_GROUP_HATCH_HOLDER                      (1ull << 38)
+
+
+
+
