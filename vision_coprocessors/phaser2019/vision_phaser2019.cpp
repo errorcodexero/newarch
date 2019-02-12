@@ -150,6 +150,7 @@ namespace {
     nt::NetworkTableEntry nt_rect_r_dist_inch;
     nt::NetworkTableEntry nt_bot_x_offset_inch;
     nt::NetworkTableEntry nt_bot_z_offset_inch;
+    nt::NetworkTableEntry nt_bot_angle2_deg;
     nt::NetworkTableEntry nt_target_valid;
 
     
@@ -797,11 +798,13 @@ namespace {
             double bot_z_offset_inch = sqrt(pow(l_rect_dist_inch,2) - pow(bot_x_offset_inch - 0.5*dist_bet_centers_inch,2));
             double dist2_inch = sqrt(pow(bot_x_offset_inch,2) + pow(bot_z_offset_inch,2));
             double dist3_inch = (l_rect_dist_inch + r_rect_dist_inch)/2;
+            double bot_angle2_deg = atan2(bot_x_offset_inch, bot_z_offset_inch) * 180.0 / M_PI;
             bot_x_offset_inch = -bot_x_offset_inch;  // Flip X coordinate to negative if bot on left of target, not opposite.
             nt_rect_l_dist_inch.SetDouble(l_rect_dist_inch);
             nt_rect_r_dist_inch.SetDouble(r_rect_dist_inch);
             nt_bot_x_offset_inch.SetDouble(bot_x_offset_inch);
             nt_bot_z_offset_inch.SetDouble(bot_z_offset_inch);
+            nt_bot_angle2_deg.SetDouble(bot_angle2_deg);
             
             // Publish info on the 2 rectangles.
             nt_rect_l_angle_deg.SetDouble(left_rect.angle);
@@ -1099,6 +1102,8 @@ int main(int argc, char* argv[]) {
     nt_bot_x_offset_inch.SetDefaultDouble(0);
     nt_bot_z_offset_inch = nt_table->GetEntry("bot_z_offset_inch");
     nt_bot_z_offset_inch.SetDefaultDouble(0);
+    nt_bot_angle2_deg = nt_table->GetEntry("bot_angle2_deg");
+    nt_bot_angle2_deg.SetDefaultDouble(0);
     nt_target_valid = nt_table->GetEntry("valid");
     nt_target_valid.SetDefaultBoolean(false);
     setTargetIsIdentified(false);
