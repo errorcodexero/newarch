@@ -425,6 +425,7 @@ namespace {
             assert(chooser_val == 1 || chooser_val == 2);
             bool new_viewing_mode = (chooser_val == 2);
             if (viewing_mode != new_viewing_mode) {
+                //std::cout << "Changing viewing mode to " << (new_viewing_mode ? 1 : 0) << "\n" << std::flush;
                 viewing_mode = new_viewing_mode;
                 setViewingExposure(viewing_mode);
             }
@@ -436,6 +437,7 @@ namespace {
             assert(chooser_val == 1 || chooser_val == 2);
             int new_selected_camera = chooser_val - 1;
             if (selected_camera != new_selected_camera) {
+                //std::cout << "Changing selected camera to " << new_selected_camera << "\n" << std::flush;
                 selected_camera = new_selected_camera;
                 cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
                 server.SetSource(cameras[selected_camera]);
@@ -673,7 +675,7 @@ namespace {
                 // Discard rectangles that don't have the expected angle
                 // Expected angles are -15 for one and -75 for the other.
                 const double rot_ang_tol = 0.3;  /*Tolerance as fraction*/
-                const double rot_ang_tol_abs = 7;  /*+- that many degrees */
+                const double rot_ang_tol_abs = 10;  /*+- that many degrees */
                 if (!isApproxEqual(min_rect.angle+90, 15, rot_ang_tol, rot_ang_tol_abs) &&
                     !isApproxEqual(min_rect.angle+90, 75, rot_ang_tol, rot_ang_tol_abs)) {
                     //std::cout << "FALSE: Rect angle = " << min_rect.angle << "\n";
