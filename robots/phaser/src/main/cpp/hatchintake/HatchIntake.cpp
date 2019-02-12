@@ -9,7 +9,7 @@ using namespace xero::base ;
 
 namespace xero {
     namespace phaser {
-        HatchIntake::HatchIntake(xero::base::Robot &robot, uint64_t id, bool victor) : SingleMotorSubsystem(robot, "HatchIntake", "hw:hatchintake:motor", id, victor=false){
+        HatchIntake::HatchIntake(xero::base::Robot &robot, uint64_t id, bool victor) : SingleMotorSubsystem(robot, "HatchIntake", "hw:hatchintake:motor", id, victor){
             solenoid_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:hatchintake:solenoid"));
             sensor_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:hatchintake:sensor"));
 

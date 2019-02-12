@@ -14,7 +14,7 @@ namespace xero {
 
             friend class HatchIntakeAction ;
         public:
-            HatchIntake(xero::base::Robot &robot,  uint64_t id, bool victor=false) ;
+            HatchIntake(xero::base::Robot &robot,  uint64_t id, bool victor=true) ;
             ~HatchIntake() ;
             void deployCollector() ;
             void retractCollector() ;
