@@ -7,8 +7,6 @@ SOURCES = \
 	src/main/cpp/phaseroi/PhaserOISubsystem.cpp\
 	src/main/cpp/phaserrobotsubsystem/PhaserRobotSubsystem.cpp\
 	src/main/cpp/automodes/PhaserAutoModeController.cpp\
-	src/main/cpp/hatchholder/HatchHolder.cpp\
-	src/main/cpp/hatchholder/HatchHolderAction.cpp\
 	src/main/cpp/turntable/Turntable.cpp\
 	src/main/cpp/turntable/TurntableCalibrateAction.cpp\
 	src/main/cpp/turntable/TurntableGoToAngleAction.cpp\
@@ -16,8 +14,11 @@ SOURCES = \
 	src/main/cpp/turntable/TurntablePowerAction.cpp\
 	src/main/cpp/phasercameratracker/PhaserCameraTracker.cpp\
 	src/main/cpp/phasercameratracker/DriveByVisionAction.cpp\
+	src/main/cpp/hatchholder/HatchHolder.cpp\
+	src/main/cpp/hatchholder/HatchHolderAction.cpp\
+	src/main/cpp/hatchintake/HatchIntake.cpp\
+	src/main/cpp/hatchintake/HatchIntakeAction.cpp\
 	src/main/cpp/cargoholder/CargoHolder.cpp\
-	src/main/cpp/cargoholder/CargoHolderAction.cpp\
 	src/main/cpp/cargointake/CargoIntake.cpp\
 	src/main/cpp/cargointake/CargoIntakeAction.cpp\
 	src/main/cpp/climber/Climber.cpp\

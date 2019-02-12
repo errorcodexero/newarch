@@ -1,9 +1,0 @@
-This directory will contains the line follower subsystem.  The line follower subsystem 
-main contain just the line following sensor and will then only implement the subsystem
-and ISteerAngle interface.  It may also include an distance sensor to the target object
-and then would also include an ISteerDistance interface.
-
-Actions
--------
-Enable/Disable
-

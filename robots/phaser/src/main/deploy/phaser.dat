@@ -18,31 +18,39 @@ hw:tankdrive:leftencoder:1                                      0               
 hw:tankdrive:leftencoder:2                                      1               # Digital IO
 hw:tankdrive:rightencoder:1                                     2               # Digital IO
 hw:tankdrive:rightencoder:2                                     3               # Digital IO
-hw:tankdrive:shifter                                            0               # Solenoid 0
+hw:tankdrive:shifter                                            0               # Solenoid
 hw:tankdrive:invert:motors:right                                true
 hw:tankdrive:invert:encoders:right                              true
 
-hw:hatchholder:arm                                              1               # Solenoid 1
-hw:hatchholder:finger                                           2               # Solenoid 2
+hw:hatchholder:arm                                              1               # Solenoid
+hw:hatchholder:finger                                           2               # Solenoid
 hw:hatchholder:sensor                                           10              # Digital IO
+
+hw:hatchintake:motor                                            11              # Victor SPX
+hw:hatchintake:sensor                                           12              # Digital IO
+hw:hatchintake:deploy                                           3               # Solenoid
 
 hw:lifter:encoder1                                              6               # Digital IO
 hw:lifter:encoder2                                              7               # Digital IO
 hw:lifter:limit:bottom                                          8               # Digital IO
 hw:lifter:limit:top                                             9               # Digital IO
-hw:lifter:motor:1                                               8               # TalonSRX 8
-hw:lifter:motor:2                                               9               # TalonSRX 9
+hw:lifter:motor:1                                               8               # TalonSRX
+hw:lifter:motor:2                                               9               # TalonSRX
 
 hw:turntable:encoder1                                           4               # Digital IO
 hw:turntable:encoder2                                           5               # Ditigal IO
 hw:turntable:motor:1                                            7               # TALON SRX
 
-hw:linesensor:0                                                 21              # Digital IO
-hw:linesensor:1                                                 22              # Digital IO
-hw:linesensor:2                                                 23              # Digital IO
+hw:linesensor:front:0                                           21              # Digital IO
+hw:linesensor:front:1                                           22              # Digital IO
+hw:linesensor:front:2                                           23              # Digital IO
 
-hw:driverstation:hid:driver                                     0
-hw:driverstation:hid:oi                                         2
+hw:linesensor:back:0                                            20              # Digital IO
+hw:linesensor:back:1                                            19              # Digital IO
+hw:linesensor:back:2                                            18              # Digital IO
+
+hw:driverstation:hid:driver                                     0               # HID Device Index
+hw:driverstation:hid:oi                                         2               # HID Device Index
 
 hw:cargoholder:sensor                                           11              # Digital IO
 hw:cargoholder:motor                                            10              # Victor SPX

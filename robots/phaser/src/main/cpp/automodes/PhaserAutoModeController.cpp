@@ -286,7 +286,7 @@ namespace xero {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
-            auto ls = phaserrobot->getLightSensor() ;
+            auto ls = phaserrobot->getFrontLineSensor() ;
             auto cm = phaserrobot->getCameraTracker() ;
 
             childact = std::make_shared<TankDriveFollowPathAction>(*db, "CurveLeft") ;
@@ -331,7 +331,7 @@ namespace xero {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
-            auto ls = phaserrobot->getLightSensor() ;
+            auto ls = phaserrobot->getFrontLineSensor() ;
 
             act = std::make_shared<TankDrivePowerAction>(*db, 0.2, 0.2, false) ;
             mode->pushSubActionPair(db, act) ;
