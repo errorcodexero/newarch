@@ -137,6 +137,7 @@ namespace {
     nt::NetworkTableEntry nt_target_dist_pixels;
     nt::NetworkTableEntry nt_target_dist_inch;
     nt::NetworkTableEntry nt_target_dist2_inch;
+    nt::NetworkTableEntry nt_target_dist3_inch;
     nt::NetworkTableEntry nt_target_yaw_deg;
     nt::NetworkTableEntry nt_target_rect_ratio;
     nt::NetworkTableEntry nt_rect_l_angle_deg;
@@ -792,6 +793,7 @@ namespace {
             double bot_x_offset_inch = (pow(r_rect_dist_inch,2) - pow(l_rect_dist_inch,2))/(2*dist_bet_centers_inch);
             double bot_z_offset_inch = sqrt(pow(l_rect_dist_inch,2) - pow(bot_x_offset_inch - 0.5*dist_bet_centers_inch,2));
             double dist2_inch = sqrt(pow(bot_x_offset_inch,2) + pow(bot_z_offset_inch,2));
+            double dist3_inch = (l_rect_dist_inch + r_rect_dist_inch)/2;
             bot_x_offset_inch = -bot_x_offset_inch;  // Flip X coordinate to negative if bot on left of target, not opposite.
             nt_rect_l_dist_inch.SetDouble(l_rect_dist_inch);
             nt_rect_r_dist_inch.SetDouble(r_rect_dist_inch);
@@ -815,6 +817,7 @@ namespace {
             nt_target_dist_pixels.SetDouble(dist_bet_centers);
             nt_target_dist_inch.SetDouble(dist_to_target);
             nt_target_dist2_inch.SetDouble(dist2_inch);
+            nt_target_dist3_inch.SetDouble(dist3_inch);
             setTargetIsIdentified(true);  // Also flushed NT, so keep this call at the end of NT updates.
         }
 
@@ -1067,6 +1070,8 @@ int main(int argc, char* argv[]) {
     nt_target_dist_inch.SetDefaultDouble(0);
     nt_target_dist2_inch = nt_table->GetEntry("dist2_inch");
     nt_target_dist2_inch.SetDefaultDouble(0);
+    nt_target_dist3_inch = nt_table->GetEntry("dist3_inch");
+    nt_target_dist3_inch.SetDefaultDouble(0);
     nt_target_yaw_deg = nt_table->GetEntry("yaw_deg");
     nt_target_yaw_deg.SetDefaultDouble(0);
     nt_target_rect_ratio = nt_table->GetEntry("rect_ratio");
