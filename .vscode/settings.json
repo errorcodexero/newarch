@@ -90,6 +90,8 @@
     "future": "cpp",
     "numeric": "cpp",
     "csignal": "cpp",
-    "random": "cpp"
+    "random": "cpp",
+    "optional": "cpp",
+    "string_view": "cpp"
   }
 }
