@@ -11,11 +11,9 @@ namespace xero {
             void CargoIntakeAction::start() {
                 if (is_deployed_ == true){
                     subsystem_.deployCollector() ;
-                    subsystem_.setMotor(collect_power_) ;
                 }
                 else {
                     subsystem_.retractCollector() ;
-                    subsystem_.setMotor(0.0) ;
                 }
                 is_done_ = true ;
             }

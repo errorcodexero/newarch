@@ -20,6 +20,9 @@ namespace xero {
         }
 
         bool CargoIntake::canAcceptAction(xero::base::ActionPtr act) {
+            if (SingleMotorSubsystem::canAcceptAction(act))
+                return true ;
+                
             std::shared_ptr<CargoIntakeAction> cargoact = std::dynamic_pointer_cast<CargoIntakeAction>(act) ;
             return cargoact != nullptr ;
         }
