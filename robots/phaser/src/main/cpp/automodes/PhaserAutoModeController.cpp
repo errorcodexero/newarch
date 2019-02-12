@@ -3,9 +3,9 @@
 #include "hatchholder/HatchHolderAction.h"
 #include "phasercameratracker/DriveByVisionAction.h"
 #include "cargoholder/CargoHolder.h"
-#include "cargoholder/CargoHolderAction.h"
 #include "cargointake/CargoIntake.h"
 #include "cargointake/CargoIntakeAction.h"
+#include "singlemotorsubsystem/SingleMotorPowerAction.h"
 #include <tankdrive/TankDriveFollowPathAction.h>
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveScrubCharAction.h>
@@ -173,19 +173,19 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto cargoholder = phaserrobot->getGameManipulator()->getCargoHolder() ;    
 
-            act = std::make_shared<CargoHolderAction>(*cargoholder, 0.4) ;
+            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, 0.4) ;
             mode->pushSubActionPair(cargoholder, act) ;
 
             act = std::make_shared<DelayAction>(10.0) ;
             mode->pushAction(act) ;
             
-            act = std::make_shared<CargoHolderAction>(*cargoholder, -0.4) ;
+            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, -0.4) ;
             mode->pushSubActionPair(cargoholder, act) ;       
 
             act = std::make_shared<DelayAction>(3.0) ;
             mode->pushAction(act) ;
 
-            act = std::make_shared<CargoHolderAction>(*cargoholder, 0.0) ;
+            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, 0.0) ;
             mode->pushSubActionPair(cargoholder, act) ;    
 
             return mode ;                                                    
