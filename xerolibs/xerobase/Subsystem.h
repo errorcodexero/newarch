@@ -124,6 +124,8 @@ namespace xero {
             //
             ActionPtr action_;
 
+            ActionPtr pending_ ;
+
             //
             // The set of child subsystems
             //
