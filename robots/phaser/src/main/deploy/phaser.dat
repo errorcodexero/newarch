@@ -24,10 +24,10 @@ hw:tankdrive:invert:encoders:right                              true
 
 hw:hatchholder:arm                                              1               # Solenoid
 hw:hatchholder:finger                                           2               # Solenoid
-hw:hatchholder:sensor                                           10              # Digital IO
+hw:hatchholder:sensor                                           22              # Digital IO
 
 hw:hatchintake:motor                                            11              # Victor SPX
-hw:hatchintake:sensor                                           12              # Digital IO
+hw:hatchintake:sensor                                           21              # Digital IO
 hw:hatchintake:solenoid                                         3               # Solenoid
 
 hw:lifter:encoder1                                              6               # Digital IO
@@ -41,18 +41,18 @@ hw:turntable:encoder1                                           4               
 hw:turntable:encoder2                                           5               # Ditigal IO
 hw:turntable:motor:1                                            7               # TALON SRX
 
-hw:linesensor:front:0                                           21              # Digital IO
-hw:linesensor:front:1                                           22              # Digital IO
-hw:linesensor:front:2                                           23              # Digital IO
+hw:linesensor:front:0                                           10              # Digital IO
+hw:linesensor:front:1                                           11              # Digital IO
+hw:linesensor:front:2                                           12              # Digital IO
 
-hw:linesensor:back:0                                            20              # Digital IO
-hw:linesensor:back:1                                            19              # Digital IO
-hw:linesensor:back:2                                            18              # Digital IO
+hw:linesensor:back:0                                            13              # Digital IO
+hw:linesensor:back:1                                            18              # Digital IO
+hw:linesensor:back:2                                            19              # Digital IO
 
 hw:driverstation:hid:driver                                     0               # HID Device Index
 hw:driverstation:hid:oi                                         2               # HID Device Index
 
-hw:cargoholder:sensor                                           11              # Digital IO
+hw:cargoholder:sensor                                           20              # Digital IO
 hw:cargoholder:motor                                            10              # Victor SPX
 
 hw:cargointake:motor                                            12              # Victor SPX
@@ -72,7 +72,7 @@ hw:climber:solenoid                                             6               
 # aligned with Phoenix as the basis for the Phaser code until we get
 # a Phaser drivebase
 #
-tankdrive:inches_per_tick                                       0.010471976
+tankdrive:inches_per_tick                                       0.010952734
 tankdrive:width                                                 24.5
 tankdrive:scrub                                                 0.9
 
@@ -115,65 +115,73 @@ linefollow:adjust                                               .35
 #
 # Variables for the turntable
 #
-turntable:keepout:minimum                                       -60
-turntable:keepout:maximum                                       -30
-turntable:degrees_per_tick                                      0.5
-turntable:maxa                                                  45
-turntable:maxd                                                  -45
-turntable:maxv                                                  45
+turntable:keepout:minimum                                       -55
+turntable:keepout:maximum                                       -35
+turntable:degrees_per_tick                                      0.135427952
+turntable:maxa                                                  45                  # TODO
+turntable:maxd                                                  -45                 # TODO
+turntable:maxv                                                  45                  # TODO
 turntable:base                                                  0.0
-turntable:threshold                                             1.0
-turntable:follower:kv                                           0.011111
-turntable:follower:ka                                           0.0
-turntable:follower:kp                                           0.0
-turntable:follower:kd                                           0.0
-turntable:maxa
+turntable:threshold                                             1.0                 # TODO
+turntable:follower:kv                                           0.011111            # TODO
+turntable:follower:ka                                           0.0                 # TODO
+turntable:follower:kp                                           0.0                 # TODO
+turntable:follower:kd                                           0.0                 # TODO
+turntable:hold:p                                                -0.1                # TODO
+turntable:hold:i                                                0.0                 # TODO
+turntable:hold:d                                                0.0                 # TODO
+turntable:hold:f                                                0.0                 # TODO
+turntable:hold:a                                                0.0                 # TODO
+turntable:hold:min                                              -0.5                # TODO
+turntable:hold:max                                              0.5                 # TODO
+turntable:hold:imax                                             0.0                 # TODO
+turntable:speed_threshold                                       5.0                 # TODO
+turntable:angle_threshold                                       1.0                 # TODO
 
 #
 # Variables for the lifter
 #
-lifter:base							                            11.375
-lifter:inches_per_tick                                          0.08327
-lifter:max_height                                               86.0
-lifter:min_height                                               11.375
+lifter:base							                            0.0                 # TODO
+lifter:inches_per_tick                                          0.014861049
+lifter:max_height                                               86.0                # TODO
+lifter:min_height                                               11.375              # TODO
 lifter:threshold                                                1.0
-lifter:maxv                                                     12
-lifter:maxa                                                     12
-lifter:maxd                                                     -12
-lifter:follower:kp                                              0.4
-lifter:follower:ka                                              0.03
-lifter:follower:kv                                              0.018
-lifter:follower:kd                                              0.0
-lifter:hold:p                                                   -0.1
-lifter:hold:i                                                   0.0
-lifter:hold:d                                                   0.0
-lifter:hold:f                                                   0.0
-lifter:hold:a                                                   0.0
-lifter:hold:min                                                 -0.5
-lifter:hold:max                                                 0.5
-lifter:hold:imax                                                0.0
+lifter:maxv                                                     12                  # TODO
+lifter:maxa                                                     12                  # TODO
+lifter:maxd                                                     -12                 # TODO
+lifter:follower:kp                                              0.4                 # TODO
+lifter:follower:ka                                              0.03                # TODO
+lifter:follower:kv                                              0.018               # TODO
+lifter:follower:kd                                              0.0                 # TODO
+lifter:hold:p                                                   -0.1                # TODO
+lifter:hold:i                                                   0.0                 # TODO
+lifter:hold:d                                                   0.0                 # TODO
+lifter:hold:f                                                   0.0                 # TODO
+lifter:hold:a                                                   0.0                 # TODO
+lifter:hold:min                                                 -0.5                # TODO
+lifter:hold:max                                                 0.5                 # TODO
+lifter:hold:imax                                                0.0                 # TODO
 
 cameratracker:distance_threshold                                0.0
 cameratracker:yaw_threshold                                     0.0
 cameratracker:rect_ratio_min                                    0.0
 cameratracker:rect_ratio_max                                    0.0
 
-drivebyvision:yaw_base_power                  0.2                  
-drivebyvision:yaw_p                           -0.003
-drivebyvision:yaw_threshold                   3.0
-drivebyvision:lost_target_threshold           4
-drivebyvision:outer_distance                  96.0
-drivebyvision:inner:0                         0.90
-drivebyvision:inner:1                         0.98
-drivebyvision:inner:2                         1.02
-drivebyvision:inner:3                         1.1
-drivebyvision:outer:0                         0.90
-drivebyvision:outer:1                         0.98
-drivebyvision:outer:2                         1.02
-drivebyvision:outer:3                         1.10
-drivebyvision:scurve_base_power                 0.2
-drivebyvision:scurve_turn_offset                0.1
-drivebyvision:scurve_cycles                     100
-drivebyvision:quit_threshold                   31.0
+drivebyvision:yaw_base_power                                    0.2                  
+drivebyvision:yaw_p                                             -0.003
+drivebyvision:yaw_threshold                                     3.0
+drivebyvision:lost_target_threshold                             4
+drivebyvision:outer_distance                                    96.0
+drivebyvision:inner:0                                           0.90
+drivebyvision:inner:1                                           0.98
+drivebyvision:inner:2                                           1.02
+drivebyvision:inner:3                                           1.1
+drivebyvision:outer:0                                           0.90
+drivebyvision:outer:1                                           0.98
+drivebyvision:outer:2                                           1.02
+drivebyvision:outer:3                                           1.10
+drivebyvision:scurve_base_power                                 0.2
+drivebyvision:scurve_turn_offset                                0.1
+drivebyvision:scurve_cycles                                     100
+drivebyvision:quit_threshold                                    31.0
 
-cargointake:collectpower                                        0.5

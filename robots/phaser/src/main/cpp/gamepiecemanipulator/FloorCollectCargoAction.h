@@ -17,6 +17,19 @@ namespace xero{
             virtual std::string toString() ;
 
         private:
+            enum class State {
+                Idle,
+                LifterGoToSafeHeight,
+                TurntableGoToCollectAngle,
+                LifterGoToCollectHeightDeployIntake,
+                WaitForCargo,
+                StopAllMotors,
+                RetractIntake
+            } ;
+
+        private:
+            State state_ ;
+
             xero::base::ActionPtr set_lifter_safe_height_ ; 
             xero::base::ActionPtr set_turntable_cargo_angle_ ;
             xero::base::ActionPtr set_lifter_cargo_intake_height_ ;

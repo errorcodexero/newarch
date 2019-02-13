@@ -9,17 +9,17 @@ using namespace xero::misc ;
 namespace xero {
     namespace phaser {
         TurntableHoldAngleAction::TurntableHoldAngleAction(Turntable &turntable, double target) : TurntableAction(turntable) {
-            angle_threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:goto:angle_threshold") ;
-            speed_threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:goto:speed_threshold") ;
+            angle_threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:hold:angle_threshold") ;
+            speed_threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:hold:speed_threshold") ;
             target_ = target ;
-            pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:goto") ;          
+            pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:hold") ;          
         }
 
         TurntableHoldAngleAction::TurntableHoldAngleAction(Turntable &turntable, const std::string &name) : TurntableAction(turntable) {
-            angle_threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:goto:angle_threshold") ;
-            speed_threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:goto:speed_threshold") ;
+            angle_threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:hold:angle_threshold") ;
+            speed_threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:hold:speed_threshold") ;
             target_ = getTurntable().getRobot().getSettingsParser().getDouble(name) ;
-            pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:goto") ;          
+            pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:hold") ;          
         }
 
         TurntableHoldAngleAction::~TurntableHoldAngleAction() {
