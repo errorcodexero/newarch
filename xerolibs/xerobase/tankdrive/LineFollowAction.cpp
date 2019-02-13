@@ -88,6 +88,8 @@ namespace xero {
         }
 
         void LineFollowAction::cancel() {
+            is_done_ = true ;
+            setMotorsToPercents(0, 0) ;
         }
 
         std::string LineFollowAction::toString() {

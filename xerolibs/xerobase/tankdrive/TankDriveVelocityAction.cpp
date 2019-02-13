@@ -68,6 +68,7 @@ void TankDriveVelocityAction::run() {
 }
 
 void TankDriveVelocityAction::cancel() {
+    is_done_ = true ;
 }
 
 bool TankDriveVelocityAction::isDone() {

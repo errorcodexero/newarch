@@ -129,6 +129,7 @@ namespace xero {
 
             void ShooterEjectOneBallAction::cancel() {
                 getSubsystem().setMotor(0);
+                state_ = State::DONE ;
             }
 
             std::string ShooterEjectOneBallAction::toString() {

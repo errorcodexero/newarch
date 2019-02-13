@@ -191,6 +191,7 @@ void TankDriveDistanceAction::cancel() {
         act->cancel() ;
 
     running_.clear() ;
+    is_done_ = true ;
 }
 
 bool TankDriveDistanceAction::isDone() {

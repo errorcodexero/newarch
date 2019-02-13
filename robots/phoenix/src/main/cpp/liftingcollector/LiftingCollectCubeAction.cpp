@@ -38,7 +38,8 @@ namespace xero {
             return getLiftingCollector().getCollector()->isDone() ;
         }
 
-        void LiftingCollectCubeAction::cancel() {            
+        void LiftingCollectCubeAction::cancel() {      
+            getLiftingCollector().getCollector()->cancelAction() ;     
         }
     }
 }

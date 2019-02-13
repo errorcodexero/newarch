@@ -66,6 +66,7 @@ namespace xero {
         }
 
         void LifterHoldHeightAction::cancel() {
+            is_done_ = true ; 
         }
 
         std::string LifterHoldHeightAction::toString() {

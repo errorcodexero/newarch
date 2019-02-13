@@ -40,6 +40,9 @@ namespace xero {
             case State::grabbing:
                 ret = "grabbing" ;
                 break ;
+            case State::cancel:
+                ret = "cancel" ;
+                break ;
             }
 
             return ret ;
@@ -93,6 +96,9 @@ namespace xero {
                     start() ;
                 }
                 break ;
+
+            case State::cancel:
+                break ;
             }
 
             if (state_ != prev_state_) {
@@ -109,7 +115,8 @@ namespace xero {
         }
 
         bool CollectCubeAction::isDone() {
-            return state_ == State::clamp ;
+
+            return state_ == State::clamp || state_ == State::cancel ;
         }
 
         void CollectCubeAction::cancel() {
@@ -120,6 +127,7 @@ namespace xero {
             action = getCollector().getGrabber()->getAction() ;
             if (action != nullptr)
                 action->cancel() ;
+            state_ = State::cancel ;
         }
     }
 }

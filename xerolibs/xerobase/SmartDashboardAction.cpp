@@ -23,7 +23,8 @@ namespace xero {
         void SmartDashboardAction::run() {            
         }
 
-        void SmartDashboardAction::cancel() {            
+        void SmartDashboardAction::cancel() {  
+                      
         }
 
         bool SmartDashboardAction::isDone() {

@@ -170,6 +170,8 @@ namespace xero
 
         void TankDriveAngleAction::cancel()
         {
+            is_done_ = true ;
+            setMotorsToPercents(0, 0) ;
         }
 
         bool TankDriveAngleAction::isDone()

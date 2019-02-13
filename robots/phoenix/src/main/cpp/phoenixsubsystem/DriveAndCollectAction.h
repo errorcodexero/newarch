@@ -21,7 +21,8 @@ namespace xero {
                 Driving,
                 Stopping,
                 Collected,
-                DistanceReached
+                DistanceReached,
+                Cancel
             } ;
 
         private:

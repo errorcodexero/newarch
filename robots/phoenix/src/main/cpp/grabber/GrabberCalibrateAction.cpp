@@ -57,6 +57,7 @@ namespace xero {
         }
 
         void GrabberCalibrateAction::cancel() {
+            is_calibrated_ = true ;
         }
     }
 }

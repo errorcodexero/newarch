@@ -56,6 +56,7 @@ namespace xero {
 
         void TankDriveAngleCharAction::cancel() {
             is_done_ = true ;
+            setMotorsToPercents(0, 0) ;
         }
         bool TankDriveAngleCharAction::isDone() {
             return is_done_ ;

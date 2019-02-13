@@ -68,6 +68,7 @@ namespace xero {
             }
 
             void SingleMotorPowerAction::cancel() {
+                is_done_ = true ;
             }
 
             std::string SingleMotorPowerAction::toString() {

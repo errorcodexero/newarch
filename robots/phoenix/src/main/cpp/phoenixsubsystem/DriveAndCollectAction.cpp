@@ -45,7 +45,7 @@ namespace xero {
         }
 
         bool DriveAndCollectAction::isDone() {
-            return state_ == State::Collected || state_ == State::DistanceReached ;
+            return state_ == State::Collected || state_ == State::DistanceReached || state_ ==State::Cancel ;
         }
 
         void DriveAndCollectAction::run()  {
@@ -66,10 +66,6 @@ namespace xero {
                 }
                 break ;
 
-            case State::DistanceReached:
-                // Do nothing, just sit here
-                break ;
-
             case State::Stopping:
                 if (drivebase->getVelocity() < 0.1) {
                     double total = drivebase->getDist() - start_ ;
@@ -80,12 +76,16 @@ namespace xero {
                 break ;
 
             case State::Collected:
+            case State::Cancel:
+            case State::DistanceReached:
                 // Do nothing, just sit here
                 break ;
             }
         }
 
         void DriveAndCollectAction::cancel() {
+            state_ = State::Cancel ;
+            
         }
 
         std::string DriveAndCollectAction::toString() {

@@ -24,6 +24,7 @@ namespace xero {
                 waiting,            // Waiting for a cube
                 grabbing,           // Running the intake to ensure we complete have the cube
                 clamp,              // Clamping the grabber down on the cube and stopping the intake
+                cancel
             } ;         
 
         private:

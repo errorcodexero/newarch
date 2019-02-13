@@ -38,6 +38,8 @@ namespace xero {
         }
 
         void TankDriveTimedPowerAction::cancel()  {
+            isdone_ = true ;
+            setMotorsToPercents(0, 0) ;
         }
 
         std::string TankDriveTimedPowerAction::toString() {

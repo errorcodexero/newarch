@@ -32,6 +32,7 @@ namespace xero {
             }
 
             void LineDetectAction::cancel() {
+                is_done_ = true ;
             }
 
             std::string LineDetectAction::toString() {

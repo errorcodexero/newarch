@@ -238,7 +238,9 @@ namespace xero {
         }
         
         /// \brief Cancel the action
-        void DriveByVisionAction::cancel() {            
+        void DriveByVisionAction::cancel() { 
+            state_ = State::Done ;
+            setMotorsToPercents(0, 0) ;           
         }
 
         /// \brief Return true if the action is complete
