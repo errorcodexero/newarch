@@ -14,7 +14,7 @@ using namespace xero::base ;
 
 namespace xero {
     namespace phoenix {
-        PhoenixAutoMode::PhoenixAutoMode(Phoenix &robot, const std::string &name) : ActionSequence(robot.getMessageLogger(), name), robot_(robot) {
+        PhoenixAutoMode::PhoenixAutoMode(Phoenix &robot, const std::string &name) : AutoMode(robot.getMessageLogger(), name), robot_(robot) {
         }
         
         PhoenixAutoMode::~PhoenixAutoMode() {

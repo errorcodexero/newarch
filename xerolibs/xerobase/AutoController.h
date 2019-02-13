@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ControllerBase.h"
-#include "ActionSequence.h"
+#include "AutoMode.h"
 #include "OISubsystem.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <iostream>
@@ -18,7 +18,7 @@ namespace xero {
         /// robot, automode selector, and set of field conditions.  This class simply
         /// runs a single action.  For more complex automodes this single action
         /// should be an action sequence or parallel action.
-        /// \sa ActionSequence
+        /// \sa AutoMode
         /// \sa ParallelAction
         class AutoController : public ControllerBase {
         public:
@@ -68,7 +68,7 @@ namespace xero {
         protected:
             /// \brief sets the reference to the action that will be run when run() is called
             /// \param action run for a controller
-            void setAction(ActionSequencePtr action) {
+            void setAction(AutoModePtr action) {
                 actionptr_ = action;
                 if (actionptr_ != nullptr)
                     actionptr_->start() ;
@@ -76,7 +76,7 @@ namespace xero {
 
 
         private:
-            ActionSequencePtr actionptr_;
+            AutoModePtr actionptr_;
         } ;
     }
 }

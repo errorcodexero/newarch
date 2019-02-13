@@ -19,7 +19,7 @@ namespace xero {
 
             Robot &robot = getRobot() ;
             Phoenix &phoenix = dynamic_cast<Phoenix &>(robot) ;
-            ActionSequencePtr mode = nullptr ;
+            AutoModePtr mode = nullptr ;
 
             auto &ds = frc::DriverStation::GetInstance() ;
             std::string game = ds.GetGameSpecificMessage() ;

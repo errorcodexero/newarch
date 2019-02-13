@@ -1,7 +1,7 @@
 #pragma once
 
 #include <AutoController.h>
-#include <ActionSequence.h>
+#include <AutoMode.h>
 #include <string>
 
 namespace xero {
@@ -14,9 +14,9 @@ namespace xero {
             virtual void updateAutoMode(int sel, const std::string &gamedata) ;
 
         private:
-            xero::base::ActionSequencePtr createCharAutoMode() ;
-            xero::base::ActionSequencePtr createTestOne() ;
-            xero::base::ActionSequencePtr createTestTwo() ;
+            xero::base::AutoModePtr createCharAutoMode() ;
+            xero::base::AutoModePtr createTestOne() ;
+            xero::base::AutoModePtr createTestTwo() ;
         } ;
     }
 }

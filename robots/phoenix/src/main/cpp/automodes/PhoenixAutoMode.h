@@ -1,11 +1,11 @@
 #pragma once
 
 #include "Phoenix.h"
-#include <ActionSequence.h>
+#include <AutoMode.h>
 
 namespace xero {
     namespace phoenix {
-        class PhoenixAutoMode : public xero::base::ActionSequence {
+        class PhoenixAutoMode : public xero::base::AutoMode {
         public:
             PhoenixAutoMode(Phoenix &robot, const std::string &name) ;
             virtual ~PhoenixAutoMode() ;
@@ -28,7 +28,7 @@ namespace xero {
             void addAction(xero::base::ActionPtr act) ;
 
         private:
-            std::list<xero::base::ActionSequencePtr> stack_ ;
+            std::list<xero::base::AutoModePtr> stack_ ;
             Phoenix &robot_ ;
         } ;
     }

@@ -15,7 +15,7 @@ namespace xero {
         }
 
         void GrondAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
-            ActionSequencePtr mode = nullptr ;
+            AutoModePtr mode = nullptr ;
 
             switch(sel) {
             case 0:
@@ -33,10 +33,10 @@ namespace xero {
             setAction(mode) ;
         }
 
-        ActionSequencePtr GrondAutoModeController::createCharAutoMode() {
+        AutoModePtr GrondAutoModeController::createCharAutoMode() {
             std::string name = "Char Drive Base" ;
             std::string desc = "Characterize the drive base" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
             auto &grond = dynamic_cast<Grond &>(getRobot()) ;
@@ -49,10 +49,10 @@ namespace xero {
             return mode ;         
         }        
 
-        ActionSequencePtr GrondAutoModeController::createTestOne() {
+        AutoModePtr GrondAutoModeController::createTestOne() {
             std::string name = "Test One" ;
             std::string desc = "Path following drive straight" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
             auto &grond = dynamic_cast<Grond &>(getRobot()) ;
@@ -65,10 +65,10 @@ namespace xero {
             return mode ;         
         }
 
-        ActionSequencePtr GrondAutoModeController::createTestTwo() {
+        AutoModePtr GrondAutoModeController::createTestTwo() {
             std::string name = "Test Two" ;
             std::string desc = "Drive Curve" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
             auto &grond = dynamic_cast<Grond &>(getRobot()) ;

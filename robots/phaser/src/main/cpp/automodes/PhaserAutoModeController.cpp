@@ -39,7 +39,7 @@ namespace xero {
         }
 
         void PhaserAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
-            ActionSequencePtr mode = nullptr ;
+            AutoModePtr mode = nullptr ;
             
             getRobot().getMessageLogger().startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
             getRobot().getMessageLogger() << "creating automode" ;
@@ -107,10 +107,10 @@ namespace xero {
         }
 
 
-        ActionSequencePtr PhaserAutoModeController::testHatchHolder() {
+        AutoModePtr PhaserAutoModeController::testHatchHolder() {
             std::string name = "Test Hatch Holder" ;
             std::string desc = "Cycle through the combinations of the hatch holder" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
@@ -144,10 +144,10 @@ namespace xero {
             return mode ;             
         }        
 
-        ActionSequencePtr PhaserAutoModeController::testClimber() {
+        AutoModePtr PhaserAutoModeController::testClimber() {
             std::string name = "Test Climber" ;
             std::string desc = "Test the climber" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
@@ -163,10 +163,10 @@ namespace xero {
             return mode ;                                                    
         }        
 
-        ActionSequencePtr PhaserAutoModeController::testCargoHolder() {
+        AutoModePtr PhaserAutoModeController::testCargoHolder() {
             std::string name = "Test Cargo Holder" ;
             std::string desc = "Test the cargo holder" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
@@ -191,10 +191,10 @@ namespace xero {
             return mode ;                                                    
         }
         
-        ActionSequencePtr PhaserAutoModeController::testCargoIntake() {    
+        AutoModePtr PhaserAutoModeController::testCargoIntake() {    
             std::string name = "Test Cargo Intake" ;
             std::string desc = "Test the cargo intake" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
@@ -213,10 +213,10 @@ namespace xero {
             return mode ;                     
         }
 
-        ActionSequencePtr PhaserAutoModeController::testLifter() {
+        AutoModePtr PhaserAutoModeController::testLifter() {
             std::string name = "Test Lifter" ;
             std::string desc = "Test the lifter go to height and hold" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
@@ -244,10 +244,10 @@ namespace xero {
             return mode ;                
         }
 
-        ActionSequencePtr PhaserAutoModeController::testTurntable() {
+        AutoModePtr PhaserAutoModeController::testTurntable() {
             std::string name = "Test Turntable" ;
             std::string desc = "Test the turntable" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
@@ -276,10 +276,10 @@ namespace xero {
         }
 
 
-        ActionSequencePtr PhaserAutoModeController::testHatchDeposit() {
+        AutoModePtr PhaserAutoModeController::testHatchDeposit() {
             std::string name = "Test Deposit Hatch" ;
             std::string desc = "Test the deposit hatch sequence" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr childact, act, dispatch ;
             TermActionPtr termact ;
 
@@ -305,10 +305,10 @@ namespace xero {
             return mode ;         
         }        
 
-        ActionSequencePtr PhaserAutoModeController::testVision() {
+        AutoModePtr PhaserAutoModeController::testVision() {
             std::string name = "Test Vision" ;
             std::string desc = "Test the vision system" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr childact, act, dispatch ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
@@ -322,10 +322,10 @@ namespace xero {
             return mode ;
         }         
 
-        ActionSequencePtr PhaserAutoModeController::testLineFollower() {
+        AutoModePtr PhaserAutoModeController::testLineFollower() {
             std::string name = "Test Line Follower" ;
             std::string desc = "Test the line follower" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr childact, act, dispatch ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
@@ -345,10 +345,10 @@ namespace xero {
             return mode ;
         }
 
-        ActionSequencePtr PhaserAutoModeController::createStraightCharAutoMode() {
+        AutoModePtr PhaserAutoModeController::createStraightCharAutoMode() {
             std::string name = "Char Drive Base" ;
             std::string desc = "Characterize the drive base" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
@@ -361,10 +361,10 @@ namespace xero {
             return mode ;         
         }        
 
-        ActionSequencePtr PhaserAutoModeController::createScrubCharAutoMode() {
+        AutoModePtr PhaserAutoModeController::createScrubCharAutoMode() {
             std::string name = "Char Drive Base" ;
             std::string desc = "Characterize the drive base" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
@@ -377,10 +377,10 @@ namespace xero {
             return mode ;         
         }  
 
-        ActionSequencePtr PhaserAutoModeController::createTestOne() {
+        AutoModePtr PhaserAutoModeController::createTestOne() {
             std::string name = "Test One" ;
             std::string desc = "Drive straight" ;
-            ActionSequencePtr mode = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name, desc) ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
             ActionPtr act ;
             std::shared_ptr<TerminateAction> termptr ;
 
@@ -393,12 +393,12 @@ namespace xero {
             return mode ;         
         }
 
-        ActionSequencePtr PhaserAutoModeController::createTestTwo() {
+        AutoModePtr PhaserAutoModeController::createTestTwo() {
             return nullptr ;
         }        
 
         ActionPtr PhaserAutoModeController::lifterGoToHeight(double height) {
-            ActionSequencePtr seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "lifter_go_to_height", "") ;
+            AutoModePtr seq = std::make_shared<AutoMode>(getRobot().getMessageLogger(), "lifter_go_to_height", "") ;
             ActionPtr act ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
@@ -415,7 +415,7 @@ namespace xero {
         }
 
         ActionPtr PhaserAutoModeController::turntableGoToAngle(double angle) {
-            ActionSequencePtr seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "turntable_go_to_angle", "") ;
+            AutoModePtr seq = std::make_shared<AutoMode>(getRobot().getMessageLogger(), "turntable_go_to_angle", "") ;
             ActionPtr act ;
 
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;

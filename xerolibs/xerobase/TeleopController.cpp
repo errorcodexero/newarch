@@ -3,12 +3,13 @@
 #include <OISubsystem.h>
 #include <MessageLogger.h>
 
+
 using namespace xero::misc ;
 
 namespace xero {
     namespace base {
         TeleopController::TeleopController(Robot &robot) : ControllerBase(robot) {
-            seq_ = std::make_shared<ActionSequence>(robot.getMessageLogger(), "teleop") ;
+            seq_ = std::make_shared<AutoMode>(robot.getMessageLogger(), "teleop") ;
         }
 
         TeleopController::~TeleopController() {            

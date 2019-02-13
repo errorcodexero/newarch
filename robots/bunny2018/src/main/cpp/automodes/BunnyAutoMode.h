@@ -2,7 +2,7 @@
 
 #include <AutoController.h>
 #include <Action.h>
-#include <ActionSequence.h>
+#include <AutoMode.h>
 
 namespace xero {
     namespace bunny2018 {
@@ -22,11 +22,11 @@ namespace xero {
             virtual void updateAutoMode(int sel, const std::string &gamedata) ;
 
         private:
-            xero::base::ActionSequencePtr createDriveStraightChar() ;
-            xero::base::ActionSequencePtr createDriveStraightTest() ;
-            xero::base::ActionSequencePtr createGameAutoMode(int number_of_crates) ;
-            xero::base::ActionSequencePtr createTestMotors() ;
-            xero::base::ActionSequencePtr createShooterTestMode() ;
+            xero::base::AutoModePtr createDriveStraightChar() ;
+            xero::base::AutoModePtr createDriveStraightTest() ;
+            xero::base::AutoModePtr createGameAutoMode(int number_of_crates) ;
+            xero::base::AutoModePtr createTestMotors() ;
+            xero::base::AutoModePtr createShooterTestMode() ;
 
             void addCrateLocations(std::shared_ptr<ShooterEjectAutoBallAction> act, int count) ;
         };

@@ -25,7 +25,7 @@ namespace xero {
         }
 
         void BunnyAutoMode::updateAutoMode(int sel, const std::string &gamedata) {
-            ActionSequencePtr mode ;
+            AutoModePtr mode ;
             
             if (sel >= 0 && sel <= 9) {
                 int min_crates = getRobot().getSettingsParser().getInteger("automode:1:min_crate_number") ;             
@@ -58,25 +58,25 @@ namespace xero {
             setAction(mode) ;
         }
 
-        ActionSequencePtr BunnyAutoMode::createDriveStraightChar() {
+        AutoModePtr BunnyAutoMode::createDriveStraightChar() {
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveStraightChar") ;
+            auto seq = std::make_shared<AutoMode>(getRobot().getMessageLogger(), "TankDriveStraightChar") ;
             auto act = std::make_shared<TankDriveCharAction>(*tankdrive, 2.0, 0.9) ;
             seq->pushSubActionPair(tankdrive, act) ;
             return seq ;
         }
 
-        ActionSequencePtr BunnyAutoMode::createDriveStraightTest() {
+        AutoModePtr BunnyAutoMode::createDriveStraightTest() {
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
 
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TankDriveStraight") ;
+            auto seq = std::make_shared<AutoMode>(getRobot().getMessageLogger(), "TankDriveStraight") ;
             auto act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 276.0) ;           
             seq->pushSubActionPair(tankdrive, act) ;
 
             return seq ;
         }
 
-        ActionSequencePtr BunnyAutoMode::createShooterTestMode() {
+        AutoModePtr BunnyAutoMode::createShooterTestMode() {
             ActionPtr act ;
             auto &robot = getRobot() ;
             Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
@@ -87,7 +87,7 @@ namespace xero {
             auto hopper = bunny.getBunnySubsystem()->getHopper() ;
             auto shooter = bunny.getBunnySubsystem()->getShooter() ;
 
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "ShootTest") ;   
+            auto seq = std::make_shared<AutoMode>(getRobot().getMessageLogger(), "ShootTest") ;   
 
             act = std::make_shared<SingleMotorPowerAction>(*intake, -0.8) ;
             seq->pushSubActionPair(intake, act) ;   
@@ -149,7 +149,7 @@ namespace xero {
             return seq ;
         }
 
-        ActionSequencePtr BunnyAutoMode::createTestMotors() {
+        AutoModePtr BunnyAutoMode::createTestMotors() {
             ActionPtr act ;
             auto &robot = getRobot() ;
             Bunny &bunny = dynamic_cast<Bunny &>(robot) ;
@@ -160,7 +160,7 @@ namespace xero {
             auto hopper = bunny.getBunnySubsystem()->getHopper() ;
             auto shooter = bunny.getBunnySubsystem()->getShooter() ;
 
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "TestMotors") ;
+            auto seq = std::make_shared<AutoMode>(getRobot().getMessageLogger(), "TestMotors") ;
             assert(shooter != nullptr) ;
 
             act = std::make_shared<SingleMotorPowerAction>(*shooter, 0.5, 2.0) ;
@@ -191,12 +191,12 @@ namespace xero {
             return seq ;          
         }        
 
-        ActionSequencePtr BunnyAutoMode::createGameAutoMode(int number_of_crates) {
+        AutoModePtr BunnyAutoMode::createGameAutoMode(int number_of_crates) {
             ActionPtr act ;
 
             std::string name("crates ") ;
             name += std::to_string(number_of_crates) ;
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), name) ;
+            auto seq = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name) ;
 
             auto &robot = getRobot() ;
             Bunny &bunny = dynamic_cast<Bunny &>(robot) ;

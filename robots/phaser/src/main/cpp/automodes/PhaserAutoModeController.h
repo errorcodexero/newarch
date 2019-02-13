@@ -1,7 +1,7 @@
 #pragma once
 
 #include <AutoController.h>
-#include <ActionSequence.h>
+#include <AutoMode.h>
 #include <string>
 
 namespace xero {
@@ -14,20 +14,20 @@ namespace xero {
             virtual void updateAutoMode(int sel, const std::string &gamedata) ;
 
         private:
-            xero::base::ActionSequencePtr createStraightCharAutoMode() ;
-            xero::base::ActionSequencePtr createScrubCharAutoMode() ;
-            xero::base::ActionSequencePtr createTestOne() ;
-            xero::base::ActionSequencePtr createTestTwo() ;
-            xero::base::ActionSequencePtr testHatchDeposit() ;
-            xero::base::ActionSequencePtr testLineFollower() ;
-            xero::base::ActionSequencePtr testHatchHolder() ;
-            xero::base::ActionSequencePtr testLifter() ;        
-            xero::base::ActionSequencePtr testVision() ;   
-            xero::base::ActionSequencePtr testTurntable() ; 
+            xero::base::AutoModePtr createStraightCharAutoMode() ;
+            xero::base::AutoModePtr createScrubCharAutoMode() ;
+            xero::base::AutoModePtr createTestOne() ;
+            xero::base::AutoModePtr createTestTwo() ;
+            xero::base::AutoModePtr testHatchDeposit() ;
+            xero::base::AutoModePtr testLineFollower() ;
+            xero::base::AutoModePtr testHatchHolder() ;
+            xero::base::AutoModePtr testLifter() ;        
+            xero::base::AutoModePtr testVision() ;   
+            xero::base::AutoModePtr testTurntable() ; 
 
-            xero::base::ActionSequencePtr testCargoHolder() ;
-            xero::base::ActionSequencePtr testCargoIntake() ;
-            xero::base::ActionSequencePtr testClimber() ;
+            xero::base::AutoModePtr testCargoHolder() ;
+            xero::base::AutoModePtr testCargoIntake() ;
+            xero::base::AutoModePtr testClimber() ;
 
             xero::base::ActionPtr lifterGoToHeight(double height) ;
             xero::base::ActionPtr turntableGoToAngle(double angle) ;
