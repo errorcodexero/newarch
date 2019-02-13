@@ -21,8 +21,14 @@ namespace xero {
                 sub->run() ;
             }
             
-            if (action_ != nullptr)
+            if (action_ != nullptr){
                 action_->run() ;
+                if (pending_ != nullptr && action_->isDone()){
+                    action_ = pending_ ;
+                    pending_ = nullptr ;
+                    action_->start() ;
+                }
+            }
         }
         
         void Subsystem::computeState() {
@@ -33,19 +39,10 @@ namespace xero {
         void Subsystem::cancelAction() {
             if (action_ != nullptr)
                 action_->cancel() ;
-
-            action_ = nullptr ;
         }
 
         bool Subsystem::setAction(ActionPtr action) {
-
-            if (action_ != nullptr && !action_->isDone()) {
-                //
-                // The current Action is still running, interrupt it
-                //
-                cancelAction();
-            }
-
+            
             if (action != nullptr && !canAcceptAction(action)) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
@@ -54,12 +51,27 @@ namespace xero {
                 return false ;
             }
 
-            //
-            // And now start the Action
-            //
-            action_ = action ;
-            if (action_ != nullptr) {
-                action_->start() ;
+            if (action_ != nullptr && !action_->isDone()) {
+                //
+                // The current Action is still running, interrupt it
+                //
+                cancelAction();
+
+                if(!action_->isDone()){
+
+                    pending_ = action ;
+                }
+            }
+
+            if(pending_ == nullptr){
+
+                //
+                // And now start the Action
+                //
+                action_ = action ;
+                if (action_ != nullptr) {
+                    action_->start() ;
+                }
             }
             return true ;
         }

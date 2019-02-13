@@ -1,14 +1,14 @@
 #pragma once
 
-#include <GamePieceAction.h>
-#include <GamePieceManipulator.h>
+#include "GamePieceAction.h"
+#include "GamePieceManipulator.h"
 
 namespace xero{
     namespace phaser{
-        class FloorCollectAction : public GamePieceAction{
+        class FloorCollectCargoAction : public GamePieceAction{
         public:
-            FloorCollectAction() ;
-            virtual ~FloorCollectAction() ;
+            FloorCollectCargoAction(GamePieceManipulator &subsystem) ;
+            virtual ~FloorCollectCargoAction() ;
 
             virtual void start() ;
             virtual void run() ;
@@ -17,17 +17,17 @@ namespace xero{
             virtual std::string toString() ;
 
         private:
-            ActionPtr set_lifter_safe_height_ ; 
-            ActionPtr set_turntable_cargo_angle_ ;
-            ActionPtr set_lifter_cargo_intake_height_ ;
+            xero::base::ActionPtr set_lifter_safe_height_ ; 
+            xero::base::ActionPtr set_turntable_cargo_angle_ ;
+            xero::base::ActionPtr set_lifter_cargo_intake_height_ ;
 
-            ActionPtr deploy_cargo_intake_ ;
-            ActionPtr retract_cargo_intake_ ;
+            xero::base::ActionPtr deploy_cargo_intake_ ;
+            xero::base::ActionPtr retract_cargo_intake_ ;
 
-            ActionPtr set_cargo_intake_motor_ ;
-            ActionPtr stop_cargo_intake_motor_ ;
-            ActionPtr set_cargo_holder_motors_ ;
-            ActionPtr stop_cargo_holder_motors_ ;
+            xero::base::ActionPtr set_cargo_intake_motor_ ;
+            xero::base::ActionPtr stop_cargo_intake_motor_ ;
+            xero::base::ActionPtr set_cargo_holder_motor_ ;
+            xero::base::ActionPtr stop_cargo_holder_motor_ ;
             
         };
     }

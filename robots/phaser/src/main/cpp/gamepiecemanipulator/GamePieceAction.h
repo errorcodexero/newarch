@@ -4,19 +4,19 @@
 
 namespace xero {
     namespace phaser {
-        class GamePiece ;
+        class GamePieceManipulator ;
 
         class GamePieceAction : public xero::base::Action {
         public:
-            GamePieceAction(GamePiece &game_piece) : game_piece_(game_piece) {                
+            GamePieceAction(GamePieceManipulator &game_piece) : game_piece_(game_piece) {                
             }
             
-            GamePiece &getGamePiece() {
+            GamePieceManipulator &getGamePiece() {
                 return game_piece_ ;
             }
 
         private:
-            GamePiece &game_piece_ ;
+            GamePieceManipulator &game_piece_ ;
         } ;
     }
 }
