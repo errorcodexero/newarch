@@ -137,6 +137,7 @@ namespace {
     nt::NetworkTableEntry nt_target_dist_pixels;
     nt::NetworkTableEntry nt_target_dist_inch;
     nt::NetworkTableEntry nt_target_dist2_inch;
+    nt::NetworkTableEntry nt_target_dist3_inch;
     nt::NetworkTableEntry nt_target_yaw_deg;
     nt::NetworkTableEntry nt_target_rect_ratio;
     nt::NetworkTableEntry nt_rect_l_angle_deg;
@@ -149,6 +150,7 @@ namespace {
     nt::NetworkTableEntry nt_rect_r_dist_inch;
     nt::NetworkTableEntry nt_bot_x_offset_inch;
     nt::NetworkTableEntry nt_bot_z_offset_inch;
+    nt::NetworkTableEntry nt_bot_angle2_deg;
     nt::NetworkTableEntry nt_target_valid;
 
     
@@ -404,6 +406,13 @@ namespace {
         }
     }
 
+    // Post result of target being identified on network table, and flush immediately.
+    void setTargetIsIdentified(bool target_identified) {
+        nt_target_valid.SetBoolean(target_identified);
+        frc::SmartDashboard::PutBoolean("TargetIdentified", target_identified);
+        ntinst.Flush();
+    }
+
     void processCameraParamChanges(std::vector<cs::VideoSource>& cameras) {
         if (!nobot_mode) {
             // For now, ignore chooser if on bot.
@@ -417,6 +426,7 @@ namespace {
             assert(chooser_val == 1 || chooser_val == 2);
             bool new_viewing_mode = (chooser_val == 2);
             if (viewing_mode != new_viewing_mode) {
+                //std::cout << "Changing viewing mode to " << (new_viewing_mode ? 1 : 0) << "\n" << std::flush;
                 viewing_mode = new_viewing_mode;
                 setViewingExposure(viewing_mode);
             }
@@ -428,9 +438,11 @@ namespace {
             assert(chooser_val == 1 || chooser_val == 2);
             int new_selected_camera = chooser_val - 1;
             if (selected_camera != new_selected_camera) {
+                //std::cout << "Changing selected camera to " << new_selected_camera << "\n" << std::flush;
                 selected_camera = new_selected_camera;
                 cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
                 server.SetSource(cameras[selected_camera]);
+                setTargetIsIdentified(false);
             }
         }
             
@@ -514,13 +526,6 @@ namespace {
         // but it's rate-limited to prevent flooding newwork. Unclear whether this affects the cap.
         // Changing it anyway in case it does + in case flush() is not called.
         ntinst.SetUpdateRate(0.01);    // Allowed range per docs is 0.01 -> 1.0 (rate in seconds)
-    }
-
-    // Post result of target being identified on network table, and flush immediately.
-    void setTargetIsIdentified(bool target_identified) {
-        nt_target_valid.SetBoolean(target_identified);
-        frc::SmartDashboard::PutBoolean("TargetIdentified", target_identified);
-        ntinst.Flush();
     }
 
     // Draw ractangle
@@ -671,7 +676,7 @@ namespace {
                 // Discard rectangles that don't have the expected angle
                 // Expected angles are -15 for one and -75 for the other.
                 const double rot_ang_tol = 0.3;  /*Tolerance as fraction*/
-                const double rot_ang_tol_abs = 7;  /*+- that many degrees */
+                const double rot_ang_tol_abs = 10;  /*+- that many degrees */
                 if (!isApproxEqual(min_rect.angle+90, 15, rot_ang_tol, rot_ang_tol_abs) &&
                     !isApproxEqual(min_rect.angle+90, 75, rot_ang_tol, rot_ang_tol_abs)) {
                     //std::cout << "FALSE: Rect angle = " << min_rect.angle << "\n";
@@ -792,11 +797,14 @@ namespace {
             double bot_x_offset_inch = (pow(r_rect_dist_inch,2) - pow(l_rect_dist_inch,2))/(2*dist_bet_centers_inch);
             double bot_z_offset_inch = sqrt(pow(l_rect_dist_inch,2) - pow(bot_x_offset_inch - 0.5*dist_bet_centers_inch,2));
             double dist2_inch = sqrt(pow(bot_x_offset_inch,2) + pow(bot_z_offset_inch,2));
+            double dist3_inch = (l_rect_dist_inch + r_rect_dist_inch)/2;
+            double bot_angle2_deg = atan2(bot_x_offset_inch, bot_z_offset_inch) * 180.0 / M_PI;
             bot_x_offset_inch = -bot_x_offset_inch;  // Flip X coordinate to negative if bot on left of target, not opposite.
             nt_rect_l_dist_inch.SetDouble(l_rect_dist_inch);
             nt_rect_r_dist_inch.SetDouble(r_rect_dist_inch);
             nt_bot_x_offset_inch.SetDouble(bot_x_offset_inch);
             nt_bot_z_offset_inch.SetDouble(bot_z_offset_inch);
+            nt_bot_angle2_deg.SetDouble(bot_angle2_deg);
             
             // Publish info on the 2 rectangles.
             nt_rect_l_angle_deg.SetDouble(left_rect.angle);
@@ -815,6 +823,7 @@ namespace {
             nt_target_dist_pixels.SetDouble(dist_bet_centers);
             nt_target_dist_inch.SetDouble(dist_to_target);
             nt_target_dist2_inch.SetDouble(dist2_inch);
+            nt_target_dist3_inch.SetDouble(dist3_inch);
             setTargetIsIdentified(true);  // Also flushed NT, so keep this call at the end of NT updates.
         }
 
@@ -1067,6 +1076,8 @@ int main(int argc, char* argv[]) {
     nt_target_dist_inch.SetDefaultDouble(0);
     nt_target_dist2_inch = nt_table->GetEntry("dist2_inch");
     nt_target_dist2_inch.SetDefaultDouble(0);
+    nt_target_dist3_inch = nt_table->GetEntry("dist3_inch");
+    nt_target_dist3_inch.SetDefaultDouble(0);
     nt_target_yaw_deg = nt_table->GetEntry("yaw_deg");
     nt_target_yaw_deg.SetDefaultDouble(0);
     nt_target_rect_ratio = nt_table->GetEntry("rect_ratio");
@@ -1091,6 +1102,8 @@ int main(int argc, char* argv[]) {
     nt_bot_x_offset_inch.SetDefaultDouble(0);
     nt_bot_z_offset_inch = nt_table->GetEntry("bot_z_offset_inch");
     nt_bot_z_offset_inch.SetDefaultDouble(0);
+    nt_bot_angle2_deg = nt_table->GetEntry("bot_angle2_deg");
+    nt_bot_angle2_deg.SetDefaultDouble(0);
     nt_target_valid = nt_table->GetEntry("valid");
     nt_target_valid.SetDefaultBoolean(false);
     setTargetIsIdentified(false);

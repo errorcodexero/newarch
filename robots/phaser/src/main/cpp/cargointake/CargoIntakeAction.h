@@ -20,7 +20,6 @@ namespace xero {
             /// \param subsystem SingleMotor subsystem
             CargoIntakeAction(CargoIntake &subsystem, bool is_deployed) : subsystem_(subsystem) {
                 is_done_ = false ;
-                collect_power_ = subsystem.getRobot().getSettingsParser().getDouble("cargointake:collectpower") ;
                 is_deployed_ = is_deployed ;
             }
 
@@ -36,7 +35,6 @@ namespace xero {
         private:
             /// The tank drive subsystem
             CargoIntake &subsystem_;
-            double collect_power_ ;
             bool is_done_;
             bool is_deployed_;
         };

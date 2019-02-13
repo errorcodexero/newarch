@@ -3,9 +3,9 @@
 #include "hatchholder/HatchHolderAction.h"
 #include "phasercameratracker/DriveByVisionAction.h"
 #include "cargoholder/CargoHolder.h"
-#include "cargoholder/CargoHolderAction.h"
 #include "cargointake/CargoIntake.h"
 #include "cargointake/CargoIntakeAction.h"
+#include "singlemotorsubsystem/SingleMotorPowerAction.h"
 #include <tankdrive/TankDriveFollowPathAction.h>
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveScrubCharAction.h>
@@ -173,19 +173,19 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto cargoholder = phaserrobot->getGameManipulator()->getCargoHolder() ;    
 
-            act = std::make_shared<CargoHolderAction>(*cargoholder, 0.4) ;
+            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, 0.4) ;
             mode->pushSubActionPair(cargoholder, act) ;
 
             act = std::make_shared<DelayAction>(10.0) ;
             mode->pushAction(act) ;
             
-            act = std::make_shared<CargoHolderAction>(*cargoholder, -0.4) ;
+            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, -0.4) ;
             mode->pushSubActionPair(cargoholder, act) ;       
 
             act = std::make_shared<DelayAction>(3.0) ;
             mode->pushAction(act) ;
 
-            act = std::make_shared<CargoHolderAction>(*cargoholder, 0.0) ;
+            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, 0.0) ;
             mode->pushSubActionPair(cargoholder, act) ;    
 
             return mode ;                                                    
@@ -286,7 +286,7 @@ namespace xero {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
-            auto ls = phaserrobot->getLightSensor() ;
+            auto ls = phaserrobot->getFrontLineSensor() ;
             auto cm = phaserrobot->getCameraTracker() ;
 
             childact = std::make_shared<TankDriveFollowPathAction>(*db, "CurveLeft") ;
@@ -331,7 +331,7 @@ namespace xero {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
-            auto ls = phaserrobot->getLightSensor() ;
+            auto ls = phaserrobot->getFrontLineSensor() ;
 
             act = std::make_shared<TankDrivePowerAction>(*db, 0.2, 0.2, false) ;
             mode->pushSubActionPair(db, act) ;
