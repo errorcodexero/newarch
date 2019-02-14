@@ -23,7 +23,15 @@ SOURCES = \
 	src/main/cpp/cargointake/CargoIntakeAction.cpp\
 	src/main/cpp/climber/Climber.cpp\
 	src/main/cpp/climber/ClimberDeployAction.cpp\
-	src/main/cpp/gamepiecemanipulator/GamePieceManipulator.cpp
+	src/main/cpp/gamepiecemanipulator/GamePieceManipulator.cpp\
+	src/main/cpp/gamepiecemanipulator/CompleteCargoPlace.cpp\
+	src/main/cpp/gamepiecemanipulator/CompleteHatchPlace.cpp\
+	src/main/cpp/gamepiecemanipulator/CompleteLSHatchCollect.cpp\
+	src/main/cpp/gamepiecemanipulator/FloorCollectCargoAction.cpp\
+	src/main/cpp/gamepiecemanipulator/FloorCollectHatchAction.cpp\
+	src/main/cpp/gamepiecemanipulator/ReadyCargoPlace.cpp\
+	src/main/cpp/gamepiecemanipulator/ReadyHatchPlace.cpp\
+	src/main/cpp/gamepiecemanipulator/ReadyLSHatchCollect.cpp
 
 TARGET = phaser
 
@@ -51,5 +59,3 @@ $(error This robot is not supported by the GOPIGO platform)
 endif
 
 include $(TOPDIR)/makefiles/buildexe.mk
-
-

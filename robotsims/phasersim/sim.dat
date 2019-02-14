@@ -131,8 +131,8 @@ turntable:sim:degrees_per_sec_per_volt                  90.0
 #
 ######################################################################################
 
-lifter:sim:bottom_limit_height                          11.375
-lifter:sim:top_limit_height                             72.0
+lifter:sim:bottom_limit_height                          8.46
+lifter:sim:top_limit_height                             83.66
 lifter:sim:inches_per_tick                              0.08327
 lifter:sim:inches_per_sec_per_volt                      18.0
 lifter:sim:gravity_equivalent_speed                     -1.0

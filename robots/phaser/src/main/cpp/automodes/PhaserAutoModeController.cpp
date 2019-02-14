@@ -5,7 +5,9 @@
 #include "cargoholder/CargoHolder.h"
 #include "cargointake/CargoIntake.h"
 #include "cargointake/CargoIntakeAction.h"
-#include "singlemotorsubsystem/SingleMotorPowerAction.h"
+#include "gamepiecemanipulator/GamePieceManipulator.h"
+#include "gamepiecemanipulator/FloorCollectCargoAction.h"
+#include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <tankdrive/TankDriveFollowPathAction.h>
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveScrubCharAction.h>
@@ -102,10 +104,38 @@ namespace xero {
             case 13:
                 mode = testHatchHolder() ;
                 break ;
+
+            case 14:
+                mode = testFloorCollectCargo() ;
+                break ;
             }
             setAction(mode) ;
         }
 
+        AutoModePtr PhaserAutoModeController::testFloorCollectCargo() {
+            std::string name = "Test Floor Collect Cargo" ;
+            std::string desc = "Test the floor collect cargo action" ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto gamepiece = phaserrobot->getGameManipulator() ;
+
+            auto lifter = phaserrobot->getGameManipulator()->getLifter() ;
+            auto turntable = phaserrobot->getGameManipulator()->getTurntable() ;
+
+            act = std::make_shared<LifterCalibrateAction>(*lifter) ;
+            mode->pushSubActionPair(lifter, act) ;
+
+            act = std::make_shared<TurntableCalibrateAction>(*turntable) ;
+            mode->pushSubActionPair(turntable, act) ;
+
+            act = std::make_shared<FloorCollectCargoAction>(*gamepiece) ;
+            mode->pushSubActionPair(gamepiece, act) ;
+
+            return mode ;
+        }
 
         AutoModePtr PhaserAutoModeController::testHatchHolder() {
             std::string name = "Test Hatch Holder" ;

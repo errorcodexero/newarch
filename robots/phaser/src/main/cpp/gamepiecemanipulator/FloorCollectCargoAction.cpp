@@ -19,17 +19,16 @@ namespace xero {
             // Pre-create all of the actions needed so that we are not constantly creating and
             // destroying this during the robot loop
             //
-
-            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "set_lifter_safe_height_") ;
-            set_turntable_cargo_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "set_turntable_cargo_angle_") ;
-            set_lifter_cargo_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "set_lifter_cargo_intake_height_") ;
-            deploy_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, "deploy_cargo_intake_") ;
-            retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, "retract_cargo_intake_") ;
+            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
+            set_turntable_cargo_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:cargo:floor_collect") ;
+            set_lifter_cargo_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;
+            deploy_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, true) ;
+            retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
 
             
-            set_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, "set_cargo_intake_motor_") ;
+            set_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, "cargointake:power") ;
             stop_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
-            set_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, "set_cargo_holder_motors_") ;
+            set_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, "cargoholder:power") ;
             stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
         }
 

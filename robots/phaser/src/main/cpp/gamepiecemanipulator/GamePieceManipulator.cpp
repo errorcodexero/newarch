@@ -1,4 +1,5 @@
 #include "GamePieceManipulator.h"
+#include "GamePieceAction.h"
 #include "phaserids.h"
 #include <Robot.h>
 #include <list>
@@ -31,6 +32,11 @@ namespace xero {
         }
 
         GamePieceManipulator::~GamePieceManipulator() {
+        }
+
+        bool GamePieceManipulator::canAcceptAction(ActionPtr action) {
+            std::shared_ptr<GamePieceAction> gact = std::dynamic_pointer_cast<GamePieceAction>(action) ;
+            return gact != nullptr ;
         }
     }
 }

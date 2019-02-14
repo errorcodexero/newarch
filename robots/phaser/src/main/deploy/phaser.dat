@@ -138,13 +138,15 @@ turntable:hold:imax                                             0.0             
 turntable:speed_threshold                                       5.0                 # TODO
 turntable:angle_threshold                                       1.0                 # TODO
 
+turntable:angle:cargo:floor_collect                             90.0
+
 #
 # Variables for the lifter
 #
 lifter:base							                            0.0                 # TODO
 lifter:inches_per_tick                                          0.014861049
-lifter:max_height                                               86.0                # TODO
-lifter:min_height                                               11.375              # TODO
+lifter:max_height                                               83.66
+lifter:min_height                                               8.46
 lifter:threshold                                                1.0
 lifter:maxv                                                     12                  # TODO
 lifter:maxa                                                     12                  # TODO
@@ -161,6 +163,23 @@ lifter:hold:a                                                   0.0             
 lifter:hold:min                                                 -0.5                # TODO
 lifter:hold:max                                                 0.5                 # TODO
 lifter:hold:imax                                                0.0                 # TODO
+
+#
+# Note, the heights are referenced to the floor.  The height of the lifter is the height of the
+# bottom plate of the cargo holder.
+#
+# The offsets from this are
+#
+# cargo_holder_center, the height of the cargo holder center above the lifter height
+# hatch_center, the height of the center of a hatch on the hatch holder above the lifter height
+# hatch_hook_center, the height of the center of the hatch holder above the lifter height
+#
+lifter:height:bottom                                            8.46
+lifter:height:safe_turn                                         12.0
+lifter:height:cargo:floor_collect                               10.46               # 8.46 + 2.0
+lifter:height:offset:cargo_holder_center                        6.75
+lifter:height:offset:hatch_center                               5.5
+lifter:height:offset:hatch_hook_center                          8.6
 
 cameratracker:distance_threshold                                0.0
 cameratracker:yaw_threshold                                     0.0
@@ -185,3 +204,5 @@ drivebyvision:scurve_turn_offset                                0.1
 drivebyvision:scurve_cycles                                     100
 drivebyvision:quit_threshold                                    31.0
 
+cargointake:power                                               0.4
+cargoholder:power                                               0.3

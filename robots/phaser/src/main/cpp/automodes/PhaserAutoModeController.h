@@ -29,6 +29,8 @@ namespace xero {
             xero::base::AutoModePtr testCargoIntake() ;
             xero::base::AutoModePtr testClimber() ;
 
+            xero::base::AutoModePtr testFloorCollectCargo() ;
+
             xero::base::ActionPtr lifterGoToHeight(double height) ;
             xero::base::ActionPtr turntableGoToAngle(double angle) ;
             xero::base::ActionPtr driveAndPosition(const std::string &path, double height, double angle) ;

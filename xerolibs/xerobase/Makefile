@@ -2,6 +2,7 @@ TOPDIR=../..
 
 SOURCES = \
 	ActionSequence.cpp\
+	AutoMode.cpp\
 	ControllerBase.cpp\
 	DelayAction.cpp\
 	TerminateAction.cpp\

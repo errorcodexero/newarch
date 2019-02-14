@@ -41,6 +41,8 @@ namespace xero {
                 return turntable_ ;
             }
 
+            virtual bool canAcceptAction(xero::base::ActionPtr action) ;
+
         private:
             std::shared_ptr<HatchHolder> hatch_holder_ ;
             std::shared_ptr<HatchIntake> hatch_intake_ ;
