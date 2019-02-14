@@ -165,8 +165,8 @@ namespace xero {
             //
             is_calibrated_ = true ;
             encoder_->Reset() ;
-            last_height_ = lifter_offset ;
-            height_ = lifter_offset ;
+            last_height_ = min_height_ ;
+            height_ = min_height_ ;
         }
     }
 }

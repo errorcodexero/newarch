@@ -18,7 +18,7 @@
       "desktop": false,
     },
     {
-      "name": "(gdb) Launch",
+      "name": "Phaser Simulator Launch",
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/phaser/phaser.exe",
@@ -32,7 +32,9 @@
           "--oper", "0.0",
           "--simscreen",
           "--simprop", "pos=64,162.0",
-          "--simprop","autovalue=0.3"
+          "--simprop","autovalue=-0.2",
+          "--simprop","hatch=10",
+          "--simprop","cargo=11"
         ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

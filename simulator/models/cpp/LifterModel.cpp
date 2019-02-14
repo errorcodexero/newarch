@@ -17,8 +17,15 @@ namespace xero {
 
             encoder_1_ = simbase.getSettingsParser().getInteger("hw:lifter:encoder1") ;
             encoder_2_ = simbase.getSettingsParser().getInteger("hw:lifter:encoder2") ;
-            bottom_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:bottom") ;
-            top_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:top") ;
+            if (simbase.getSettingsParser().isDefined("hw:lifter:limit:bottom"))
+                bottom_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:bottom") ;
+            else
+                bottom_limit_channel_ = -1 ;
+
+            if (simbase.getSettingsParser().isDefined("hw:lifter:limit:top"))
+                top_limit_channel_ = simbase.getSettingsParser().getInteger("hw:lifter:limit:top") ;
+            else
+                top_limit_channel_ = -1 ;
             motor_1_ = simbase.getSettingsParser().getInteger("hw:lifter:motor:1") ;
             motor_2_ = simbase.getSettingsParser().getInteger("hw:lifter:motor:2") ;
 
@@ -71,9 +78,6 @@ namespace xero {
         }
 
         void LifterModel::run(double dt) {
-            if (power_ > 0.2)
-                power_ = power_ ;
-
             double dh = power_ * inch_per_sec_per_volt_* dt + gravity_equivalent_speed_ * dt ;
             height_ += dh ;
 

@@ -88,8 +88,14 @@ namespace xero {
             }
             else {
                 double dist = getAngleDifference(getTurntable().getAngleValue(), target_) ;
-                if (std::fabs(dist) < threshold_)
+                if (std::fabs(dist) < threshold_) {
                     is_done_ = true ;
+
+                    MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
+                    logger << "TurntableGoToAngle: action completed sucessfully" << profile_->toString() ;
+                    logger.endMessage() ;
+                }
                 else {
                     is_done_ = false ;
                     profile_->update(dist, 0.0, 0.0) ;
@@ -97,8 +103,8 @@ namespace xero {
                     start_angle_ = getTurntable().getAngleValue() ;
 
                     MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::error) ;
-                    logger << "TurntableGoToAngle Velocity Profile: " << profile_->toString() ;
+                    logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
+                    logger << "TurntableGoToAngle: Velocity Profile: " << profile_->toString() ;
                     logger.endMessage() ;                    
 
                     plotid_ = getTurntable().getRobot().startPlot("TurntableGoToAngle", plot_columns_) ;
@@ -108,6 +114,9 @@ namespace xero {
         }
 
         void TurntableGoToAngleAction::run() {
+            if (is_done_)
+                return ;
+
             Turntable &turntable = getTurntable() ;
             double dt = turntable.getRobot().getDeltaTime() ;
             double elapsed = turntable.getRobot().getTime() - start_time_ ;
@@ -121,7 +130,18 @@ namespace xero {
                     is_done_ = true ;
                     turntable.setMotorPower(0.0) ;
                     turntable.getRobot().endPlot(plotid_) ;
+
+                    MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
+                    logger << "TurntableGoToAngle: action completed sucessfully" ;
+                    logger.endMessage() ;                    
                 } else {
+
+                    MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
+                    logger << "TurntableGoToAngle: did not reach target, new Velocity Profile: " << profile_->toString() ;
+                    logger.endMessage() ; 
+                    
                     //
                     // We reached the end of the profile, but are not where we
                     // want to be.  Create a new profile to get us there.

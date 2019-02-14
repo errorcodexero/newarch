@@ -52,9 +52,15 @@ namespace xero {
             }
             else {
                 double dist = target_ - getLifter().getHeight() ;
-                if (std::fabs(dist) < threshold_)
+                if (std::fabs(dist) < threshold_) {
                     is_done_ = true ;
-                else {
+
+                    MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
+                    logger << "LifterGoToHeightAction: action completed sucessfully in start" ;
+                    logger.endMessage() ;
+
+                } else {
                     is_done_ = false ;
                     profile_->update(dist, 0.0, 0.0) ;
                     start_time_ = getLifter().getRobot().getTime() ;
@@ -71,6 +77,9 @@ namespace xero {
         }
 
         void LifterGoToHeightAction::run() {
+            if (is_done_)
+                return ;
+
             Lifter &lifter = getLifter() ;
             double dt = lifter.getRobot().getDeltaTime() ;
             double elapsed = lifter.getRobot().getTime() - start_time_ ;
@@ -83,9 +92,14 @@ namespace xero {
                 if (std::fabs(delta) < threshold_) {
                     is_done_ = true ;
                     lifter.getRobot().endPlot(plotid_) ;
+                    lifter.setMotorPower(0.0) ;
+
+                    MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
+                    logger << "LifterGoToHeightAction: action completed sucessfully" ;
+                    logger.endMessage() ;
+                    
                 } else {
-                    is_done_ = true ;
-                    return ;
                     //
                     // We reached the end of the profile, but are not where we
                     // want to be.  Create a new profile to get us there.
@@ -95,6 +109,11 @@ namespace xero {
                     start_time_ = getLifter().getRobot().getTime() ;
                     elapsed = 0 ;
                     traveled = 0 ;
+
+                    MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
+                    logger << "Did not reach destination, new Lifter Velocity Profile: " << profile_->toString() ;
+                    logger.endMessage() ;                      
                 }
             }
 

@@ -51,15 +51,24 @@ namespace xero {
                 return false ;
             }
 
+            MessageLogger &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
+            logger << "subsystem '" << getName() << "' was assigned action '" << action->toString() << "'" ;
+            logger.endMessage() ;            
+
             if (action_ != nullptr && !action_->isDone()) {
                 //
                 // The current Action is still running, interrupt it
                 //
                 cancelAction();
 
-                if(!action_->isDone()){
-
+                if(!action_->isDone()) {
                     pending_ = action ;
+
+                    MessageLogger &logger = getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
+                    logger << "subsystem '" << getName() << "' action '" << action->toString() << "' was pended" ;
+                    logger.endMessage() ;                    
                 }
             }
 

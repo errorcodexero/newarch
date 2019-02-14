@@ -40,7 +40,10 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_PHASER_LIFTER);
 
             logger.enableSubsystem(MSG_GROUP_ACTIONS);      
+            logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);               
             logger.enableSubsystem(MSG_GROUP_PHASER_LIFTER);
+            logger.enableSubsystem(MSG_GROUP_PHASER_TURNTABLE);
+            
         }
         
         void Phaser::loadPaths() {

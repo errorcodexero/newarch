@@ -17,37 +17,38 @@ hw:tankdrive:rightencoder:1          2                                  # DIO 2
 hw:tankdrive:rightencoder:2          3                                  # DIO 3
 hw:tankdrive:shifter                 0                                  # Solenoid 0
 
+# Hatch Holder
+hw:hatchholder:arm                   1                                  # Solenoid 1
+hw:hatchholder:finger                2                                  # Solenoid 2
+hw:hatchholder:sensor               22                                  # DIO 10
+
+# Hatch Intake
+hw:hatchintake:motor                11                                  # VictorSPX 11
+hw:hatchintake:sensor               21                                  # DIO 12
+hw:hatchintake:deploy                3                                  # Solenoid 3
+
+# Lifter
+hw:lifter:encoder1                   6                                  # DIO 6
+hw:lifter:encoder2                   7                                  # DIO 7
+hw:lifter:motor:1                    8                                  # TalonSRX 8
+hw:lifter:motor:2                    9                                  # TalonSRX 9
+
 # Turntable
 hw:turntable:encoder1                4                                  # DIO 4
 hw:turntable:encoder2                5                                  # DIO 5
 hw:turntable:motor                   7                                  # TalonSRX 7
 
-# Lifter
-hw:lifter:encoder1                   6                                  # DIO 6
-hw:lifter:encoder2                   7                                  # DIO 7
-hw:lifter:limit:bottom               8                                  # DIO 8
-hw:lifter:limit:top                  9                                  # DIO 9
-hw:lifter:motor:1                    8                                  # TalonSRX 8
-hw:lifter:motor:2                    9                                  # TalonSRX 9
+hw:linesensor:front:0                10                                 # Digital IO
+hw:linesensor:front:1                11                                 # Digital IO
+hw:linesensor:front:2                12                                 # Digital IO
 
-# Hatch Holder
-hw:hatchholder:arm                   1                                  # Solenoid 1
-hw:hatchholder:finger                2                                  # Solenoid 2
-hw:hatchholder:sensor               10                                  # DIO 10
+hw:linesensor:back:0                 13                                 # Digital IO
+hw:linesensor:back:1                 18                                 # Digital IO
+hw:linesensor:back:2                 19                                 # Digital IO
 
 # Cargo Holder
 hw:cargoholder:motor                10                                  # VictorSPX 10
-hw:cargoholder:sensor               11                                  # DIO 11
-
-# Hatch Intake
-hw:hatchintake:motor                11                                  # VictorSPX 11
-hw:hatchintake:sensor               12                                  # DIO 12
-hw:hatchintake:deploy                3                                  # Solenoid 3
-
-# Line Follower
-hw:follower:sensor:1                21                                  # DIO 13
-hw:follower:sensor:2                22                                  # DIO 14
-hw:follower:sensor:3                23                                  # DIO 15
+hw:cargoholder:sensor               20                                  # DIO 11
 
 # Cargo Intake
 hw:cargointake:motor                12                                  # VictorSPX 12
@@ -118,7 +119,7 @@ turntable:sim:min_limit_boundary                        -60
 #
 # The number of degrees per encoder tick (assuming 200 ticks per revolution)
 #
-turntable:sim:degrees_per_tick                          0.5
+turntable:sim:degrees_per_tick                          0.135427952
 
 #
 # The number of degrees the turntable rotates per second per volt
@@ -133,6 +134,6 @@ turntable:sim:degrees_per_sec_per_volt                  90.0
 
 lifter:sim:bottom_limit_height                          8.46
 lifter:sim:top_limit_height                             83.66
-lifter:sim:inches_per_tick                              0.08327
+lifter:sim:inches_per_tick                              0.014861049
 lifter:sim:inches_per_sec_per_volt                      18.0
-lifter:sim:gravity_equivalent_speed                     -1.0
+lifter:sim:gravity_equivalent_speed                     0

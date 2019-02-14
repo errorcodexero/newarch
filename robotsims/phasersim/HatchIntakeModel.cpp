@@ -17,6 +17,8 @@ namespace xero {
                 has_hatch_ = false ;
                 deploy_state_ = false ;
                 power_ = 0.0 ;
+
+                hatch_sensor_ = nullptr ;
             }
 
             HatchIntakeModel::~HatchIntakeModel() {
@@ -69,6 +71,9 @@ namespace xero {
                 }          
 
                 last_time_ = now ;      
+
+                if (hatch_sensor_ != nullptr)
+                    hatch_sensor_->SimulatorSetValue(has_hatch_) ;
             }
 
             void HatchIntakeModel::inputChanged(SimulatedObject *obj) {

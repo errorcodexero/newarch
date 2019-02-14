@@ -32,8 +32,6 @@ hw:hatchintake:solenoid                                         3               
 
 hw:lifter:encoder1                                              6               # Digital IO
 hw:lifter:encoder2                                              7               # Digital IO
-hw:lifter:limit:bottom                                          8               # Digital IO
-hw:lifter:limit:top                                             9               # Digital IO
 hw:lifter:motor:1                                               8               # TalonSRX
 hw:lifter:motor:2                                               9               # TalonSRX
 
@@ -123,9 +121,9 @@ turntable:maxd                                                  -45             
 turntable:maxv                                                  45                  # TODO
 turntable:base                                                  0.0
 turntable:threshold                                             1.0                 # TODO
-turntable:follower:kv                                           0.011111            # TODO
+turntable:follower:kv                                           0.044               # TODO
 turntable:follower:ka                                           0.0                 # TODO
-turntable:follower:kp                                           0.0                 # TODO
+turntable:follower:kp                                           0.2                 # TODO
 turntable:follower:kd                                           0.0                 # TODO
 turntable:hold:p                                                -0.1                # TODO
 turntable:hold:i                                                0.0                 # TODO
@@ -143,7 +141,7 @@ turntable:angle:cargo:floor_collect                             90.0
 #
 # Variables for the lifter
 #
-lifter:base							                            0.0                 # TODO
+lifter:base							                            8.46
 lifter:inches_per_tick                                          0.014861049
 lifter:max_height                                               83.66
 lifter:min_height                                               8.46
@@ -151,7 +149,7 @@ lifter:threshold                                                1.0
 lifter:maxv                                                     12                  # TODO
 lifter:maxa                                                     12                  # TODO
 lifter:maxd                                                     -12                 # TODO
-lifter:follower:kp                                              0.4                 # TODO
+lifter:follower:kp                                              0.5                 # TODO
 lifter:follower:ka                                              0.03                # TODO
 lifter:follower:kv                                              0.018               # TODO
 lifter:follower:kd                                              0.0                 # TODO
@@ -175,7 +173,7 @@ lifter:hold:imax                                                0.0             
 # hatch_hook_center, the height of the center of the hatch holder above the lifter height
 #
 lifter:height:bottom                                            8.46
-lifter:height:safe_turn                                         12.0
+lifter:height:safe_turn                                         18.0
 lifter:height:cargo:floor_collect                               10.46               # 8.46 + 2.0
 lifter:height:offset:cargo_holder_center                        6.75
 lifter:height:offset:hatch_center                               5.5

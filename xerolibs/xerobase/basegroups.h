@@ -42,5 +42,7 @@
 
 #define MSG_GROUP_CAMERA_TRACKER        (1ull << 10)
 
+#define MSG_GROUP_ACTIONS_VERBOSE       (1ull << 11)
+
 /// \brief ID to get all messages
 #define MSG_GROUP_ALL                   (0xffffffffffffffffull)

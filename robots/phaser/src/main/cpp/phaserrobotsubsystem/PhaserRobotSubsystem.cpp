@@ -33,6 +33,7 @@ namespace xero {
             addChild(tracker_) ;
 
             game_piece_man_ = std::make_shared<GamePieceManipulator>(robot) ;
+            addChild(game_piece_man_) ;
         }
 
         PhaserRobotSubsystem::~PhaserRobotSubsystem() {

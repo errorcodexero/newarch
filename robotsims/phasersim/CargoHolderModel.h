@@ -11,6 +11,8 @@ namespace xero {
 
                 virtual ~CargoHolderModel() ;
 
+                virtual void init() ;
+
                 /// \brief Convert the model to a string.
                 /// \returns details about the lifter's state
                 virtual std::string toString() ;
@@ -50,6 +52,9 @@ namespace xero {
 
                 double power_ ;
                 bool has_cargo_ ;
+
+                double last_time_ ;
+                std::vector<double> ontimes_ ;                
             } ;
         }
     }
