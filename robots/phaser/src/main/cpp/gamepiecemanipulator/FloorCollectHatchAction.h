@@ -38,20 +38,16 @@ namespace xero{
             xero::base::ActionPtr set_lifter_hatch_intake_height_ ;
             xero::base::ActionPtr set_lifter_undock_hatch_height_ ;
 
+            xero::base::ActionPtr set_extend_arm_ ;
             xero::base::ActionPtr set_retract_arm_ ;
             xero::base::ActionPtr set_deploy_hatch_finger_ ;
             xero::base::ActionPtr set_retract_hatch_finger_ ;
-            // ensure hatch collect is not extended
-            // ensure hatch finger is not deployed
 
             xero::base::ActionPtr deploy_hatch_intake_ ;
             xero::base::ActionPtr retract_hatch_intake_ ;
 
             xero::base::ActionPtr set_hatch_intake_motor_ ;
             xero::base::ActionPtr stop_hatch_intake_motor_ ;
-            // has_hatch will be a called if condition for stopping the motor
-
-            
         };
     }
 }

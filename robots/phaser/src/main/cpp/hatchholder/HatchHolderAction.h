@@ -18,11 +18,11 @@ namespace xero {
         
         public:
 
-            enum class Operation{
-                    EXTEND_ARM,
-                    RETRACT_ARM,
-                    EXTEND_FINGER,
-                    RETRACT_FINGER
+            enum class Operation {
+                EXTEND_ARM,
+                RETRACT_ARM,
+                EXTEND_FINGER,
+                RETRACT_FINGER
             };
 
             /// \brief Create a new SingleMotorSubsystemAction
