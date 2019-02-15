@@ -5,6 +5,11 @@
 #include <cameratracker/CameraChangeAction.h>
 #include <ActionSequence.h>
 
+#include "gamepiecemanipulator/GamePieceManipulator.h"
+#include "gamepiecemanipulator/GamePieceAction.h"
+#include "gamepiecemanipulator/FloorCollectCargoAction.h"
+#include "gamepiecemanipulator/FloorCollectHatchAction.h"
+
 using namespace xero::base ;
 
 namespace xero {
@@ -19,6 +24,12 @@ namespace xero {
         void PhaserOIDevice::initialize() {
             std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
             automode_ = mapAxisScale(6, mapping) ;   
+
+            // 
+            // Actions
+            // 
+            collect_hatch_floor_ = mapButton(1, OIButton::ButtonType::LowtoHigh) ;
+            collect_cargo_floor_ = mapButton(2, OIButton::ButtonType::LowtoHigh) ;   
 
             camera_switch_ = mapButton(15, OIButton::ButtonType::Level) ;   
             camera_mode_ = mapButton(14, OIButton::ButtonType::Level) ;   

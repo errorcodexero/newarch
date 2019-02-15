@@ -1,6 +1,6 @@
 #pragma once
 
-#include <OIDevice.h>
+#include <OIDevice.h> 
 #include <Action.h>
 
 namespace xero {
@@ -26,6 +26,11 @@ namespace xero {
             size_t automode_ ;
             size_t camera_switch_ ;
             size_t camera_mode_ ;   
+            size_t collect_hatch_floor_ ;
+            size_t collect_cargo_floor_ ;
+
+            xero::base::ActionPtr set_collect_hatch_floor_ ;
+            xero::base::ActionPtr set_collect_cargo_floor_ ;
         } ;
     }
 }

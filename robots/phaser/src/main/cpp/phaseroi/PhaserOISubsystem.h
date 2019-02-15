@@ -1,6 +1,9 @@
 #pragma once
 
 #include <OISubsystem.h>
+#include "PhaserOIDevice.h"
+#include <DriverGamepad.h>
+#include <memory>
 
 namespace xero {
     namespace phaser {
@@ -9,9 +12,12 @@ namespace xero {
             PhaserOISubsystem(xero::base::Robot &robot) ;
             virtual ~PhaserOISubsystem() ;
         
-            
-        private:
+        protected:
+            void initializeWithGunner(int gunner, int driver) ;
+            void initializeWithOI(int oi, int driver) ;
 
+        private:
+            bool detectOI(int index) ;
         } ;
     }
 }
