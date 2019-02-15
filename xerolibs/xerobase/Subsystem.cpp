@@ -53,7 +53,10 @@ namespace xero {
 
             MessageLogger &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
-            logger << "subsystem '" << getName() << "' was assigned action '" << action->toString() << "'" ;
+            if (action == nullptr)
+                logger << "subsystem '" << getName() << "' was assigned NULL action" ;
+            else
+                logger << "subsystem '" << getName() << "' was assigned action '" << action->toString() << "'" ;            
             logger.endMessage() ;            
 
             if (action_ != nullptr && !action_->isDone()) {

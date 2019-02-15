@@ -86,8 +86,7 @@ namespace xero {
                 }           
             }
         }
-
-
+        
         void TankDrive::lowGear() {
             if (gear_ != nullptr) {
                 gear_->Set(true) ;

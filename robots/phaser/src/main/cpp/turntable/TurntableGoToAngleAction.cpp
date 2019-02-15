@@ -5,6 +5,7 @@
 #include <cmath>
 
 using namespace xero::misc ;
+using namespace xero::base ;
 
 namespace xero {
     namespace phaser {
@@ -78,6 +79,9 @@ namespace xero {
             start_time_ = getTurntable().getRobot().getTime() ;
 
             Turntable &turntable = getTurntable() ;
+            Lifter &lifter = turntable.getLifter() ;
+
+
 
             if (!turntable.isCalibrated()) {
                 MessageLogger &logger = turntable.getRobot().getMessageLogger() ;

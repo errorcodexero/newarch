@@ -1,6 +1,7 @@
 #include "FloorCollectHatchAction.h"
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <lifter/LifterGoToHeightAction.h>
+#include <lifter/LifterHoldHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
 #include "hatchintake/HatchIntakeAction.h"
 #include "hatchholder/HatchHolderAction.h"
@@ -22,9 +23,12 @@ namespace xero {
             //
 
             set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
+            hold_lifter_safe_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:safe_turn") ;            
             set_turntable_hatch_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:hatch:floor_collect") ;
             set_lifter_hatch_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;            
             set_lifter_undock_hatch_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:undock_height") ;
+            hold_lifter_hatch_intake_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;            
+            hold_lifter_undock_hatch_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:cargo:undock_height") ;            
 
             set_extend_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM) ;
             set_retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM) ;
@@ -55,15 +59,15 @@ namespace xero {
         void FloorCollectHatchAction::run() {
             auto hatch_intake = getGamePiece().getHatchIntake() ;
             auto hatch_holder = getGamePiece().getHatchHolder() ;
+            auto lifter = getGamePiece().getLifter() ;
 
             switch(state_) {
             case State::LifterGoToSafeHeight:
                 if (set_lifter_safe_height_->isDone() && set_retract_arm_->isDone()) {
                     auto turntable = getGamePiece().getTurntable();
                     turntable->setAction(set_turntable_hatch_angle_) ;
-
-                    auto hatchholder = getGamePiece().getHatchHolder() ;
-                    hatchholder->setAction(set_retract_hatch_finger_) ;
+                    hatch_holder->setAction(set_retract_hatch_finger_) ;
+                    lifter->setAction(hold_lifter_safe_height_) ;
 
                     state_ = State::TurntableGoToCollectAngle ;
                 }
@@ -76,9 +80,9 @@ namespace xero {
                     lifter->setAction(set_lifter_hatch_intake_height_) ;
 
                     auto hatch_intake = getGamePiece().getHatchIntake() ;
-                    hatch_intake->setAction(deploy_hatch_intake_) ;                   
+                    hatch_intake->setAction(deploy_hatch_intake_) ;
 
-                    state_ = State::LifterGoToCollectHeightDeployIntakeRunMotor ;                     
+                    state_ = State::LifterGoToCollectHeightDeployIntakeRunMotor ;
                 }
                 break ;
 
@@ -95,6 +99,7 @@ namespace xero {
                     //
                     auto hatch_intake = getGamePiece().getHatchIntake() ;
                     hatch_intake->setAction(set_hatch_intake_motor_) ;
+                    lifter->setAction(hold_lifter_hatch_intake_height_) ;
 
                     state_ = State::WaitForHatch ;
                 }
@@ -110,24 +115,8 @@ namespace xero {
                     //    and the holder.
                     //
                     auto hatch_intake = getGamePiece().getHatchIntake() ;
-                    hatch_intake->setAction(stop_hatch_intake_motor_) ;
-
-                    state_ = State::StopMotor ;
-                }
-                break ;
-
-            case State::StopMotor:
-                //
-                // Ensure that the motors have been stopped.  Setting motor power will happen in
-                // the start() function for the action so this is guaranteed.
-                //
-                if (stop_hatch_intake_motor_->isDone()) {
-                    //
-                    // 6. The motors are stopped, retract the intake back into the robot.  The state
-                    //    RetrackIntake means we are waiting on the intake to retract.
-                    //
-                    auto hatch_intake = getGamePiece().getHatchIntake() ;                    
                     hatch_intake->setAction(retract_hatch_intake_) ;
+
                     state_ = State::FlipIntake ;
                 }
                 break ;
@@ -152,6 +141,7 @@ namespace xero {
                 if (set_lifter_undock_hatch_height_->isDone()) {
                     auto hatchholder = getGamePiece().getHatchHolder() ;
                     hatchholder->setAction(set_deploy_hatch_finger_) ;
+                    lifter->setAction(hold_lifter_undock_hatch_height_) ;
 
                     state_ = State::DeployFinger ;
                 }

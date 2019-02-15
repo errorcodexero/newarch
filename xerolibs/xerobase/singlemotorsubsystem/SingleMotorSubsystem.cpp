@@ -12,9 +12,11 @@ namespace xero {
             msg_id_ = mid ;
 
             if (victor)
-                motor_ = std::make_shared<VictorSPX>(m) ;
+                motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::VictorSPX>(m) ;
             else
-                motor_ = std::make_shared<TalonSRX>(m);
+                motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::TalonSRX>(m);
+
+            motor_->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
 
             current_power_ = 0.0 ;
         }
@@ -28,6 +30,10 @@ namespace xero {
                 motor_ = std::make_shared<VictorSPX>(m) ;
             else
                 motor_ = std::make_shared<TalonSRX>(m);
+
+            motor_->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
+            motor_->ConfigVoltageCompSaturation(12.0, 10) ;
+            motor_->EnableVoltageCompensation(true) ;
 
             current_power_ = 0.0 ;
         }        

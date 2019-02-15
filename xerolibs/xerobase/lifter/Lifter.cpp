@@ -96,7 +96,8 @@ namespace xero {
                 talon->SetInverted(reverse) ;
                 talon->ConfigVoltageCompSaturation(12.0, 10) ;
                 talon->EnableVoltageCompensation(true) ;                
-
+                talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
+                
                 if (motors_.size() > 0)
                     talon->Follow(*motors_.front()) ;
 

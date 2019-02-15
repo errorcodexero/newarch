@@ -34,9 +34,12 @@ namespace xero{
             State state_ ;
 
             xero::base::ActionPtr set_lifter_safe_height_ ; 
+            xero::base::ActionPtr hold_lifter_safe_height_ ;             
             xero::base::ActionPtr set_turntable_hatch_angle_ ;
             xero::base::ActionPtr set_lifter_hatch_intake_height_ ;
+            xero::base::ActionPtr hold_lifter_hatch_intake_height_ ;
             xero::base::ActionPtr set_lifter_undock_hatch_height_ ;
+            xero::base::ActionPtr hold_lifter_undock_hatch_height_ ;
 
             xero::base::ActionPtr set_extend_arm_ ;
             xero::base::ActionPtr set_retract_arm_ ;

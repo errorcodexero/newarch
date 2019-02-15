@@ -113,6 +113,7 @@ linefollow:adjust                                               .35
 #
 # Variables for the turntable
 #
+turntable:safe_lifter_height                                    14                  # Lifter must be above this height to rotate turntable
 turntable:keepout:minimum                                       -55
 turntable:keepout:maximum                                       -35
 turntable:degrees_per_tick                                      0.135427952
@@ -137,6 +138,7 @@ turntable:speed_threshold                                       5.0             
 turntable:angle_threshold                                       1.0                 # TODO
 
 turntable:angle:cargo:floor_collect                             90.0
+turntable:angle:hatch:floor_collect                             0.0
 
 #
 # Variables for the lifter
@@ -178,6 +180,9 @@ lifter:height:cargo:floor_collect                               10.46           
 lifter:height:offset:cargo_holder_center                        6.75
 lifter:height:offset:hatch_center                               5.5
 lifter:height:offset:hatch_hook_center                          8.6
+lifter:height:cargo:undock_height                               
+lifter:height:cargo:floor_collect                               14.46
+lifter:height:cargo:undock_height                               22.00
 
 cameratracker:distance_threshold                                0.0
 cameratracker:yaw_threshold                                     0.0
@@ -204,3 +209,4 @@ drivebyvision:quit_threshold                                    31.0
 
 cargointake:power                                               0.4
 cargoholder:power                                               0.3
+hatchintake:power                                               0.2

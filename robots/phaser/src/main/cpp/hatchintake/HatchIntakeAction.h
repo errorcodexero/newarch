@@ -20,7 +20,7 @@ namespace xero {
             /// \param subsystem SingleMotor subsystem
             HatchIntakeAction(HatchIntake &subsystem, bool is_deployed_) : subsystem_(subsystem) {
                 is_done_ = false ;
-                collect_power_ = subsystem.getRobot().getSettingsParser().getDouble("hatchintake:collectpower") ;
+                collect_power_ = subsystem.getRobot().getSettingsParser().getDouble("hatchintake:power") ;
             }
 
             ~HatchIntakeAction(){

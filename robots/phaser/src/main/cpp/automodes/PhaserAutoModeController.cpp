@@ -7,6 +7,7 @@
 #include "cargointake/CargoIntakeAction.h"
 #include "gamepiecemanipulator/GamePieceManipulator.h"
 #include "gamepiecemanipulator/FloorCollectCargoAction.h"
+#include "gamepiecemanipulator/FloorCollectHatchAction.h"
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <tankdrive/TankDriveFollowPathAction.h>
 #include <tankdrive/TankDriveCharAction.h>
@@ -108,8 +109,37 @@ namespace xero {
             case 14:
                 mode = testFloorCollectCargo() ;
                 break ;
+
+            case 15:
+                mode = testFloorCollectHatch() ;
+                break ;
             }
             setAction(mode) ;
+        }
+
+        AutoModePtr PhaserAutoModeController::testFloorCollectHatch() {
+            std::string name = "Test Floor Collect Hatsh" ;
+            std::string desc = "Test the floor collect hatch action" ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto gamepiece = phaserrobot->getGameManipulator() ;
+
+            auto lifter = phaserrobot->getGameManipulator()->getLifter() ;
+            auto turntable = phaserrobot->getGameManipulator()->getTurntable() ;
+
+            act = std::make_shared<LifterCalibrateAction>(*lifter) ;
+            mode->pushSubActionPair(lifter, act) ;
+
+            act = std::make_shared<TurntableCalibrateAction>(*turntable) ;
+            mode->pushSubActionPair(turntable, act) ;
+
+            act = std::make_shared<FloorCollectHatchAction>(*gamepiece) ;
+            mode->pushSubActionPair(gamepiece, act) ;
+
+            return mode ;            
         }
 
         AutoModePtr PhaserAutoModeController::testFloorCollectCargo() {

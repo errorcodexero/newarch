@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Subsystem.h>
+#include <lifter/Lifter.h>
 #include <ctre/Phoenix.h>
 #include <frc/Encoder.h>
 #include <frc/DigitalInput.h>
-
 typedef ctre::phoenix::motorcontrol::can::TalonSRX TalonSRX;
 
 namespace xero {
@@ -17,7 +17,7 @@ namespace xero {
             friend class TurntablePowerAction ;
         
         public:
-             Turntable(xero::base::Robot &robot, uint64_t id) ;
+             Turntable(xero::base::Robot &robot, xero::base::Lifter &lifter, uint64_t id) ;
              virtual ~Turntable() ;
 
              virtual bool canAcceptAction(xero::base::ActionPtr action) ;
@@ -51,6 +51,14 @@ namespace xero {
             void calibrate() ;
             void setMotorPower(double v) ;
 
+            double getSafeRotateHeight() {
+                return safe_rotate_height_ ;
+            }
+
+            xero::base::Lifter &getLifter() {
+                return lifter_ ;
+            }
+
             uint64_t getMsgID() const {
                 return msg_id_ ;
             }
@@ -70,6 +78,11 @@ namespace xero {
             double speed_;
 
             //
+            // The height required of the lifter before the turntable should be rotated
+            //
+            double safe_rotate_height_ ;
+
+            //
             // This is the angle of the turntable when the encoder is at
             // zero.  This angle gets added to the calculated angle when
             // encoder values are converted to angle.
@@ -84,6 +97,7 @@ namespace xero {
 
             uint64_t msg_id_ ;
 
+            xero::base::Lifter &lifter_ ;
         };
     }
 }

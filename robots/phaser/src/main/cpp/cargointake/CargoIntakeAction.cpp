@@ -14,6 +14,7 @@ namespace xero {
                 }
                 else {
                     subsystem_.retractCollector() ;
+                    subsystem_.setMotor(0.0) ;
                 }
                 is_done_ = true ;
             }

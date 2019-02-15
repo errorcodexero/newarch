@@ -30,6 +30,7 @@ namespace xero {
             xero::base::AutoModePtr testClimber() ;
 
             xero::base::AutoModePtr testFloorCollectCargo() ;
+            xero::base::AutoModePtr testFloorCollectHatch() ;
 
             xero::base::ActionPtr lifterGoToHeight(double height) ;
             xero::base::ActionPtr turntableGoToAngle(double angle) ;

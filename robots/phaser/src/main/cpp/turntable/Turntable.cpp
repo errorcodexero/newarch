@@ -1,5 +1,6 @@
 #include "Turntable.h"
 #include "TurntableAction.h"
+#include "TurntableCalibrateAction.h"
 #include <Robot.h>
 #include <MessageLogger.h>
 #include <xeromath.h>
@@ -10,10 +11,9 @@ using namespace xero::misc ;
 
 namespace xero{
     namespace phaser{
-        Turntable::Turntable(Robot &robot, uint64_t id) : Subsystem(robot, "turntable") {
+        Turntable::Turntable(Robot &robot, Lifter &lifter, uint64_t id) : Subsystem(robot, "turntable"), lifter_(lifter) {
 
             SettingsParser &parser = robot.getSettingsParser() ;
-            
             msg_id_ = id ;
             
             getMotors(robot) ;
@@ -32,6 +32,8 @@ namespace xero{
             // point.
             //
             turntable_offset_ = parser.getDouble("turntable:base") ;
+
+            safe_rotate_height_ = parser.getDouble("turntable:safe_lifter_height") ;
             
             // And we start without calibration
             is_calibrated_ = false ;
@@ -60,10 +62,11 @@ namespace xero{
                     break ;
 
                 int motor = robot.getSettingsParser().getInteger(motorname) ;
-                auto talon = std::make_shared<ctre::phoenix::motorcontrol::can::TalonSRX>(motor) ;
+                auto talon = std::make_shared<TalonSRX>(motor) ;
                 talon->SetInverted(reverse) ;
                 talon->ConfigVoltageCompSaturation(12.0, 10) ;
                 talon->EnableVoltageCompensation(true) ;                
+                talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
 
                 if (motors_.size() > 0)
                     talon->Follow(*motors_.front()) ;
@@ -102,9 +105,23 @@ namespace xero{
         }
 
         bool Turntable::canAcceptAction(ActionPtr action) {
+            
             auto dir_p = std::dynamic_pointer_cast<TurntableAction>(action) ;
             if (dir_p == nullptr)
                 return false ;
+
+            auto calib_p = std::dynamic_pointer_cast<TurntableCalibrateAction>(action) ;
+            if (calib_p != nullptr)
+                return true ;
+
+            if (!lifter_.isCalibrated() || lifter_.getHeight() < getSafeRotateHeight()) {
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << "Turntable: canAcceptAction failed, lifter to to low to rotate turntable\n" ;
+                logger << "           " << action->toString() ;
+                logger.endMessage() ;
+                return false ;
+            }
 
             return true ;
         }
