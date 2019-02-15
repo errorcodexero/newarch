@@ -109,7 +109,7 @@ namespace xero {
                 //
                 // Check the hatch holder subsystem is see if it has hatch.  If not, we keep
                 // waiting.  When the limit switch does have hatch, we continue
-                if (hatch_holder->hasHatch()) {
+                if (hatch_intake->hasHatch()) {
                     //
                     // 5. The hatch holder has detected hatch.  Stop the motors on the intake
                     //    and the holder.

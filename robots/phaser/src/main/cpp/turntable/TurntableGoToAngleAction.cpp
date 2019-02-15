@@ -81,8 +81,6 @@ namespace xero {
             Turntable &turntable = getTurntable() ;
             Lifter &lifter = turntable.getLifter() ;
 
-
-
             if (!turntable.isCalibrated()) {
                 MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::error) ;
@@ -97,7 +95,7 @@ namespace xero {
 
                     MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
                     logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
-                    logger << "TurntableGoToAngle: action completed sucessfully" << profile_->toString() ;
+                    logger << "TurntableGoToAngle: action completed sucessfully" ;
                     logger.endMessage() ;
                 }
                 else {

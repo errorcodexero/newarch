@@ -18,13 +18,18 @@ namespace xero {
             ~HatchIntake() ;
             void deployCollector() ;
             void retractCollector() ;
-            virtual bool HatchCollected() ;
             virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
+            virtual void computeState() ;
+
+            bool hasHatch() const {
+                return has_hatch_ ;
+            }
 
         private:
             std::shared_ptr<frc::Solenoid> solenoid_ ;
             std::shared_ptr<frc::DigitalInput> sensor_ ;
 
+            bool has_hatch_ ;
          } ;
         
     }

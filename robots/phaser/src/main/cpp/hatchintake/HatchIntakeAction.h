@@ -18,9 +18,10 @@ namespace xero {
         public:
             /// \brief Create a new SingleMotorSubsystemAction
             /// \param subsystem SingleMotor subsystem
-            HatchIntakeAction(HatchIntake &subsystem, bool is_deployed_) : subsystem_(subsystem) {
+            HatchIntakeAction(HatchIntake &subsystem, bool deployed) : subsystem_(subsystem) {
                 is_done_ = false ;
                 collect_power_ = subsystem.getRobot().getSettingsParser().getDouble("hatchintake:power") ;
+                is_deployed_ = deployed ;
             }
 
             ~HatchIntakeAction(){
