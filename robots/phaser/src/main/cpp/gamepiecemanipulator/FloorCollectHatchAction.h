@@ -23,7 +23,6 @@ namespace xero{
                 TurntableGoToCollectAngle,
                 LifterGoToCollectHeightDeployIntakeRunMotor,
                 WaitForHatch,
-                StopMotor,
                 FlipIntake,
                 RaiseLiftFromIntake, 
                 DeployFinger
