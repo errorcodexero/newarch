@@ -155,6 +155,15 @@ namespace xero {
                 speed_ = (height_ - last_height_) / getRobot().getDeltaTime() ;
                 last_height_ = height_ ;
             }
+
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, msg_id_) ;
+            logger << "Lifter:" ;
+            logger << " ticks " << encoder_value_ ;
+            logger << " calibrated " << is_calibrated_ ;
+            logger << " height " << height_ ;
+            logger << " speed " << speed_ ;  
+            logger.endMessage() ;
         }
 
         void Lifter::calibrate() {

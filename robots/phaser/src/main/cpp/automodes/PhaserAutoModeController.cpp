@@ -5,6 +5,8 @@
 #include "cargoholder/CargoHolder.h"
 #include "cargointake/CargoIntake.h"
 #include "cargointake/CargoIntakeAction.h"
+#include "hatchintake/HatchIntake.h"
+#include "hatchintake/HatchIntakeAction.h"
 #include "gamepiecemanipulator/GamePieceManipulator.h"
 #include "gamepiecemanipulator/FloorCollectCargoAction.h"
 #include "gamepiecemanipulator/FloorCollectHatchAction.h"
@@ -18,6 +20,7 @@
 #include <lifter/LifterCalibrateAction.h>
 #include <lifter/LifterGoToHeightAction.h>
 #include <lifter/LifterHoldHeightAction.h>
+#include <lifter/LifterPowerAction.h>
 #include <turntable/TurntableCalibrateAction.h>
 #include <turntable/TurntableGoToAngleAction.h>
 #include <turntable/TurnTableHoldAngleAction.h>
@@ -52,7 +55,7 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = createStraightCharAutoMode() ;
+                mode = createStraightCharAutoMode(true) ;
                 break ;
 
             case 1:
@@ -75,7 +78,7 @@ namespace xero {
                 break ;
 
             case 6:
-                mode = testLifter() ;
+                mode = testLifterRaw() ;
                 break ;
 
             case 7:
@@ -250,6 +253,37 @@ namespace xero {
 
             return mode ;                                                    
         }
+
+        AutoModePtr PhaserAutoModeController::testHatchIntake() {    
+            std::string name = "Test Hatch Intake" ;
+            std::string desc = "Test the hatch intake" ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto hatchintake = phaserrobot->getGameManipulator()->getHatchIntake() ;   
+
+            act = std::make_shared<HatchIntakeAction>(*hatchintake, true) ;
+            mode->pushSubActionPair(hatchintake, act) ;  
+
+            act = std::make_shared<DelayAction>(3.0) ;
+            mode->pushAction(act) ;
+
+            act = std::make_shared<SingleMotorPowerAction>(*hatchintake, 0.2) ;
+            mode->pushSubActionPair(hatchintake, act) ;
+
+            act = std::make_shared<DelayAction>(3.0) ;
+            mode->pushAction(act) ;      
+
+            act = std::make_shared<SingleMotorPowerAction>(*hatchintake, 0.0) ;
+            mode->pushSubActionPair(hatchintake, act) ;      
+
+            act = std::make_shared<HatchIntakeAction>(*hatchintake, false) ;
+            mode->pushSubActionPair(hatchintake, act) ;  
+
+            return mode ;
+        }      
         
         AutoModePtr PhaserAutoModeController::testCargoIntake() {    
             std::string name = "Test Cargo Intake" ;
@@ -266,12 +300,44 @@ namespace xero {
 
             act = std::make_shared<DelayAction>(3.0) ;
             mode->pushAction(act) ;
+
+            act = std::make_shared<SingleMotorPowerAction>(*cargointake, 0.2) ;
+            mode->pushSubActionPair(cargointake, act) ;
+
+            act = std::make_shared<DelayAction>(3.0) ;
+            mode->pushAction(act) ;
+
+            act = std::make_shared<SingleMotorPowerAction>(*cargointake, 0.0) ;
+            mode->pushSubActionPair(cargointake, act) ;
             
             act = std::make_shared<CargoIntakeAction>(*cargointake, false) ;
             mode->pushSubActionPair(cargointake, act) ;       
 
             return mode ;                     
         }
+
+        AutoModePtr PhaserAutoModeController::testLifterRaw() {
+            std::string name = "Test Lifter Raw" ;
+            std::string desc = "Test the lifter motor & sensor" ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto lifter = phaserrobot->getGameManipulator()->getLifter() ;
+
+            act = std::make_shared<LifterPowerAction>(*lifter, 0.1) ;
+            mode->pushSubActionPair(lifter, act) ;
+
+            act = std::make_shared<DelayAction>(1.0) ;
+            mode->pushAction(act) ;              
+
+            act = std::make_shared<LifterPowerAction>(*lifter, 0.0) ;
+            mode->pushSubActionPair(lifter, act) ;
+
+            return mode ;                
+        }
+
 
         AutoModePtr PhaserAutoModeController::testLifter() {
             std::string name = "Test Lifter" ;
@@ -303,6 +369,28 @@ namespace xero {
 
             return mode ;                
         }
+
+       AutoModePtr PhaserAutoModeController::testTurntableRaw() {
+            std::string name = "Test Turntable Electrical" ;
+            std::string desc = "Test the turntable electrical" ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto turntable = phaserrobot->getGameManipulator()->getTurntable() ;
+
+            act = std::make_shared<TurntablePowerAction>(*turntable, 0.1) ;
+            mode->pushSubActionPair(turntable, act) ;
+
+            act = std::make_shared<DelayAction>(10.0) ;
+            mode->pushAction(act) ;
+            
+            act = std::make_shared<TurntablePowerAction>(*turntable, 0.0) ;
+            mode->pushSubActionPair(turntable, act) ;                        
+
+            return mode ;             
+        }        
 
         AutoModePtr PhaserAutoModeController::testTurntable() {
             std::string name = "Test Turntable" ;
@@ -405,7 +493,7 @@ namespace xero {
             return mode ;
         }
 
-        AutoModePtr PhaserAutoModeController::createStraightCharAutoMode() {
+        AutoModePtr PhaserAutoModeController::createStraightCharAutoMode(bool gear) {
             std::string name = "Char Drive Base" ;
             std::string desc = "Characterize the drive base" ;
             AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
@@ -415,7 +503,7 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
 
-            act = std::make_shared<TankDriveCharAction>(*db, 3.0, 0.5) ;
+            act = std::make_shared<TankDriveCharAction>(*db, 3.0, 0.5, gear) ;
             mode->pushSubActionPair(db, act) ;
 
             return mode ;         
