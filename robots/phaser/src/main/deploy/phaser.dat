@@ -6,6 +6,28 @@
 #
 
 #
+# OI mapping
+#
+oi:camera_mode                                                  0
+oi:hatch_cargo_switch                                           1
+oi:tracking_manual_switch                                       2
+oi:climb_lock_switch                                            3
+oi:camera_switch                                                4                                           
+oi:compass_north                                                5
+oi:compass_south                                                6
+oi:compass_east                                                 7
+oi:compass_west                                                 8
+oi:height_level_one                                             9
+oi:height_level_two                                             10
+oi:height_level_three                                           11
+oi:height_cargo_bay                                             12
+oi:collect_floor                                                13
+oi:collect_loading_station                                      14
+oi:score                                                        15
+oi:climb                                                        16
+oi:extra_button                                                 17  
+
+#
 # The definition of the drivebase (for now this is phoenix)
 #
 hw:tankdrive:leftmotor:1                                        1               # TALON SRX
