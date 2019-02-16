@@ -182,19 +182,15 @@ namespace xero {
             case State::LifterGoToCollectHeightDeployIntakeRunMotor:
                 // We are deploying the intake, must get it back into the robot before
                 // the cancel operation is done
-                hatch_intake->setAction(stop_hatch_intake_motor_) ;
-                state_ = State::StopMotor ;
+                    hatch_intake->setAction(retract_hatch_intake_) ;
+                state_ = State::FlipIntake ;
                 break ;
 
             case State::WaitForHatch:
                 // We are deploying the intake, must get it back into the robot before
                 // the cancel operation is done
-                hatch_intake->setAction(stop_hatch_intake_motor_) ;
-                state_ = State::StopMotor ;            
-                break ;
-
-            case State::StopMotor:
-                // We are already putting things away, just let it finish
+                hatch_intake->setAction(retract_hatch_intake_) ;
+                state_ = State::FlipIntake ;            
                 break ;
 
             case State::FlipIntake:
