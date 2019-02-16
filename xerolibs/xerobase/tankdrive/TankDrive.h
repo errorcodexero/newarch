@@ -205,6 +205,9 @@ namespace xero {
             std::list<TalonPtr> left_talon_motors_, right_talon_motors_;
             std::list<VictorPtr> left_victor_motors_, right_victor_motors_ ;
 
+            std::vector<double> left_power_ ;
+            std::vector<double> right_power_ ;
+
             std::shared_ptr<frc::Encoder> left_enc_ ;
             std::shared_ptr<frc::Encoder> right_enc_ ;
 

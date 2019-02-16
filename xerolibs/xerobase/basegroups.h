@@ -44,5 +44,7 @@
 
 #define MSG_GROUP_ACTIONS_VERBOSE       (1ull << 11)
 
+#define MSG_GROUP_POWER                 (1ull << 12)
+
 /// \brief ID to get all messages
 #define MSG_GROUP_ALL                   (0xffffffffffffffffull)

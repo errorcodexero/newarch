@@ -3,6 +3,7 @@
 #include <ActionSequence.h>
 #include <MessageLogger.h>
 #include "HatchHolderAction.h"
+#include "phaserids.h"
 
 
 using namespace xero::base ;
@@ -27,6 +28,12 @@ namespace xero {
 
         void HatchHolder::computeState() {
             has_hatch_ = sensor_->Get() ;
+
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
+            logger << "HatchHolder:" ;
+            logger << " HasHatch " << has_hatch_ ;
+            logger.endMessage() ;            
         }
 
         void HatchHolder::extendArm() {

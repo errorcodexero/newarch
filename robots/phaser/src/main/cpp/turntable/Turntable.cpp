@@ -133,6 +133,15 @@ namespace xero{
                 speed_ = (angle_ - last_angle_) / getRobot().getDeltaTime() ;
                 last_angle_ = angle_ ;
             }
+
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, msg_id_) ;
+            logger << "Turntable:" ;
+            logger << " ticks " << encoder_value_ ;
+            logger << " calibrated " << is_calibrated_ ;
+            logger << " angle " << angle_ ;
+            logger << " speed " << speed_ ;  
+            logger.endMessage() ;            
         }
 
         void Turntable::calibrate() {
