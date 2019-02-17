@@ -870,6 +870,22 @@ namespace {
             cv::Point2f center_point = (left_center + right_center) * 0.5;
             double dist_bet_centers = hypot(delta_x, delta_y);
 
+            // Get dimensions of rects
+            double l_rect_height = std::max(left_rect.size.height, left_rect.size.width);
+            double r_rect_height = std::max(right_rect.size.height, right_rect.size.width);
+            double l_rect_width = std::min(left_rect.size.height, left_rect.size.width);
+            double r_rect_width = std::min(right_rect.size.height, right_rect.size.width);
+
+            // Compare distance between centers to [average] rect height.
+            // If outside of expected range, picking up invalid pair of rectangles
+            const double meas_dist_to_height_ratio = dist_bet_centers / ((l_rect_height+r_rect_height)/2);
+            const double exp_dist_to_height_ratio = dist_bet_centers_inch / 5.5;
+            if (!isApproxEqual(meas_dist_to_height_ratio, exp_dist_to_height_ratio, 0.3)) {
+                setTargetIsIdentified(false);
+                //std::cout << "FALSE: Dist between centers/height not in expected range (" << meas_dist_to_height_ratio << " vs. exp. " << exp_dist_to_height_ratio << ")\n";
+                return;
+            }
+
             // Distance to target in inches
             // At 640x460 of C270 and 640x480 resolution, pixels_bet_centres * dist_to_target_in_FEET ~ 760
             // Product at 432x240 is 650.  So not proportional to width.
@@ -906,10 +922,6 @@ namespace {
             nt_target_yaw_deg.SetDouble(yaw_in_deg);
 
             // Estimate distance to each rectangle based on its height + coordinate of bot rel to target
-            double l_rect_height = std::max(left_rect.size.height, left_rect.size.width);
-            double r_rect_height = std::max(right_rect.size.height, right_rect.size.width);
-            double l_rect_width = std::min(left_rect.size.height, left_rect.size.width);
-            double r_rect_width = std::min(right_rect.size.height, right_rect.size.width);
             double l_rect_dist_inch = 12.0 * (206.0/l_rect_height) * (height_pixels/240.0);
             double r_rect_dist_inch = 12.0 * (206.0/r_rect_height) * (height_pixels/240.0);
             double bot_x_offset_inch = (pow(r_rect_dist_inch,2) - pow(l_rect_dist_inch,2))/(2*dist_bet_centers_inch);
