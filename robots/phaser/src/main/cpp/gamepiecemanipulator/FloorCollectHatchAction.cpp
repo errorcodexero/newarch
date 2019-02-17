@@ -10,8 +10,8 @@ using namespace xero::base ;
 
 namespace xero {
     namespace phaser {
-        FloorCollectHatchAction::FloorCollectHatchAction(GamePieceManipulator &subsystem):GamePieceAction(subsystem)
-        {
+        FloorCollectHatchAction::FloorCollectHatchAction(GamePieceManipulator &subsystem):GamePieceAction(subsystem) {
+
             auto lifter = getGamePiece().getLifter() ;
             auto turntable = getGamePiece().getTurntable();
             auto hatch_holder = getGamePiece().getHatchHolder() ;
@@ -25,10 +25,10 @@ namespace xero {
             set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
             hold_lifter_safe_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:safe_turn") ;            
             set_turntable_hatch_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:hatch:floor_collect") ;
-            set_lifter_hatch_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;            
-            set_lifter_undock_hatch_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:undock_height") ;
-            hold_lifter_hatch_intake_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;            
-            hold_lifter_undock_hatch_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:cargo:undock_height") ;            
+            set_lifter_hatch_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:hatch:floor_collect") ;            
+            set_lifter_undock_hatch_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:hatch:undock_height") ;
+            hold_lifter_hatch_intake_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:hatch:floor_collect") ;            
+            hold_lifter_undock_hatch_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:hatch:undock_height") ;            
 
             set_extend_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM) ;
             set_retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM) ;
