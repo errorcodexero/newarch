@@ -85,6 +85,8 @@
 
 namespace {
 
+    typedef std::vector<cv::Point>       Contour;
+    typedef std::vector<Contour>         Contours;
     typedef cv::RotatedRect              RRect;
     typedef std::vector<cv::RotatedRect> RRects;
 
@@ -715,6 +717,12 @@ namespace {
         }
         
         virtual void Process(cv::Mat& frame_in) {
+            // Confirm input binary image to a viewable object.
+            // Further detection will be added to this image.
+            if (stream_pipeline_output) {
+                cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
+            }
+            
             // Perform contour detection
             contours.clear();
             const bool externalOnlyContours = true;
@@ -722,17 +730,26 @@ namespace {
             const int method = cv::CHAIN_APPROX_SIMPLE;
             cv::findContours(frame_in, contours, hierarchy, mode, method);
 
-            // Confirm input binary image to a viewable object.
-            // Further detection will be added to this image.
-            if (stream_pipeline_output) {
-                cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
-            }
-            
             // Unless we have at least 2 contours, nothing further to do
             if (contours.size() < 2) {
                 setTargetIsIdentified(false);
                 //std::cout << "FALSE: Fewer than 2 contours\n";
                 return;
+            }
+
+            // Sort contours by keep largest ones for further processing
+            // Disabled for now.  No visible performance benefit.
+            if (false) {
+                std::sort(contours.begin(),
+                          contours.end(),
+                          [](const Contour& a, const Contour& b) -> bool
+                          { 
+                              return (cv::arcLength(a,true) > cv::arcLength(b,true));
+                          });
+                const int contour_size_lim = 12;  // Rather arbitrary
+                if (contours.size() > contour_size_lim) {
+                    contours.resize(contour_size_lim);
+                }
             }
 
             // Draw contours + find rectangles meeting aspect ratio requirement
@@ -942,7 +959,7 @@ namespace {
 
     private:
 
-        std::vector<std::vector<cv::Point> > contours;
+        Contours contours;
         std::vector<cv::Vec4i> hierarchy;
 
     };
