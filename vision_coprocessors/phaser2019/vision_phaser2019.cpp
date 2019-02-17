@@ -594,7 +594,7 @@ namespace {
         }
 
         // If fewer than 2 rects left or odd number, no target
-        if (filtered_rects.size() == 1) {
+        if (filtered_rects.size() < 2) {
             //std::cout << "FALSE: Didn't find at least 2 rectangles close in size (" << getRectArea(rects_in[0]) << ", " << getRectArea(rects_in[1]) << ") and have right orientation\n";
             return RRects {};
         }
