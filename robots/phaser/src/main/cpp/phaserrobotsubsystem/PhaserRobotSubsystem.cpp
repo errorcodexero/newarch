@@ -21,10 +21,10 @@ namespace xero {
             oi_ = std::make_shared<PhaserOISubsystem>(robot) ;
             addChild(oi_) ;        
 
-            front_line_sensor_ = std::make_shared<LightSensorSubsystem>(robot, "frontlinesensor", "hw:linesensor:front:", 3) ;    
+            front_line_sensor_ = std::make_shared<LightSensorSubsystem>(robot, "front", "hw:linesensor:front:", 3) ;    
             addChild(front_line_sensor_) ;
 
-            back_line_sensor_ = std::make_shared<LightSensorSubsystem>(robot, "frontlinesensor", "hw:linesensor:back:", 3) ;    
+            back_line_sensor_ = std::make_shared<LightSensorSubsystem>(robot, "back", "hw:linesensor:back:", 3) ;    
             addChild(back_line_sensor_) ;            
 
             tracker_ = std::make_shared<PhaserCameraTracker>(robot) ;

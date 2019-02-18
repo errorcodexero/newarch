@@ -30,6 +30,7 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
             // logger.enableSubsystem(MSG_GROUP_TANKDRIVE_VERBOSE);            
             // logger.enableSubsystem(MSG_GROUP_ACTIONS);
+            // logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);               
             // logger.enableSubsystem(MSG_GROUP_PARSER) ;
             // logger.enableSubsystem(MSG_GROUP_OI) ;
             // logger.enableSubsystem(MSG_GROUP_ALL) ;         
@@ -38,12 +39,13 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_VISION_DRIVING); 
             // logger.enableSubsystem(MSG_GROUP_PHASER_TURNTABLE);
             // logger.enableSubsystem(MSG_GROUP_PHASER_LIFTER);
+            // logger.enableSubsystem(MSG_GROUP_CARGO_INTAKE);    
+            // logger.enableSubsystem(MSG_GROUP_CARGO_HOLDER);   
+            // logger.enableSubsystem(MSG_GROUP_HATCH_INTAKE);    
+            // logger.enableSubsystem(MSG_GROUP_HATCH_HOLDER);
 
-            logger.enableSubsystem(MSG_GROUP_ACTIONS);      
-            logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);               
-            logger.enableSubsystem(MSG_GROUP_PHASER_LIFTER);
-            logger.enableSubsystem(MSG_GROUP_PHASER_TURNTABLE);
-            
+            logger.enableSubsystem(MSG_GROUP_ACTIONS); 
+            logger.enableSubsystem(MSG_GROUP_PHASER_TURNTABLE);                       
         }
         
         void Phaser::loadPaths() {
@@ -54,8 +56,14 @@ namespace xero {
         }
         
         void Phaser::RobotHardwareInit() {
+            compressor_ = std::make_shared<frc::Compressor>() ;
+            compressor_->SetClosedLoopControl(true) ;
+            compressor_->Start() ;
+
             auto sub_p = std::make_shared<PhaserRobotSubsystem>(*this) ;
             setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getTankDrive()) ;
+
+
         }
 
         std::shared_ptr<ControllerBase> Phaser::createAutoController() {

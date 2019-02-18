@@ -208,6 +208,7 @@ namespace xero {
                 message_logger_.endMessage() ;
             }
 
+#ifdef NOTYET
             message_logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_POWER) ;
             message_logger_ << "Power:" ;
             for(int i = 0 ; i < 16 ; i++) {
@@ -218,6 +219,7 @@ namespace xero {
             message_logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_POWER) ;            
             message_logger_ << "Voltage: " << voltage_ ;
             message_logger_.endMessage() ;
+#endif
         }
 
         void Robot::RobotInit() {
@@ -265,11 +267,6 @@ namespace xero {
             message_logger_ << ".... initializing hardware" ;
             message_logger_.endMessage() ;              
             RobotHardwareInit() ;
-
-            //
-            // Create the power distribution panel
-            //
-            pdp_ = std::make_shared<frc::PowerDistributionPanel>(0) ;
 
             //
             // Create the auto mode controller.  Its around for the complete lifecycle of the

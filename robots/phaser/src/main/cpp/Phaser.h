@@ -3,6 +3,7 @@
 #include <phaserrobotsubsystem/PhaserRobotSubsystem.h>
 #include <tankdrive/TankDrive.h>
 #include <Robot.h>
+#include <frc/Compressor.h>
 
 namespace xero {
     namespace phaser {
@@ -39,6 +40,9 @@ namespace xero {
 
             /// \brief enable specific message for logging
             virtual void enableSpecificMessages() ; 
+
+        private:
+            std::shared_ptr<frc::Compressor> compressor_ ;
         } ;
     }
 }

@@ -89,6 +89,12 @@ namespace xero {
 
             if (elapsed > profile_->getTotalTime())
             {
+                MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
+                logger << "LifterGoToHeightAction: action completed" ;
+                logger << ", delta = " << delta ;
+                logger.endMessage() ;
+
                 if (std::fabs(delta) < threshold_) {
                     is_done_ = true ;
                     lifter.getRobot().endPlot(plotid_) ;
@@ -100,6 +106,10 @@ namespace xero {
                     logger.endMessage() ;
                     
                 } else {
+                    lifter.getRobot().endPlot(plotid_) ;                    
+                    is_done_ = true ;
+                    return ;
+
                     //
                     // We reached the end of the profile, but are not where we
                     // want to be.  Create a new profile to get us there.

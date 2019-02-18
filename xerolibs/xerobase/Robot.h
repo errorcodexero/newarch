@@ -219,11 +219,6 @@ namespace xero {
             /// \brief return the auto mode selection
             virtual int getAutoModelSelection() ;
 
-            double getChannelCurrent(int channel) {
-                return pdp_->GetCurrent(channel) ;
-            }
-
-
         private:
             void logAutoModeState() ;
             void displayAutoModeState() ;
@@ -245,9 +240,6 @@ namespace xero {
             SubsystemPtr robot_subsystem_ ;
             std::shared_ptr<DriveBase> drivebase_subsystem_ ;
             std::shared_ptr<OISubsystem> oi_subsystem_ ;
-
-            // The PDP for the robot
-            std::shared_ptr<frc::PowerDistributionPanel> pdp_ ;
 
             // Message logger instance
             xero::misc::MessageLogger message_logger_;

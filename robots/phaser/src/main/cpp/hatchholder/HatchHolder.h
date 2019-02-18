@@ -31,7 +31,8 @@ namespace xero {
         private:
             bool has_hatch_ ;
             std::shared_ptr<frc::DigitalInput> sensor_ ;
-            std::shared_ptr<frc::Solenoid> arm_ ;
+            std::shared_ptr<frc::Solenoid> arm_extend_ ;
+            std::shared_ptr<frc::Solenoid> arm_retract_ ;
             std::shared_ptr<frc::Solenoid> finger_ ;
         } ;
     }

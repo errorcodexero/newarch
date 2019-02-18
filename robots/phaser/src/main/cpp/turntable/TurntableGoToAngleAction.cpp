@@ -137,6 +137,9 @@ namespace xero {
                     logger << "TurntableGoToAngle: action completed sucessfully" ;
                     logger.endMessage() ;                    
                 } else {
+                    turntable.getRobot().endPlot(plotid_) ;
+                    is_done_ = true ;
+                    return ;
 
                     MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
                     logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;

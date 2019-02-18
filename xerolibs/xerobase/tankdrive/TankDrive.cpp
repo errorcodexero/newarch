@@ -144,6 +144,7 @@ namespace xero {
 
         void TankDrive::setGearShifter(int index) {
             gear_ = std::make_shared<frc::Solenoid>(index) ;
+            highGear() ;
         }
 
         void TankDrive::initTalonList(const std::list<int>& ids, std::list<TalonPtr>& talons) {
@@ -229,6 +230,7 @@ namespace xero {
 
         void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
             if (left_talon_motors_.size() > 0) {
+                std::cout << "Setting talons " << left_percent << " " << right_percent << std::endl ;
                 left_talon_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent);
                 right_talon_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
             }

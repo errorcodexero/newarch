@@ -1,11 +1,11 @@
 #include "HatchIntake.h"
 #include "Robot.h"
 #include "HatchIntakeAction.h"
-
-
-
+#include "phaserids.h"
+#include <MessageLogger.h>
 
 using namespace xero::base ;
+using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
@@ -13,6 +13,8 @@ namespace xero {
             solenoid_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:hatchintake:solenoid"));
             sensor_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:hatchintake:sensor"));
             has_hatch_ = false ;
+
+            solenoid_->Set(false) ;
         }
         HatchIntake::~HatchIntake(){
 
@@ -31,6 +33,13 @@ namespace xero {
 
         void HatchIntake::computeState() {
             has_hatch_ = sensor_->Get() ;
+
+
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_INTAKE) ;
+            logger << "HatchIntake:" ;
+            logger << " HasHatch " << has_hatch_ ;
+            logger.endMessage() ;              
         }
 
     }

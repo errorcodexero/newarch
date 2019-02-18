@@ -67,6 +67,9 @@ namespace xero {
             // Initialize to false, only gets reset if we have a limit switch
             bottom_limit_switch_ = false ;
             top_limit_switch_ = false ;
+
+            height_ = 0.0 ;
+            speed_ = 0.0 ;
         }
 
         Lifter::~Lifter() {
@@ -97,6 +100,7 @@ namespace xero {
                 talon->ConfigVoltageCompSaturation(12.0, 10) ;
                 talon->EnableVoltageCompensation(true) ;                
                 talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
+                talon->ConfigForwardLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyOpen) ;
                 
                 if (motors_.size() > 0)
                     talon->Follow(*motors_.front()) ;

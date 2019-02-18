@@ -36,64 +36,64 @@ namespace xero {
             // 
 
             // switch
-            button = settings.getInteger("oi:hatch_cargo_switch_") ;
+            button = settings.getInteger("oi:hatch_cargo_switch") ;
             hatch_cargo_switch_ = mapButton(button, OIButton::ButtonType::Level) ;
 
-            button = settings.getInteger("oi:tracking_manual_switch_") ;
+            button = settings.getInteger("oi:tracking_manual_switch") ;
             tracking_manual_switch_ = mapButton(button, OIButton::ButtonType::Level) ;
             
-            button = settings.getInteger("oi:climb_lock_switch_") ;
+            button = settings.getInteger("oi:climb_lock_switch") ;
             climb_lock_switch_ = mapButton(button, OIButton::ButtonType::Level) ;
             
-            button = settings.getInteger("oi:camera_switch_") ;
+            button = settings.getInteger("oi:camera_switch") ;
             camera_switch_ = mapButton(button, OIButton::ButtonType::Level) ;   
 
-            button = settings.getInteger("oi:camera_mode_") ;
+            button = settings.getInteger("oi:camera_mode") ;
             camera_mode_ = mapButton(button, OIButton::ButtonType::Level) ;   
 
             // compass
-            button = settings.getInteger("oi:compass_north_") ;
+            button = settings.getInteger("oi:compass_north") ;
             compass_north_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
             
-            button = settings.getInteger("oi:compass_south_") ;
+            button = settings.getInteger("oi:compass_south") ;
             compass_south_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
             
-            button = settings.getInteger("oi:compass_east_") ;
+            button = settings.getInteger("oi:compass_east") ;
             compass_east_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
             
-            button = settings.getInteger("oi:compass_west_") ;
+            button = settings.getInteger("oi:compass_west") ;
             compass_west_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
             // height
-            button = settings.getInteger("oi:height_level_one_") ;
+            button = settings.getInteger("oi:height_level_one") ;
             height_level_one_ = mapButton(button, OIButton::ButtonType::LowToHigh) ; 
 
-            button = settings.getInteger("oi:height_level_two_") ;
+            button = settings.getInteger("oi:height_level_two") ;
             height_level_two_ = mapButton(button, OIButton::ButtonType::LowToHigh) ; 
 
-            button = settings.getInteger("oi:height_level_three_") ;
+            button = settings.getInteger("oi:height_level_three") ;
             height_level_three_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
             
-            button = settings.getInteger("oi:height_cargo_bay_") ;
+            button = settings.getInteger("oi:height_cargo_bay") ;
             height_cargo_bay_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
             
             // collect
             button = settings.getInteger("oi:collect_floor") ;
             collect_floor_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
             
-            button = settings.getInteger("oi:collect_loading_station_") ;
+            button = settings.getInteger("oi:collect_loading_station") ;
             collect_loading_station_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
             // score
-            button = settings.getInteger("oi:score_") ;
+            button = settings.getInteger("oi:score") ;
             score_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
             // climb
-            button= settings.getInteger("oi:climb_") ;
+            button= settings.getInteger("oi:climb") ;
             climb_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
             // extra
-            button= settings.getInteger("oi:extra_button_") ;
+            button= settings.getInteger("oi:extra_button") ;
             extra_button_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
 

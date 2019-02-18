@@ -80,6 +80,7 @@ namespace xero {
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
             logger << "LightSensor :" ;
+            logger << getName() ;
             for(unsigned int i = 0; i < light_sensors_.size(); i++)
                 logger << " " << light_sensors_[i]->Get() ;            
             logger.endMessage() ;

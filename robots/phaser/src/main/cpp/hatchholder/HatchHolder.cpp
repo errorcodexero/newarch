@@ -12,9 +12,14 @@ using namespace xero::misc ;
 namespace xero {
     namespace phaser {
         HatchHolder::HatchHolder(xero::base::Robot &robot) : Subsystem(robot, "HatchHolder") {
-            arm_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:hatchholder:arm"));
+            arm_extend_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:hatchholder:arm:extend"));
+            arm_retract_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:hatchholder:arm:retract"));            
             finger_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:hatchholder:finger"));
             sensor_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:hatchholder:sensor"));
+
+            finger_->Set(false) ;
+            arm_extend_->Set(false) ;
+            arm_retract_->Set(false) ;
         }   
 
         HatchHolder::~HatchHolder() {
@@ -37,11 +42,13 @@ namespace xero {
         }
 
         void HatchHolder::extendArm() {
-            arm_->Set(true) ;
+            arm_extend_->Set(true) ;
+            arm_retract_->Set(false) ;
         }
 
         void HatchHolder::retractArm() {
-            arm_->Set(false) ;
+            arm_extend_->Set(false) ;
+            arm_retract_->Set(true) ;
         }
 
         void HatchHolder::extendFinger() {

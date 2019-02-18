@@ -22,6 +22,7 @@ namespace xero{
             int enc1 = robot.getSettingsParser().getInteger("hw:turntable:encoder1") ;
             int enc2 = robot.getSettingsParser().getInteger("hw:turntable:encoder2") ;           
             encoder_ = std::make_shared<frc::Encoder>(enc1, enc2) ;
+            encoder_->SetReverseDirection(true) ;
 
             min_angle_ = robot.getSettingsParser().getDouble("turntable:keepout:minimum") ;
             max_angle_ = robot.getSettingsParser().getDouble("turntable:keepout:maximum") ;
@@ -36,7 +37,9 @@ namespace xero{
             safe_rotate_height_ = parser.getDouble("turntable:safe_lifter_height") ;
             
             // And we start without calibration
-            is_calibrated_ = false ;
+            is_calibrated_ = true ;
+
+            angle_ = 0.0 ;
         }
 
         Turntable::~Turntable() {
@@ -105,6 +108,7 @@ namespace xero{
         }
 
         bool Turntable::canAcceptAction(ActionPtr action) {
+            return true ;
             
             auto dir_p = std::dynamic_pointer_cast<TurntableAction>(action) ;
             if (dir_p == nullptr)
@@ -126,6 +130,7 @@ namespace xero{
             return true ;
         }
 
+        static int count = 0 ;
         void Turntable::computeState(){
             encoder_value_ = encoder_->Get() ;
             if (is_calibrated_) {
@@ -137,6 +142,7 @@ namespace xero{
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, msg_id_) ;
             logger << "Turntable:" ;
+            logger << " count " << count++ ;
             logger << " ticks " << encoder_value_ ;
             logger << " calibrated " << is_calibrated_ ;
             logger << " angle " << angle_ ;

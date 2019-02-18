@@ -47,15 +47,9 @@ namespace xero {
         void PhaserAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             AutoModePtr mode = nullptr ;
             
-            getRobot().getMessageLogger().startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
-            getRobot().getMessageLogger() << "creating automode" ;
-            getRobot().getMessageLogger().endMessage() ;
-
-            sel += 10 ;
-
             switch(sel) {
             case 0:
-                mode = createStraightCharAutoMode(true) ;
+                mode = testTurntableRaw() ;
                 break ;
 
             case 1:
@@ -236,10 +230,10 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto cargoholder = phaserrobot->getGameManipulator()->getCargoHolder() ;    
 
-            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, 0.4) ;
+            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, 0.2) ;
             mode->pushSubActionPair(cargoholder, act) ;
 
-            act = std::make_shared<DelayAction>(10.0) ;
+            act = std::make_shared<DelayAction>(3.0) ;
             mode->pushAction(act) ;
             
             act = std::make_shared<SingleMotorPowerAction>(*cargoholder, -0.4) ;
@@ -309,6 +303,9 @@ namespace xero {
 
             act = std::make_shared<SingleMotorPowerAction>(*cargointake, 0.0) ;
             mode->pushSubActionPair(cargointake, act) ;
+
+            act = std::make_shared<DelayAction>(3.0) ;
+            mode->pushAction(act) ;       
             
             act = std::make_shared<CargoIntakeAction>(*cargointake, false) ;
             mode->pushSubActionPair(cargointake, act) ;       
@@ -326,10 +323,13 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto lifter = phaserrobot->getGameManipulator()->getLifter() ;
 
-            act = std::make_shared<LifterPowerAction>(*lifter, 0.1) ;
+            act = std::make_shared<LifterCalibrateAction>(*lifter) ;
+            mode->pushSubActionPair(lifter, act) ;            
+
+            act = std::make_shared<LifterPowerAction>(*lifter, 0.40) ;
             mode->pushSubActionPair(lifter, act) ;
 
-            act = std::make_shared<DelayAction>(1.0) ;
+            act = std::make_shared<DelayAction>(3.0) ;
             mode->pushAction(act) ;              
 
             act = std::make_shared<LifterPowerAction>(*lifter, 0.0) ;
@@ -354,19 +354,26 @@ namespace xero {
 
             act = std::make_shared<LifterGoToHeightAction>(*lifter, 45.0) ;
             mode->pushSubActionPair(lifter, act) ;
-
+            
             act = std::make_shared<LifterHoldHeightAction>(*lifter, 45.0) ;
             mode->pushSubActionPair(lifter, act, false) ;   
 
-            act = std::make_shared<DelayAction>(10.0) ;
-            mode->pushAction(act) ;  
+            act = std::make_shared<DelayAction>(5.0) ;
+            mode->pushAction(act) ;              
 
             act = std::make_shared<LifterGoToHeightAction>(*lifter, 20.0) ;
             mode->pushSubActionPair(lifter, act) ;
 
+#ifdef NOTYET
             act = std::make_shared<LifterHoldHeightAction>(*lifter, 20.0) ;
             mode->pushSubActionPair(lifter, act, false) ;
 
+            act = std::make_shared<DelayAction>(5.0) ;
+            mode->pushAction(act) ;              
+
+            act = std::make_shared<LifterGoToHeightAction>(*lifter, 9.0) ;
+            mode->pushSubActionPair(lifter, act) ;
+#endif
             return mode ;                
         }
 
@@ -380,10 +387,10 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto turntable = phaserrobot->getGameManipulator()->getTurntable() ;
 
-            act = std::make_shared<TurntablePowerAction>(*turntable, 0.1) ;
+            act = std::make_shared<TurntablePowerAction>(*turntable, 0.25) ;
             mode->pushSubActionPair(turntable, act) ;
 
-            act = std::make_shared<DelayAction>(10.0) ;
+            act = std::make_shared<DelayAction>(2.0) ;
             mode->pushAction(act) ;
             
             act = std::make_shared<TurntablePowerAction>(*turntable, 0.0) ;
@@ -503,7 +510,7 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
 
-            act = std::make_shared<TankDriveCharAction>(*db, 3.0, 0.5, gear) ;
+            act = std::make_shared<TankDriveCharAction>(*db, 1.0, 0.2, gear) ;
             mode->pushSubActionPair(db, act) ;
 
             return mode ;         

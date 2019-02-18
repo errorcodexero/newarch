@@ -22,22 +22,24 @@ hw:tankdrive:shifter                                            0               
 hw:tankdrive:invert:motors:right                                true
 hw:tankdrive:invert:encoders:right                              true
 
-hw:hatchholder:arm                                              1               # Solenoid
-hw:hatchholder:finger                                           2               # Solenoid
-hw:hatchholder:sensor                                           22              # Digital IO
+hw:hatchholder:arm:extend                                        6
+hw:hatchholder:arm:retract                                       7              # Solenoid
+hw:hatchholder:finger                                            5              # Solenoid
+hw:hatchholder:sensor                                           21              # Digital IO
 
-hw:hatchintake:motor                                            11              # Victor SPX
-hw:hatchintake:sensor                                           21              # Digital IO
-hw:hatchintake:solenoid                                         3               # Solenoid
+hw:hatchintake:motor                                            12              # Victor SPX
+hw:hatchintake:sensor                                           23              # Digital IO
+hw:hatchintake:solenoid                                         2               # Solenoid
 
 hw:lifter:encoder1                                              6               # Digital IO
 hw:lifter:encoder2                                              7               # Digital IO
-hw:lifter:motor:1                                               8               # TalonSRX
-hw:lifter:motor:2                                               9               # TalonSRX
+hw:lifter:motor:1                                               10               # TalonSRX
+hw:lifter:motor:2                                               11               # TalonSRX
+hw:lifter:reversemotors                                         true            
 
 hw:turntable:encoder1                                           4               # Digital IO
 hw:turntable:encoder2                                           5               # Ditigal IO
-hw:turntable:motor:1                                            7               # TALON SRX
+hw:turntable:motor:1                                            8               # TALON SRX
 
 hw:linesensor:front:0                                           10              # Digital IO
 hw:linesensor:front:1                                           11              # Digital IO
@@ -51,12 +53,12 @@ hw:driverstation:hid:driver                                     0               
 hw:driverstation:hid:oi                                         2               # HID Device Index
 
 hw:cargoholder:sensor                                           20              # Digital IO
-hw:cargoholder:motor                                            10              # Victor SPX
+hw:cargoholder:motor                                            7              # Victor SPX
 
-hw:cargointake:motor                                            12              # Victor SPX
-hw:cargointake:solenoid                                         5               # Solenoid
+hw:cargointake:motor                                            9              # Victor SPX
+hw:cargointake:solenoid                                         1              # Solenoid
 
-hw:climber:solenoid                                             6               # Solenoid
+hw:climber:solenoid                                             3               # Solenoid
 
 ###################################################################
 #
@@ -113,10 +115,10 @@ linefollow:adjust                                               .35
 #
 # Variables for the turntable
 #
-turntable:safe_lifter_height                                    14                  # Lifter must be above this height to rotate turntable
-turntable:keepout:minimum                                       -55
-turntable:keepout:maximum                                       -35
-turntable:degrees_per_tick                                      0.135427952
+turntable:safe_lifter_height                                    17
+turntable:keepout:minimum                                       130
+turntable:keepout:maximum                                       160
+turntable:degrees_per_tick                                      0.6
 turntable:maxa                                                  45                  # TODO
 turntable:maxd                                                  -45                 # TODO
 turntable:maxv                                                  45                  # TODO
@@ -144,24 +146,25 @@ turntable:angle:hatch:floor_collect                             0.0
 # Variables for the lifter
 #
 lifter:base							                            8.46
-lifter:inches_per_tick                                          0.014861049
+lifter:inches_per_tick                                          0.05925
 lifter:max_height                                               83.66
 lifter:min_height                                               8.46
 lifter:threshold                                                1.0
-lifter:maxv                                                     12                  # TODO
-lifter:maxa                                                     12                  # TODO
-lifter:maxd                                                     -12                 # TODO
-lifter:follower:kp                                              0.5                 # TODO
-lifter:follower:ka                                              0.03                # TODO
-lifter:follower:kv                                              0.018               # TODO
+lifter:maxv                                                     23.0
+lifter:maxa                                                     50.0
+lifter:maxd                                                     -50.0
+lifter:follower:kp                                              0.01                # TODO
+lifter:follower:ka                                              0.0                 # TODO
+lifter:follower:kv                                              0.035
 lifter:follower:kd                                              0.0                 # TODO
+
 lifter:hold:p                                                   -0.1                # TODO
 lifter:hold:i                                                   0.0                 # TODO
 lifter:hold:d                                                   0.0                 # TODO
 lifter:hold:f                                                   0.0                 # TODO
 lifter:hold:a                                                   0.0                 # TODO
-lifter:hold:min                                                 -0.5                # TODO
-lifter:hold:max                                                 0.5                 # TODO
+lifter:hold:min                                                 -0.4                # TODO
+lifter:hold:max                                                 0.4                 # TODO
 lifter:hold:imax                                                0.0                 # TODO
 
 #
@@ -210,3 +213,22 @@ drivebyvision:quit_threshold                                    31.0
 cargointake:power                                               0.4
 cargoholder:power                                               0.3
 hatchintake:power                                               0.2
+
+oi:hatch_cargo_switch                                           1
+oi:tracking_manual_switch                                       2
+oi:climb_lock_switch                                            2
+oi:camera_switch                                                2
+oi:camera_mode                                                  2
+oi:compass_north                                                2
+oi:compass_south                                                2
+oi:compass_east                                                 2
+oi:compass_west                                                 2
+oi:height_level_one                                             2
+oi:height_level_two                                             2
+oi:height_level_three                                           2
+oi:height_cargo_bay                                             2
+oi:collect_floor                                                2
+oi:collect_loading_station                                      2
+oi:score                                                        2
+oi:climb                                                        2
+oi:extra_button                                                 2

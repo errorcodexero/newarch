@@ -30,6 +30,7 @@ namespace xero {
                     }
                 }
             }
+            running_auto_seq_ = nullptr ;
 
             if (running_auto_seq_ != nullptr) {
                 if (oi->getDriverGamepad()->isCancelPressed()) {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cameratracker/CameraTracker.h>
+#include <frc/Relay.h>
 #include <ITerminator.h>
 
 namespace xero {
@@ -29,6 +30,7 @@ namespace xero {
             double rect_ratio_min_ ;
             double rect_ratio_max_ ;         
             double rect_ratio_ ;   
+            std::shared_ptr<frc::Relay> light_ring_ ;
         } ;
     }
 }
