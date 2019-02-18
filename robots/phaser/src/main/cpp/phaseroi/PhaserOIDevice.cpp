@@ -106,6 +106,7 @@ namespace xero {
         void PhaserOIDevice::generateActions(ActionSequence &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
+            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
 
             size_t which = 0 ;
             CameraTracker::CameraMode mode = CameraTracker::CameraMode::TargetTracking ;
@@ -115,6 +116,11 @@ namespace xero {
             
             if (getValue(camera_mode_) == 1)
                 mode = CameraTracker::CameraMode::DriverViewing ;
+
+            if (getValue(collect_floor_) == 1) {
+                ActionPtr act = std::make_shared<FloorCollectCargoAction>(*game) ;
+                seq.pushSubActionPair(game, act) ;
+            }
 
             ActionPtr action = std::make_shared<CameraChangeAction>(*camera, which, mode) ;
             seq.pushSubActionPair(camera, action) ;            

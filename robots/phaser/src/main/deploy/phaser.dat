@@ -13,7 +13,7 @@ oi:hatch_cargo_switch                                           1
 oi:tracking_manual_switch                                       2
 oi:climb_lock_switch                                            3
 oi:camera_switch                                                4                                           
-oi:compass_north                                                5
+oi:compass_north                                                13
 oi:compass_south                                                6
 oi:compass_east                                                 7
 oi:compass_west                                                 8
@@ -21,7 +21,7 @@ oi:height_level_one                                             9
 oi:height_level_two                                             10
 oi:height_level_three                                           11
 oi:height_cargo_bay                                             12
-oi:collect_floor                                                13
+oi:collect_floor                                                5
 oi:collect_loading_station                                      14
 oi:score                                                        15
 oi:climb                                                        16
@@ -141,27 +141,25 @@ turntable:safe_lifter_height                                    17
 turntable:keepout:minimum                                       130
 turntable:keepout:maximum                                       160
 turntable:degrees_per_tick                                      0.6
-turntable:maxa                                                  45                  # TODO
-turntable:maxd                                                  -45                 # TODO
-turntable:maxv                                                  45                  # TODO
+turntable:maxa                                                  150
+turntable:maxd                                                  -150
+turntable:maxv                                                  200
 turntable:base                                                  0.0
-turntable:threshold                                             1.0                 # TODO
-turntable:follower:kv                                           0.044               # TODO
-turntable:follower:ka                                           0.0                 # TODO
-turntable:follower:kp                                           0.2                 # TODO
-turntable:follower:kd                                           0.0                 # TODO
-turntable:hold:p                                                -0.1                # TODO
-turntable:hold:i                                                0.0                 # TODO
-turntable:hold:d                                                0.0                 # TODO
-turntable:hold:f                                                0.0                 # TODO
-turntable:hold:a                                                0.0                 # TODO
-turntable:hold:min                                              -0.5                # TODO
-turntable:hold:max                                              0.5                 # TODO
-turntable:hold:imax                                             0.0                 # TODO
-turntable:speed_threshold                                       5.0                 # TODO
-turntable:angle_threshold                                       1.0                 # TODO
+turntable:threshold                                             1.0
+turntable:follower:kv                                           0.0036
+turntable:follower:ka                                           0.0
+turntable:follower:kp                                           0.031
+turntable:follower:kd                                           0.0
+turntable:hold:p                                                0.01
+turntable:hold:i                                                0.0
+turntable:hold:d                                                0.0
+turntable:hold:f                                                0.0
+turntable:hold:a                                                0.0
+turntable:hold:min                                              -0.5
+turntable:hold:max                                              0.5
+turntable:hold:imax                                             0.0
 
-turntable:angle:cargo:floor_collect                             90.0
+turntable:angle:cargo:floor_collect                             -90.0
 turntable:angle:hatch:floor_collect                             0.0
 
 #

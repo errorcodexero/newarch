@@ -58,6 +58,8 @@ namespace xero {
                 // complete until the lifter is done with its action.
                 //
                 if (set_lifter_safe_height_->isDone()) {
+                    auto cargo_intake = getGamePiece().getCargoIntake() ;
+
                     //
                     // 2. The lifter action to move the lifter to a safe height has
                     //    completed.  We perform the next step by rotating the turntable to
@@ -68,6 +70,7 @@ namespace xero {
                     auto lifter = getGamePiece().getLifter() ;
                     turntable->setAction(set_turntable_cargo_angle_) ;
                     lifter->setAction(hold_lifter_safe_height_) ;
+                    cargo_intake->setAction(deploy_cargo_intake_) ;       
 
                     state_ = State::TurntableGoToCollectAngle ;
                 }
@@ -78,7 +81,7 @@ namespace xero {
                 // Check to see if the turntable is at the desired angle.  The current state is not
                 // complete until the turntable is done with its action
                 //
-                if (set_turntable_cargo_angle_->isDone()) {
+                if (set_turntable_cargo_angle_->isDone() && deploy_cargo_intake_->isDone()) {
                     //
                     // 3. The turntable action to move into the position to collect cargo from the
                     //    floor is complete.  Move the lifter to the right height to capture cargo
@@ -86,9 +89,6 @@ namespace xero {
                     //
                     auto lifter = getGamePiece().getLifter() ;
                     lifter->setAction(set_lifter_cargo_intake_height_) ;
-
-                    auto cargo_intake = getGamePiece().getCargoIntake() ;
-                    cargo_intake->setAction(deploy_cargo_intake_) ;                   
 
                     state_ = State::LifterGoToCollectHeightDeployIntake ;                     
                 }

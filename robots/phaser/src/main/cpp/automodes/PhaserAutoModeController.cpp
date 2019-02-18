@@ -49,9 +49,10 @@ namespace xero {
             
             switch(sel) {
             case 0:
-                mode = testTurntableRaw() ;
+                mode = testTurntable() ;
                 break ;
 
+#ifdef NOTYHET
             case 1:
                 mode = createScrubCharAutoMode() ;
                 break ;
@@ -110,6 +111,7 @@ namespace xero {
             case 15:
                 mode = testFloorCollectHatch() ;
                 break ;
+#endif
             }
             setAction(mode) ;
         }
@@ -364,7 +366,6 @@ namespace xero {
             act = std::make_shared<LifterGoToHeightAction>(*lifter, 20.0) ;
             mode->pushSubActionPair(lifter, act) ;
 
-#ifdef NOTYET
             act = std::make_shared<LifterHoldHeightAction>(*lifter, 20.0) ;
             mode->pushSubActionPair(lifter, act, false) ;
 
@@ -373,7 +374,6 @@ namespace xero {
 
             act = std::make_shared<LifterGoToHeightAction>(*lifter, 9.0) ;
             mode->pushSubActionPair(lifter, act) ;
-#endif
             return mode ;                
         }
 
@@ -412,21 +412,28 @@ namespace xero {
             act = std::make_shared<TurntableCalibrateAction>(*turntable) ;
             mode->pushSubActionPair(turntable, act) ;
 
-            act = std::make_shared<TurntableGoToAngleAction>(*turntable, -20) ;
+            act = std::make_shared<TurntableGoToAngleAction>(*turntable, 100) ;
             mode->pushSubActionPair(turntable, act) ;
 
-            act = std::make_shared<DelayAction>(10.0) ;
+            act = std::make_shared<TurntableHoldAngleAction>(*turntable, 100) ;
+            mode->pushSubActionPair(turntable, act) ;  
+
+            act = std::make_shared<DelayAction>(45.0) ;
+            mode->pushAction(act) ;                      
+
+#ifdef NOTYET
+            act = std::make_shared<DelayAction>(5.0) ;
             mode->pushAction(act) ;
 
-            act = std::make_shared<TurntableGoToAngleAction>(*turntable, 180) ;
+            act = std::make_shared<TurntableGoToAngleAction>(*turntable, -60) ;
             mode->pushSubActionPair(turntable, act) ;    
 
-            act = std::make_shared<DelayAction>(10.0) ;
+            act = std::make_shared<DelayAction>(5.0) ;
             mode->pushAction(act) ;
             
             act = std::make_shared<TurntableGoToAngleAction>(*turntable, 0) ;
-            mode->pushSubActionPair(turntable, act) ;                        
-
+            mode->pushSubActionPair(turntable, act) ;
+#endif
             return mode ;             
         }
 

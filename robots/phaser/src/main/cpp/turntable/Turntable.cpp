@@ -40,6 +40,7 @@ namespace xero{
             is_calibrated_ = true ;
 
             angle_ = 0.0 ;
+            last_angle_ = 0.0 ;
         }
 
         Turntable::~Turntable() {
