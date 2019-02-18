@@ -44,7 +44,7 @@ hw:tankdrive:shifter                                            0               
 hw:tankdrive:invert:motors:right                                true
 hw:tankdrive:invert:encoders:right                              true
 
-hw:hatchholder:arm:extend                                        6
+hw:hatchholder:arm:extend                                        6              # Solenoid
 hw:hatchholder:arm:retract                                       7              # Solenoid
 hw:hatchholder:finger                                            5              # Solenoid
 hw:hatchholder:sensor                                           21              # Digital IO
