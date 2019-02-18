@@ -163,6 +163,9 @@ turntable:angle_threshold                                       1.0             
 
 turntable:angle:cargo:floor_collect                             90.0
 turntable:angle:hatch:floor_collect                             0.0
+turntable:angle:hatch:LS                                        0.0                 #TODO
+turntable:angle:score:hatch                                     90.0                #TODO
+turntable:angle:score:cargo                                     90.0                #TODO
 
 #
 # Variables for the lifter
@@ -204,10 +207,15 @@ lifter:height:safe_turn                                         18.0
 lifter:height:cargo:floor_collect                               10.46               # 8.46 + 2.0
 lifter:height:offset:cargo_holder_center                        6.75
 lifter:height:offset:hatch_center                               5.5
-lifter:height:offset:hatch_hook_center                          8.6
-lifter:height:cargo:undock_height                               
+lifter:height:offset:hatch_hook_center                          8.6                               
 lifter:height:cargo:floor_collect                               14.46
-lifter:height:cargo:undock_height                               22.00
+lifter:height:hatch:floor_collect                               10                  #TODO
+lifter:height:hatch:undock_intake                               22.00
+lifter:height:LS:hatch                                          40                  #TODO
+lifter:height:LS:hatch:shift_up                                 5                   #TODO
+lifter:height:score:hatch                                       40                  #TODO
+lifter:height:score:hatch:shift_down                            5                   #TODO
+lifter:height:score:cargo                                       5                   #TODO
 
 cameratracker:distance_threshold                                0.0
 cameratracker:yaw_threshold                                     0.0
@@ -235,6 +243,9 @@ drivebyvision:quit_threshold                                    31.0
 cargointake:power                                               0.4
 cargoholder:power                                               0.3
 hatchintake:power                                               0.2
+
+score_cargo:power                                               -0.03               #TODO
+score_cargo:time                                                2                   #TODO           
 
 oi:hatch_cargo_switch                                           1
 oi:tracking_manual_switch                                       2

@@ -15,10 +15,10 @@ namespace xero {
             auto turntable = getGamePiece().getTurntable();
             auto hatch_holder = getGamePiece().getHatchHolder() ;
             
-            set_lifter_score_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:score_hatch") ;
-            hold_lifter_score_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:score_hatch") ;
+            set_lifter_score_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:score:hatch") ;
+            hold_lifter_score_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:score:hatch") ;
             set_turntable_cargo_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:score:hatch") ;
-            set_lifter_shift_down_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:score_hatch:shift_down") ;
+            set_lifter_shift_down_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:score:hatch:shift_down") ;
 
             set_extend_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM) ;
             set_retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM) ;
