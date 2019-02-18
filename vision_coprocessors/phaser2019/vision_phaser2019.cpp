@@ -85,6 +85,11 @@
 
 namespace {
 
+    typedef std::vector<cv::Point>       Contour;
+    typedef std::vector<Contour>         Contours;
+    typedef cv::RotatedRect              RRect;
+    typedef std::vector<cv::RotatedRect> RRects;
+
     bool viewing_mode;        // Viewing mode if true, else tracking mode
     bool nobot_mode = false;  // When true, running off robot.  Set Network table in server mode, etc.
     int  selected_camera;     // Currently selected camera for viewing/tracking
@@ -496,6 +501,15 @@ namespace {
         return fabs(ratio);
     }
 
+    // Check if rotated rect is a left or right marker based on loose angle range
+    bool isLeftMarker(const RRect& rect) {
+        return (rect.angle < -45);
+    }
+    
+    bool isRightMarker(const RRect& rect) {
+        return !isLeftMarker(rect);
+    }
+
     // Start network table in client vs. server mode depending whether running on robot or not
     // Also speed up update rate.
     void startNetworkTable(nt::NetworkTableInstance& ntinst, bool server_mode) {
@@ -538,6 +552,103 @@ namespace {
         for (int j = 0; j < 4; j++ ) {
             cv::line(frame, rect_points[j], rect_points[(j+1)%4], color, width);
         }
+    }
+
+    // From list of filtered and sorted rectangles, find target pair.
+    // Return empty container if no taret found, or pair where first element is the one on the left.
+    RRects identifyTargetRectPair(RRects rects_in) {
+        assert(rects_in.size() >= 2);
+
+        const RRect& largest = rects_in[0];
+        const double largest_area = getRectArea(largest);
+
+        // Only keep rects within some size difference.
+        // We want this check even if we only have 2 rectangles.
+        RRects filtered_rects {largest};
+        for (int i=1; i<rects_in.size(); ++i) {
+            const RRect& rect2 = rects_in[i];
+            const double area2 = getRectArea(rect2);
+            const double rel_area = ratioOfDifference(largest_area, area2);
+            if (rel_area < 0.5) {
+                filtered_rects.push_back(rect2);
+            }
+        }
+
+        // Sort rectangles from left to right
+        std::sort(filtered_rects.begin(),
+                  filtered_rects.end(),
+                  [](const RRect& a, const RRect& b) -> bool
+                  { 
+                      return (a.center.x < b.center.x);
+                  });
+
+        // If left-most rectangle is not a left marker, discard it
+        if (!filtered_rects.empty() &&
+            !isLeftMarker(filtered_rects[0])) {
+            filtered_rects.erase(filtered_rects.begin());
+        }
+
+        // If right-most rectangle is not a right marker and we have an odd number of markers, discard it
+        if (!filtered_rects.empty() &&
+            ((filtered_rects.size() % 2) == 1) &&
+            !isRightMarker( filtered_rects[filtered_rects.size()-1] )) {
+            filtered_rects.erase(filtered_rects.end()-1);
+        }
+
+        // If fewer than 2 rects left or odd number, no target
+        if (filtered_rects.size() < 2) {
+            //std::cout << "FALSE: Didn't find at least 2 rectangles close in size (" << getRectArea(rects_in[0]) << ", " << getRectArea(rects_in[1]) << ") and have right orientation\n";
+            return RRects {};
+        }
+
+        // If odd number of rects left, no target
+        if ((filtered_rects.size()) % 2 == 1) {
+            //std::cout << "FALSE: Odd number of filtered rects (" << filtered_rects.size() << ")\n";
+            return RRects {};
+        }
+
+        // Check that we alternate left/right rectangles, else bail out.
+        for (int i=1; i<filtered_rects.size(); ++i) {
+            const RRect& rect = filtered_rects[i];
+            if ((i % 2) == 0) {   // Expect left marker
+                if (!isLeftMarker(rect)) {
+                    //std::cout << "FALSE: Rect #" << i << " from left was not a left marker\n";
+                    return RRects {};
+                }
+            } else {  // Expect right marker
+                if (!isRightMarker(rect)) {
+                    //std::cout << "FALSE: Rect #" << i << " from left was not a right marker\n";
+                    return RRects {};
+                }
+            }
+        }
+
+        // Find the pair closest to the center
+        int ix_of_best = -1;
+        if (filtered_rects.size() == 2) {
+            ix_of_best = 0;
+        } else {
+            int best_dist_from_center = width_pixels;  // Infinity
+            for (int i=0; i<filtered_rects.size(); i+=2) {
+                RRect l_rect(filtered_rects[i]);
+                RRect r_rect(filtered_rects[i+1]);
+                cv::Point2f center = (l_rect.center + r_rect.center) * 0.5;
+                int dist_from_center = (center.x - width_pixels/2);
+                if (abs(dist_from_center) < abs(best_dist_from_center)) {
+                    best_dist_from_center = dist_from_center;
+                    ix_of_best = i;
+                }
+            }
+            assert(ix_of_best >= 0);
+            assert(best_dist_from_center <= width_pixels/2);
+        }
+
+        RRect l_rect(filtered_rects[ix_of_best]);
+        RRect r_rect(filtered_rects[ix_of_best+1]);
+
+        assert(l_rect.center.x <= r_rect.center.x);
+        RRects result {l_rect, r_rect};
+        return result;            
     }
 
     // One component of a vision pipeline.
@@ -606,6 +717,12 @@ namespace {
         }
         
         virtual void Process(cv::Mat& frame_in) {
+            // Confirm input binary image to a viewable object.
+            // Further detection will be added to this image.
+            if (stream_pipeline_output) {
+                cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
+            }
+            
             // Perform contour detection
             contours.clear();
             const bool externalOnlyContours = true;
@@ -613,12 +730,6 @@ namespace {
             const int method = cv::CHAIN_APPROX_SIMPLE;
             cv::findContours(frame_in, contours, hierarchy, mode, method);
 
-            // Confirm input binary image to a viewable object.
-            // Further detection will be added to this image.
-            if (stream_pipeline_output) {
-                cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
-            }
-            
             // Unless we have at least 2 contours, nothing further to do
             if (contours.size() < 2) {
                 setTargetIsIdentified(false);
@@ -626,23 +737,26 @@ namespace {
                 return;
             }
 
+            // Sort contours by keep largest ones for further processing
+            // Disabled for now.  No visible performance benefit.
+            if (false) {
+                std::sort(contours.begin(),
+                          contours.end(),
+                          [](const Contour& a, const Contour& b) -> bool
+                          { 
+                              return (cv::arcLength(a,true) > cv::arcLength(b,true));
+                          });
+                const int contour_size_lim = 12;  // Rather arbitrary
+                if (contours.size() > contour_size_lim) {
+                    contours.resize(contour_size_lim);
+                }
+            }
+
             // Draw contours + find rectangles meeting aspect ratio requirement
             std::vector<cv::RotatedRect> min_rects(contours.size()), filtered_min_rects;
             const double expected_aspect_of_target = 5.5/2;
             const double aspect_ratio_tolerance = 0.3;   //0.15;
 
-            // Draw all contours in blue
-            /*
-            if (stream_pipeline_output) {
-                cv::drawContours(frame_out_,
-                                 contours,
-                                 -1,          // Negative index ==> draw all contours
-                                 color_blue,  // Color
-                                 1,           // Thickness
-                                 8);
-            }
-            */
-            
             for (int ix=0; ix < contours.size(); ++ix) {
                 std::vector<cv::Point>& contour = contours[ix];
 
@@ -707,25 +821,29 @@ namespace {
                           return (getRectArea(a) > getRectArea(b));
                       });
 
-            // Focus on 2 largest rectangles
-            cv::RotatedRect left_rect(filtered_min_rects[0]);
-            cv::RotatedRect right_rect(filtered_min_rects[1]);
-            if (left_rect.center.x > right_rect.center.x) {
-                std::swap(left_rect, right_rect);
+            // Report areas of rectangles in debug mode
+            if (false) {
+                std::cout << "# rectangles after filtering: " << filtered_min_rects.size() << "\n";
+                for (size_t i=0; i<filtered_min_rects.size(); ++i) {
+                    const cv::RotatedRect& rect = filtered_min_rects[i];
+                    std::cout << "    rect[" << i << "]: ";
+                    std::cout << "area=" << getRectArea(rect) << ", ";
+                    std::cout << "angle=" << rect.angle << ", ";
+                    std::cout << "center.x(off center)=" << (rect.center.x-width_pixels/2) << "\n";
+                }
             }
 
-            // Only accept rectangles if top 2 rectangles close in area
-            const double l_area = getRectArea(left_rect);
-            const double r_area = getRectArea(right_rect);
-            double relative_area = ratioOfDifference(l_area, r_area);
-            //std::cout << "    Relative area = " << relative_area << "\n";
-            if (relative_area > 0.5) {
+            // Find target pair of rectangles after pairing up and checking rectangles
+            RRects rects = identifyTargetRectPair(filtered_min_rects);
+            if (rects.empty()) {
                 setTargetIsIdentified(false);
-                //std::cout << "FALSE: Relative area " << relative_area << " (" << l_area << ", " << r_area << ")\n";
+                //std::cout << "FALSE: No filtered rectangles\n";
                 return;
             }
+            RRect left_rect(rects[0]);
+            RRect right_rect(rects[1]);
 
-            // Draw 2 largest rectangles (yellow)
+            // Draw potential target, before checking heights (yellow)
             if (stream_pipeline_output) {
                 drawRectangle(frame_out_, left_rect, color_yellow, 4);
                 drawRectangle(frame_out_, right_rect, color_yellow, 4);
@@ -752,6 +870,22 @@ namespace {
             cv::Point2f center_point = (left_center + right_center) * 0.5;
             double dist_bet_centers = hypot(delta_x, delta_y);
 
+            // Get dimensions of rects
+            double l_rect_height = std::max(left_rect.size.height, left_rect.size.width);
+            double r_rect_height = std::max(right_rect.size.height, right_rect.size.width);
+            double l_rect_width = std::min(left_rect.size.height, left_rect.size.width);
+            double r_rect_width = std::min(right_rect.size.height, right_rect.size.width);
+
+            // Compare distance between centers to [average] rect height.
+            // If outside of expected range, picking up invalid pair of rectangles
+            const double meas_dist_to_height_ratio = dist_bet_centers / ((l_rect_height+r_rect_height)/2);
+            const double exp_dist_to_height_ratio = dist_bet_centers_inch / 5.5;
+            if (!isApproxEqual(meas_dist_to_height_ratio, exp_dist_to_height_ratio, 0.3)) {
+                setTargetIsIdentified(false);
+                //std::cout << "FALSE: Dist between centers/height not in expected range (" << meas_dist_to_height_ratio << " vs. exp. " << exp_dist_to_height_ratio << ")\n";
+                return;
+            }
+
             // Distance to target in inches
             // At 640x460 of C270 and 640x480 resolution, pixels_bet_centres * dist_to_target_in_FEET ~ 760
             // Product at 432x240 is 650.  So not proportional to width.
@@ -761,8 +895,8 @@ namespace {
             // Draw them in green.
             if (stream_pipeline_output) {
                 for (int ix=0; ix<2; ++ix) {
-                    cv::RotatedRect rect = filtered_min_rects[ix];
-                    drawRectangle(frame_out_, rect, color_green, 2);
+                    drawRectangle(frame_out_, left_rect, color_green, 2);
+                    drawRectangle(frame_out_, right_rect, color_green, 2);
                 }
 
                 // Draw line between centres
@@ -788,10 +922,6 @@ namespace {
             nt_target_yaw_deg.SetDouble(yaw_in_deg);
 
             // Estimate distance to each rectangle based on its height + coordinate of bot rel to target
-            double l_rect_height = std::max(left_rect.size.height, left_rect.size.width);
-            double r_rect_height = std::max(right_rect.size.height, right_rect.size.width);
-            double l_rect_width = std::min(left_rect.size.height, left_rect.size.width);
-            double r_rect_width = std::min(right_rect.size.height, right_rect.size.width);
             double l_rect_dist_inch = 12.0 * (206.0/l_rect_height) * (height_pixels/240.0);
             double r_rect_dist_inch = 12.0 * (206.0/r_rect_height) * (height_pixels/240.0);
             double bot_x_offset_inch = (pow(r_rect_dist_inch,2) - pow(l_rect_dist_inch,2))/(2*dist_bet_centers_inch);
@@ -829,7 +959,7 @@ namespace {
 
     private:
 
-        std::vector<std::vector<cv::Point> > contours;
+        Contours contours;
         std::vector<cv::Vec4i> hierarchy;
 
     };
