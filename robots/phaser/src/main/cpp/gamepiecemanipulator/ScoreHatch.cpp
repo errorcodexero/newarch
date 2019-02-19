@@ -53,20 +53,20 @@ namespace xero {
 
             case State::TurntableGoToAngle:
                 if(set_turntable_cargo_angle_->isDone()){
-                    hatch_holder->setAction(set_extend_arm_) ;
-                    state_ = State::ExtendArm ;
-                }
-                break ;
-            
-            case State::ExtendArm:
-                if(set_extend_arm_->isDone()){
                     hatch_holder->setAction(set_retract_hatch_finger_) ;
                     state_ = State::ReleaseFinger ;
                 }
                 break ;
-            
+             
             case State::ReleaseFinger:
                 if(set_retract_hatch_finger_->isDone()){
+                    hatch_holder->setAction(set_extend_arm_) ;
+                    state_ = State::LifterShiftDownHeight ;
+                }
+                break ;
+
+            case State::ExtendArm:
+                if(set_extend_arm_->isDone()){
                     lifter->setAction(set_lifter_shift_down_height_) ;
                     state_ = State::LifterShiftDownHeight ;
                 }
@@ -114,19 +114,21 @@ namespace xero {
                 state_ = State::Idle ;
                 break ;
 
-            case State::ExtendArm:
-                hatch_holder->setAction(set_retract_arm_) ;
-                state_ = State::ReleaseFinger ;
+            case State::ReleaseFinger:
+                hatch_holder->setAction(set_deploy_hatch_finger_) ;
+                state_ = State::Idle ;
                 break ;
 
-            case State::ReleaseFinger:
-                hatch_holder->setAction(set_retract_hatch_finger_) ;
-                state_ = State::LifterShiftDownHeight ;
+            case State::ExtendArm:
+                lifter->setAction(set_lifter_shift_down_height_) ;
+                hatch_holder->setAction(set_retract_arm_) ;
+                state_ = State::CheckHolder ;
                 break ;
 
             case State::LifterShiftDownHeight: 
                 lifter->setAction(set_lifter_shift_down_height_) ;
-                state_ = State::RetractArm ;
+                hatch_holder->setAction(set_retract_arm_) ;
+                state_ = State::CheckHolder ;
                 break ;
 
             case State::RetractArm:
