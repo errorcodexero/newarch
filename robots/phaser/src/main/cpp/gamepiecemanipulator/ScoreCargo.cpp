@@ -15,8 +15,8 @@ namespace xero {
             auto turntable = getGamePiece().getTurntable();
             auto cargo_holder = getGamePiece().getCargoHolder() ;
 
-            set_lifter_score_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:score_cargo") ;
-            hold_lifter_score_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:score_cargo") ;
+            set_lifter_score_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:score:cargo") ;
+            hold_lifter_score_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:score:cargo") ;
             set_turntable_cargo_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:score:cargo") ;
             
             set_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, "score_cargo:power", "score_cargo:time") ;

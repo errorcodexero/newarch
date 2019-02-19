@@ -26,9 +26,9 @@ namespace xero {
             hold_lifter_safe_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:safe_turn") ;            
             set_turntable_hatch_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:hatch:floor_collect") ;
             set_lifter_hatch_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:hatch:floor_collect") ;            
-            set_lifter_undock_hatch_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:hatch:undock_height") ;
+            set_lifter_undock_hatch_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:hatch:undock_intake") ;
             hold_lifter_hatch_intake_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:hatch:floor_collect") ;            
-            hold_lifter_undock_hatch_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:hatch:undock_height") ;            
+            hold_lifter_undock_hatch_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:hatch:undock_intake") ;            
 
             set_extend_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM) ;
             set_retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM) ;
