@@ -59,7 +59,7 @@ namespace xero {
             min_height_ = parser.getDouble("lifter:min_height") ;
 
             // And we start without calibration
-            is_calibrated_ = false ;
+            is_calibrated_ = true ;
 
             // The base encoder value
             encoder_value_ = 0 ;
@@ -101,7 +101,7 @@ namespace xero {
                 talon->EnableVoltageCompensation(true) ;                
                 talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
                 talon->ConfigForwardLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyOpen) ;
-                
+                                
                 if (motors_.size() > 0)
                     talon->Follow(*motors_.front()) ;
 
@@ -140,6 +140,7 @@ namespace xero {
             else if (v < 0 && isAtBottom())
                 v = 0.0 ;
 
+            power_ = v ;
             motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v);
         }
 
@@ -166,7 +167,8 @@ namespace xero {
             logger << " ticks " << encoder_value_ ;
             logger << " calibrated " << is_calibrated_ ;
             logger << " height " << height_ ;
-            logger << " speed " << speed_ ;  
+            logger << " speed " << speed_ ;
+            logger << " power " << power_ ;
             logger.endMessage() ;
         }
 

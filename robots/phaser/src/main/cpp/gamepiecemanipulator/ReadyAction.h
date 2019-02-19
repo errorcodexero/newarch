@@ -29,6 +29,7 @@ namespace xero{
             State state_ ;
             std::string height_ ;
             std::string angle_ ;
+            double safe_height_ ;
 
             xero::base::ActionPtr set_lifter_safe_height_ ;
             xero::base::ActionPtr hold_lifter_safe_height_ ;

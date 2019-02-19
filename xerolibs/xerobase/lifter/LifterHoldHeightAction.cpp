@@ -49,15 +49,15 @@ namespace xero {
             Lifter &lifter = getLifter() ;               
             double dist = target_ - lifter.getHeight() ;
             double out = pid_ctrl_.getOutput(0, dist, 0, getLifter().getRobot().getDeltaTime()) ;
-            double elapsed = lifter.getRobot().getTime() - start_ ;
+
 
             lifter.setMotorPower(out) ;
 
+            double elapsed = lifter.getRobot().getTime() - start_ ;
             lifter.getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
             lifter.getRobot().addPlotData(plotid_, index_, 1, target_) ;
             lifter.getRobot().addPlotData(plotid_, index_, 2, lifter.getHeight()) ;
             lifter.getRobot().addPlotData(plotid_, index_, 3, out) ;
-
             index_++ ;
         }
 

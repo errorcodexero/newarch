@@ -44,15 +44,13 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_HATCH_INTAKE);    
             // logger.enableSubsystem(MSG_GROUP_HATCH_HOLDER);
 
-            logger.enableSubsystem(MSG_GROUP_ACTIONS); 
-            logger.enableSubsystem(MSG_GROUP_PHASER_TURNTABLE);                       
+            logger.enableSubsystem(MSG_GROUP_ACTIONS);
+            logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);  
         }
         
         void Phaser::loadPaths() {
             auto paths = getPathManager() ;
-            paths->loadPath("HabCenterCargoFrontLeft") ;
-            paths->loadPath("LSLeftCargoFrontLeft") ;
-            paths->loadPath("LSLeftCargoFrontRight") ;
+            paths->loadPath("Straight") ;
         }
         
         void Phaser::RobotHardwareInit() {
@@ -62,8 +60,6 @@ namespace xero {
 
             auto sub_p = std::make_shared<PhaserRobotSubsystem>(*this) ;
             setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getTankDrive()) ;
-
-
         }
 
         std::shared_ptr<ControllerBase> Phaser::createAutoController() {

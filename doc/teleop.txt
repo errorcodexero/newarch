@@ -1,0 +1,112 @@
+All,
+
+
+
+So I have not fully internalized the OI to date.  I have had too much on my plate with work and bag day approaching.  However, this afternoon I took some time on my white board at home (in my little thinking cave) and have come up with the following.  I think this is what Tristan has been trying to say but let me know if I am missing something.  Note this is all about placement and collection from levels higher than the floor.  Floor collection is something else.  There will probably need to be slight modifications for side placement when we get to that.
+
+
+
+Mode 1: Fully Auto
+
+1. The camera stays in tracking mode.  The software picks the camera based on the item (cargo vs hatch)
+
+2. The action (place vs collect) is determined by what the robot is holding.  Hatch or Cargo means place.  Nothing means collect.
+
+3. The item is determined by what the robot is holding for place.  It is determined by the hatch/cargo switch for collection.
+
+4. The side of the robot to place/collect on is determined by the joystick.  The choices are N/W/E/W but we may limit the E/W sides until we have code in place.
+
+5. The height of the target is determined by a height button (Level 1, Level 2, Level 3, Cargo).  The lift will not move right away but will move when the software determine it is time based on target distance or start of line following.
+
+6. The trigger in this mode is the height button.  Although you can change the side of the robot after hitting the trigger.
+
+7. The trigger causes the cameras to look for targets.  When a target is identified that meets our criteria, software takes over and finishes the operation.
+
+8. Note, you can use the joystick to pick a side and delay hitting the height button until you want the camera to take over giving the drive team control over when the vision tracking starts.
+
+
+
+Typical operation: 
+
+a. Select cargo/hatch switch setting if it needs to change (immediately)
+
+b. Select the side of the robot to use (immediately) - turntable will rotate to right angle
+
+c. Drive to place/collect location
+
+d. Press the height button (when you want the vision to start looking for targets)
+
+e. Drive to place/collect location
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+Mode 2: Line Follower Only
+
+1. The camera stays in viewing mode.The software picks the camera based on the item (cargo vs hatch)
+
+2. The action (place vs collect) is determined by what the robot is holding.  Hatch or Cargo means place.  Nothing means collect.
+
+3. The item is determined by what the robot is holding for place.  It is determined by the hatch/cargo switch for collection.
+
+4. The side of the robot to place/collect on is determined by the joystick.  The choices are N/W/E/W but we may limit the E/W sides until we have code in place.
+
+5. The height of the target is determined by a height button (Level 1, Level 2, Level 3, Cargo) The lift will move as soon as the height is selected to the target height
+
+6. The trigger in this mode is the height button.  This causes the line followers to look for a line.
+
+7. Detection of a line causes the software to take over and finish the place/collect operation.
+
+
+
+Typical operation:
+
+a. Select cargo/hatch switch setting if it needs to change (immediately)
+
+b. Select the side of the robot to use (immediately) - turntable will rotate to right angle
+
+c. Drive to place/collect location, near but not yet on the lines
+
+d. Press the height button when you are ready for the lift to go to its target location and you are ready for the line follower to start searching.
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Mode 2: Manual (100%)
+
+1. The camera stays in viewing mode.The software picks the camera based on the item (cargo vs hatch)
+
+2. The action (place vs collect) is determined by what the robot is holding.  Hatch or Cargo means place.  Nothing means collect.
+
+3. The item is determined by what the robot is holding for place.  It is determined by the hatch/cargo switch for collection.
+
+4. The side of the robot to place/collect on is determined by the joystick.  The choices are N/W/E/W but we may limit the E/W sides until we have code in place.
+
+5. The height of the target is determined by a height button (Level 1, Level 2, Level 3, Cargo) The lift will move as soon as the height is selected to the target height.
+
+6. The trigger for the place/collect action is the deposit (rename to "go") button.  This starts the sequence to finish a placement or collection.
+
+
+
+Typical operation:
+
+a. Select cargo/hatch switch setting if it needs to change (immediately)
+
+b. Select the side of the robot to use (immediately) - turntable will rotate to right angle
+
+c. Drive to place/collect location, near the target
+
+d. Hit the height button and drive all the way to the target
+
+e. Press the deposit (go) button to complete collect or place operation
+
+
+
+Thoughts?
+
+Butch
+

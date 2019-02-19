@@ -145,6 +145,11 @@ namespace xero {
             void addPlotData(int id, size_t row, size_t col, double value) ;
             void endPlot(int id) ;
 
+            /// \brief return the current controller
+            std::shared_ptr<ControllerBase> getCurrentController() {
+                return controller_ ;
+            }            
+
         protected:
 
             /// \brief initialize the message logger subsystem
@@ -218,6 +223,8 @@ namespace xero {
 
             /// \brief return the auto mode selection
             virtual int getAutoModelSelection() ;
+
+
 
         private:
             void logAutoModeState() ;

@@ -5,7 +5,8 @@
 
 namespace xero{
     namespace phaser{
-        class ScoreHatch : public GamePieceAction{
+        class ScoreHatch : public GamePieceAction {
+        public:
             ScoreHatch(GamePieceManipulator &subsystem) ;
             virtual ~ScoreHatch() ;
 

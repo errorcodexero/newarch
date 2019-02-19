@@ -19,13 +19,8 @@ namespace xero {
             virtual std::string toString() ;
 
         private:
-            bool atTarget() ;
-
-        private:
             bool is_done_ ;
             double target_ ;
-            double angle_threshold_ ;
-            double speed_threshold_ ;
             xero::misc::PIDCtrl pidctrl_ ;
             double output_ ;
             double start_time_ ;

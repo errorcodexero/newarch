@@ -20,10 +20,18 @@ namespace xero {
 
             virtual void run() ;
 
+            void addDetector(std::shared_ptr<DetectAutoSequence> det) {
+                auto_sequences_.push_back(det) ;
+            }
+
+            void clearDetectors() {
+                auto_sequences_.clear() ;
+            }
+
         private:
             std::shared_ptr<AutoMode> seq_ ;     
             std::list<std::shared_ptr<DetectAutoSequence>> auto_sequences_ ;
-            std::shared_ptr<ActionSequence> running_auto_seq_ ;
+            std::shared_ptr<Action> running_auto_seq_ ;
         } ;
     }
 }

@@ -23,7 +23,15 @@ namespace xero {
             virtual bool canAcceptAction(ActionPtr action) ;
 
             void setCameraIndex(size_t which)  ;
+            size_t getCameraIndex() {
+                return camera_ ;
+            }
+
             void setCameraMode(CameraMode mode) ;
+
+            CameraMode getCameraMode() {
+                return mode_ ;
+            }
 
             bool isValid() const {
                 return is_valid_ ;

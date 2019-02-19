@@ -94,22 +94,21 @@ namespace xero {
 
         bool DriverGamepad::isCancelPressed() {
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
-
             return ds.GetStickButton(getIndex(), ButtonNumber::A) ;
         }
 
         void DriverGamepad::generateActions(ActionSequence &seq) {
             int pov ;
 
-            if (nudge_forward_ == nullptr)
-                init(db_) ;
-
             if (db_ == nullptr) {
                 auto &logger = getSubsystem().getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::warning) ;
                 logger << "DriverGamepad: generateActions called with no attached drivebase" ;
                 logger.endMessage() ;
-            }
+            }            
+
+            if (nudge_forward_ == nullptr)
+                init(db_) ;
 
             if (getIndex() == -1)
                 return ;
@@ -145,8 +144,8 @@ namespace xero {
                 if (std::fabs(power + spin - left_) > tolerance_ || std::fabs(power - spin - right_) > tolerance_) {
                     auto dir = std::make_shared<TankDrivePowerAction>(*db_, power + spin, power - spin) ;
                     seq.pushSubActionPair(db_, dir) ;
-                    left_ = power + spin ;
-                    right_ = power - spin ;
+                    left_ = power - spin ;
+                    right_ = power + spin ;
                 }
             }
         }

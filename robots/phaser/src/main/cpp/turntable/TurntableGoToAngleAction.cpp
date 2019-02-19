@@ -127,6 +127,12 @@ namespace xero {
 
             if (elapsed > profile_->getTotalTime())
             {
+                    MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
+                    logger << "TurntableGoToAngle: action completed " ;
+                    logger << ", delta " << delta ;
+                    logger.endMessage() ; 
+
                 if (std::fabs(delta) < threshold_) {
                     is_done_ = true ;
                     turntable.setMotorPower(0.0) ;

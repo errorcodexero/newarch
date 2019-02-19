@@ -1,8 +1,10 @@
 #include "ReadyAction.h"
+#include <lifter/Lifter.h>
 #include <lifter/LifterGoToHeightAction.h>
 #include <lifter/LifterHoldHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
 #include "turntable/TurntableHoldAngleAction.h"
+#include <Robot.h>
 
 using namespace xero::base ;
 
@@ -22,7 +24,9 @@ namespace xero {
             set_lifter_final_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
             hold_lifter_final_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, height) ;
             set_turntable_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, angle) ;
-            hold_turntable_angle_ = std::make_shared<TurntableHoldAngleAction>(*turntable, angle) ;            
+            hold_turntable_angle_ = std::make_shared<TurntableHoldAngleAction>(*turntable, angle) ;  
+
+            safe_height_ = subsystem.getRobot().getSettingsParser().getDouble("lifter:height:safe_turn")  ;
         }
 
         ReadyAction::~ReadyAction(){
@@ -31,9 +35,19 @@ namespace xero {
         void ReadyAction::start() {
          
             auto lifter = getGamePiece().getLifter() ;
-            lifter->setAction(set_lifter_safe_height_) ; 
-
-            state_ = State::LifterSafeHeight ;
+            if (lifter->getHeight() > safe_height_) {
+                //
+                // IF we are already above the safe height, do not go to the safe 
+                // height
+                //
+                auto turntable = getGamePiece().getTurntable() ;
+                turntable->setAction(set_turntable_angle_) ;
+                state_ = State::TurntableGoToAngle ;
+            }
+            else {
+                lifter->setAction(set_lifter_safe_height_) ; 
+                state_ = State::LifterSafeHeight ;
+            }
         }
 
         void ReadyAction::run(){

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ActionSequence.h"
+#include "Action.h"
 
 namespace xero 
 {
@@ -9,7 +9,7 @@ namespace xero
         class DetectAutoSequence
         {
         public:
-            DetectAutoSequence(ActionSequencePtr seq) {
+            DetectAutoSequence(ActionPtr seq) {
                 sequence_ = seq ;
             }
 
@@ -18,12 +18,12 @@ namespace xero
             
             virtual bool isTakeoverValid() = 0 ;
 
-            ActionSequencePtr getSequence() {
+            ActionPtr getSequence() {
                 return sequence_ ;
             }
 
         private:
-            ActionSequencePtr sequence_ ;
+            ActionPtr sequence_ ;
         };
     }
 }

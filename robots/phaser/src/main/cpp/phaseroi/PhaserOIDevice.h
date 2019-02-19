@@ -25,6 +25,13 @@ namespace xero {
                 CargoBay,
             } ;
 
+            enum class OperationMode
+            {
+                Auto,
+                SemiAuto,
+                Manual,
+            } ;
+
         public:
             PhaserOIDevice(PhaserOISubsystem &sub, int index) ;
             virtual ~PhaserOIDevice() ;
@@ -38,10 +45,19 @@ namespace xero {
         private:
             void createActions() ;
             void initialize() ;
+            void getTrackingMode() ;
             bool getDirection() ;
-            bool getHeight() ;
-            
-            void generateReadyAction() ;
+            bool getHeightButton() ;
+
+            void updateMode(OperationMode mode) ;
+            void generateDirectionActions(xero::base::ActionSequence &seq) ;
+            void generateHeightButtonActions(xero::base::ActionSequence &seq) ;
+            void generateTargetHeightActions(xero::base::ActionSequence &seq) ;
+
+            void setupVisionDetectors() ;
+            void setupLineFollowingDetectors() ;
+
+            xero::base::ActionPtr getFinishAction() ;
 
             std::string dirToString() ;
             std::string heightToString() ;
@@ -81,9 +97,15 @@ namespace xero {
 
             Direction dir_ ;
             ActionHeight height_ ;
+            OperationMode mode_ ;
 
             xero::base::ActionPtr set_collect_hatch_floor_ ;
             xero::base::ActionPtr set_collect_cargo_floor_ ;
+
+            xero::base::ActionPtr finish_collect_hatch_ ;
+            xero::base::ActionPtr finish_collect_cargo_ ;
+            xero::base::ActionPtr finish_place_hatch_ ;
+            xero::base::ActionPtr finish_place_cargo_ ;                                    
         } ;
     }
 }
