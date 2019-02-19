@@ -158,6 +158,10 @@ namespace {
     nt::NetworkTableEntry nt_bot_angle2_deg;
     nt::NetworkTableEntry nt_target_valid;
 
+    // Network table entries set by the robot
+    nt::NetworkTableEntry nt_camera_number;
+    nt::NetworkTableEntry nt_camera_mode;
+
     
     struct CameraConfig {
         std::string name;
@@ -419,38 +423,50 @@ namespace {
     }
 
     void processCameraParamChanges(std::vector<cs::VideoSource>& cameras) {
-        if (!nobot_mode) {
-            // For now, ignore chooser if on bot.
-            // TODO: Read selections from NT values published by bot.
-            return;
+        bool new_viewing_mode = false;
+        int  new_selected_camera = 0;
+        
+        // If data published by robot, use it and ignore SendableChooser so
+        // Shuffleboard doesn't override software.
+        double cam_no = nt_camera_number.GetDouble(-1);
+        std::string cam_mode = nt_camera_mode.GetString("");
+        
+        if (cam_no != -1) {     // Selection published by robot ==> don't use chooser
+            assert(!cam_mode.empty());
+            std::cout << cam_no << "    " << cam_mode << "\n";
+            new_selected_camera = (cam_no == 0)? 0 : 1;
+            new_viewing_mode = (cam_mode == "TargetTracking") ? false : true;
+        } else {
+            assert(cam_mode.empty());
+            
+            // Chooser for viewing mode
+            int chooser_val = viewing_mode_chooser.GetSelected();
+            if (chooser_val != 0) {  // Not unspecified
+                assert(chooser_val == 1 || chooser_val == 2);
+                new_viewing_mode = (chooser_val == 2);
+            }
+
+            // Chooser for camera
+            chooser_val = camera_chooser.GetSelected();
+            if (chooser_val != 0) {  // Not unspecified
+                assert(chooser_val == 1 || chooser_val == 2);
+                new_selected_camera = chooser_val - 1;
+            }
         }
         
-        // Chooser for viewing mode
-        int chooser_val = viewing_mode_chooser.GetSelected();
-        if (chooser_val != 0) {  // Not unspecified
-            assert(chooser_val == 1 || chooser_val == 2);
-            bool new_viewing_mode = (chooser_val == 2);
-            if (viewing_mode != new_viewing_mode) {
-                //std::cout << "Changing viewing mode to " << (new_viewing_mode ? 1 : 0) << "\n" << std::flush;
-                viewing_mode = new_viewing_mode;
-                setViewingExposure(viewing_mode);
-            }
+        if (viewing_mode != new_viewing_mode) {
+            //std::cout << "Changing viewing mode to " << (new_viewing_mode ? 1 : 0) << "\n" << std::flush;
+            viewing_mode = new_viewing_mode;
+            setViewingExposure(viewing_mode);
         }
-            
-        // Chooser for camera
-        chooser_val = camera_chooser.GetSelected();
-        if (chooser_val != 0) {  // Not unspecified
-            assert(chooser_val == 1 || chooser_val == 2);
-            int new_selected_camera = chooser_val - 1;
-            if (selected_camera != new_selected_camera) {
-                //std::cout << "Changing selected camera to " << new_selected_camera << "\n" << std::flush;
-                selected_camera = new_selected_camera;
-                cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
-                server.SetSource(cameras[selected_camera]);
-                setTargetIsIdentified(false);
-            }
+        
+        if (selected_camera != new_selected_camera) {
+            //std::cout << "Changing selected camera to " << new_selected_camera << "\n" << std::flush;
+            selected_camera = new_selected_camera;
+            cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
+            server.SetSource(cameras[selected_camera]);
+            setTargetIsIdentified(false);
         }
-            
     }
 
     // Return area of cv::RotatedRect
@@ -1194,7 +1210,7 @@ int main(int argc, char* argv[]) {
     ntinst = nt::NetworkTableInstance::GetDefault();
     startNetworkTable(ntinst, nobot_mode);
     
-    // Prepare network table variables that tracker will populate
+    // Prepare network table variables that tracker will populate + those set by robot
     std::shared_ptr<NetworkTable> nt_table = ntinst.GetTable("TargetTracking");
     nt_pipe_fps = nt_table->GetEntry("pipe_fps");
     nt_pipe_fps.SetDefaultDouble(0);
@@ -1237,6 +1253,9 @@ int main(int argc, char* argv[]) {
     nt_target_valid = nt_table->GetEntry("valid");
     nt_target_valid.SetDefaultBoolean(false);
     setTargetIsIdentified(false);
+
+    nt_camera_number = nt_table->GetEntry("camera_number");
+    nt_camera_mode = nt_table->GetEntry("camera_mode");
 
     // Set choosers from SmartDashboard
     viewing_mode_chooser.SetDefaultOption("1. Unspecified", 0);
