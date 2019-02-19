@@ -167,6 +167,26 @@ turntable:angle:hatch:LS                                        0.0             
 turntable:angle:score:hatch                                     90.0                #TODO
 turntable:angle:score:cargo                                     90.0                #TODO
 
+turntable:angle:cargo:collect:north                             -90                #TODO
+turntable:angle:cargo:collect:south                             90                #TODO
+turntable:angle:cargo:collect:east                              0                #TODO
+turntable:angle:cargo:collect:west                              180                #TODO
+
+turntable:angle:cargo:place:north                               -90                #TODO
+turntable:angle:cargo:place:south                               90                #TODO
+turntable:angle:cargo:place:east                                0                #TODO
+turntable:angle:cargo:place:west                                180                #TODO
+
+turntable:angle:hatch:collect:north                             0                #TODO
+turntable:angle:hatch:collect:south                             180                #TODO
+turntable:angle:hatch:collect:east                              -90                #TODO
+turntable:angle:hatch:collect:west                              90                #TODO
+ 
+turntable:angle:hatch:place:north                               0                #TODO
+turntable:angle:hatch:place:south                               180                #TODO
+turntable:angle:hatch:place:east                                -90                #TODO
+turntable:angle:hatch:place:west                                90                #TODO
+
 #
 # Variables for the lifter
 #
@@ -216,6 +236,51 @@ lifter:height:LS:hatch:shift_up                                 5               
 lifter:height:score:hatch                                       40                  #TODO
 lifter:height:score:hatch:shift_down                            5                   #TODO
 lifter:height:score:cargo                                       5                   #TODO
+
+lifter:height:cargo:collect:north                             18                 #TODO
+lifter:height:cargo:collect:south                             18                 #TODO
+lifter:height:cargo:collect:east                              18                 #TODO
+lifter:height:cargo:collect:west                              18                 #TODO
+
+lifter:height:cargo:place:north:1                             18                 #TODO
+lifter:height:cargo:place:south:1                             18                 #TODO
+lifter:height:cargo:place:east:1                              18                 #TODO
+lifter:height:cargo:place:west:1                              18                 #TODO
+lifter:height:cargo:place:north:2                             45                 #TODO
+lifter:height:cargo:place:south:2                             45                 #TODO
+lifter:height:cargo:place:east:2                              45                 #TODO
+lifter:height:cargo:place:west:2                              45                 #TODO
+lifter:height:cargo:place:north:3                             70                 #TODO
+lifter:height:cargo:place:south:3                             70                 #TODO
+lifter:height:cargo:place:east:3                              70                 #TODO
+lifter:height:cargo:place:west:3                              70                 #TODO
+lifter:height:cargo:place:north:c                             26                 #TODO
+lifter:height:cargo:place:south:c                             26                 #TODO
+lifter:height:cargo:place:east:c                              26                 #TODO
+lifter:height:cargo:place:west:c                              26                 #TODO
+
+lifter:height:hatch:collect:north                             18                 #TODO
+lifter:height:hatch:collect:south                             18                 #TODO
+lifter:height:hatch:collect:east                              18                 #TODO
+lifter:height:hatch:collect:west                              18                 #TODO
+ 
+lifter:height:hatch:place:north:1                             18                 #TODO
+lifter:height:hatch:place:south:1                             18                 #TODO
+lifter:height:hatch:place:east:1                              18                 #TODO
+lifter:height:hatch:place:west:1                              18                 #TODO
+lifter:height:hatch:place:north:2                             18                 #TODO
+lifter:height:hatch:place:south:2                             18                 #TODO
+lifter:height:hatch:place:east:2                              18                 #TODO
+lifter:height:hatch:place:west:2                              18                 #TODO
+lifter:height:hatch:place:north:3                             18                 #TODO
+lifter:height:hatch:place:south:3                             18                 #TODO
+lifter:height:hatch:place:east:3                              18                 #TODO
+lifter:height:hatch:place:west:3                              18                 #TODO
+lifter:height:hatch:place:north:c                             18                 #TODO
+lifter:height:hatch:place:south:c                             18                 #TODO
+lifter:height:hatch:place:east:c                              18                 #TODO
+lifter:height:hatch:place:west:c                              18                 #TODO
+
 
 cameratracker:distance_threshold                                0.0
 cameratracker:yaw_threshold                                     0.0

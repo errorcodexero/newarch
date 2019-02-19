@@ -55,6 +55,7 @@ namespace xero {
             std::shared_ptr<PhaserCameraTracker> tracker_ ;
             std::shared_ptr<GamePieceManipulator> game_piece_man_ ;
             std::shared_ptr<Climber> climber_ ;
+
         } ;
     }
 }

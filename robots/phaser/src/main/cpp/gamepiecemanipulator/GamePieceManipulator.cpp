@@ -37,5 +37,20 @@ namespace xero {
             std::shared_ptr<GamePieceAction> gact = std::dynamic_pointer_cast<GamePieceAction>(action) ;
             return gact != nullptr ;
         }
+
+        GamePieceManipulator::GamePieceType GamePieceManipulator::getGamePieceType() {
+            GamePieceType ret = GamePieceType::Invalid ;
+            bool hatch = hatch_holder_->hasHatch() ;
+            bool cargo = cargo_holder_->hasCargo() ;
+
+            if (hatch && !cargo)
+                ret = GamePieceType::Hatch ;
+            else if (!hatch && cargo)
+                ret = GamePieceType::Cargo ;
+            else if (!hatch && !cargo)
+                ret = GamePieceType::None ;
+
+            return ret ;
+        }
     }
 }

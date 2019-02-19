@@ -9,6 +9,23 @@ namespace xero {
 
         class PhaserOIDevice : public xero::base::OIDevice {
         public:
+            enum class Direction
+            {
+                North,
+                South,
+                East,
+                West,
+            } ;
+
+            enum class ActionHeight
+            {
+                LevelOne,
+                LevelTwo,
+                LevelThree,
+                CargoBay,
+            } ;
+
+        public:
             PhaserOIDevice(PhaserOISubsystem &sub, int index) ;
             virtual ~PhaserOIDevice() ;
 
@@ -21,6 +38,13 @@ namespace xero {
         private:
             void createActions() ;
             void initialize() ;
+            bool getDirection() ;
+            bool getHeight() ;
+            
+            void generateReadyAction() ;
+
+            std::string dirToString() ;
+            std::string heightToString() ;
             
         private:
             size_t automode_ ;
@@ -55,6 +79,8 @@ namespace xero {
 
             size_t extra_button_ ; 
 
+            Direction dir_ ;
+            ActionHeight height_ ;
 
             xero::base::ActionPtr set_collect_hatch_floor_ ;
             xero::base::ActionPtr set_collect_cargo_floor_ ;

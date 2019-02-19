@@ -14,6 +14,14 @@ namespace xero {
 
         class GamePieceManipulator : public xero::base::Subsystem {
         public:
+            enum class GamePieceType {
+                Hatch,
+                Cargo,
+                None,
+                Invalid
+            } ;
+
+        public:
             GamePieceManipulator(xero::base::Robot &robot) ;
             virtual ~GamePieceManipulator() ;
 
@@ -42,6 +50,8 @@ namespace xero {
             }
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
+
+            GamePieceType getGamePieceType() ;
 
         private:
             std::shared_ptr<HatchHolder> hatch_holder_ ;
