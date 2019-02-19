@@ -64,7 +64,7 @@ namespace xero {
         }
 
         std::string TurntableHoldAngleAction::toString() {
-            std::string result = "TurntableGoToAngle " + std::to_string(target_) ;
+            std::string result = "TurntableHoldAngle " + std::to_string(target_) ;
             return result ;
         }
     }

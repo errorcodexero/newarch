@@ -12,8 +12,10 @@ namespace xero {
         void OIDevice::computeState() {
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
 
-            for(auto item : items_)
+            for(size_t i = 0 ; i < items_.size() ; i++) {
+                auto item = items_[i] ;
                 item->setValue(ds, getIndex()) ;
+            }
         }
 
         size_t OIDevice::mapButton(int button, OIButton::ButtonType btype) {

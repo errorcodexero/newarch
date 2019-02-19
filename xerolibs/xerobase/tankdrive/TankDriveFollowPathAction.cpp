@@ -50,12 +50,14 @@ namespace xero {
             logger << ",lavel";
             logger << ",ltaccel" ;
             logger << ",lout" ;
+            logger << ",lticks" ;
             logger << ",rtpos" ;
             logger << ",rapos" ;
             logger << ",rtvel" ;
             logger << ",ravel" ;
             logger << ",rtaccel" ;
             logger << ",rout" ;
+            logger << ",rticks" ;
             logger.endMessage() ;
 
             plotid_ = getTankDrive().getRobot().startPlot(toString(), plot_columns_) ;
@@ -96,12 +98,14 @@ namespace xero {
                 logger << "," << td.getLeftVelocity() ;
                 logger << "," << lseg.getAccel() ;
                 logger << "," << lout ;
+                logger << "," << td.getLeftTickCount() ;
                 logger << "," << rseg.getPOS() ;
                 logger << "," << right_start_ + td.getRightDistance() ;                
                 logger << "," << lseg.getVelocity() ;
                 logger << "," << td.getRightVelocity() ;                
                 logger << "," << lseg.getAccel() ;                
                 logger << "," << rout ;
+                logger << "," << td.getRightTickCount() ;
                 logger.endMessage() ;
 
                 rb.addPlotData(plotid_, index_, 0, rb.getTime() - start_time_) ;

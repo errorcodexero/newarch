@@ -10,6 +10,8 @@
 #include "gamepiecemanipulator/FloorCollectCargoAction.h"
 #include "gamepiecemanipulator/FloorCollectHatchAction.h"
 
+#include "lifter/LifterPowerAction.h"
+
 #include <Robot.h>
 #include <SettingsParser.h>
 
@@ -39,65 +41,57 @@ namespace xero {
             button = settings.getInteger("oi:hatch_cargo_switch") ;
             hatch_cargo_switch_ = mapButton(button, OIButton::ButtonType::Level) ;
 
-            button = settings.getInteger("oi:tracking_manual_switch") ;
-            tracking_manual_switch_ = mapButton(button, OIButton::ButtonType::Level) ;
+            button = settings.getInteger("oi:tracking_viewing_nothing_switch") ;
+            tracking_manual_switch_ = mapAxisSwitch(button, 3) ;
             
             button = settings.getInteger("oi:climb_lock_switch") ;
             climb_lock_switch_ = mapButton(button, OIButton::ButtonType::Level) ;
             
-            button = settings.getInteger("oi:camera_switch") ;
-            camera_switch_ = mapButton(button, OIButton::ButtonType::Level) ;   
-
-            button = settings.getInteger("oi:camera_mode") ;
-            camera_mode_ = mapButton(button, OIButton::ButtonType::Level) ;   
-
             // compass
             button = settings.getInteger("oi:compass_north") ;
-            compass_north_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
-            
+            compass_north_ = mapButton(button, OIButton::ButtonType::Level) ;
+
             button = settings.getInteger("oi:compass_south") ;
-            compass_south_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
-            
+            compass_south_ = mapButton(button, OIButton::ButtonType::Level) ;
+
             button = settings.getInteger("oi:compass_east") ;
-            compass_east_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            compass_east_ = mapButton(button, OIButton::ButtonType::Level) ;
             
             button = settings.getInteger("oi:compass_west") ;
-            compass_west_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            compass_west_ = mapButton(button, OIButton::ButtonType::Level) ;
 
             // height
             button = settings.getInteger("oi:height_level_one") ;
-            height_level_one_ = mapButton(button, OIButton::ButtonType::LowToHigh) ; 
+            height_level_one_ = mapButton(button, OIButton::ButtonType::Level) ; 
 
             button = settings.getInteger("oi:height_level_two") ;
-            height_level_two_ = mapButton(button, OIButton::ButtonType::LowToHigh) ; 
+            height_level_two_ = mapButton(button, OIButton::ButtonType::Level) ; 
 
             button = settings.getInteger("oi:height_level_three") ;
-            height_level_three_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            height_level_three_ = mapButton(button, OIButton::ButtonType::Level) ;
             
             button = settings.getInteger("oi:height_cargo_bay") ;
-            height_cargo_bay_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            height_cargo_bay_ = mapButton(button, OIButton::ButtonType::Level) ;
             
             // collect
             button = settings.getInteger("oi:collect_floor") ;
+            std::cout << "Collect floor " << button << std::endl ;
             collect_floor_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
             
             button = settings.getInteger("oi:collect_loading_station") ;
-            collect_loading_station_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            collect_loading_station_ = mapButton(button, OIButton::ButtonType::Level) ;
 
             // score
             button = settings.getInteger("oi:score") ;
-            score_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            score_ = mapButton(button, OIButton::ButtonType::Level) ;
 
             // climb
             button= settings.getInteger("oi:climb") ;
-            climb_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            climb_ = mapButton(button, OIButton::ButtonType::Level) ;
 
             // extra
             button= settings.getInteger("oi:extra_button") ;
-            extra_button_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
-
-
-            
+            extra_button_ = mapButton(button, OIButton::ButtonType::Level) ;
         }
 
         void PhaserOIDevice::createActions() {
@@ -107,6 +101,7 @@ namespace xero {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
+            ActionPtr action ; 
 
             size_t which = 0 ;
             CameraTracker::CameraMode mode = CameraTracker::CameraMode::TargetTracking ;
@@ -117,12 +112,30 @@ namespace xero {
             if (getValue(camera_mode_) == 1)
                 mode = CameraTracker::CameraMode::DriverViewing ;
 
-            if (getValue(collect_floor_) == 1) {
-                ActionPtr act = std::make_shared<FloorCollectCargoAction>(*game) ;
-                seq.pushSubActionPair(game, act) ;
+            int floor = getValue(collect_floor_) ;
+            if (floor) {
+                std::cout << "Collect Floor" << std::endl ;
+                action = std::make_shared<FloorCollectCargoAction>(*game) ;
+                // seq.pushSubActionPair(game, action) ;
             }
 
-            ActionPtr action = std::make_shared<CameraChangeAction>(*camera, which, mode) ;
+            int north = getValue(compass_north_) ;
+            int south = getValue(compass_south_) ;
+
+            if (north) {
+                action = std::make_shared<LifterPowerAction>(*game->getLifter(), 1.0) ;
+                seq.pushSubActionPair(game->getLifter(), action) ;   
+            }
+            else if (south) {
+                action = std::make_shared<LifterPowerAction>(*game->getLifter(), -0.2) ;
+                seq.pushSubActionPair(game->getLifter(), action) ; 
+            }
+            else {
+                action = std::make_shared<LifterPowerAction>(*game->getLifter(), 0.0) ;
+                seq.pushSubActionPair(game->getLifter(), action) ;
+            }
+
+            action = std::make_shared<CameraChangeAction>(*camera, which, mode) ;
             seq.pushSubActionPair(camera, action) ;            
         }
     }

@@ -5,27 +5,6 @@
 # update to reflect phaser (the 2019 robot)
 #
 
-#
-# OI mapping
-#
-oi:camera_mode                                                  0
-oi:hatch_cargo_switch                                           1
-oi:tracking_manual_switch                                       2
-oi:climb_lock_switch                                            3
-oi:camera_switch                                                4                                           
-oi:compass_north                                                13
-oi:compass_south                                                6
-oi:compass_east                                                 7
-oi:compass_west                                                 8
-oi:height_level_one                                             9
-oi:height_level_two                                             10
-oi:height_level_three                                           11
-oi:height_cargo_bay                                             12
-oi:collect_floor                                                5
-oi:collect_loading_station                                      14
-oi:score                                                        15
-oi:climb                                                        16
-oi:extra_button                                                 17  
 
 #
 # The definition of the drivebase (for now this is phoenix)
@@ -41,8 +20,8 @@ hw:tankdrive:leftencoder:2                                      1               
 hw:tankdrive:rightencoder:1                                     2               # Digital IO
 hw:tankdrive:rightencoder:2                                     3               # Digital IO
 hw:tankdrive:shifter                                            0               # Solenoid
-hw:tankdrive:invert:motors:right                                true
-hw:tankdrive:invert:encoders:right                              true
+hw:tankdrive:invert:motors:left                                true
+hw:tankdrive:invert:encoders:left                               true
 
 hw:hatchholder:arm:extend                                        6              # Solenoid
 hw:hatchholder:arm:retract                                       7              # Solenoid
@@ -53,8 +32,8 @@ hw:hatchintake:motor                                            12              
 hw:hatchintake:sensor                                           23              # Digital IO
 hw:hatchintake:solenoid                                         2               # Solenoid
 
-hw:lifter:encoder1                                              6               # Digital IO
-hw:lifter:encoder2                                              7               # Digital IO
+hw:lifter:encoder1                                              8               # Digital IO
+hw:lifter:encoder2                                              9               # Digital IO
 hw:lifter:motor:1                                               10               # TalonSRX
 hw:lifter:motor:2                                               11               # TalonSRX
 hw:lifter:reversemotors                                         true            
@@ -95,17 +74,17 @@ hw:climber:solenoid                                             3               
 # a Phaser drivebase
 #
 tankdrive:inches_per_tick                                       0.010952734
-tankdrive:width                                                 24.5
+tankdrive:width                                                 22
 tankdrive:scrub                                                 0.9
 
-tankdrive:follower:left:ka                                      0.0005
-tankdrive:follower:left:kv                                      0.00555555555555
-tankdrive:follower:left:kp                                      0.1
+tankdrive:follower:left:ka                                      0.0
+tankdrive:follower:left:kv                                      0.0065
+tankdrive:follower:left:kp                                      0.0
 tankdrive:follower:left:kd                                      0.0
 
-tankdrive:follower:right:ka                                     0.0005
-tankdrive:follower:right:kv                                     0.00555555555555
-tankdrive:follower:right:kp                                     0.1
+tankdrive:follower:right:ka                                     0.0
+tankdrive:follower:right:kv                                     0.0065
+tankdrive:follower:right:kp                                     0.0
 tankdrive:follower:right:kd                                     0.0
 
 tankdrive:follower:turn_correction                              0.0
@@ -140,7 +119,7 @@ linefollow:adjust                                               .35
 turntable:safe_lifter_height                                    17
 turntable:keepout:minimum                                       130
 turntable:keepout:maximum                                       160
-turntable:degrees_per_tick                                      0.6
+turntable:degrees_per_tick                                      0.5357143
 turntable:maxa                                                  150
 turntable:maxd                                                  -150
 turntable:maxv                                                  200
@@ -173,19 +152,24 @@ lifter:threshold                                                1.0
 lifter:maxv                                                     23.0
 lifter:maxa                                                     50.0
 lifter:maxd                                                     -50.0
-lifter:follower:kp                                              0.01                # TODO
-lifter:follower:ka                                              0.0                 # TODO
-lifter:follower:kv                                              0.035
-lifter:follower:kd                                              0.0                 # TODO
+lifter:follower:up:kp                                           0.05              
+lifter:follower:up:ka                                           0.0                 
+lifter:follower:up:kv                                           0.035
+lifter:follower:up:kd                                           0.0
 
-lifter:hold:p                                                   -0.1                # TODO
-lifter:hold:i                                                   0.0                 # TODO
-lifter:hold:d                                                   0.0                 # TODO
-lifter:hold:f                                                   0.0                 # TODO
-lifter:hold:a                                                   0.0                 # TODO
-lifter:hold:min                                                 -0.4                # TODO
-lifter:hold:max                                                 0.4                 # TODO
-lifter:hold:imax                                                0.0                 # TODO
+lifter:follower:down:kp                                         0.01
+lifter:follower:down:ka                                         0.0
+lifter:follower:down:kv                                         0.017
+lifter:follower:down:kd                                         0.0
+
+lifter:hold:p                                                   -0.1                
+lifter:hold:i                                                   0.0                 
+lifter:hold:d                                                   0.0                 
+lifter:hold:f                                                   0.0                 
+lifter:hold:a                                                   0.0                 
+lifter:hold:min                                                 -0.4                
+lifter:hold:max                                                 0.4                 
+lifter:hold:imax                                                0.0                 
 
 #
 # Note, the heights are referenced to the floor.  The height of the lifter is the height of the
@@ -199,13 +183,13 @@ lifter:hold:imax                                                0.0             
 #
 lifter:height:bottom                                            8.46
 lifter:height:safe_turn                                         18.0
-lifter:height:cargo:floor_collect                               10.46               # 8.46 + 2.0
+lifter:height:cargo:floor_collect                               9.0
 lifter:height:offset:cargo_holder_center                        6.75
 lifter:height:offset:hatch_center                               5.5
 lifter:height:offset:hatch_hook_center                          8.6
 lifter:height:cargo:undock_height                               
-lifter:height:cargo:floor_collect                               14.46
 lifter:height:cargo:undock_height                               22.00
+lifter:height:cargo:collected                                   16.0
 
 cameratracker:distance_threshold                                0.0
 cameratracker:yaw_threshold                                     0.0
@@ -230,25 +214,23 @@ drivebyvision:scurve_turn_offset                                0.1
 drivebyvision:scurve_cycles                                     100
 drivebyvision:quit_threshold                                    31.0
 
-cargointake:power                                               0.4
+cargointake:power                                               -0.6
 cargoholder:power                                               0.3
 hatchintake:power                                               0.2
 
-oi:hatch_cargo_switch                                           1
-oi:tracking_manual_switch                                       2
-oi:climb_lock_switch                                            2
-oi:camera_switch                                                2
-oi:camera_mode                                                  2
-oi:compass_north                                                2
-oi:compass_south                                                2
-oi:compass_east                                                 2
-oi:compass_west                                                 2
-oi:height_level_one                                             2
-oi:height_level_two                                             2
-oi:height_level_three                                           2
-oi:height_cargo_bay                                             2
-oi:collect_floor                                                2
-oi:collect_loading_station                                      2
-oi:score                                                        2
-oi:climb                                                        2
-oi:extra_button                                                 2
+oi:hatch_cargo_switch                                           11                  # Button
+oi:tracking_viewing_nothing_switch                              3                   # Axis
+oi:climb_lock_switch                                            15                  # Button
+oi:compass_north                                                13                  # Button
+oi:compass_south                                                14                  # Button
+oi:compass_east                                                 9                   # Button
+oi:compass_west                                                 12                  # Button
+oi:height_level_one                                             1                   # Button
+oi:height_level_two                                             2                   # Button
+oi:height_level_three                                           3                   # Button
+oi:height_cargo_bay                                             4                   # Button
+oi:collect_floor                                                5                   # Button
+oi:collect_loading_station                                      10                  # Button
+oi:score                                                        6                   # Button
+oi:climb                                                        8                   # Button
+oi:extra_button                                                 7                   # Button

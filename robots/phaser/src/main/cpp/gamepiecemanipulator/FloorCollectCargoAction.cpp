@@ -27,6 +27,9 @@ namespace xero {
             hold_lifter_cargo_intake_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;
             deploy_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, true) ;
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
+            set_lifter_cargo_collected_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:collected") ;            
+            hold_lifter_cargo_collected_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:cargo:collected") ;
+
             
             set_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, "cargointake:power") ;
             stop_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, 0.0) ;
@@ -142,8 +145,18 @@ namespace xero {
                     // 6. The motors are stopped, retract the intake back into the robot.  The state
                     //    RetrackIntake means we are waiting on the intake to retract.
                     //
+                    auto lifter = getGamePiece().getLifter() ;
+                    lifter->setAction(set_lifter_cargo_collected_height_) ;
+                    state_ = State::RaiseLifter ;
+                }
+                break ;
+
+            case State::RaiseLifter:
+                if (set_lifter_cargo_collected_height_->isDone()) {
                     auto cargo_intake = getGamePiece().getCargoIntake() ;                    
                     cargo_intake->setAction(retract_cargo_intake_) ;
+                    auto lifter = getGamePiece().getLifter() ;
+                    lifter->setAction(hold_lifter_cargo_collected_height_) ;                    
                     state_ = State::RetractIntake ;
                 }
                 break ;
@@ -208,6 +221,9 @@ namespace xero {
 
             case State::RetractIntake:
                 // We are already putting things away, just let it finish            
+                break ;
+
+            case State::RaiseLifter:
                 break ;
 
             case State::Idle:

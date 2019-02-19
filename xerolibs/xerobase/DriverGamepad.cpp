@@ -145,8 +145,8 @@ namespace xero {
                 if (std::fabs(power + spin - left_) > tolerance_ || std::fabs(power - spin - right_) > tolerance_) {
                     auto dir = std::make_shared<TankDrivePowerAction>(*db_, power + spin, power - spin) ;
                     seq.pushSubActionPair(db_, dir) ;
-                    left_ = power + spin ;
-                    right_ = power - spin ;
+                    left_ = power - spin ;
+                    right_ = power + spin ;
                 }
             }
         }

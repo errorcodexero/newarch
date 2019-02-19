@@ -31,8 +31,9 @@ namespace xero {
                 }
             }
             running_auto_seq_ = nullptr ;
+            oi->getDriverGamepad()->enable(true) ;
 
-            if (running_auto_seq_ != nullptr) {
+            if (running_auto_seq_ != nullptr) {                
                 if (oi->getDriverGamepad()->isCancelPressed()) {
                     running_auto_seq_->cancel() ;
                     running_auto_seq_ = nullptr ;
@@ -53,7 +54,7 @@ namespace xero {
                     }
                 }
             }
-            else {                
+            else {             
                 seq_->clear() ;
                 oi->generateActions(seq_) ;
                 seq_->start() ;

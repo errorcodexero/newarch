@@ -79,6 +79,7 @@ namespace xero {
             double speed_ ;
             double max_height_ ;
             double min_height_ ;
+            double power_ ;
 
             uint64_t msg_id_ ;
         } ;

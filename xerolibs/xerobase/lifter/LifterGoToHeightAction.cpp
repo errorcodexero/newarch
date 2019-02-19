@@ -16,8 +16,7 @@ namespace xero {
         LifterGoToHeightAction::LifterGoToHeightAction(Lifter &lifter, double target) : LifterAction(lifter) {
             target_ = target ;
             threshold_ = getLifter().getRobot().getSettingsParser().getDouble("lifter:threshold") ;
-            ctrl_ = std::make_shared<PIDACtrl>(lifter.getRobot().getSettingsParser(), "lifter:follower:kv", 
-                                "lifter:follower:ka", "lifter:follower:kp", "lifter:follower:kd") ;
+
 
             double maxv = getLifter().getRobot().getSettingsParser().getDouble("lifter:maxv") ;
             double maxa = getLifter().getRobot().getSettingsParser().getDouble("lifter:maxa") ;
@@ -28,8 +27,7 @@ namespace xero {
         LifterGoToHeightAction::LifterGoToHeightAction(Lifter &lifter, const std::string &name) : LifterAction(lifter) {
             target_ = getLifter().getRobot().getSettingsParser().getDouble(name) ;
             threshold_ = getLifter().getRobot().getSettingsParser().getDouble("lifter:threshold") ;
-            ctrl_ = std::make_shared<PIDACtrl>(lifter.getRobot().getSettingsParser(), "lifter:follower:kv", 
-                                "lifter:follower:ka", "lifter:follower:kp", "lifter:follower:kd") ;    
+  
                                 
             double maxv = getLifter().getRobot().getSettingsParser().getDouble("lifter:maxv") ;
             double maxa = getLifter().getRobot().getSettingsParser().getDouble("lifter:maxa") ;
@@ -61,6 +59,15 @@ namespace xero {
                     logger.endMessage() ;
 
                 } else {
+
+                    if (dist < 0) {
+                        ctrl_ = std::make_shared<PIDACtrl>(lifter.getRobot().getSettingsParser(), "lifter:follower:down:kv", 
+                                "lifter:follower:down:ka", "lifter:follower:down:kp", "lifter:follower:down:kd") ;     
+                    }
+                    else {
+                        ctrl_ = std::make_shared<PIDACtrl>(lifter.getRobot().getSettingsParser(), "lifter:follower:up:kv", 
+                                "lifter:follower:up:ka", "lifter:follower:up:kp", "lifter:follower:up:kd") ;                          
+                    }
                     is_done_ = false ;
                     profile_->update(dist, 0.0, 0.0) ;
                     start_time_ = getLifter().getRobot().getTime() ;
@@ -70,6 +77,10 @@ namespace xero {
 
                     MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
                     logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
+                    logger << "Lifter Target Distance: " << dist ;
+                    logger.endMessage() ;
+
+                    logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;                    
                     logger << "Lifter Velocity Profile: " << profile_->toString() ;
                     logger.endMessage() ;                    
                 }

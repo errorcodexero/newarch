@@ -16,6 +16,7 @@ namespace xero {
             /// \param index the joystick index for this device
             HIDDevice(OISubsystem &sub, int index) : subsystem_(sub) {
                 index_ = index ;
+                enabled_ = true ;
             }
 
             /// \brief destroy this device

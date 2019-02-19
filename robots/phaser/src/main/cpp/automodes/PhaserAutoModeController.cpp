@@ -46,13 +46,12 @@ namespace xero {
 
         void PhaserAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             AutoModePtr mode = nullptr ;
-            
+
             switch(sel) {
             case 0:
-                mode = testTurntable() ;
+                mode = createTestOne() ;
                 break ;
 
-#ifdef NOTYHET
             case 1:
                 mode = createScrubCharAutoMode() ;
                 break ;
@@ -111,10 +110,26 @@ namespace xero {
             case 15:
                 mode = testFloorCollectHatch() ;
                 break ;
-#endif
             }
             setAction(mode) ;
         }
+
+
+        AutoModePtr PhaserAutoModeController::createStraightCharAutoMode(bool gear) {
+            std::string name = "Char Drive Base" ;
+            std::string desc = "Characterize the drive base" ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto db = phaserrobot->getTankDrive() ;
+
+            act = std::make_shared<TankDriveCharAction>(*db, 4.0, 0.5, gear) ;
+            mode->pushSubActionPair(db, act) ;
+
+            return mode ;         
+        }             
 
         AutoModePtr PhaserAutoModeController::testFloorCollectHatch() {
             std::string name = "Test Floor Collect Hatsh" ;
@@ -356,13 +371,14 @@ namespace xero {
 
             act = std::make_shared<LifterGoToHeightAction>(*lifter, 45.0) ;
             mode->pushSubActionPair(lifter, act) ;
-            
+
             act = std::make_shared<LifterHoldHeightAction>(*lifter, 45.0) ;
             mode->pushSubActionPair(lifter, act, false) ;   
 
             act = std::make_shared<DelayAction>(5.0) ;
             mode->pushAction(act) ;              
 
+#ifdef NOTYET
             act = std::make_shared<LifterGoToHeightAction>(*lifter, 20.0) ;
             mode->pushSubActionPair(lifter, act) ;
 
@@ -372,8 +388,25 @@ namespace xero {
             act = std::make_shared<DelayAction>(5.0) ;
             mode->pushAction(act) ;              
 
-            act = std::make_shared<LifterGoToHeightAction>(*lifter, 9.0) ;
+            act = std::make_shared<LifterGoToHeightAction>(*lifter, 70.0) ;
             mode->pushSubActionPair(lifter, act) ;
+
+            act = std::make_shared<LifterHoldHeightAction>(*lifter, 70.0) ;
+            mode->pushSubActionPair(lifter, act, false) ; 
+
+            act = std::make_shared<DelayAction>(5.0) ;
+            mode->pushAction(act) ;  
+
+            act = std::make_shared<LifterGoToHeightAction>(*lifter, 20.0) ;
+            mode->pushSubActionPair(lifter, act) ;
+
+            act = std::make_shared<LifterHoldHeightAction>(*lifter, 20.0) ;
+            mode->pushSubActionPair(lifter, act, false) ;
+
+            act = std::make_shared<DelayAction>(5.0) ;
+            mode->pushAction(act) ;   
+#endif           
+
             return mode ;                
         }
 
@@ -412,20 +445,13 @@ namespace xero {
             act = std::make_shared<TurntableCalibrateAction>(*turntable) ;
             mode->pushSubActionPair(turntable, act) ;
 
-            act = std::make_shared<TurntableGoToAngleAction>(*turntable, 100) ;
+            act = std::make_shared<TurntableGoToAngleAction>(*turntable, 90) ;
             mode->pushSubActionPair(turntable, act) ;
 
-            act = std::make_shared<TurntableHoldAngleAction>(*turntable, 100) ;
-            mode->pushSubActionPair(turntable, act) ;  
-
-            act = std::make_shared<DelayAction>(45.0) ;
-            mode->pushAction(act) ;                      
-
-#ifdef NOTYET
             act = std::make_shared<DelayAction>(5.0) ;
             mode->pushAction(act) ;
 
-            act = std::make_shared<TurntableGoToAngleAction>(*turntable, -60) ;
+            act = std::make_shared<TurntableGoToAngleAction>(*turntable, -90) ;
             mode->pushSubActionPair(turntable, act) ;    
 
             act = std::make_shared<DelayAction>(5.0) ;
@@ -433,7 +459,25 @@ namespace xero {
             
             act = std::make_shared<TurntableGoToAngleAction>(*turntable, 0) ;
             mode->pushSubActionPair(turntable, act) ;
-#endif
+
+            act = std::make_shared<DelayAction>(5.0) ;
+            mode->pushAction(act) ;
+
+            act = std::make_shared<TurntableGoToAngleAction>(*turntable, -90) ;
+            mode->pushSubActionPair(turntable, act) ;
+
+            act = std::make_shared<DelayAction>(5.0) ;
+            mode->pushAction(act) ;
+
+            act = std::make_shared<TurntableGoToAngleAction>(*turntable, 90) ;
+            mode->pushSubActionPair(turntable, act) ;
+
+            act = std::make_shared<DelayAction>(5.0) ;
+            mode->pushAction(act) ;
+
+            act = std::make_shared<TurntableGoToAngleAction>(*turntable, 0) ;
+            mode->pushSubActionPair(turntable, act) ;            
+
             return mode ;             
         }
 
@@ -506,22 +550,7 @@ namespace xero {
 
             return mode ;
         }
-
-        AutoModePtr PhaserAutoModeController::createStraightCharAutoMode(bool gear) {
-            std::string name = "Char Drive Base" ;
-            std::string desc = "Characterize the drive base" ;
-            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
-            ActionPtr act ;
-
-            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
-            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto db = phaserrobot->getTankDrive() ;
-
-            act = std::make_shared<TankDriveCharAction>(*db, 1.0, 0.2, gear) ;
-            mode->pushSubActionPair(db, act) ;
-
-            return mode ;         
-        }        
+   
 
         AutoModePtr PhaserAutoModeController::createScrubCharAutoMode() {
             std::string name = "Char Drive Base" ;
@@ -549,14 +578,28 @@ namespace xero {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
-            auto lifter = phaserrobot->getGameManipulator()->getLifter() ;
-            auto turntable = phaserrobot->getGameManipulator()->getTurntable() ;
+
+            act = std::make_shared<TankDriveFollowPathAction>(*db, "Straight") ;
+            mode->pushSubActionPair(db, act) ;
 
             return mode ;         
         }
 
         AutoModePtr PhaserAutoModeController::createTestTwo() {
-            return nullptr ;
+            std::string name = "Test One" ;
+            std::string desc = "Drive straight" ;
+            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
+            ActionPtr act ;
+            std::shared_ptr<TerminateAction> termptr ;
+
+            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
+            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
+            auto game = phaserrobot->getGameManipulator() ;
+
+            act = std::make_shared<FloorCollectCargoAction>(*game) ;
+            mode->pushSubActionPair(game, act) ;
+
+            return mode ; 
         }        
 
         ActionPtr PhaserAutoModeController::lifterGoToHeight(double height) {
