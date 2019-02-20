@@ -13,6 +13,7 @@ namespace xero {
             solenoid_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:hatchintake:solenoid"));
             sensor_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:hatchintake:sensor"));
             has_hatch_ = false ;
+            deployed_ = false ;
 
             solenoid_->Set(false) ;
         }
@@ -21,9 +22,11 @@ namespace xero {
         }
         void HatchIntake::deployCollector(){
             solenoid_->Set(true) ;
+            deployed_ = true ;
         }
         void HatchIntake::retractCollector(){
             solenoid_->Set(false) ;
+            deployed_ = false ;
         }
 
         bool HatchIntake::canAcceptAction(xero::base::ActionPtr action) {

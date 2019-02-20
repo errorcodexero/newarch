@@ -150,7 +150,13 @@ namespace xero {
             if (solenoid != nullptr) {
                 for(auto model : getModels())
                     model->addDevice(solenoid) ;
-            }           
+            } 
+
+            Relay * relay = dynamic_cast<Relay *>(device) ;
+            if (relay != nullptr) {
+                for(auto model : getModels())
+                    model->addDevice(relay) ;
+            }                            
 
             AHRS *navx = dynamic_cast<AHRS *>(device) ;
             if (navx != nullptr) {
@@ -225,6 +231,13 @@ namespace xero {
             }
         }
 
+        void RobotSimBase::dispatchEvent(const SimEvent &ev) {
+            for(auto model : models_) {
+                if (model->getName() == ev.getModel())
+                    model->processEvent(ev.getName(), ev.getValue()) ;
+            }
+        }
+
         //
         // This method is run from the simulator thread and not from
         // the robot thread.
@@ -240,6 +253,12 @@ namespace xero {
             while (running_) {
                 auto start = std::chrono::high_resolution_clock::now() ;
                 double now = getTime() ;
+
+                while (events_.size() > 0 && events_.getFirstEventTime() < now) {
+                    const SimEvent &event = events_.getFirstEvent() ;
+                    dispatchEvent(event) ;
+                    events_.removeFirstEvent() ;
+                }
 
                 for(auto v:visualizers_)
                     v->beginCycle(now) ;

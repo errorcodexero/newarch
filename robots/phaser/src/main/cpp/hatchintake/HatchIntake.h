@@ -25,11 +25,16 @@ namespace xero {
                 return has_hatch_ ;
             }
 
+            bool isDeployed() const {
+                return deployed_ ;
+            }
+
         private:
             std::shared_ptr<frc::Solenoid> solenoid_ ;
             std::shared_ptr<frc::DigitalInput> sensor_ ;
 
             bool has_hatch_ ;
+            bool deployed_ ;
          } ;
         
     }

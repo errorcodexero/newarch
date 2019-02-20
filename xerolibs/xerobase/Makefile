@@ -1,6 +1,11 @@
 TOPDIR=../..
 
 SOURCES = \
+	lifter/Lifter.cpp\
+	lifter/LifterCalibrateAction.cpp\
+	lifter/LifterGoToHeightAction.cpp\
+	lifter/LifterHoldHeightAction.cpp\
+	lifter/LifterPowerAction.cpp\
 	ActionSequence.cpp\
 	AutoMode.cpp\
 	ControllerBase.cpp\
@@ -33,11 +38,6 @@ SOURCES = \
 	singlemotorsubsystem/SingleMotorPowerAction.cpp\
 	singlemotorsubsystem/SingleMotorSubsystem.cpp\
 	lightsensor/LightSensorSubsystem.cpp\
-	lifter/Lifter.cpp\
-	lifter/LifterCalibrateAction.cpp\
-	lifter/LifterGoToHeightAction.cpp\
-	lifter/LifterHoldHeightAction.cpp\
-	lifter/LifterPowerAction.cpp\
 	cameratracker/CameraTracker.cpp\
 	cameratracker/CameraChangeAction.cpp
 

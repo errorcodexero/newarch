@@ -8,6 +8,7 @@
 #include "VictorSP.h"
 #include "Timer.h"
 #include "AHRS.h"
+#include "Relay.h"
 #include <mutex>
 #include <map>
 #include <vector>
@@ -53,6 +54,12 @@ namespace xero {
             virtual void addDevice(AHRS *navx) {                
             }
 
+            virtual void addDevice(frc::Relay *relay) {                
+            }
+
+            virtual void processEvent(const std::string &name, int value) {                
+            }
+
             std::mutex &getLockMutex() ;
 
             const std::string &getName() const {
@@ -66,8 +73,6 @@ namespace xero {
             virtual void generateDisplayInformation(std::list<std::string> &lines) ;
 
         protected:
-            bool parseDoubleList(const std::string &list, std::vector<double> &values) ;
-            bool parseDouble (const std::string &prop, double &value) ;
 
         private:
             std::string name_ ;

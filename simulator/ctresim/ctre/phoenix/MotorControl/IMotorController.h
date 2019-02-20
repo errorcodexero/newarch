@@ -3,6 +3,7 @@
 #include <ctre/phoenix/MotorControl/SensorCollection.h>
 #include <ctre/phoenix/MotorControl/ControlMode.h>
 #include <ctre/phoenix/MotorControl/NeutralMode.h>
+#include <ctre/phoenix/MotorControl/LimitSwitchType.h>
 #include <frc/SimulatedObject.h>
 
 namespace ctre {
@@ -40,7 +41,10 @@ namespace ctre {
                 }
 
                 void SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode mode) {
-                }                
+                }        
+
+                void ConfigForwardLimitSwitchSource(LimitSwitchSource source, LimitSwitchNormal state, int to = 0) {
+                }        
 
             private:
                 int index_ ;

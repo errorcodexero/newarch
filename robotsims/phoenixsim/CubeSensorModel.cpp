@@ -30,20 +30,6 @@ namespace xero {
                 return result ;
             }
 
-
-            void CubeSensorModel::init() {
-                if (getSimulator().hasProperty("cube")) {
-                    std::vector<double> values ;
-                    const std::string &prop = getSimulator().getProperty("cube") ;
-                    if (parseDoubleList(prop, values)) {
-                        for(double t : values) {
-                            OnTime tm(t) ;
-                            ontimes_.push_back(tm) ;
-                        }
-                    }
-                }
-            }
-
             void CubeSensorModel::evalSensor() {
                 if (!running_) {
                     if (duty_ < -0.1) {

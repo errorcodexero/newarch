@@ -9,7 +9,7 @@ using namespace xero::misc ;
 namespace xero {
     namespace phaser {
             void CargoIntakeAction::start() {
-                if (is_deployed_ == true){
+                if (deploy_ == true) {
                     subsystem_.deployCollector() ;
                 }
                 else {
@@ -33,7 +33,7 @@ namespace xero {
 
             std::string CargoIntakeAction::toString() {
                 std::string result = "CargoIntakeAction " ;
-                result += std::to_string(is_deployed_) ;
+                result += std::to_string(deploy_) ;
             
                 return result ;
             }    

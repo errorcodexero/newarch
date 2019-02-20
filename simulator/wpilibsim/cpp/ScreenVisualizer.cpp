@@ -149,9 +149,6 @@ namespace xero {
         }       
 
         void ScreenVisualizer::initScreen() {
-
-            resizeCaptureFrame()
-            \e[8;30;30t
             initscr() ;
             noecho() ;
             cbreak() ;

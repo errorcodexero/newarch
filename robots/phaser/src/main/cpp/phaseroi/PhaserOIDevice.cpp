@@ -13,6 +13,7 @@
 #include "gamepiecemanipulator/ScoreCargo.h"
 #include "gamepiecemanipulator/ScoreHatch.h"
 #include "gamepiecemanipulator/ReadyAction.h"
+#include "gamepiecemanipulator/ResetIntakesAction.h"
 
 #include "cargointake/CargoIntakeAction.h"
 #include "singlemotorsubsystem/SingleMotorPowerAction.h"
@@ -50,59 +51,49 @@ namespace xero {
             int button ;
             SettingsParser &settings = getSubsystem().getRobot().getSettingsParser() ;
             
-            // 
-            // Actions
-            // 
-
-            // switch
             button = settings.getInteger("oi:hatch_cargo_switch") ;
             hatch_cargo_switch_ = mapButton(button, OIButton::ButtonType::Level) ;
 
-            button = settings.getInteger("oi:tracking_viewing_nothing_switch") ;            // TODO - assumes tracking for now
+            button = settings.getInteger("oi:tracking_viewing_nothing_switch") ;
             tracking_manual_switch_ = mapAxisSwitch(button, 3) ;
             
-            button = settings.getInteger("oi:climb_lock_switch") ;                          // TODO
+            button = settings.getInteger("oi:climb_lock_switch") ;                              // TODO
             climb_lock_switch_ = mapButton(button, OIButton::ButtonType::Level) ;
             
-            // compass
-            button = settings.getInteger("oi:compass_north") ;                              // OK
-            compass_north_ = mapButton(button, OIButton::ButtonType::Level) ;
+            button = settings.getInteger("oi:compass_north") ;
+            compass_north_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
-            button = settings.getInteger("oi:compass_south") ;                              // OK
-            compass_south_ = mapButton(button, OIButton::ButtonType::Level) ;
+            button = settings.getInteger("oi:compass_south") ;
+            compass_south_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
-            button = settings.getInteger("oi:compass_east") ;                               // OK
-            compass_east_ = mapButton(button, OIButton::ButtonType::Level) ;
+            button = settings.getInteger("oi:compass_east") ;
+            compass_east_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
             
-            button = settings.getInteger("oi:compass_west") ;                               // OK
-            compass_west_ = mapButton(button, OIButton::ButtonType::Level) ;
+            button = settings.getInteger("oi:compass_west") ;
+            compass_west_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
-            // height
-            button = settings.getInteger("oi:height_level_one") ;                           // OK
+            button = settings.getInteger("oi:height_level_one") ;
             height_level_one_ = mapButton(button, OIButton::ButtonType::LowToHigh) ; 
 
-            button = settings.getInteger("oi:height_level_two") ;                           // OK
+            button = settings.getInteger("oi:height_level_two") ;
             height_level_two_ = mapButton(button, OIButton::ButtonType::Level) ; 
 
-            button = settings.getInteger("oi:height_level_three") ;                         // OK
+            button = settings.getInteger("oi:height_level_three") ;
             height_level_three_ = mapButton(button, OIButton::ButtonType::Level) ;
             
-            button = settings.getInteger("oi:height_cargo_bay") ;                           // OK
+            button = settings.getInteger("oi:height_cargo_bay") ;
             height_cargo_bay_ = mapButton(button, OIButton::ButtonType::Level) ;
             
-            // collect
-            button = settings.getInteger("oi:collect_floor") ;                              // OK
+            button = settings.getInteger("oi:collect_floor") ;
             collect_floor_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
             
-            button = settings.getInteger("oi:collect_loading_station") ;                    // What is this for?
-            collect_loading_station_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            button = settings.getInteger("oi:go") ;
+            go_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
-            // score
             button = settings.getInteger("oi:score") ;
             score_ = mapButton(button, OIButton::ButtonType::Level) ;
 
-            // climb
-            button= settings.getInteger("oi:climb") ;
+            button= settings.getInteger("oi:climb") ;                                           // TODO
             climb_ = mapButton(button, OIButton::ButtonType::Level) ;
 
             // extra
@@ -114,20 +105,19 @@ namespace xero {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;  
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
 
-#ifdef NOTYET
             finish_collect_hatch_ = std::make_shared<CompleteLSHatchCollect>(*game) ;
             finish_place_hatch_  = std::make_shared<ScoreHatch>(*game) ;
             finish_place_cargo_  = std::make_shared<ScoreCargo>(*game) ;
-            set_collect_hatch_floor_  = std::make_shared<FloorCollectCargoAction>(*game) ;
-#endif
+            set_collect_hatch_floor_  = std::make_shared<FloorCollectHatchAction>(*game) ;
             set_collect_cargo_floor_  = std::make_shared<FloorCollectCargoAction>(*game) ;
+            reset_intakes_ = std::make_shared<ResetIntakeAction>(*game) ;
         }
 
         void PhaserOIDevice::updateMode(OperationMode mode) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;  
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
 
-            std::cout << "Entering Mode " << (int)mode_ << " new mode " << (int)mode << std::endl ;
+            // std::cout << "Entering Mode " << (int)mode_ << " new mode " << (int)mode << std::endl ;
 
             if ((mode_ == OperationMode::Manual || mode_ == OperationMode::SemiAuto) && mode == OperationMode::Auto)
             {
@@ -143,7 +133,7 @@ namespace xero {
             }
 
             mode_ = mode ;
-            std::cout << "Exiting Mode " << (int)mode_ << " new mode " << (int)mode << std::endl ;            
+            // std::cout << "Exiting Mode " << (int)mode_ << " new mode " << (int)mode << std::endl ;            
         }
 
         std::string PhaserOIDevice::dirToString() {
@@ -478,7 +468,6 @@ namespace xero {
             teleop->addDetector(std::make_shared<VisionDetectTakeover>(act, *ph.getPhaserRobotSubsystem()->getCameraTracker())) ;
         }
 
-
         xero::base::ActionPtr PhaserOIDevice::getFinishAction() {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;               
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
@@ -504,57 +493,61 @@ namespace xero {
             return nullptr ;
         }
 
+        void PhaserOIDevice::manuallyFinish(ActionSequence &seq) {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;               
+            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
+            auto ctrl = ph.getCurrentController() ;            
+            std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ; 
+
+            teleop->clearDetectors() ;
+            seq.pushSubActionPair(game, getFinishAction()) ;
+        }
+
         void PhaserOIDevice::generateActions(ActionSequence &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
 
             if (set_collect_cargo_floor_ == nullptr)
-                createActions() ;
+                createActions() ;            
 
-            int value = getValue(collect_floor_) ;
-            if (value) {
-                seq.pushSubActionPair(game, set_collect_cargo_floor_) ;
-            }   
-
-            if (getValue(collect_loading_station_)) {
-                auto intake = game->getCargoIntake() ;
-                ActionPtr act = std::make_shared<CargoIntakeAction>(*intake, false) ;
-                seq.pushSubActionPair(intake, act) ;
-            } 
-
-            if (getValue(height_level_one_)) {
-                auto holder = game->getCargoHolder() ;
-                ActionPtr act = std::make_shared<SingleMotorPowerAction>(*holder, 0.5) ;
-                seq.pushSubActionPair(holder, act) ;                
-            }
-
-#ifdef NOTYET
             getTrackingMode() ;
 
-            if (getDirection()) {
+            if (getValue(extra_button_)) {
+                //
+                // Pull any intakes that are out of the robot back into the
+                // robot.
+                //
+                seq.pushSubActionPair(game, reset_intakes_) ;
+            }
+            else if (getDirection()) {
+                //
+                // The joystick has been pressed in a direction, move the
+                // lift and turntable to match to desired target
+                //
                 generateDirectionActions(seq) ;
             }
             else if (getHeightButton()) {
+                //
+                // A height button has been pressed, ready the lift for the
+                // operation
+                //
                 generateHeightButtonActions(seq) ;
             }
-            else {
-
+            else if (getValue(go_)) {
                 //
-                // TDOO: a collect/place above the floor may be in progress
+                // Manually initiate the seleced operation
                 //
-
-                //
-                // Collect/Deposit sequences not from the floor take
-                // priority.
-                //
-                if (getValue(collect_floor_)) {
-                    if (getValue(hatch_cargo_switch_))
-                        game->setAction(set_collect_cargo_floor_) ;
-                    else
-                        game->setAction(set_collect_hatch_floor_) ;                    
-                }
+                manuallyFinish(seq) ;
             }
-#endif
+            else if (getValue(collect_floor_)) {
+                //
+                // Collect game pieces from the floor
+                //
+                if (getValue(hatch_cargo_switch_))
+                    game->setAction(set_collect_cargo_floor_) ;
+                else
+                    game->setAction(set_collect_hatch_floor_) ;                    
+            }
         }
     }
 }

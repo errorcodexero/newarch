@@ -3,6 +3,7 @@
 #include "CargoHolderModel.h"
 #include "HatchIntakeModel.h"
 #include "CargoIntakeModel.h"
+#include "LineSensorModel.h"
 #include "ClimberModel.h"
 #include <frc/RobotSimBase.h>
 #include <LifterModel.h>
@@ -57,7 +58,9 @@ namespace xero
                 std::shared_ptr<HatchIntakeModel> hatch_intake_ ;
                 std::shared_ptr<CargoIntakeModel> cargo_intake_ ;   
                 std::shared_ptr<ClimberModel> climber_ ;             
-                std::shared_ptr<xero::sim::phaser::OIModel> oi_ ;                
+                std::shared_ptr<xero::sim::phaser::OIModel> oi_ ;     
+                std::shared_ptr<LineSensorModel> front_ ;           
+                std::shared_ptr<LineSensorModel> back_ ;   
 
                 bool visualizer_ ;
             };

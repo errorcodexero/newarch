@@ -265,9 +265,10 @@ lifter:height:hatch:place:east:c                              18                
 lifter:height:hatch:place:west:c                              18                 #TODO
 
 lifter:height:offset:hatch_hook_center                          8.6
-lifter:height:cargo:undock_height                               
 lifter:height:cargo:undock_height                               22.00
 lifter:height:cargo:collected                                   16.0
+
+lifter:height:LS_hatch                                          18              # TODO
 
 cameratracker:distance_threshold                                0.0
 cameratracker:yaw_threshold                                     0.0
@@ -311,7 +312,7 @@ oi:height_level_two                                             2               
 oi:height_level_three                                           3                   # Button
 oi:height_cargo_bay                                             4                   # Button
 oi:collect_floor                                                5                   # Button
-oi:collect_loading_station                                      10                  # Button
+oi:go                                                           10                  # Button
 oi:score                                                        6                   # Button
 oi:climb                                                        8                   # Button
 oi:extra_button                                                 7                   # Button

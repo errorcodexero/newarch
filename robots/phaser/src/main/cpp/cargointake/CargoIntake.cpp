@@ -33,7 +33,6 @@ namespace xero {
 
         void CargoIntake::computeState() {
             is_deployed_ = solenoid_->Get() ;
-
             has_cargo_ = !sensor_->Get() ;
         }
     }

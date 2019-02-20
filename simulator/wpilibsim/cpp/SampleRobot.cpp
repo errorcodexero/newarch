@@ -126,7 +126,18 @@ namespace frc
 
         while (index < m_args.size())
         {
-            if (m_args[index] == "--start")
+            if (m_args[index] == "--events")
+            {
+                index++ ;
+                if (index == m_args.size()) {
+                    std::cerr << "--events flag requires additional argument" << std::endl ;
+                    exit(1) ;
+                }   
+
+                RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
+                sim.readEvents(m_args[index++]) ;                             
+            }
+            else if (m_args[index] == "--start")
             {
                 index++;
                 if (index == m_args.size()) {
@@ -240,19 +251,6 @@ namespace frc
                 index++ ;
                 screen_ = true ;
             }
-            else if (m_args[index] == "--simprop") {
-                index++ ;
-                if (index == m_args.size()) {
-                    std::cerr << "--simprop flag requires additional argument" << std::endl ;
-                    exit(1) ;
-                }                   
-                RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
-                if (!sim.setProperty(m_args[index])) {
-                    std::cerr << "--simprop flag, additional argument was invalid" << std::endl ;
-                    exit(1) ;                   
-                }
-                index++ ;               
-            }
             else
             {
                 std::cout << "SampleRobot: invalid command line argument '";
@@ -264,7 +262,6 @@ namespace frc
                 std::cout << "  --simprint" << std::endl ;
                 std::cout << "  --simfile file" << std::endl ;
                 std::cout << "  --simscreen" << std::endl ;                             
-                std::cout << "  --simprop property" << std::endl ;
                 ret = false;
                 break;
             }

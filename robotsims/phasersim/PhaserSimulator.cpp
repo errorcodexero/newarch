@@ -43,7 +43,13 @@ namespace xero
                 addModel(climber_) ;
 
                 oi_ = std::make_shared<OIModel>(*this) ;
-                addModel(oi_) ;        
+                addModel(oi_) ;      
+
+                front_ = std::make_shared<LineSensorModel>(*this, "front") ;  
+                addModel(front_) ;
+
+                back_ = std::make_shared<LineSensorModel>(*this, "back") ;  
+                addModel(back_) ;                
 
                 visualizer_ = false ;
             }

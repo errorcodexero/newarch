@@ -1,26 +1,28 @@
 TOPDIR=../..
 
 SOURCES = \
-	./cpp/DigitalInput.cpp\
-	./cpp/DIJoystickManager.cpp\
-	./cpp/DriverStation.cpp\
-	./cpp/Encoder.cpp\
-	./cpp/livewindow/LiveWindow.cpp\
-	./cpp/livewindow/LiveWindowSendable.cpp\
-	./cpp/PrintVisualizer.cpp\
-	./cpp/RobotSimBase.cpp\
-	./cpp/SampleRobot.cpp\
-	./cpp/ScreenVisualizer.cpp\
-	./cpp/SimulatedObject.cpp\
-	./cpp/smartdashboard/NamedSendable.cpp\
-	./cpp/smartdashboard/SendableBase.cpp\
-	./cpp/smartdashboard/SendableBuilderImpl.cpp\
-	./cpp/smartdashboard/SendableChooserBase.cpp\
-	./cpp/smartdashboard/SmartDashboard.cpp\
-	./cpp/Solenoid.cpp\
-	./cpp/SubsystemModel.cpp\
-	./cpp/Timer.cpp\
-	./cpp/VictorSP.cpp
+	cpp/DigitalInput.cpp\
+	cpp/DIJoystickManager.cpp\
+	cpp/DriverStation.cpp\
+	cpp/Encoder.cpp\
+	cpp/livewindow/LiveWindow.cpp\
+	cpp/livewindow/LiveWindowSendable.cpp\
+	cpp/PrintVisualizer.cpp\
+	cpp/RobotSimBase.cpp\
+	cpp/SimEventManager.cpp\
+	cpp/SampleRobot.cpp\
+	cpp/ScreenVisualizer.cpp\
+	cpp/SimulatedObject.cpp\
+	cpp/smartdashboard/NamedSendable.cpp\
+	cpp/smartdashboard/SendableBase.cpp\
+	cpp/smartdashboard/SendableBuilderImpl.cpp\
+	cpp/smartdashboard/SendableChooserBase.cpp\
+	cpp/smartdashboard/SmartDashboard.cpp\
+	cpp/Solenoid.cpp\
+	cpp/SubsystemModel.cpp\
+	cpp/Timer.cpp\
+	cpp/VictorSP.cpp\
+	cpp/Relay.cpp
 
 TARGET = wpilibsim
 

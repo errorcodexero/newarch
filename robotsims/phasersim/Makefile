@@ -8,7 +8,8 @@ SOURCES = \
 	CargoHolderModel.cpp\
 	HatchIntakeModel.cpp\
 	CargoIntakeModel.cpp\
-	ClimberModel.cpp
+	ClimberModel.cpp\
+	LineSensorModel.cpp
 
 TARGET=phasersim
 

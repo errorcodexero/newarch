@@ -1,0 +1,7 @@
+#
+# This file does a floor collect cargo
+#
+
+oi,floor_collect_cargo,2.0,1                       # Press the floor collect button
+oi,floor_collect_cargo,2.2,0                       # Release the floor collect button
+

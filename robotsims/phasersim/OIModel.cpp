@@ -1,6 +1,7 @@
 #include "OIModel.h"
 
 #include <frc/RobotSimBase.h>
+#include <ncurses.h>
 
 using namespace frc ;
 
@@ -14,14 +15,13 @@ namespace xero {
             OIModel::~OIModel() {               
             }
 
-            void OIModel::init() {
-                if (getSimulator().hasProperty("autovalue")) {
-                    std::vector<double> values ;
-                    const std::string &prop = getSimulator().getProperty("autovalue") ;
-                    if (parseDoubleList(prop, values)) {
-                        autovalue_ = values[0] ;
-                    }
-                }               
+            void OIModel::processEvent(const std::string &event, int value) {
+                if (event == "automode") {
+                    autovalue_ = static_cast<double>(value) / 100.0 ;
+                }
+                else if (event == "floor_collect") {
+                    setButton(2, 5, (value ? true : false)) ;
+                }
             }
 
             std::string OIModel::toString() {
@@ -40,19 +40,9 @@ namespace xero {
                 ds_ = ds ;
                 auto &stick = ds_->getStick(2) ;
                 //
-                // Axis used to detect the OI
-                //
-                stick.setAxisValue(9, 1.0) ;
-
-                //
                 // Axis used to control the automode switch
                 //
                 stick.setAxisValue(6, autovalue_) ;
-
-                //
-                // The climb diabled button is true to start, disabling climb
-                //
-                stick.setButtonValue(15, false) ;
             }     
 
             void OIModel::setButton(int which, int button, bool value) {

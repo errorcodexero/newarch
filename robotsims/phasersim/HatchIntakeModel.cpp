@@ -24,20 +24,6 @@ namespace xero {
             HatchIntakeModel::~HatchIntakeModel() {
             }
 
-            void HatchIntakeModel::init() {
-                if (getSimulator().hasProperty("hatch")) {
-                    std::vector<double> values ;
-                    const std::string &prop = getSimulator().getProperty("hatch") ;
-                    if (parseDoubleList(prop, values)) {
-                        for(double t : values) {
-                            ontimes_.push_back(t) ;
-                        }
-                    }
-                }
-
-                last_time_ = 0.0 ;
-            }
-
             void HatchIntakeModel::generateDisplayInformation(std::list<std::string> &lines) {
 
                 std::string line ;

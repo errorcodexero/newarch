@@ -24,14 +24,13 @@ SOURCES = \
 	src/main/cpp/climber/Climber.cpp\
 	src/main/cpp/climber/ClimberDeployAction.cpp\
 	src/main/cpp/gamepiecemanipulator/GamePieceManipulator.cpp\
-	src/main/cpp/gamepiecemanipulator/CompleteCargoPlace.cpp\
-	src/main/cpp/gamepiecemanipulator/CompleteHatchPlace.cpp\
 	src/main/cpp/gamepiecemanipulator/CompleteLSHatchCollect.cpp\
 	src/main/cpp/gamepiecemanipulator/FloorCollectCargoAction.cpp\
 	src/main/cpp/gamepiecemanipulator/FloorCollectHatchAction.cpp\
-	src/main/cpp/gamepiecemanipulator/ReadyCargoPlace.cpp\
-	src/main/cpp/gamepiecemanipulator/ReadyHatchPlace.cpp\
-	src/main/cpp/gamepiecemanipulator/ReadyLSHatchCollect.cpp
+	src/main/cpp/gamepiecemanipulator/ScoreCargo.cpp\
+	src/main/cpp/gamepiecemanipulator/ScoreHatch.cpp\
+	src/main/cpp/gamepiecemanipulator/ReadyAction.cpp\
+	src/main/cpp/gamepiecemanipulator/ResetIntakesAction.cpp
 
 TARGET = phaser
 

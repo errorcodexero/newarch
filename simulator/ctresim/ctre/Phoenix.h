@@ -5,4 +5,5 @@
 #include <ctre/phoenix/MotorControl/ControlMode.h>
 #include <ctre/phoenix/MotorControl/NeutralMode.h>
 #include <ctre/phoenix/MotorControl/SensorCollection.h>
+#include <ctre/phoenix/MotorControl/LimitSwitchType.h>
 

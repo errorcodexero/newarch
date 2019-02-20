@@ -14,16 +14,6 @@ namespace xero {
             OIModel::~OIModel() {               
             }
 
-            void OIModel::init() {
-                if (getSimulator().hasProperty("autovalue")) {
-                    std::vector<double> values ;
-                    const std::string &prop = getSimulator().getProperty("autovalue") ;
-                    if (parseDoubleList(prop, values)) {
-                        autovalue_ = values[0] ;
-                    }
-                }               
-            }
-
             std::string OIModel::toString() {
                 std::string result("OI: ") ;
                 return result ;

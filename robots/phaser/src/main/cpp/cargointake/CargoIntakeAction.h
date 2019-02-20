@@ -18,9 +18,9 @@ namespace xero {
         public:
             /// \brief Create a new SingleMotorSubsystemAction
             /// \param subsystem SingleMotor subsystem
-            CargoIntakeAction(CargoIntake &subsystem, bool is_deployed) : subsystem_(subsystem) {
+            CargoIntakeAction(CargoIntake &subsystem, bool deploy) : subsystem_(subsystem) {
                 is_done_ = false ;
-                is_deployed_ = is_deployed ;
+                deploy_ = deploy ;
             }
 
             ~CargoIntakeAction(){
@@ -36,7 +36,7 @@ namespace xero {
             /// The tank drive subsystem
             CargoIntake &subsystem_;
             bool is_done_;
-            bool is_deployed_;
+            bool deploy_;
         };
     }
 }

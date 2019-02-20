@@ -21,20 +21,6 @@ namespace xero {
             CargoHolderModel::~CargoHolderModel() {
             }
 
-            void CargoHolderModel::init() {
-                if (getSimulator().hasProperty("cargo")) {
-                    std::vector<double> values ;
-                    const std::string &prop = getSimulator().getProperty("cargo") ;
-                    if (parseDoubleList(prop, values)) {
-                        for(double t : values) {
-                            ontimes_.push_back(t) ;
-                        }
-                    }
-                }
-
-                last_time_ = 0.0 ;
-            }            
-
             void CargoHolderModel::generateDisplayInformation(std::list<std::string> &lines) {
                 std::string line ;
 

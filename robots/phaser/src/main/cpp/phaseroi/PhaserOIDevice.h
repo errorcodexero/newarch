@@ -57,6 +57,8 @@ namespace xero {
             void setupVisionDetectors() ;
             void setupLineFollowingDetectors() ;
 
+            void manuallyFinish(xero::base::ActionSequence &seq) ;
+
             xero::base::ActionPtr getFinishAction() ;
 
             std::string dirToString() ;
@@ -85,7 +87,7 @@ namespace xero {
             // \collect takes input from hatch_cargo_switch_ 
             // \when holders empty, height_level_one_ will set lift to loading station height
             size_t collect_floor_ ;
-            size_t collect_loading_station_ ; 
+            size_t go_ ; 
 
             // \ score takes input from gamepiece holders
             size_t score_ ;
@@ -101,6 +103,8 @@ namespace xero {
 
             xero::base::ActionPtr set_collect_hatch_floor_ ;
             xero::base::ActionPtr set_collect_cargo_floor_ ;
+
+            xero::base::ActionPtr reset_intakes_ ;
 
             xero::base::ActionPtr finish_collect_hatch_ ;
             xero::base::ActionPtr finish_collect_cargo_ ;

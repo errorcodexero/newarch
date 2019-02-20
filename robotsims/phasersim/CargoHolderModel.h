@@ -11,8 +11,6 @@ namespace xero {
 
                 virtual ~CargoHolderModel() ;
 
-                virtual void init() ;
-
                 /// \brief Convert the model to a string.
                 /// \returns details about the lifter's state
                 virtual std::string toString() ;

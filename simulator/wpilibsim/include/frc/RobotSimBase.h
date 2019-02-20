@@ -3,11 +3,14 @@
 #include "DriverStation.h"
 #include "Encoder.h"
 #include "Solenoid.h"
+#include "Relay.h"
 #include <ctre/phoenix/motorcontrol/can/TalonSRX.h>
 #include "VictorSP.h"
 #include "AHRS.h"
 #include "Timer.h"
+#include "Relay.h"
 #include "JoystickManager.h"
+#include "SimEventManager.h"
 #include <TankDriveModel.h>
 #include <SettingsParser.h>
 #include <list>
@@ -86,6 +89,10 @@ namespace xero {
                 return tank_drive_model_->getYPos() ;
             }           
 
+            void readEvents(const std::string &filename) {
+                events_.readEvents(filename) ;
+            }
+
         protected:
             void addModel(std::shared_ptr<SubsystemModel> model) {
                 models_.push_back(model) ;
@@ -108,6 +115,7 @@ namespace xero {
         private:
             void simLoop() ;
             void incrCurrentTime(double incr) ;
+            void dispatchEvent(const SimEvent &event) ;
 
         private:
             static RobotSimBase *theOne ;
@@ -139,6 +147,8 @@ namespace xero {
             frc::SampleRobot *robot_ ;
 
             JoystickManager *joysticks_ ;
+
+            SimEventManager events_ ;
         } ;
     }
 }

@@ -125,20 +125,6 @@ namespace xero {
             return result ;
         }
 
-        void TankDriveModel::init() {
-            if (getSimulator().hasProperty("pos")) {
-                std::vector<double> values ;
-                const std::string &prop = getSimulator().getProperty("pos") ;
-
-                if (parseDoubleList(prop, values) && values.size() == 2) {
-                    xpos_ = values[0] ;
-                    ypos_ = values[1] ;
-                    last_xpos_ = xpos_ ;
-                    last_ypos_ = ypos_ ;
-                }
-            }
-        }
-
         double TankDriveModel::capValue(double prev, double target, double maxchange) {
             double ret ;
 

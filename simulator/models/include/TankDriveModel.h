@@ -21,7 +21,6 @@ namespace xero
             virtual void run(double dt);
             virtual void inputChanged(SimulatedObject *obj);
             virtual std::string toString()  ;
-            virtual void init() ;           
 
             virtual void addDevice(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
             virtual void addDevice(frc::Encoder *encoder);

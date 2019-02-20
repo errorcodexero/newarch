@@ -5,6 +5,7 @@
 
 using namespace xero::base ;
 using namespace xero::misc ;
+using namespace ctre::phoenix::motorcontrol ;
 
 namespace xero {
     namespace base {
@@ -100,6 +101,8 @@ namespace xero {
                 talon->ConfigVoltageCompSaturation(12.0, 10) ;
                 talon->EnableVoltageCompensation(true) ;                
                 talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
+
+                // TODO - generalize this for the lifter
                 talon->ConfigForwardLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyOpen) ;
                                 
                 if (motors_.size() > 0)
