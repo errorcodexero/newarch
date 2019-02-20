@@ -3,7 +3,7 @@
 # This script should be installed in /home/pi.  It's executed at boot time + when camera service is started.
 # 5 second wait is added because camera may not be ready at boot time.
 
-exec >vision.log 2>&1
+#exec >vision.log 2>&1
 
 echo "Waiting 5 seconds..."
 sleep 5
