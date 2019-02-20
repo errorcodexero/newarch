@@ -14,6 +14,9 @@
 #include "gamepiecemanipulator/ScoreHatch.h"
 #include "gamepiecemanipulator/ReadyAction.h"
 
+#include "cargointake/CargoIntakeAction.h"
+#include "singlemotorsubsystem/SingleMotorPowerAction.h"
+
 #include "phasercameratracker/DriveByVisionAction.h"
 
 #include "lifter/LifterPowerAction.h"
@@ -76,7 +79,7 @@ namespace xero {
 
             // height
             button = settings.getInteger("oi:height_level_one") ;                           // OK
-            height_level_one_ = mapButton(button, OIButton::ButtonType::Level) ; 
+            height_level_one_ = mapButton(button, OIButton::ButtonType::LowToHigh) ; 
 
             button = settings.getInteger("oi:height_level_two") ;                           // OK
             height_level_two_ = mapButton(button, OIButton::ButtonType::Level) ; 
@@ -89,11 +92,10 @@ namespace xero {
             
             // collect
             button = settings.getInteger("oi:collect_floor") ;                              // OK
-            std::cout << "Collect floor " << button << std::endl ;
             collect_floor_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
             
             button = settings.getInteger("oi:collect_loading_station") ;                    // What is this for?
-            collect_loading_station_ = mapButton(button, OIButton::ButtonType::Level) ;
+            collect_loading_station_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
             // score
             button = settings.getInteger("oi:score") ;
@@ -112,10 +114,12 @@ namespace xero {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;  
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
 
+#ifdef NOTYET
             finish_collect_hatch_ = std::make_shared<CompleteLSHatchCollect>(*game) ;
             finish_place_hatch_  = std::make_shared<ScoreHatch>(*game) ;
             finish_place_cargo_  = std::make_shared<ScoreCargo>(*game) ;
-            set_collect_hatch_floor_  = std::make_shared<FloorCollectHatchAction>(*game) ;
+            set_collect_hatch_floor_  = std::make_shared<FloorCollectCargoAction>(*game) ;
+#endif
             set_collect_cargo_floor_  = std::make_shared<FloorCollectCargoAction>(*game) ;
         }
 
@@ -123,11 +127,13 @@ namespace xero {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;  
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
 
+            std::cout << "Entering Mode " << (int)mode_ << " new mode " << (int)mode << std::endl ;
+
             if ((mode_ == OperationMode::Manual || mode_ == OperationMode::SemiAuto) && mode == OperationMode::Auto)
             {
                 // Switch camera to tracking mode
                 auto act = std::make_shared<CameraChangeAction>(*camera, camera->getCameraIndex(), CameraTracker::CameraMode::TargetTracking) ;
-                camera->setAction(act) ;                
+                camera->setAction(act) ;         
             }
             else if (mode_ == OperationMode::Auto && (mode == OperationMode::Manual || mode == OperationMode::SemiAuto))
             {
@@ -135,6 +141,9 @@ namespace xero {
                 auto act = std::make_shared<CameraChangeAction>(*camera, camera->getCameraIndex(), CameraTracker::CameraMode::DriverViewing) ;
                 camera->setAction(act) ;
             }
+
+            mode_ = mode ;
+            std::cout << "Exiting Mode " << (int)mode_ << " new mode " << (int)mode << std::endl ;            
         }
 
         std::string PhaserOIDevice::dirToString() {
@@ -233,8 +242,9 @@ namespace xero {
 
         void PhaserOIDevice::getTrackingMode() {
             OperationMode mode = OperationMode::Auto ;
+            int value = getValue(tracking_manual_switch_) ;
 
-            switch(getValue(tracking_manual_switch_)) {
+            switch(value) {
             case 0:
                 mode = OperationMode::Auto ;
                 break ;
@@ -498,6 +508,27 @@ namespace xero {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
 
+            if (set_collect_cargo_floor_ == nullptr)
+                createActions() ;
+
+            int value = getValue(collect_floor_) ;
+            if (value) {
+                seq.pushSubActionPair(game, set_collect_cargo_floor_) ;
+            }   
+
+            if (getValue(collect_loading_station_)) {
+                auto intake = game->getCargoIntake() ;
+                ActionPtr act = std::make_shared<CargoIntakeAction>(*intake, false) ;
+                seq.pushSubActionPair(intake, act) ;
+            } 
+
+            if (getValue(height_level_one_)) {
+                auto holder = game->getCargoHolder() ;
+                ActionPtr act = std::make_shared<SingleMotorPowerAction>(*holder, 0.5) ;
+                seq.pushSubActionPair(holder, act) ;                
+            }
+
+#ifdef NOTYET
             getTrackingMode() ;
 
             if (getDirection()) {
@@ -523,6 +554,7 @@ namespace xero {
                         game->setAction(set_collect_hatch_floor_) ;                    
                 }
             }
+#endif
         }
     }
 }

@@ -2,6 +2,7 @@
 
 #include "Subsystem.h"
 #include <networktables/NetworkTable.h>
+#include <frc/Relay.h>
 
 namespace xero {
     namespace base {
@@ -65,6 +66,8 @@ namespace xero {
             double yaw_deg_ ;
             size_t camera_ ;
             CameraMode mode_ ;
+
+            std::shared_ptr<frc::Relay> relay_ ;
         } ;
     }
 }

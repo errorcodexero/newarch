@@ -3,6 +3,7 @@
 #include <lifter/LifterGoToHeightAction.h>
 #include <lifter/LifterHoldHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
+#include "turntable/TurntableHoldAngleAction.h"
 #include "cargointake/CargoIntakeAction.h"
 
 using namespace xero::base ;
@@ -23,6 +24,7 @@ namespace xero {
             set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
             hold_lifter_safe_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:safe_turn") ;            
             set_turntable_cargo_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:cargo:floor_collect") ;
+            hold_turntable_cargo_angle_ = std::make_shared<TurntableHoldAngleAction>(*turntable, "turntable:angle:cargo:floor_collect") ;            
             set_lifter_cargo_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;            
             hold_lifter_cargo_intake_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;
             deploy_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, true) ;
@@ -53,6 +55,7 @@ namespace xero {
 
         void FloorCollectCargoAction::run() {
             auto cargo_holder = getGamePiece().getCargoHolder() ;
+            auto cargo_intake = getGamePiece().getCargoIntake() ;   
 
             switch(state_) {
             case State::LifterGoToSafeHeight:
@@ -93,6 +96,9 @@ namespace xero {
                     auto lifter = getGamePiece().getLifter() ;
                     lifter->setAction(set_lifter_cargo_intake_height_) ;
 
+                    auto turntable = getGamePiece().getTurntable() ;
+                    turntable->setAction(hold_turntable_cargo_angle_) ;
+
                     state_ = State::LifterGoToCollectHeightDeployIntake ;                     
                 }
                 break ;
@@ -127,11 +133,13 @@ namespace xero {
                     // 5. The cargo holder has detected cargo.  Stop the motors on the intake
                     //    and the holder.
                     //
-                    auto cargo_intake = getGamePiece().getCargoIntake() ;
                     cargo_intake->setAction(stop_cargo_intake_motor_) ;
                     cargo_holder->setAction(stop_cargo_holder_motor_) ;
 
                     state_ = State::StopAllMotors ;
+                }
+                else if (cargo_intake->hasCargo()) {
+                    cargo_intake->setAction(retract_cargo_intake_) ;
                 }
                 break ;
 

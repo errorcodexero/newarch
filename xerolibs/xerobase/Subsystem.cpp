@@ -56,7 +56,8 @@ namespace xero {
             if (action == nullptr)
                 logger << "subsystem '" << getName() << "' was assigned NULL action" ;
             else
-                logger << "subsystem '" << getName() << "' was assigned action '" << action->toString() << "'" ;            
+                logger << "subsystem '" << getName() << "' was assigned action '" << action->toString() << "'" ;    
+                        
             logger.endMessage() ;            
 
             if (action_ != nullptr && !action_->isDone()) {

@@ -21,7 +21,7 @@ hw:tankdrive:rightencoder:1                                     2               
 hw:tankdrive:rightencoder:2                                     3               # Digital IO
 hw:tankdrive:shifter                                            0               # Solenoid
 hw:tankdrive:invert:motors:left                                true
-hw:tankdrive:invert:encoders:left                               true
+hw:tankdrive:invert:encoders:left                              true
 
 hw:hatchholder:arm:extend                                        6              # Solenoid
 hw:hatchholder:arm:retract                                       7              # Solenoid
@@ -58,8 +58,10 @@ hw:cargoholder:motor                                            7              #
 
 hw:cargointake:motor                                            9              # Victor SPX
 hw:cargointake:solenoid                                         1              # Solenoid
-
+hw:cargointake:sensor                                           22             # Sensor
 hw:climber:solenoid                                             3               # Solenoid
+
+
 
 ###################################################################
 #
@@ -78,13 +80,13 @@ tankdrive:width                                                 22
 tankdrive:scrub                                                 0.9
 
 tankdrive:follower:left:ka                                      0.0
-tankdrive:follower:left:kv                                      0.0065
-tankdrive:follower:left:kp                                      0.0
+tankdrive:follower:left:kv                                      0.00625   #0.00624
+tankdrive:follower:left:kp                                      0.005
 tankdrive:follower:left:kd                                      0.0
 
 tankdrive:follower:right:ka                                     0.0
-tankdrive:follower:right:kv                                     0.0065
-tankdrive:follower:right:kp                                     0.0
+tankdrive:follower:right:kv                                     0.00637    #0.00636
+tankdrive:follower:right:kp                                     0.005
 tankdrive:follower:right:kd                                     0.0
 
 tankdrive:follower:turn_correction                              0.0
@@ -210,7 +212,6 @@ lifter:height:cargo:floor_collect                               9.0
 lifter:height:offset:cargo_holder_center                        6.75
 lifter:height:offset:hatch_center                               5.5
 lifter:height:offset:hatch_hook_center                          8.6                               
-lifter:height:cargo:floor_collect                               14.46
 lifter:height:hatch:floor_collect                               10                  #TODO
 lifter:height:hatch:undock_intake                               22.00
 lifter:height:LS:hatch                                          40                  #TODO

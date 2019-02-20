@@ -34,6 +34,7 @@ namespace xero{
             xero::base::ActionPtr set_lifter_safe_height_ ; 
             xero::base::ActionPtr hold_lifter_safe_height_ ;            
             xero::base::ActionPtr set_turntable_cargo_angle_ ;
+            xero::base::ActionPtr hold_turntable_cargo_angle_ ;            
             xero::base::ActionPtr set_lifter_cargo_intake_height_ ;
             xero::base::ActionPtr hold_lifter_cargo_intake_height_ ;            
             xero::base::ActionPtr set_lifter_cargo_collected_height_ ;

@@ -2,9 +2,8 @@
 
 #include "singlemotorsubsystem/SingleMotorSubsystem.h"
 #include <frc/Solenoid.h>
+#include <frc/DigitalInput.h>
 #include <iostream>
-
-
 
 namespace xero {
     namespace phaser {
@@ -24,10 +23,15 @@ namespace xero {
                 return is_deployed_ ;
             }
 
+            bool hasCargo() const {
+                return has_cargo_ ;
+            }
+
         private:
             bool is_deployed_ ;
+            bool has_cargo_ ;
             std::shared_ptr<frc::Solenoid> solenoid_ ;
-
+            std::shared_ptr<frc::DigitalInput> sensor_ ;
          } ;
         
     }
