@@ -23,7 +23,7 @@ if [ $1 = "teleop" ]; then
     teleoptime=300.0
 fi
 
-echo gdb \
+gdb \
     --args makebuild/SIMULATOR/Debug/phaser/phaser \
     --simfile logs/SIM \
     --robotfile logs/ROBOT \

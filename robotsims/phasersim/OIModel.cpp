@@ -19,8 +19,8 @@ namespace xero {
                 if (event == "automode") {
                     autovalue_ = static_cast<double>(value) / 100.0 ;
                 }
-                else if (event == "floor_collect") {
-                    setButton(2, 5, (value ? true : false)) ;
+                else if (event == "floor_collect_cargo") {
+                    setButton(2, 4, (value ? true : false)) ;
                 }
             }
 

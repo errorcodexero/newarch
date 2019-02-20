@@ -28,13 +28,10 @@
           "--robotfile", "logs/ROBOT",
           "--test", "0.0",
           "--start", "0",
-          "--auto","60.0",
-          "--oper", "0.0",
+          "--auto","0.0",
+          "--oper", "60.0",
           "--simscreen",
-          "--simprop", "pos=64,162.0",
-          "--simprop","autovalue=0.1",
-          "--simprop","hatch=10",
-          "--simprop","cargo=11"
+          "--events","robots/phaser/sims/floor_collect_cargo"
         ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

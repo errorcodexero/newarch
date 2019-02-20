@@ -53,7 +53,7 @@ namespace xero {
 
                 size_t index= line.find('#') ;
                 if (index != std::string::npos)
-                    line = line.substr(index) ;
+                    line = line.substr(0, index - 1) ;
 
                 split(line, words) ;
 

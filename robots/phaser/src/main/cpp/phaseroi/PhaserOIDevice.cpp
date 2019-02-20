@@ -239,7 +239,7 @@ namespace xero {
                 mode = OperationMode::Auto ;
                 break ;
             case 1:
-                mode_ = OperationMode::SemiAuto ;
+                mode = OperationMode::SemiAuto ;
                 break ;            
             case 2:
                 mode = OperationMode::Manual ;
