@@ -15,7 +15,8 @@ namespace xero {
             table_ = ntinst.GetTable(NetworkTableName) ;
 
             relay_ = std::make_shared<frc::Relay>(0) ;
-            relay_->Set(frc::Relay::Value::kOff) ;               
+            relay_->Set(frc::Relay::Value::kOff) ;   
+            relay_state_ = frc::Relay::Value::kOff ;      
         }
 
         CameraTracker::~CameraTracker()
@@ -32,8 +33,9 @@ namespace xero {
 
             bool is_enabled = getRobot().IsEnabled() ;
 
+
             MessageLogger &logger = getRobot().getMessageLogger() ;
-            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CAMERA_TRACKER) ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CAMERA_TRACKER_VERBOSE) ;
             logger << "CameraTracker" ;
             logger << " is_valid " << is_valid_ ;
             logger << " enabled " << is_enabled ;
@@ -82,15 +84,49 @@ namespace xero {
             setLEDRing() ;
         }
 
+        std::string CameraTracker::toString(frc::Relay::Value v) {
+            std::string ret = "???" ;
+            switch(v) {
+                case frc::Relay::Value::kForward:
+                    ret = "forward" ;
+                    break ;
+                case frc::Relay::Value::kReverse:
+                    ret = "reverse" ;
+                    break ;
+                case frc::Relay::Value::kOn:
+                    ret = "on" ;
+                    break ;
+                case frc::Relay::Value::kOff:
+                    ret = "off" ;
+                    break ;
+            }
+
+            return ret ;
+        }
+
         void CameraTracker::setLEDRing() {
+            frc::Relay::Value newvalue = frc::Relay::Value::kOff ;
             if (mode_ == CameraMode::DriverViewing)
-                relay_->Set(frc::Relay::Value::kOff) ;
+                newvalue = frc::Relay::Value::kOff ;
             else {
                 if (camera_ == 0)
-                    relay_->Set(frc::Relay::Value::kReverse) ;
+                    newvalue = frc::Relay::Value::kReverse ;
                 else
-                    relay_->Set(frc::Relay::Value::kForward) ;
+                    newvalue = frc::Relay::Value::kForward ;
             }      
+
+            if (newvalue != relay_state_) {
+                relay_->Set(newvalue) ;
+
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CAMERA_TRACKER) ;
+                logger << "Camera: changing LED ring state" ;
+                logger << ", old state " << toString(relay_state_) ;
+                logger << ", new state " << toString(newvalue) ;
+                logger.endMessage() ;
+
+                relay_state_ = newvalue ;                
+            }
         }
     }
 }

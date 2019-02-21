@@ -18,11 +18,34 @@
 #    9           90
 #
 
-oi,automode,1.0,-100                                    # Automode switch set to zero
+#
+# Tracking Viewing Nothing switch
+#
+#  Value         Mode
+#  100           manual
+#  0             semi-auto
+#  -100          auto
+#
 
-oi,tracking_viewing_nothing_switch,1.0,0                # Set the auto/semi/manual switch (axis)
+#
+# Startup conditions
+#
+oi,automode,0.1,-100                                    # Automode switch set to zero
+oi,hatch_cargo_switch,0.1,0                             # Cargo
+oi,tracking_viewing_nothing_switch,0.1,-100             # Set the auto/semi/manual switch to manual
 
-oi,tracking_viewing_nothing_switch,3.0,50               # Set the auto/semi/manual switch (axis)
+oi,tracking_viewing_nothing_switch,3.0,-100             # Set the auto/semi/manual switch to manual
+oi,hatch_cargo_switch,4.0,0                             # Cargo
+oi,hatch_cargo_switch,5.0,1                             # Hatch
+oi,hatch_cargo_switch,6.0,0                             # Cargo
 
-oi,tracking_viewing_nothing_switch,6.0,100              # Set the auto/semi/manual switch (axis)
+oi,tracking_viewing_nothing_switch,7.0,0               # Set the auto/semi/manual switch to semi-auto
+oi,hatch_cargo_switch,8.0,0                             # Cargo
+oi,hatch_cargo_switch,9.0,1                             # Hatch
+oi,hatch_cargo_switch,10.0,0                             # Cargo
+
+oi,tracking_viewing_nothing_switch,11.0,100              # Set the auto/semi/manual switch auto
+oi,hatch_cargo_switch,12.0,0                             # Cargo
+oi,hatch_cargo_switch,13.0,1                             # Hatch
+oi,hatch_cargo_switch,14.0,0                             # Cargo
 

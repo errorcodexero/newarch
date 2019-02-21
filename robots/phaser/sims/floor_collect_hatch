@@ -18,10 +18,28 @@
 #    9           90
 #
 
-oi,automode,0.0,-100                    # Automode switch set to zero
-oi,hatch_cargo_switch,3.0,0             # Set the cargo/hatch switch to cargo
-oi,collect_floor,4.0,1                  # Press the floor collect button
-oi,collect_floor,4.2,0                  # Release the floor collect button
+#
+# Tracking Viewing Nothing switch
+#
+#  Value         Mode
+#  100           manual
+#  0             semi-auto
+#  -100          auto
+#
+
+#
+# Start up conditions
+#
+oi,automode,0.1,-100                                    # Automode switch set to zero
+oi,tracking_viewing_nothing_switch,0.1,100              # Set the auto/semi/manual switch to manual
+
+oi,hatch_cargo_switch,3.0,1                             # Set the cargo/hatch switch to cargo
+oi,collect_floor,4.0,1                                  # Press the floor collect button
+oi,collect_floor,4.2,0                                  # Release the floor collect button
+
+hatchintake,hatch,6.0,1                                 # Hatch detected in the hatch intack
+hatchholder,hatch,8.0,1                                 # Hatch detected in the hatch hatchholder
+
 
 
 

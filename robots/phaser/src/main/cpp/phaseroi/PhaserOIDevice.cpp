@@ -24,6 +24,7 @@
 #include "lifter/LifterGoToHeightAction.h"
 #include "LineFollowerTakeover.h"
 #include "VisionDetectTakeover.h"
+#include "phaserids.h"
 
 #include <Robot.h>
 #include <TeleopController.h>
@@ -41,13 +42,17 @@ namespace xero {
             height_ = ActionHeight::LevelOne ;
             dir_ = Direction::North ;
             mode_ = OperationMode::Invalid ;     
-            cargo_mode_  = true ;                 
         }
 
         PhaserOIDevice::~PhaserOIDevice() {
         }
         
         void PhaserOIDevice::initialize() {
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: initializing button/axis mapping" ;
+            log.endMessage() ;
+
             std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
             automode_ = mapAxisScale(6, mapping) ;   
             int button ;
@@ -103,6 +108,11 @@ namespace xero {
         }
 
         void PhaserOIDevice::createActions() {
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: creating static actions" ;
+            log.endMessage() ;
+
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;  
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
 
@@ -112,6 +122,27 @@ namespace xero {
             set_collect_hatch_floor_  = std::make_shared<FloorCollectHatchAction>(*game) ;
             set_collect_cargo_floor_  = std::make_shared<FloorCollectCargoAction>(*game) ;
             reset_intakes_ = std::make_shared<ResetIntakeAction>(*game) ;
+        }
+
+        std::string PhaserOIDevice::toString(OperationMode mode) {
+            std::string ret = "?????" ;
+
+            switch(mode) {
+                case OperationMode::Auto:
+                    ret = "Auto" ;
+                    break ;
+                case OperationMode::Invalid:
+                    ret = "Invalid" ;
+                    break ;
+                case OperationMode::Manual:
+                    ret = "Manual" ;
+                    break ;
+                case OperationMode::SemiAuto:
+                    ret = "SemiAuto" ;
+                    break ;
+            }
+
+            return ret ;
         }
 
         void PhaserOIDevice::updateMode(OperationMode mode) {
@@ -131,27 +162,17 @@ namespace xero {
                 camera->setAction(act) ;
             }
 
+            std::string newmode = toString(mode) ;
+
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: updating mode" ;
+            log << ", old mode " << toString(mode_) ;
+            log << ", new mode " << newmode ; ;
+            log.endMessage() ;            
+
             mode_ = mode ;
-            publishMode() ;
-        }
-
-        void PhaserOIDevice::publishMode() {
-            switch(mode_) {
-            case OperationMode::Auto:
-                frc::SmartDashboard::PutString("RobotMode", "Auto") ;            
-                break ;
-
-            case OperationMode::SemiAuto:
-                frc::SmartDashboard::PutString("RobotMode", "SemiAuto") ;                 
-                break ;     
-
-            case OperationMode::Manual:
-                frc::SmartDashboard::PutString("RobotMode", "Manual") ;               
-                break ;   
-
-            case OperationMode::Invalid:
-                break ;            
-            }            
+            frc::SmartDashboard::PutString("RobotMode", newmode) ;
         }
 
         std::string PhaserOIDevice::dirToString() {
@@ -228,23 +249,30 @@ namespace xero {
         bool PhaserOIDevice::getHeightButton() {
             bool ret = false ;
 
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+  
             if (getValue(height_level_one_)) {
                 height_ = ActionHeight::LevelOne ;
                 ret = true ;
+                log << "OI: Level 1" ;
             }
             else if (getValue(height_level_two_)) {
                 height_ = ActionHeight::LevelTwo ;
                 ret = true ;
+                log << "OI: Level 2" ;                
             }
             else if (getValue(height_level_three_)) {
                 height_ = ActionHeight::LevelThree ;
                 ret = true ;
+                log << "OI: Level 3" ;                
             }
             else if (getValue(height_cargo_bay_)) {
                 height_ = ActionHeight::CargoBay ;
                 ret = true ;
+                log << "OI: Cargo Height" ;                
             }
-
+            log.endMessage() ; 
             return ret ;
         }
 
@@ -273,7 +301,12 @@ namespace xero {
             auto lifter = game->getLifter() ;
             GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;     
             ActionPtr act, finish ;
-            std::string height ;             
+            std::string height ;        
+
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: generating height related actions" ;
+            log.endMessage() ;                    
 
             if (piece == GamePieceManipulator::GamePieceType::Hatch) {
                 height = "lifter:height:hatch:place:" ;
@@ -281,7 +314,7 @@ namespace xero {
                 height += heightToString() ;
             }
             else if (piece == GamePieceManipulator::GamePieceType::Cargo) {
-                std::string height = "lifter:height:cargo:place:" ;
+                height = "lifter:height:cargo:place:" ;
                 height += dirToString() + ":" ;
                 height += heightToString() ;
             }
@@ -329,7 +362,12 @@ namespace xero {
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;     
             ActionPtr act, finish ;
-            std::string height, angle ;             
+            std::string height, angle ;     
+
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: generating direction related actions" ;
+            log.endMessage() ;                     
 
             if (piece == GamePieceManipulator::GamePieceType::Hatch) {
                 height = "lifter:height:hatch:place:" ;
@@ -349,7 +387,7 @@ namespace xero {
                 //
                 if (getValue(hatch_cargo_switch_)) {
                     //
-                    // Loading hatch from the loading station
+                    // Loading cargo from the loading station
                     //
                     height = "lifter:height:cargo:collect:" ;
                     height += dirToString() ;
@@ -363,7 +401,7 @@ namespace xero {
                 }
                 else {
                     //
-                    // Loading cargo from the loading station
+                    // Loading hatch from the loading station
                     //
                     height = "lifter:height:hatch:collect:" ;
                     height += dirToString()  ;
@@ -408,6 +446,11 @@ namespace xero {
             bool vision = false ;
             bool linefollower = false ;
 
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: generating height button related actions" ;
+            log.endMessage() ;                  
+
             if (mode_ == OperationMode::Auto) {
                 vision = true ;
                 linefollower = true ;
@@ -438,7 +481,12 @@ namespace xero {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;   
             ActionPtr finish = getFinishAction() ;         
             auto ctrl = ph.getCurrentController() ;
-            std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;            
+            std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;        
+
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: enabling line follower detectors" ;
+            log.endMessage() ;                 
 
             if (dir_ == Direction::North && teleop != nullptr) {
                 teleop->addDetector(std::make_shared<LineFollowerTakeover>(finish, *ph.getPhaserRobotSubsystem()->getFrontLineSensor())) ;
@@ -452,6 +500,11 @@ namespace xero {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;   
             auto ctrl = ph.getCurrentController() ;
             std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ; 
+
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: enabling vision detectors" ;
+            log.endMessage() ;                 
 
             //
             // TODO: Assign a drive by vision action, as the finish action.  And remove the
@@ -504,6 +557,11 @@ namespace xero {
             auto ctrl = ph.getCurrentController() ;            
             std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ; 
 
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: manually finishing action" ;
+            log.endMessage() ;              
+
             teleop->clearDetectors() ;
             seq.pushSubActionPair(game, getFinishAction()) ;
         }
@@ -514,7 +572,7 @@ namespace xero {
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
             size_t camerano = 0 ;
 
-            GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;
+            GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;         
 
             if (piece == GamePieceManipulator::GamePieceType::Cargo) {
                 camerano = CargoCamera ;
@@ -532,6 +590,15 @@ namespace xero {
             }
 
             if (camera->getCameraIndex() != camerano) {
+                MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+                log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+                log << "OI: getCargoHatchMode - changing camera to " ;
+                if (camerano == HatchCamera)
+                    log << "hatch" ;
+                else
+                    log << "cargo" ;
+                log.endMessage() ;     
+                            
                 ActionPtr ptr = std::make_shared<CameraChangeAction>(*camera, camerano, camera->getCameraMode()) ;
                 seq.pushSubActionPair(camera, ptr) ;
             }
@@ -575,7 +642,6 @@ namespace xero {
                 manuallyFinish(seq) ;
             }
             else if (getValue(collect_floor_)) {
-                std::cout << "Collect floor" << std::endl ;
                 //
                 // Collect game pieces from the floor
                 //

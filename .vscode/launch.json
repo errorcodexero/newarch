@@ -30,7 +30,7 @@
           "--start", "0",
           "--auto","0.0",
           "--oper", "60.0",
-          "--events","robots/phaser/sims/floor_collect_cargo"
+          "--events","robots/phaser/sims/place_cargo_north_ship"
         ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

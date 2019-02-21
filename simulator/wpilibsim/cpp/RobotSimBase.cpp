@@ -4,6 +4,8 @@
 #include "JoystickManager.h"
 #include "DIJoystickManager.h"
 #include <MessageLogger.h>
+#include <Robot.h>
+#include <basegroups.h>
 #include <cassert>
 #include <chrono>
 #include <fstream>
@@ -256,11 +258,16 @@ namespace xero {
 
                 while (events_.size() > 0 && events_.getFirstEventTime() < now) {
                     const SimEvent &event = events_.getFirstEvent() ;
-                    if (filestrm_ != nullptr) {
-                        (*filestrm_) << "Processing Event: " << event.getModel() ;
-                        (*filestrm_) << " " << event.getName() << " " << event.getTime() ;
-                        (*filestrm_) << " " << event.getValue() << std::endl ;
+                    xero::base::Robot *xerorobot = dynamic_cast<xero::base::Robot *>(robot_) ;
+                    if (xerorobot != nullptr) {
+                        MessageLogger &logger = xerorobot->getMessageLogger() ;
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SIMULATOR) ;
+                        logger << "Processing Event: " << event.getModel() ;
+                        logger << " " << event.getName() << " " << event.getTime() ;
+                        logger << " " << event.getValue() ;
+                        logger.endMessage() ;
                     }
+                    
                     dispatchEvent(event) ;
                     events_.removeFirstEvent() ;
                 }

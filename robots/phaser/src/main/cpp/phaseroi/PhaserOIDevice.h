@@ -44,7 +44,6 @@ namespace xero {
             virtual void generateActions(xero::base::ActionSequence &seq) ;
 
         private:
-            void publishMode() ;
             void createActions() ;
             void initialize() ;
             void getTrackingMode() ;
@@ -66,6 +65,7 @@ namespace xero {
 
             std::string dirToString() ;
             std::string heightToString() ;
+            std::string toString(OperationMode mode) ;
 
         private:
             static const size_t HatchCamera = 0 ;
@@ -117,8 +117,6 @@ namespace xero {
             xero::base::ActionPtr finish_collect_cargo_ ;
             xero::base::ActionPtr finish_place_hatch_ ;
             xero::base::ActionPtr finish_place_cargo_ ;     
-
-            bool cargo_mode_ ;                               
         } ;
     }
 }

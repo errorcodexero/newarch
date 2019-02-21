@@ -52,8 +52,6 @@ namespace xero {
    
             auto hatchholder = getGamePiece().getHatchHolder() ;
             hatchholder->setAction(set_retract_arm_) ;
-            hatchholder->setAction(set_retract_hatch_finger_) ;
-
             state_ = State::LifterGoToSafeHeight ;
         }
 

@@ -24,6 +24,4 @@
 
 #define MSG_GROUP_HATCH_HOLDER                      (1ull << 38)
 
-
-
-
+#define MSG_GROUP_PHASER_OI                         (1ull << 39)

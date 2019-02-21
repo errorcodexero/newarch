@@ -19,7 +19,7 @@ namespace xero {
             target_ = target ;
             threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:threshold") ;
             ctrl_ = std::make_shared<PIDACtrl>(turntable.getRobot().getSettingsParser(), "turntable:follower:kv", 
-                                "turntable:follower:ka", "turntable:follower:kp", "turntable:follower:kd") ;
+                                "turntable:follower:ka", "turntable:follower:kp", "turntable:follower:kd", true) ;
 
             double maxv = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxv")  ;
             double maxa = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxa")  ;
@@ -31,7 +31,7 @@ namespace xero {
             target_ = getTurntable().getRobot().getSettingsParser().getDouble(name) ;
             threshold_ = getTurntable().getRobot().getSettingsParser().getDouble("turntable:threshold") ;
             ctrl_ = std::make_shared<PIDACtrl>(turntable.getRobot().getSettingsParser(), "turntable:follower:kv", 
-                                "turntable:follower:ka", "turntable:follower:kp", "turntable:follower:kd") ;  
+                                "turntable:follower:ka", "turntable:follower:kp", "turntable:follower:kd", true) ;  
                                   
             double maxv = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxv")  ;
             double maxa = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxa")  ;
@@ -171,7 +171,7 @@ namespace xero {
                 double tacc = profile_->getAccel(elapsed) ;
 
                 double error = xero::math::normalizeAngleDegrees(tdist - traveled) ;
-                double out = ctrl_->getOutput(tacc, tvel, tdist, traveled, error, dt) ;
+                double out = ctrl_->getOutput(tacc, tvel, tdist, traveled, dt) ;
                 turntable.setMotorPower(out) ;
 
                 turntable.getRobot().addPlotData(plotid_, index_, 0, elapsed) ;

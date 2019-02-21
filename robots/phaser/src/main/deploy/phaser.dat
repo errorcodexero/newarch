@@ -59,6 +59,7 @@ hw:cargoholder:motor                                            7              #
 hw:cargointake:motor                                            9              # Victor SPX
 hw:cargointake:solenoid                                         1              # Solenoid
 hw:cargointake:sensor                                           22             # Sensor
+
 hw:climber:solenoid                                             3               # Solenoid
 
 
@@ -142,7 +143,6 @@ turntable:hold:imax                                             0.0
 
 turntable:angle:cargo:floor_collect                             -90.0
 turntable:angle:hatch:floor_collect                             0.0
-turntable:angle:hatch:LS                                        0.0                 #TODO
 turntable:angle:score:hatch                                     90.0                #TODO
 turntable:angle:score:cargo                                     90.0                #TODO
 
@@ -214,11 +214,8 @@ lifter:height:offset:hatch_center                               5.5
 lifter:height:offset:hatch_hook_center                          8.6                               
 lifter:height:hatch:floor_collect                               8.5
 lifter:height:hatch:undock_intake                               22.00
-lifter:height:LS:hatch                                          24.5                  
-lifter:height:LS:hatch:shift_up                                 3                   
-lifter:height:score:hatch                                       40                  #TODO
-lifter:height:score:hatch:shift_down                            5                   #TODO
-lifter:height:score:cargo                                       5                   #TODO
+lifter:height:LS:hatch:shift_up                                 5
+lifter:height:score:hatch:shift_down                            -5
 
 lifter:height:cargo:collect:north                             37
 lifter:height:cargo:collect:south                             37
@@ -268,8 +265,6 @@ lifter:height:offset:hatch_hook_center                          8.6
 lifter:height:cargo:undock_height                               22.00
 lifter:height:cargo:collected                                   16.0
 
-lifter:height:LS_hatch                                          24.5
-
 cameratracker:distance_threshold                                0.0
 cameratracker:yaw_threshold                                     0.0
 cameratracker:rect_ratio_min                                    0.0
@@ -297,8 +292,8 @@ cargointake:power                                               -0.6
 cargoholder:power                                               0.3
 hatchintake:power                                               0.2
 
-score_cargo:power                                               -0.03               #TODO
-score_cargo:time                                                2                   #TODO           
+score_cargo:power                                               -0.3
+score_cargo:time                                                2
 
 oi:hatch_cargo_switch                                           11                  # Button
 oi:climb_lock_switch                                            15                  # Button

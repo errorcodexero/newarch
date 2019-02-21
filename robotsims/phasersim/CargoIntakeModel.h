@@ -11,6 +11,8 @@ namespace xero {
 
                 virtual ~CargoIntakeModel() ;
 
+                virtual void processEvent(const std::string &name, int value) ;
+
                 /// \brief Convert the model to a string.
                 /// \returns details about the lifter's state
                 virtual std::string toString() ;
@@ -26,6 +28,10 @@ namespace xero {
                 virtual void addDevice(ctre::phoenix::motorcontrol::can::VictorSPX *motor);      
                 virtual void addDevice(frc::Solenoid *solenoid) ;
 
+                /// \brief Add a digital input to the model.
+                /// \param input the digital input to add
+                virtual void addDevice(frc::DigitalInput *input) ;                
+
                 bool isDeployed() const {
                     return deploy_state_ ;
                 }
@@ -38,6 +44,7 @@ namespace xero {
 
             private:
                 frc::Solenoid *deploy_solenoid_ ;
+                frc::DigitalInput *cargo_sensor_ ;
                 ctre::phoenix::motorcontrol::can::VictorSPX * motor_ ;                
 
                 int deploy_channel_ ;
@@ -45,6 +52,9 @@ namespace xero {
 
                 double power_ ;
                 bool deploy_state_ ;
+
+                int cargo_sensor_channel_ ;
+                bool has_cargo_ ;
             } ;
         }
     }

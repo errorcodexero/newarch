@@ -26,6 +26,7 @@ SOURCES = \
 
 TARGET = wpilibsim
 
+NEED_XEROBASE=true
 NEED_WPIUTIL=true
 NEED_NETWORKTABLES = true
 NEED_NAVX = true

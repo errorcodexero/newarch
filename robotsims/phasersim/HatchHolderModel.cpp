@@ -15,14 +15,18 @@ namespace xero {
                 hatch_sensor_channel_ = simbase.getSettingsParser().getInteger("hw:hatchholder:sensor") ;
 
                 has_hatch_ = false ;
+                hatch_sensor_ = nullptr ;
             }
 
             HatchHolderModel::~HatchHolderModel() {
             }
 
             void HatchHolderModel::processEvent(const std::string &event, int value) {
-                if (event == "hatch")
+                if (event == "hatch") {
                     has_hatch_ = (value ? true : false) ;
+                    if (hatch_sensor_ != nullptr)
+                        hatch_sensor_->SimulatorSetValue(has_hatch_) ;
+                }
             }
 
             void HatchHolderModel::generateDisplayInformation(std::list<std::string> &lines) {
@@ -65,7 +69,7 @@ namespace xero {
                 if (input->GetChannel() == hatch_sensor_channel_) {
                     hatch_sensor_ = input ;
                     hatch_sensor_->addModel(this) ;
-                    hatch_sensor_->SimulatorSetValue(true) ;
+                    hatch_sensor_->SimulatorSetValue(has_hatch_) ;
                 }
             }
 

@@ -20,11 +20,11 @@ hw:tankdrive:shifter                 0                                  # Soleno
 # Hatch Holder
 hw:hatchholder:arm                   1                                  # Solenoid 1
 hw:hatchholder:finger                2                                  # Solenoid 2
-hw:hatchholder:sensor               22                                  # DIO 10
+hw:hatchholder:sensor               21                                  # DIO 10
 
 # Hatch Intake
 hw:hatchintake:motor                11                                  # VictorSPX 11
-hw:hatchintake:sensor               21                                  # DIO 12
+hw:hatchintake:sensor               23                                  # DIO 12
 hw:hatchintake:deploy                3                                  # Solenoid 3
 
 # Lifter
@@ -53,6 +53,7 @@ hw:cargoholder:sensor               20                                  # DIO 11
 # Cargo Intake
 hw:cargointake:motor                12                                  # VictorSPX 12
 hw:cargointake:deploy                5                                  # Solenoid 5
+hw:cargointake:sensor               22                                  # Sensor
 
 # Climber
 hw:climber:deploy                    6                                  # Solenoid 6

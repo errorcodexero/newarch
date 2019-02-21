@@ -68,6 +68,7 @@ namespace xero {
 
         private:
             void setLEDRing() ;
+            std::string toString(frc::Relay::Value v) ;
 
         private:
             constexpr static const char *NetworkTableName = "TargetTracking" ;
@@ -84,6 +85,7 @@ namespace xero {
             double yaw_deg_ ;
             size_t camera_ ;
             CameraMode mode_ ;
+            frc::Relay::Value relay_state_ ;
 
             std::shared_ptr<frc::Relay> relay_ ;
         } ;

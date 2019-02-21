@@ -81,6 +81,8 @@ namespace xero {
             double min_height_ ;
             double power_ ;
 
+            double expected_height_ ;
+
             uint64_t msg_id_ ;
         } ;
     }

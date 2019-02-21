@@ -85,10 +85,12 @@ void MessageLogger::startMessage(const MessageType &type, uint64_t sub)
 void MessageLogger::endMessage()
 {
     in_message_ = false;
-    if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
-    {
-        for (auto dest_p : destinations_)
-            dest_p->displayMessage(current_type_, current_subsystem_, current_message_);
+    if (current_message_.length() > 0) {
+        if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
+        {
+            for (auto dest_p : destinations_)
+                dest_p->displayMessage(current_type_, current_subsystem_, current_message_);
+        }
     }
     current_message_ = "";
 }

@@ -19,8 +19,6 @@ namespace xero {
         private:
             enum class State {
                 Idle,
-                TurntableGoToAngle,
-                LifterGoToCollectHeight,
                 ExtendArm,
                 LifterShiftUpHeight,
                 DeployFinger,
@@ -31,11 +29,7 @@ namespace xero {
         private:
             State state_ ;
             
-            xero::base::ActionPtr set_lifter_collect_height_ ;
-            xero::base::ActionPtr hold_lifter_collect_height_ ;
-            xero::base::ActionPtr set_turntable_hatch_angle_ ;
             xero::base::ActionPtr set_lifter_shift_up_height_ ;
-
             xero::base::ActionPtr set_extend_arm_ ;
             xero::base::ActionPtr set_retract_arm_ ;
             xero::base::ActionPtr set_retract_hatch_finger_ ;

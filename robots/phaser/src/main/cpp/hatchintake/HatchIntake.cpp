@@ -36,8 +36,7 @@ namespace xero {
 
         void HatchIntake::computeState() {
             has_hatch_ = sensor_->Get() ;
-
-
+            
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_INTAKE) ;
             logger << "HatchIntake:" ;

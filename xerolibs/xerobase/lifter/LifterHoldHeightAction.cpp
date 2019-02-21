@@ -13,14 +13,19 @@ namespace xero {
             "tpos", "apos", "out"
         } ;
 
-        LifterHoldHeightAction::LifterHoldHeightAction(Lifter &lifter, double target) : LifterAction(lifter) {
+        LifterHoldHeightAction::LifterHoldHeightAction(Lifter &lifter, double target, bool relative) : LifterAction(lifter) {
+            relative_ = relative ;
+            offset_ = target ;
             target_ = target ;
             threshold_ = getLifter().getRobot().getSettingsParser().getDouble("lifter:threshold") ;
             pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold") ;            
         }
 
-        LifterHoldHeightAction::LifterHoldHeightAction(Lifter &lifter, const std::string &name) : LifterAction(lifter) {
+        LifterHoldHeightAction::LifterHoldHeightAction(Lifter &lifter, const std::string &name, bool relative) : LifterAction(lifter) {
+            relative_ = relative ;            
             target_ = getLifter().getRobot().getSettingsParser().getDouble(name) ;
+            offset_ =target_ ;
+
             threshold_ = getLifter().getRobot().getSettingsParser().getDouble("lifter:threshold") ;
             pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold") ;
         }
@@ -29,7 +34,11 @@ namespace xero {
         }
 
         void LifterHoldHeightAction::start() {
-            Lifter &lifter = getLifter() ;            
+            Lifter &lifter = getLifter() ;    
+
+            if (relative_)
+                target_ = lifter.expected_height_ + offset_ ;
+
             if (!lifter.isCalibrated()) {
                 MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::error) ;
@@ -43,6 +52,8 @@ namespace xero {
                 plotid_ = getLifter().getRobot().startPlot("LifterHoldHeight", plot_columns_) ;
                 index_ = 0 ;                
             } 
+
+            lifter.expected_height_ = target_ ;            
         }
 
         void LifterHoldHeightAction::run() {
@@ -71,6 +82,8 @@ namespace xero {
 
         std::string LifterHoldHeightAction::toString() {
             std::string result = "LifterHoldHeight " + std::to_string(target_) ;
+            if (relative_)
+                result += " RELATIVE" ;            
             return result ;
         }
     }

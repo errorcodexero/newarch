@@ -13,8 +13,10 @@ namespace xero {
             "tpos", "apos", "tvel", "avel", "out"
         } ;
 
-        LifterGoToHeightAction::LifterGoToHeightAction(Lifter &lifter, double target) : LifterAction(lifter) {
+        LifterGoToHeightAction::LifterGoToHeightAction(Lifter &lifter, double target, bool relative) : LifterAction(lifter) {
+            relative_ = relative ;
             target_ = target ;
+            offset_ = target ;
             threshold_ = getLifter().getRobot().getSettingsParser().getDouble("lifter:threshold") ;
 
 
@@ -24,8 +26,11 @@ namespace xero {
             profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
         }
 
-        LifterGoToHeightAction::LifterGoToHeightAction(Lifter &lifter, const std::string &name) : LifterAction(lifter) {
+        LifterGoToHeightAction::LifterGoToHeightAction(Lifter &lifter, const std::string &name, bool relative) : LifterAction(lifter) {
+            relative_ = relative ;            
             target_ = getLifter().getRobot().getSettingsParser().getDouble(name) ;
+            offset_ = target_ ;
+
             threshold_ = getLifter().getRobot().getSettingsParser().getDouble("lifter:threshold") ;
   
                                 
@@ -40,6 +45,9 @@ namespace xero {
 
         void LifterGoToHeightAction::start() {
             Lifter &lifter = getLifter() ;
+
+            if (relative_)
+                target_ = lifter.expected_height_ + offset_ ;
 
             if (!lifter.isCalibrated()) {
                 MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
@@ -85,6 +93,8 @@ namespace xero {
                     logger.endMessage() ;                    
                 }
             }
+
+            lifter.expected_height_ = target_ ;
         }
 
         void LifterGoToHeightAction::run() {
@@ -168,6 +178,8 @@ namespace xero {
 
         std::string LifterGoToHeightAction::toString() {
             std::string result = "LifterGoToHeight " + std::to_string(target_) ;
+            if (relative_)
+                result += " RELATIVE" ;
             return result ;
         }
     }

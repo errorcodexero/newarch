@@ -12,6 +12,7 @@ namespace xero {
 
                 motor_channel_ = simbase.getSettingsParser().getInteger("hw:cargointake:motor") ;
                 deploy_channel_ = simbase.getSettingsParser().getInteger("hw:cargointake:deploy") ;
+                cargo_sensor_channel_ = simbase.getSettingsParser().getInteger("hw:cargointake:sensor") ;                
 
                 deploy_state_ = false ;
                 power_ = 0.0 ;
@@ -19,6 +20,14 @@ namespace xero {
 
             CargoIntakeModel::~CargoIntakeModel() {
             }
+
+            void CargoIntakeModel::processEvent(const std::string &name, int value) {
+                if (name == "cargo") {
+                    has_cargo_ = (value ? true : false) ;
+                    if (cargo_sensor_ != nullptr)
+                        cargo_sensor_->SimulatorSetValue(has_cargo_) ;
+                }
+            }            
 
             void CargoIntakeModel::generateDisplayInformation(std::list<std::string> &lines) {
 
@@ -62,6 +71,14 @@ namespace xero {
                     deploy_solenoid_ = sol ;
                     deploy_solenoid_->addModel(this) ;
                     deploy_state_ = deploy_solenoid_->Get() ;                    
+                }
+            }
+
+            void CargoIntakeModel::addDevice(frc::DigitalInput *input)  {
+                if (input->GetChannel() == cargo_sensor_channel_) {
+                    cargo_sensor_ = input ;
+                    cargo_sensor_->addModel(this) ;
+                    cargo_sensor_->SimulatorSetValue(has_cargo_) ;
                 }
             }
         }

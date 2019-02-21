@@ -9,8 +9,8 @@ namespace xero {
     namespace base {
         class LifterGoToHeightAction : public LifterAction {
         public:
-            LifterGoToHeightAction(Lifter &lifter, double target) ;
-            LifterGoToHeightAction(Lifter &lifter, const std::string &name) ;
+            LifterGoToHeightAction(Lifter &lifter, double target, bool relative = false) ;
+            LifterGoToHeightAction(Lifter &lifter, const std::string &name, bool relative = false) ;
             virtual ~LifterGoToHeightAction() ;
 
             virtual void start() ;
@@ -23,6 +23,7 @@ namespace xero {
             bool is_done_ ;
             double target_ ;
             double threshold_ ;
+            double offset_ ;
             std::shared_ptr<xero::misc::PIDACtrl> ctrl_ ;
             std::shared_ptr<xero::misc::TrapezoidalProfile> profile_ ;
             double start_time_ ;
@@ -30,7 +31,8 @@ namespace xero {
             size_t index_ ;
 
             int plotid_ ;
-            static std::list<std::string> plot_columns_ ;                
+            static std::list<std::string> plot_columns_ ; 
+            bool relative_ ;               
         } ;
     }
 }

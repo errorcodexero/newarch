@@ -8,8 +8,8 @@ namespace xero {
     namespace base {
         class LifterHoldHeightAction : public LifterAction {
         public:
-            LifterHoldHeightAction(Lifter &lifter, double target) ;
-            LifterHoldHeightAction(Lifter &lifter, const std::string &name) ;
+            LifterHoldHeightAction(Lifter &lifter, double target, bool relative = false) ;
+            LifterHoldHeightAction(Lifter &lifter, const std::string &name, bool relative = false) ;
             virtual ~LifterHoldHeightAction() ;
 
             virtual void start() ;
@@ -30,6 +30,8 @@ namespace xero {
             int plotid_ ;
             static std::list<std::string> plot_columns_ ;
             size_t index_ ;
+            bool relative_;
+            double offset_ ;
         } ;
     }
 }
