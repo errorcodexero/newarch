@@ -121,7 +121,7 @@ linefollow:adjust                                               .35
 turntable:safe_lifter_height                                    17
 turntable:keepout:minimum                                       130
 turntable:keepout:maximum                                       160
-turntable:degrees_per_tick                                      0.5357143
+turntable:degrees_per_tick                                      0.608108108
 turntable:maxa                                                  150
 turntable:maxd                                                  -150
 turntable:maxv                                                  200

@@ -21,5 +21,11 @@ namespace xero{
             last_error_ = current_error ;
             return output ;
         }
+
+        double PIDACtrl::getOutput(double a, double v, double dtarget, double dactual, double current_error, double dt){
+            double output = v * kv_ + a * ka_ + last_error_ * kp_ + ((current_error - last_error_) / dt -v) * kd_ ;
+            last_error_ = current_error ;
+            return output ;
+        }        
     }
 }

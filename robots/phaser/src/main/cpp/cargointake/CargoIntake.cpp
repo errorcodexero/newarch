@@ -2,8 +2,11 @@
 #include "CargoIntakeAction.h"
 #include "Robot.h"
 #include "CargoIntakeAction.h"
+#include "phaserids.h"
+#include <Robot.h>
 
 using namespace xero::base ;
+using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
@@ -34,6 +37,12 @@ namespace xero {
         void CargoIntake::computeState() {
             is_deployed_ = solenoid_->Get() ;
             has_cargo_ = !sensor_->Get() ;
+
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CARGO_INTAKE) ;
+            logger << "CargoIntake:" ;
+            logger << " HasCargo " << has_cargo_ ;
+            logger.endMessage() ;             
         }
     }
 }

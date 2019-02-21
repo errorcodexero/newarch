@@ -59,7 +59,7 @@ namespace xero {
             button = settings.getInteger("oi:tracking_viewing_nothing_switch") ;
             tracking_manual_switch_ = mapAxisSwitch(button, 3) ;
             
-            button = settings.getInteger("oi:climb_lock_switch") ;                              // TODO
+            button = settings.getInteger("oi:climb_lock_switch") ;
             climb_lock_switch_ = mapButton(button, OIButton::ButtonType::Level) ;
             
             button = settings.getInteger("oi:compass_north") ;
@@ -545,7 +545,6 @@ namespace xero {
                 createActions() ;            
 
             getTrackingMode() ;
-
             getCargoHatchMode(seq) ;
 
             if (getValue(extra_button_)) {
@@ -576,6 +575,7 @@ namespace xero {
                 manuallyFinish(seq) ;
             }
             else if (getValue(collect_floor_)) {
+                std::cout << "Collect floor" << std::endl ;
                 //
                 // Collect game pieces from the floor
                 //

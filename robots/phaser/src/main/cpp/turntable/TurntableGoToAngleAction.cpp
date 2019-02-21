@@ -2,6 +2,7 @@
 #include "Turntable.h"
 #include <Robot.h>
 #include <MessageLogger.h>
+#include <xeromath.h>
 #include <cmath>
 
 using namespace xero::misc ;
@@ -11,7 +12,7 @@ namespace xero {
     namespace phaser {
         std::list<std::string> TurntableGoToAngleAction::plot_columns_ = {
             "time", 
-            "tangle", "aangle", "tvel", "avel", "out"
+            "tangle", "aangle", "tvel", "avel", "out", "error"
         } ;
 
         TurntableGoToAngleAction::TurntableGoToAngleAction(Turntable &turntable, double target) : TurntableAction(turntable) {
@@ -169,7 +170,8 @@ namespace xero {
                 double tvel = profile_->getVelocity(elapsed) ;
                 double tacc = profile_->getAccel(elapsed) ;
 
-                double out = ctrl_->getOutput(tacc, tvel, tdist, traveled, dt) ;
+                double error = xero::math::normalizeAngleDegrees(tdist - traveled) ;
+                double out = ctrl_->getOutput(tacc, tvel, tdist, traveled, error, dt) ;
                 turntable.setMotorPower(out) ;
 
                 turntable.getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
@@ -178,6 +180,7 @@ namespace xero {
                 turntable.getRobot().addPlotData(plotid_, index_, 3, tvel) ;
                 turntable.getRobot().addPlotData(plotid_, index_, 4, speed) ;
                 turntable.getRobot().addPlotData(plotid_, index_, 5, out) ;
+                turntable.getRobot().addPlotData(plotid_, index_, 6, error) ;
 
                 index_++ ;
             }

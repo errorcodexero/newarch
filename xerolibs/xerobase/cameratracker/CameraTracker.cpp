@@ -54,8 +54,6 @@ namespace xero {
 
         void CameraTracker::setCameraIndex(size_t which)
         {
-            which = 1 - which ;
-            
             if (which != camera_)
             {
                 camera_ = which ;

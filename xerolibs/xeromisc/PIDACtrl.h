@@ -34,6 +34,7 @@ namespace xero {
             /// \param dactual the actual distance
             /// \param dt the delta time since the last time this was called
             double getOutput(double a, double v, double dtarget, double dactual, double dt);
+            double getOutput(double a, double v, double dtarget, double dactual, double error, double dt);
 
         private:
             double kv_;

@@ -49,7 +49,7 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = createTestOne() ;
+                mode = testTurntable() ;
                 break ;
 
             case 1:
@@ -369,9 +369,10 @@ namespace xero {
             act = std::make_shared<LifterCalibrateAction>(*lifter) ;
             mode->pushSubActionPair(lifter, act) ;
 
-            act = std::make_shared<LifterGoToHeightAction>(*lifter, 45.0) ;
+            act = std::make_shared<LifterGoToHeightAction>(*lifter, 180.0) ;
             mode->pushSubActionPair(lifter, act) ;
 
+#ifdef NOTYET
             act = std::make_shared<LifterHoldHeightAction>(*lifter, 45.0) ;
             mode->pushSubActionPair(lifter, act, false) ;   
 
@@ -386,7 +387,7 @@ namespace xero {
 
             act = std::make_shared<DelayAction>(5.0) ;
             mode->pushAction(act) ;              
-
+#endif
             return mode ;                
         }
 
@@ -425,9 +426,10 @@ namespace xero {
             act = std::make_shared<TurntableCalibrateAction>(*turntable) ;
             mode->pushSubActionPair(turntable, act) ;
 
-            act = std::make_shared<TurntableGoToAngleAction>(*turntable, 90) ;
+            act = std::make_shared<TurntableGoToAngleAction>(*turntable, 180) ;
             mode->pushSubActionPair(turntable, act) ;
-
+            
+#ifdef NOTYET
             act = std::make_shared<DelayAction>(5.0) ;
             mode->pushAction(act) ;
 
@@ -456,7 +458,8 @@ namespace xero {
             mode->pushAction(act) ;
 
             act = std::make_shared<TurntableGoToAngleAction>(*turntable, 0) ;
-            mode->pushSubActionPair(turntable, act) ;            
+            mode->pushSubActionPair(turntable, act) ; 
+#endif           
 
             return mode ;             
         }
