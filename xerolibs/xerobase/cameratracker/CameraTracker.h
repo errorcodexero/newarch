@@ -46,10 +46,28 @@ namespace xero {
                 return yaw_deg_ ;
             }
 
+            static std::string toString(CameraMode mode) {
+                std::string ret = "????" ;
+
+                switch(mode) {
+                    case CameraMode::DriverViewing:
+                        ret = "DriverViewing" ;
+                        break ;
+                    case CameraMode::TargetTracking:
+                        ret = "TargetTracking" ;
+                        break ;
+                }
+
+                return ret ;
+            }
+
         protected:
             std::shared_ptr<nt::NetworkTable> getNetworkTable() {
                 return table_ ;
             }
+
+        private:
+            void setLEDRing() ;
 
         private:
             constexpr static const char *NetworkTableName = "TargetTracking" ;

@@ -60,6 +60,9 @@ namespace xero {
                     state_ = State::Idle ;
                 }
                 break ;
+
+            case State::Idle:
+                break ;
             }
         }
         

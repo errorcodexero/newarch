@@ -301,7 +301,6 @@ score_cargo:power                                               -0.03           
 score_cargo:time                                                2                   #TODO           
 
 oi:hatch_cargo_switch                                           11                  # Button
-oi:tracking_viewing_nothing_switch                              3                   # Axis
 oi:climb_lock_switch                                            15                  # Button
 oi:compass_north                                                13                  # Button
 oi:compass_south                                                14                  # Button
@@ -316,3 +315,6 @@ oi:go                                                           10              
 oi:score                                                        6                   # Button
 oi:climb                                                        8                   # Button
 oi:extra_button                                                 7                   # Button
+
+oi:automode                                                     6                   # Axis
+oi:tracking_viewing_nothing_switch                              3                   # Axis

@@ -463,32 +463,7 @@ namespace xero {
 
 
         AutoModePtr PhaserAutoModeController::testHatchDeposit() {
-            std::string name = "Test Deposit Hatch" ;
-            std::string desc = "Test the deposit hatch sequence" ;
-            AutoModePtr mode = std::make_shared<AutoMode>(getRobot().getMessageLogger(), name, desc) ;
-            ActionPtr childact, act, dispatch ;
-            TermActionPtr termact ;
-
-            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
-            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto db = phaserrobot->getTankDrive() ;
-            auto ls = phaserrobot->getFrontLineSensor() ;
-            auto cm = phaserrobot->getCameraTracker() ;
-
-            childact = std::make_shared<TankDriveFollowPathAction>(*db, "CurveLeft") ;
-            dispatch = std::make_shared<DispatchAction>(db, childact) ;
-            termact = std::make_shared<TerminateAction>(dispatch, getRobot().getMessageLogger()) ;
-            termact->addTerminator(cm) ;
-            mode->pushAction(termact) ;
-
-            childact = std::make_shared<DriveByVisionAction>(*db, *cm) ;
-            dispatch = std::make_shared<DispatchAction>(db, childact) ;    
-
-            mode->pushAction(act) ;
-
-            act = std::make_shared<LineFollowAction>(*ls, *db, "linefollow:power", "linefollow:distance", "linefollow:adjust") ;
-            mode->pushSubActionPair(db, act) ;            
-            return mode ;         
+            return nullptr ;
         }        
 
         AutoModePtr PhaserAutoModeController::testVision() {
@@ -615,23 +590,5 @@ namespace xero {
 
             return seq ;                 
         }        
-
-        xero::base::ActionPtr PhaserAutoModeController::driveAndPosition(const std::string &path, double height, double angle) {
-            auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
-            auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto db = phaserrobot->getTankDrive() ;               
-            auto par = std::make_shared<ParallelAction>() ;
-            std::shared_ptr<DispatchAction> dact ;
-            ActionPtr act ;
-
-            par->addAction(turntableGoToAngle(angle)) ;
-            par->addAction(lifterGoToHeight(height)) ;
-
-            act = std::make_shared<TankDriveFollowPathAction>(*db, "HabCenterCargoFrontLeft") ;
-            dact = std::make_shared<DispatchAction>(db, act) ;
-            par->addAction(dact) ;
-
-            return par ;
-        }
     }
 }

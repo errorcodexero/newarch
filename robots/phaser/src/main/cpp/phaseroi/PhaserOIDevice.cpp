@@ -28,6 +28,7 @@
 #include <Robot.h>
 #include <TeleopController.h>
 #include <SettingsParser.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -39,7 +40,8 @@ namespace xero {
 
             height_ = ActionHeight::LevelOne ;
             dir_ = Direction::North ;
-            mode_ = OperationMode::SemiAuto ;
+            mode_ = OperationMode::Invalid ;     
+            cargo_mode_  = true ;                 
         }
 
         PhaserOIDevice::~PhaserOIDevice() {
@@ -52,7 +54,7 @@ namespace xero {
             SettingsParser &settings = getSubsystem().getRobot().getSettingsParser() ;
             
             button = settings.getInteger("oi:hatch_cargo_switch") ;
-            hatch_cargo_switch_ = mapButton(button, OIButton::ButtonType::Level) ;
+            hatch_cargo_switch_ = mapButton(button, OIButton::ButtonType::LevelInv) ;
 
             button = settings.getInteger("oi:tracking_viewing_nothing_switch") ;
             tracking_manual_switch_ = mapAxisSwitch(button, 3) ;
@@ -76,13 +78,13 @@ namespace xero {
             height_level_one_ = mapButton(button, OIButton::ButtonType::LowToHigh) ; 
 
             button = settings.getInteger("oi:height_level_two") ;
-            height_level_two_ = mapButton(button, OIButton::ButtonType::Level) ; 
+            height_level_two_ = mapButton(button, OIButton::ButtonType::LowToHigh) ; 
 
             button = settings.getInteger("oi:height_level_three") ;
-            height_level_three_ = mapButton(button, OIButton::ButtonType::Level) ;
+            height_level_three_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
             
             button = settings.getInteger("oi:height_cargo_bay") ;
-            height_cargo_bay_ = mapButton(button, OIButton::ButtonType::Level) ;
+            height_cargo_bay_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
             
             button = settings.getInteger("oi:collect_floor") ;
             collect_floor_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
@@ -91,12 +93,11 @@ namespace xero {
             go_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
             button = settings.getInteger("oi:score") ;
-            score_ = mapButton(button, OIButton::ButtonType::Level) ;
+            score_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
-            button= settings.getInteger("oi:climb") ;                                           // TODO
-            climb_ = mapButton(button, OIButton::ButtonType::Level) ;
+            button= settings.getInteger("oi:climb") ;
+            climb_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
-            // extra
             button= settings.getInteger("oi:extra_button") ;
             extra_button_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
         }
@@ -117,8 +118,6 @@ namespace xero {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;  
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
 
-            // std::cout << "Entering Mode " << (int)mode_ << " new mode " << (int)mode << std::endl ;
-
             if ((mode_ == OperationMode::Manual || mode_ == OperationMode::SemiAuto) && mode == OperationMode::Auto)
             {
                 // Switch camera to tracking mode
@@ -133,7 +132,26 @@ namespace xero {
             }
 
             mode_ = mode ;
-            // std::cout << "Exiting Mode " << (int)mode_ << " new mode " << (int)mode << std::endl ;            
+            publishMode() ;
+        }
+
+        void PhaserOIDevice::publishMode() {
+            switch(mode_) {
+            case OperationMode::Auto:
+                frc::SmartDashboard::PutString("RobotMode", "Auto") ;            
+                break ;
+
+            case OperationMode::SemiAuto:
+                frc::SmartDashboard::PutString("RobotMode", "SemiAuto") ;                 
+                break ;     
+
+            case OperationMode::Manual:
+                frc::SmartDashboard::PutString("RobotMode", "Manual") ;               
+                break ;   
+
+            case OperationMode::Invalid:
+                break ;            
+            }            
         }
 
         std::string PhaserOIDevice::dirToString() {
@@ -340,6 +358,8 @@ namespace xero {
                     angle += dirToString() ;
 
                     piece = GamePieceManipulator::GamePieceType::Cargo ;
+
+                    std::cout << "Cargo Hatch Switch is cargo" << std::endl ;
                 }
                 else {
                     //
@@ -351,7 +371,9 @@ namespace xero {
                     angle = "turntable:angle:hatch:collect:" ;
                     angle += dirToString() ;  
 
-                    piece = GamePieceManipulator::GamePieceType::Hatch ;                                      
+                    piece = GamePieceManipulator::GamePieceType::Hatch ;    
+
+                    std::cout << "Cargo Hatch Switch is hatch" << std::endl ;                                                      
                 }
             }  
 
@@ -359,23 +381,6 @@ namespace xero {
             if (parser.isDefined(height) && parser.isDefined(angle)) {
                 act = std::make_shared<ReadyAction>(*game, height, angle) ;
                 seq.pushSubActionPair(game, act, false) ;
-
-                auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
-                //
-                // Turn on the right camera based on the target feature
-                //
-                if (piece == GamePieceManipulator::GamePieceType::Hatch) {
-                    if (camera->getCameraIndex() != 0) {
-                        act = std::make_shared<CameraChangeAction>(*camera, 0, camera->getCameraMode()) ;
-                        seq.pushSubActionPair(camera, act) ;
-                    }
-                }
-                else {
-                    if (camera->getCameraIndex() != 1) {
-                        act = std::make_shared<CameraChangeAction>(*camera, 1, camera->getCameraMode()) ; 
-                        seq.pushSubActionPair(camera, act) ;
-                    }                   
-                }
             }
             else {
                 MessageLogger &logger = getSubsystem().getRobot().getMessageLogger() ;
@@ -503,6 +508,35 @@ namespace xero {
             seq.pushSubActionPair(game, getFinishAction()) ;
         }
 
+        void PhaserOIDevice::getCargoHatchMode(ActionSequence &seq) {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;               
+            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
+            auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
+            size_t camerano = 0 ;
+
+            GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;
+
+            if (piece == GamePieceManipulator::GamePieceType::Cargo) {
+                camerano = CargoCamera ;
+            }   
+            else if (piece == GamePieceManipulator::GamePieceType::Hatch) {
+                camerano = HatchCamera ;
+            }   
+            else {
+                if (getValue(hatch_cargo_switch_)) {
+                    camerano = CargoCamera ;
+                }
+                else {
+                    camerano = HatchCamera ;
+                }
+            }
+
+            if (camera->getCameraIndex() != camerano) {
+                ActionPtr ptr = std::make_shared<CameraChangeAction>(*camera, camerano, camera->getCameraMode()) ;
+                seq.pushSubActionPair(camera, ptr) ;
+            }
+        }
+
         void PhaserOIDevice::generateActions(ActionSequence &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
@@ -511,6 +545,8 @@ namespace xero {
                 createActions() ;            
 
             getTrackingMode() ;
+
+            getCargoHatchMode(seq) ;
 
             if (getValue(extra_button_)) {
                 //

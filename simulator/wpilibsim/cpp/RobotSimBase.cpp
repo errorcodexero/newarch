@@ -256,6 +256,11 @@ namespace xero {
 
                 while (events_.size() > 0 && events_.getFirstEventTime() < now) {
                     const SimEvent &event = events_.getFirstEvent() ;
+                    if (filestrm_ != nullptr) {
+                        (*filestrm_) << "Processing Event: " << event.getModel() ;
+                        (*filestrm_) << " " << event.getName() << " " << event.getTime() ;
+                        (*filestrm_) << " " << event.getValue() << std::endl ;
+                    }
                     dispatchEvent(event) ;
                     events_.removeFirstEvent() ;
                 }

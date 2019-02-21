@@ -63,7 +63,7 @@ namespace xero {
 
                 if (running_auto_seq_ == nullptr) {
                     //
-                    // Still not running and auto sequence
+                    // Still not running an auto sequence
                     //
                     seq_->clear() ;
                     oi->generateActions(seq_) ;

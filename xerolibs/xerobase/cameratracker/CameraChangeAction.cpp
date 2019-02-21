@@ -22,6 +22,8 @@ namespace xero {
             std::string CameraChangeAction::toString() {
                 std::string result = "CameraChangeAction " ;
                 result += std::to_string(camera_) ;
+                result += " " ;
+                result += CameraTracker::toString(mode_) ;
                 return result ;
             }
     }

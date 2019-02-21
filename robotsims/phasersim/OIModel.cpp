@@ -4,6 +4,7 @@
 #include <ncurses.h>
 
 using namespace frc ;
+using namespace xero::misc ;
 
 namespace xero {
     namespace sim {
@@ -17,10 +18,20 @@ namespace xero {
 
             void OIModel::processEvent(const std::string &event, int value) {
                 if (event == "automode") {
-                    autovalue_ = static_cast<double>(value) / 100.0 ;
+                    double v = static_cast<double>(value) / 100.0 ;
+                    setAxis(2, 6, v) ;                  
                 }
-                else if (event == "floor_collect_cargo") {
-                    setButton(2, 4, (value ? true : false)) ;
+                else if (event == "tracking_viewing_nothing_switch") {
+                    double v = static_cast<double>(value) / 100.0 ;
+                    setAxis(2, 3, v) ;
+                }
+                else {
+                    SettingsParser &settings =  getSimulator().getSettingsParser() ;
+                    std::string name = "oi:" + event ;
+                    if (settings.isDefined(name)) {
+                        int button = settings.getInteger(name) ;
+                        setButton(2, button, (value ? true : false)) ;
+                    }
                 }
             }
 
@@ -38,11 +49,6 @@ namespace xero {
 
             void OIModel::addDevice(frc::DriverStation *ds) {
                 ds_ = ds ;
-                auto &stick = ds_->getStick(2) ;
-                //
-                // Axis used to control the automode switch
-                //
-                stick.setAxisValue(6, autovalue_) ;
             }     
 
             void OIModel::setButton(int which, int button, bool value) {

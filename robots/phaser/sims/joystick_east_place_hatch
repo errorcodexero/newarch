@@ -19,9 +19,9 @@
 #
 
 oi,automode,0.0,-100                    # Automode switch set to zero
-oi,hatch_cargo_switch,3.0,1             # Set the cargo/hatch switch to cargo
-oi,collect_floor,4.0,1                  # Press the floor collect button
-oi,collect_floor,4.2,0                  # Release the floor collect button
 
+hatchholder,hatch,3.0,1                 # Put a hatch in the hatch hatchholder
+oi,compass_east,4.0,1                   # Press the floor collect button
+oi,compass_east,4.2,0                   # Release the floor collect button
 
-
+oi,

@@ -30,6 +30,7 @@ namespace xero {
                 Auto,
                 SemiAuto,
                 Manual,
+                Invalid
             } ;
 
         public:
@@ -43,9 +44,11 @@ namespace xero {
             virtual void generateActions(xero::base::ActionSequence &seq) ;
 
         private:
+            void publishMode() ;
             void createActions() ;
             void initialize() ;
             void getTrackingMode() ;
+            void getCargoHatchMode(xero::base::ActionSequence &seq) ;
             bool getDirection() ;
             bool getHeightButton() ;
 
@@ -63,6 +66,10 @@ namespace xero {
 
             std::string dirToString() ;
             std::string heightToString() ;
+
+        private:
+            static const size_t HatchCamera = 0 ;
+            static const size_t CargoCamera = 1 ;
             
         private:
             size_t automode_ ;
@@ -109,7 +116,9 @@ namespace xero {
             xero::base::ActionPtr finish_collect_hatch_ ;
             xero::base::ActionPtr finish_collect_cargo_ ;
             xero::base::ActionPtr finish_place_hatch_ ;
-            xero::base::ActionPtr finish_place_cargo_ ;                                    
+            xero::base::ActionPtr finish_place_cargo_ ;     
+
+            bool cargo_mode_ ;                               
         } ;
     }
 }

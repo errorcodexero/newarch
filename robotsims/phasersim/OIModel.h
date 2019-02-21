@@ -36,7 +36,6 @@ namespace xero  {
 
             private:
                 frc::DriverStation *ds_ ;
-                double autovalue_ ;
             } ;
         }
     }

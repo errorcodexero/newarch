@@ -1,5 +1,6 @@
 #include "HatchHolderModel.h"
 #include <frc/RobotSimBase.h>
+#include <frc/SimEvent.h>
 
 using namespace frc ;
 using namespace xero::sim ;
@@ -17,6 +18,11 @@ namespace xero {
             }
 
             HatchHolderModel::~HatchHolderModel() {
+            }
+
+            void HatchHolderModel::processEvent(const std::string &event, int value) {
+                if (event == "hatch")
+                    has_hatch_ = (value ? true : false) ;
             }
 
             void HatchHolderModel::generateDisplayInformation(std::list<std::string> &lines) {

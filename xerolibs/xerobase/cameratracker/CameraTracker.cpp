@@ -15,7 +15,7 @@ namespace xero {
             table_ = ntinst.GetTable(NetworkTableName) ;
 
             relay_ = std::make_shared<frc::Relay>(0) ;
-            relay_->Set(frc::Relay::Value::kReverse) ;               
+            relay_->Set(frc::Relay::Value::kOff) ;               
         }
 
         CameraTracker::~CameraTracker()
@@ -54,25 +54,14 @@ namespace xero {
 
         void CameraTracker::setCameraIndex(size_t which)
         {
-            if (which == std::numeric_limits<size_t>::max()) {
-                relay_->Set(frc::Relay::Value::kOff) ;                
+            which = 1 - which ;
+            
+            if (which != camera_)
+            {
+                camera_ = which ;
+                table_->PutNumber(CameraNumber, which) ;
             }
-            else {
-                if (which != camera_)
-                {
-                    camera_ = which ;
-                    table_->PutNumber(CameraNumber, which) ;
-                }
-
-                if (which == 0) {
-                    relay_->Set(frc::Relay::Value::kForward) ;
-                }
-                else if (which == 1) {
-                    relay_->Set(frc::Relay::Value::kForward) ;
-                }
-            }
-
-            relay_->Set(frc::Relay::Value::kReverse) ;             
+            setLEDRing() ;
         }
 
         void CameraTracker::setCameraMode(CameraMode mode)
@@ -91,6 +80,19 @@ namespace xero {
                     break ;
                 }
             }
+
+            setLEDRing() ;
+        }
+
+        void CameraTracker::setLEDRing() {
+            if (mode_ == CameraMode::DriverViewing)
+                relay_->Set(frc::Relay::Value::kOff) ;
+            else {
+                if (camera_ == 0)
+                    relay_->Set(frc::Relay::Value::kReverse) ;
+                else
+                    relay_->Set(frc::Relay::Value::kForward) ;
+            }      
         }
     }
 }

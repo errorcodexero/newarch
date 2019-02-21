@@ -11,6 +11,8 @@ namespace xero {
 
                 virtual ~HatchHolderModel() ;
 
+                virtual void processEvent(const std::string &name, int value) ;
+
                 /// \brief Convert the model to a string.
                 /// \returns details about the lifter's state
                 virtual std::string toString() ;
