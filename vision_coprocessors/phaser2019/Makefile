@@ -72,8 +72,11 @@ deploy: deploy-norun
 
 deploy-norun:
 ifdef PIIP
+	ssh -t pi@${PIIP} 'bash -ci rw'
+	scp pi_files/stopService 'pi@${PIIP}:/home/pi'
 	ssh -t pi@${PIIP} './stopService ; sleep 1'
-	scp ${BINS} vision_params.txt pi_files/frc.json 'pi@${PIIP}:/home/pi'
+	scp ${BINS} vision_params.txt pi_files/frc.json pi_files/run* 'pi@${PIIP}:/home/pi'
+	ssh -t pi@${PIIP} 'bash -ci ro'
 else
 	@echo PIIP is not defined
 endif

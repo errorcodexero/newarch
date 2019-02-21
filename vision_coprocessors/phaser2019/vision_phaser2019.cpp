@@ -431,14 +431,11 @@ namespace {
         double cam_no = nt_camera_number.GetDouble(-1);
         std::string cam_mode = nt_camera_mode.GetString("");
         
-        if (cam_no != -1) {     // Selection published by robot ==> don't use chooser
-            assert(!cam_mode.empty());
-            std::cout << cam_no << "    " << cam_mode << "\n";
+        if (cam_no != -1 && !cam_mode.empty()) {     // Selection published by robot ==> don't use chooser
+            std::cout << "From robot: " << cam_no << "    " << cam_mode << "\n";
             new_selected_camera = (cam_no == 0)? 0 : 1;
             new_viewing_mode = (cam_mode == "TargetTracking") ? false : true;
         } else {
-            assert(cam_mode.empty());
-            
             // Chooser for viewing mode
             int chooser_val = viewing_mode_chooser.GetSelected();
             if (chooser_val != 0) {  // Not unspecified
