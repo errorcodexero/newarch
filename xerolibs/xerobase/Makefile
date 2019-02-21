@@ -22,6 +22,7 @@ SOURCES = \
 	Subsystem.cpp\
 	TCS34725ColorSensor.cpp\
 	TeleopController.cpp\
+	DetectAutoSequence.cpp\
 	MessageListener/MessageListener.cpp\
 	tankdrive/TankDrive.cpp\
 	tankdrive/TankDriveDistanceAction.cpp\

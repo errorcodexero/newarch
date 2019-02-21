@@ -102,7 +102,6 @@ namespace xero {
             // actually mounted at /media/sd*, and a symbolic link is created
             // to /U.
             //
-
             std::string logname("logfile_");
             dest_p = std::make_shared<MessageDestSeqFile>(log_dir_, logname);
             logger.addDestination(dest_p);

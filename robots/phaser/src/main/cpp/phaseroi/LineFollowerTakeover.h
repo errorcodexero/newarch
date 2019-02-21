@@ -2,6 +2,7 @@
 
 #include <lightsensor/LightSensorSubsystem.h>
 #include <DetectAutoSequence.h>
+#include <TeleopController.h>
 
 namespace xero 
 {
@@ -10,14 +11,18 @@ namespace xero
         class LineFollowerTakeover : public xero::base::DetectAutoSequence
         {
         public:
-            LineFollowerTakeover(xero::base::ActionPtr seq, xero::base::LightSensorSubsystem &lights) : DetectAutoSequence(seq), lights_(lights) {
+            LineFollowerTakeover(std::shared_ptr<xero::base::TeleopController> teleop, xero::base::ActionPtr seq, xero::base::LightSensorSubsystem &lights) : DetectAutoSequence(teleop, seq), lights_(lights) {
             }
 
             ~LineFollowerTakeover() {                
             }
             
             virtual bool isTakeoverValid() {
-                return   lights_.detectedObject() ;
+                bool ret = lights_.detectedObject() ;
+                if (ret)
+                    removeMe() ;
+
+                return ret ;
             }
 
         private:

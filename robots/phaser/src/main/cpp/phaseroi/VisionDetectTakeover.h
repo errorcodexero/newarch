@@ -2,6 +2,7 @@
 
 #include "phasercameratracker/PhaserCameraTracker.h"
 #include <DetectAutoSequence.h>
+#include <TeleopController.h>
 
 namespace xero 
 {
@@ -10,14 +11,16 @@ namespace xero
         class VisionDetectTakeover : public xero::base::DetectAutoSequence
         {
         public:
-            VisionDetectTakeover(xero::base::ActionPtr seq, PhaserCameraTracker &camera) : DetectAutoSequence(seq), camera_(camera) {
+            VisionDetectTakeover(std::shared_ptr<xero::base::TeleopController> teleop, xero::base::ActionPtr seq, PhaserCameraTracker &camera) : DetectAutoSequence(teleop, seq), camera_(camera) {
             }
 
             ~VisionDetectTakeover() {                
             }
 
             virtual bool isTakeoverValid() {
-                return camera_.shouldTerminate() ;
+                bool ret = camera_.shouldTerminate() ;
+                if (ret)
+                    removeMe() ;
             }
 
         private:

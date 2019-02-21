@@ -63,7 +63,7 @@ namespace xero {
             if (is_detected_ == false) {
                 if (detectedObject()) {
                     detect_count_++ ;
-                    if (detect_count_ == 4)
+                    if (detect_count_ == 3)
                         is_detected_ = true ;
                 }
                 else {

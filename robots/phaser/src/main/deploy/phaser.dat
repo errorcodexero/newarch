@@ -112,9 +112,12 @@ plotter:port                                                    5555
 #
 # Variables for the linefollower
 #
-linefollow:power                                                .4
-linefollow:distance                                             16
-linefollow:adjust                                               .35
+linefollower:front:power                                          0.4
+linefollower:front:distance                                       16
+linefollower:front:adjust                                         0.35
+linefollower:back:power                                           -0.4
+linefollower:back:distance                                        -16
+linefollower:back:adjust                                          -0.35
 
 #
 # Variables for the turntable

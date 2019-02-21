@@ -53,23 +53,8 @@ namespace xero {
             }
 
             void HatchIntakeModel::run(double dt) {
-                double now = getSimulator().getTime() ;
-                if (has_hatch_ == false) {
-                    //
-                    // Cubes based on time
-                    //
-                    for(double entry: ontimes_) {
-                        if (entry > last_time_ && entry <= now)
-                            has_hatch_ = true ;
-                    }
-                }          
-
-                last_time_ = now ;      
-
-                if (hatch_sensor_ != nullptr)
-                    hatch_sensor_->SimulatorSetValue(has_hatch_) ;
             }
-
+            
             void HatchIntakeModel::inputChanged(SimulatedObject *obj) {
                 std::lock_guard<std::mutex> lock(getLockMutex()) ;
                 VictorSPX *victor = dynamic_cast<VictorSPX *>(obj) ;

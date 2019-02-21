@@ -44,21 +44,6 @@ namespace xero {
             }
 
             void CargoHolderModel::run(double dt) {
-                double now = getSimulator().getTime() ;
-                if (has_cargo_ == false) {
-                    //
-                    // Cubes based on time
-                    //
-                    for(double entry: ontimes_) {
-                        if (entry > last_time_ && entry <= now)
-                            has_cargo_ = true ;
-                    }
-                }          
-
-                if (cargo_sensor_ != nullptr)
-                    cargo_sensor_->SimulatorSetValue(has_cargo_) ;
-
-                last_time_ = now ;                   
             }
 
             void CargoHolderModel::inputChanged(SimulatedObject *obj) {

@@ -1,0 +1,54 @@
+#
+# This file does a floor collect cargo
+#
+
+#
+# Automode values
+#
+#  Value        Setting
+#    0          -100
+#    1          -80
+#    2          -60
+#    3          -40
+#    4          -20
+#    5           10
+#    6           30
+#    7           50
+#    8           70
+#    9           90
+#
+
+#
+# Tracking Viewing Nothing switch
+#
+#  Value         Mode
+#  100           manual
+#  0             semi-auto
+#  -100          auto
+#
+
+#
+# Start up conditions
+#
+oi,automode,0.1,-100                                    # Automode switch set to zero
+oi,tracking_viewing_nothing_switch,0.1,0                # Set the auto/semi/manual switch to manual
+oi,hatch_cargo_switch,0.1,1                             # Hatch
+
+#
+# Should rotate the turntable if a safe manner to put the hatch 
+# holder on the north side of the robot
+#
+hatchholder,hatch,3.0,1                                 # Put a hatch in the hatch hatchholder
+oi,compass_north,4.0,1                                  # Press the joystick north button
+oi,compass_north,4.2,0                                  # Release the joystick north button
+
+#
+# Should raise the lift to the level one height
+#
+oi,height_level_one,10.0,1                             # Press the level 3 button
+oi,height_level_one,10.1,0                             # Release the level 3 button
+
+#
+# Now the line sensor fire
+#
+# front,values,13.0,2

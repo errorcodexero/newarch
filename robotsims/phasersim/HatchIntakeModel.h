@@ -57,9 +57,6 @@ namespace xero {
                 double power_ ;
                 bool deploy_state_ ;
                 bool has_hatch_ ;
-
-                double last_time_ ;
-                std::vector<double> ontimes_ ;
             } ;
         }
     }

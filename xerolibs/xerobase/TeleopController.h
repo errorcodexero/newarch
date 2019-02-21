@@ -3,6 +3,8 @@
 #include "ControllerBase.h"
 #include <AutoMode.h>
 #include <DetectAutoSequence.h>
+#include <algorithm>
+
 /// \file
 
 
@@ -27,6 +29,8 @@ namespace xero {
             void clearDetectors() {
                 auto_sequences_.clear() ;
             }
+
+            void removeDetector(DetectAutoSequence *det) ;
 
         private:
             std::shared_ptr<AutoMode> seq_ ;     

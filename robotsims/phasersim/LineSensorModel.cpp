@@ -88,21 +88,6 @@ namespace xero {
             }
 
             void LineSensorModel::run(double dt) {
-                double now = getSimulator().getTime() ;
-                if (i0state_ == false) {
-                    //
-                    // Cubes based on time
-                    //
-                    for(double entry: ontimes_) {
-                        if (entry > last_time_ && entry <= now)
-                            i0state_ = true ;
-                    }
-                }          
-
-                if (i0_ != nullptr)
-                    i0_->SimulatorSetValue(i0_) ;
-
-                last_time_ = now ;                    
             }
 
             void LineSensorModel::addDevice(DigitalInput *input) {
@@ -112,6 +97,8 @@ namespace xero {
                     i1_ = input ;
                 else if (input->GetChannel() == i2num_) ;
                     i2_ = input ;
+
+                input->SimulatorSetValue(false) ;
             }
         }
     }

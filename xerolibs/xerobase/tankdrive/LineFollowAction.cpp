@@ -28,8 +28,6 @@ namespace xero {
         }
 
         void LineFollowAction::start() {
-            if (getTankDrive().hasGearShifter())
-                getTankDrive().lowGear() ;                
             start_distance_ = getTankDrive().getDist() ;
             is_done_ = false ;
             plotid_ = getTankDrive().getRobot().startPlot(toString(), plot_columns_) ;

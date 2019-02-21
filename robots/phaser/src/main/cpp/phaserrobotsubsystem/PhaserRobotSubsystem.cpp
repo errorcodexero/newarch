@@ -28,8 +28,8 @@ namespace xero {
             addChild(back_line_sensor_) ;            
 
             tracker_ = std::make_shared<PhaserCameraTracker>(robot) ;
+            tracker_->setCameraMode(CameraTracker::CameraMode::DriverViewing) ;               
             tracker_->setCameraIndex(0) ;
-            tracker_->setCameraMode(CameraTracker::CameraMode::DriverViewing) ;            
             addChild(tracker_) ;
 
             game_piece_man_ = std::make_shared<GamePieceManipulator>(robot) ;

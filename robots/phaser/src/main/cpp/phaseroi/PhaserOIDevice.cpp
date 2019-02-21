@@ -22,6 +22,7 @@
 
 #include "lifter/LifterPowerAction.h"
 #include "lifter/LifterGoToHeightAction.h"
+#include "tankdrive/LineFollowAction.h"
 #include "LineFollowerTakeover.h"
 #include "VisionDetectTakeover.h"
 #include "phaserids.h"
@@ -478,7 +479,9 @@ namespace xero {
         }
 
         void PhaserOIDevice::setupLineFollowingDetectors() {
-            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;   
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ; 
+            auto db = ph.getPhaserRobotSubsystem()->getTankDrive() ;  
+            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             ActionPtr finish = getFinishAction() ;         
             auto ctrl = ph.getCurrentController() ;
             std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;        
@@ -487,12 +490,21 @@ namespace xero {
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
             log << "OI: enabling line follower detectors" ;
             log.endMessage() ;                 
-
             if (dir_ == Direction::North && teleop != nullptr) {
-                teleop->addDetector(std::make_shared<LineFollowerTakeover>(finish, *ph.getPhaserRobotSubsystem()->getFrontLineSensor())) ;
+                auto line = ph.getPhaserRobotSubsystem()->getFrontLineSensor() ;
+                ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
+                ActionPtr drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:front:power", "linefollower:front:distance", "linefollower:front:adjust") ;
+                seq->pushSubActionPair(db, drive) ;
+                seq->pushSubActionPair(game, finish) ;
+                teleop->addDetector(std::make_shared<LineFollowerTakeover>(teleop, seq, *line)) ;
             }
             else if (dir_ == Direction::South && teleop != nullptr) {
-                teleop->addDetector(std::make_shared<LineFollowerTakeover>(finish, *ph.getPhaserRobotSubsystem()->getBackLineSensor())) ;
+                auto line = ph.getPhaserRobotSubsystem()->getBackLineSensor() ;                
+                ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
+                ActionPtr drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:back:power", "linefollower:back:distance", "linefollower:back:adjust") ;
+                seq->pushSubActionPair(db, drive) ;
+                seq->pushSubActionPair(game, finish) ;                
+                teleop->addDetector(std::make_shared<LineFollowerTakeover>(teleop, seq, *line)) ;
             }
         }
 
@@ -523,7 +535,7 @@ namespace xero {
             ActionPtr act = std::make_shared<DriveByVisionAction>(*db, *camera) ;
             act = std::make_shared<DispatchAction>(db, act) ;
 
-            teleop->addDetector(std::make_shared<VisionDetectTakeover>(act, *ph.getPhaserRobotSubsystem()->getCameraTracker())) ;
+            teleop->addDetector(std::make_shared<VisionDetectTakeover>(teleop, act, *ph.getPhaserRobotSubsystem()->getCameraTracker())) ;
         }
 
         xero::base::ActionPtr PhaserOIDevice::getFinishAction() {

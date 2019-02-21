@@ -15,6 +15,22 @@ namespace xero {
         TeleopController::~TeleopController() {            
         }
 
+        void TeleopController::removeDetector(DetectAutoSequence *detector) {
+            std::list<std::shared_ptr<DetectAutoSequence>>::iterator theone ;
+            bool found = false ;
+
+            for(auto it = auto_sequences_.begin() ; it != auto_sequences_.end() ; it++) {
+                DetectAutoSequence *tryme = (*it).get() ;
+                if (tryme == detector) {
+                    theone = it ;
+                    found = true ;
+                }
+            }
+
+            if (found)
+                auto_sequences_.erase(theone) ;
+        }
+
         void TeleopController::run() {
             auto oi = getRobot().getOI() ;
 
@@ -57,6 +73,7 @@ namespace xero {
                             running_auto_seq_ = autoseq->getSequence() ;
                             running_auto_seq_->start() ;
                             oi->getDriverGamepad()->enable(false) ;
+                            break ;
                         }
                     }
                 }
