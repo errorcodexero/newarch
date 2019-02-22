@@ -51,7 +51,25 @@ namespace xero {
 
             while (std::getline(in, line)) {
 
-                size_t index= line.find('#') ;
+                size_t index = 0 ;
+                while (index < line.length() && std::isspace(line[index]))
+                    index++ ;
+
+                if (index == line.length()) {
+                    //
+                    // Blank line, continue
+                    //
+                    continue ;
+                }
+
+                if (line[index] == '#') {
+                    //
+                    // Comment line only, continue
+                    //
+                    continue ;
+                }
+
+                index = line.find('#') ;
                 if (index != std::string::npos)
                     line = line.substr(0, index - 1) ;
 

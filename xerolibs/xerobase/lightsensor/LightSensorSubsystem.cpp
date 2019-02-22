@@ -37,31 +37,21 @@ namespace xero {
             uint32_t data = 0 ;
             for(unsigned int i = 0; i < light_sensors_.size(); i++) {
                 bool light_sensor = light_sensors_[i]->Get() ;
-                if (!light_sensor) {
+                if (light_sensor) {
                     sensors_on++ ;
                     data |= (1 << i) ;
                     angle_ = angle_ + ((i-midpoint)/midpoint) ;
                 }
             }
-            if(sensors_on > 0){
+            if(sensors_on > 0)
                 angle_= angle_/sensors_on ;
-            }
 
-            bool adddata = true ;
-
-            if (light_sensors_.size() == 3 && sensor_data_.size() > 0 && data == 0 && sensor_data_.front() == 2)
-                adddata = false ;
-
-            if (adddata)
-            {
-                sensor_data_.push_front(data) ;
-
-                while (sensor_data_.size() > 4)
-                    sensor_data_.pop_back() ;
-            }
+            sensor_data_.push_front(data) ;
+            while (sensor_data_.size() > 10)
+                sensor_data_.pop_back() ;
 
             if (is_detected_ == false) {
-                if (detectedObject()) {
+                if (localDetectedObject()) {
                     detect_count_++ ;
                     if (detect_count_ == 3)
                         is_detected_ = true ;
@@ -71,7 +61,7 @@ namespace xero {
                 }
             }
             else {
-                if (!detectedObject()) {
+                if (!localDetectedObject()) {
                     detect_count_ = 0 ;
                     is_detected_ = false ;
                 }
@@ -81,8 +71,7 @@ namespace xero {
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
             logger << "LightSensor :" ;
             logger << getName() ;
-            for(unsigned int i = 0; i < light_sensors_.size(); i++)
-                logger << " " << light_sensors_[i]->Get() ;            
+            logger << sensor_data_.front() ;      
             logger.endMessage() ;
         }
     }

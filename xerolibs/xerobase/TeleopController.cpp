@@ -32,6 +32,7 @@ namespace xero {
         }
 
         void TeleopController::run() {
+            MessageLogger &logger = getRobot().getMessageLogger() ;            
             auto oi = getRobot().getOI() ;
 
             if (running_auto_seq_ != nullptr) {
@@ -70,6 +71,9 @@ namespace xero {
                     //
                     for(std::shared_ptr<DetectAutoSequence> autoseq: auto_sequences_) {
                         if (autoseq->isTakeoverValid()) {
+                            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
+                            logger << "Teleop: detector fired: " << autoseq->getName() ;
+                            logger.endMessage() ;
                             running_auto_seq_ = autoseq->getSequence() ;
                             running_auto_seq_->start() ;
                             oi->getDriverGamepad()->enable(false) ;
@@ -87,7 +91,6 @@ namespace xero {
                     seq_->start() ;
                     seq_->run() ;
                     if (!seq_->isDone()) {
-                        MessageLogger &logger = getRobot().getMessageLogger() ;
                         logger.startMessage(MessageLogger::MessageType::error) ;
                         logger << "telop sequence did not complete in one cycle" ;
                         logger.endMessage() ;

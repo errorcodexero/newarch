@@ -45,34 +45,10 @@ def includeDesktopSupport = false
 
 model {
     components {
-        frcUserPhoenixProgram(NativeExecutableSpec) {
-            targetPlatform wpi.platforms.roborio
-			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-				lib library: "xerobase", linkage: "static"
-				lib library: "xeromisc", linkage: "static"                
-			}            
-            if (includeDesktopSupport) {
-                targetPlatform wpi.platforms.desktop
-            }
 
-            sources.cpp {
-                source {
-                    srcDir 'robots/phoenix/src/main/cpp'
-                    include '**/*.cpp'
-                }
-                exportedHeaders {
-                    srcDir 'robots/phoenix/src/main/cpp'
-                    include '**/*.h'
-                }
-                                
-            }
-
-            // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-            useLibrary(it, "wpilib")
-            wpi.deps.vendor.cpp(it)
-        }  
-
+        //
+        // 2019 FRC Robot
+        //
         frcUserProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
 			binaries.all {
@@ -101,61 +77,104 @@ model {
             wpi.deps.vendor.cpp(it)
         }  
 
-        frcUserGrondProgram(NativeExecutableSpec) {
-            targetPlatform wpi.platforms.roborio
-			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-				lib library: "xerobase", linkage: "static"
-				lib library: "xeromisc", linkage: "static"                
-			}            
-            if (includeDesktopSupport) {
-                targetPlatform wpi.platforms.desktop
-            }
+        //
+        // 2018 BunnyBots Robot
+        //
 
-            sources.cpp {
-                source {
-                    srcDir 'robots/grond/src/main/cpp'
-                    include '**/*.cpp'
-                }
-                exportedHeaders {
-                    srcDir 'robots/grond/src/main/cpp'
-                    include '**/*.h'
-                }
+        // frcUserBunny2018Program(NativeExecutableSpec) {
+        //     targetPlatform wpi.platforms.roborio
+		// 	binaries.all {
+		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+		// 		lib library: "xerobase", linkage: "static"
+		// 		lib library: "xeromisc", linkage: "static"                
+		// 	}            
+        //     if (includeDesktopSupport) {
+        //         targetPlatform wpi.platforms.desktop
+        //     }
+
+        //     sources.cpp {
+        //         source {
+        //             srcDir 'robots/bunny2018/src/main/cpp'
+        //             include '**/*.cpp'
+        //         }
+        //         exportedHeaders {
+        //             srcDir 'robots/bunny2018/src/main/cpp'
+        //             include '**/*.h'
+        //         }
                                 
-            }
+        //     }
 
-            // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-            useLibrary(it, "wpilib")
-            wpi.deps.vendor.cpp(it)
-        }
+        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
+        //     useLibrary(it, "wpilib")
+        //     wpi.deps.vendor.cpp(it)
+        // }         
 
-        frcUserBunny2018Program(NativeExecutableSpec) {
-            targetPlatform wpi.platforms.roborio
-			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-				lib library: "xerobase", linkage: "static"
-				lib library: "xeromisc", linkage: "static"                
-			}            
-            if (includeDesktopSupport) {
-                targetPlatform wpi.platforms.desktop
-            }
+        //
+        // 2018 FRC Robot
+        //
 
-            sources.cpp {
-                source {
-                    srcDir 'robots/bunny2018/src/main/cpp'
-                    include '**/*.cpp'
-                }
-                exportedHeaders {
-                    srcDir 'robots/bunny2018/src/main/cpp'
-                    include '**/*.h'
-                }
+        // frcUserPhoenixProgram(NativeExecutableSpec) {
+        //     targetPlatform wpi.platforms.roborio
+		// 	binaries.all {
+		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+		// 		lib library: "xerobase", linkage: "static"
+		// 		lib library: "xeromisc", linkage: "static"                
+		// 	}            
+        //     if (includeDesktopSupport) {
+        //         targetPlatform wpi.platforms.desktop
+        //     }
+
+        //     sources.cpp {
+        //         source {
+        //             srcDir 'robots/phoenix/src/main/cpp'
+        //             include '**/*.cpp'
+        //         }
+        //         exportedHeaders {
+        //             srcDir 'robots/phoenix/src/main/cpp'
+        //             include '**/*.h'
+        //         }
                                 
-            }
+        //     }
 
-            // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-            useLibrary(it, "wpilib")
-            wpi.deps.vendor.cpp(it)
-        }        
+        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
+        //     useLibrary(it, "wpilib")
+        //     wpi.deps.vendor.cpp(it)
+        // }         
+
+        //
+        // 2016 FRC Robot - used as a demo bot so we keep the code as up do date as
+        //                  we can
+        //
+
+        // frcUserGrondProgram(NativeExecutableSpec) {
+        //     targetPlatform wpi.platforms.roborio
+		// 	binaries.all {
+		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+		// 		lib library: "xerobase", linkage: "static"
+		// 		lib library: "xeromisc", linkage: "static"                
+		// 	}            
+        //     if (includeDesktopSupport) {
+        //         targetPlatform wpi.platforms.desktop
+        //     }
+
+        //     sources.cpp {
+        //         source {
+        //             srcDir 'robots/grond/src/main/cpp'
+        //             include '**/*.cpp'
+        //         }
+        //         exportedHeaders {
+        //             srcDir 'robots/grond/src/main/cpp'
+        //             include '**/*.h'
+        //         }
+                                
+        //     }
+
+        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
+        //     useLibrary(it, "wpilib")
+        //     wpi.deps.vendor.cpp(it)
+        // }
+
+       
 
 		xeromisc(NativeLibrarySpec) {
             targetPlatform wpi.platforms.roborio

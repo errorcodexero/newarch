@@ -52,13 +52,6 @@ namespace xero {
 
             virtual void computeState() ;
 
-            bool detectedObject() {
-                if (sensor_data_.size() > 0 && sensor_data_.front() != 0) {
-                    return true ;
-                }
-
-                return false ;
-            }
 
             virtual bool shouldTerminate() {
                 return is_detected_ ;
@@ -82,6 +75,15 @@ namespace xero {
             size_t getSensorCount() const {
                 return light_sensors_.size() ;
             }
+
+            bool detectedObject() {
+                return is_detected_ ;
+            }
+
+        private:
+            bool localDetectedObject() {
+                return sensor_data_.size() > 0 && sensor_data_.front() != 0 ;
+            }            
 
         private:
             std::vector <std::shared_ptr<frc::DigitalInput>> light_sensors_ ;

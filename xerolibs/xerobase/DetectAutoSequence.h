@@ -12,13 +12,9 @@ namespace xero
         class DetectAutoSequence
         {
         public:
-            DetectAutoSequence(std::shared_ptr<TeleopController> teleop, ActionPtr seq) {
-                sequence_ = seq ;
-                teleop_ = teleop ;
-            }
+            DetectAutoSequence(const std::string &name, std::shared_ptr<TeleopController> teleop, ActionPtr seq) ;
 
-            ~DetectAutoSequence() {                
-            }
+            virtual ~DetectAutoSequence() ;
             
             virtual bool isTakeoverValid() = 0 ;
 
@@ -28,7 +24,12 @@ namespace xero
 
             void removeMe() ;
 
+            const std::string &getName() {
+                return name_ ;
+            }
+
         private:
+            std::string name_ ;
             ActionPtr sequence_ ;
             std::shared_ptr<TeleopController> teleop_ ;
         };

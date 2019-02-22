@@ -25,6 +25,7 @@ namespace xero {
 
         private:
             bool is_done_ ;
+            bool lost_encoders_ ;
             double target_ ;
             double output_ ;
             double start_time_ ;

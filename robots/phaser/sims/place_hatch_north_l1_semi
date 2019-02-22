@@ -32,10 +32,10 @@
 #
 oi,automode,0.1,-100                                    # Automode switch set to zero
 oi,tracking_viewing_nothing_switch,0.1,0                # Set the auto/semi/manual switch to manual
-oi,hatch_cargo_switch,0.1,1                             # Hatch
+oi,hatch_cargo_switch,0.1,1                             # Hatch/Cargo switch set to hatch
 
 #
-# Should rotate the turntable if a safe manner to put the hatch 
+# Should rotate the turntable in a safe manner to put the hatch
 # holder on the north side of the robot
 #
 hatchholder,hatch,3.0,1                                 # Put a hatch in the hatch hatchholder
@@ -45,10 +45,10 @@ oi,compass_north,4.2,0                                  # Release the joystick n
 #
 # Should raise the lift to the level one height
 #
-oi,height_level_one,10.0,1                             # Press the level 3 button
-oi,height_level_one,10.1,0                             # Release the level 3 button
+oi,height_level_one,10.0,1                             # Press the level 1 button
+oi,height_level_one,10.1,0                             # Release the level 1 button
 
 #
 # Now the line sensor fire
 #
-# front,values,13.0,2
+front,values,15.0,2

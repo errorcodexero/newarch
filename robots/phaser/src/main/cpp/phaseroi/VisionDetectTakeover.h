@@ -11,7 +11,8 @@ namespace xero
         class VisionDetectTakeover : public xero::base::DetectAutoSequence
         {
         public:
-            VisionDetectTakeover(std::shared_ptr<xero::base::TeleopController> teleop, xero::base::ActionPtr seq, PhaserCameraTracker &camera) : DetectAutoSequence(teleop, seq), camera_(camera) {
+            VisionDetectTakeover(std::shared_ptr<xero::base::TeleopController> teleop, xero::base::ActionPtr seq, PhaserCameraTracker &camera) 
+                    : DetectAutoSequence("vision", teleop, seq), camera_(camera) {
             }
 
             ~VisionDetectTakeover() {                
