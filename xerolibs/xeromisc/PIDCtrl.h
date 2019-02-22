@@ -20,33 +20,30 @@ public:
     /// \param i the I constant (integral)
     /// \param d the D constant (difference)
     /// \param f the F constant (feed forward)
-    /// \param a the A constant (acceleration)
     /// \param floor the lowest possible value for the output
     /// \param ceil the highest possible value for the output
     /// \param integralCeil the largest magnitude for the stored integral sum
     /// \param is_angle if true the values are angles that wrap at +/- 180
-    PIDCtrl(double p, double i, double d, double f, double a, double floor, double ceil, double integralCeil, bool is_angle = false);
+    PIDCtrl(double p, double i, double d, double f, double floor, double ceil, double integralCeil, bool is_angle = false);
 
     /// \brief Initialize the PID controller with a new set of constants
     /// \param p the P constant (proportional)
     /// \param i the I constant (integral)
     /// \param d the D constant (difference)
     /// \param f the F constant (feed forward)
-    /// \param a the A constant (acceleration)
     /// \param floor the lowest possible value for the output
     /// \param ceil the highest possible value for the output
     /// \param integralCeil the largest magnitude for the stored integral sum
     /// \param is_angle if true the values are angles that wrap at +/- 180
-    void init(double p, double i, double d, double f, double a, double floor, double ceil, double integralCeil, bool is_angle = false);
+    void init(double p, double i, double d, double f, double floor, double ceil, double integralCeil, bool is_angle = false);
 
     /// \brief Initialize the PID controller with a new set of constants
     /// \param p the P constant (proportional)
     /// \param i the I constant (integral)
     /// \param d the D constant (difference)
     /// \param f the F constant (feed forward)
-    /// \param a the A constant (acceleration)
     /// \param is_angle if true the values are angles that wrap at +/- 180
-    void init(double p, double i, double d, double f, double a, bool is_angle = false);
+    void init(double p, double i, double d, double f, bool is_angle = false);
 
     /// \brief Initialize the PID controller from constants in the settings
     ///
@@ -70,7 +67,7 @@ public:
     /// \param accel the current acceleration of the target value
     /// \param timeDifference the time that has passed since the last time this was called
     /// \returns the calculated output value
-    double getOutput(double target, double current, double accel, double timeDifference);
+    double getOutput(double target, double current, double timeDifference);
 
     /// \brief return a human readable string representing the PID controller
     /// \returns a human readable string representing the PID controller state
@@ -87,7 +84,7 @@ private:
 private:
     struct PIDConstants
     {
-        double p, i, d, f, a;
+        double p, i, d, f ;
         double floor, ceil;
         double integralCeil;
     } pid_consts_;

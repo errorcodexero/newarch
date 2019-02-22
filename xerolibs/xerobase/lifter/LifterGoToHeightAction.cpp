@@ -106,7 +106,7 @@ namespace xero {
 
             if (is_done_) {
                 double dist = target_ - lifter.getHeight() ;
-                double out = pid_ctrl_.getOutput(0, dist, 0, getLifter().getRobot().getDeltaTime()) ;
+                double out = pid_ctrl_.getOutput(0, dist, getLifter().getRobot().getDeltaTime()) ;
                 lifter.setMotorPower(out) ;                
             } 
             else 

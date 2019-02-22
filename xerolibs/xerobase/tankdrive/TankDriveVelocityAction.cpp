@@ -37,10 +37,10 @@ void TankDriveVelocityAction::run() {
             
             double current_velocity = getTankDrive().getVelocity(); 
             
-            double base_power = velocity_pid_.getOutput(target_velocity_, current_velocity, 0.0, getTankDrive().getRobot().getDeltaTime());
+            double base_power = velocity_pid_.getOutput(target_velocity_, current_velocity, getTankDrive().getRobot().getDeltaTime());
 
             double current_angle = getTankDrive().getAngle();
-            double straightness_offset = angle_pid_.getOutput(0, current_angle, 0, getTankDrive().getRobot().getDeltaTime());
+            double straightness_offset = angle_pid_.getOutput(0, current_angle, getTankDrive().getRobot().getDeltaTime());
             double left_power = base_power - straightness_offset;
             double right_power = base_power + straightness_offset;
 

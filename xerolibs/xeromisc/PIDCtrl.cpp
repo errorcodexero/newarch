@@ -13,19 +13,18 @@ PIDCtrl::PIDCtrl():PIDCtrl(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 {
 }
 
-PIDCtrl::PIDCtrl(double p, double i, double d, double f, double a, double floor, double ceil, double integralCeil, bool is_angle)
+PIDCtrl::PIDCtrl(double p, double i, double d, double f, double floor, double ceil, double integralCeil, bool is_angle)
 {
-    init(p, i, d, f, a, floor, ceil, integralCeil, is_angle);
+    init(p, i, d, f, floor, ceil, integralCeil, is_angle);
     current_ = 0;
 }
 
-void PIDCtrl::init(double p, double i, double d, double f, double a, double floor, double ceil, double integralCeil, bool is_angle)
+void PIDCtrl::init(double p, double i, double d, double f, double floor, double ceil, double integralCeil, bool is_angle)
 {
     pid_consts_.p = p;
     pid_consts_.i = i;
     pid_consts_.d = d;
     pid_consts_.f = f;
-    pid_consts_.a = a ;
     pid_consts_.floor = floor;
     pid_consts_.ceil = ceil;
     pid_consts_.integralCeil = integralCeil;
@@ -33,13 +32,12 @@ void PIDCtrl::init(double p, double i, double d, double f, double a, double floo
     integral_ = 0;
 }
 
-void PIDCtrl::init(double p, double i, double d, double f, double a, bool is_angle)
+void PIDCtrl::init(double p, double i, double d, double f, bool is_angle)
 {
     pid_consts_.p = p;
     pid_consts_.i = i;
     pid_consts_.d = d;
     pid_consts_.f = f;
-    pid_consts_.a = a ;
     pid_consts_.floor = std::numeric_limits<double>::min() ;
     pid_consts_.ceil = std::numeric_limits<double>::max() ;
     pid_consts_.integralCeil = std::numeric_limits<double>::max() ;
@@ -52,7 +50,6 @@ void PIDCtrl::initFromSettings(SettingsParser &parser, const std::string &prefix
     pid_consts_.i = parser.getDouble(prefix + ":i");
     pid_consts_.d = parser.getDouble(prefix + ":d");
     pid_consts_.f = parser.getDouble(prefix + ":f");
-    pid_consts_.a = parser.getDouble(prefix + ":a") ;
     pid_consts_.floor = std::numeric_limits<double>::min() ;
     pid_consts_.ceil = std::numeric_limits<double>::max() ;
     pid_consts_.integralCeil = std::numeric_limits<double>::max() ;
@@ -68,7 +65,7 @@ void PIDCtrl::initFromSettingsExtended(SettingsParser &parser, const std::string
     pid_consts_.integralCeil = parser.getDouble(prefix + ":imax");
 }
 
-double PIDCtrl::getOutput(double target, double current, double accel, double timeDifference)
+double PIDCtrl::getOutput(double target, double current, double timeDifference)
 {
     double error = calcError(target, current) ;
     double pOut = pid_consts_.p*error;
@@ -84,7 +81,7 @@ double PIDCtrl::getOutput(double target, double current, double accel, double ti
     
     double iOut = pid_consts_.i * integral_;
 
-    double output = pOut + iOut + dOut + pid_consts_.f * target + pid_consts_.a * accel ;
+    double output = pOut + iOut + dOut + pid_consts_.f * target ;
 
     if (output <= pid_consts_.floor)
         output = pid_consts_.floor;
@@ -113,7 +110,6 @@ std::string PIDCtrl::toString() {
     ss << ",i: " << pid_consts_.i;
     ss << ",d: " << pid_consts_.d;
     ss << ",f: " << pid_consts_.f;
-    ss << ",a: " << pid_consts_.a;
     ss << ",min: " << pid_consts_.floor;
     ss << ",max: " << pid_consts_.ceil;
     ss << ",imax: " << pid_consts_.integralCeil;

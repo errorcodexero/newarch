@@ -23,7 +23,7 @@ namespace xero {
         void GrabberToAngleAction::run() {
             double dt = getGrabber().getRobot().getDeltaTime() ;
             double current = getGrabber().getAngle() ;
-            output_ = pid_ctrl_.getOutput(target_, current, 0, dt) ;
+            output_ = pid_ctrl_.getOutput(target_, current, dt) ;
 
             getGrabber().motor_->Set(output_) ;
         }

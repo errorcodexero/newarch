@@ -125,13 +125,11 @@ namespace xero {
             double angle = turntable.getAngleValue() ;
                         
             if (is_done_) {
-                output_ = pidctrl_.getOutput(target_, angle, 0, dt) ;
+                output_ = pidctrl_.getOutput(target_, angle, dt) ;
                 turntable.setMotorPower(output_) ;                
             }
             else
             {
-
-
                 double elapsed = turntable.getRobot().getTime() - start_time_ ;
                 double speed = turntable.getVelocity() ;
                 double traveled = getTurntable().getAngleValue() - start_angle_ ;

@@ -70,7 +70,7 @@ namespace xero {
                     is_done_ = true ;
                 }
                 else {
-                    output_ = pidctrl_.getOutput(target_, height, 0, dt) ;
+                    output_ = pidctrl_.getOutput(target_, height, dt) ;
                     lifter.setBrakeOff() ;
                     lifter.setMotorDutyCycle(output_) ;
 
