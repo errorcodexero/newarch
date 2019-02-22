@@ -93,7 +93,9 @@ bool MessageDestSeqFile::openfile()
         // For convenience, always create a symlink point to the latest log file
         //
         const std::string latest_file_symlink_name(dirname_ + "/latest");
-        xero::file::create_symlink(filename, latest_file_symlink_name);
+        if (xero::file::exists(filename)) {
+            xero::file::create_symlink(filename, latest_file_symlink_name);
+        }
     }
 
     return ret;
