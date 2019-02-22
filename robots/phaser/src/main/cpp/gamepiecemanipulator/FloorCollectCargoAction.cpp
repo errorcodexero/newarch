@@ -1,9 +1,7 @@
 #include "FloorCollectCargoAction.h"
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <lifter/LifterGoToHeightAction.h>
-#include <lifter/LifterHoldHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
-#include "turntable/TurntableHoldAngleAction.h"
 #include "cargointake/CargoIntakeAction.h"
 
 using namespace xero::base ;
@@ -22,15 +20,11 @@ namespace xero {
             // destroying this during the robot loop
             //
             set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
-            hold_lifter_safe_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:safe_turn") ;            
             set_turntable_cargo_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:cargo:floor_collect") ;
-            hold_turntable_cargo_angle_ = std::make_shared<TurntableHoldAngleAction>(*turntable, "turntable:angle:cargo:floor_collect") ;            
             set_lifter_cargo_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;            
-            hold_lifter_cargo_intake_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;
             deploy_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, true) ;
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
             set_lifter_cargo_collected_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:collected") ;            
-            hold_lifter_cargo_collected_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:cargo:collected") ;
 
             
             set_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, "cargointake:power") ;
@@ -75,7 +69,6 @@ namespace xero {
                     auto turntable = getGamePiece().getTurntable();
                     auto lifter = getGamePiece().getLifter() ;
                     turntable->setAction(set_turntable_cargo_angle_) ;
-                    lifter->setAction(hold_lifter_safe_height_) ;
                     cargo_intake->setAction(deploy_cargo_intake_) ;       
 
                     state_ = State::TurntableGoToCollectAngle ;
@@ -96,9 +89,6 @@ namespace xero {
                     auto lifter = getGamePiece().getLifter() ;
                     lifter->setAction(set_lifter_cargo_intake_height_) ;
 
-                    auto turntable = getGamePiece().getTurntable() ;
-                    turntable->setAction(hold_turntable_cargo_angle_) ;
-
                     state_ = State::LifterGoToCollectHeightDeployIntake ;                     
                 }
                 break ;
@@ -118,7 +108,6 @@ namespace xero {
                     auto lifter = getGamePiece().getLifter() ;
                     cargo_intake->setAction(set_cargo_intake_motor_) ;
                     cargo_holder->setAction(set_cargo_holder_motor_) ;
-                    lifter->setAction(hold_lifter_cargo_intake_height_) ;
 
                     state_ = State::WaitForCargo ;
                 }
@@ -164,7 +153,6 @@ namespace xero {
                     auto cargo_intake = getGamePiece().getCargoIntake() ;                    
                     cargo_intake->setAction(retract_cargo_intake_) ;
                     auto lifter = getGamePiece().getLifter() ;
-                    lifter->setAction(hold_lifter_cargo_collected_height_) ;                    
                     state_ = State::RetractIntake ;
                 }
                 break ;

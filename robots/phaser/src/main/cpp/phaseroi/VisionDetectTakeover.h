@@ -21,6 +21,8 @@ namespace xero
                 bool ret = camera_.shouldTerminate() ;
                 if (ret)
                     removeMe() ;
+
+                return ret ;
             }
 
         private:

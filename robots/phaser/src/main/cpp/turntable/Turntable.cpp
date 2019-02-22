@@ -26,6 +26,7 @@ namespace xero{
 
             min_angle_ = robot.getSettingsParser().getDouble("turntable:keepout:minimum") ;
             max_angle_ = robot.getSettingsParser().getDouble("turntable:keepout:maximum") ;
+            danger_zone_ = robot.getSettingsParser().getDouble("turntable:keepout:dangerzone") ;
             degrees_per_tick_ = robot.getSettingsParser().getDouble("turntable:degrees_per_tick") ;
 
             //
@@ -83,27 +84,13 @@ namespace xero{
 
         void Turntable::setMotorPower(double v) {
             if (is_calibrated_) {
-                if (angle_ >= min_angle_ && angle_ <= max_angle_) {
-                    //
-                    // We are in the danger zone.  Should only move the turntable
-                    // to get out of the danger zone
-                    //
-                    double d1 = std::fabs(angle_ - min_angle_) ;
-                    double d2 = std::fabs(angle_ - max_angle_) ;
-
-                    if (d1 < d2) {
-                        // Closest to the min angle point
-                        if (v < 0)
-                            v = 0 ;
-                    }
-                    else {
-                        // closeest to the max angle point
-                        if (v > 0)
-                            v = 0 ;
-                    }
-                }
+                if (angle_ >= min_angle_ - danger_zone_ && angle_ <= min_angle_ && v > 0)
+                    v = 0 ;
+                
+                if (angle_ <= max_angle_ + danger_zone_ && angle_ >= max_angle_ && v < 0)
+                    v = 0 ;
             }
-
+            
             if (motors_.size() > 0)
                 motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v);
         }

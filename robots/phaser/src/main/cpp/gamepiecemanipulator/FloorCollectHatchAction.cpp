@@ -1,7 +1,6 @@
 #include "FloorCollectHatchAction.h"
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <lifter/LifterGoToHeightAction.h>
-#include <lifter/LifterHoldHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
 #include "hatchintake/HatchIntakeAction.h"
 #include "hatchholder/HatchHolderAction.h"
@@ -23,12 +22,9 @@ namespace xero {
             //
 
             set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
-            hold_lifter_safe_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:safe_turn") ;            
             set_turntable_hatch_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:hatch:floor_collect") ;
             set_lifter_hatch_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:hatch:floor_collect") ;            
             set_lifter_undock_hatch_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:hatch:undock_intake") ;
-            hold_lifter_hatch_intake_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:hatch:floor_collect") ;            
-            hold_lifter_undock_hatch_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:hatch:undock_intake") ;            
 
             set_extend_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM) ;
             set_retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM) ;
@@ -66,7 +62,6 @@ namespace xero {
                     auto turntable = getGamePiece().getTurntable();
                     turntable->setAction(set_turntable_hatch_angle_) ;
                     hatch_holder->setAction(set_retract_hatch_finger_) ;
-                    lifter->setAction(hold_lifter_safe_height_) ;
 
                     state_ = State::TurntableGoToCollectAngle ;
                 }
@@ -98,7 +93,6 @@ namespace xero {
                     //
                     auto hatch_intake = getGamePiece().getHatchIntake() ;
                     hatch_intake->setAction(set_hatch_intake_motor_) ;
-                    lifter->setAction(hold_lifter_hatch_intake_height_) ;
 
                     state_ = State::WaitForHatch ;
                 }
@@ -140,7 +134,6 @@ namespace xero {
                 if (set_lifter_undock_hatch_height_->isDone()) {
                     auto hatchholder = getGamePiece().getHatchHolder() ;
                     hatchholder->setAction(set_deploy_hatch_finger_) ;
-                    lifter->setAction(hold_lifter_undock_hatch_height_) ;
 
                     state_ = State::DeployFinger ;
                 }

@@ -51,6 +51,11 @@ namespace xero {
             arm_retract_->Set(true) ;
         }
 
+        void HatchHolder::stopArm() {
+            arm_extend_->Set(false) ;
+            arm_retract_->Set(false) ;            
+        }
+
         void HatchHolder::extendFinger() {
             finger_->Set(true) ;
         }

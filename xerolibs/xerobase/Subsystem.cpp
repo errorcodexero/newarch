@@ -64,6 +64,11 @@ namespace xero {
                 //
                 // The current Action is still running, interrupt it
                 //
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
+                logger << "subsystem '" << getName() << "' action '" << action_->toString() << "' was canceled by setAction" ;
+                logger.endMessage() ;   
+
                 cancelAction();
 
                 if(!action_->isDone()) {

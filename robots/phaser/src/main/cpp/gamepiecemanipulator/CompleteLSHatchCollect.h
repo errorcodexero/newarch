@@ -23,7 +23,6 @@ namespace xero {
                 LifterShiftUpHeight,
                 DeployFinger,
                 RetractArm,
-                CheckHolder,
         } ;
 
         private:

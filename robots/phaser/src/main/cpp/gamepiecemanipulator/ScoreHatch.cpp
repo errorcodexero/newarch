@@ -1,7 +1,6 @@
 #include "ScoreHatch.h"
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <lifter/LifterGoToHeightAction.h>
-#include <lifter/LifterHoldHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
 #include "hatchholder/HatchHolderAction.h"
 
@@ -60,9 +59,6 @@ namespace xero {
                 
             case State::RetractArm:
                 if(set_retract_arm_->isDone()) {
-                    if(hatch_holder->hasHatch())
-                        hatch_holder->setAction(set_deploy_hatch_finger_) ;
-
                     state_ = State::Idle ;
                 }
                 break ;

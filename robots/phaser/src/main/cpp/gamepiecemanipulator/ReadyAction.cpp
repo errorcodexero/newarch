@@ -1,9 +1,7 @@
 #include "ReadyAction.h"
 #include <lifter/Lifter.h>
 #include <lifter/LifterGoToHeightAction.h>
-#include <lifter/LifterHoldHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
-#include "turntable/TurntableHoldAngleAction.h"
 #include <Robot.h>
 
 using namespace xero::base ;
@@ -20,11 +18,8 @@ namespace xero {
             angle_ = angle ;
 
             set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
-            hold_lifter_safe_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, "lifter:height:safe_turn") ;
             set_lifter_final_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
-            hold_lifter_final_height_ = std::make_shared<LifterHoldHeightAction>(*lifter, height) ;
             set_turntable_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, angle) ;
-            hold_turntable_angle_ = std::make_shared<TurntableHoldAngleAction>(*turntable, angle) ;  
 
             safe_height_ = subsystem.getRobot().getSettingsParser().getDouble("lifter:height:safe_turn")  ;
         }
@@ -58,7 +53,6 @@ namespace xero {
                     turntable->setAction(set_turntable_angle_) ;
 
                     auto lifter = getGamePiece().getLifter() ;
-                    lifter->setAction(hold_lifter_safe_height_) ;
                     state_ = State::TurntableGoToAngle ; 
                 }
                 break ;
@@ -66,7 +60,6 @@ namespace xero {
             case State::TurntableGoToAngle:
                 if(set_turntable_angle_->isDone()){
                     auto turntable = getGamePiece().getTurntable() ;
-                    turntable->setAction(hold_turntable_angle_) ;
 
                     auto lifter = getGamePiece().getLifter() ;
                     lifter->setAction(set_lifter_final_height_) ;
@@ -77,7 +70,6 @@ namespace xero {
             case State::LifterGoToFinalHeight:
                 if(set_lifter_final_height_->isDone()){
                     auto lifter = getGamePiece().getLifter() ;
-                    lifter->setAction(hold_lifter_final_height_) ;
                     state_ = State::Idle ;                     
                 }            
                 break ;

@@ -3,6 +3,7 @@
 #include "TurntableAction.h"
 #include "Turntable.h"
 #include <PIDACtrl.h>
+#include <PIDCtrl.h>
 #include <TrapezoidalProfile.h>
 
 namespace xero {
@@ -27,12 +28,14 @@ namespace xero {
             double target_ ;
             double output_ ;
             double start_time_ ;
+            double last_pos_ ;
 
             double min_keepout_angle_ ;
             double max_keepout_angle_ ;
             
             double threshold_ ;
             std::shared_ptr<xero::misc::PIDACtrl> ctrl_ ;
+            xero::misc::PIDCtrl pidctrl_ ;            
             std::shared_ptr<xero::misc::TrapezoidalProfile> profile_ ;
             double start_angle_ ;
             size_t index_ ;

@@ -14,7 +14,6 @@ namespace xero {
         
         class Lifter : public xero::base::Subsystem {
             friend class LifterGoToHeightAction ;
-            friend class LifterHoldHeightAction ;
             friend class LifterPowerAction ;
             friend class LifterCalibrateAction ;
 

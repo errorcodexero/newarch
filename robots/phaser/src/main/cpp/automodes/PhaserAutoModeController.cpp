@@ -19,11 +19,9 @@
 #include <tankdrive/TankDrivePowerAction.h>
 #include <lifter/LifterCalibrateAction.h>
 #include <lifter/LifterGoToHeightAction.h>
-#include <lifter/LifterHoldHeightAction.h>
 #include <lifter/LifterPowerAction.h>
 #include <turntable/TurntableCalibrateAction.h>
 #include <turntable/TurntableGoToAngleAction.h>
-#include <turntable/TurnTableHoldAngleAction.h>
 #include <turntable/TurntablePowerAction.h>
 #include <climber/Climber.h>
 #include <climber/ClimberDeployAction.h>
@@ -49,7 +47,7 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = testTurntable() ;
+                mode = testCargoHolder() ;
                 break ;
 
             case 1:
@@ -247,13 +245,13 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto cargoholder = phaserrobot->getGameManipulator()->getCargoHolder() ;    
 
-            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, 0.2) ;
+            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, 0.6) ;
             mode->pushSubActionPair(cargoholder, act) ;
 
             act = std::make_shared<DelayAction>(3.0) ;
             mode->pushAction(act) ;
             
-            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, -0.4) ;
+            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, -0.6) ;
             mode->pushSubActionPair(cargoholder, act) ;       
 
             act = std::make_shared<DelayAction>(3.0) ;
@@ -315,13 +313,13 @@ namespace xero {
             act = std::make_shared<SingleMotorPowerAction>(*cargointake, 0.2) ;
             mode->pushSubActionPair(cargointake, act) ;
 
-            act = std::make_shared<DelayAction>(3.0) ;
+            act = std::make_shared<DelayAction>(60.0) ;
             mode->pushAction(act) ;
 
             act = std::make_shared<SingleMotorPowerAction>(*cargointake, 0.0) ;
             mode->pushSubActionPair(cargointake, act) ;
 
-            act = std::make_shared<DelayAction>(3.0) ;
+            act = std::make_shared<DelayAction>(60.0) ;
             mode->pushAction(act) ;       
             
             act = std::make_shared<CargoIntakeAction>(*cargointake, false) ;
@@ -369,25 +367,9 @@ namespace xero {
             act = std::make_shared<LifterCalibrateAction>(*lifter) ;
             mode->pushSubActionPair(lifter, act) ;
 
-            act = std::make_shared<LifterGoToHeightAction>(*lifter, 180.0) ;
+            act = std::make_shared<LifterGoToHeightAction>(*lifter, 60.0) ;
             mode->pushSubActionPair(lifter, act) ;
-
-#ifdef NOTYET
-            act = std::make_shared<LifterHoldHeightAction>(*lifter, 45.0) ;
-            mode->pushSubActionPair(lifter, act, false) ;   
-
-            act = std::make_shared<DelayAction>(5.0) ;
-            mode->pushAction(act) ;              
-
-            act = std::make_shared<LifterGoToHeightAction>(*lifter, 20.0) ;
-            mode->pushSubActionPair(lifter, act) ;
-
-            act = std::make_shared<LifterHoldHeightAction>(*lifter, 20.0) ;
-            mode->pushSubActionPair(lifter, act, false) ;
-
-            act = std::make_shared<DelayAction>(5.0) ;
-            mode->pushAction(act) ;              
-#endif
+            
             return mode ;                
         }
 
@@ -571,9 +553,6 @@ namespace xero {
             act = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
             seq->pushSubActionPair(lifter, act) ;
 
-            act = std::make_shared<LifterHoldHeightAction>(*lifter, height) ;
-            seq->pushSubActionPair(lifter, act, false) ;     
-
             return seq ;     
         }
 
@@ -587,9 +566,6 @@ namespace xero {
 
             act = std::make_shared<TurntableGoToAngleAction>(*turntable, angle) ;
             seq->pushSubActionPair(turntable, act) ;
-
-            act = std::make_shared<TurntableHoldAngleAction>(*turntable, angle) ;
-            seq->pushSubActionPair(turntable, act, false) ;     
 
             return seq ;                 
         }        

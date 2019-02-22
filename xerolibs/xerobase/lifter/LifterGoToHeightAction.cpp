@@ -24,6 +24,8 @@ namespace xero {
             double maxa = getLifter().getRobot().getSettingsParser().getDouble("lifter:maxa") ;
             double maxd = getLifter().getRobot().getSettingsParser().getDouble("lifter:maxd") ;                        
             profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
+
+            pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold") ;             
         }
 
         LifterGoToHeightAction::LifterGoToHeightAction(Lifter &lifter, const std::string &name, bool relative) : LifterAction(lifter) {
@@ -37,7 +39,9 @@ namespace xero {
             double maxv = getLifter().getRobot().getSettingsParser().getDouble("lifter:maxv") ;
             double maxa = getLifter().getRobot().getSettingsParser().getDouble("lifter:maxa") ;
             double maxd = getLifter().getRobot().getSettingsParser().getDouble("lifter:maxd") ;                        
-            profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;                                     
+            profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;     
+
+            pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold") ;                                             
         }
 
         LifterGoToHeightAction::~LifterGoToHeightAction() {
@@ -98,73 +102,79 @@ namespace xero {
         }
 
         void LifterGoToHeightAction::run() {
-            if (is_done_)
-                return ;
-
             Lifter &lifter = getLifter() ;
-            double dt = lifter.getRobot().getDeltaTime() ;
-            double elapsed = lifter.getRobot().getTime() - start_time_ ;
-            double speed = lifter.getVelocity() ;
-            double traveled = getLifter().getHeight() - start_height_ ;
-            double delta = target_ - getLifter().getHeight() ;
 
-            if (elapsed > profile_->getTotalTime())
+            if (is_done_) {
+                double dist = target_ - lifter.getHeight() ;
+                double out = pid_ctrl_.getOutput(0, dist, 0, getLifter().getRobot().getDeltaTime()) ;
+                lifter.setMotorPower(out) ;                
+            } 
+            else 
             {
-                MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
-                logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
-                logger << "LifterGoToHeightAction: action completed" ;
-                logger << ", delta = " << delta ;
-                logger.endMessage() ;
+                double dt = lifter.getRobot().getDeltaTime() ;
+                double elapsed = lifter.getRobot().getTime() - start_time_ ;
+                double speed = lifter.getVelocity() ;
+                double traveled = getLifter().getHeight() - start_height_ ;
+                double delta = target_ - getLifter().getHeight() ;
 
-                if (std::fabs(delta) < threshold_) {
-                    is_done_ = true ;
-                    lifter.getRobot().endPlot(plotid_) ;
-                    lifter.setMotorPower(0.0) ;
-
+                if (elapsed > profile_->getTotalTime())
+                {
                     MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
                     logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
-                    logger << "LifterGoToHeightAction: action completed sucessfully" ;
+                    logger << "LifterGoToHeightAction: action completed" ;
+                    logger << ", delta = " << delta ;
                     logger.endMessage() ;
-                    
-                } else {
-                    lifter.getRobot().endPlot(plotid_) ;                    
-                    is_done_ = true ;
-                    return ;
 
-                    //
-                    // We reached the end of the profile, but are not where we
-                    // want to be.  Create a new profile to get us there.
-                    //
-                    profile_->update(delta, speed, 0.0) ;
-                    start_height_ = getLifter().getHeight() ;
-                    start_time_ = getLifter().getRobot().getTime() ;
-                    elapsed = 0 ;
-                    traveled = 0 ;
+                    if (std::fabs(delta) < threshold_) {
+                        is_done_ = true ;
+                        lifter.getRobot().endPlot(plotid_) ;
+                        lifter.setMotorPower(0.0) ;
 
-                    MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
-                    logger << "Did not reach destination, new Lifter Velocity Profile: " << profile_->toString() ;
-                    logger.endMessage() ;                      
+                        MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
+                        logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
+                        logger << "LifterGoToHeightAction: action completed sucessfully" ;
+                        logger.endMessage() ;
+                        
+                    } else {
+                        lifter.getRobot().endPlot(plotid_) ;                    
+                        is_done_ = true ;
+                        return ;
+
+                        //
+                        // We reached the end of the profile, but are not where we
+                        // want to be.  Create a new profile to get us there.
+                        //
+                        profile_->update(delta, speed, 0.0) ;
+                        start_height_ = getLifter().getHeight() ;
+                        start_time_ = getLifter().getRobot().getTime() ;
+                        elapsed = 0 ;
+                        traveled = 0 ;
+
+                        MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
+                        logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
+                        logger << "Did not reach destination, new Lifter Velocity Profile: " << profile_->toString() ;
+                        logger.endMessage() ;                      
+                    }
                 }
-            }
 
-            if (!is_done_)
-            {
-                double tdist = profile_->getDistance(elapsed) ;
-                double tvel = profile_->getVelocity(elapsed) ;
-                double tacc = profile_->getAccel(elapsed) ;
+                if (!is_done_)
+                {
+                    double tdist = profile_->getDistance(elapsed) ;
+                    double tvel = profile_->getVelocity(elapsed) ;
+                    double tacc = profile_->getAccel(elapsed) ;
 
-                double out = ctrl_->getOutput(tacc, tvel, tdist, traveled, dt) ;
-                lifter.setMotorPower(out) ;
+                    double out = ctrl_->getOutput(tacc, tvel, tdist, traveled, dt) ;
+                    lifter.setMotorPower(out) ;
 
-                lifter.getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
-                lifter.getRobot().addPlotData(plotid_, index_, 1, tdist + start_height_) ;
-                lifter.getRobot().addPlotData(plotid_, index_, 2, traveled + start_height_) ;
-                lifter.getRobot().addPlotData(plotid_, index_, 3, tvel) ;
-                lifter.getRobot().addPlotData(plotid_, index_, 4, speed) ;
-                lifter.getRobot().addPlotData(plotid_, index_, 5, out) ;
+                    lifter.getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
+                    lifter.getRobot().addPlotData(plotid_, index_, 1, tdist + start_height_) ;
+                    lifter.getRobot().addPlotData(plotid_, index_, 2, traveled + start_height_) ;
+                    lifter.getRobot().addPlotData(plotid_, index_, 3, tvel) ;
+                    lifter.getRobot().addPlotData(plotid_, index_, 4, speed) ;
+                    lifter.getRobot().addPlotData(plotid_, index_, 5, out) ;
 
-                index_++ ;
+                    index_++ ;
+                }
             }
         }
 

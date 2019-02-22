@@ -13,7 +13,6 @@ namespace xero {
 
             friend class TurntableCalibrateAction ;
             friend class TurntableGoToAngleAction ;
-            friend class TurntableHoldAngleAction ;            
             friend class TurntablePowerAction ;
         
         public:
@@ -72,6 +71,7 @@ namespace xero {
             int encoder_value_;
             double min_angle_;
             double max_angle_;
+            double danger_zone_ ;
             double degrees_per_tick_;
             double angle_;
             bool is_calibrated_;

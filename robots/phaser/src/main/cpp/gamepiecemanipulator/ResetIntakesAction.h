@@ -29,6 +29,7 @@ namespace xero{
             xero::base::ActionPtr hold_lifter_safe_height_ ;
             xero::base::ActionPtr retract_cargo_intake_ ;
             xero::base::ActionPtr retract_hatch_intake_ ;
+            xero::base::ActionPtr retract_arm_ ;
         } ;
     }
 }

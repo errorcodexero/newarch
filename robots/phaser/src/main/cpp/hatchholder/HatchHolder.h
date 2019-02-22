@@ -4,6 +4,7 @@
 #include <frc/DigitalInput.h>
 #include <frc/Solenoid.h>
 #include <PIDCtrl.h>
+#include <Robot.h>
 #include <limits>
 #include <vector>
 
@@ -23,6 +24,7 @@ namespace xero {
 
             void extendArm() ;
             void retractArm() ;
+            void stopArm() ;            
             void extendFinger() ;
             void retractFinger() ;
             bool holdingHatch() ;

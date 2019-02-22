@@ -1,8 +1,7 @@
 #include "CompleteLSHatchCollect.h"
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
-#include <lifter/LifterGoToHeightAction.h>
-#include <lifter/LifterHoldHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
+#include "lifter/LifterGoToHeightAction.h"
 #include "hatchholder/HatchHolderAction.h"
 
 using namespace xero::base ;
@@ -22,12 +21,13 @@ namespace xero {
             set_retract_hatch_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER) ;
             set_deploy_hatch_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_FINGER) ;
         }
+
         CompleteLSHatchCollect::~CompleteLSHatchCollect() {
         }
-
         
         void CompleteLSHatchCollect::start() {
             auto hatch_holder = getGamePiece().getHatchHolder() ;
+            hatch_holder->setAction(set_retract_hatch_finger_) ;            
             hatch_holder->setAction(set_extend_arm_) ;
             state_ = State::ExtendArm ;
         }
@@ -60,13 +60,6 @@ namespace xero {
                 
             case State::RetractArm:
                 if(set_retract_arm_->isDone()){
-                    state_ = State::CheckHolder ;
-                }
-                break ;
-                
-            case State::CheckHolder:
-                if(!hatch_holder->hasHatch()){
-                    hatch_holder->setAction(set_retract_hatch_finger_) ;
                     state_ = State::Idle ;
                 }
                 break ;

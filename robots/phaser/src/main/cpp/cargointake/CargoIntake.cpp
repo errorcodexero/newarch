@@ -15,15 +15,19 @@ namespace xero {
             solenoid_->Set(false) ;          
             sensor_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:cargointake:sensor")) ;  
             has_cargo_ = false ;
+            is_deployed_ = false ;
         }
         CargoIntake::~CargoIntake(){
 
         }
         void CargoIntake::deployCollector(){
             solenoid_->Set(true) ;
+            is_deployed_ = true ;
         }
+
         void CargoIntake::retractCollector(){
             solenoid_->Set(false) ;
+            is_deployed_ = false ;
         }
 
         bool CargoIntake::canAcceptAction(xero::base::ActionPtr act) {
@@ -35,7 +39,6 @@ namespace xero {
         }
 
         void CargoIntake::computeState() {
-            is_deployed_ = solenoid_->Get() ;
             has_cargo_ = !sensor_->Get() ;
 
             auto &logger = getRobot().getMessageLogger() ;

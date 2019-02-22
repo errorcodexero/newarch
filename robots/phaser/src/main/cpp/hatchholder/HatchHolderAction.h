@@ -29,10 +29,10 @@ namespace xero {
             /// \param subsystem SingleMotor subsystem
             HatchHolderAction(HatchHolder &subsystem, Operation operation) : subsystem_(subsystem), operation_(operation) {
                 is_done_ = false ;
+                duration_ = subsystem.getRobot().getSettingsParser().getDouble("hatchholder:delay") ;
             }
 
             ~HatchHolderAction(){
-
             }
 
             virtual void start() ;
@@ -47,6 +47,8 @@ namespace xero {
             HatchHolder &subsystem_;
             Operation operation_;
             bool is_done_;
+            double start_ ;
+            double duration_ ;
         };
     }
 }

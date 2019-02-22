@@ -3,6 +3,7 @@
 #include "LifterAction.h"
 #include "Lifter.h"
 #include <PIDACtrl.h>
+#include <PIDCtrl.h>
 #include <TrapezoidalProfile.h>
 
 namespace xero {
@@ -26,6 +27,7 @@ namespace xero {
             double offset_ ;
             std::shared_ptr<xero::misc::PIDACtrl> ctrl_ ;
             std::shared_ptr<xero::misc::TrapezoidalProfile> profile_ ;
+            xero::misc::PIDCtrl pid_ctrl_ ;            
             double start_time_ ;
             double start_height_ ;
             size_t index_ ;

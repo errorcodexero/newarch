@@ -13,11 +13,4 @@ arguments.  The following command line arguments are defined.
 --simprint - print the simualtor output on the standard error stream
 --simfile file - print the simulator output to a file given by 'file'
 --simscreen - run the full screen simulator mode
---simprop propstring - set a property for the simulator (only one property is used now)
-  cube=time,time,time - this causes the cube detect sensor model to detect at each time given
-  
-
-The simulator executable is at:
-build/exe/frcUserProgramSim/frcUserProgramSim.exe
-
-
+ 

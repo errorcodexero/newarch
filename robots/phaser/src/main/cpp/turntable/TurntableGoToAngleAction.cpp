@@ -25,6 +25,8 @@ namespace xero {
             double maxa = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxa")  ;
             double maxd = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxd")  ;                        
             profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
+
+            pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:hold") ;              
         }
 
         TurntableGoToAngleAction::TurntableGoToAngleAction(Turntable &turntable, const std::string &name) : TurntableAction(turntable) {
@@ -37,6 +39,8 @@ namespace xero {
             double maxa = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxa")  ;
             double maxd = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxd")  ;                        
             profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;   
+
+            pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:hold") ;              
         }
 
         TurntableGoToAngleAction::~TurntableGoToAngleAction() {
@@ -116,73 +120,81 @@ namespace xero {
         }
 
         void TurntableGoToAngleAction::run() {
-            if (is_done_)
-                return ;
-
             Turntable &turntable = getTurntable() ;
-            double dt = turntable.getRobot().getDeltaTime() ;
-            double elapsed = turntable.getRobot().getTime() - start_time_ ;
-            double speed = turntable.getVelocity() ;
-            double traveled = getTurntable().getAngleValue() - start_angle_ ;
-            double delta = getAngleDifference(getTurntable().getAngleValue(), target_) ;
-
-            if (elapsed > profile_->getTotalTime())
-            {
-                    MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
-                    logger << "TurntableGoToAngle: action completed " ;
-                    logger << ", delta " << delta ;
-                    logger.endMessage() ; 
-
-                if (std::fabs(delta) < threshold_) {
-                    is_done_ = true ;
-                    turntable.setMotorPower(0.0) ;
-                    turntable.getRobot().endPlot(plotid_) ;
-
-                    MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
-                    logger << "TurntableGoToAngle: action completed sucessfully" ;
-                    logger.endMessage() ;                    
-                } else {
-                    turntable.getRobot().endPlot(plotid_) ;
-                    is_done_ = true ;
-                    return ;
-
-                    MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
-                    logger << "TurntableGoToAngle: did not reach target, new Velocity Profile: " << profile_->toString() ;
-                    logger.endMessage() ; 
-                    
-                    //
-                    // We reached the end of the profile, but are not where we
-                    // want to be.  Create a new profile to get us there.
-                    //
-                    profile_->update(delta, speed, 0.0) ;
-                    start_angle_ = getTurntable().getAngleValue() ;
-                    start_time_ = getTurntable().getRobot().getTime() ;
-                    elapsed = 0 ;
-                    traveled = 0 ;
-                }
+            double dt = turntable.getRobot().getDeltaTime() ;               
+            double angle = turntable.getAngleValue() ;
+                        
+            if (is_done_) {
+                output_ = pidctrl_.getOutput(target_, angle, 0, dt) ;
+                turntable.setMotorPower(output_) ;                
             }
-            if (!is_done_)
+            else
             {
-                double tdist = profile_->getDistance(elapsed) ;
-                double tvel = profile_->getVelocity(elapsed) ;
-                double tacc = profile_->getAccel(elapsed) ;
 
-                double error = xero::math::normalizeAngleDegrees(tdist - traveled) ;
-                double out = ctrl_->getOutput(tacc, tvel, tdist, traveled, dt) ;
-                turntable.setMotorPower(out) ;
 
-                turntable.getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
-                turntable.getRobot().addPlotData(plotid_, index_, 1, tdist + start_angle_) ;
-                turntable.getRobot().addPlotData(plotid_, index_, 2, traveled + start_angle_) ;
-                turntable.getRobot().addPlotData(plotid_, index_, 3, tvel) ;
-                turntable.getRobot().addPlotData(plotid_, index_, 4, speed) ;
-                turntable.getRobot().addPlotData(plotid_, index_, 5, out) ;
-                turntable.getRobot().addPlotData(plotid_, index_, 6, error) ;
+                double elapsed = turntable.getRobot().getTime() - start_time_ ;
+                double speed = turntable.getVelocity() ;
+                double traveled = getTurntable().getAngleValue() - start_angle_ ;
+                double delta = getAngleDifference(getTurntable().getAngleValue(), target_) ;
 
-                index_++ ;
+                if (elapsed > profile_->getTotalTime())
+                {
+                        MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
+                        logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
+                        logger << "TurntableGoToAngle: action completed " ;
+                        logger << ", delta " << delta ;
+                        logger.endMessage() ; 
+
+                    if (std::fabs(delta) < threshold_) {
+                        is_done_ = true ;
+                        turntable.setMotorPower(0.0) ;
+                        turntable.getRobot().endPlot(plotid_) ;
+
+                        MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
+                        logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
+                        logger << "TurntableGoToAngle: action completed sucessfully" ;
+                        logger.endMessage() ;                    
+                    } else {
+                        turntable.getRobot().endPlot(plotid_) ;
+                        is_done_ = true ;
+                        return ;
+
+                        MessageLogger &logger = turntable.getRobot().getMessageLogger() ;
+                        logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
+                        logger << "TurntableGoToAngle: did not reach target, new Velocity Profile: " << profile_->toString() ;
+                        logger.endMessage() ; 
+                        
+                        //
+                        // We reached the end of the profile, but are not where we
+                        // want to be.  Create a new profile to get us there.
+                        //
+                        profile_->update(delta, speed, 0.0) ;
+                        start_angle_ = getTurntable().getAngleValue() ;
+                        start_time_ = getTurntable().getRobot().getTime() ;
+                        elapsed = 0 ;
+                        traveled = 0 ;
+                    }
+                }
+                if (!is_done_)
+                {
+                    double tdist = profile_->getDistance(elapsed) ;
+                    double tvel = profile_->getVelocity(elapsed) ;
+                    double tacc = profile_->getAccel(elapsed) ;
+
+                    double error = xero::math::normalizeAngleDegrees(tdist - traveled) ;
+                    double out = ctrl_->getOutput(tacc, tvel, tdist, traveled, dt) ;
+                    turntable.setMotorPower(out) ;
+
+                    turntable.getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
+                    turntable.getRobot().addPlotData(plotid_, index_, 1, tdist + start_angle_) ;
+                    turntable.getRobot().addPlotData(plotid_, index_, 2, traveled + start_angle_) ;
+                    turntable.getRobot().addPlotData(plotid_, index_, 3, tvel) ;
+                    turntable.getRobot().addPlotData(plotid_, index_, 4, speed) ;
+                    turntable.getRobot().addPlotData(plotid_, index_, 5, out) ;
+                    turntable.getRobot().addPlotData(plotid_, index_, 6, error) ;
+
+                    index_++ ;
+                }
             }
         }
 

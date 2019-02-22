@@ -4,7 +4,6 @@ SOURCES = \
 	lifter/Lifter.cpp\
 	lifter/LifterCalibrateAction.cpp\
 	lifter/LifterGoToHeightAction.cpp\
-	lifter/LifterHoldHeightAction.cpp\
 	lifter/LifterPowerAction.cpp\
 	ActionSequence.cpp\
 	AutoMode.cpp\

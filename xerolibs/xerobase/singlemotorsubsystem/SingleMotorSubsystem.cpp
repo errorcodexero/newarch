@@ -12,12 +12,14 @@ namespace xero {
             msg_id_ = mid ;
 
             if (victor)
+            {
                 motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::VictorSPX>(m) ;
+            }
             else
                 motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::TalonSRX>(m);
 
             motor_->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
-
+                motor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0.5) ;  
             current_power_ = 0.0 ;
         }
 
@@ -42,6 +44,7 @@ namespace xero {
         }
 
         bool SingleMotorSubsystem::canAcceptAction(ActionPtr action) {
+          
             auto coll = std::dynamic_pointer_cast<SingleMotorSubsystemAction>(action) ;
             return coll != nullptr ;
         }

@@ -32,11 +32,8 @@ namespace xero{
             double safe_height_ ;
 
             xero::base::ActionPtr set_lifter_safe_height_ ;
-            xero::base::ActionPtr hold_lifter_safe_height_ ;
             xero::base::ActionPtr set_lifter_final_height_ ;
-            xero::base::ActionPtr hold_lifter_final_height_ ;
             xero::base::ActionPtr set_turntable_angle_ ;
-            xero::base::ActionPtr hold_turntable_angle_ ;                
         } ;
     }
 }

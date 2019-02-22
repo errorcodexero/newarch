@@ -1,11 +1,11 @@
 #include "ResetIntakesAction.h"
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <lifter/LifterGoToHeightAction.h>
-#include <lifter/LifterHoldHeightAction.h>
 #include <cargointake/CargoIntake.h>
 #include <cargointake/CargoIntakeAction.h>
 #include <hatchintake/HatchIntake.h>
 #include <hatchintake/HatchIntakeAction.h>
+#include <hatchholder/HatchHolderAction.h>
 
 using namespace xero::base ;
 
@@ -16,11 +16,13 @@ namespace xero {
             auto lifter = getGamePiece().getLifter() ; 
             auto hatch_intake = getGamePiece().getHatchIntake();
             auto cargo_intake = getGamePiece().getCargoIntake() ;
+            auto hatch_holder = getGamePiece().getHatchHolder() ;
 
             set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
             hold_lifter_safe_height_  = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
             retract_hatch_intake_ = std::make_shared<HatchIntakeAction>(*hatch_intake, false) ;
+            retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM) ;
         }
 
         ResetIntakeAction::~ResetIntakeAction() {
@@ -52,11 +54,14 @@ namespace xero {
 
                     auto lifter = getGamePiece().getLifter() ;
                     lifter->setAction(hold_lifter_safe_height_) ;
+
+                    auto hatch_holder = getGamePiece().getHatchHolder() ;
+                    hatch_holder->setAction(retract_arm_) ;
                 }
                 break ;
 
             case State::Retracting:
-                if (retract_hatch_intake_->isDone() && retract_cargo_intake_->isDone()) {
+                if (retract_hatch_intake_->isDone() && retract_cargo_intake_->isDone() && retract_arm_->isDone()) {
                     state_ = State::Idle ;
                 }
                 break ;
