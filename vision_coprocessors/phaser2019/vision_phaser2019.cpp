@@ -432,7 +432,7 @@ namespace {
         std::string cam_mode = nt_camera_mode.GetString("");
         
         if (cam_no != -1 && !cam_mode.empty()) {     // Selection published by robot ==> don't use chooser
-            std::cout << "From robot: " << cam_no << "    " << cam_mode << "\n";
+            //std::cout << "From robot: " << cam_no << "    " << cam_mode << "\n";
             new_selected_camera = (cam_no == 0)? 0 : 1;
             new_viewing_mode = (cam_mode == "TargetTracking") ? false : true;
         } else {
@@ -515,12 +515,14 @@ namespace {
     }
 
     // Check if rotated rect is a left or right marker based on loose angle range
+    const double rot_ang_tol = 0.3;  /*Tolerance as fraction*/
+    const double rot_ang_tol_abs = 10;  /*+- that many degrees */
     bool isLeftMarker(const RRect& rect) {
-        return (rect.angle < -45);
+        return isApproxEqual(rect.angle+90, 15, rot_ang_tol, rot_ang_tol_abs);
     }
     
     bool isRightMarker(const RRect& rect) {
-        return !isLeftMarker(rect);
+        return isApproxEqual(rect.angle+90, 75, rot_ang_tol, rot_ang_tol_abs);
     }
 
     // Start network table in client vs. server mode depending whether running on robot or not
@@ -621,7 +623,7 @@ namespace {
         }
 
         // Check that we alternate left/right rectangles, else bail out.
-        for (int i=1; i<filtered_rects.size(); ++i) {
+        for (int i=0; i<filtered_rects.size(); ++i) {
             const RRect& rect = filtered_rects[i];
             if ((i % 2) == 0) {   // Expect left marker
                 if (!isLeftMarker(rect)) {
@@ -802,10 +804,7 @@ namespace {
                 
                 // Discard rectangles that don't have the expected angle
                 // Expected angles are -15 for one and -75 for the other.
-                const double rot_ang_tol = 0.3;  /*Tolerance as fraction*/
-                const double rot_ang_tol_abs = 10;  /*+- that many degrees */
-                if (!isApproxEqual(min_rect.angle+90, 15, rot_ang_tol, rot_ang_tol_abs) &&
-                    !isApproxEqual(min_rect.angle+90, 75, rot_ang_tol, rot_ang_tol_abs)) {
+                if (!isLeftMarker(min_rect) && !isRightMarker(min_rect)) {
                     //std::cout << "FALSE: Rect angle = " << min_rect.angle << "\n";
                     continue;
                 }
@@ -967,6 +966,8 @@ namespace {
             nt_target_dist_inch.SetDouble(dist_to_target);
             nt_target_dist2_inch.SetDouble(dist2_inch);
             nt_target_dist3_inch.SetDouble(dist3_inch);
+
+            //std::cout << "Rect angles: " << left_rect.angle << ", " << right_rect.angle << "\n";
             setTargetIsIdentified(true);  // Also flushed NT, so keep this call at the end of NT updates.
         }
 
@@ -1044,6 +1045,14 @@ namespace {
                 output_stream_.PutFrame(pipe.output_frame_);
             }
 
+            // For debug of false positives
+            /*
+            if (nt_target_valid.GetBoolean(false)) {
+                std::cout << "DEBUG: Target distance = " << nt_target_dist3_inch.GetDouble(0)/12.0 << " feet\n";
+                std::this_thread::sleep_for(std::chrono::seconds(10));
+            }
+            */
+            
             if ((times_called % 20) == 0) {
                 const double current_time = frc::Timer::GetFPGATimestamp();
                 double elapsed_time = current_time - start_time;
