@@ -47,71 +47,37 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = testCargoHolder() ;
                 break ;
 
             case 1:
-                mode = createScrubCharAutoMode() ;
                 break ;
 
             case 2:
-                mode = createTestOne() ;
                 break ;
 
             case 3:
-                mode = createTestTwo() ;
                 break ;
 
             case 4:
-                mode = testHatchDeposit() ;
                 break ;
 
             case 5:
                 break ;
 
             case 6:
-                mode = testLifterRaw() ;
                 break ;
 
             case 7:
-                mode = testLineFollower() ;
                 break ;
 
             case 8:
-                mode = testVision() ;
                 break ;
 
             case 9:
-                mode = testTurntable() ;
-                break ;
-
-            case 10:
-                mode = testCargoHolder() ;
-                break ;
-
-            case 11: 
-                mode = testCargoIntake() ;
-                break ;
-
-            case 12:
-                mode = testClimber() ;
-                break ;
-
-            case 13:
-                mode = testHatchHolder() ;
-                break ;
-
-            case 14:
-                mode = testFloorCollectCargo() ;
-                break ;
-
-            case 15:
-                mode = testFloorCollectHatch() ;
                 break ;
             }
             setAction(mode) ;
         }
-
 
         AutoModePtr PhaserAutoModeController::createStraightCharAutoMode(bool gear) {
             std::string name = "Char Drive Base" ;
@@ -248,15 +214,9 @@ namespace xero {
             act = std::make_shared<SingleMotorPowerAction>(*cargoholder, 0.6) ;
             mode->pushSubActionPair(cargoholder, act) ;
 
-            act = std::make_shared<DelayAction>(3.0) ;
+            act = std::make_shared<DelayAction>(60.0) ;
             mode->pushAction(act) ;
             
-            act = std::make_shared<SingleMotorPowerAction>(*cargoholder, -0.6) ;
-            mode->pushSubActionPair(cargoholder, act) ;       
-
-            act = std::make_shared<DelayAction>(3.0) ;
-            mode->pushAction(act) ;
-
             act = std::make_shared<SingleMotorPowerAction>(*cargoholder, 0.0) ;
             mode->pushSubActionPair(cargoholder, act) ;    
 

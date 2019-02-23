@@ -78,10 +78,10 @@ namespace xero {
                 if (words.size() != 4)
                     continue ;
 
-                double time = std::stod(words[2]) ;
+                double time = std::stod(words[0]) ;
                 int value = std::stoi(words[3]) ;
 
-                addEvent(words[0], words[1], time, value) ;                
+                addEvent(words[1], words[2], time, value) ;                
             }
         }
     }

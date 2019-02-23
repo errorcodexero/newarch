@@ -13,7 +13,7 @@ class PIDCtrl
 {
 public:
     /// \brief create a new pid controller with all zero constants
-    PIDCtrl();
+    PIDCtrl(bool is_angle = false);
 
     /// \brief create a new pid controller with the given constants
     /// \param p the P constant (proportional)

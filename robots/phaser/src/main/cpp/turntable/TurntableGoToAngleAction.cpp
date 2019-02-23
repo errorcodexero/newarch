@@ -26,8 +26,7 @@ namespace xero {
             double maxd = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxd")  ;                        
             profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
 
-            pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:hold") ;       
-
+            pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:hold", true) ;       
         }
 
         TurntableGoToAngleAction::TurntableGoToAngleAction(Turntable &turntable, const std::string &name) : TurntableAction(turntable) {
@@ -41,7 +40,7 @@ namespace xero {
             double maxd = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxd")  ;                        
             profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;   
 
-            pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:hold") ;              
+            pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:hold", true) ;              
         }
 
         TurntableGoToAngleAction::~TurntableGoToAngleAction() {
@@ -142,38 +141,20 @@ namespace xero {
 
                 if (elapsed > profile_->getTotalTime())
                 {
-                        logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
-                        logger << "TurntableGoToAngle: action completed " ;
-                        logger << ", delta " << delta ;
-                        logger.endMessage() ; 
+                    logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
+                    logger << "TurntableGoToAngle: action completed " ;
+                    logger << ", delta " << delta ;
+                    logger.endMessage() ; 
 
-                    if (std::fabs(delta) < threshold_) {
-                        is_done_ = true ;
-                        turntable.setMotorPower(0.0) ;
-                        turntable.getRobot().endPlot(plotid_) ;
+                    std::cout << "Finished go to angle" << std::endl ;
+                    is_done_ = true ;
+                    turntable.setMotorPower(0.0) ;
+                    turntable.getRobot().endPlot(plotid_) ;
 
-                        logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
-                        logger << "TurntableGoToAngle: action completed sucessfully" ;
-                        logger.endMessage() ;                    
-                    } else {
-                        turntable.getRobot().endPlot(plotid_) ;
-                        is_done_ = true ;
-                        return ;
+                    logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
+                    logger << "TurntableGoToAngle: action completed sucessfully" ;
+                    logger.endMessage() ;       
 
-                        logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
-                        logger << "TurntableGoToAngle: did not reach target, new Velocity Profile: " << profile_->toString() ;
-                        logger.endMessage() ; 
-                        
-                        //
-                        // We reached the end of the profile, but are not where we
-                        // want to be.  Create a new profile to get us there.
-                        //
-                        profile_->update(delta, speed, 0.0) ;
-                        start_angle_ = getTurntable().getAngleValue() ;
-                        start_time_ = getTurntable().getRobot().getTime() ;
-                        elapsed = 0 ;
-                        traveled = 0 ;
-                    }
                 }
                 if (!is_done_)
                 {

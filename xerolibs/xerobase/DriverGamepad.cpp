@@ -37,6 +37,12 @@ namespace xero {
             }
 
             controller_ = std::make_shared<frc::XboxController>(index) ;
+            reverse_ = false ;
+
+            auto &parser = oi.getRobot().getSettingsParser() ;
+            if (parser.isDefined("driver:spin:reverse")) {
+                reverse_ = parser.getBoolean("driver:spin:reverse") ;
+            }
         }
 
         DriverGamepad::~DriverGamepad() {            
@@ -140,12 +146,23 @@ namespace xero {
 
                 double power = scalePower(-ly, boost, slow) ;
                 double spin = (std::fabs(rx) > 0.01) ? scalePower(rx, boost, slow) : 0.0 ;
+
+                double left, right ;
+
+                if (reverse_) {
+                    left = power - spin ;
+                    right = power + spin ;
+                }
+                else {
+                    left = power + spin ;
+                    right = power - spin ;
+                }
                 
-                if (std::fabs(power + spin - left_) > tolerance_ || std::fabs(power - spin - right_) > tolerance_) {
-                    auto dir = std::make_shared<TankDrivePowerAction>(*db_, power + spin, power - spin) ;
+                if (std::fabs(left - left_) > tolerance_ || std::fabs(right - right_) > tolerance_) {
+                    auto dir = std::make_shared<TankDrivePowerAction>(*db_, left, right) ;
                     seq.pushSubActionPair(db_, dir) ;
-                    left_ = power - spin ;
-                    right_ = power + spin ;
+                    left_ = left ;
+                    right_ = right ;
                 }
             }
         }

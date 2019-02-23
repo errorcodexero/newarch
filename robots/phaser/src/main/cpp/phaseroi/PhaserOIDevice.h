@@ -43,8 +43,9 @@ namespace xero {
 
             virtual void generateActions(xero::base::ActionSequence &seq) ;
 
+            virtual void init() ;
+
         private:
-            void createActions() ;
             void initialize() ;
             void getTrackingMode() ;
             void getCargoHatchMode(xero::base::ActionSequence &seq) ;
@@ -73,8 +74,6 @@ namespace xero {
             
         private:
             size_t automode_ ;
-            size_t camera_switch_ ;
-            size_t camera_mode_ ;   
 
             size_t hatch_cargo_switch_ ;
             size_t tracking_manual_switch_ ;
@@ -95,9 +94,7 @@ namespace xero {
             // \when holders empty, height_level_one_ will set lift to loading station height
             size_t collect_floor_ ;
             size_t go_ ; 
-
-            // \ score takes input from gamepiece holders
-            size_t score_ ;
+            size_t turtle_mode_ ;
 
             size_t climb_lock_switch_ ;
             size_t climb_ ;

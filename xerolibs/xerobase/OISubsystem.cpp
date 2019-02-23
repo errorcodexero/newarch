@@ -24,6 +24,12 @@ namespace xero {
         OISubsystem::~OISubsystem() {
         }     
 
+        void OISubsystem::postHWInit() {
+            Subsystem::postHWInit() ;
+            for(auto dev: hiddevices_)
+                dev->init() ;            
+        }
+
         int OISubsystem::getAutoModeSelector() {
             for(auto dev: hiddevices_) {
                 int automode = dev->getAutoModeSelector() ;

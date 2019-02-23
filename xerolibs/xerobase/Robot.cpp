@@ -215,23 +215,10 @@ namespace xero {
                 double avg = sleep_time_[index] / iterations_[index] ;
                 message_logger_.startMessage(MessageLogger::MessageType::info) ;
                 message_logger_ << "RobotLoop:" ;
-                message_logger_ << "iterations " << iterations_[index] ;
+                message_logger_ << " iterations " << iterations_[index] ;
                 message_logger_ << ", average sleep time " << avg ;
                 message_logger_.endMessage() ;
             }
-
-#ifdef NOTYET
-            message_logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_POWER) ;
-            message_logger_ << "Power:" ;
-            for(int i = 0 ; i < 16 ; i++) {
-                message_logger_ << " " << i ;
-                message_logger_ << " " << getChannelCurrent(i) ;
-            }
-            message_logger_.endMessage() ;
-            message_logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_POWER) ;            
-            message_logger_ << "Voltage: " << voltage_ ;
-            message_logger_.endMessage() ;
-#endif
         }
 
         void Robot::RobotInit() {
@@ -281,8 +268,17 @@ namespace xero {
             RobotHardwareInit() ;
 
             //
+            // Perform post hardware subsystem initialization.  This is initialization
+            // that needs to happen after all of the hierarchal subsystem in the robot
+            // have been created and the parent child relationships have been put in
+            // place.
+            //
+            robot_subsystem_->postHWInit() ;
+
+            //
             // Create the auto mode controller.  Its around for the complete lifecycle of the
-            // robot object
+            // robot object as it is needed while the robot is disabled to ready any long running
+            // operations for autonomous.
             //
             auto_controller_ = std::dynamic_pointer_cast<AutoController>(createAutoController()) ;
             assert(auto_controller_ != nullptr) ;

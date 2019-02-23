@@ -100,6 +100,8 @@ namespace xero {
             ActionPtr nudge_backward_ ;
             ActionPtr nudge_clockwise_ ;
             ActionPtr nudge_counter_clockwise_ ;
+
+            bool reverse_ ;
         } ;
      }
  }

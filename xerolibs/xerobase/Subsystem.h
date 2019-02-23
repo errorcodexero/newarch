@@ -99,6 +99,14 @@ namespace xero {
                 return robot_ ;
             }
 
+            /// \brief this is called after hardware is initialized.
+            /// This method gives each subsystem a chance to initialization
+            /// any hardware needed.
+            /// 
+            virtual void postHWInit() {
+                for(auto child : children_)
+                    child->postHWInit() ;
+            }
 
         protected:
             /// \brief check that a Action is valid for a subsystem

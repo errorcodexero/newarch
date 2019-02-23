@@ -9,7 +9,7 @@
 namespace xero {
 namespace misc {
 
-PIDCtrl::PIDCtrl():PIDCtrl(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+PIDCtrl::PIDCtrl(bool is_angle):PIDCtrl(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, is_angle_)
 {
 }
 
@@ -95,7 +95,7 @@ double PIDCtrl::getOutput(double target, double current, double timeDifference)
 double PIDCtrl::calcError(double target, double current)
 {
     double error ;
-    
+
     if (is_angle_)
         error = xero::math::normalizeAngleDegrees(target - current) ;
     else

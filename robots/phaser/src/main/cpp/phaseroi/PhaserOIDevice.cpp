@@ -38,8 +38,14 @@ using namespace xero::misc ;
 namespace xero {
     namespace phaser {
         PhaserOIDevice::PhaserOIDevice(PhaserOISubsystem &sub, int index) : OIDevice(sub, index) {
+            //
+            // Bind keys joystick buttons and axis to meaningful OI items
+            //
             initialize() ;
 
+            //
+            // Initialize state maintained by the OI
+            //
             height_ = ActionHeight::LevelOne ;
             dir_ = Direction::North ;
             mode_ = OperationMode::Invalid ;     
@@ -203,8 +209,8 @@ namespace xero {
             button = settings.getInteger("oi:go") ;
             go_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
-            button = settings.getInteger("oi:score") ;
-            score_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            button = settings.getInteger("oi:turtle") ;
+            turtle_mode_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
             button= settings.getInteger("oi:climb") ;
             climb_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
@@ -216,7 +222,7 @@ namespace xero {
         //
         // Create static actions we for the OI
         //
-        void PhaserOIDevice::createActions() {
+        void PhaserOIDevice::init() {
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
             log << "OI: creating static actions" ;
@@ -456,8 +462,6 @@ namespace xero {
                     angle += dirToString() ;  
 
                     piece = GamePieceManipulator::GamePieceType::Hatch ;    
-
-                    std::cout << "Cargo Hatch Switch is hatch" << std::endl ;                                                      
                 }
             }  
             log << "height " << height ;
@@ -685,9 +689,6 @@ namespace xero {
         void PhaserOIDevice::generateActions(ActionSequence &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
-
-            if (set_collect_cargo_floor_ == nullptr)
-                createActions() ;            
 
             getTrackingMode() ;
             getCargoHatchMode(seq) ;

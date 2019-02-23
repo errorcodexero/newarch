@@ -19,7 +19,6 @@ namespace xero {
                 motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::TalonSRX>(m);
 
             motor_->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
-                motor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0.5) ;  
             current_power_ = 0.0 ;
         }
 

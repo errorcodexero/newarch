@@ -17,7 +17,7 @@ void DispatchAction::start() {
     if (!subsystem_->setAction(action_)) {
         MessageLogger &logger = subsystem_->getRobot().getMessageLogger() ;
         logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
-        logger << "subsystem '" << subsystem_->getName() << "' rejected action '" ;
+        logger << "Actions: subsystem '" << subsystem_->getName() << "' rejected action '" ;
         logger << action_->toString() << "'" ;
         logger.endMessage() ;
         denied_ = true;

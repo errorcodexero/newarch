@@ -46,17 +46,17 @@ namespace xero {
             if (action != nullptr && !canAcceptAction(action)) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
-                logger << "subsystem '" << getName() << "' rejected action '" << action->toString() << "'" ;
+                logger << "Actions: subsystem '" << getName() << "' rejected action '" << action->toString() << "'" ;
                 logger.endMessage() ;
                 return false ;
             }
 
             MessageLogger &logger = getRobot().getMessageLogger() ;
-            logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
             if (action == nullptr)
-                logger << "subsystem '" << getName() << "' was assigned NULL action" ;
+                logger << "Actions: subsystem '" << getName() << "' was assigned NULL action" ;
             else
-                logger << "subsystem '" << getName() << "' was assigned action '" << action->toString() << "'" ;    
+                logger << "Actions: subsystem '" << getName() << "' was assigned action '" << action->toString() << "'" ;    
                         
             logger.endMessage() ;            
 
@@ -66,7 +66,7 @@ namespace xero {
                 //
                 MessageLogger &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
-                logger << "subsystem '" << getName() << "' action '" << action_->toString() << "' was canceled by setAction" ;
+                logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString() << "' was canceled by setAction" ;
                 logger.endMessage() ;   
 
                 cancelAction();
@@ -76,7 +76,7 @@ namespace xero {
 
                     MessageLogger &logger = getRobot().getMessageLogger() ;
                     logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
-                    logger << "subsystem '" << getName() << "' action '" << action->toString() << "' was pended" ;
+                    logger << "Actions: subsystem '" << getName() << "' action '" << action->toString() << "' was pended" ;
                     logger.endMessage() ;                    
                 }
             }

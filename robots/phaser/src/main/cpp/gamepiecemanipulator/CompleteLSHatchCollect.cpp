@@ -28,8 +28,8 @@ namespace xero {
         void CompleteLSHatchCollect::start() {
             auto hatch_holder = getGamePiece().getHatchHolder() ;
             hatch_holder->setAction(set_retract_hatch_finger_) ;            
-            hatch_holder->setAction(set_extend_arm_) ;
-            state_ = State::ExtendArm ;
+
+            state_ = State::RetractFinger ;
         }
 
         void CompleteLSHatchCollect::run(){
@@ -37,6 +37,13 @@ namespace xero {
             auto hatch_holder = getGamePiece().getHatchHolder() ;
 
             switch(state_) {
+            case State::RetractFinger:
+                if (set_retract_hatch_finger_->isDone()) {
+                    hatch_holder->setAction(set_extend_arm_) ;
+                    state_ = State::ExtendArm ;
+                }
+                break ;
+
             case State::ExtendArm:
                 if(set_extend_arm_->isDone()){
                     lifter->setAction(set_lifter_shift_up_height_) ;

@@ -30,11 +30,11 @@
 #
 # Start up conditions
 #
-oi,automode,0.1,-100                                    # Automode switch set to zero
-oi,tracking_viewing_nothing_switch,0.1,100              # Set the auto/semi/manual switch to manual
+0.1,oi,automode,-100                                    # Automode switch set to zero
+0.1,oi,tracking_viewing_nothing_switch,100              # Set the auto/semi/manual switch to manual
 
-oi,hatch_cargo_switch,3.0,0                             # Set the cargo/hatch switch to cargo
-oi,collect_floor,4.0,1                                  # Press the floor collect button
-oi,collect_floor,4.2,0                                  # Release the floor collect button
+3.0,oi,hatch_cargo_switch,0                             # Set the cargo/hatch switch to cargo
+4.0,oi,collect_floor,1                                  # Press the floor collect button
+4.2,oi,collect_floor,0                                  # Release the floor collect button
 
-cargoholder,cargo,8.0,1                                 # Ball shows up in cargo holder
+8.0,cargoholder,cargo,1                                 # Ball shows up in cargo holder

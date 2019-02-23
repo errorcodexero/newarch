@@ -224,8 +224,6 @@ namespace xero {
             /// \brief return the auto mode selection
             virtual int getAutoModelSelection() ;
 
-
-
         private:
             void logAutoModeState() ;
             void displayAutoModeState() ;

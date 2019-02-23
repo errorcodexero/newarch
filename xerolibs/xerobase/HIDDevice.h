@@ -56,6 +56,10 @@ namespace xero {
                 return enabled_ ;
             }
 
+            /// \brief This is called after the hardware is initialization
+            virtual void init() {
+            }
+
         private:
             OISubsystem &subsystem_ ;
             bool enabled_ ;

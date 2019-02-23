@@ -28,12 +28,19 @@ namespace xero {
                         subsystem_.getRobot().getMessageLogger().endMessage() ;
                         break;
                 }
+
+                if (duration_ < 0.001)
+                    is_done_ = true ;
             }
 
             void HatchHolderAction::run() {
-                if (subsystem_.getRobot().getTime() - start_ > duration_) {
-                    subsystem_.stopArm() ;
-                    is_done_ = true ;
+                if (!is_done_) {
+                    if (subsystem_.getRobot().getTime() - start_ > duration_) {
+                        if (operation_ == Operation::EXTEND_ARM || operation_ == Operation::RETRACT_ARM)
+                            subsystem_.stopArm() ;
+
+                        is_done_ = true ;
+                    }
                 }
             }
 

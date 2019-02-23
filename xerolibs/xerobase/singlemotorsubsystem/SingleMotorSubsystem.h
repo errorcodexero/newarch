@@ -69,6 +69,7 @@ namespace xero {
             /// \brief set the power (PWM) percentage for the motor.
             /// \param power the power to apply to the motor, between -1.0 and 1.0
             void setMotor(double power) {
+                std::cout << "SetMotorPower id " << motor_->GetDeviceID() << " power " << power << std::endl ;
                 motor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, power) ;
                 current_power_ = power ;
             }       

@@ -32,6 +32,11 @@ namespace xero {
                 duration_ = subsystem.getRobot().getSettingsParser().getDouble("hatchholder:delay") ;
             }
 
+            HatchHolderAction(HatchHolder &subsystem, Operation operation, double delay) : subsystem_(subsystem), operation_(operation) {
+                is_done_ = false ;
+                duration_ = delay ;
+            }            
+
             ~HatchHolderAction(){
             }
 

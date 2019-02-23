@@ -20,8 +20,19 @@ hw:tankdrive:leftencoder:2                                      1               
 hw:tankdrive:rightencoder:1                                     2               # Digital IO
 hw:tankdrive:rightencoder:2                                     3               # Digital IO
 hw:tankdrive:shifter                                            0               # Solenoid
-hw:tankdrive:invert:motors:left                                true
-hw:tankdrive:invert:encoders:left                              true
+
+#
+# The is for the comp bot
+#
+#hw:tankdrive:invert:motors:left                                true
+#hw:tankdrive:invert:encoders:left                              true
+# 
+
+#
+# This is for the practice bot
+#
+hw:tankdrive:invert:motors:right                                true
+hw:tankdrive:invert:encoders:right                              true
 
 hw:hatchholder:arm:extend                                        6              # Solenoid
 hw:hatchholder:arm:retract                                       7              # Solenoid
@@ -103,6 +114,7 @@ driver:power:tolerance                                          0.1
 driver:power:nudge_straight                                     0.2
 driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
+driver:spin:reverse                                             true
 
 #
 # Setup the data plotter
@@ -122,7 +134,7 @@ linefollower:back:adjust                                          -0.35
 #
 # Variables for the turntable
 #
-turntable:safe_lifter_height                                    17
+turntable:safe_lifter_height                                    26
 turntable:keepout:minimum                                       130
 turntable:keepout:maximum                                       160
 turntable:keepout:dangerzone                                    15
@@ -211,7 +223,7 @@ lifter:hold:imax                                                0.0
 # hatch_hook_center, the height of the center of the hatch holder above the lifter height
 #
 lifter:height:bottom                                            8.46
-lifter:height:safe_turn                                         18.0
+lifter:height:safe_turn                                         28.0
 lifter:height:cargo:floor_collect                               9.0
 lifter:height:offset:cargo_holder_center                        6.75
 lifter:height:offset:hatch_center                               5.5
@@ -293,11 +305,13 @@ drivebyvision:scurve_cycles                                     100
 drivebyvision:quit_threshold                                    31.0
 
 cargointake:power                                               -0.6
+
 cargoholder:power                                               0.6
+cargoholder:TalonSRX                                            true
 
 hatchintake:power                                               0.2
 
-hatchholder:delay                                               0.6
+hatchholder:delay                                               0.1
 
 score_cargo:power                                               -0.3
 score_cargo:time                                                2
@@ -314,7 +328,7 @@ oi:height_level_three                                           3               
 oi:height_cargo_bay                                             4                   # Button
 oi:collect_floor                                                5                   # Button
 oi:go                                                           10                  # Button
-oi:score                                                        6                   # Button
+oi:turtle                                                       6
 oi:climb                                                        8                   # Button
 oi:extra_button                                                 7                   # Button
 

@@ -10,6 +10,8 @@ using namespace xero::misc ;
 namespace xero {
     namespace phaser {
         GamePieceManipulator::GamePieceManipulator(Robot &robot) : Subsystem(robot, "gamepiecemanipulator") {
+            SettingsParser &settings = robot.getSettingsParser() ;            
+            bool victor = true ;
 
             hatch_holder_ = std::make_shared<HatchHolder>(robot) ;
             addChild(hatch_holder_) ;
@@ -17,7 +19,10 @@ namespace xero {
             hatch_intake_ = std::make_shared<HatchIntake>(robot, MSG_GROUP_HATCH_INTAKE) ;
             addChild(hatch_intake_) ;
 
-            cargo_holder_ = std::make_shared<CargoHolder>(robot, MSG_GROUP_CARGO_HOLDER) ;
+            if (settings.isDefined("cargoholder:TalonSRX"))
+                victor = !settings.getBoolean("cargoholder:TalonSRX") ;
+
+            cargo_holder_ = std::make_shared<CargoHolder>(robot, MSG_GROUP_CARGO_HOLDER, victor) ;
             addChild(cargo_holder_) ;
 
             cargo_intake_ = std::make_shared<CargoIntake>(robot, MSG_GROUP_CARGO_INTAKE) ;
