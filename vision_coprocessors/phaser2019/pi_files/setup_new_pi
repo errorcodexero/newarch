@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ -z "$PIIP" ]
+then
+  echo "PIIP not set"
+  exit 1
+fi
+
+# First remount as rw, then add ssh key so we only enter the password the first time
+cat ~/.ssh/id_rsa.pub | ssh -oStrictHostKeyChecking=accept-new pi@$PIIP 'bash -ci rw && mkdir -p .ssh && touch .ssh/authorized_keys && cat >> .ssh/authorized_keys'
+
+scp pi_files/stopService pi@$PIIP:/home/pi
+
+ssh -t pi@${PIIP} './stopService ; sleep 1'
+
+scp pi_files/frc.json pi@$PIIP:/home/pi
+
+ssh -t pi@$PIIP 'sudo cp frc.json /boot'
+
+make deploy
+
+
+
+
