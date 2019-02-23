@@ -754,17 +754,15 @@ namespace {
 
             // Sort contours by keep largest ones for further processing
             // Disabled for now.  No visible performance benefit.
-            if (false) {
-                std::sort(contours.begin(),
-                          contours.end(),
-                          [](const Contour& a, const Contour& b) -> bool
-                          { 
-                              return (cv::arcLength(a,true) > cv::arcLength(b,true));
-                          });
-                const int contour_size_lim = 12;  // Rather arbitrary
-                if (contours.size() > contour_size_lim) {
-                    contours.resize(contour_size_lim);
-                }
+            std::sort(contours.begin(),
+                      contours.end(),
+                      [](const Contour& a, const Contour& b) -> bool
+                      { 
+                          return (cv::arcLength(a,true) > cv::arcLength(b,true));
+                      });
+            const int contour_size_lim = 12;  // Rather arbitrary
+            if (contours.size() > contour_size_lim) {
+                contours.resize(contour_size_lim);
             }
 
             // Draw contours + find rectangles meeting aspect ratio requirement
