@@ -17,10 +17,20 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
+
+        static Robot *theOne = nullptr ;
+        static double getTimeFunc() {
+            if (theOne == nullptr)
+                return 0.0 ;
+
+            return theOne->getTime() ;
+        }
         
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         Robot::Robot(const std::string &name, double looptime) {
+            assert(theOne == nullptr) ;
+            theOne = this ;
             name_ = name ;
 
             target_loop_time_ = looptime ;
@@ -40,10 +50,13 @@ namespace xero {
             srand(time(NULL)) ;
 
             sender_ = nullptr ;
+
+            message_logger_.setTimeFunction(getTimeFunc) ;
         }
 #pragma GCC diagnostic pop
 
         Robot::~Robot() {
+            theOne = nullptr ;
             delete parser_ ;
             message_logger_.clear() ;
             if (output_stream_ != nullptr)

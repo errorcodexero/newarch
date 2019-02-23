@@ -14,6 +14,7 @@ MessageLogger::MessageLogger()
     current_message_ = "";
     in_message_ = false;
     subsystems_enabled_ = 0;
+    time_func_ = nullptr ;
 }
 
 void MessageLogger::clear() 
@@ -88,8 +89,16 @@ void MessageLogger::endMessage()
     if (current_message_.length() > 0) {
         if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
         {
+            double now = std::numeric_limits<double>::infinity() ;
+            std::string msg = current_message_ ;
+            if (time_func_ != nullptr) {
+                now = (*time_func_)() ;
+
+                msg = std::to_string(now) + ": " + msg ;
+            }
+                
             for (auto dest_p : destinations_)
-                dest_p->displayMessage(current_type_, current_subsystem_, current_message_);
+                dest_p->displayMessage(current_type_, current_subsystem_, msg);
         }
     }
     current_message_ = "";

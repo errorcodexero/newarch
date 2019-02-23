@@ -37,6 +37,10 @@ class MessageLogger
     /// \brief create a new message logger object
     MessageLogger();
 
+    void setTimeFunction(double (* timefun)()) {
+        time_func_ = timefun ;
+    }
+
     /// \brief clear all message destinations
     void clear() ;
 
@@ -218,6 +222,9 @@ class MessageLogger
 
     // The list of message logger destinations
     std::list<std::shared_ptr<MessageLoggerDest>> destinations_;
+
+    // Function to return the current time
+    double (* time_func_)() ;
 };
 
 } // namespace misc
