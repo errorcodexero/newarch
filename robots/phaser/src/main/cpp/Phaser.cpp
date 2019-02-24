@@ -21,6 +21,11 @@ namespace xero {
         Phaser::Phaser() : xero::base::Robot("phaser", 0.02) {           
         }
 
+        bool Phaser::isCompBot() {
+            comp_bot_ = new frc::DigitalInput(6) ;
+            return comp_bot_->Get() ;
+        }
+
         void Phaser::enableSpecificMessages() {
             MessageLogger& logger = getMessageLogger();
                         

@@ -20,7 +20,7 @@ namespace xero {
             /// \brief destroy a settings parser object
             virtual ~SettingsParser();
 
-            void addDefined(const std::string &define) {
+            void addDefine(const std::string &define) {
                 defines_.push_back(define) ;
             }
 

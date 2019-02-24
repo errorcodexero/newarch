@@ -40,6 +40,11 @@ namespace xero {
             parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;
             output_stream_ = nullptr ;
 
+            if (isCompBot())
+                parser_->addDefine("COMPETITION") ;
+            else
+                parser_->addDefine("PRACTICE") ;
+
             sleep_time_.resize(static_cast<int>(LoopType::MaxValue)) ;
             std::fill(sleep_time_.begin(), sleep_time_.end(), 0.0) ;
 
@@ -61,6 +66,10 @@ namespace xero {
             message_logger_.clear() ;
             if (output_stream_ != nullptr)
                 delete output_stream_ ;
+        }
+
+        bool Robot::isCompBot() {
+            return true ;
         }
 
         void Robot::setupPaths() {

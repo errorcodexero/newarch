@@ -157,7 +157,7 @@ bool SettingsParser::readFile(const std::string &filename) {
 
 void SettingsParser::processIf(const std::string &filename, int line_num, const std::string &line) {
     std::string keyword ;
-    size_t index = 3 ;
+    size_t index = 2 ;
 
     while (index < line.length() && std::isspace(line[index++]))
         index++ ;

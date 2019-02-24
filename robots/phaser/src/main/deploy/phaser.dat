@@ -22,7 +22,7 @@ hw:tankdrive:rightencoder:2                                     3               
 hw:tankdrive:shifter                                            0               # Solenoid
 
 
-if COMPBOT
+if COMPETITION
 #
 # The is for the comp bot
 #
@@ -30,7 +30,7 @@ hw:tankdrive:invert:motors:left                                true
 hw:tankdrive:invert:encoders:left                              true
 endif
 
-if PRACTICEBOT
+if PRACTICE
 #
 # This is for the practice bot
 #

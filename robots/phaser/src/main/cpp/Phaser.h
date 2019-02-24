@@ -41,8 +41,11 @@ namespace xero {
             /// \brief enable specific message for logging
             virtual void enableSpecificMessages() ; 
 
+            virtual bool isCompBot() ;
+
         private:
             std::shared_ptr<frc::Compressor> compressor_ ;
+            frc::DigitalInput *comp_bot_ ;
         } ;
     }
 }
