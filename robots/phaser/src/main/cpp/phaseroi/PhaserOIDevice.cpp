@@ -506,7 +506,6 @@ namespace xero {
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
             log << "OI: generating height button actions:" ;
                
-
             if (mode_ == OperationMode::Auto) {
                 vision = true ;
                 linefollower = true ;
@@ -693,15 +692,11 @@ namespace xero {
             getTrackingMode() ;
             getCargoHatchMode(seq) ;
 
-            if (game->isDone()) {
-                if (getValue(extra_button_)) {
-                    //
-                    // Pull any intakes that are out of the robot back into the
-                    // robot.
-                    //
-                    seq.pushSubActionPair(game, reset_intakes_) ;
-                }
-                else if (getDirection()) {
+            if (getValue(turtle_mode_) && reset_intakes_->isDone()) {
+                seq.pushSubActionPair(game, reset_intakes_) ;                
+            }
+            else if (game->isDone()) {
+                if (getDirection()) {
                     //
                     // The joystick has been pressed in a direction, move the
                     // lift and turntable to match to desired target

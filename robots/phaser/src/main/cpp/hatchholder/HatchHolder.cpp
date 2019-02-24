@@ -44,11 +44,13 @@ namespace xero {
         void HatchHolder::extendArm() {
             arm_extend_->Set(true) ;
             arm_retract_->Set(false) ;
+            arm_deployed_ = true ;
         }
 
         void HatchHolder::retractArm() {
             arm_extend_->Set(false) ;
             arm_retract_->Set(true) ;
+            arm_deployed_ = false ;
         }
 
         void HatchHolder::stopArm() {
@@ -58,10 +60,12 @@ namespace xero {
 
         void HatchHolder::extendFinger() {
             finger_->Set(true) ;
+            finger_deployed_ = true ;
         }
 
         void HatchHolder::retractFinger() {
             finger_->Set(false) ;
+            finger_deployed_ = false ;
         }
 
         bool HatchHolder::holdingHatch() {

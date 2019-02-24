@@ -39,6 +39,7 @@
 #define MSG_GROUP_TANKDRIVE_VERBOSE         (1ull << 8)
 
 #define MSG_GROUP_LINE_FOLLOWER             (1ull << 9)
+#define MSG_GROUP_LINE_FOLLOWER_VERBOSE     (1ull << 9)
 
 #define MSG_GROUP_CAMERA_TRACKER            (1ull << 10)
 

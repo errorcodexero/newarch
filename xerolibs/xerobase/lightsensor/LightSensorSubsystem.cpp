@@ -36,7 +36,7 @@ namespace xero {
             double midpoint = (light_sensors_.size()-1)/2.0 ;
             uint32_t data = 0 ;
             for(unsigned int i = 0; i < light_sensors_.size(); i++) {
-                bool light_sensor = light_sensors_[i]->Get() ;
+                bool light_sensor = !light_sensors_[i]->Get() ;
                 if (light_sensor) {
                     sensors_on++ ;
                     data |= (1 << i) ;
@@ -51,7 +51,7 @@ namespace xero {
                 sensor_data_.pop_back() ;
 
             if (is_detected_ == false) {
-                if (localDetectedObject()) {
+                if (sensors_on) {
                     detect_count_++ ;
                     if (detect_count_ == 3)
                         is_detected_ = true ;
@@ -61,16 +61,16 @@ namespace xero {
                 }
             }
             else {
-                if (!localDetectedObject()) {
+                if (sensors_on == 0) {
                     detect_count_ = 0 ;
                     is_detected_ = false ;
                 }
             }
 
             auto &logger = getRobot().getMessageLogger() ;
-            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER_VERBOSE) ;
             logger << "LightSensor :" ;
-            logger << getName() ;
+            logger << getName() << " " ;
             logger << sensor_data_.front() ;      
             logger.endMessage() ;
         }

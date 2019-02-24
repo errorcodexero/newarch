@@ -81,11 +81,6 @@ namespace xero {
             }
 
         private:
-            bool localDetectedObject() {
-                return sensor_data_.size() > 0 && sensor_data_.front() != 0 ;
-            }            
-
-        private:
             std::vector <std::shared_ptr<frc::DigitalInput>> light_sensors_ ;
             double angle_ ;
             std::list<uint32_t> sensor_data_ ;

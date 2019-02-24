@@ -27,15 +27,10 @@ namespace xero {
 
             /// \brief Create a new SingleMotorSubsystemAction
             /// \param subsystem SingleMotor subsystem
-            HatchHolderAction(HatchHolder &subsystem, Operation operation) : subsystem_(subsystem), operation_(operation) {
+            HatchHolderAction(HatchHolder &subsystem, Operation operation, const std::string &name) : subsystem_(subsystem), operation_(operation) {
                 is_done_ = false ;
-                duration_ = subsystem.getRobot().getSettingsParser().getDouble("hatchholder:delay") ;
+                duration_ = subsystem.getRobot().getSettingsParser().getDouble(name) ;
             }
-
-            HatchHolderAction(HatchHolder &subsystem, Operation operation, double delay) : subsystem_(subsystem), operation_(operation) {
-                is_done_ = false ;
-                duration_ = delay ;
-            }            
 
             ~HatchHolderAction(){
             }

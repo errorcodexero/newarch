@@ -1,6 +1,7 @@
 #include "ResetIntakesAction.h"
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <lifter/LifterGoToHeightAction.h>
+#include <turntable/TurntableGoToAngleAction.h>
 #include <cargointake/CargoIntake.h>
 #include <cargointake/CargoIntakeAction.h>
 #include <hatchintake/HatchIntake.h>
@@ -14,15 +15,24 @@ namespace xero {
         ResetIntakeAction::ResetIntakeAction(GamePieceManipulator &subsystem):GamePieceAction(subsystem) {
 
             auto lifter = getGamePiece().getLifter() ; 
+            auto turntable = getGamePiece().getTurntable() ;
             auto hatch_intake = getGamePiece().getHatchIntake();
             auto cargo_intake = getGamePiece().getCargoIntake() ;
             auto hatch_holder = getGamePiece().getHatchHolder() ;
+            auto cargo_holder = getGamePiece().getCargoHolder() ;
 
             set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
-            hold_lifter_safe_height_  = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
+            set_lifter_level_one_  = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:bottom") ;
+            set_turntable_zero_ = std::make_shared<TurntableGoToAngleAction>(*turntable, 0.0) ;
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
             retract_hatch_intake_ = std::make_shared<HatchIntakeAction>(*hatch_intake, false) ;
-            retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM) ;
+            retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatcholder:default:delay") ;
+
+            stop_hatch_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*hatch_intake, 0.0) ;
+            stop_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, 0.0) ;
+            stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
+
+            state_ = State::Idle ;           
         }
 
         ResetIntakeAction::~ResetIntakeAction() {
@@ -32,9 +42,10 @@ namespace xero {
             auto lifter = getGamePiece().getLifter() ;
             auto hatch_intake = getGamePiece().getHatchIntake();
             auto cargo_intake = getGamePiece().getCargoIntake() ;
+            auto hatch_holder = getGamePiece().getHatchHolder() ;
 
-            if (!hatch_intake->isDeployed() && !cargo_intake->isDeployed())
-                state_ = State::Idle ;
+            if (!hatch_intake->isDeployed() && !cargo_intake->isDeployed() && !hatch_holder->isArmDeployed()) 
+                state_ = State::StopMotors ;
             else 
             {
                 lifter->setAction(set_lifter_safe_height_) ;
@@ -52,19 +63,43 @@ namespace xero {
                     auto cargo_intake = getGamePiece().getCargoIntake();  
                     cargo_intake->setAction(retract_cargo_intake_) ;
 
-                    auto lifter = getGamePiece().getLifter() ;
-                    lifter->setAction(hold_lifter_safe_height_) ;
-
                     auto hatch_holder = getGamePiece().getHatchHolder() ;
                     hatch_holder->setAction(retract_arm_) ;
+
+                    auto lifter = getGamePiece().getLifter() ;
+                    lifter->setAction(set_turntable_zero_) ;
+
+                    state_ = State::Retracting ;
                 }
                 break ;
 
             case State::Retracting:
                 if (retract_hatch_intake_->isDone() && retract_cargo_intake_->isDone() && retract_arm_->isDone()) {
-                    state_ = State::Idle ;
+                    auto hatch_intake = getGamePiece().getHatchIntake() ;
+                    auto cargo_intake = getGamePiece().getCargoIntake() ;
+                    auto cargo_holder = getGamePiece().getCargoHolder() ;
+
+                    hatch_intake->setAction(stop_hatch_intake_motor_) ;
+                    cargo_intake->setAction(stop_cargo_intake_motor_) ;
+                    cargo_holder->setAction(stop_cargo_holder_motor_) ;
+
+                    state_ = State::StopMotors ;
                 }
                 break ;
+
+            case State::StopMotors:
+                if (stop_hatch_intake_motor_->isDone() && stop_cargo_intake_motor_->isDone() && 
+                                stop_hatch_intake_motor_->isDone() && set_turntable_zero_->isDone()) {
+                    auto lifter = getGamePiece().getLifter() ;
+                    lifter->setAction(set_lifter_level_one_) ;
+                    state_ = State::DropLift ;
+                }
+                break ;
+
+            case State::DropLift:
+                if (set_lifter_level_one_->isDone())
+                    state_ = State::Idle ;
+                break  ;
 
             case State::Idle:
                 break ;

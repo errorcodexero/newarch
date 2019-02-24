@@ -13,7 +13,7 @@ namespace xero {
             auto turntable = getGamePiece().getTurntable();
             auto cargo_holder = getGamePiece().getCargoHolder() ;
 
-            set_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, "score_cargo:power", "score_cargo:time") ;
+            set_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, "cargoholder:score:power", "cargoholder:score:time") ;
             stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
        }
 
@@ -32,7 +32,6 @@ namespace xero {
             switch(state_) {
             case State::ScoreCargo:
                 if (set_cargo_holder_motor_->isDone()) {
-
                     auto cargo_holder = getGamePiece().getCargoHolder() ;
                     cargo_holder->setAction(stop_cargo_holder_motor_) ;
                     state_ = State::Idle ;

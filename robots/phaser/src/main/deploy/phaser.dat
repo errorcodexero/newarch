@@ -32,7 +32,7 @@ hw:tankdrive:shifter                                            0               
 # This is for the practice bot
 #
 hw:tankdrive:invert:motors:right                                true
-hw:tankdrive:invert:encoders:right                              true
+hw:tankdrive:invert:encoders:left                              true
 
 hw:hatchholder:arm:extend                                        6              # Solenoid
 hw:hatchholder:arm:retract                                       7              # Solenoid
@@ -124,12 +124,12 @@ plotter:port                                                    5555
 #
 # Variables for the linefollower
 #
-linefollower:front:power                                          0.4
-linefollower:front:distance                                       16
-linefollower:front:adjust                                         0.35
-linefollower:back:power                                           -0.4
-linefollower:back:distance                                        -16
-linefollower:back:adjust                                          -0.35
+linefollower:front:power                                          0.2
+linefollower:front:distance                                       14
+linefollower:front:adjust                                         -0.40
+linefollower:back:power                                           -0.2
+linefollower:back:distance                                        -14
+linefollower:back:adjust                                          0.40
 
 #
 # Variables for the turntable
@@ -162,15 +162,15 @@ turntable:angle:hatch:floor_collect                             0.0
 turntable:angle:score:hatch                                     90.0                #TODO
 turntable:angle:score:cargo                                     90.0                #TODO
 
-turntable:angle:cargo:collect:north                             -90                #TODO
-turntable:angle:cargo:collect:south                             90                #TODO
-turntable:angle:cargo:collect:east                              0                #TODO
-turntable:angle:cargo:collect:west                              180                #TODO
+turntable:angle:cargo:collect:north                             90
+turntable:angle:cargo:collect:south                             -90
+turntable:angle:cargo:collect:east                              0
+turntable:angle:cargo:collect:west                              180
 
-turntable:angle:cargo:place:north                               -90                #TODO
-turntable:angle:cargo:place:south                               90                #TODO
-turntable:angle:cargo:place:east                                0                #TODO
-turntable:angle:cargo:place:west                                180                #TODO
+turntable:angle:cargo:place:north                               90
+turntable:angle:cargo:place:south                               -90
+turntable:angle:cargo:place:east                                0
+turntable:angle:cargo:place:west                                180
 
 turntable:angle:hatch:collect:north                             0                #TODO
 turntable:angle:hatch:collect:south                             180                #TODO
@@ -230,7 +230,7 @@ lifter:height:offset:hatch_center                               5.5
 lifter:height:offset:hatch_hook_center                          8.6                               
 lifter:height:hatch:floor_collect                               8.5
 lifter:height:hatch:undock_intake                               22.00
-lifter:height:LS:hatch:shift_up                                 6
+lifter:height:loadingstation:hatch:shift_up                     3
 lifter:height:score:hatch:shift_down                            -3.2
 
 lifter:height:cargo:collect:north                             37
@@ -250,10 +250,10 @@ lifter:height:cargo:place:north:3                             75.5
 lifter:height:cargo:place:south:3                             75.5
 lifter:height:cargo:place:east:3                              75.5
 lifter:height:cargo:place:west:3                              75.5
-lifter:height:cargo:place:north:c                             31.5
-lifter:height:cargo:place:south:c                             31.5
-lifter:height:cargo:place:east:c                              31.5
-lifter:height:cargo:place:west:c                              31.5
+lifter:height:cargo:place:north:c                             38
+lifter:height:cargo:place:south:c                             38
+lifter:height:cargo:place:east:c                              38
+lifter:height:cargo:place:west:c                              38
 
 lifter:height:hatch:collect:north                             11.2              
 lifter:height:hatch:collect:south                             11.2                 
@@ -272,10 +272,10 @@ lifter:height:hatch:place:north:3                             78
 lifter:height:hatch:place:south:3                             78                
 lifter:height:hatch:place:east:3                              78                 
 lifter:height:hatch:place:west:3                              78                 
-lifter:height:hatch:place:north:c                             22
-lifter:height:hatch:place:south:c                             22
-lifter:height:hatch:place:east:c                              22          
-lifter:height:hatch:place:west:c                              22            
+lifter:height:hatch:place:north:c                             15
+lifter:height:hatch:place:south:c                             15
+lifter:height:hatch:place:east:c                              15          
+lifter:height:hatch:place:west:c                              15            
 
 lifter:height:offset:hatch_hook_center                          8.6
 lifter:height:cargo:undock_height                               22.00
@@ -306,12 +306,16 @@ drivebyvision:quit_threshold                                    31.0
 
 cargointake:power                                               -0.6
 
-cargoholder:power                                               0.6
+cargoholder:collect:power                                       -0.6
 cargoholder:TalonSRX                                            true
+cargoholder:score:power                                         0.8
+cargoholder:score:time                                          2.0
 
 hatchintake:power                                               0.2
 
-hatchholder:delay                                               0.1
+hatchholder:collect:delay                                       0.1
+hatchholder:place:delay                                         0.2
+hatcholder:default:delay                                        0.5
 
 score_cargo:power                                               -0.3
 score_cargo:time                                                2

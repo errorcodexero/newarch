@@ -29,9 +29,19 @@ namespace xero {
             void retractFinger() ;
             bool holdingHatch() ;
 
+            bool isArmDeployed() {
+                return arm_deployed_ ;
+            }
+
+            bool isFingerDepoyed() {
+                return finger_deployed_ ;
+            }
+
 
         private:
             bool has_hatch_ ;
+            bool arm_deployed_ ;
+            bool finger_deployed_ ;
             std::shared_ptr<frc::DigitalInput> sensor_ ;
             std::shared_ptr<frc::Solenoid> arm_extend_ ;
             std::shared_ptr<frc::Solenoid> arm_retract_ ;
