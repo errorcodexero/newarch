@@ -20,6 +20,10 @@ namespace xero {
             /// \brief destroy a settings parser object
             virtual ~SettingsParser();
 
+            void addDefined(const std::string &define) {
+                defines_.push_back(define) ;
+            }
+
             /// \brief read a file of values
             ///
             /// A value is stored on a single line.  The line consists of a name followed by white space
@@ -119,7 +123,9 @@ namespace xero {
             bool parseDouble(const std::string &value, double &result);
             bool parseString(const std::string &value, std::string &result);
 
-            bool readLine(const std::string &line, std::string &key, std::string &value, bool &is_string, const std::string &filename, int line_num);
+            bool processKeyPair(const std::string &line, std::string &key, std::string &value, bool &is_string, const std::string &filename, int line_num);
+            void processIf(const std::string &filename, int line_num, const std::string &line) ;
+            void processEndif(const std::string &line) ;
 
         private:
             static const std::string var_prefix_ ;
@@ -128,6 +134,9 @@ namespace xero {
             uint64_t msggroup_;
             
             std::map<std::string, Setting> settings_;
+            std::list<std::string> defines_ ;
+
+            bool skipping_ ;
         };
     }
 }

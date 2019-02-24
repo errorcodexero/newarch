@@ -21,18 +21,22 @@ hw:tankdrive:rightencoder:1                                     2               
 hw:tankdrive:rightencoder:2                                     3               # Digital IO
 hw:tankdrive:shifter                                            0               # Solenoid
 
+
+if COMPBOT
 #
 # The is for the comp bot
 #
-#hw:tankdrive:invert:motors:left                                true
-#hw:tankdrive:invert:encoders:left                              true
-# 
+hw:tankdrive:invert:motors:left                                true
+hw:tankdrive:invert:encoders:left                              true
+endif
 
+if PRACTICEBOT
 #
 # This is for the practice bot
 #
 hw:tankdrive:invert:motors:right                                true
-hw:tankdrive:invert:encoders:left                              true
+hw:tankdrive:invert:encoders:left                               true
+endif
 
 hw:hatchholder:arm:extend                                        6              # Solenoid
 hw:hatchholder:arm:retract                                       7              # Solenoid

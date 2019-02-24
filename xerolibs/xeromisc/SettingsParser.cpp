@@ -10,13 +10,14 @@ const std::string SettingsParser::var_prefix_("var:") ;
 
 SettingsParser::SettingsParser(MessageLogger &logger, uint64_t msggroup) : logger_(logger) {
     msggroup_ = msggroup;
+    skipping_ = false ;
 }
 
 SettingsParser::~SettingsParser() {
     settings_.clear();
 }
 
-bool SettingsParser::readLine(const std::string &line, std::string &key, std::string &value, bool &is_string, const std::string& filename, int line_num) {
+bool SettingsParser::processKeyPair(const std::string &line, std::string &key, std::string &value, bool &is_string, const std::string& filename, int line_num) {
     std::stringstream buffer;
     bool in_string = false;
 
@@ -128,23 +129,50 @@ bool SettingsParser::readFile(const std::string &filename) {
 
         line_num++;
 
-        if(readLine(line, key, value, is_string, filename, line_num) && key.length() > 0 && value.length() > 0) {
-            if(parseBoolean(value, bool_output))
-                set(key, bool_output);
-            else if(parseInteger(value, int_output))
-                set(key, int_output);
-            else if(parseDouble(value, double_output))
-                set(key, double_output);
-            else if(is_string && parseString(value, string_output))
-                set(key, string_output);
-            else {
-                logger_.startMessage(MessageLogger::MessageType::warning, msggroup_);
-                logger_ << filename << ": " << line_num << ": Unable to parse value '" << value << "'";
-                logger_.endMessage();
+        if (line.length() >= 3 && line.substr(0, 3) == "if ")
+            processIf(filename, line_num, line) ;
+        else if (line.length() >= 5 && line.substr(0, 5) == "endif") {
+            skipping_ = false ;
+        }
+        else if (!skipping_) {
+            if(processKeyPair(line, key, value, is_string, filename, line_num) && key.length() > 0 && value.length() > 0) {
+                if(parseBoolean(value, bool_output))
+                    set(key, bool_output);
+                else if(parseInteger(value, int_output))
+                    set(key, int_output);
+                else if(parseDouble(value, double_output))
+                    set(key, double_output);
+                else if(is_string && parseString(value, string_output))
+                    set(key, string_output);
+                else {
+                    logger_.startMessage(MessageLogger::MessageType::warning, msggroup_);
+                    logger_ << filename << ": " << line_num << ": Unable to parse value '" << value << "'";
+                    logger_.endMessage();
+                }
             }
         }
     }
     return true;
+}
+
+void SettingsParser::processIf(const std::string &filename, int line_num, const std::string &line) {
+    std::string keyword ;
+    size_t index = 3 ;
+
+    while (index < line.length() && std::isspace(line[index++]))
+        index++ ;
+
+    if (index == line.length()) {
+        logger_.startMessage(MessageLogger::MessageType::error);
+        logger_ << filename << ": " << line_num << ": missing token after 'if' keyword" ;
+        logger_.endMessage();        
+    }
+
+    while (index < line.length() && !std::isspace(line[index]))
+        keyword += line[index++] ;
+
+    if (std::find(defines_.begin(), defines_.end(), keyword) == defines_.end())
+        skipping_ = true ;
 }
 
 bool SettingsParser::parseBoolean(const std::string &value, bool &result) {
