@@ -139,18 +139,21 @@ lifter:sim:inches_per_tick                              0.014861049
 lifter:sim:inches_per_sec_per_volt                      18.0
 lifter:sim:gravity_equivalent_speed                     0
 
-oi:hatch_cargo_switch                                           11                  # Button
-oi:climb_lock_switch                                            15                  # Button
-oi:compass_north                                                13                  # Button
-oi:compass_south                                                14                  # Button
-oi:compass_east                                                 9                   # Button
-oi:compass_west                                                 12                  # Button
-oi:height_level_one                                             1                   # Button
-oi:height_level_two                                             2                   # Button
-oi:height_level_three                                           3                   # Button
-oi:height_cargo_bay                                             4                   # Button
-oi:collect_floor                                                5                   # Button
-oi:go                                                           10                  # Button
-oi:score                                                        6                   # Button
-oi:climb                                                        8                   # Button
-oi:extra_button                                                 7                   # Button
+oi:button:hatch_cargo_switch                                    11                  # Button
+oi:button:climb_lock_switch                                     15                  # Button
+oi:button:compass_north                                         13                  # Button
+oi:button:compass_south                                         14                  # Button
+oi:button:compass_east                                          9                   # Button
+oi:button:compass_west                                          12                  # Button
+oi:button:height_level_one                                      1                   # Button
+oi:button:height_level_two                                      2                   # Button
+oi:button:height_level_three                                    3                   # Button
+oi:button:height_cargo_bay                                      4                   # Button
+oi:button:collect_floor                                         5                   # Button
+oi:button:go                                                    10                  # Button
+oi:button:turtle                                                6                   # Button
+oi:button:climb                                                 8                   # Button
+oi:button:extra_button                                          7                   # Button
+
+oi:axis:automode                                                6                   # Axis
+oi:axis:tracking_viewing_nothing_switch                         3                   # Axis

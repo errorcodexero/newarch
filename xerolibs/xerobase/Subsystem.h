@@ -50,9 +50,10 @@ namespace xero {
             virtual void computeState() ;
 
             /// \brief set the current Action for the subsystem
-            /// \param Action the new Action for the subsystem
+            /// \param action the new Action for the subsystem
+            /// \param force if true abort the current action and force this action immediately
             /// \return true if the Action is accepted, false if not
-            virtual bool setAction(ActionPtr Action);
+            virtual bool setAction(ActionPtr action, bool force = false);
 
             /// \brief return a constant pointer to the current Action
             /// \returns  a constant pointer to the current Action
@@ -70,6 +71,7 @@ namespace xero {
             /// It also cancels the actions for any children subsystems
             /// \returns true if the action was canceled, false if it could not be
             virtual void cancelAction() ;
+
 
             /// \brief Set output actuators associated with the subsystem
             /// The output actuators are set to achieve the currently active

@@ -27,7 +27,20 @@ namespace xero {
             virtual void run() = 0 ;
 
             /// \brief Cancel the action
+            /// A cancel operation may take many cycles to complete and this action should
+            /// not return isDone() equal true until the cancel has completed.  A cancel should
+            /// restore the robot to a reasonable state.
             virtual void cancel() = 0 ;
+
+            /// \brief abort the current action immediately.  
+            /// The action should return isDone() equal true immedately after
+            /// executing this method.  The default implementation of this calls
+            /// cancelAction as this is how cancelAction works for most actions.  However
+            /// if an action does not complete immediately after cancelAction() is
+            /// called, abortAction() should be defined to end all actions immediately.
+            virtual void abort() {
+                cancel() ;
+            }            
 
             /// \brief Return true if the action is complete
             /// \returns True if the action is complete

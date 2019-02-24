@@ -16,6 +16,7 @@ namespace xero {
 
                 deploy_state_ = false ;
                 power_ = 0.0 ;
+                has_cargo_ = true ;
             }
 
             CargoIntakeModel::~CargoIntakeModel() {

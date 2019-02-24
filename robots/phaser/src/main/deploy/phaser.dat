@@ -332,9 +332,8 @@ oi:height_level_three                                           3               
 oi:height_cargo_bay                                             4                   # Button
 oi:collect_floor                                                5                   # Button
 oi:go                                                           10                  # Button
-oi:turtle                                                       6
+oi:turtle                                                       6                   # Button
 oi:climb                                                        8                   # Button
 oi:extra_button                                                 7                   # Button
-
 oi:automode                                                     6                   # Axis
 oi:tracking_viewing_nothing_switch                              3                   # Axis

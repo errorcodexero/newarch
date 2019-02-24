@@ -3,6 +3,7 @@
 #include "Robot.h"
 #include "basegroups.h"
 #include <MessageLogger.h>
+#include <cassert>
 
 using namespace xero::misc ;
 
@@ -23,7 +24,13 @@ namespace xero {
             
             if (action_ != nullptr){
                 action_->run() ;
-                if (pending_ != nullptr && action_->isDone()){
+                if (pending_ != nullptr && action_->isDone()) {
+                    MessageLogger &logger = getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
+                    logger << "Actions: subsystem '" << getName() << "' pending action '" << pending_->toString() ;
+                    logger << "' was started" ;
+                    logger.endMessage() ;
+
                     action_ = pending_ ;
                     pending_ = nullptr ;
                     action_->start() ;
@@ -41,8 +48,13 @@ namespace xero {
                 action_->cancel() ;
         }
 
-        bool Subsystem::setAction(ActionPtr action) {
-            
+        bool Subsystem::setAction(ActionPtr action, bool force) {
+
+            //
+            // Check that the action is valid for this subsystem.  If not, print and error
+            // and do nothing else.  Any existing action remains attached to the subsystem and
+            // continue to perform its function.
+            //
             if (action != nullptr && !canAcceptAction(action)) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
@@ -51,33 +63,65 @@ namespace xero {
                 return false ;
             }
 
+            //
+            // Print information about what is being requested
+            //
             MessageLogger &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
             if (action == nullptr)
                 logger << "Actions: subsystem '" << getName() << "' was assigned NULL action" ;
             else
                 logger << "Actions: subsystem '" << getName() << "' was assigned action '" << action->toString() << "'" ;    
-                        
+            if (force)
+                logger << " - FORCED" ;
             logger.endMessage() ;            
 
             if (action_ != nullptr && !action_->isDone()) {
                 //
                 // The current Action is still running, interrupt it
                 //
-                MessageLogger &logger = getRobot().getMessageLogger() ;
-                logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
-                logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString() << "' was canceled by setAction" ;
-                logger.endMessage() ;   
 
-                cancelAction();
-
-                if(!action_->isDone()) {
-                    pending_ = action ;
+                if (force) {
 
                     MessageLogger &logger = getRobot().getMessageLogger() ;
                     logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
-                    logger << "Actions: subsystem '" << getName() << "' action '" << action->toString() << "' was pended" ;
+                    logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString() << "' was aborted" ;
                     logger.endMessage() ;                    
+
+                    //
+                    // We want to force the action here, so abort the current action
+                    // and assign this one
+                    //
+                    action_->abort() ;
+                    pending_ = nullptr ;
+                    assert(action_->isDone()) ;
+                }
+                else {
+
+                    MessageLogger &logger = getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
+                    logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString() << "' was canceled" ;
+                    logger.endMessage() ; 
+
+                    //
+                    // We are not forcing the issue (e.g. force was false) so cancel the action and
+                    // pend the new action.  THe new action will get assigned when the old action
+                    // finishes its cancel.
+                    //
+                    cancelAction();
+
+                    if(!action_->isDone()) {
+                        //
+                        // The old action did not finish immedately after cancel was called.  Pend the
+                        // new action and wait for the canceled action to complete
+                        //
+                        pending_ = action ;
+
+                        MessageLogger &logger = getRobot().getMessageLogger() ;
+                        logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
+                        logger << "Actions: subsystem '" << getName() << "' action '" << action->toString() << "' was pended" ;
+                        logger.endMessage() ;                    
+                    }
                 }
             }
 

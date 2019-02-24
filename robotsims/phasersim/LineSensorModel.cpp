@@ -91,14 +91,18 @@ namespace xero {
             }
 
             void LineSensorModel::addDevice(DigitalInput *input) {
-                if (input->GetChannel() == i0num_)
+                if (input->GetChannel() == i0num_) {
                     i0_ = input ;
-                else if (input->GetChannel() == i1num_)
+                    input->SimulatorSetValue(false) ;
+                }
+                else if (input->GetChannel() == i1num_) {
                     i1_ = input ;
-                else if (input->GetChannel() == i2num_) ;
+                    input->SimulatorSetValue(false) ;                    
+                }
+                else if (input->GetChannel() == i2num_) {
                     i2_ = input ;
-
-                input->SimulatorSetValue(false) ;
+                    input->SimulatorSetValue(false) ;                    
+                }
             }
         }
     }

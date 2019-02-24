@@ -1,5 +1,6 @@
 #include <frc/DigitalInput.h>
 #include <frc/RobotSimBase.h>
+#include <iostream>
 
 using namespace xero::sim ;
 
@@ -22,7 +23,11 @@ namespace frc {
     }
 
     void DigitalInput::SimulatorSetValue(bool v) {
-        std::lock_guard<std::mutex> lock(getLockMutex()) ;        
+        std::lock_guard<std::mutex> lock(getLockMutex()) ;      
+
+        if (which_ == 22) {
+            std::cout << "Input 22, value is " << v << std::endl ;
+        }
         value_ = v ;
     }
 }

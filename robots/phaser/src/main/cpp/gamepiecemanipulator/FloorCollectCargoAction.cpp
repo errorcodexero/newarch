@@ -129,8 +129,22 @@ namespace xero {
                 }
                 else if (cargo_intake->hasCargo()) {
                     cargo_intake->setAction(retract_cargo_intake_) ;
+                    state_ = State::WaitForCargo2 ;
                 }
                 break ;
+        
+            case State::WaitForCargo2:
+                if (cargo_holder->hasCargo()) {
+                    //
+                    // 5. The cargo holder has detected cargo.  Stop the motors on the intake
+                    //    and the holder.
+                    //
+                    cargo_intake->setAction(stop_cargo_intake_motor_) ;
+                    cargo_holder->setAction(stop_cargo_holder_motor_) ;
+
+                    state_ = State::StopAllMotors ;
+                }
+                break ;            
 
             case State::StopAllMotors:
                 //
@@ -176,6 +190,10 @@ namespace xero {
         
         bool FloorCollectCargoAction::isDone() {
             return state_ == State::Idle ;
+        }
+
+        void FloorCollectCargoAction::abort() {
+            state_ = State::Idle ;
         }
 
         void FloorCollectCargoAction::cancel() {

@@ -17,21 +17,19 @@ namespace xero {
             }
 
             void OIModel::processEvent(const std::string &event, int value) {
-                if (event == "automode") {
-                    double v = static_cast<double>(value) / 100.0 ;
-                    setAxis(2, 6, v) ;                  
-                }
-                else if (event == "tracking_viewing_nothing_switch") {
-                    double v = static_cast<double>(value) / 100.0 ;
-                    setAxis(2, 3, v) ;
+                SettingsParser &settings =  getSimulator().getSettingsParser() ;
+                std::string name = "oi:button:" + event ;
+                if (settings.isDefined(name)) {
+                    int button = settings.getInteger(name) ;
+                    setButton(2, button, (value ? true : false)) ;
                 }
                 else {
-                    SettingsParser &settings =  getSimulator().getSettingsParser() ;
-                    std::string name = "oi:" + event ;
+                    name = "oi:axis:" + event ;
                     if (settings.isDefined(name)) {
-                        int button = settings.getInteger(name) ;
-                        setButton(2, button, (value ? true : false)) ;
-                    }
+                        int axis = settings.getInteger(name) ;
+                        double v = static_cast<double>(value) / 100.0 ;
+                        setAxis(2, axis, v) ;
+                    }                        
                 }
             }
 

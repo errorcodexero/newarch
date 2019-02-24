@@ -14,6 +14,7 @@ namespace xero{
             virtual void run() ;
             virtual bool isDone() ;
             virtual void cancel() ;
+            virtual void abort() ;
             virtual std::string toString() ;
 
         private:
@@ -23,6 +24,7 @@ namespace xero{
                 TurntableGoToCollectAngle,
                 LifterGoToCollectHeightDeployIntake,
                 WaitForCargo,
+                WaitForCargo2,
                 StopAllMotors,
                 RaiseLifter,
                 RetractIntake
@@ -30,6 +32,8 @@ namespace xero{
 
         private:
             State state_ ;
+
+            bool retracted_intake_ ;
 
             xero::base::ActionPtr set_lifter_safe_height_ ; 
             xero::base::ActionPtr set_turntable_cargo_angle_ ;

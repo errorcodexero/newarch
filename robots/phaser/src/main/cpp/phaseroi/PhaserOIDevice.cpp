@@ -693,7 +693,11 @@ namespace xero {
             getCargoHatchMode(seq) ;
 
             if (getValue(turtle_mode_) && reset_intakes_->isDone()) {
-                seq.pushSubActionPair(game, reset_intakes_) ;                
+                //
+                // Directly assign the action and make it forcing to ensure this
+                // action takes priority over everything else.
+                //
+                game->setAction(reset_intakes_, true) ;
             }
             else if (game->isDone()) {
                 if (getDirection()) {
