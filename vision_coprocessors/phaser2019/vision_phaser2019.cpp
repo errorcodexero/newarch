@@ -515,14 +515,34 @@ namespace {
     }
 
     // Check if rotated rect is a left or right marker based on loose angle range
-    const double rot_ang_tol = 0.3;  /*Tolerance as fraction*/
-    const double rot_ang_tol_abs = 10;  /*+- that many degrees */
+    const double rot_ang_tol = 0.25;  /*Tolerance as fraction*/
+    const double rot_ang_tol_abs = 8;  /*+- that many degrees */
     bool isLeftMarker(const RRect& rect) {
-        return isApproxEqual(rect.angle+90, 15, rot_ang_tol, rot_ang_tol_abs);
+        return isApproxEqual(rect.angle+90, 15, rot_ang_tol, rot_ang_tol_abs) && (rect.size.width > rect.size.height);
     }
     
     bool isRightMarker(const RRect& rect) {
-        return isApproxEqual(rect.angle+90, 75, rot_ang_tol, rot_ang_tol_abs);
+        return isApproxEqual(rect.angle+90, 75, rot_ang_tol, rot_ang_tol_abs) && (rect.size.width < rect.size.height);
+    }
+
+    // Distance in pixels between centers or 2 rects
+    double distBetweenRectCenters(const RRect& r1, const RRect& r2) {
+        const double delta_x = fabs(r2.center.x - r1.center.x);
+        const double delta_y = fabs(r2.center.y - r1.center.y);
+        const double dist_bet_centers = hypot(delta_x, delta_y);
+        return dist_bet_centers;
+    }
+
+    // Check if pair of rectangles is a potential pair based on ratio of dist-between-centers to height
+    bool isPotentialPairBasedOnDistHeightRatio(const RRect& r1, const RRect& r2) {
+        const double dist_bet_centers = distBetweenRectCenters(r1, r2);
+        const double r1_height = std::max(r1.size.height, r1.size.width);
+        const double r2_height = std::max(r2.size.height, r2.size.width);
+        const double av_height = (r1_height + r2_height) / 2;
+        
+        const double meas_dist_to_height_ratio = dist_bet_centers / av_height;
+        const double exp_dist_to_height_ratio = dist_bet_centers_inch / 5.5;
+        return isApproxEqual(meas_dist_to_height_ratio, exp_dist_to_height_ratio, 0.3);        
     }
 
     // Start network table in client vs. server mode depending whether running on robot or not
@@ -557,11 +577,11 @@ namespace {
         ntinst.SetUpdateRate(0.01);    // Allowed range per docs is 0.01 -> 1.0 (rate in seconds)
     }
 
-    // Draw ractangle
-    void drawRectangle(cv::Mat& frame,
-                       const cv::RotatedRect& rect,
+    // Draw 1 ractangle
+    void drawRectangle(cv::Mat&         frame,
+                       const RRect&     rect,
                        const cv::Scalar color,
-                       int width) {
+                       int              width) {
         cv::Point2f rect_points[4];
         rect.points(rect_points);
         for (int j = 0; j < 4; j++ ) {
@@ -569,9 +589,91 @@ namespace {
         }
     }
 
+    //Draw collection of rectangles
+    void drawRectangles(cv::Mat&         frame,
+                        const RRects&    rects,
+                        const cv::Scalar color,
+                        int              width) {
+        for (auto& rect : rects) {
+            drawRectangle(frame, rect, color, width);
+        }
+    }
+
+    // Discard solitary Rect at specific height [range].  Needs at least 3 rect.
+    void discardSolitaryRectAtHeight(RRects& rects, cv::Mat& frame) {
+        if (rects.size() < 3) {
+            return;
+        }
+        
+        //drawRectangles(frame, rects, color_blue, 4);
+        
+        // Sort rectangles based on height of center
+        std::sort(rects.begin(),
+                  rects.end(),
+                  [](const RRect& a, const RRect& b) -> bool
+                  { 
+                      return (a.center.y < b.center.y);
+                  });
+
+        const double tol = 0.1;
+        for (int i=0; i<rects.size()-2; ++i) {
+            RRect& r0 = rects[i];
+            RRect& r1 = rects[i+1];
+            RRect& r2 = rects[i+2];
+
+            int h0 = r0.center.y;
+            int h1 = r1.center.y;
+            int h2 = r2.center.y;
+
+            double h01 = ((double)(h1-h0))/height_pixels;
+            double h12 = ((double)(h2-h1))/height_pixels;
+            double h02 = ((double)(h2-h0))/height_pixels;
+            assert(h01 >= 0);
+            assert(h12 >= 0);
+            assert(h02 >= 0);
+
+            double a0 = getRectArea(r0);
+            double a1 = getRectArea(r1);
+            double a2 = getRectArea(r2);
+
+            // Figure out if 2 rect are close enough in height and area to be a potential pair
+            const double h_tol = 0.05;
+            const double a_tol = 0.2;
+            bool pair01 = (h01 < h_tol) && (ratioOfDifference(a0, a1) < a_tol) && isPotentialPairBasedOnDistHeightRatio(r0, r1);
+            bool pair12 = (h12 < h_tol) && (ratioOfDifference(a1, a2) < a_tol) && isPotentialPairBasedOnDistHeightRatio(r1, r2);
+            bool pair02 = (h02 < h_tol) && (ratioOfDifference(a0, a2) < a_tol) && isPotentialPairBasedOnDistHeightRatio(r0, r2);
+
+            // If 2 are a potential pair and the third is not, discard it
+            int odd_ix = -1;
+            if (pair01 && !pair12 && !pair02) {
+                odd_ix = 2;
+            }
+            else if (!pair01 && pair12 && !pair02) {
+                odd_ix = 0;
+            }
+            else if (!pair01 && !pair12 && pair02) {
+                odd_ix = 1;
+            }
+            if (odd_ix != -1) {
+                drawRectangle(frame, rects[odd_ix], color_blue, 4);
+                rects.erase(rects.begin() + odd_ix);
+                --i;
+                /*
+                std::cout << "Odd rect #" << odd_ix << ": (h="
+                          << h0 << ", " << h1 << ", " << h2
+                          << ")     (hxy=";
+                std::cout << h01 << ", " << h12 << ", " << h02
+                          << ")     (a=";
+                std::cout << a0 << ", " << a1 << ", " << a2
+                          << ")\n";
+                */
+            }   
+        }
+    }
+    
     // From list of filtered and sorted rectangles, find target pair.
     // Return empty container if no taret found, or pair where first element is the one on the left.
-    RRects identifyTargetRectPair(RRects rects_in) {
+    RRects identifyTargetRectPair(RRects rects_in, cv::Mat& frame) {
         assert(rects_in.size() >= 2);
 
         const RRect& largest = rects_in[0];
@@ -584,10 +686,12 @@ namespace {
             const RRect& rect2 = rects_in[i];
             const double area2 = getRectArea(rect2);
             const double rel_area = ratioOfDifference(largest_area, area2);
-            if (rel_area < 0.5) {
+            if (rel_area < 0.4) {
                 filtered_rects.push_back(rect2);
             }
         }
+
+        //drawRectangles(frame, filtered_rects, color_yellow, 4);
 
         // Sort rectangles from left to right
         std::sort(filtered_rects.begin(),
@@ -598,16 +702,22 @@ namespace {
                   });
 
         // If left-most rectangle is not a left marker, discard it
-        if (!filtered_rects.empty() &&
-            !isLeftMarker(filtered_rects[0])) {
-            filtered_rects.erase(filtered_rects.begin());
+        if (!filtered_rects.empty()) {
+            RRect& left_rect = filtered_rects[0];
+            if (!isLeftMarker(left_rect)) {
+                drawRectangle(frame, left_rect, color_cyan, 4);
+                filtered_rects.erase(filtered_rects.begin());
+            }
         }
 
         // If right-most rectangle is not a right marker and we have an odd number of markers, discard it
-        if (!filtered_rects.empty() &&
-            ((filtered_rects.size() % 2) == 1) &&
-            !isRightMarker( filtered_rects[filtered_rects.size()-1] )) {
-            filtered_rects.erase(filtered_rects.end()-1);
+        if (filtered_rects.size() > 2   /*!filtered_rects.empty()*/) {
+            RRect& right_rect = filtered_rects[filtered_rects.size()-1];
+            if (((filtered_rects.size() % 2) == 1) &&
+                !isRightMarker(right_rect)) {
+                drawRectangle(frame, right_rect, color_cyan, 4);
+                filtered_rects.erase(filtered_rects.end()-1);
+            }
         }
 
         // If fewer than 2 rects left or odd number, no target
@@ -754,6 +864,7 @@ namespace {
 
             // Sort contours by keep largest ones for further processing
             // Disabled for now.  No visible performance benefit.
+            /*
             std::sort(contours.begin(),
                       contours.end(),
                       [](const Contour& a, const Contour& b) -> bool
@@ -764,6 +875,7 @@ namespace {
             if (contours.size() > contour_size_lim) {
                 contours.resize(contour_size_lim);
             }
+            */
 
             // Draw contours + find rectangles meeting aspect ratio requirement
             std::vector<cv::RotatedRect> min_rects(contours.size()), filtered_min_rects;
@@ -784,10 +896,16 @@ namespace {
                 if (pixels_from_vertical_middle/half_height > 0.7) {
                     continue;
                 }
+
+                // Discard rectangles that are too small
+                const double r_height = std::max(min_rect.size.height, min_rect.size.width);
+                if ((double)r_height/height_pixels < 0.08) {
+                    continue;
+                }
                 
                 // Draw rectangle (cyan) after excluding those in top or bottom of frame
                 if (stream_pipeline_output) {
-                    drawRectangle(frame_out_, min_rect, color_cyan, 4);
+                    //drawRectangle(frame_out_, min_rect, color_cyan, 4);
                 }
 
                 // Discard rectangles that don't have the expected aspect ratio
@@ -822,11 +940,16 @@ namespace {
                 //std::cout << "FALSE: Fewer than 2 filtered rect\n";
                 return;
             }
-            
+
+            // Discard solitary rectangle at specific height
+            discardSolitaryRectAtHeight(filtered_min_rects, frame_out_);
+
+            drawRectangles(frame_out_, filtered_min_rects, color_yellow, 4);
+
             // Sort rectangles on descending area
             std::sort(filtered_min_rects.begin(),
                       filtered_min_rects.end(),
-                      [](const cv::RotatedRect& a, const cv::RotatedRect& b) -> bool
+                      [](const RRect& a, const RRect& b) -> bool
                       { 
                           return (getRectArea(a) > getRectArea(b));
                       });
@@ -844,7 +967,7 @@ namespace {
             }
 
             // Find target pair of rectangles after pairing up and checking rectangles
-            RRects rects = identifyTargetRectPair(filtered_min_rects);
+            RRects rects = identifyTargetRectPair(filtered_min_rects, frame_out_);
             if (rects.empty()) {
                 setTargetIsIdentified(false);
                 //std::cout << "FALSE: No filtered rectangles\n";
@@ -855,8 +978,8 @@ namespace {
 
             // Draw potential target, before checking heights (yellow)
             if (stream_pipeline_output) {
-                drawRectangle(frame_out_, left_rect, color_yellow, 4);
-                drawRectangle(frame_out_, right_rect, color_yellow, 4);
+                //drawRectangle(frame_out_, left_rect, color_yellow, 4);
+                //drawRectangle(frame_out_, right_rect, color_yellow, 4);
             }
 
             // Top 2 rectangles must have centers almost at same height.
@@ -1045,9 +1168,8 @@ namespace {
 
             // For debug of false positives
             /*
-            if (nt_target_valid.GetBoolean(false)) {
-                std::cout << "DEBUG: Target distance = " << nt_target_dist3_inch.GetDouble(0)/12.0 << " feet\n";
-                std::this_thread::sleep_for(std::chrono::seconds(10));
+            if (!nt_target_valid.GetBoolean(false)) {
+                std::this_thread::sleep_for(std::chrono::seconds(5));
             }
             */
             
