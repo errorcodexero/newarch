@@ -984,9 +984,8 @@ namespace {
 
             // Analyze 3 rectangles at a time.
             // Find potential pairs, filter out odd one based on multiple criteria.
-            filterBasedOnTriplets(filtered_min_rects, frame_out_);
-
-            drawRectangles(frame_out_, filtered_min_rects, color_yellow, 4);
+            //filterBasedOnTriplets(filtered_min_rects, frame_out_);
+            //drawRectangles(frame_out_, filtered_min_rects, color_yellow, 4);
 
             // Find target pair of rectangles after pairing up and checking rectangles
             RRects rects = identifyTargetRectPair(filtered_min_rects, frame_out_);
@@ -1000,8 +999,8 @@ namespace {
 
             // Draw potential target, before checking heights (yellow)
             if (stream_pipeline_output) {
-                //drawRectangle(frame_out_, left_rect, color_yellow, 4);
-                //drawRectangle(frame_out_, right_rect, color_yellow, 4);
+                drawRectangle(frame_out_, left_rect, color_yellow, 4);
+                drawRectangle(frame_out_, right_rect, color_yellow, 4);
             }
 
             // Top 2 rectangles must have centers almost at same height.
