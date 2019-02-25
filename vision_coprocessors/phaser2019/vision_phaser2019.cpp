@@ -515,14 +515,36 @@ namespace {
     }
 
     // Check if rotated rect is a left or right marker based on loose angle range
-    const double rot_ang_tol = 0.25;  /*Tolerance as fraction*/
-    const double rot_ang_tol_abs = 8;  /*+- that many degrees */
+    const double rot_ang_tol = 0.3;  /*Tolerance as fraction*/
+    const double rot_ang_tol_abs = 10;  /*+- that many degrees */
     bool isLeftMarker(const RRect& rect) {
         return isApproxEqual(rect.angle+90, 15, rot_ang_tol, rot_ang_tol_abs) && (rect.size.width > rect.size.height);
     }
     
     bool isRightMarker(const RRect& rect) {
         return isApproxEqual(rect.angle+90, 75, rot_ang_tol, rot_ang_tol_abs) && (rect.size.width < rect.size.height);
+    }
+
+    bool rectInTopOrBottomOfFrame(const RRect& rect) {
+        const double half_height = height_pixels/2;
+        const double pixels_from_vertical_middle = abs(rect.center.y - half_height);
+        return (pixels_from_vertical_middle/half_height > 0.7);
+    }
+
+    bool rectTooSmall(const RRect& rect) {
+        const double r_height = std::max(rect.size.height, rect.size.width);
+        return ((double)r_height/height_pixels < 0.08);
+    }
+
+    bool expectedAspectRatio(const RRect& rect) {
+        const double expected_aspect_of_target = 5.5/2;
+        const double aspect_ratio_tolerance = 0.3;   //0.15;
+        const double aspect_ratio = getRectAspectRatio(rect);
+        return isApproxEqual(aspect_ratio, expected_aspect_of_target, aspect_ratio_tolerance);
+    }
+
+    bool isAMarker(const RRect& rect) {
+        return isLeftMarker(rect) || isRightMarker(rect);
     }
 
     // Distance in pixels between centers or 2 rects
@@ -542,7 +564,7 @@ namespace {
         
         const double meas_dist_to_height_ratio = dist_bet_centers / av_height;
         const double exp_dist_to_height_ratio = dist_bet_centers_inch / 5.5;
-        return isApproxEqual(meas_dist_to_height_ratio, exp_dist_to_height_ratio, 0.3);        
+        return isApproxEqual(meas_dist_to_height_ratio, exp_dist_to_height_ratio, 0.3);
     }
 
     // Start network table in client vs. server mode depending whether running on robot or not
@@ -599,8 +621,10 @@ namespace {
         }
     }
 
-    // Discard solitary Rect at specific height [range].  Needs at least 3 rect.
-    void discardSolitaryRectAtHeight(RRects& rects, cv::Mat& frame) {
+    // analyze 3 rectangles at a time.  Find potential pairs, discard odd one if any.
+    // Group by height of center.
+    // Consider vertical dist between centers, areas, and ratio of dist-between-centers to heights.
+    void filterBasedOnTriplets(RRects& rects, cv::Mat& frame) {
         if (rects.size() < 3) {
             return;
         }
@@ -615,19 +639,31 @@ namespace {
                       return (a.center.y < b.center.y);
                   });
 
-        const double tol = 0.1;
+        const double h_tol = 0.05;
+        const double a_tol = 0.3;
         for (int i=0; i<rects.size()-2; ++i) {
-            RRect& r0 = rects[i];
-            RRect& r1 = rects[i+1];
-            RRect& r2 = rects[i+2];
+            RRects s_rects(rects.begin(), rects.begin()+3);
+            assert(s_rects.size() == 3);
+            
+            // Sort triplet from left to right
+            std::sort(s_rects.begin(),
+                      s_rects.end(),
+                      [](const RRect& a, const RRect& b) -> bool
+                      { 
+                          return (a.center.x < b.center.x);
+                      });
+            
+            RRect& r0 = s_rects[i];
+            RRect& r1 = s_rects[i+1];
+            RRect& r2 = s_rects[i+2];
 
             int h0 = r0.center.y;
             int h1 = r1.center.y;
             int h2 = r2.center.y;
 
-            double h01 = ((double)(h1-h0))/height_pixels;
-            double h12 = ((double)(h2-h1))/height_pixels;
-            double h02 = ((double)(h2-h0))/height_pixels;
+            double h01 = (fabs(h1-h0))/height_pixels;
+            double h12 = (fabs(h2-h1))/height_pixels;
+            double h02 = (fabs(h2-h0))/height_pixels;
             assert(h01 >= 0);
             assert(h12 >= 0);
             assert(h02 >= 0);
@@ -636,12 +672,10 @@ namespace {
             double a1 = getRectArea(r1);
             double a2 = getRectArea(r2);
 
-            // Figure out if 2 rect are close enough in height and area to be a potential pair
-            const double h_tol = 0.05;
-            const double a_tol = 0.2;
-            bool pair01 = (h01 < h_tol) && (ratioOfDifference(a0, a1) < a_tol) && isPotentialPairBasedOnDistHeightRatio(r0, r1);
-            bool pair12 = (h12 < h_tol) && (ratioOfDifference(a1, a2) < a_tol) && isPotentialPairBasedOnDistHeightRatio(r1, r2);
-            bool pair02 = (h02 < h_tol) && (ratioOfDifference(a0, a2) < a_tol) && isPotentialPairBasedOnDistHeightRatio(r0, r2);
+            // Figure out if each 2 is a potential pair based on multiple criteria
+            bool pair01 = (h01 < h_tol) && (ratioOfDifference(a0, a1) < a_tol) && isPotentialPairBasedOnDistHeightRatio(r0, r1) && isLeftMarker(r0) && isRightMarker(r1);
+            bool pair12 = (h12 < h_tol) && (ratioOfDifference(a1, a2) < a_tol) && isPotentialPairBasedOnDistHeightRatio(r1, r2) && isLeftMarker(r1) && isRightMarker(r2);
+            bool pair02 = (h02 < h_tol) && (ratioOfDifference(a0, a2) < a_tol) && isPotentialPairBasedOnDistHeightRatio(r0, r2) && isLeftMarker(r0) && isRightMarker(r2);
 
             // If 2 are a potential pair and the third is not, discard it
             int odd_ix = -1;
@@ -667,7 +701,12 @@ namespace {
                 std::cout << a0 << ", " << a1 << ", " << a2
                           << ")\n";
                 */
-            }   
+            } else if (false /*debug*/) {
+                int sum = (int)pair01 + (int)pair12 + (int)pair02;
+                if (sum > 1) {
+                    std::cout << "Multiple potential pairs (" << sum << ")\n";
+                }
+            }
         }
     }
     
@@ -675,6 +714,14 @@ namespace {
     // Return empty container if no taret found, or pair where first element is the one on the left.
     RRects identifyTargetRectPair(RRects rects_in, cv::Mat& frame) {
         assert(rects_in.size() >= 2);
+
+        // Sort rectangles on descending area
+        std::sort(rects_in.begin(),
+                  rects_in.end(),
+                  [](const RRect& a, const RRect& b) -> bool
+                  { 
+                      return (getRectArea(a) > getRectArea(b));
+                  });
 
         const RRect& largest = rects_in[0];
         const double largest_area = getRectArea(largest);
@@ -711,7 +758,7 @@ namespace {
         }
 
         // If right-most rectangle is not a right marker and we have an odd number of markers, discard it
-        if (filtered_rects.size() > 2   /*!filtered_rects.empty()*/) {
+        if (/*filtered_rects.size() > 2*/   !filtered_rects.empty()) {
             RRect& right_rect = filtered_rects[filtered_rects.size()-1];
             if (((filtered_rects.size() % 2) == 1) &&
                 !isRightMarker(right_rect)) {
@@ -878,9 +925,7 @@ namespace {
             */
 
             // Draw contours + find rectangles meeting aspect ratio requirement
-            std::vector<cv::RotatedRect> min_rects(contours.size()), filtered_min_rects;
-            const double expected_aspect_of_target = 5.5/2;
-            const double aspect_ratio_tolerance = 0.3;   //0.15;
+            RRects min_rects(contours.size()), filtered_min_rects;
 
             for (int ix=0; ix < contours.size(); ++ix) {
                 std::vector<cv::Point>& contour = contours[ix];
@@ -888,18 +933,14 @@ namespace {
                 // Find minimum rotated rectangle encapsulating the contour
                 cv::RotatedRect min_rect = min_rects[ix];
                 min_rect = cv::minAreaRect(contour);
-                double aspect_ratio = getRectAspectRatio(min_rect);
 
                 // Discard rectangles off vertical center.  Discard top and bottom of fov.
-                const double half_height = height_pixels/2;
-                const double pixels_from_vertical_middle = abs(min_rect.center.y - half_height);
-                if (pixels_from_vertical_middle/half_height > 0.7) {
+                if (rectInTopOrBottomOfFrame(min_rect)) {
                     continue;
                 }
 
                 // Discard rectangles that are too small
-                const double r_height = std::max(min_rect.size.height, min_rect.size.width);
-                if ((double)r_height/height_pixels < 0.08) {
+                if (rectTooSmall(min_rect)) {
                     continue;
                 }
                 
@@ -909,7 +950,7 @@ namespace {
                 }
 
                 // Discard rectangles that don't have the expected aspect ratio
-                if (!isApproxEqual(aspect_ratio, expected_aspect_of_target, aspect_ratio_tolerance)) {
+                if (!expectedAspectRatio(min_rect)) {
                     continue;
                 }
 
@@ -920,7 +961,7 @@ namespace {
                 
                 // Discard rectangles that don't have the expected angle
                 // Expected angles are -15 for one and -75 for the other.
-                if (!isLeftMarker(min_rect) && !isRightMarker(min_rect)) {
+                if (!isAMarker(min_rect)) {
                     //std::cout << "FALSE: Rect angle = " << min_rect.angle << "\n";
                     continue;
                 }
@@ -941,30 +982,11 @@ namespace {
                 return;
             }
 
-            // Discard solitary rectangle at specific height
-            discardSolitaryRectAtHeight(filtered_min_rects, frame_out_);
+            // Analyze 3 rectangles at a time.
+            // Find potential pairs, filter out odd one based on multiple criteria.
+            filterBasedOnTriplets(filtered_min_rects, frame_out_);
 
             drawRectangles(frame_out_, filtered_min_rects, color_yellow, 4);
-
-            // Sort rectangles on descending area
-            std::sort(filtered_min_rects.begin(),
-                      filtered_min_rects.end(),
-                      [](const RRect& a, const RRect& b) -> bool
-                      { 
-                          return (getRectArea(a) > getRectArea(b));
-                      });
-
-            // Report areas of rectangles in debug mode
-            if (false) {
-                std::cout << "# rectangles after filtering: " << filtered_min_rects.size() << "\n";
-                for (size_t i=0; i<filtered_min_rects.size(); ++i) {
-                    const cv::RotatedRect& rect = filtered_min_rects[i];
-                    std::cout << "    rect[" << i << "]: ";
-                    std::cout << "area=" << getRectArea(rect) << ", ";
-                    std::cout << "angle=" << rect.angle << ", ";
-                    std::cout << "center.x(off center)=" << (rect.center.x-width_pixels/2) << "\n";
-                }
-            }
 
             // Find target pair of rectangles after pairing up and checking rectangles
             RRects rects = identifyTargetRectPair(filtered_min_rects, frame_out_);
