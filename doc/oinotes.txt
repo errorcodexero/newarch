@@ -1,0 +1,27 @@
+1. Get the tracking mode, change camera mode if it has changed
+2. Get the cargo/hatch mode, change the camera index if it has changed
+3. If turtle mode switch and not already running a turtle mode, force turtle mode action
+4. If Joystick pressed - perform direction actions
+   Angle is based on place/collect, cargo/hatch - determined automatically
+   Height is based on mode, place/collect, cargo/hatch
+   - AutoMode - tracking_height + cargo/hatch + direction
+   - SemiAuto - place/collect + cargo/hatch + direction + level 1 height
+   - Manual - place/collect + cargo/hatch + direction + level 1 height
+5. If height button pressed (l1, l2, l3, cargo) - generate height actions
+6. If execute button pressed - manuallyFinish operation
+7. If collect_floor pressed
+   - If Holding Game Piece, print error to console
+   - Else if cargo/hatch switch cargo - floor collect cargo
+   - Else if cargo/hatch switch hatch - floor collect hatch
+
+If you changes the tracking mode (auto, semi-auto, manual), you must hit direction and height
+again to reset internal state of the robot.
+
+If you change the cargo/hatch switch, you must hit direction and height again to reset the interernal
+state of the robot.
+
+We need a way to manage the finger on the hatch holder so that if we lose a hatch, we retract the
+finger, but not interfer with collect and place operations.
+
+
+

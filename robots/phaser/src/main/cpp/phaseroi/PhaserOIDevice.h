@@ -47,7 +47,7 @@ namespace xero {
             virtual void init() ;
 
         private:
-            void initialize() ;
+            void bindOI() ;
             void getTrackingMode() ;
             void getCargoHatchMode(xero::base::ActionSequence &seq) ;
             bool getDirection() ;
@@ -71,11 +71,17 @@ namespace xero {
 
             std::string generateActionHeightName() ;
 
+            void processHatchFinger(xero::base::ActionSequence &seq) ;
+
         private:
             static const size_t HatchCamera = 0 ;
             static const size_t CargoCamera = 1 ;
             
         private:
+            double hatch_finger_start_ ;
+            bool has_hatch_state_ ;
+            double hatch_finger_delay_ ;
+
             size_t automode_ ;
 
             size_t hatch_cargo_switch_ ;
@@ -112,6 +118,8 @@ namespace xero {
             xero::base::ActionPtr set_collect_cargo_floor_ ;
 
             xero::base::ActionPtr reset_intakes_ ;
+            xero::base::ActionPtr extend_finger_ ;
+            xero::base::ActionPtr retract_finger_ ;
 
             xero::base::ActionPtr finish_collect_hatch_ ;
             xero::base::ActionPtr finish_collect_cargo_ ;

@@ -241,6 +241,11 @@ lifter:height:hatch:tracking_height:south                       13
 lifter:height:hatch:tracking_height:east                        13
 lifter:height:hatch:tracking_height:west                        13
 
+lifter:height:cargo:tracking_height:north                       13
+lifter:height:cargo:tracking_height:south                       13
+lifter:height:cargo:tracking_height:east                        13
+lifter:height:cargo:tracking_height:west                        13
+
 lifter:height:cargo:collect:north                             37
 lifter:height:cargo:collect:south                             37
 lifter:height:cargo:collect:east                              37
@@ -331,6 +336,7 @@ hatchintake:power                                               0.2
 hatchholder:collect:delay                                       0.1
 hatchholder:place:delay                                         0.2
 hatcholder:default:delay                                        0.5
+hatchholder:finger:autodelay                                    1.0
 
 score_cargo:power                                               -0.3
 score_cargo:time                                                2
