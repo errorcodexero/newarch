@@ -86,17 +86,21 @@ namespace xero {
             // encoders such that a positive power on the robot moves the robot forward, and
             // forward motion on the robot results in positive encoder values.
             //
-            if (isDefinedAndTrue("hw:tankdrive:invert:motors:left"))
+            if (isDefinedAndTrue("hw:tankdrive:invert:motors:left")) {
                 tank->invertLeftMotors() ;
+            }
 
-            if (isDefinedAndTrue("hw:tankdrive:invert:motors:right"))
+            if (isDefinedAndTrue("hw:tankdrive:invert:motors:right")) {
                 tank->invertRightMotors() ;
+            }
 
-            if (isDefinedAndTrue("hw:tankdrive:invert:encoders:left"))
+            if (isDefinedAndTrue("hw:tankdrive:invert:encoders:left")) {
                 tank->invertLeftEncoder() ;
+            }
 
-            if (isDefinedAndTrue("hw:tankdrive:invert:encoders:right"))
+            if (isDefinedAndTrue("hw:tankdrive:invert:encoders:right")) {
                 tank->invertRightEncoder() ;
+            }
 
             db_ = tank ;
             addChild(db_) ;

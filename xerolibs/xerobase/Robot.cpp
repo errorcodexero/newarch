@@ -69,7 +69,7 @@ namespace xero {
         }
 
         bool Robot::isCompBot() {
-            return true ;
+            return false ;
         }
 
         void Robot::setupPaths() {

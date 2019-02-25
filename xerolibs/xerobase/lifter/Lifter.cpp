@@ -173,6 +173,7 @@ namespace xero {
             logger << " speed " << speed_ ;
             logger << " power " << power_ ;
             logger.endMessage() ;
+
         }
 
         void Lifter::calibrate() {

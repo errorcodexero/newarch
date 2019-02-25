@@ -58,7 +58,7 @@ namespace xero {
         }
 
         void DriveByVisionAction::start() {
-            state_ = State::InitialDriveByYaw ;
+            state_ = State::FinalDriveByYaw ;
             lost_target_count_ = 0 ;
         }
 
@@ -66,6 +66,9 @@ namespace xero {
             MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
 
             double yaw = camera_.getYaw() ;
+
+            yaw -= 6.0 ;
+
             double yawadj = yaw * yaw_p_ ;
             double left = yaw_base_power_ + yawadj ;
             double right = yaw_base_power_ - yawadj ;
@@ -94,6 +97,7 @@ namespace xero {
             logger << " yawadj " << yawadj ;
             logger << " left " << left ;
             logger << " right " << right ;
+            logger << " dist " << camera_.getDistance() ;
             logger << " valid " << camera_.isValid() ;
             logger.endMessage() ;
         }

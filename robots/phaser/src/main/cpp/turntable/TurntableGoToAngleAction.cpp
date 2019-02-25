@@ -146,7 +146,6 @@ namespace xero {
                     logger << ", delta " << delta ;
                     logger.endMessage() ; 
 
-                    std::cout << "Finished go to angle" << std::endl ;
                     is_done_ = true ;
                     turntable.setMotorPower(0.0) ;
                     turntable.getRobot().endPlot(plotid_) ;

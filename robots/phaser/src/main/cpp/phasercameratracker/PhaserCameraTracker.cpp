@@ -9,7 +9,6 @@ namespace xero {
 
         PhaserCameraTracker::PhaserCameraTracker(Robot &robot) : CameraTracker(robot) {
             distance_threshold_ = robot.getSettingsParser().getDouble("cameratracker:distance_threshold") ;
-            yaw_threshold_ = robot.getSettingsParser().getDouble("cameratracker:yaw_threshold") ;
             rect_ratio_min_ = robot.getSettingsParser().getDouble("cameratracker:rect_ratio_min") ;
             rect_ratio_max_ = robot.getSettingsParser().getDouble("cameratracker:rect_ratio_max") ;      
         }

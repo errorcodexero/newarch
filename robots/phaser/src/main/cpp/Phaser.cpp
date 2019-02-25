@@ -9,6 +9,7 @@
 #include <MessageLogger.h>
 #include <MessageDestSeqFile.h>
 #include <MessageDestStream.h>
+#include <frc/DriverStation.h>
 #include <memory>
 #include <cassert>
 
@@ -22,8 +23,9 @@ namespace xero {
         }
 
         bool Phaser::isCompBot() {
-            comp_bot_ = new frc::DigitalInput(6) ;
-            return comp_bot_->Get() ;
+            // frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
+            // bool button = ds.GetStickButton(2, 16) ;
+            return false ;
         }
 
         void Phaser::enableSpecificMessages() {
@@ -49,11 +51,14 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_CARGO_HOLDER);   
             // logger.enableSubsystem(MSG_GROUP_HATCH_INTAKE);    
             // logger.enableSubsystem(MSG_GROUP_HATCH_HOLDER);
-            // logger.enableSubsystem(MSG_GROUP_PHASER_OI) ;       
+            // logger.enableSubsystem(MSG_GROUP_PHASER_OI) ;  
+            // logger.enableSubsystem(MSG_GROUP_PARSER) ;                  
+               
             
-            logger.enableSubsystem(MSG_GROUP_ACTIONS);
-            logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);    
-            logger.enableSubsystem(MSG_GROUP_PHASER_OI) ;    
+            logger.enableSubsystem(MSG_GROUP_ACTIONS); 
+            logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);                
+            logger.enableSubsystem(MSG_GROUP_PHASER_OI) ;              
+            logger.enableSubsystem(MSG_GROUP_VISION_DRIVING); 
 
             //
             // This should stay on.  It will have no effect on the real robot

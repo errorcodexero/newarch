@@ -222,6 +222,7 @@ namespace xero {
                 break ;
 
             case State::WaitForCargo:
+            case State::WaitForCargo2:
                 // We are deploying the intake, must get it back into the robot before
                 // the cancel operation is done
                 cargo_intake->setAction(stop_cargo_intake_motor_) ;

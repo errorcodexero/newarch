@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gamepiecemanipulator/GamePieceManipulator.h"
 #include <OIDevice.h> 
 #include <Action.h>
 
@@ -67,6 +68,8 @@ namespace xero {
             std::string dirToString() ;
             std::string heightToString() ;
             std::string toString(OperationMode mode) ;
+
+            std::string generateActionHeightName() ;
 
         private:
             static const size_t HatchCamera = 0 ;

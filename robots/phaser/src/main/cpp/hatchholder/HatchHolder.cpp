@@ -20,6 +20,9 @@ namespace xero {
             finger_->Set(false) ;
             arm_extend_->Set(false) ;
             arm_retract_->Set(false) ;
+
+            finger_deployed_ = false ;
+            arm_deployed_ = false ;
         }   
 
         HatchHolder::~HatchHolder() {

@@ -48,14 +48,17 @@ namespace xero {
         DriverGamepad::~DriverGamepad() {            
         }
 
-        void DriverGamepad::rumble(bool left, double value) {
+        void DriverGamepad::rumble(bool left, double value, double duration) {
             if (controller_ != nullptr) {
-                frc::XboxController::RumbleType rtype = frc::XboxController::RumbleType::kLeftRumble ;
+                rtype_ = frc::XboxController::RumbleType::kLeftRumble ;
 
                 if (!left)
-                    rtype = frc::XboxController::RumbleType::kRightRumble ;
+                    rtype_ = frc::XboxController::RumbleType::kRightRumble ;
 
-                controller_->SetRumble(rtype, value) ;
+                controller_->SetRumble(rtype_, value) ;
+                rumbling_ = true ;
+                start_ = getSubsystem().getRobot().getTime() ;
+                duration_ = duration ;
             }
         }
 
@@ -96,6 +99,12 @@ namespace xero {
         }
 
         void DriverGamepad::computeState() {
+            if (rumbling_) {
+                if (getSubsystem().getRobot().getTime() - start_ > duration_) {
+                    rumbling_ = false ;
+                    controller_->SetRumble(rtype_, 0.0) ;
+                }
+            }
         }
 
         bool DriverGamepad::isCancelPressed() {
@@ -132,6 +141,7 @@ namespace xero {
                 seq.pushSubActionPair(db_, nudge_clockwise_, false) ;
             }
             else if (pov == POVAngle::UP) {
+                std::cout << "Nudge forward" << std::endl ;
                 seq.pushSubActionPair(db_, nudge_forward_, false) ;
             }
             else if (pov == POVAngle::DOWN) {

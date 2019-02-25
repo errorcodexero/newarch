@@ -122,6 +122,12 @@ bool SettingsParser::readFile(const std::string &filename) {
     double double_output;
     std::string string_output;
 
+    logger_.startMessage(MessageLogger::MessageType::debug, msggroup_);
+    logger_ << "Settings: defines" ;
+    for(const std::string &define : defines_)
+        logger_ << " '" << define << "'" ;
+    logger_.endMessage();    
+
     std::string line;
     while(std::getline(file, line)) {
         std::string key, value;
@@ -159,7 +165,7 @@ void SettingsParser::processIf(const std::string &filename, int line_num, const 
     std::string keyword ;
     size_t index = 2 ;
 
-    while (index < line.length() && std::isspace(line[index++]))
+    while (index < line.length() && std::isspace(line[index]))
         index++ ;
 
     if (index == line.length()) {

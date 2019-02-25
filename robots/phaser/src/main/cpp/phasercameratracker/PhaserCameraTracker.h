@@ -26,7 +26,6 @@ namespace xero {
 
         private:
             double distance_threshold_ ;
-            double yaw_threshold_ ;
             double rect_ratio_min_ ;
             double rect_ratio_max_ ;         
             double rect_ratio_ ;   

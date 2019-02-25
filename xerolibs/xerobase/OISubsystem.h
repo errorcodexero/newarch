@@ -43,8 +43,8 @@ namespace xero {
             /// \returns the value of the automodel selection
             int getAutoModeSelector() ;
 
-            void rumble(bool left, double value) {
-                driver_->rumble(left, value) ;
+            void rumble(bool left, double value, double duration) {
+                driver_->rumble(left, value, duration) ;
             }
 
             /// \brief return the driver gamepad

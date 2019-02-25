@@ -70,7 +70,7 @@ namespace xero {
             /// \param db the drivebase to control
             void init(std::shared_ptr<TankDrive> db) ;
 
-            void rumble(bool left, double value) ;
+            void rumble(bool left, double value, double duration) ;
 
             bool isCancelPressed() ;
 
@@ -102,6 +102,11 @@ namespace xero {
             ActionPtr nudge_counter_clockwise_ ;
 
             bool reverse_ ;
+
+            bool rumbling_ ;
+            double start_ ;
+            double duration_ ;
+            frc::XboxController::RumbleType rtype_ ;            
         } ;
      }
  }

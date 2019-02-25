@@ -47,6 +47,7 @@ namespace xero {
 
             switch(sel) {
             case 0:
+                mode = testLifter() ;
                 break ;
 
             case 1:
@@ -313,7 +314,6 @@ namespace xero {
             return mode ;                
         }
 
-
         AutoModePtr PhaserAutoModeController::testLifter() {
             std::string name = "Test Lifter" ;
             std::string desc = "Test the lifter go to height and hold" ;
@@ -327,7 +327,7 @@ namespace xero {
             act = std::make_shared<LifterCalibrateAction>(*lifter) ;
             mode->pushSubActionPair(lifter, act) ;
 
-            act = std::make_shared<LifterGoToHeightAction>(*lifter, 60.0) ;
+            act = std::make_shared<LifterGoToHeightAction>(*lifter, 24.0) ;
             mode->pushSubActionPair(lifter, act) ;
             
             return mode ;                

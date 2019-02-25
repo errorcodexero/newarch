@@ -27,7 +27,7 @@ namespace xero {
         {            
             is_valid_ = table_->GetBoolean(TargetDetected, false) ;
             if (is_valid_) {
-                dist_inch_ = table_->GetNumber(TargetDistance, 0.0) ;
+                dist_inch_ = table_->GetNumber(TargetDistance, 0.0) * 0.71 ;
                 yaw_deg_ = table_->GetNumber(TargetAngle, 0.0) ;
             }
 

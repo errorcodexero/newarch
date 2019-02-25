@@ -61,6 +61,7 @@ namespace xero {
             double start_time_ ;
             size_t index_ ;
             
+            std::list<double> distances_ ;
             static std::list<std::string> plot_columns_ ;
         };
     }

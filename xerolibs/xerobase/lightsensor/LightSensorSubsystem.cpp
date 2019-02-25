@@ -50,22 +50,7 @@ namespace xero {
             while (sensor_data_.size() > 10)
                 sensor_data_.pop_back() ;
 
-            if (is_detected_ == false) {
-                if (sensors_on) {
-                    detect_count_++ ;
-                    if (detect_count_ == 3)
-                        is_detected_ = true ;
-                }
-                else {
-                    detect_count_ = 0 ;
-                }
-            }
-            else {
-                if (sensors_on == 0) {
-                    detect_count_ = 0 ;
-                    is_detected_ = false ;
-                }
-            }
+            is_detected_ = (sensors_on > 0) ;
 
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER_VERBOSE) ;

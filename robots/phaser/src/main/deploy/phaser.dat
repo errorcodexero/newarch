@@ -33,7 +33,6 @@ endif
 if PRACTICE
 #
 # This is for the practice bot
-#
 hw:tankdrive:invert:motors:right                                true
 hw:tankdrive:invert:encoders:left                               true
 endif
@@ -129,11 +128,11 @@ plotter:port                                                    5555
 # Variables for the linefollower
 #
 linefollower:front:power                                          0.2
-linefollower:front:distance                                       14
-linefollower:front:adjust                                         -0.40
+linefollower:front:distance                                       18
+linefollower:front:adjust                                         -0.4
 linefollower:back:power                                           -0.2
-linefollower:back:distance                                        -14
-linefollower:back:adjust                                          0.40
+linefollower:back:distance                                        -18
+linefollower:back:adjust                                          0.4
 
 #
 # Variables for the turntable
@@ -189,14 +188,14 @@ turntable:angle:hatch:place:west                                90              
 #
 # Variables for the lifter
 #
-lifter:base							                            8.46
-lifter:inches_per_tick                                          0.05925
+lifter:base							                            8.75
+lifter:inches_per_tick                                          0.177951389                # old number 0.05925
 lifter:max_height                                               83.66
 lifter:min_height                                               8.46
 lifter:threshold                                                1.0
 lifter:maxv                                                     23.0
-lifter:maxa                                                     50.0
-lifter:maxd                                                     -50.0
+lifter:maxa                                                     50
+lifter:maxd                                                     -50
 lifter:follower:up:kp                                           0.05              
 lifter:follower:up:ka                                           0.0                 
 lifter:follower:up:kv                                           0.035
@@ -234,8 +233,13 @@ lifter:height:offset:hatch_center                               5.5
 lifter:height:offset:hatch_hook_center                          8.6                               
 lifter:height:hatch:floor_collect                               8.5
 lifter:height:hatch:undock_intake                               22.00
-lifter:height:loadingstation:hatch:shift_up                     3
+lifter:height:loadingstation:hatch:shift_up                     5
 lifter:height:score:hatch:shift_down                            -3.2
+
+lifter:height:hatch:tracking_height:north                       13
+lifter:height:hatch:tracking_height:south                       13
+lifter:height:hatch:tracking_height:east                        13
+lifter:height:hatch:tracking_height:west                        13
 
 lifter:height:cargo:collect:north                             37
 lifter:height:cargo:collect:south                             37
@@ -285,13 +289,12 @@ lifter:height:offset:hatch_hook_center                          8.6
 lifter:height:cargo:undock_height                               22.00
 lifter:height:cargo:collected                                   16.0
 
-cameratracker:distance_threshold                                0.0
-cameratracker:yaw_threshold                                     0.0
-cameratracker:rect_ratio_min                                    0.0
-cameratracker:rect_ratio_max                                    0.0
+cameratracker:distance_threshold                                75.0
+cameratracker:rect_ratio_min                                    0.9
+cameratracker:rect_ratio_max                                    1.1
 
-drivebyvision:yaw_base_power                                    0.2                  
-drivebyvision:yaw_p                                             -0.003
+drivebyvision:yaw_base_power                                    0.15               
+drivebyvision:yaw_p                                             -0.005
 drivebyvision:yaw_threshold                                     3.0
 drivebyvision:lost_target_threshold                             4
 drivebyvision:outer_distance                                    96.0
@@ -306,13 +309,21 @@ drivebyvision:outer:3                                           1.10
 drivebyvision:scurve_base_power                                 0.2
 drivebyvision:scurve_turn_offset                                0.1
 drivebyvision:scurve_cycles                                     100
-drivebyvision:quit_threshold                                    31.0
+drivebyvision:quit_threshold                                    18.0
 
 cargointake:power                                               -0.6
 
+if COMPETITION
+cargoholder:collect:power                                       0.6
+cargoholder:score:power                                         -0.8
+endif
+
+if PRACTICE
 cargoholder:collect:power                                       -0.6
 cargoholder:TalonSRX                                            true
 cargoholder:score:power                                         0.8
+endif
+
 cargoholder:score:time                                          2.0
 
 hatchintake:power                                               0.2
