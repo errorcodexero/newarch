@@ -104,8 +104,30 @@ tankdrive:follower:right:kv                                     0.00637    #0.00
 tankdrive:follower:right:kp                                     0.005
 tankdrive:follower:right:kd                                     0.0
 
+tankdrive:follower:ka                                           0.0
+tankdrive:follower:kv                                           0.00637
+tankdrive:follower:kp                                           0.005
+tankdrive:follower:kd                                           0.0
+
 tankdrive:follower:turn_correction                              0.0
 tankdrive:follower:angle_decay                                  0.0
+
+tankdrive:distance_action:maxa                                  36.0
+tankdrive:distance_action:maxd                                  -36.0
+tankdrive:distance_action:maxv                                  36.0
+
+tankdrive:distance_action:angle_pid:p                           0.0
+tankdrive:distance_action:angle_pid:i                           0.0
+tankdrive:distance_action:angle_pid:d                           0.0
+tankdrive:distance_action:angle_pid:f                           0.0
+tankdrive:distance_action:angle_pid:min                         -1.0
+tankdrive:distance_action:angle_pid:max                         1.0
+tankdrive:distance_action:angle_pid:imax                        0.0
+
+tankdrive:distance_action:distance_threshold                    999.0
+tankdrive:distance_action:profile_outdated_error_long           8.0
+tankdrive:distance_action:profile_outdated_error_short          4.0
+tankdrive:distance_action:profile_outdated_error_dist           12.0
 
 #
 # Variables for the driver gamepad
@@ -335,8 +357,14 @@ hatchintake:power                                               0.2
 
 hatchholder:collect:delay                                       0.1
 hatchholder:place:delay                                         0.2
-hatcholder:default:delay                                        0.5
+hatchholder:default:delay                                        0.5
 hatchholder:finger:autodelay                                    1.0
+
+climb:backup_distance                                           12.0
+climb:deploy_delay                                              0.3
+climb:drive:left                                                0.5
+climb:drive:right                                               0.5
+climb:drive:duration                                            3.0
 
 score_cargo:power                                               -0.3
 score_cargo:time                                                2

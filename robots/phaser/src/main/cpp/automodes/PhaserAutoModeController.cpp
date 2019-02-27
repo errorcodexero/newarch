@@ -156,25 +156,25 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto hatchholder = phaserrobot->getGameManipulator()->getHatchHolder() ;
 
-            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::EXTEND_ARM, "hatcholder:default:delay") ;
+            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::EXTEND_ARM, "hatchholder:default:delay") ;
             mode->pushSubActionPair(hatchholder, act) ;
 
             act = std::make_shared<DelayAction>(2.0) ;
             mode->pushAction(act) ;
 
-            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::EXTEND_FINGER, "hatcholder:default:delay") ;
+            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::EXTEND_FINGER, "hatchholder:default:delay") ;
             mode->pushSubActionPair(hatchholder, act) ;
 
             act = std::make_shared<DelayAction>(2.0) ;
             mode->pushAction(act) ;           
 
-            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::RETRACT_ARM, "hatcholder:default:delay") ;
+            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::RETRACT_ARM, "hatchholder:default:delay") ;
             mode->pushSubActionPair(hatchholder, act) ;
 
             act = std::make_shared<DelayAction>(2.0) ;
             mode->pushAction(act) ;
 
-            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::RETRACT_FINGER, "hatcholder:default:delay") ;
+            act = std::make_shared<HatchHolderAction>(*hatchholder, HatchHolderAction::Operation::RETRACT_FINGER, "hatchholder:default:delay") ;
             mode->pushSubActionPair(hatchholder, act) ;
 
             act = std::make_shared<DelayAction>(2.0) ;

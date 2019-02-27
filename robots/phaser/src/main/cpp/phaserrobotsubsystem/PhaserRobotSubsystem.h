@@ -48,6 +48,8 @@ namespace xero {
                 return game_piece_man_ ;
             }
 
+            virtual bool canAcceptAction(xero::base::ActionPtr action) ;
+            
         private:
             std::shared_ptr<PhaserOISubsystem> oi_ ;
             std::shared_ptr<xero::base::LightSensorSubsystem> front_line_sensor_ ;

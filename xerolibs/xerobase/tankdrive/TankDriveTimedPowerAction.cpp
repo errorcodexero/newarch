@@ -4,17 +4,19 @@
 
 namespace xero {
     namespace base {
-        TankDriveTimedPowerAction::TankDriveTimedPowerAction(TankDrive &db, double left, double right, double time) : TankDriveAction(db)  {
+        TankDriveTimedPowerAction::TankDriveTimedPowerAction(TankDrive &db, double left, double right, double time, bool lowgear) : TankDriveAction(db)  {
             left_ = left ;
             right_ = right ;
             duration_ = time ;
+            lowgear_ = lowgear ;
         }
 
         TankDriveTimedPowerAction::TankDriveTimedPowerAction(TankDrive &db, const std::string &left, 
-                const std::string &right, const std::string &time) : TankDriveAction(db) {
+                const std::string &right, const std::string &time, bool lowgear) : TankDriveAction(db) {
             left_ = getTankDrive().getRobot().getSettingsParser().getDouble(left) ;
             right_ = getTankDrive().getRobot().getSettingsParser().getDouble(right) ;
             duration_ = getTankDrive().getRobot().getSettingsParser().getDouble(time) ;            
+            lowgear_ = lowgear ;
         }
 
         TankDriveTimedPowerAction::~TankDriveTimedPowerAction() {                
@@ -23,6 +25,12 @@ namespace xero {
         void TankDriveTimedPowerAction::start() {
             isdone_ = false ;
             start_ = getTankDrive().getRobot().getTime() ;
+            if (getTankDrive().hasGearShifter()) {
+                if (lowgear_)
+                    getTankDrive().lowGear() ;
+                else
+                    getTankDrive().highGear() ;
+            }
             setMotorsToPercents(left_, right_) ;
         }
 

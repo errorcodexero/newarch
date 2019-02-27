@@ -15,14 +15,14 @@ namespace xero {
             /// \param left the power to apply to the left side
             /// \param right the power to apply to the right side
             /// \param time the amount of time to apply the power
-            TankDriveTimedPowerAction(TankDrive &db, double left, double right, double time) ;
+            TankDriveTimedPowerAction(TankDrive &db, double left, double right, double time, bool lowgear = false) ;
 
             /// \brief create the action
             /// \param db the drivebase this action will act on
             /// \param left the name of the parameter that contains the power for the left side
             /// \param right the name of the parameter that contains the power for the right side
             /// \param time the amount of time to apply the power            
-            TankDriveTimedPowerAction(TankDrive &db, const std::string &left, const std::string &right, const std::string &time) ;
+            TankDriveTimedPowerAction(TankDrive &db, const std::string &left, const std::string &right, const std::string &time, bool lowgear = false) ;
 
             /// \brief destroy the action object
             virtual ~TankDriveTimedPowerAction() ;
@@ -50,6 +50,7 @@ namespace xero {
             double duration_ ;
             double start_ ;
             bool isdone_ ;
+            bool lowgear_ ;
         } ;
     }
 }
