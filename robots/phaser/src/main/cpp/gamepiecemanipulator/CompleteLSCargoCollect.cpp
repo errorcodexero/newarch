@@ -29,7 +29,6 @@ namespace xero {
             switch(state_) {
             case State::WaitForCargo:
                 if (set_cargo_holder_motor_->isDone() && cargo_holder->hasCargo()) {
-       
                     cargo_holder->setAction(stop_cargo_holder_motor_) ;
                     state_ = State::StopAllMotors ;
                 }
