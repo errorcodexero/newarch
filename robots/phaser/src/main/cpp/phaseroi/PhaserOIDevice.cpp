@@ -20,6 +20,8 @@
 #include "lifter/LifterGoToHeightAction.h"
 #include "tankdrive/LineFollowAction.h"
 #include "hatchholder/HatchHolderAction.h"
+#include "phaserrobotsubsystem/PhaserRobotSubsystem.h"
+#include "phaserrobotsubsystem/ClimbAction.h"
 
 #include "LineFollowerTakeover.h"
 #include "VisionDetectTakeover.h"
@@ -241,8 +243,9 @@ namespace xero {
             set_collect_hatch_floor_  = std::make_shared<FloorCollectHatchAction>(*game) ;
             set_collect_cargo_floor_  = std::make_shared<FloorCollectCargoAction>(*game) ;
             reset_intakes_ = std::make_shared<ResetIntakeAction>(*game) ;
-            extend_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_FINGER, "hatcholder:default:delay") ;
-            retract_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER, "hatcholder:default:delay") ;            
+            extend_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_FINGER, "hatchholder:default:delay") ;
+            retract_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER, "hatchholder:default:delay") ;     
+            climb_action_ = std::make_shared<ClimbAction>(*ph.getPhaserRobotSubsystem()) ;
         }
 
         //
@@ -817,7 +820,11 @@ namespace xero {
             //
             getCargoHatchMode(seq) ;
 
-            if (getValue(turtle_mode_) && reset_intakes_->isDone()) {
+            //
+            // Cannot execute turtle mode if we are already executing turtle mode, or if we have
+            // triggered the climb sequence.
+            //
+            if (getValue(turtle_mode_) && reset_intakes_->isDone() && climb_action_->isDone()) {
                 //
                 // Directly assign the action and make it forcing to ensure this
                 // action takes priority over everything else.
@@ -826,7 +833,16 @@ namespace xero {
                 hatch_finger_start_ = getSubsystem().getRobot().getTime() ;                
             }
             else if (game->isDone()) {
-                if (getDirection()) {
+                if (!getValue(climb_lock_switch_) && getValue(climb_)) {
+                    //
+                    // Climb lock switch is off and the climb button is pushed.  
+                    //
+                    // Time to fly .... like a grasshopper
+                    //
+                    auto robotsub = ph.getPhaserRobotSubsystem() ;
+                    robotsub->setAction(climb_action_) ;
+                }
+                else if (getDirection()) {
                     //
                     // The joystick has been pressed in a direction, move the
                     // lift and turntable to match to desired target

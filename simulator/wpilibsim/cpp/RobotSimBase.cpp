@@ -263,7 +263,7 @@ namespace xero {
                         MessageLogger &logger = xerorobot->getMessageLogger() ;
                         logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SIMULATOR) ;
                         logger << "Simulation Event: " << event.getModel() ;
-                        logger << " " << event.getName() << " " << event.getTime() ;
+                        logger << " " << event.getName() ;
                         logger << " " << event.getValue() ;
                         logger.endMessage() ;
                     }

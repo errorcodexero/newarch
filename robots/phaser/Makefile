@@ -6,6 +6,7 @@ SOURCES = \
 	src/main/cpp/phaseroi/PhaserOIDevice.cpp\
 	src/main/cpp/phaseroi/PhaserOISubsystem.cpp\
 	src/main/cpp/phaserrobotsubsystem/PhaserRobotSubsystem.cpp\
+	src/main/cpp/phaserrobotsubsystem/ClimbAction.cpp\
 	src/main/cpp/automodes/PhaserAutoModeController.cpp\
 	src/main/cpp/turntable/Turntable.cpp\
 	src/main/cpp/turntable/TurntableCalibrateAction.cpp\
@@ -29,7 +30,7 @@ SOURCES = \
 	src/main/cpp/gamepiecemanipulator/ScoreCargo.cpp\
 	src/main/cpp/gamepiecemanipulator/ScoreHatch.cpp\
 	src/main/cpp/gamepiecemanipulator/ReadyAction.cpp\
-	src/main/cpp/gamepiecemanipulator/ResetIntakesAction.cpp
+	src/main/cpp/gamepiecemanipulator/ResetIntakesAction.cpp\
 
 TARGET = phaser
 

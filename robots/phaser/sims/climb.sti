@@ -1,0 +1,40 @@
+#
+# This file does a floor collect cargo
+#
+
+#
+# Automode values
+#
+#  Value        Setting
+#    0          -100
+#    1          -80
+#    2          -60
+#    3          -40
+#    4          -20
+#    5           10
+#    6           30
+#    7           50
+#    8           70
+#    9           90
+#
+
+#
+# Tracking Viewing Nothing switch
+#
+#  Value         Mode
+#  100           manual
+#  0             semi-auto
+#  -100          auto
+#
+
+#
+# Startup conditions
+#
+0.1,oi,automode,-100                                    # Automode switch set to zero
+0.1,oi,hatch_cargo_switch,0                             # Cargo
+0.1,oi,tracking_viewing_nothing_switch,-100             # Set the auto/semi/manual switch to manual
+
+2.0,oi,climb_lock_switch,0                              # Turn off the climb lock switch
+3.0,oi,climb,1                                          # Press the climb button
+3.2,oi.climb,0                                          # Release the climb button
+

@@ -10,6 +10,7 @@
 #include <MessageDestSeqFile.h>
 #include <MessageDestStream.h>
 #include <frc/DriverStation.h>
+#include <frc/DigitalInput.h>
 #include <memory>
 #include <cassert>
 
@@ -23,9 +24,13 @@ namespace xero {
         }
 
         bool Phaser::isCompBot() {
-            // frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
-            // bool button = ds.GetStickButton(2, 16) ;
-            return false ;
+            //
+            // For the practice bot, we have a jumper between digital IO 6 and ground.  For the
+            // competition bot we have nothing and the roborio pulls this value up to one.  In this
+            // way we detect the difference between the COMP bot and the PRACTICE bot.
+            //
+            frc::DigitalInput input(6) ;
+            return input.Get() ;
         }
 
         void Phaser::enableSpecificMessages() {

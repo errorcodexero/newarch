@@ -33,13 +33,9 @@
 oi,automode,0.1,-100                                    # Automode switch set to zero
 oi,tracking_viewing_nothing_switch,0.1,100              # Set the auto/semi/manual switch to manual
 
-oi,hatch_cargo_switch,3.0,1                             # Set the cargo/hatch switch to cargo
+oi,hatch_cargo_switch,3.0,1                             # Set the cargo/hatch switch to hatch
 oi,collect_floor,4.0,1                                  # Press the floor collect button
 oi,collect_floor,4.2,0                                  # Release the floor collect button
 
 hatchintake,hatch,6.0,1                                 # Hatch detected in the hatch intack
 hatchholder,hatch,8.0,1                                 # Hatch detected in the hatch hatchholder
-
-
-
-
