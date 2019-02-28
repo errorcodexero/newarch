@@ -9,6 +9,7 @@ namespace xero {
     namespace phaser {
             void HatchHolderAction::start() {
                 start_ = subsystem_.getRobot().getTime() ;
+                stopped_ = false ;
                 switch(operation_){
                     case Operation::EXTEND_ARM:
                         subsystem_.extendArm() ;
@@ -35,12 +36,16 @@ namespace xero {
 
             void HatchHolderAction::run() {
                 if (!is_done_) {
-                    if (subsystem_.getRobot().getTime() - start_ > duration_) {
-                        if (operation_ == Operation::EXTEND_ARM || operation_ == Operation::RETRACT_ARM)
+                    double now = subsystem_.getRobot().getTime() ;
+                    if (now - start_ > duration_) {
+                        if ((operation_ == Operation::EXTEND_ARM || operation_ == Operation::RETRACT_ARM) && !stopped_) {
                             subsystem_.stopArm() ;
-
-                        is_done_ = true ;
+                            stopped_ = true ;
+                        }
                     }
+
+                    if (now - start_ > action_duration_)
+                        is_done_ = true ;
                 }
             }
 

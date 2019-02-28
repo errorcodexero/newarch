@@ -126,6 +126,7 @@ namespace xero {
             xero::base::ActionPtr finish_place_hatch_ ;
             xero::base::ActionPtr finish_place_cargo_ ;    
 
+            xero::base::ActionPtr deploy_climber_ ;
             xero::base::ActionPtr climb_action_ ; 
         } ;
     }

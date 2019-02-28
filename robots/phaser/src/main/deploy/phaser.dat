@@ -44,7 +44,7 @@ hw:hatchholder:sensor                                           21              
 
 hw:hatchintake:motor                                            12              # Victor SPX
 hw:hatchintake:sensor                                           23              # Digital IO
-hw:hatchintake:solenoid                                         2               # Solenoid
+hw:hatchintake:solenoid                                         3               # Solenoid
 
 hw:lifter:encoder1                                              8               # Digital IO
 hw:lifter:encoder2                                              9               # Digital IO
@@ -74,7 +74,7 @@ hw:cargointake:motor                                            9               
 hw:cargointake:solenoid                                         1               # Solenoid
 hw:cargointake:sensor                                           22              # Sensor
 
-hw:climber:solenoid                                             3               # Solenoid
+hw:climber:solenoid                                             2               # Solenoid
 
 
 
@@ -253,7 +253,7 @@ lifter:height:cargo:floor_collect                               9.0
 lifter:height:offset:cargo_holder_center                        6.75
 lifter:height:offset:hatch_center                               5.5
 lifter:height:offset:hatch_hook_center                          8.6                               
-lifter:height:hatch:floor_collect                               8.5
+lifter:height:hatch:floor_collect                               12.0
 lifter:height:hatch:undock_intake                               22.00
 lifter:height:loadingstation:hatch:shift_up                     5
 lifter:height:score:hatch:shift_down                            -3.2
@@ -299,14 +299,15 @@ lifter:height:hatch:place:north:1                             15
 lifter:height:hatch:place:south:1                             15       
 lifter:height:hatch:place:east:1                              15               
 lifter:height:hatch:place:west:1                              15                
-lifter:height:hatch:place:north:2                             50           
-lifter:height:hatch:place:south:2                             50              
-lifter:height:hatch:place:east:2                              50                 
-lifter:height:hatch:place:west:2                              50               
-lifter:height:hatch:place:north:3                             78                 
-lifter:height:hatch:place:south:3                             78                
-lifter:height:hatch:place:east:3                              78                 
-lifter:height:hatch:place:west:3                              78                 
+lifter:height:hatch:place:north:2                             44           
+lifter:height:hatch:place:south:2                             44              
+lifter:height:hatch:place:east:2                              44                 
+lifter:height:hatch:place:west:2                              44
+               
+lifter:height:hatch:place:north:3                             74                 
+lifter:height:hatch:place:south:3                             74                
+lifter:height:hatch:place:east:3                              74                 
+lifter:height:hatch:place:west:3                              74                 
 lifter:height:hatch:place:north:c                             15
 lifter:height:hatch:place:south:c                             15
 lifter:height:hatch:place:east:c                              15          
@@ -353,11 +354,14 @@ endif
 
 cargoholder:score:time                                          2.0
 
-hatchintake:power                                               0.2
+hatchintake:power                                               0.6
 
-hatchholder:collect:delay                                       0.1
-hatchholder:place:delay                                         0.2
-hatchholder:default:delay                                        0.5
+hatchholder:collect:delay                                       0.6
+hatchholder:collect:totaldelay                                  2.0
+hatchholder:specialflow:delay                                   0.4
+hatchholder:place:delay                                         0.6
+hatchholder:place:totaldelay                                    2.0
+hatchholder:default:delay                                       0.5
 hatchholder:finger:autodelay                                    1.0
 
 climb:backup_distance                                           12.0

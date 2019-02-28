@@ -2,7 +2,9 @@
 #include <lifter/Lifter.h>
 #include <lifter/LifterGoToHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
+#include "hatchholder/HatchHolderAction.h"
 #include <Robot.h>
+#include <cmath>
 
 using namespace xero::base ;
 
@@ -20,6 +22,7 @@ namespace xero {
             set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
             set_lifter_final_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
             set_turntable_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, angle) ;
+            extend_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM, "hatchholder:specialflow:delay") ;
 
             safe_height_ = subsystem.getRobot().getSettingsParser().getDouble("lifter:height:safe_turn")  ;
         }
@@ -27,26 +30,72 @@ namespace xero {
         ReadyAction::~ReadyAction(){
         }
 
+        bool ReadyAction::alreadyOnCorrectSide() {
+            auto turntable = getGamePiece().getTurntable() ;
+            return std::fabs(turntable->getAngleValue() - set_turntable_angle_->getTargetAngle()) < 10.0 ;
+        }
+
+        bool ReadyAction::isSpecialHatchFlow() {
+            auto hatch_holder = getGamePiece().getHatchHolder() ;
+            double hatch_north = getGamePiece().getRobot().getSettingsParser().getDouble("turntable:angle:hatch:place:north") ;
+            double hatch_south = getGamePiece().getRobot().getSettingsParser().getDouble("turntable:angle:hatch:place:south") ;            
+            double target_angle = set_turntable_angle_->getTargetAngle() ;
+
+            if (!hatch_holder->hasHatch())
+                return false ;
+
+            double ndiff = std::fabs(target_angle - hatch_north) ;
+            double sdiff = std::fabs(target_angle - hatch_south) ;
+
+            return ndiff < 5.0 || sdiff < 5.0 ;
+        }
+
         void ReadyAction::start() {
-         
-            auto lifter = getGamePiece().getLifter() ;
-            if (lifter->getHeight() > safe_height_) {
-                //
-                // IF we are already above the safe height, do not go to the safe 
-                // height
-                //
-                auto turntable = getGamePiece().getTurntable() ;
-                turntable->setAction(set_turntable_angle_) ;
-                state_ = State::TurntableGoToAngle ;
+            if (isSpecialHatchFlow()) {
+                auto hatch_holder = getGamePiece().getHatchHolder() ;
+                hatch_holder->setAction(extend_hatch_holder_) ;
+
+                state_ = State::ExtendHatchHolder ;
             }
             else {
-                lifter->setAction(set_lifter_safe_height_) ; 
-                state_ = State::LifterSafeHeight ;
+                auto lifter = getGamePiece().getLifter() ;
+                if (lifter->getHeight() > safe_height_ || alreadyOnCorrectSide()) {
+                    //
+                    // IF we are already above the safe height, do not go to the safe 
+                    // height
+                    //
+                    auto turntable = getGamePiece().getTurntable() ;
+                    turntable->setAction(set_turntable_angle_) ;
+                    state_ = State::TurntableGoToAngle ;
+                }
+                else {
+                    lifter->setAction(set_lifter_safe_height_) ; 
+                    state_ = State::LifterSafeHeight ;
+                }
             }
         }
 
         void ReadyAction::run(){
             switch(state_) {
+            case State::ExtendHatchHolder:
+                if (extend_hatch_holder_->isDone()) {
+                    auto lifter = getGamePiece().getLifter() ;
+                    if (lifter->getHeight() > safe_height_ || alreadyOnCorrectSide()) {
+                        //
+                        // IF we are already above the safe height, do not go to the safe 
+                        // height
+                        //
+                        auto turntable = getGamePiece().getTurntable() ;
+                        turntable->setAction(set_turntable_angle_) ;
+                        state_ = State::TurntableGoToAngle ;
+                    }
+                    else {
+                        lifter->setAction(set_lifter_safe_height_) ; 
+                        state_ = State::LifterSafeHeight ;
+                    }                    
+                }
+                break ;
+
             case State::LifterSafeHeight:
                 if(set_lifter_safe_height_->isDone()){
                     auto turntable = getGamePiece().getTurntable() ;

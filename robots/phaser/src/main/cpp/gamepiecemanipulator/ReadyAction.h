@@ -2,6 +2,7 @@
 
 #include "GamePieceAction.h"
 #include "GamePieceManipulator.h"
+#include "turntable/TurntableGoToAngleAction.h"
 
 namespace xero{
     namespace phaser{
@@ -18,8 +19,13 @@ namespace xero{
             virtual std::string toString() ;
 
         private:
+            bool alreadyOnCorrectSide() ;
+            bool isSpecialHatchFlow() ;
+
+        private:
             enum class State{
                 Idle,
+                ExtendHatchHolder,
                 LifterSafeHeight,
                 TurntableGoToAngle,
                 LifterGoToFinalHeight,
@@ -31,9 +37,12 @@ namespace xero{
             std::string angle_ ;
             double safe_height_ ;
 
+            bool special_hatch_flow_ ;
+
             xero::base::ActionPtr set_lifter_safe_height_ ;
             xero::base::ActionPtr set_lifter_final_height_ ;
-            xero::base::ActionPtr set_turntable_angle_ ;
+            xero::base::ActionPtr extend_hatch_holder_ ;
+            std::shared_ptr<TurntableGoToAngleAction> set_turntable_angle_ ;
         } ;
     }
 }

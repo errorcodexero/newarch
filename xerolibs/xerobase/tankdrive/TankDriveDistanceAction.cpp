@@ -43,10 +43,6 @@ TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, const st
     auto &parser = tank_drive.getRobot().getSettingsParser() ;    
 
     // Setup follower
-    const char *kvname = "tankdrive:distance_action:kv" ;
-    const char *kaname = "tankdrive:distance_action:ka" ;
-    const char *kpname = "tankdrive:distance_action:kp" ;
-    const char *kdname = "tankdrive:distance_action:kd" ;            
     velocity_pid_ = std::make_shared<PIDACtrl>(parser,kvname_, kaname_, kpname_, kdname_) ;    
 
     angle_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:angle_pid", true);    
@@ -62,10 +58,6 @@ TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, double t
     auto &parser = tank_drive.getRobot().getSettingsParser() ;
 
     // Setup follower
-    const char *kvname = "tankdrive:distance_action:kv" ;
-    const char *kaname = "tankdrive:distance_action:ka" ;
-    const char *kpname = "tankdrive:distance_action:kp" ;
-    const char *kdname = "tankdrive:distance_action:kd" ;            
     velocity_pid_ = std::make_shared<PIDACtrl>(parser, kvname_, kaname_, kpname_, kdname_) ;    
 
     angle_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:angle_pid", true);    
@@ -82,10 +74,6 @@ TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, const st
     auto &parser = tank_drive.getRobot().getSettingsParser() ;    
 
     // Setup follower
-    const char *kvname = "tankdrive:distance_action:kv" ;
-    const char *kaname = "tankdrive:distance_action:ka" ;
-    const char *kpname = "tankdrive:distance_action:kp" ;
-    const char *kdname = "tankdrive:distance_action:kd" ;            
     velocity_pid_ = std::make_shared<PIDACtrl>(parser, kvname_, kaname_, kpname_, kdname_) ;    
 
     angle_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:angle_pid", true);    

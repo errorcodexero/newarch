@@ -22,6 +22,7 @@
 #include "hatchholder/HatchHolderAction.h"
 #include "phaserrobotsubsystem/PhaserRobotSubsystem.h"
 #include "phaserrobotsubsystem/ClimbAction.h"
+#include "climber/ClimberDeployAction.h"
 
 #include "LineFollowerTakeover.h"
 #include "VisionDetectTakeover.h"
@@ -52,8 +53,6 @@ namespace xero {
             mode_ = OperationMode::Invalid ;     
 
             has_hatch_state_ = false ;
-
-            hatch_finger_delay_ = sub.getRobot().getSettingsParser().getDouble("hatchholder:finger:autodelay") ;
         }
 
         PhaserOIDevice::~PhaserOIDevice() {
@@ -236,6 +235,7 @@ namespace xero {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;  
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto hatch_holder = game->getHatchHolder() ;
+            auto climber = ph.getPhaserRobotSubsystem()->getClimber() ;
 
             finish_collect_hatch_ = std::make_shared<CompleteLSHatchCollect>(*game) ;
             finish_place_hatch_  = std::make_shared<ScoreHatch>(*game) ;
@@ -246,6 +246,8 @@ namespace xero {
             extend_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_FINGER, "hatchholder:default:delay") ;
             retract_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER, "hatchholder:default:delay") ;     
             climb_action_ = std::make_shared<ClimbAction>(*ph.getPhaserRobotSubsystem()) ;
+
+            deploy_climber_ = std::make_shared<ClimberDeployAction>(*climber) ;
         }
 
         //
@@ -780,27 +782,11 @@ namespace xero {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ; 
             auto hatch_holder = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
 
-            if (hatch_holder->hasHatch() != has_hatch_state_) {
-                hatch_finger_start_ = getSubsystem().getRobot().getTime() ;
-                has_hatch_state_ = hatch_holder->hasHatch() ;
+            if (hatch_holder->hasHatch() && !hatch_holder->isFingerDepoyed()) {
+                seq.pushSubActionPair(hatch_holder, extend_finger_) ;
             }
-            else if (getSubsystem().getRobot().getTime() - hatch_finger_start_ > hatch_finger_delay_) {
-                //
-                // The hatch holder has sat in a state long enough.  If the finger does not match, fix
-                // the finger
-                //
-                if (hatch_holder->hasHatch() && !hatch_holder->isFingerDepoyed()) {
-                    //
-                    // We have a hatch, but the finger is not deployed, extend the finger
-                    //
-                    seq.pushSubActionPair(hatch_holder, extend_finger_) ;
-                }
-                else if (!hatch_holder->hasHatch() && hatch_holder->isFingerDepoyed()) {
-                    //
-                    // We don't have a hatch, but the finger is deployed, retract the finger
-                    //
-                    seq.pushSubActionPair(hatch_holder, retract_finger_) ;
-                }
+            else if (!hatch_holder->hasHatch() && hatch_holder->isFingerDepoyed()) {
+                seq.pushSubActionPair(hatch_holder, retract_finger_) ;
             }
         }
 
@@ -884,13 +870,10 @@ namespace xero {
                         log.endMessage() ;                          
                     }
                 }
-            }
 
-            if (seq.size() == 0) {
-                //
-                // Nothing happening this robot loop, so process the hatch finger
-                //
-                processHatchFinger(seq) ;
+                if (seq.size() == 0) {
+                    processHatchFinger(seq) ;
+                }
             }
         }
     }
