@@ -775,7 +775,7 @@ namespace xero {
 
         void PhaserOIDevice::processHatchFinger(ActionSequence &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ; 
-            auto hatch_holder = ph.getGameManipulator()->getHatchHolder() ;
+            auto hatch_holder = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
 
             if (hatch_holder->hasHatch() != has_hatch_state_) {
                 hatch_finger_start_ = getSubsystem().getRobot().getTime() ;
