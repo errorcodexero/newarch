@@ -9,7 +9,7 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
         TeleopController::TeleopController(Robot &robot) : ControllerBase(robot) {
-            seq_ = std::make_shared<AutoMode>(robot.getMessageLogger(), "teleop") ;
+            seq_ = std::make_shared<AutoMode>(robot, "teleop", "Teleop actions") ;
         }
 
         TeleopController::~TeleopController() {            

@@ -1,5 +1,11 @@
 TOPDIR=../..
 
+AUTOMODES = \
+	src/main/cpp/automodes/PhaserAutoModeController.cpp\
+	src/main/cpp/automodes/PhaserAutoModeBase.cpp\
+	src/main/cpp/automodes/StraightCharAutoMode.cpp\
+	src/main/cpp/automodes/CenterHabTwoHatchLeft.cpp
+
 SOURCES = \
 	src/main/cpp/main.cpp\
 	src/main/cpp/Phaser.cpp\
@@ -7,7 +13,6 @@ SOURCES = \
 	src/main/cpp/phaseroi/PhaserOISubsystem.cpp\
 	src/main/cpp/phaserrobotsubsystem/PhaserRobotSubsystem.cpp\
 	src/main/cpp/phaserrobotsubsystem/ClimbAction.cpp\
-	src/main/cpp/automodes/PhaserAutoModeController.cpp\
 	src/main/cpp/turntable/Turntable.cpp\
 	src/main/cpp/turntable/TurntableCalibrateAction.cpp\
 	src/main/cpp/turntable/TurntableGoToAngleAction.cpp\
@@ -32,6 +37,7 @@ SOURCES = \
 	src/main/cpp/gamepiecemanipulator/ScoreHatch.cpp\
 	src/main/cpp/gamepiecemanipulator/ReadyAction.cpp\
 	src/main/cpp/gamepiecemanipulator/ResetIntakesAction.cpp\
+	$(AUTOMODES)
 
 TARGET = phaser
 
