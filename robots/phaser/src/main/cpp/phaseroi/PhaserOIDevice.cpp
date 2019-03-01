@@ -9,6 +9,7 @@
 #include "gamepiecemanipulator/FloorCollectCargoAction.h"
 #include "gamepiecemanipulator/FloorCollectHatchAction.h"
 #include "gamepiecemanipulator/CompleteLSHatchCollect.h"
+#include "gamepiecemanipulator/CompleteLSCargoCollect.h"
 #include "gamepiecemanipulator/ScoreCargo.h"
 #include "gamepiecemanipulator/ScoreHatch.h"
 #include "gamepiecemanipulator/ReadyAction.h"
@@ -238,6 +239,7 @@ namespace xero {
             auto climber = ph.getPhaserRobotSubsystem()->getClimber() ;
 
             finish_collect_hatch_ = std::make_shared<CompleteLSHatchCollect>(*game) ;
+            finish_collect_cargo_ = std::make_shared<CompleteLSCargoCollect>(*game) ;
             finish_place_hatch_  = std::make_shared<ScoreHatch>(*game) ;
             finish_place_cargo_  = std::make_shared<ScoreCargo>(*game) ;
             set_collect_hatch_floor_  = std::make_shared<FloorCollectHatchAction>(*game) ;
@@ -411,8 +413,6 @@ namespace xero {
                     angle += dirToString() ;
 
                     piece = GamePieceManipulator::GamePieceType::Cargo ;
-
-                    std::cout << "Cargo Hatch Switch is cargo" << std::endl ;
                 }
                 else {
                     //
@@ -676,8 +676,6 @@ namespace xero {
             MessageLogger &log = ph.getMessageLogger() ;    
 
             ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
- 
-
             drive = std::make_shared<DriveByVisionAction>(*db, *camera) ;
 
             seq->pushSubActionPair(db, drive) ;

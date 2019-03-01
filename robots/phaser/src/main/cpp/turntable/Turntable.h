@@ -76,6 +76,7 @@ namespace xero {
             double angle_;
             bool is_calibrated_;
             double speed_;
+            int loops_ ;
 
             //
             // The height required of the lifter before the turntable should be rotated

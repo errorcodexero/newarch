@@ -37,7 +37,7 @@ namespace xero {
         void LineFollowAction::run() {
             MessageLogger &logger = ls_subsystem_.getRobot().getMessageLogger() ;                
 
-            Robot &rb = getTankDrive().getRobot() ;     
+            Robot &rb = getTankDrive().getRobot() ;   
 
             distances_.push_front(getTankDrive().getDist()) ;
             if (distances_.size() > 4)
@@ -46,6 +46,7 @@ namespace xero {
             if (!is_done_) {
                 double traveled = distances_.front() - distances_.back() ;
                 if (distances_.size() == 4 && std::fabs(traveled) < 0.1) {
+                    std::cout << "drive by line: shortcut stop" << std::endl ;
                     is_done_ = true ;
                 } else {
                     bool is_detected = ls_subsystem_.detectedObject() ;                
@@ -57,8 +58,12 @@ namespace xero {
 
                         setMotorsToPercents(left_m, right_m) ;
 
-                        is_done_ = getTankDrive().getDist() - start_distance_ >= distance_ ;
-
+                        double traveled = getTankDrive().getDist() - start_distance_ ;
+                        if (distance_ < 0)
+                            is_done_ = traveled < distance_ ;
+                        else
+                            is_done_ = traveled > distance_ ;
+                        
                         logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
                         logger << "LineFollowAction:" ;
                         logger << " sensor_values " << ls_subsystem_.getSensorsState() ;

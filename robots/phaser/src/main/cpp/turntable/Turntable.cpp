@@ -1,6 +1,7 @@
 #include "Turntable.h"
 #include "TurntableAction.h"
 #include "TurntableCalibrateAction.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <Robot.h>
 #include <MessageLogger.h>
 #include <xeromath.h>
@@ -42,6 +43,8 @@ namespace xero{
 
             angle_ = 0.0 ;
             last_angle_ = 0.0 ;
+
+            loops_ = 0 ;
         }
 
         Turntable::~Turntable() {
@@ -118,7 +121,6 @@ namespace xero{
             return true ;
         }
 
-        static int count = 0 ;
         void Turntable::computeState(){
             encoder_value_ = encoder_->Get() ;
             if (is_calibrated_) {
@@ -130,12 +132,13 @@ namespace xero{
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, msg_id_) ;
             logger << "Turntable:" ;
-            logger << " count " << count++ ;
             logger << " ticks " << encoder_value_ ;
             logger << " calibrated " << is_calibrated_ ;
             logger << " angle " << angle_ ;
             logger << " speed " << speed_ ;  
-            logger.endMessage() ;            
+            logger.endMessage() ; 
+
+            frc::SmartDashboard::PutNumber("Turntable", angle_) ;                       
         }
 
         void Turntable::calibrate() {

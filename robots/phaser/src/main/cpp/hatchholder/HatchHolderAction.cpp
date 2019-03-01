@@ -10,6 +10,7 @@ namespace xero {
             void HatchHolderAction::start() {
                 start_ = subsystem_.getRobot().getTime() ;
                 stopped_ = false ;
+                is_done_ = false ;
                 switch(operation_){
                     case Operation::EXTEND_ARM:
                         subsystem_.extendArm() ;

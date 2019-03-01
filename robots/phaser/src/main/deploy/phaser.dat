@@ -43,7 +43,7 @@ hw:hatchholder:finger                                            5              
 hw:hatchholder:sensor                                           21              # Digital IO
 
 hw:hatchintake:motor                                            12              # Victor SPX
-hw:hatchintake:sensor                                           23              # Digital IO
+hw:hatchintake:sensor                                           20              # Digital IO
 hw:hatchintake:solenoid                                         3               # Solenoid
 
 hw:lifter:encoder1                                              8               # Digital IO
@@ -67,7 +67,7 @@ hw:linesensor:back:2                                            19              
 hw:driverstation:hid:driver                                     0               # HID Device Index
 hw:driverstation:hid:oi                                         2               # HID Device Index
 
-hw:cargoholder:sensor                                           20              # Digital IO
+hw:cargoholder:sensor                                           23              # Digital IO
 hw:cargoholder:motor                                            7               # Victor SPX
 
 hw:cargointake:motor                                            9               # Victor SPX
@@ -134,6 +134,8 @@ tankdrive:distance_action:profile_outdated_error_dist           12.0
 #
 driver:power:max                                                1.0
 driver:power:default                                            0.6
+driver:turn:max                                                 0.8
+driver:turn:default                                             0.4
 driver:power:slowby                                             0.5
 driver:power:tolerance                                          0.1
 driver:power:nudge_straight                                     0.2
@@ -159,21 +161,21 @@ linefollower:back:adjust                                          0.4
 #
 # Variables for the turntable
 #
-turntable:safe_lifter_height                                    26
+turntable:safe_lifter_height                                    22
 turntable:keepout:minimum                                       130
 turntable:keepout:maximum                                       160
 turntable:keepout:dangerzone                                    15
 turntable:degrees_per_tick                                      0.608108108
-turntable:maxa                                                  150
-turntable:maxd                                                  -150
-turntable:maxv                                                  200
+turntable:maxa                                                  270
+turntable:maxd                                                  -270
+turntable:maxv                                                  270
 turntable:base                                                  0.0
 turntable:threshold                                             1.0
 turntable:follower:kv                                           0.0036
 turntable:follower:ka                                           0.0
 turntable:follower:kp                                           0.031
 turntable:follower:kd                                           0.0
-turntable:hold:p                                                0.01
+turntable:hold:p                                                0.1
 turntable:hold:i                                                0.0
 turntable:hold:d                                                0.0
 turntable:hold:f                                                0.0
@@ -248,7 +250,7 @@ lifter:hold:imax                                                0.0
 # hatch_hook_center, the height of the center of the hatch holder above the lifter height
 #
 lifter:height:bottom                                            8.46
-lifter:height:safe_turn                                         28.0
+lifter:height:safe_turn                                         24.0
 lifter:height:cargo:floor_collect                               9.0
 lifter:height:offset:cargo_holder_center                        6.75
 lifter:height:offset:hatch_center                               5.5
@@ -356,11 +358,11 @@ cargoholder:score:time                                          2.0
 
 hatchintake:power                                               0.6
 
-hatchholder:collect:delay                                       0.6
-hatchholder:collect:totaldelay                                  2.0
-hatchholder:specialflow:delay                                   0.4
-hatchholder:place:delay                                         0.6
-hatchholder:place:totaldelay                                    2.0
+hatchholder:collect:delay                                       0.15
+hatchholder:collect:totaldelay                                  0.2
+hatchholder:specialflow:delay                                   0.1
+hatchholder:place:delay                                         0.15
+hatchholder:place:totaldelay                                    0.20
 hatchholder:default:delay                                       0.5
 hatchholder:finger:autodelay                                    1.0
 

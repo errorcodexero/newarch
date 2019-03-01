@@ -67,6 +67,8 @@ namespace xero {
 
             default_duty_cycle_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:default") ;
             max_duty_cycle_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:max") ;
+            turn_default_duty_cycle_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:turn:default") ;
+            turn_max_duty_cycle_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:turn:max") ;            
             slow_factor_= getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:slowby") ;
 
             tolerance_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:tolerance") ;
@@ -97,6 +99,23 @@ namespace xero {
             //
             return axis * (baseduty - slowdown) ;
         }
+
+        double DriverGamepad::scaleTurn(double axis, double boost, bool slow) {
+            //
+            // The boost value (0 - 1) picks a power between DEFAULT and MAX
+            //
+            double baseduty = turn_default_duty_cycle_ + (turn_max_duty_cycle_ - turn_default_duty_cycle_) * boost ;
+
+            //
+            // We slow down by this amount.  Generally we dont expect boost to be non-zewro and slow be true
+            //
+            double slowdown = slow ? turn_default_duty_cycle_ * slow_factor_ : 0.0 ;
+
+            //
+            // Combine them for the final duty cycle
+            //
+            return axis * (baseduty - slowdown) ;
+        }        
 
         void DriverGamepad::computeState() {
             if (rumbling_) {
@@ -155,7 +174,7 @@ namespace xero {
                 double boost = ds.GetStickAxis(getIndex(),AxisNumber::LTRIGGER) ;
 
                 double power = scalePower(-ly, boost, slow) ;
-                double spin = (std::fabs(rx) > 0.01) ? scalePower(rx, boost, slow) : 0.0 ;
+                double spin = (std::fabs(rx) > 0.01) ? scaleTurn(rx, boost, slow) : 0.0 ;
 
                 double left, right ;
 

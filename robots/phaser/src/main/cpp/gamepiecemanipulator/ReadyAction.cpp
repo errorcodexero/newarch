@@ -4,6 +4,7 @@
 #include "turntable/TurntableGoToAngleAction.h"
 #include "hatchholder/HatchHolderAction.h"
 #include <Robot.h>
+#include <xeromath.h>
 #include <cmath>
 
 using namespace xero::base ;
@@ -23,6 +24,7 @@ namespace xero {
             set_lifter_final_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
             set_turntable_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, angle) ;
             extend_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM, "hatchholder:specialflow:delay") ;
+            retract_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatchholder:default:delay") ;
 
             safe_height_ = subsystem.getRobot().getSettingsParser().getDouble("lifter:height:safe_turn")  ;
         }
@@ -32,30 +34,31 @@ namespace xero {
 
         bool ReadyAction::alreadyOnCorrectSide() {
             auto turntable = getGamePiece().getTurntable() ;
-            return std::fabs(turntable->getAngleValue() - set_turntable_angle_->getTargetAngle()) < 10.0 ;
+            double diff = xero::math::normalizeAngleDegrees(turntable->getAngleValue() - set_turntable_angle_->getTargetAngle()) ;
+            return std::fabs(diff) < 10.0 ;
         }
 
         bool ReadyAction::isSpecialHatchFlow() {
             auto hatch_holder = getGamePiece().getHatchHolder() ;
-            double hatch_north = getGamePiece().getRobot().getSettingsParser().getDouble("turntable:angle:hatch:place:north") ;
-            double hatch_south = getGamePiece().getRobot().getSettingsParser().getDouble("turntable:angle:hatch:place:south") ;            
+            auto turntable = getGamePiece().getTurntable() ;
             double target_angle = set_turntable_angle_->getTargetAngle() ;
 
             if (!hatch_holder->hasHatch())
                 return false ;
 
-            double ndiff = std::fabs(target_angle - hatch_north) ;
-            double sdiff = std::fabs(target_angle - hatch_south) ;
-
-            return ndiff < 5.0 || sdiff < 5.0 ;
+            return std::fabs(xero::math::normalizeAngleDegrees(target_angle - turntable->getAngleValue())) > 15.0 ;
         }
 
         void ReadyAction::start() {
+            special_hatch_flow_ = false ;
+
             if (isSpecialHatchFlow()) {
                 auto hatch_holder = getGamePiece().getHatchHolder() ;
+                auto lifter = getGamePiece().getLifter() ;
                 hatch_holder->setAction(extend_hatch_holder_) ;
-
-                state_ = State::ExtendHatchHolder ;
+                lifter->setAction(set_lifter_safe_height_) ;
+                special_hatch_flow_ = true ;
+                state_ = State::LifterSafeHeight ;
             }
             else {
                 auto lifter = getGamePiece().getLifter() ;
@@ -118,9 +121,21 @@ namespace xero {
              
             case State::LifterGoToFinalHeight:
                 if(set_lifter_final_height_->isDone()){
-                    auto lifter = getGamePiece().getLifter() ;
-                    state_ = State::Idle ;                     
+                    if (special_hatch_flow_) {
+                        auto hatch_holder = getGamePiece().getHatchHolder() ;
+                        hatch_holder->setAction(retract_hatch_holder_) ;
+                        state_ = State::RetractHatchHolder ;
+                    }
+                    else {
+                        state_ = State::Idle ;                     
+                    }
                 }            
+                break ;
+
+            case State::RetractHatchHolder:
+                if (retract_hatch_holder_->isDone()) {
+                    state_ = State::Idle ;
+                }
                 break ;
 
             case State::Idle:

@@ -3,6 +3,7 @@
 #include <lifter/LifterGoToHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
 #include "hatchholder/HatchHolderAction.h"
+#include "DriverGamepad.h"
 
 using namespace xero::base ;
 

@@ -11,7 +11,6 @@ namespace xero{
             ReadyAction(GamePieceManipulator &subsystem, const std::string &height, const std::string &angle) ;
             virtual ~ReadyAction() ;
 
-
             virtual void start() ;
             virtual void run() ;
             virtual bool isDone() ;
@@ -29,6 +28,7 @@ namespace xero{
                 LifterSafeHeight,
                 TurntableGoToAngle,
                 LifterGoToFinalHeight,
+                RetractHatchHolder,
             } ;
 
         private:
@@ -42,6 +42,7 @@ namespace xero{
             xero::base::ActionPtr set_lifter_safe_height_ ;
             xero::base::ActionPtr set_lifter_final_height_ ;
             xero::base::ActionPtr extend_hatch_holder_ ;
+            xero::base::ActionPtr retract_hatch_holder_ ;            
             std::shared_ptr<TurntableGoToAngleAction> set_turntable_angle_ ;
         } ;
     }

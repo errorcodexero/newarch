@@ -76,6 +76,7 @@ namespace xero {
 
         private:
             double scalePower(double axis, double boost, bool slow) ;
+            double scaleTurn(double axis, double boost, bool slow) ;
             
         private:
             static const int SpinAxis = AxisNumber::RIGHTX ;
@@ -90,6 +91,8 @@ namespace xero {
             int pov_ ;
             double default_duty_cycle_ ;
             double max_duty_cycle_ ;
+            double turn_default_duty_cycle_ ;
+            double turn_max_duty_cycle_ ;            
             double slow_factor_ ;
 
             double left_ ;

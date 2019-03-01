@@ -19,11 +19,11 @@ namespace xero{
 
             private:
                 enum class State{
-                    Idle,
                     ExtendArm,                    
                     ReleaseFinger,
                     LifterShiftDownHeight,
                     RetractArm,
+                    Idle
                 } ;
 
             private:
