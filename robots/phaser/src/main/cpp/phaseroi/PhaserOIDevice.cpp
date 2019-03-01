@@ -388,6 +388,8 @@ namespace xero {
                     height = "lifter:height:cargo:tracking_height:" ;
                     height += dirToString() + ":" ;
                     height += heightToString() ;
+                    angle = "turntable:angle:cargo:place:" ;
+                    angle += dirToString() ;                    
                 }
                 else {
                     //
@@ -396,6 +398,8 @@ namespace xero {
                     //
                     height = "lifter:height:cargo:place:" ;
                     height += dirToString() + ":1" ;
+                    angle = "turntable:angle:cargo:place:" ;
+                    angle += dirToString() ;                      
                 }
             }
             else if (piece == GamePieceManipulator::GamePieceType::None) {

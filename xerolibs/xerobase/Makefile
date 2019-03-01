@@ -12,6 +12,7 @@ SOURCES = \
 	TerminateAction.cpp\
 	DispatchAction.cpp\
 	DriverGamepad.cpp\
+	DriverGamepadRumbleAction.cpp\
 	OIDevice.cpp\
 	OIOutputAction.cpp\
 	OISubsystem.cpp\

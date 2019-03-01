@@ -1,5 +1,7 @@
 #include "CompleteLSCargoCollect.h"
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
+#include <OISubsystem.h>
+#include <DriverGamepadRumbleAction.h>
 
 using namespace xero::base ;
 
@@ -8,9 +10,11 @@ namespace xero {
         CompleteLSCargoCollect::CompleteLSCargoCollect(GamePieceManipulator &subsystem):GamePieceAction(subsystem)
         {
             auto cargo_holder = getGamePiece().getCargoHolder();
+            auto oi = getGamePiece().getRobot().getOI() ;
 
             set_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, "cargoholder:collect:power") ;
             stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
+            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1.0, 1.0) ;
         }
 
         CompleteLSCargoCollect::~CompleteLSCargoCollect() {
@@ -28,15 +32,18 @@ namespace xero {
 
             switch(state_) {
             case State::WaitForCargo:
-                if (set_cargo_holder_motor_->isDone() && cargo_holder->hasCargo()) {
-                    cargo_holder->setAction(stop_cargo_holder_motor_) ;
-                    state_ = State::StopAllMotors ;
+                if (set_cargo_holder_motor_->isDone()) {
+                    if (cargo_holder->hasCargo()) {
+                        cargo_holder->setAction(stop_cargo_holder_motor_) ;
+                        state_ = State::StopAllMotors ; 
+                    }
                 }
                 break ;
 
             case State::StopAllMotors:
                 if (stop_cargo_holder_motor_->isDone()) {
-
+                    auto oi = getGamePiece().getRobot().getOI() ;
+                    oi->setAction(rumble_) ;
                     state_ = State::Idle ;
                 }
 

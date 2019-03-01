@@ -47,6 +47,7 @@ namespace xero{
 
             xero::base::ActionPtr set_hatch_intake_motor_ ;
             xero::base::ActionPtr stop_hatch_intake_motor_ ;
+            xero::base::ActionPtr rumble_ ;            
         };
     }
 }

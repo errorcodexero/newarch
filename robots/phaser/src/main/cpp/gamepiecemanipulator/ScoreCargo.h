@@ -27,6 +27,7 @@ namespace xero{
 
             xero::base::ActionPtr set_cargo_holder_motor_ ;
             xero::base::ActionPtr stop_cargo_holder_motor_ ;
+            xero::base::ActionPtr rumble_ ;            
         } ;
     }
 }

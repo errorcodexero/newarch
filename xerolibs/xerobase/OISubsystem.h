@@ -37,15 +37,13 @@ namespace xero {
             /// \brief run the action generated in the computeState above
             virtual void run() ;
 
+            virtual bool canAcceptAction(ActionPtr act) ;
+
             /// \brief return the value of the automode selctor.
             /// This method iterates through each of the HID devices and the first HID device that
             /// returns an automode selection that is not -1, this value is returned.
             /// \returns the value of the automodel selection
             int getAutoModeSelector() ;
-
-            void rumble(bool left, double value, double duration) {
-                driver_->rumble(left, value, duration) ;
-            }
 
             /// \brief return the driver gamepad
             std::shared_ptr<DriverGamepad> getDriverGamepad() {

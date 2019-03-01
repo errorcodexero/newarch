@@ -30,7 +30,7 @@
           "--start", "0",
           "--auto","0.0",
           "--oper", "60.0",
-          "--events","robots/phaser/sims/turtle"
+          "--events","robots/phaser/sims/load_cargo_north.sti"
         ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
