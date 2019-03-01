@@ -3,6 +3,7 @@
 #include <lifter/LifterGoToHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
 #include "cargointake/CargoIntakeAction.h"
+#include <DriverGamepadRumbleAction.h>
 
 using namespace xero::base ;
 
@@ -14,6 +15,7 @@ namespace xero {
             auto turntable = getGamePiece().getTurntable();
             auto cargo_intake = getGamePiece().getCargoIntake();
             auto cargo_holder = getGamePiece().getCargoHolder();
+            auto oi = getGamePiece().getRobot().getOI() ;
 
             //
             // Pre-create all of the actions needed so that we are not constantly creating and
@@ -31,6 +33,8 @@ namespace xero {
             stop_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, 0.0) ;
             set_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, "cargoholder:collect:power") ;
             stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
+            
+            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1.0, 1.0) ;            
         }
 
         FloorCollectCargoAction::~FloorCollectCargoAction() {
@@ -184,6 +188,9 @@ namespace xero {
                     // 7. We are done, move to the idle state
                     //
                     state_ = State::Idle ;
+
+                    auto oi = getGamePiece().getRobot().getOI() ;
+                    oi->setAction(rumble_) ;                    
                 }
                 break ;
 

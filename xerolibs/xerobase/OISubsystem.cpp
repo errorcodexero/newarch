@@ -3,6 +3,7 @@
 #include "ActionSequence.h"
 #include "tankdrive/TankDrive.h"
 #include "basegroups.h"
+#include "DriverGamepadRumbleAction.h"
 #include <MessageLogger.h>
 
 using namespace xero::misc ;
@@ -67,6 +68,11 @@ namespace xero {
         }
 
         void OISubsystem::run() {
+        }
+
+        bool OISubsystem::canAcceptAction(ActionPtr act) {
+            std::shared_ptr<DriverGamepadRumbleAction> dact = std::dynamic_pointer_cast<DriverGamepadRumbleAction>(act) ;
+            return dact != nullptr ;
         }
     }
 }

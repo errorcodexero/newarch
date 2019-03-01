@@ -30,22 +30,23 @@
 #
 # Start up conditions
 #
-oi,automode,0.1,-100                                    # Automode switch set to zero
-oi,tracking_viewing_nothing_switch,0.1,100              # Set the auto/semi/manual switch to manual
-oi,hatch_cargo_switch,0.1,0                             # Hatch
-hatchholder,hatch,0.1,0                                 # No hatch in the hatch holder
+0.1,oi,automode,-100                                    # Automode switch set to zero
+0.1,oi,tracking_viewing_nothing_switch,100              # Set the auto/semi/manual switch to manual
+0.1,oi,hatch_cargo_switch,0                             # set the hatch/cargo switch to cargo
 
 #
 # Should rotate the turntable if a safe manner to put the hatch 
 # holder on the north side of the robot
 #
-oi,compass_north,4.0,1                                  # Press the joystick north button
-oi,compass_north,4.2,0                                  # Release the joystick north button
+4.0,oi,compass_south,1                                  # Press the joystick north button
+4.2,oi,compass_south,0                                  # Release the joystick north button
 
 #
 # Should complete the place operation manually
 #
-oi,go,12.0,1                                             # Press the go button
-oi,go,12.1,0                                             # Release the go button
-cargoholder,cargo,18.0,1                                 # The hatch appears in the hatch holder
+12.0,oi,go,1                                             # Press the go button
+12.2,oi,go,0                                             # Release the go button
+18.0,cargoholder,cargo,1                                 # The cargo appears in the cargo holder
 
+22.0,oi,compass_north,1
+22.2,oi.compass_north,0

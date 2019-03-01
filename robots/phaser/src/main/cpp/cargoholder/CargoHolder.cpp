@@ -19,7 +19,6 @@ namespace xero {
 
         void CargoHolder::computeState() {
             has_cargo_ = sensor_->Get() ;
-            has_cargo_ = false ;
 
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CARGO_HOLDER) ;

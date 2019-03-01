@@ -25,6 +25,7 @@ SOURCES = \
 	src/main/cpp/climber/ClimberDeployAction.cpp\
 	src/main/cpp/gamepiecemanipulator/GamePieceManipulator.cpp\
 	src/main/cpp/gamepiecemanipulator/CompleteLSHatchCollect.cpp\
+	src/main/cpp/gamepiecemanipulator/CompleteLSCargoCollect.cpp\
 	src/main/cpp/gamepiecemanipulator/FloorCollectCargoAction.cpp\
 	src/main/cpp/gamepiecemanipulator/FloorCollectHatchAction.cpp\
 	src/main/cpp/gamepiecemanipulator/ScoreCargo.cpp\

@@ -34,6 +34,7 @@ namespace xero {
             xero::base::ActionPtr set_retract_arm_ ;
             xero::base::ActionPtr set_retract_hatch_finger_ ;
             xero::base::ActionPtr set_deploy_hatch_finger_ ;
+            xero::base::ActionPtr rumble_ ;            
         } ;
     }
 }

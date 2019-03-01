@@ -3,6 +3,7 @@
 #include <lifter/LifterGoToHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
 #include "hatchholder/HatchHolderAction.h"
+#include <DriverGamepadRumbleAction.h>
 
 using namespace xero::base ;
 
@@ -11,6 +12,7 @@ namespace xero {
         ScoreHatch::ScoreHatch(GamePieceManipulator &subsystem):GamePieceAction(subsystem) {
             auto hatch_holder = getGamePiece().getHatchHolder() ;
             auto lifter = getGamePiece().getLifter() ;
+            auto oi = getGamePiece().getRobot().getOI() ;
             
             set_lifter_shift_down_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:score:hatch:shift_down", true) ;
 
@@ -18,6 +20,7 @@ namespace xero {
             set_retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatchholder:default:delay") ;
             set_retract_hatch_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER, "hatchholder:default:delay") ;
             set_deploy_hatch_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_FINGER, "hatchholder:default:delay") ;
+            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1.0, 1.0) ;            
         }
 
         ScoreHatch::~ScoreHatch(){
@@ -59,6 +62,8 @@ namespace xero {
                 
             case State::RetractArm:
                 if(set_retract_arm_->isDone()) {
+                    auto oi = getGamePiece().getRobot().getOI() ;
+                    oi->setAction(rumble_) ;                    
                     state_ = State::Idle ;
                 }
                 break ;
