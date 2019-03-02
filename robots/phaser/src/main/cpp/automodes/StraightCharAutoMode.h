@@ -5,7 +5,7 @@ namespace xero {
         class StraightCharAutoMode : public PhaserAutoModeBase
         {
         public:
-            StraightCharAutoMode(xero::base::Robot &robot, double power, double duration, bool highgear) ;
+            StraightCharAutoMode(xero::base::Robot &robot, double power, double duration, bool highgear = true) ;
             virtual ~StraightCharAutoMode() ;
         } ;
     }

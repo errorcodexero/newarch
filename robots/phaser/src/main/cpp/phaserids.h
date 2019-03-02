@@ -25,3 +25,5 @@
 #define MSG_GROUP_HATCH_HOLDER                      (1ull << 38)
 
 #define MSG_GROUP_PHASER_OI                         (1ull << 39)
+
+#define MSG_GROUP_VISION_TERMINATOR                 (1ull << 40)

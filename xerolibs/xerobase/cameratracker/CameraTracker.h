@@ -73,7 +73,7 @@ namespace xero {
         private:
             constexpr static const char *NetworkTableName = "TargetTracking" ;
             constexpr static const char *TargetDetected = "valid" ;
-            constexpr static const char *TargetDistance = "dist_inch" ;
+            constexpr static const char *TargetDistance = "dist3_inch" ;
             constexpr static const char *TargetAngle = "yaw_deg" ;
             constexpr static const char *CameraNumber ="camera_number";
             constexpr static const char *CameraModeName = "camera_mode" ;

@@ -17,6 +17,11 @@ namespace xero {
             
             virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
             virtual void computeState() ;
+            virtual void run() ;
+
+            void autoHatchEnable(bool b) {
+                auto_hatch_enabled_ = b ;
+            }
 
             bool hasHatch() const {
                 return has_hatch_ ;
@@ -33,7 +38,7 @@ namespace xero {
                 return arm_deployed_ ;
             }
 
-            bool isFingerDepoyed() {
+            bool isFingerDeployed() {
                 return finger_deployed_ ;
             }
 
@@ -42,6 +47,7 @@ namespace xero {
             bool has_hatch_ ;
             bool arm_deployed_ ;
             bool finger_deployed_ ;
+            bool auto_hatch_enabled_ ;
             std::shared_ptr<frc::DigitalInput> sensor_ ;
             std::shared_ptr<frc::Solenoid> arm_extend_ ;
             std::shared_ptr<frc::Solenoid> arm_retract_ ;

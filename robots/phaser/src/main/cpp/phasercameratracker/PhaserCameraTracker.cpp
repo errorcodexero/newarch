@@ -1,4 +1,5 @@
 #include "PhaserCameraTracker.h"
+#include "phaserids.h"
 #include <Robot.h>
 
 using namespace xero::base ;
@@ -7,7 +8,7 @@ using namespace xero::misc ;
 namespace xero {
     namespace phaser {
 
-        PhaserCameraTracker::PhaserCameraTracker(Robot &robot) : CameraTracker(robot) {
+        PhaserCameraTracker::PhaserCameraTracker(Robot &robot) : CameraTracker(robot), ITerminator("Vision") {
             distance_threshold_ = robot.getSettingsParser().getDouble("cameratracker:distance_threshold") ;
             rect_ratio_min_ = robot.getSettingsParser().getDouble("cameratracker:rect_ratio_min") ;
             rect_ratio_max_ = robot.getSettingsParser().getDouble("cameratracker:rect_ratio_max") ;      
@@ -25,10 +26,15 @@ namespace xero {
             if (!isValid())
                 return false ;
 
+            MessageLogger &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_TERMINATOR) ;
+            logger << "PhaserCameraTracker: distance " << getDistance() ;
+            logger.endMessage() ;  
+
             if (getDistance() > distance_threshold_)
                 return false ;
 
-            return getRectRatio() > rect_ratio_min_ && getRectRatio() < rect_ratio_max_ ;
+            return true ;
         }
     }
 }

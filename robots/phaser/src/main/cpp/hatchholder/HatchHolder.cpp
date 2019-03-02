@@ -23,6 +23,8 @@ namespace xero {
 
             finger_deployed_ = false ;
             arm_deployed_ = false ;
+
+            auto_hatch_enabled_ = true ;
         }   
 
         HatchHolder::~HatchHolder() {
@@ -42,6 +44,17 @@ namespace xero {
             logger << "HatchHolder:" ;
             logger << " HasHatch " << has_hatch_ ;
             logger.endMessage() ;            
+        }
+
+        void HatchHolder::run() {
+            Subsystem::run() ;
+
+            if (auto_hatch_enabled_) {
+                if (hasHatch() && !isFingerDeployed())
+                    extendFinger() ;
+                else if (!hasHatch() && isFingerDeployed())
+                    retractFinger() ;
+            }
         }
 
         void HatchHolder::extendArm() {

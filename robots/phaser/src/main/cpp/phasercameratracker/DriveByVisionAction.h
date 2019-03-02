@@ -30,18 +30,14 @@ namespace xero {
 
         private:
             enum class State {
-                InitialDriveByYaw,
-                DriveFirstSCurve,
-                DriveSecondSCurve,
-                FinalDriveByYaw,
+                DriveYaw,
+                Tracking,
                 Done,
             } ;            
 
         private:
             void driveByYaw() ;    
-            bool driveSCurve() ;
-            void evaluatePosition() ;
-            int computeQuadrant() ;
+            void driveTracking() ;
             std::string toString(State st) ;
 
         private:
@@ -51,28 +47,6 @@ namespace xero {
             // Drive by Yaw constants
             double yaw_base_power_ ;
             double yaw_p_ ;
-            int lost_target_threshold_ ;
-            int lost_target_count_ ;
-
-            // Threshold for evaluation quadrant
-            double yaw_threshold_ ;
-
-            // Threshold to be in the outer ring
-            double outer_dist_threshold_ ;
-
-            // Thresholds for the quadrant based on rect ratio
-            double inner_boundaries_[4] ;
-            double outer_boundaries_[4] ;
-
-            // For S curve
-            double scurve_base_power_ ;
-            double scurve_turn_offset_ ;
-            double scurve_left_offset_ ;
-            double scurve_right_offset_ ;
-            int scurve_cycles_ ;
-            int cycles_ ;
-
-            double quit_threshold_ ;
         } ;
     }
 }

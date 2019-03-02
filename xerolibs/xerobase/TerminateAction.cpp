@@ -25,7 +25,12 @@ namespace xero {
                 for(auto term : terminators_) {
                     if (term->shouldTerminate())
                     {
+                        logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
+                        logger_ << "TerminateAction: " << term->getTerminatorName() << " terminated action" ;
+                        logger_.endMessage() ;
                         termstate = true ;
+                        std::cout << "TerminateAction " << term->getTerminatorName() << std::endl ;
+                        std::cout << "TerminateAction " << action_->toString() << std::endl; 
                         break ;
                     }
                 }

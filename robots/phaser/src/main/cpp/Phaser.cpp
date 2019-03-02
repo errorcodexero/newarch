@@ -20,7 +20,8 @@ using namespace xero::base ;
 namespace xero {
     namespace phaser {
 
-        Phaser::Phaser() : xero::base::Robot("phaser", 0.02) {           
+        Phaser::Phaser() : xero::base::Robot("phaser", 0.02) {   
+            comp_bot_flag_set_ = false ;
         }
 
         bool Phaser::isCompBot() {
@@ -29,8 +30,11 @@ namespace xero {
             // competition bot we have nothing and the roborio pulls this value up to one.  In this
             // way we detect the difference between the COMP bot and the PRACTICE bot.
             //
-            frc::DigitalInput input(6) ;
-            return input.Get() ;
+            if (!comp_bot_flag_set_) {
+                frc::DigitalInput input(6) ;
+                comp_bot_ = input.Get() ;
+            }
+            return comp_bot_ ;
         }
 
         void Phaser::enableSpecificMessages() {
@@ -59,10 +63,11 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_PHASER_OI) ;  
             // logger.enableSubsystem(MSG_GROUP_PARSER) ;                  
                
-            
             logger.enableSubsystem(MSG_GROUP_ACTIONS); 
             logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);                
             logger.enableSubsystem(MSG_GROUP_PHASER_OI) ;   
+            logger.enableSubsystem(MSG_GROUP_VISION_TERMINATOR) ;
+            logger.enableSubsystem(MSG_GROUP_VISION_DRIVING); 
 
             //
             // This should stay on.  It will have no effect on the real robot
@@ -75,6 +80,10 @@ namespace xero {
         void Phaser::loadPaths() {
             auto paths = getPathManager() ;
             paths->loadPath("Straight") ;
+            paths->loadPath("CurveLeft") ;
+            paths->loadPath("CurveRight") ;
+            paths->loadPath("CenterHab2CargoFrontLeft") ;
+            paths->loadPath("CenterHab2CargoFrontRight") ;            
         }
         
         void Phaser::RobotHardwareInit() {

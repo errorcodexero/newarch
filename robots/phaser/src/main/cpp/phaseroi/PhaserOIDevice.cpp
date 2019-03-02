@@ -780,24 +780,11 @@ namespace xero {
             }
         }
 
-        void PhaserOIDevice::processHatchFinger(ActionSequence &seq) {
-            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ; 
-            auto hatch_holder = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
-
-            if (hatch_holder->hasHatch() && !hatch_holder->isFingerDepoyed()) {
-                seq.pushSubActionPair(hatch_holder, extend_finger_) ;
-            }
-            else if (!hatch_holder->hasHatch() && hatch_holder->isFingerDepoyed()) {
-                seq.pushSubActionPair(hatch_holder, retract_finger_) ;
-            }
-        }
-
         void PhaserOIDevice::generateActions(ActionSequence &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto hatch_holder = game->getHatchHolder() ;     
-     
-
+    
             //
             // Get the tracking mode, either auto, semi-auto, or manual
             //
@@ -818,7 +805,7 @@ namespace xero {
                 // action takes priority over everything else.
                 //
                 game->setAction(reset_intakes_, true) ;
-                hatch_finger_start_ = getSubsystem().getRobot().getTime() ;                
+                hatch_finger_start_ = getSubsystem().getRobot().getTime() ;
             }
             else if (game->isDone()) {
                 if (!getValue(climb_lock_switch_) && getValue(climb_)) {
@@ -871,10 +858,6 @@ namespace xero {
                         log << "Pressed FloorCollect button while holding a game piece" ;
                         log.endMessage() ;                          
                     }
-                }
-
-                if (seq.size() == 0) {
-                    processHatchFinger(seq) ;
                 }
             }
         }

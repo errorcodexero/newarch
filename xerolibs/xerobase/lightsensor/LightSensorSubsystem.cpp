@@ -9,7 +9,7 @@ using namespace xero::misc;
 
 namespace xero {
     namespace base {
-        LightSensorSubsystem::LightSensorSubsystem(Robot &robot, const std::string &name, const std::string &base, int sensor_count) : Subsystem(robot,name) {
+        LightSensorSubsystem::LightSensorSubsystem(Robot &robot, const std::string &name, const std::string &base, int sensor_count) : Subsystem(robot,name), ITerminator("LineFollower") {
             SettingsParser settings_parser = robot.getSettingsParser() ;
             for(int i=0; i<sensor_count; i++ ){
                 int sensor_address = settings_parser.getInteger(base + std::to_string(i)) ;
@@ -20,7 +20,7 @@ namespace xero {
             is_detected_ = false ;
         }
 
-        LightSensorSubsystem::LightSensorSubsystem(Robot &robot, const std::string &name, std::vector<int> sensor_numbers) : Subsystem(robot,name) {
+        LightSensorSubsystem::LightSensorSubsystem(Robot &robot, const std::string &name, std::vector<int> sensor_numbers) : Subsystem(robot,name), ITerminator("LineFollower") {
             for (const int &sensorAddress : sensor_numbers){
                 std::shared_ptr <frc::DigitalInput> sensor = std::make_shared <frc::DigitalInput>(sensorAddress) ;
                 light_sensors_.push_back(sensor) ;

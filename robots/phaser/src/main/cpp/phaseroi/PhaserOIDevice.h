@@ -71,8 +71,6 @@ namespace xero {
 
             std::string generateActionHeightName() ;
 
-            void processHatchFinger(xero::base::ActionSequence &seq) ;
-
         private:
             static const size_t HatchCamera = 0 ;
             static const size_t CargoCamera = 1 ;

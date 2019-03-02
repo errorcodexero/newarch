@@ -24,6 +24,10 @@ namespace xero {
                 defines_.push_back(define) ;
             }
 
+            const std::list<std::string> &getDefines() const {
+                return defines_ ;
+            }
+
             /// \brief read a file of values
             ///
             /// A value is stored on a single line.  The line consists of a name followed by white space

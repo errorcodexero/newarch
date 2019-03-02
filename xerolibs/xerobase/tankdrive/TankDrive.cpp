@@ -230,6 +230,7 @@ namespace xero {
 
         void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
             if (left_talon_motors_.size() > 0) {
+                std::cout << "Motors " << left_percent << " " << right_percent << std::endl ;
                 left_talon_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent);
                 right_talon_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
             }

@@ -40,10 +40,6 @@ namespace xero {
             parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;
             output_stream_ = nullptr ;
 
-            if (isCompBot())
-                parser_->addDefine("COMPETITION") ;
-            else
-                parser_->addDefine("PRACTICE") ;
 
             sleep_time_.resize(static_cast<int>(LoopType::MaxValue)) ;
             std::fill(sleep_time_.begin(), sleep_time_.end(), 0.0) ;
@@ -66,10 +62,6 @@ namespace xero {
             message_logger_.clear() ;
             if (output_stream_ != nullptr)
                 delete output_stream_ ;
-        }
-
-        bool Robot::isCompBot() {
-            return false ;
         }
 
         void Robot::setupPaths() {
@@ -151,6 +143,19 @@ namespace xero {
         }       
 
         bool Robot::readParamsFile(const std::string &filename) {
+
+            if (isCompBot())
+                parser_->addDefine("COMPETITION") ;
+            else
+                parser_->addDefine("PRACTICE") ;
+
+            message_logger_.startMessage(MessageLogger::MessageType::info) ;
+            message_logger_ << "Reading Params File, Defines:" ;
+            const auto &defines = parser_->getDefines() ;
+            for(const std::string &def : defines)
+                message_logger_ << " " << def ;
+            message_logger_.endMessage() ;
+
             return parser_->readFile(filename) ;
         }
 

@@ -61,7 +61,7 @@ namespace xero {
                 state_ = State::RetractArm ;
 
             }
-            else if (hatch_holder->isFingerDepoyed()) {
+            else if (hatch_holder->isFingerDeployed()) {
                 hatch_holder->setAction(retract_finger_) ;
                 state_ = State::RetractFinger ;
             }
@@ -99,7 +99,7 @@ namespace xero {
                         hatch_holder->setAction(retract_arm_) ;
                         state_ = State::RetractArm ;
                     }
-                    else if (hatch_holder->isFingerDepoyed()) {
+                    else if (hatch_holder->isFingerDeployed()) {
                         hatch_holder->setAction(retract_finger_) ;
                         state_ = State::RetractFinger ;
                     }
@@ -114,7 +114,7 @@ namespace xero {
             case State::RetractArm:
                 if (retract_arm_->isDone()) {
                     auto hatch_holder = getGamePiece().getHatchHolder() ;
-                    if (hatch_holder->isFingerDepoyed()) {
+                    if (hatch_holder->isFingerDeployed()) {
                         hatch_holder->setAction(retract_finger_) ;
                         state_ = State::RetractFinger ;
                     }

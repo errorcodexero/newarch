@@ -37,6 +37,17 @@ namespace xero {
 
         GamePieceManipulator::~GamePieceManipulator() {
         }
+        
+        void GamePieceManipulator::run() {
+            Subsystem::run() ;
+
+            auto hatch_holder = getHatchHolder() ;
+            ActionPtr act = getAction() ;
+            if (act == nullptr || act->isDone())
+                hatch_holder->autoHatchEnable(true) ;
+            else
+                hatch_holder->autoHatchEnable(false) ;
+        }
 
         bool GamePieceManipulator::canAcceptAction(ActionPtr action) {
             std::shared_ptr<GamePieceAction> gact = std::dynamic_pointer_cast<GamePieceAction>(action) ;

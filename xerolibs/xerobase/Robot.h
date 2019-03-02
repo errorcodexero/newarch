@@ -152,7 +152,7 @@ namespace xero {
 
         protected:
 
-            virtual bool isCompBot() ;
+            virtual bool isCompBot() = 0 ;
 
             /// \brief initialize the message logger subsystem
             virtual void initializeMessageLogger() ;

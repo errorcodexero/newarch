@@ -79,15 +79,16 @@ namespace xero {
                 double rout = right_follower_->getOutput(rseg.getAccel(), rseg.getVelocity(), rseg.getPOS(), 
                                         right_start_ + td.getRightDistance(), dt) ;
 
-                double dv = std::fabs(lseg.getVelocity() - rseg.getVelocity()) ;
+                double dv = lseg.getVelocity() - rseg.getVelocity() ;
                 double correct = dv * turn_correction_ ;
-                lout += dv * correct ;
-                rout += dv * correct ;
+                lout += correct ;
+                rout -= correct ;
 
                 double angerr = lseg.getHeading() - td.getAngle() ;
                 angle_error_ = angle_error_ * angle_decay_ + angerr ;
 
                 setMotorsToPercents(lout, rout) ;
+                std::cout << "FollowPath " << lout << " " << rout << std::endl ;
 
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << td.getRobot().getTime() ;
@@ -135,8 +136,6 @@ namespace xero {
             else {
                 if (index_ == path_->size())
                     rb.endPlot(plotid_) ;
-
-                setMotorsToPercents(0.0, 0.0) ;
             }
 
             index_++ ;            
@@ -148,7 +147,7 @@ namespace xero {
 
         void TankDriveFollowPathAction::cancel()  {
             index_ = path_->size() ;
-            setMotorsToPercents(0.0, 0.0) ;            
+            std::cout << "TankDriveFollowPath canceled" << std::endl ;
         }
 
         std::string TankDriveFollowPathAction::toString() {

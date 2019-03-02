@@ -50,6 +50,7 @@ namespace xero {
             }
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
+            virtual void run() ;
 
             GamePieceType getGamePieceType() ;
 
