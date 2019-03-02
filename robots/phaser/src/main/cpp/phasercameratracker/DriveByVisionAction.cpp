@@ -58,7 +58,6 @@ namespace xero {
                 double yawadj = yaw * yaw_p_ ;
                 double left = yaw_base_power_ + yawadj ;
                 double right = yaw_base_power_ - yawadj ;
-                std::cout << "DriveByVision " << left << " " << right << std::endl ;
                 setMotorsToPercents(left, right) ;
 
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
@@ -94,7 +93,7 @@ namespace xero {
         /// \brief Cancel the action
         void DriveByVisionAction::cancel() { 
             state_ = State::Done ;
-            setMotorsToPercents(0, 0) ;           
+            std::cout << "DriveByVision canceled" << std::endl ;
         }
 
         /// \brief Return true if the action is complete

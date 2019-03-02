@@ -29,14 +29,14 @@ namespace xero {
                         logger_ << "TerminateAction: " << term->getTerminatorName() << " terminated action" ;
                         logger_.endMessage() ;
                         termstate = true ;
-                        std::cout << "TerminateAction " << term->getTerminatorName() << std::endl ;
-                        std::cout << "TerminateAction " << action_->toString() << std::endl; 
                         break ;
                     }
                 }
 
-                if(termstate)
+                if(termstate) {
+                    action_->cancel() ;
                     is_done_ = true;
+                }
             }
         }
 

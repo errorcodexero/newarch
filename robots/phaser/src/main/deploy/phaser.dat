@@ -147,15 +147,6 @@ driver:spin:reverse                                             true
 #
 plotter:port                                                    5555
 
-#
-# Variables for the linefollower
-#
-linefollower:front:power                                          0.2
-linefollower:front:distance                                       14
-linefollower:front:adjust                                         -0.3
-linefollower:back:power                                           -0.2
-linefollower:back:distance                                        -14
-linefollower:back:adjust                                          0.4
 
 #
 # Variables for the turntable
@@ -323,7 +314,18 @@ cameratracker:rect_ratio_min                                    0.9
 cameratracker:rect_ratio_max                                    1.1
 
 drivebyvision:yaw_base_power                                    0.15
-drivebyvision:yaw_p                                             -0.08
+drivebyvision:yaw_p                                             -0.045
+
+#
+# Variables for the linefollower
+#
+linefollower:front:power                                          0.3
+linefollower:front:distance                                       14
+linefollower:front:adjust                                         -0.3
+linefollower:back:power                                           -0.3
+linefollower:back:distance                                        -14
+linefollower:back:adjust                                          0.3
+
 
 cargointake:power                                               -0.6
 

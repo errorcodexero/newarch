@@ -15,7 +15,8 @@ namespace xero {
             "xa", "ya", "xt", "yt"
         } ;
 
-        TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name) : TankDriveAction(db)  {
+        TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name, bool reverse) : TankDriveAction(db)  {
+            reverse_ = reverse;
             path_ = db.getRobot().getPathManager()->getPath(name) ;
             assert(path_ != nullptr) ;
             
@@ -32,8 +33,14 @@ namespace xero {
         }
 
         void TankDriveFollowPathAction::start() {
-            left_start_ = path_->getLeftStartPos() ;
-            right_start_ = path_->getRightStartPos() ;
+            if (reverse_) {
+                left_start_ = -path_->getLeftStartPos() ;
+                right_start_ = -path_->getRightStartPos() ;
+            }
+            else {
+                left_start_ = path_->getLeftStartPos() ;
+                right_start_ = path_->getRightStartPos() ;                
+            }
             index_ = 0 ;         
             start_time_ = getTankDrive().getRobot().getTime() ;
 
@@ -74,10 +81,29 @@ namespace xero {
                 double dt = td.getRobot().getDeltaTime() ;
                 const XeroSegment lseg = path_->getLeftSegment(index_) ;
                 const XeroSegment rseg = path_->getRightSegment(index_) ;
-                double lout = left_follower_->getOutput(lseg.getAccel(), lseg.getVelocity(), lseg.getPOS(), 
-                                        left_start_ + td.getLeftDistance(), dt) ;
-                double rout = right_follower_->getOutput(rseg.getAccel(), rseg.getVelocity(), rseg.getPOS(), 
-                                        right_start_ + td.getRightDistance(), dt) ;
+
+                double laccel, lvel, lpos ;
+                double raccel, rvel, rpos ;
+
+                if (reverse_) {
+                    laccel = -lseg.getAccel() ;
+                    lvel = -lseg.getVelocity() ;
+                    lpos = -lseg.getPOS() ;
+                    raccel = -rseg.getAccel() ;
+                    rvel = -rseg.getVelocity() ;
+                    rpos = -rseg.getPOS() ;
+                }
+                else {
+                    laccel = lseg.getAccel() ;
+                    lvel = lseg.getVelocity() ;
+                    lpos = lseg.getPOS() ;
+                    raccel = rseg.getAccel() ;
+                    rvel = rseg.getVelocity() ;
+                    rpos = rseg.getPOS() ;
+                }
+
+                double lout = left_follower_->getOutput(laccel, lvel, lpos, left_start_ + td.getLeftDistance(), dt) ;
+                double rout = right_follower_->getOutput(raccel, rvel, rpos, right_start_ + td.getRightDistance(), dt) ;
 
                 double dv = lseg.getVelocity() - rseg.getVelocity() ;
                 double correct = dv * turn_correction_ ;
@@ -88,7 +114,6 @@ namespace xero {
                 angle_error_ = angle_error_ * angle_decay_ + angerr ;
 
                 setMotorsToPercents(lout, rout) ;
-                std::cout << "FollowPath " << lout << " " << rout << std::endl ;
 
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << td.getRobot().getTime() ;
