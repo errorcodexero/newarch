@@ -15,15 +15,17 @@ namespace xero {
             "xa", "ya", "xt", "yt"
         } ;
 
-        TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name, bool reverse) : TankDriveAction(db)  {
+        TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name, const std::string &follow, bool reverse) : TankDriveAction(db)  {
             reverse_ = reverse;
             path_ = db.getRobot().getPathManager()->getPath(name) ;
             assert(path_ != nullptr) ;
+
+            std::string name = "tankdrive:follower:" + follow + ":";
             
-            left_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), "tankdrive:follower:left:kv", 
-                                "tankdrive:follower:left:ka", "tankdrive:follower:left:kp", "tankdrive:follower:left:kd") ;
-            right_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), "tankdrive:follower:right:kv", 
-                                "tankdrive:follower:right:ka", "tankdrive:follower:right:kp", "tankdrive:follower:right:kd") ;                                
+            left_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), name + "left:kv", 
+                                name + "left:ka", name + "left:kp", name + "left:kd") ;
+            right_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), name + "right:kv", 
+                                name + "right:ka", name + "right:kp", name + "right:kd") ;
 
             turn_correction_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:turn_correction") ;
             angle_decay_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:angle_decay") ;
@@ -137,19 +139,19 @@ namespace xero {
                 rb.addPlotData(plotid_, index_, 0, rb.getTime() - start_time_) ;
 
                 // Left side
-                rb.addPlotData(plotid_, index_, 1, lseg.getPOS()) ;
+                rb.addPlotData(plotid_, index_, 1, lpos) ;
                 rb.addPlotData(plotid_, index_, 2, left_start_ + td.getLeftDistance()) ;
-                rb.addPlotData(plotid_, index_, 3, lseg.getVelocity()) ;
+                rb.addPlotData(plotid_, index_, 3, lvel) ;
                 rb.addPlotData(plotid_, index_, 4, td.getLeftVelocity()) ;
-                rb.addPlotData(plotid_, index_, 5, lseg.getAccel()) ;
+                rb.addPlotData(plotid_, index_, 5, laccel) ;
                 rb.addPlotData(plotid_, index_, 6, lout) ;
 
                 // Right side
-                rb.addPlotData(plotid_, index_, 7, rseg.getPOS()) ;
+                rb.addPlotData(plotid_, index_, 7, rpos) ;
                 rb.addPlotData(plotid_, index_, 8, right_start_ + td.getRightDistance()) ;
-                rb.addPlotData(plotid_, index_, 9, rseg.getVelocity()) ;
+                rb.addPlotData(plotid_, index_, 9, rvel) ;
                 rb.addPlotData(plotid_, index_, 10, td.getRightVelocity()) ;
-                rb.addPlotData(plotid_, index_, 11, rseg.getAccel()) ;
+                rb.addPlotData(plotid_, index_, 11, raccel) ;
                 rb.addPlotData(plotid_, index_, 12, rout) ;                
 
                 // XY data

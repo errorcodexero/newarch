@@ -14,7 +14,7 @@ namespace xero {
             /// \brief this action applies power to the left and right side of the robot
             /// \param db the drivebase this action applies to
             /// \param path the name of the path to follow
-            TankDriveFollowPathAction(TankDrive &db, const std::string &path, bool reverse = false) ;
+            TankDriveFollowPathAction(TankDrive &db, const std::string &path, const std::string &follow, bool reverse = false) ;
 
             /// \brief destroy the action object
             virtual ~TankDriveFollowPathAction() ;

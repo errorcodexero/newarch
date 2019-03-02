@@ -93,15 +93,25 @@ tankdrive:inches_per_tick                                       0.010385891
 tankdrive:width                                                 22
 tankdrive:scrub                                                 0.9
 
-tankdrive:follower:left:ka                                      0.0005
-tankdrive:follower:left:kv                                      0.00790
-tankdrive:follower:left:kp                                      0.0013
-tankdrive:follower:left:kd                                      0.0
+tankdrive:follower:curve1:left:ka                                      0.00
+tankdrive:follower:curve1:left:kv                                      0.009
+tankdrive:follower:curve1:left:kp                                      0.0065
+tankdrive:follower:curve1:left:kd                                      0.0
 
-tankdrive:follower:right:ka                                     0.0005
-tankdrive:follower:right:kv                                     0.00740
-tankdrive:follower:right:kp                                     0.0013
-tankdrive:follower:right:kd                                     0.0
+tankdrive:follower:curve1:right:ka                                     0.00
+tankdrive:follower:curve1:right:kv                                     0.012
+tankdrive:follower:curve1:right:kp                                     0.0035
+tankdrive:follower:curve1:right:kd                                     0.0
+
+tankdrive:follower:straight:left:ka                                      0.00
+tankdrive:follower:straight:left:kv                                      0.009
+tankdrive:follower:straight:left:kp                                      0.0065
+tankdrive:follower:straight:left:kd                                      0.0
+
+tankdrive:follower:straight:right:ka                                     0.00
+tankdrive:follower:straight:right:kv                                     0.012
+tankdrive:follower:straight:right:kp                                     0.0035
+tankdrive:follower:straight:right:kd                                     0.0
 
 tankdrive:follower:ka                                           0.0
 tankdrive:follower:kv                                           0.00637

@@ -5,7 +5,7 @@ namespace xero {
         class FollowPathAutomode : public PhaserAutoModeBase
         {
         public:
-            FollowPathAutomode(xero::base::Robot &robot, const std::string &path) ;
+            FollowPathAutomode(xero::base::Robot &robot, const std::string &path, bool reverse = false) ;
             virtual ~FollowPathAutomode() ;
         } ;
     }
