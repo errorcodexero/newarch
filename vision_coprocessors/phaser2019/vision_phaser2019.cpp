@@ -94,6 +94,7 @@ namespace {
     bool nobot_mode = false;  // When true, running off robot.  Set Network table in server mode, etc.
     int  selected_camera;     // Currently selected camera for viewing/tracking
     bool no_set_resolution;   // If set, don't explicitly set resolution from param file and use what's in frc.json.
+    int  strategy = 0;        // Detection strategy.  0=rotated rect (default), 1=SolvePnP
 
     // Chooser(s) from SmartDashboard
     frc::SendableChooser<int> viewing_mode_chooser;
@@ -183,12 +184,14 @@ namespace {
         int viewing_mode_flag = 0;
         int nobot_mode_flag = 0;
         int nores_flag = 0;
+        int set_strategy = -1;
         static struct option long_options[] =
             {
              /* These options set a flag. */
-             {"view",    no_argument, &viewing_mode_flag, 1},
-             {"nobot",   no_argument, &nobot_mode_flag, 1},
-             {"nores",   no_argument, &nores_flag, 1},
+             {"view",     no_argument,       &viewing_mode_flag, 1},
+             {"nobot",    no_argument,       &nobot_mode_flag, 1},
+             {"nores",    no_argument,       &nores_flag, 1},
+             {"strategy", required_argument, 0, 's'},
              {0, 0, 0, 0}
             };
 
@@ -197,7 +200,7 @@ namespace {
             /* getopt_long stores the option index here. */
             int option_index = 0;
 
-            int opt = getopt_long (argc, argv, "",
+            int opt = getopt_long (argc, argv, "s:",
                                    long_options, &option_index);
 
             /* Detect the end of the options. */
@@ -205,20 +208,36 @@ namespace {
                 break;
 
             switch (opt) {
+            case 0:
+                /* If this option set a flag, do nothing else now. */
+                if (long_options[option_index].flag != 0)
+                    break;
+                printf("option %s", long_options[option_index].name);
+                if (optarg)
+                    printf (" with arg %s", optarg);
+                printf ("\n");
+                break;
             case '?':
                 /* getopt_long already printed an error message. */
                 err = true;
+                break;
+            case 's':
+                if (!xero::string::hasOnlyDigits(optarg)) {
+                    err = true;
+                    break;
+                }
+                set_strategy = std::atoi(optarg);
                 break;
             }
 
         }
 
         if (err) {
-            std::cout << "Usage: " << argv[0] << " [--view] [--nobot] [--nores]\n";
+            std::cout << "Usage: " << argv[0] << " [--view] [--nobot] [--nores] [--strategy <n>]\n";
             return false;
         }
 
-        // Set options based on what was parser
+        // Set options based on what was parsed
         viewing_mode      = (viewing_mode_flag != 0);
         nobot_mode        = (nobot_mode_flag != 0);
         no_set_resolution = (nores_flag != 0);
@@ -231,6 +250,10 @@ namespace {
         }
         if (nores_flag) {
             std::cout << "Disabling overriding of resolution that's in frc.json\n" << std::flush;
+        }
+        if (set_strategy != -1) {
+            strategy = set_strategy;
+            std::cout << "Set strategy to " << strategy << "\n" << std::flush;
         }
               
         return true;
