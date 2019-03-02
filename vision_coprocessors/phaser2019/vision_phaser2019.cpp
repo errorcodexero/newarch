@@ -567,6 +567,38 @@ namespace {
         return isApproxEqual(meas_dist_to_height_ratio, exp_dist_to_height_ratio, 0.3);
     }
 
+    // Start network table in client vs. server mode depending whether running on robot or not
+    // Also speed up update rate.
+    void startNetworkTable(nt::NetworkTableInstance& ntinst, bool server_mode) {
+        
+        // If running in client mode, assume on the robot and wait until network interface is up.
+        // (No Gaurantee the Rio is ready, but this is necessary to communicate with the Rio.)
+        const bool running_on_robot = true;
+        if (!server_mode) {
+            waitForIpAddressOnRobot(true);
+            
+            // After network connected detected, wait a few more seconds
+            // so NT server starts up on the Rio.
+            std::this_thread::sleep_for(std::chrono::seconds(5));
+        }
+    
+        // Start NetworkTables
+        ntinst = nt::NetworkTableInstance::GetDefault();
+        if (server_mode) {
+            wpi::outs() << "Setting up NetworkTables server\n";
+            ntinst.StartServer();
+        } else {
+            wpi::outs() << "Setting up NetworkTables client for team " << team << '\n';
+            ntinst.StartClientTeam(team);
+        }
+
+        // Change default update rate from 100ms to 10ms.
+        // Will flush update anyway to try and reduce latency after posting set of results,
+        // but it's rate-limited to prevent flooding newwork. Unclear whether this affects the cap.
+        // Changing it anyway in case it does + in case flush() is not called.
+        ntinst.SetUpdateRate(0.01);    // Allowed range per docs is 0.01 -> 1.0 (rate in seconds)
+    }
+
     // Draw 1 ractangle
     void drawRectangle(cv::Mat&         frame,
                        const RRect&     rect,
@@ -795,11 +827,299 @@ namespace {
     // Takes in an image (cv::Mat) and produces a modified one.
     // Copy the image frame rather than modify it in place in case we later need to show the different pipeline element outputs.
     // Later, optimize to avoid copies in non-debug mode if there's a visible performance impact.
+    class XeroPipelineElement {
+    public:
+        XeroPipelineElement(std::string name) : name_(name) {}
+        virtual void Process(cv::Mat& frame_in) =0;
+        virtual cv::Mat& getFrameOut() {
+            return frame_out_;
+        }
+        
+    protected:
+        std::string name_;
+        cv::Mat frame_out_;
+    };
 
+    // Pipeline element for: HSV Threshold
+    class XeroPipelineElementHsvThreshold : public XeroPipelineElement {
+        
+    public:
+        
+        XeroPipelineElementHsvThreshold(std::string name) : XeroPipelineElement(name) {
+            int h_min = params.getValue("vision:pipeline:hsv_threshold:h_min");
+            int h_max = params.getValue("vision:pipeline:hsv_threshold:h_max");
+            int s_min = params.getValue("vision:pipeline:hsv_threshold:s_min");
+            int s_max = params.getValue("vision:pipeline:hsv_threshold:s_max");
+            int v_min = params.getValue("vision:pipeline:hsv_threshold:v_min");
+            int v_max = params.getValue("vision:pipeline:hsv_threshold:v_max");
+            
+            // Set threshold to only select green
+            hsv_ranges = {h_min, h_max, s_min, s_max, v_min, v_max};
+        }
+        
+        virtual void Process(cv::Mat& frame_in) {
+            //frame_out_ = frame_in;
 
-  
-    // Pipeline element for: Contour detection
+            cv::cvtColor(frame_in, hsv_image, cv::COLOR_BGR2HSV);
+
+            cv::inRange(hsv_image,
+                        cv::Scalar(hsv_ranges[0], hsv_ranges[2], hsv_ranges[4]),
+                        cv::Scalar(hsv_ranges[1], hsv_ranges[3], hsv_ranges[5]),
+                        frame_out_ /*green_only_image_*/);
+
+#if 0       // Make frame_out a viewable image            
+            cv::cvtColor(green_only_image_, frame_out_, cv::COLOR_GRAY2BGR);
+#endif
+        }
+
+    private:
+
+        std::vector<int> hsv_ranges;
+        cv::Mat hsv_image;
+
+    };
+
     
+    // Pipeline element for: Contour detection
+    class XeroPipelineElementFindContours : public XeroPipelineElement {
+        
+    public:
+        
+        XeroPipelineElementFindContours(std::string name) : XeroPipelineElement(name) {
+        }
+        
+        virtual void Process(cv::Mat& frame_in) {
+            // Confirm input binary image to a viewable object.
+            // Further detection will be added to this image.
+            if (stream_pipeline_output) {
+                cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
+            }
+            
+            // Perform contour detection
+            contours.clear();
+            const bool externalOnlyContours = true;
+            const int mode = externalOnlyContours ? cv::RETR_EXTERNAL : cv::RETR_LIST;
+            const int method = cv::CHAIN_APPROX_SIMPLE;
+            cv::findContours(frame_in, contours, hierarchy, mode, method);
+
+            // Unless we have at least 2 contours, nothing further to do
+            if (contours.size() < 2) {
+                setTargetIsIdentified(false);
+                //std::cout << "FALSE: Fewer than 2 contours\n";
+                return;
+            }
+
+            // Sort contours by keep largest ones for further processing
+            // Disabled for now.  No visible performance benefit.
+            /*
+            std::sort(contours.begin(),
+                      contours.end(),
+                      [](const Contour& a, const Contour& b) -> bool
+                      { 
+                          return (cv::arcLength(a,true) > cv::arcLength(b,true));
+                      });
+            const int contour_size_lim = 12;  // Rather arbitrary
+            if (contours.size() > contour_size_lim) {
+                contours.resize(contour_size_lim);
+            }
+            */
+
+            // Draw contours + find rectangles meeting aspect ratio requirement
+            RRects min_rects(contours.size()), filtered_min_rects;
+
+            for (int ix=0; ix < contours.size(); ++ix) {
+                std::vector<cv::Point>& contour = contours[ix];
+
+                // Find minimum rotated rectangle encapsulating the contour
+                cv::RotatedRect min_rect = min_rects[ix];
+                min_rect = cv::minAreaRect(contour);
+
+                // Discard rectangles off vertical center.  Discard top and bottom of fov.
+                if (rectInTopOrBottomOfFrame(min_rect)) {
+                    continue;
+                }
+
+                // Discard rectangles that are too small
+                if (rectTooSmall(min_rect)) {
+                    continue;
+                }
+                
+                // Draw rectangle (cyan) after excluding those in top or bottom of frame
+                if (stream_pipeline_output) {
+                    //drawRectangle(frame_out_, min_rect, color_cyan, 4);
+                }
+
+                // Discard rectangles that don't have the expected aspect ratio
+                if (!expectedAspectRatio(min_rect)) {
+                    continue;
+                }
+
+                // Draw rectangle (orange) after filtering based on aspect ratio
+                if (stream_pipeline_output) {
+                    drawRectangle(frame_out_, min_rect, color_orange, 4);
+                }
+                
+                // Discard rectangles that don't have the expected angle
+                // Expected angles are -15 for one and -75 for the other.
+                if (!isAMarker(min_rect)) {
+                    //std::cout << "FALSE: Rect angle = " << min_rect.angle << "\n";
+                    continue;
+                }
+                
+                // Draw rectangle (red) after filtering based on angle of rotation
+                if (stream_pipeline_output) {
+                    drawRectangle(frame_out_, min_rect, color_red, 4);
+                }
+
+                // Add filtered rectangle to list
+                filtered_min_rects.push_back(min_rect);
+            }
+
+            // Only continue if we have at least 2 filtered rectangles
+            if (filtered_min_rects.size() < 2) {
+                setTargetIsIdentified(false);
+                //std::cout << "FALSE: Fewer than 2 filtered rect\n";
+                return;
+            }
+
+            // Analyze 3 rectangles at a time.
+            // Find potential pairs, filter out odd one based on multiple criteria.
+            //filterBasedOnTriplets(filtered_min_rects, frame_out_);
+            //drawRectangles(frame_out_, filtered_min_rects, color_yellow, 4);
+
+            // Find target pair of rectangles after pairing up and checking rectangles
+            RRects rects = identifyTargetRectPair(filtered_min_rects, frame_out_);
+            if (rects.empty()) {
+                setTargetIsIdentified(false);
+                //std::cout << "FALSE: No filtered rectangles\n";
+                return;
+            }
+            RRect left_rect(rects[0]);
+            RRect right_rect(rects[1]);
+
+            // Draw potential target, before checking heights (yellow)
+            if (stream_pipeline_output) {
+                drawRectangle(frame_out_, left_rect, color_yellow, 4);
+                drawRectangle(frame_out_, right_rect, color_yellow, 4);
+            }
+
+            // Top 2 rectangles must have centers almost at same height.
+            // Note pixel origin (0,0) is top left corner so Y axis is reversed.
+            cv::Point2f left_center = left_rect.center;
+            cv::Point2f right_center = right_rect.center;
+            const double delta_x = right_center.x - left_center.x;
+            const double delta_y = -(right_center.y - left_center.y);
+            assert(delta_x >= 0);
+            double tangent = delta_y / delta_x;
+            double angle_in_rad = atan(tangent);
+            double angle_in_deg = angle_in_rad * 180.0 / M_PI;
+            angle_in_deg = fabs(angle_in_deg);
+            //std::cout << "    Angle (centers) in deg = " << angle_in_deg << "\n";
+            if (angle_in_deg > 15) {
+                setTargetIsIdentified(false);
+                //std::cout << "FALSE: Angle in deg << " << angle_in_deg << "\n";
+                return;
+            }
+
+            cv::Point2f center_point = (left_center + right_center) * 0.5;
+            double dist_bet_centers = hypot(delta_x, delta_y);
+
+            // Get dimensions of rects
+            double l_rect_height = std::max(left_rect.size.height, left_rect.size.width);
+            double r_rect_height = std::max(right_rect.size.height, right_rect.size.width);
+            double l_rect_width = std::min(left_rect.size.height, left_rect.size.width);
+            double r_rect_width = std::min(right_rect.size.height, right_rect.size.width);
+
+            // Compare distance between centers to [average] rect height.
+            // If outside of expected range, picking up invalid pair of rectangles
+            const double meas_dist_to_height_ratio = dist_bet_centers / ((l_rect_height+r_rect_height)/2);
+            const double exp_dist_to_height_ratio = dist_bet_centers_inch / 5.5;
+            if (!isApproxEqual(meas_dist_to_height_ratio, exp_dist_to_height_ratio, 0.3)) {
+                setTargetIsIdentified(false);
+                //std::cout << "FALSE: Dist between centers/height not in expected range (" << meas_dist_to_height_ratio << " vs. exp. " << exp_dist_to_height_ratio << ")\n";
+                return;
+            }
+
+            // Distance to target in inches
+            // At 640x460 of C270 and 640x480 resolution, pixels_bet_centres * dist_to_target_in_FEET ~ 760
+            // Product at 432x240 is 650.  So not proportional to width.
+            double dist_to_target = (650.0/dist_bet_centers) * 12.0/*inches_per_foot*/ * static_cast<double>(width_pixels)/640.0;
+
+            // At this point, top 2 rectangles meet all the criteria so likely have a valid target.
+            // Draw them in green.
+            if (stream_pipeline_output) {
+                for (int ix=0; ix<2; ++ix) {
+                    drawRectangle(frame_out_, left_rect, color_green, 2);
+                    drawRectangle(frame_out_, right_rect, color_green, 2);
+                }
+
+                // Draw line between centres
+                cv::line(frame_out_, left_center, right_center, color_green, 2);
+
+                // Draw marker through center
+                cv::drawMarker(frame_out_, center_point, color_green, cv::MARKER_CROSS, 20 /*marker size*/, 2 /*thickness*/);
+            }
+
+            // Calculate offset = ratio right rectangle / left rectangle.
+            // If ratio > 1 ==> robot right of target
+            // If ratio < 1 ==> robot left of target
+            double rect_ratio = getRectArea(right_rect) / getRectArea(left_rect);
+            nt_target_rect_ratio.SetDouble(rect_ratio);
+
+            // Estimate yaw.  Assume both rectangles at equal height (among other things).
+            //double yaw = pixels_off_center * (camera_hfov_deg / width_pixels);
+            double pixels_off_center = center_point.x - (width_pixels/2);
+            double pixels_per_inch = dist_bet_centers / dist_bet_centers_inch;
+            double inches_off_center = pixels_off_center / pixels_per_inch;
+            double yaw_in_rad = atan(inches_off_center / dist_to_target);
+            double yaw_in_deg = yaw_in_rad * 180.0 / M_PI;
+            nt_target_yaw_deg.SetDouble(yaw_in_deg);
+
+            // Estimate distance to each rectangle based on its height + coordinate of bot rel to target
+            double l_rect_dist_inch = 12.0 * (206.0/l_rect_height) * (height_pixels/240.0);
+            double r_rect_dist_inch = 12.0 * (206.0/r_rect_height) * (height_pixels/240.0);
+            double bot_x_offset_inch = (pow(r_rect_dist_inch,2) - pow(l_rect_dist_inch,2))/(2*dist_bet_centers_inch);
+            double bot_z_offset_inch = sqrt(pow(l_rect_dist_inch,2) - pow(bot_x_offset_inch - 0.5*dist_bet_centers_inch,2));
+            double dist2_inch = sqrt(pow(bot_x_offset_inch,2) + pow(bot_z_offset_inch,2));
+            double dist3_inch = (l_rect_dist_inch + r_rect_dist_inch)/2;
+            double bot_angle2_deg = atan2(bot_x_offset_inch, bot_z_offset_inch) * 180.0 / M_PI;
+            bot_x_offset_inch = -bot_x_offset_inch;  // Flip X coordinate to negative if bot on left of target, not opposite.
+            nt_rect_l_dist_inch.SetDouble(l_rect_dist_inch);
+            nt_rect_r_dist_inch.SetDouble(r_rect_dist_inch);
+            nt_bot_x_offset_inch.SetDouble(bot_x_offset_inch);
+            nt_bot_z_offset_inch.SetDouble(bot_z_offset_inch);
+            nt_bot_angle2_deg.SetDouble(bot_angle2_deg);
+            
+            // Publish info on the 2 rectangles.
+            nt_rect_l_angle_deg.SetDouble(left_rect.angle);
+            nt_rect_r_angle_deg.SetDouble(right_rect.angle);
+            nt_rect_l_height.SetDouble(l_rect_height);
+            nt_rect_r_height.SetDouble(r_rect_height);
+            nt_rect_l_width.SetDouble(l_rect_width);
+            nt_rect_r_width.SetDouble(r_rect_width);
+
+
+            // TODO: Filter on vertical distance of rect from center?  Only keep pairs of rectangles meeting other critria that are at similar height.
+            //       Measure angle vs. perpendicular to target
+            //       Measure coordinates & orientation vs. target.
+
+            // Publish other results on network table
+            nt_target_dist_pixels.SetDouble(dist_bet_centers);
+            nt_target_dist_inch.SetDouble(dist_to_target);
+            nt_target_dist2_inch.SetDouble(dist2_inch);
+            nt_target_dist3_inch.SetDouble(dist3_inch);
+
+            //std::cout << "Rect angles: " << left_rect.angle << ", " << right_rect.angle << "\n";
+            setTargetIsIdentified(true);  // Also flushed NT, so keep this call at the end of NT updates.
+        }
+
+    private:
+
+        Contours contours;
+        std::vector<cv::Vec4i> hierarchy;
+
+    };
+
     
     // Example pipeline
     class XeroPipeline : public frc::VisionPipeline {
