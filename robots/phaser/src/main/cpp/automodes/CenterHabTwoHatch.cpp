@@ -77,6 +77,7 @@ namespace xero {
 
             act = std::make_shared<ScoreHatch>(*game) ;
 
+#ifdef NOTYET
             //
             // Back to the loading station
             //
@@ -120,6 +121,8 @@ namespace xero {
             pushSubActionPair(db, act) ;
 
             act = std::make_shared<CompleteLSHatchCollect>(*game) ;            
+            pushSubActionPair(game, act) ;
+#endif
         }
 
         CenterHabTwoHatch::~CenterHabTwoHatch()
