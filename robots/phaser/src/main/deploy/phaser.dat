@@ -324,7 +324,7 @@ cameratracker:rect_ratio_min                                    0.9
 cameratracker:rect_ratio_max                                    1.1
 
 drivebyvision:yaw_base_power                                    0.15
-drivebyvision:yaw_p                                             -0.045
+drivebyvision:yaw_p                                             -0.025
 
 #
 # Variables for the linefollower

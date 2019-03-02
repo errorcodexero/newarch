@@ -59,13 +59,13 @@ namespace xero {
             dispatch = std::make_shared<DispatchAction>(game, act, true) ;
             parallel->addAction(dispatch) ;
 
-            term = std::make_shared<TerminateAction>(parallel, phaser.getMessageLogger()) ;
+            term = std::make_shared<TerminateAction>(parallel, phaser) ;
             term->addTerminator(vision) ;
             pushAction(term) ;
 
             act = std::make_shared<DriveByVisionAction>(*db, *vision) ;
 
-            term = std::make_shared<TerminateAction>(act, phaser.getMessageLogger()) ;
+            term = std::make_shared<TerminateAction>(act, phaser) ;
             term->addTerminator(frontline) ;
             pushAction(term) ;
 
@@ -76,16 +76,15 @@ namespace xero {
             pushSubActionPair(db, act) ;
 
             act = std::make_shared<ScoreHatch>(*game) ;
-
-#ifdef NOTYET
-            //
-            // Back to the loading station
-            //
             pushSubActionPair(game, act) ;
-            parallel = std::make_shared<ParallelAction>() ;
+
+            //
+            // Now head for the load station
+            //
+            parallel = std::make_shared<ParallelAction>() ;            
 
             if (left)
-                act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSLeft", "curve1") ;
+                act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSLeft", "curve1", true) ;
             else {
                 assert(false) ;
             }
@@ -104,13 +103,13 @@ namespace xero {
 
             parallel->addAction(seq) ;
 
-            term = std::make_shared<TerminateAction>(parallel, phaser.getMessageLogger()) ;
+            term = std::make_shared<TerminateAction>(parallel, phaser, 3.0) ;
             term->addTerminator(vision) ;
             pushAction(term) ;
 
             act = std::make_shared<DriveByVisionAction>(*db, *vision) ;
 
-            term = std::make_shared<TerminateAction>(act, phaser.getMessageLogger()) ;
+            term = std::make_shared<TerminateAction>(act, phaser) ;
             term->addTerminator(rearline) ;
             pushAction(term) ;
 
@@ -122,7 +121,6 @@ namespace xero {
 
             act = std::make_shared<CompleteLSHatchCollect>(*game) ;            
             pushSubActionPair(game, act) ;
-#endif
         }
 
         CenterHabTwoHatch::~CenterHabTwoHatch()

@@ -6,14 +6,16 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base{
-        TerminateAction::TerminateAction(ActionPtr a, MessageLogger &logger): logger_(logger)
+        TerminateAction::TerminateAction(ActionPtr a, Robot &robot, double delay) : robot_(robot)
         {
             action_ = a ;
+            delay_ = delay ;
         }
 
         void TerminateAction::start(){
             action_->start() ;
             is_done_ = action_->isDone() ;
+            start_ = robot_.getTime() ;
         }
 
         void TerminateAction::run() {
@@ -21,21 +23,24 @@ namespace xero {
                 action_->run() ;
                 is_done_ = action_->isDone() ;
 
-                bool termstate = false ;
-                for(auto term : terminators_) {
-                    if (term->shouldTerminate())
-                    {
-                        logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
-                        logger_ << "TerminateAction: " << term->getTerminatorName() << " terminated action" ;
-                        logger_.endMessage() ;
-                        termstate = true ;
-                        break ;
+                if (robot_.getTime() - start_ > delay_) {
+                    bool termstate = false ;
+                    for(auto term : terminators_) {
+                        if (term->shouldTerminate())
+                        {
+                            auto &logger = robot_.getMessageLogger() ;
+                            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
+                            logger << "TerminateAction: " << term->getTerminatorName() << " terminated action" ;
+                            logger.endMessage() ;
+                            termstate = true ;
+                            break ;
+                        }
                     }
-                }
 
-                if(termstate) {
-                    action_->cancel() ;
-                    is_done_ = true;
+                    if(termstate) {
+                        action_->cancel() ;
+                        is_done_ = true;
+                    }
                 }
             }
         }
