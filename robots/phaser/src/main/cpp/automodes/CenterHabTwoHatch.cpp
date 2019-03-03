@@ -78,6 +78,10 @@ namespace xero {
             act = std::make_shared<ScoreHatch>(*game) ;
             pushSubActionPair(game, act) ;
 
+            act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSLeft", "curve1", true) ;
+            pushSubActionPair(db, act) ;
+
+#ifdef NOTYET
             //
             // Now head for the load station
             //
@@ -121,6 +125,8 @@ namespace xero {
 
             act = std::make_shared<CompleteLSHatchCollect>(*game) ;            
             pushSubActionPair(game, act) ;
+#endif
+
         }
 
         CenterHabTwoHatch::~CenterHabTwoHatch()
