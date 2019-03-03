@@ -7,10 +7,15 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
-        DriveByVisionAction::DriveByVisionAction(TankDrive &tank_drive, PhaserCameraTracker &camera) : TankDriveAction(tank_drive), camera_(camera)
+        DriveByVisionAction::DriveByVisionAction(TankDrive &tank_drive, PhaserCameraTracker &camera, bool reverse) : TankDriveAction(tank_drive), camera_(camera)
         {
             yaw_base_power_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_base_power") ;
             yaw_p_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_p") ;
+
+            if (reverse) {
+                yaw_base_power_ = -yaw_base_power_ ;
+                yaw_p_ = yaw_p_ ;
+            }
         }
 
         std::string DriveByVisionAction::toString(DriveByVisionAction::State st) {

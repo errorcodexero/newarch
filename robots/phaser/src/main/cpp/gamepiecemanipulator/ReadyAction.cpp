@@ -148,11 +148,15 @@ namespace xero {
         }
 
         void ReadyAction::cancel() {
-            auto turntable = getGamePiece().getTurntable() ;
-            turntable->setAction(nullptr) ;
+            if (state_ != State::Idle) {
+                auto turntable = getGamePiece().getTurntable() ;
+                turntable->cancelAction() ;
 
-            auto lifter = getGamePiece().getLifter() ;
-            lifter->setAction(nullptr) ;            
+                auto lifter = getGamePiece().getLifter() ;
+                lifter->cancelAction() ;
+
+                state_ = State::Idle ;
+            }
         }
 
         std::string ReadyAction::toString() {

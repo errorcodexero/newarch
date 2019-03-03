@@ -35,14 +35,9 @@ namespace xero {
         }
 
         void TankDriveFollowPathAction::start() {
-            if (reverse_) {
-                left_start_ = -path_->getLeftStartPos() ;
-                right_start_ = -path_->getRightStartPos() ;
-            }
-            else {
-                left_start_ = path_->getLeftStartPos() ;
-                right_start_ = path_->getRightStartPos() ;                
-            }
+            left_start_ = getTankDrive().getLeftDistance() ;
+            right_start_ = getTankDrive().getRightDistance() ;
+            
             index_ = 0 ;         
             start_time_ = getTankDrive().getRobot().getTime() ;
 
@@ -104,8 +99,8 @@ namespace xero {
                     rpos = rseg.getPOS() ;
                 }
 
-                double lout = left_follower_->getOutput(laccel, lvel, lpos, left_start_ + td.getLeftDistance(), dt) ;
-                double rout = right_follower_->getOutput(raccel, rvel, rpos, right_start_ + td.getRightDistance(), dt) ;
+                double lout = left_follower_->getOutput(laccel, lvel, lpos, td.getLeftDistance() -  left_start_, dt) ;
+                double rout = right_follower_->getOutput(raccel, rvel, rpos, td.getRightDistance() - right_start_, dt) ;
 
                 double dv = lseg.getVelocity() - rseg.getVelocity() ;
                 double correct = dv * turn_correction_ ;
@@ -120,18 +115,18 @@ namespace xero {
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << td.getRobot().getTime() ;
                 logger << "," << td.getRobot().getTime() - start_time_ ;
-                logger << "," << lseg.getPOS() ;
-                logger << "," << left_start_ + td.getLeftDistance() ;
-                logger << "," << lseg.getVelocity() ;
+                logger << "," << lpos ;
+                logger << "," << td.getLeftDistance() - left_start_ ;
+                logger << "," << lvel ;
                 logger << "," << td.getLeftVelocity() ;
-                logger << "," << lseg.getAccel() ;
+                logger << "," << laccel ;
                 logger << "," << lout ;
                 logger << "," << td.getLeftTickCount() ;
-                logger << "," << rseg.getPOS() ;
-                logger << "," << right_start_ + td.getRightDistance() ;                
-                logger << "," << lseg.getVelocity() ;
+                logger << "," << rpos ;
+                logger << "," << td.getRightDistance() - right_start_;                
+                logger << "," << rvel ;
                 logger << "," << td.getRightVelocity() ;                
-                logger << "," << lseg.getAccel() ;                
+                logger << "," << raccel ;                
                 logger << "," << rout ;
                 logger << "," << td.getRightTickCount() ;
                 logger.endMessage() ;
@@ -140,7 +135,7 @@ namespace xero {
 
                 // Left side
                 rb.addPlotData(plotid_, index_, 1, lpos) ;
-                rb.addPlotData(plotid_, index_, 2, left_start_ + td.getLeftDistance()) ;
+                rb.addPlotData(plotid_, index_, 2, td.getLeftDistance() - left_start_) ;
                 rb.addPlotData(plotid_, index_, 3, lvel) ;
                 rb.addPlotData(plotid_, index_, 4, td.getLeftVelocity()) ;
                 rb.addPlotData(plotid_, index_, 5, laccel) ;
@@ -148,7 +143,7 @@ namespace xero {
 
                 // Right side
                 rb.addPlotData(plotid_, index_, 7, rpos) ;
-                rb.addPlotData(plotid_, index_, 8, right_start_ + td.getRightDistance()) ;
+                rb.addPlotData(plotid_, index_, 8, td.getRightDistance()- right_start_) ;
                 rb.addPlotData(plotid_, index_, 9, rvel) ;
                 rb.addPlotData(plotid_, index_, 10, td.getRightVelocity()) ;
                 rb.addPlotData(plotid_, index_, 11, raccel) ;

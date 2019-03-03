@@ -46,7 +46,6 @@ namespace xero {
             if (!is_done_) {
                 double traveled = distances_.front() - distances_.back() ;
                 if (distances_.size() == 4 && std::fabs(traveled) < 0.1) {
-                    std::cout << "drive by line: shortcut stop" << std::endl ;
                     is_done_ = true ;
                 } else {
                     bool is_detected = ls_subsystem_.detectedObject() ;                

@@ -19,18 +19,22 @@ namespace xero {
         }
 
         void TerminateAction::run() {
+            auto &logger = robot_.getMessageLogger() ;
             if (!is_done_) {
                 action_->run() ;
                 is_done_ = action_->isDone() ;
 
                 if (robot_.getTime() - start_ > delay_) {
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
+                    logger << "TerminateAction: checking terminate conditions" ;
+                    logger.endMessage() ;                    
                     bool termstate = false ;
                     for(auto term : terminators_) {
                         if (term->shouldTerminate())
                         {
-                            auto &logger = robot_.getMessageLogger() ;
                             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
                             logger << "TerminateAction: " << term->getTerminatorName() << " terminated action" ;
+                            logger << " " << action_->toString() ;
                             logger.endMessage() ;
                             termstate = true ;
                             break ;
@@ -47,7 +51,8 @@ namespace xero {
 
         void TerminateAction::cancel() {
             if (!is_done_) {
-                action_->cancel() ;
+                if (action_->isDone())
+                    action_->cancel() ;
                 is_done_ = true ;
             }
         }

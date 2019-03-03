@@ -78,13 +78,9 @@ namespace xero {
             act = std::make_shared<ScoreHatch>(*game) ;
             pushSubActionPair(game, act) ;
 
-            act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSLeft", "curve1", true) ;
-            pushSubActionPair(db, act) ;
-
-#ifdef NOTYET
             //
             // Now head for the load station
-            //
+            //            
             parallel = std::make_shared<ParallelAction>() ;            
 
             if (left)
@@ -97,7 +93,7 @@ namespace xero {
             parallel->addAction(dispatch) ;
 
             seq = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
-            seq->pushAction(std::make_shared<DelayAction>(3.0)) ;
+            seq->pushAction(std::make_shared<DelayAction>(0.5)) ;
             
             angle = "turntable:angle:hatch:collect:south" ;
             height = "lifter:height:hatch:collect:south" ;
@@ -117,16 +113,14 @@ namespace xero {
             term->addTerminator(rearline) ;
             pushAction(term) ;
 
-            power = "linefollower:front:power" ;
-            dist = "linefollower:front:distance" ;
-            adjust = "linefollower:front:adjust" ;
+            power = "linefollower:back:power" ;
+            dist = "linefollower:back:distance" ;
+            adjust = "linefollower:back:adjust" ;
             act = std::make_shared<LineFollowAction>(*rearline, *db, power, dist, adjust) ;
             pushSubActionPair(db, act) ;
 
             act = std::make_shared<CompleteLSHatchCollect>(*game) ;            
             pushSubActionPair(game, act) ;
-#endif
-
         }
 
         CenterHabTwoHatch::~CenterHabTwoHatch()

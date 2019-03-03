@@ -9,7 +9,7 @@ namespace xero {
         class DriveByVisionAction : public xero::base::TankDriveAction
         {
         public:
-            DriveByVisionAction(xero::base::TankDrive &tank_drive, PhaserCameraTracker &camera) ;
+            DriveByVisionAction(xero::base::TankDrive &tank_drive, PhaserCameraTracker &camera, bool reverse = false) ;
 
             /// \brief Start the action; called once per action when it starts
             virtual void start() ;

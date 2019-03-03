@@ -97,9 +97,8 @@ namespace xero {
                     assert(action_->isDone()) ;
                 }
                 else {
-
                     MessageLogger &logger = getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
                     logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString() << "' was canceled" ;
                     logger.endMessage() ; 
 

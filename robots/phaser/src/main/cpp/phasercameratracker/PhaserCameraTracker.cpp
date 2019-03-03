@@ -23,8 +23,13 @@ namespace xero {
         }
 
         bool PhaserCameraTracker::shouldTerminate() {
-            if (!isValid())
+            if (!isValid()) {
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_TERMINATOR) ;
+                logger << "PhaserCameraTracker: did not detect target" ;
+                logger.endMessage() ;                  
                 return false ;
+            }
 
             MessageLogger &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_TERMINATOR) ;
