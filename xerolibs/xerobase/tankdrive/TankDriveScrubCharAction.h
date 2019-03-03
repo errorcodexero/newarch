@@ -47,6 +47,8 @@ namespace xero {
             bool is_done_ ;
             double lvoltage_;
             double rvoltage_;
+            double start_right_ ;
+            double start_left_ ;
             bool high_gear_ ;
             size_t index_ ;
             

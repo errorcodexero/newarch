@@ -204,6 +204,8 @@ namespace xero {
             if (navx_ != nullptr) {
                 angle = navx_->GetYaw() ;
                 angular_.update(getRobot().getDeltaTime(), angle) ;
+
+                total_angle_ = navx_->GetAngle() ;
             }
 
             left_linear_.update(getRobot().getDeltaTime(), getLeftDistance()) ;

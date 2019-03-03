@@ -27,5 +27,5 @@ html
 rtf
 *.stackdump
 makebuild
-deploy
 logs
+/deploy

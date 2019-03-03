@@ -2,6 +2,7 @@
 #include "automodes/StraightCharAutoMode.h"
 #include "automodes/FollowPathAutomode.h"
 #include "automodes/CenterHabTwoHatch.h"
+#include "automodes/TankDriveScrubMode.h"
 #include "Phaser.h"
 
 #include <frc/DriverStation.h>
@@ -51,13 +52,13 @@ namespace xero {
                 break ;
 
             case 7:
+                mode = std::make_shared<TankDriveScrubMode>(getRobot(), 0.4, 25.0, true) ;
                 break ;
 
             case 8:
                 break ;
 
             case 9:
-                mode = std::make_shared<StraightCharAutoMode>(getRobot(), 0.2, 10.0, true) ;
                 break ;
             }
             setAction(mode) ;

@@ -140,6 +140,16 @@ namespace xero {
                 return angular_.getAcceleration() ;
             }
 
+            double getTotalAngle() const {
+                return total_angle_ ;
+            }
+
+            void resetNavX() {
+                if (navx_ != nullptr) {
+                    navx_->Reset() ;
+                }
+            }
+
             /// \brief Invert the output of the left motors
             void invertLeftMotors() ;
 
@@ -214,6 +224,8 @@ namespace xero {
             std::shared_ptr<frc::Solenoid> gear_ ;
 
             std::shared_ptr<AHRS> navx_ ;
+
+            double total_angle_ ;
 
             xero::misc::Speedometer angular_ ;
             xero::misc::Speedometer left_linear_ ;

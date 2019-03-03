@@ -37,9 +37,18 @@ hw:tankdrive:invert:motors:right                                true
 hw:tankdrive:invert:encoders:left                               true
 endif
 
+if PRACTICE
 hw:hatchholder:arm:extend                                        6              # Solenoid
 hw:hatchholder:arm:retract                                       7              # Solenoid
 hw:hatchholder:finger                                            5              # Solenoid
+endif
+
+if COMPETITION
+hw:hatchholder:arm:extend                                        5              # Solenoid
+hw:hatchholder:arm:retract                                       6              # Solenoid
+hw:hatchholder:finger                                            7              # Solenoid
+endif
+
 hw:hatchholder:sensor                                           21              # Digital IO
 
 hw:hatchintake:motor                                            12              # Victor SPX
@@ -76,8 +85,6 @@ hw:cargointake:sensor                                           22              
 
 hw:climber:solenoid                                             2               # Solenoid
 
-
-
 ###################################################################
 #
 # The sections below describe the software parameters for the various
@@ -94,13 +101,13 @@ tankdrive:width                                                 22
 tankdrive:scrub                                                 0.9
 
 tankdrive:follower:curve1:left:ka                                      0.00
-tankdrive:follower:curve1:left:kv                                      0.008
-tankdrive:follower:curve1:left:kp                                      0.0015
+tankdrive:follower:curve1:left:kv                                      0.010
+tankdrive:follower:curve1:left:kp                                      0.0005
 tankdrive:follower:curve1:left:kd                                      0.0
 
 tankdrive:follower:curve1:right:ka                                     0.00
-tankdrive:follower:curve1:right:kv                                     0.011
-tankdrive:follower:curve1:right:kp                                     0.0015
+tankdrive:follower:curve1:right:kv                                     0.010
+tankdrive:follower:curve1:right:kp                                     0.0008
 tankdrive:follower:curve1:right:kd                                     0.0
 
 tankdrive:follower:straight:left:ka                                      0.0005
@@ -150,8 +157,12 @@ driver:power:tolerance                                          0.1
 driver:power:nudge_straight                                     0.2
 driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
+if COMPETITION
+driver:spin:reverse                                             false
+endif
+if PRACTICE
 driver:spin:reverse                                             true
-
+endif
 #
 # Setup the data plotter
 #
@@ -165,7 +176,12 @@ turntable:safe_lifter_height                                    22
 turntable:keepout:minimum                                       130
 turntable:keepout:maximum                                       160
 turntable:keepout:dangerzone                                    15
+if PRACTICE
 turntable:degrees_per_tick                                      0.608108108
+endif
+if COMPETITION
+turntable:degrees_per_tick                                      0.546283784
+endif
 turntable:maxa                                                  270
 turntable:maxd                                                  -270
 turntable:maxv                                                  270
@@ -213,7 +229,12 @@ turntable:angle:hatch:place:west                                90              
 # Variables for the lifter
 #
 lifter:base							                            8.75
+if PRACTICE
 lifter:inches_per_tick                                          0.177951389                # old number 0.05925
+endif
+if COMPETITION
+lifter:inches_per_tick                                          0.059099901
+endif
 lifter:max_height                                               83.66
 lifter:min_height                                               8.46
 lifter:threshold                                                1.0

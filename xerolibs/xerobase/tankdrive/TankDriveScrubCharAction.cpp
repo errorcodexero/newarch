@@ -25,6 +25,9 @@ namespace xero {
         void TankDriveScrubCharAction::start() {
             is_done_ = false ;
             start_time_ = frc::Timer::GetFPGATimestamp() ;
+            start_angle_ = getTankDrive().getTotalAngle() ;
+            start_left_ = getTankDrive().getLeftDistance() ;
+            start_right_ = getTankDrive().getRightDistance() ;
             if (high_gear_)
                 getTankDrive().highGear() ;
             else
@@ -45,6 +48,11 @@ namespace xero {
                     is_done_ = true ;
                     setMotorsToPercents(0.0, 0.0) ;
                     rb.endPlot(plotid_) ;
+
+                    std::cout << "Total Angle " << getTankDrive().getTotalAngle() - start_angle_  << std::endl ;
+                    std::cout << "Left " << getTankDrive().getLeftDistance() - start_left_ << std::endl ;
+                    std::cout << "Right " << getTankDrive().getRightDistance() - start_right_ << std::endl ;
+
                 } else {
                     rb.addPlotData(plotid_, index_, 0, now - start_time_) ;
                     rb.addPlotData(plotid_, index_, 1, getTankDrive().getLeftDistance()) ;
