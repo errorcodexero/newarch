@@ -49,6 +49,8 @@ namespace xero {
             // Drive by Yaw constants
             double yaw_base_power_ ;
             double yaw_p_ ;
+
+            int lost_count_ ;
         } ;
     }
 }

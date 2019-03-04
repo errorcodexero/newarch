@@ -40,6 +40,7 @@ namespace xero {
 
         void DriveByVisionAction::start() {
             state_ = State::DriveYaw ;
+            lost_count_ = 0 ;
         }
 
         void DriveByVisionAction::driveTracking() {
@@ -52,32 +53,53 @@ namespace xero {
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                 logger << "DriveByVision: camera lost target" ;
                 logger.endMessage() ;                
+
+                lost_count_ ++ ;
+
+                if (lost_count_ > 8) {
+                    state_ = State::Done ;
+
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
+                    logger << "DriveByVision: action done due to too many lost targets conditions" ;
+                    logger.endMessage() ;                        
+                }
             }
             else {
                 double yaw = camera_.getYaw() ;
                 double dist = camera_.getDistance() ;
 
-                double desired_yaw = 0.0031 * dist * dist - 0.3855 * dist + 14.938 ;
-                if (reverse_) 
-                    desired_yaw = -desired_yaw ;
+                if (dist < 12.0) {
+                    state_ = State::Done ;
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
+                    logger << "DriveByVision: action done due to being too close" ;
+                    logger.endMessage() ;                         
+                }
+                else {
 
-                yaw -= desired_yaw ;
+                    lost_count_ = 0 ;
 
-                double yawadj = yaw * yaw_p_ ;
-                double left = yaw_base_power_ + yawadj ;
-                double right = yaw_base_power_ - yawadj ;
-                setMotorsToPercents(left, right) ;
+                    double desired_yaw = 0.0031 * dist * dist - 0.3855 * dist + 14.938 ;
+                    if (reverse_) 
+                        desired_yaw = -desired_yaw ;
 
-                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
-                logger << "DriveByVision:" ;
-                logger << " state " << toString(state_) ;
-                logger << " yaw " << yaw ;
-                logger << " yawadj " << yawadj ;
-                logger << " left " << left ;
-                logger << " right " << right ;
-                logger << " dist " << camera_.getDistance() ;
-                logger << " valid " << camera_.isValid() ;
-                logger.endMessage() ;
+                    yaw -= desired_yaw ;
+
+                    double yawadj = yaw * yaw_p_ ;
+                    double left = yaw_base_power_ + yawadj ;
+                    double right = yaw_base_power_ - yawadj ;
+                    setMotorsToPercents(left, right) ;
+
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
+                    logger << "DriveByVision:" ;
+                    logger << " state " << toString(state_) ;
+                    logger << " yaw " << yaw ;
+                    logger << " yawadj " << yawadj ;
+                    logger << " left " << left ;
+                    logger << " right " << right ;
+                    logger << " dist " << camera_.getDistance() ;
+                    logger << " valid " << camera_.isValid() ;
+                    logger.endMessage() ;
+                }
             }
         }
 

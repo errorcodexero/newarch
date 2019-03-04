@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gamepiecemanipulator/GamePieceManipulator.h"
-#include <OIDevice.h> 
+#include <oi/OIDevice.h> 
 #include <Action.h>
 
 namespace xero {

@@ -2,7 +2,7 @@
 
 #include "ControllerBase.h"
 #include "AutoMode.h"
-#include "OISubsystem.h"
+#include "oi/OISubsystem.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <iostream>
 #include <cassert>

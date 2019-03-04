@@ -5,15 +5,16 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
 
-        DriverGamepadRumbleAction::DriverGamepadRumbleAction(OISubsystem &oi, bool left, double value, double duration) : oi_(oi) {
+        DriverGamepadRumbleAction::DriverGamepadRumbleAction(OISubsystem &oi, bool left, int count, double value, double duration) : oi_(oi) {
             value_ = value ;
             left_ = left ;
             duration_ = duration ;
+            count_ = count ;
         }
 
         void DriverGamepadRumbleAction::start() {
             auto driver = oi_.getDriverGamepad() ;
-            driver->rumble(left_, value_, duration_) ;
+            driver->rumble(left_, count_, value_, duration_) ;
         }
 
         void DriverGamepadRumbleAction::run() {

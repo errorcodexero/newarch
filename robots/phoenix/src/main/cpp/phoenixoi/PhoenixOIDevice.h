@@ -1,6 +1,6 @@
 #pragma once
 
-#include <OIDevice.h>
+#include <oi/OIDevice.h>
 #include <Action.h>
 
 namespace xero {

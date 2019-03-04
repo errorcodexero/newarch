@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Action.h"
+#include "DispatchAction.h"
 #include <list>
 
 /// \file
@@ -18,6 +19,21 @@ namespace xero {
             /// \param action an action to be added to the parallel action
             void addAction(std::shared_ptr<Action> action) {
                 action_list_.push_back(action) ;
+            }
+
+            /// \brief push a new subsystem action pair to the end of the sequence
+            /// The action sequence cannot execute a subsystem action directly.  Rather a subsystem action
+            /// must be assigned to the required subsystem.  This method puses a wrapper action into the
+            /// action sequence that stores both the action and the associated subsystem.  The wrapper can
+            /// assign the action and continue, or the wrapper can assign the action and wait for it to be
+            /// complete.  The block parameter controls this beharior.  If block is true, this wrapper will
+            /// wait for the subsystem action to complete.
+            /// \param subsystem the subsystem that will receive the action
+            /// \param action the action that is assigned to the subsystem
+            /// \param block if true the sequence waits for the subsystem to complete the action
+            void addSubActionPair(SubsystemPtr subsystem, ActionPtr action, bool block = true) {
+                auto p = std::make_shared<DispatchAction>(subsystem, action, block);
+                addAction(p);                
             }
 
             /// \brief Start the action; called once per action when it starts

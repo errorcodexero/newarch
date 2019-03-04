@@ -3,7 +3,7 @@
 #include "ControllerBase.h"
 #include "AutoController.h"
 #include "basegroups.h"
-#include "OISubsystem.h"
+#include "oi/OISubsystem.h"
 #include "TeleopController.h"
 #include <MessageDestStream.h>
 #include <MessageDestSeqFile.h>

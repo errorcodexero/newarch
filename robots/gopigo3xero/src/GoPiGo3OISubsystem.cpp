@@ -2,7 +2,7 @@
 #include "GoPiGo3OIDevice.h"
 #include <Robot.h>
 #include <SettingsParser.h>
-#include <DriverGamepad.h>
+#include <oi/DriverGamepad.h>
 
 using namespace xero::misc ;
 

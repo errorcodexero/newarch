@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Subsystem.h"
-#include "DriverGamepad.h"
+#include "oi/DriverGamepad.h"
 #include "ActionSequence.h"
 
 /// \file

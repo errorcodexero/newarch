@@ -4,6 +4,7 @@
 #include "phaserrobotsubsystem/PhaserRobotSubsystem.h"
 #include <cameratracker/CameraChangeAction.h>
 #include <ActionSequence.h>
+#include <ParallelAction.h>
 
 #include "gamepiecemanipulator/GamePieceAction.h"
 #include "gamepiecemanipulator/FloorCollectCargoAction.h"
@@ -24,6 +25,7 @@
 #include "phaserrobotsubsystem/PhaserRobotSubsystem.h"
 #include "phaserrobotsubsystem/ClimbAction.h"
 #include "climber/ClimberDeployAction.h"
+#include <oi/DriverGamepadRumbleAction.h>
 
 #include "LineFollowerTakeover.h"
 #include "VisionDetectTakeover.h"
@@ -631,6 +633,7 @@ namespace xero {
             auto db = ph.getPhaserRobotSubsystem()->getTankDrive() ;  
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto lifter = game->getLifter() ;
+            auto oi = ph.getOI() ;
             ActionPtr finish = getFinishAction() ;         
             auto ctrl = ph.getCurrentController() ;
             std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;    
@@ -638,6 +641,7 @@ namespace xero {
             ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
             std::shared_ptr<LightSensorSubsystem> line ;
             std::shared_ptr<LineFollowAction> drive ;
+            std::shared_ptr<ParallelAction> parallel = std::make_shared<ParallelAction>() ;
 
             if (dir_ == Direction::North && teleop != nullptr) {
                 line = ph.getPhaserRobotSubsystem()->getFrontLineSensor() ;
@@ -649,15 +653,20 @@ namespace xero {
                 drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:back:power", "linefollower:back:distance", "linefollower:back:adjust") ;
             }
 
-            std::string height ;
-
-            height = generateActionHeightName() ;
+        
+            std::string height = generateActionHeightName() ;
             ActionPtr lift = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
 
-            seq->pushSubActionPair(lifter, lift) ;
+            ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 2, 1.0, 0.5) ;
+
             seq->pushSubActionPair(db, drive) ;
             seq->pushSubActionPair(game, finish) ;
-            teleop->addDetector(std::make_shared<LineFollowerTakeover>(teleop, seq, *line)) ;            
+
+            parallel->addAction(seq) ;
+            parallel->addSubActionPair(lifter, lift) ;
+            parallel->addSubActionPair(oi, rumble) ;
+
+            teleop->addDetector(std::make_shared<LineFollowerTakeover>(teleop, parallel, *line)) ;            
         }
 
         //
@@ -668,10 +677,12 @@ namespace xero {
         //
         void PhaserOIDevice::setupVisionDetectors() {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ; 
+            auto oi = ph.getOI() ;
             auto db = ph.getPhaserRobotSubsystem()->getTankDrive() ;  
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
-
+            std::shared_ptr<ParallelAction> parallel = std::make_shared<ParallelAction>() ;
+            
             ActionPtr finish = getFinishAction() ;
             ActionPtr drive ;
             auto ctrl = ph.getCurrentController() ;
@@ -682,9 +693,15 @@ namespace xero {
             ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
             drive = std::make_shared<DriveByVisionAction>(*db, *camera) ;
 
+            ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 3, 1.0, 0.3333333) ;            
+
             seq->pushSubActionPair(db, drive) ;
             seq->pushSubActionPair(game, finish) ;
-            teleop->addDetector(std::make_shared<VisionDetectTakeover>(teleop, seq, *camera)) ;
+
+            parallel->addAction(seq) ;
+            parallel->addSubActionPair(oi, rumble) ;
+
+            teleop->addDetector(std::make_shared<VisionDetectTakeover>(teleop, parallel, *camera)) ;
         }
 
         //

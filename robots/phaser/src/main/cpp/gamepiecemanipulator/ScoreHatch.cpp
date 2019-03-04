@@ -3,8 +3,8 @@
 #include <lifter/LifterGoToHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
 #include "hatchholder/HatchHolderAction.h"
-#include "DriverGamepad.h"
-#include <DriverGamepadRumbleAction.h>
+#include "oi/DriverGamepad.h"
+#include <oi/DriverGamepadRumbleAction.h>
 
 using namespace xero::base ;
 
@@ -21,7 +21,7 @@ namespace xero {
             set_retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatchholder:default:delay") ;
             set_retract_hatch_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER, "hatchholder:default:delay") ;
             set_deploy_hatch_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_FINGER, "hatchholder:default:delay") ;
-            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1.0, 1.0) ;            
+            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1, 1.0, 1.0) ;            
         }
 
         ScoreHatch::~ScoreHatch(){

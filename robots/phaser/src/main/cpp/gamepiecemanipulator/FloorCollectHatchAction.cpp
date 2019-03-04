@@ -4,7 +4,7 @@
 #include "turntable/TurntableGoToAngleAction.h"
 #include "hatchintake/HatchIntakeAction.h"
 #include "hatchholder/HatchHolderAction.h"
-#include <DriverGamepadRumbleAction.h>
+#include <oi/DriverGamepadRumbleAction.h>
 
 using namespace xero::base ;
 
@@ -39,7 +39,7 @@ namespace xero {
             set_hatch_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*hatch_intake, "hatchintake:power") ;
             stop_hatch_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*hatch_intake, 0.0) ;
 
-            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1.0, 1.0) ;            
+            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1, 1.0, 1.0) ;            
         }
 
         FloorCollectHatchAction::~FloorCollectHatchAction() {

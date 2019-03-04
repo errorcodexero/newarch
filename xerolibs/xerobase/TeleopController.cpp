@@ -1,6 +1,6 @@
 #include "TeleopController.h"
 #include <Robot.h>
-#include <OISubsystem.h>
+#include <oi/OISubsystem.h>
 #include <MessageLogger.h>
 
 

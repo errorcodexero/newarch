@@ -1,21 +1,13 @@
 TOPDIR=../..
 
 SOURCES = \
-	lifter/Lifter.cpp\
-	lifter/LifterCalibrateAction.cpp\
-	lifter/LifterGoToHeightAction.cpp\
-	lifter/LifterPowerAction.cpp\
+
 	ActionSequence.cpp\
 	AutoMode.cpp\
 	ControllerBase.cpp\
 	DelayAction.cpp\
 	TerminateAction.cpp\
 	DispatchAction.cpp\
-	DriverGamepad.cpp\
-	DriverGamepadRumbleAction.cpp\
-	OIDevice.cpp\
-	OIOutputAction.cpp\
-	OISubsystem.cpp\
 	ParallelAction.cpp\
 	Robot.cpp\
 	RobotSubsystem.cpp\
@@ -23,6 +15,11 @@ SOURCES = \
 	TCS34725ColorSensor.cpp\
 	TeleopController.cpp\
 	DetectAutoSequence.cpp\
+	oi/DriverGamepad.cpp\
+	oi/DriverGamepadRumbleAction.cpp\
+	oi/OIDevice.cpp\
+	oi/OIOutputAction.cpp\
+	oi/OISubsystem.cpp\	
 	MessageListener/MessageListener.cpp\
 	tankdrive/TankDrive.cpp\
 	tankdrive/TankDriveDistanceAction.cpp\
@@ -36,6 +33,10 @@ SOURCES = \
 	tankdrive/TankDriveScrubCharAction.cpp\
 	tankdrive/LineDetectAction.cpp\
 	tankdrive/LineFollowAction.cpp\
+	lifter/Lifter.cpp\
+	lifter/LifterCalibrateAction.cpp\
+	lifter/LifterGoToHeightAction.cpp\
+	lifter/LifterPowerAction.cpp\	
 	singlemotorsubsystem/SingleMotorPowerAction.cpp\
 	singlemotorsubsystem/SingleMotorSubsystem.cpp\
 	lightsensor/LightSensorSubsystem.cpp\
