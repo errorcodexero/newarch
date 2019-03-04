@@ -46,9 +46,9 @@ namespace xero {
             parallel = std::make_shared<ParallelAction>() ;
 
             if (left)
-                act = std::make_shared<TankDriveFollowPathAction>(*db, "CenterHab2CargoFrontLeft", "straight") ;
+                act = std::make_shared<TankDriveFollowPathAction>(*db, "CenterHab2CargoFrontLeft", "curve2") ;
             else
-                act = std::make_shared<TankDriveFollowPathAction>(*db, "CenterHab2CargoFrontRight", "straight") ;            
+                act = std::make_shared<TankDriveFollowPathAction>(*db, "CenterHab2CargoFrontRight", "curve2") ;            
                 
             dispatch = std::make_shared<DispatchAction>(db, act, true) ;
             parallel->addAction(dispatch) ;
@@ -84,7 +84,7 @@ namespace xero {
             parallel = std::make_shared<ParallelAction>() ;            
 
             if (left)
-                act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSLeft", "curve1", true) ;
+                act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSLeft", "curve2", true) ;
             else {
                 assert(false) ;
             }
@@ -107,7 +107,7 @@ namespace xero {
             term->addTerminator(vision) ;
             pushAction(term) ;
 
-            act = std::make_shared<DriveByVisionAction>(*db, *vision) ;
+            act = std::make_shared<DriveByVisionAction>(*db, *vision, true) ;
 
             term = std::make_shared<TerminateAction>(act, phaser) ;
             term->addTerminator(rearline) ;

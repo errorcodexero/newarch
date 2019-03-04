@@ -12,9 +12,9 @@ namespace xero {
             yaw_base_power_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_base_power") ;
             yaw_p_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_p") ;
 
+            reverse_ = reverse ;
             if (reverse) {
                 yaw_base_power_ = -yaw_base_power_ ;
-                yaw_p_ = yaw_p_ ;
             }
         }
 
@@ -58,6 +58,9 @@ namespace xero {
                 double dist = camera_.getDistance() ;
 
                 double desired_yaw = 0.0031 * dist * dist - 0.3855 * dist + 14.938 ;
+                if (reverse_) 
+                    desired_yaw = -desired_yaw ;
+
                 yaw -= desired_yaw ;
 
                 double yawadj = yaw * yaw_p_ ;

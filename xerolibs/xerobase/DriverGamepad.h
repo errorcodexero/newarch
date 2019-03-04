@@ -105,6 +105,7 @@ namespace xero {
             ActionPtr nudge_counter_clockwise_ ;
 
             bool reverse_ ;
+            bool high_gear_ ;
 
             bool rumbling_ ;
             double start_ ;

@@ -67,8 +67,7 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_ACTIONS); 
             logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);                
             logger.enableSubsystem(MSG_GROUP_PHASER_OI) ;   
-            logger.enableSubsystem(MSG_GROUP_LINE_FOLLOWER);  
-            logger.enableSubsystem(MSG_GROUP_VISION_TERMINATOR);                
+            logger.enableSubsystem(MSG_GROUP_VISION_DRIVING); 
 
             //
             // This should stay on.  It will have no effect on the real robot
@@ -86,6 +85,7 @@ namespace xero {
             paths->loadPath("CenterHab2CargoFrontLeft") ;
             paths->loadPath("CenterHab2CargoFrontRight") ;  
             paths->loadPath("CargoFrontLeftLSLeft") ;          
+            paths->loadPath("Curve") ;
         }
         
         void Phaser::RobotHardwareInit() {

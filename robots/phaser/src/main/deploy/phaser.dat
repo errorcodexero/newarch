@@ -110,6 +110,16 @@ tankdrive:follower:curve1:right:kv                                     0.010
 tankdrive:follower:curve1:right:kp                                     0.0008
 tankdrive:follower:curve1:right:kd                                     0.0
 
+tankdrive:follower:curve2:left:ka                                      0.00
+tankdrive:follower:curve2:left:kv                                      0.005882353
+tankdrive:follower:curve2:left:kp                                      0.025400051
+tankdrive:follower:curve2:left:kd                                      0.0
+
+tankdrive:follower:curve2:right:ka                                     0.00
+tankdrive:follower:curve2:right:kv                                     0.005882353
+tankdrive:follower:curve2:right:kp                                     0.025400051
+tankdrive:follower:curve2:right:kd                                     0.0
+
 tankdrive:follower:straight:left:ka                                      0.0005
 tankdrive:follower:straight:left:kv                                      0.00790
 tankdrive:follower:straight:left:kp                                      0.0013
@@ -126,7 +136,7 @@ tankdrive:follower:kp                                           0.005
 tankdrive:follower:kd                                           0.0
 
 tankdrive:follower:turn_correction                              0
-tankdrive:follower:angle_decay                                  0.0
+tankdrive:follower:angle_error                                  -0.01
 
 tankdrive:distance_action:maxa                                  36.0
 tankdrive:distance_action:maxd                                  -36.0
@@ -177,14 +187,20 @@ turntable:keepout:minimum                                       130
 turntable:keepout:maximum                                       160
 turntable:keepout:dangerzone                                    15
 if PRACTICE
-turntable:degrees_per_tick                                      0.608108108
+turntable:degrees_per_tick                                      0.585472973
 endif
 if COMPETITION
 turntable:degrees_per_tick                                      0.546283784
 endif
+
 turntable:maxa                                                  270
 turntable:maxd                                                  -270
 turntable:maxv                                                  270
+
+#turntable:maxa                                                  270
+#turntable:maxd                                                  -270
+#turntable:maxv                                                  270
+
 turntable:base                                                  0.0
 turntable:threshold                                             1.0
 turntable:follower:kv                                           0.0036
@@ -351,10 +367,10 @@ drivebyvision:yaw_p                                             -0.04
 # Variables for the linefollower
 #
 linefollower:front:power                                          0.3
-linefollower:front:distance                                       14
+linefollower:front:distance                                       12
 linefollower:front:adjust                                         -0.3
 linefollower:back:power                                           -0.3
-linefollower:back:distance                                        -14
+linefollower:back:distance                                        -12
 linefollower:back:adjust                                          0.3
 
 

@@ -36,7 +36,7 @@ namespace xero {
                 break ;
 
             case 3:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "CurveRight", "straight") ;
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), "Curve", "curve2") ;
                 break ;
 
             case 4:
@@ -48,7 +48,7 @@ namespace xero {
                 break ;
 
             case 6:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "CargoFrontLeftLSLeft", "curve1", true) ;            
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), "CargoFrontLeftLSLeft", "curve2", true) ;            
                 break ;
 
             case 7:

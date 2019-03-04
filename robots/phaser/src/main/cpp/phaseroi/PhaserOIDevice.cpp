@@ -242,12 +242,12 @@ namespace xero {
             finish_collect_cargo_ = std::make_shared<CompleteLSCargoCollect>(*game) ;
             finish_place_hatch_  = std::make_shared<ScoreHatch>(*game) ;
             finish_place_cargo_  = std::make_shared<ScoreCargo>(*game) ;
-            set_collect_hatch_floor_  = std::make_shared<FloorCollectHatchAction>(*game) ;
+            // set_collect_hatch_floor_  = std::make_shared<FloorCollectHatchAction>(*game) ;
             set_collect_cargo_floor_  = std::make_shared<FloorCollectCargoAction>(*game) ;
             reset_intakes_ = std::make_shared<ResetIntakeAction>(*game) ;
             extend_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_FINGER, "hatchholder:default:delay") ;
             retract_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER, "hatchholder:default:delay") ;     
-            climb_action_ = std::make_shared<ClimbAction>(*ph.getPhaserRobotSubsystem()) ;
+            // climb_action_ = std::make_shared<ClimbAction>(*ph.getPhaserRobotSubsystem()) ;
 
             deploy_climber_ = std::make_shared<ClimberDeployAction>(*climber) ;
         }
@@ -847,8 +847,10 @@ namespace xero {
                         //
                         if (getValue(hatch_cargo_switch_))
                             game->setAction(set_collect_cargo_floor_) ;
+#ifdef NOTYET
                         else
                             game->setAction(set_collect_hatch_floor_) ;
+#endif
 
                         hatch_finger_start_ = getSubsystem().getRobot().getTime() ;                             
                     }

@@ -38,6 +38,7 @@ namespace xero {
 
             controller_ = std::make_shared<frc::XboxController>(index) ;
             reverse_ = false ;
+            high_gear_ = true ;
 
             auto &parser = oi.getRobot().getSettingsParser() ;
             if (parser.isDefined("driver:spin:reverse")) {
@@ -153,6 +154,13 @@ namespace xero {
             else
                 pov = POVAngle::NONE ;
 
+            if (ds.GetStickButton(getIndex(), ButtonNumber::LB)) {
+                high_gear_ = false ;
+            }
+            else if (ds.GetStickButton(getIndex(), ButtonNumber::RB)) {
+                high_gear_ = true ;
+            }
+
             double ly = ds.GetStickAxis(getIndex(),AxisNumber::LEFTY) ;
             double rx = ds.GetStickAxis(getIndex(),AxisNumber::RIGHTX) ;
 
@@ -188,7 +196,7 @@ namespace xero {
                 }
                 
                 if (std::fabs(left - left_) > tolerance_ || std::fabs(right - right_) > tolerance_) {
-                    auto dir = std::make_shared<TankDrivePowerAction>(*db_, left, right) ;
+                    auto dir = std::make_shared<TankDrivePowerAction>(*db_, left, right, high_gear_) ;
                     seq.pushSubActionPair(db_, dir) ;
                     left_ = left ;
                     right_ = right ;

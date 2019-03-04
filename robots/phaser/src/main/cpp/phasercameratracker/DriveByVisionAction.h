@@ -44,6 +44,8 @@ namespace xero {
             State state_ ;
             PhaserCameraTracker &camera_ ;
 
+            bool reverse_ ;
+
             // Drive by Yaw constants
             double yaw_base_power_ ;
             double yaw_p_ ;

@@ -12,7 +12,7 @@ namespace xero {
             "time", 
             "ltpos", "lapos", "ltvel", "lavel", "ltaccel", "lout",
             "rtpos", "rapos", "rtvel", "ravel", "rtaccel", "rout",
-            "xa", "ya", "xt", "yt"
+            "thead", "ahead"
         } ;
 
         TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name, const std::string &follow, bool reverse) : TankDriveAction(db)  {
@@ -28,7 +28,7 @@ namespace xero {
                                 pname + "right:ka", pname + "right:kp", pname + "right:kd") ;
 
             turn_correction_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:turn_correction") ;
-            angle_decay_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:angle_decay") ;
+            angle_error_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:angle_error") ;
         }
 
         TankDriveFollowPathAction::~TankDriveFollowPathAction() {                
@@ -40,6 +40,8 @@ namespace xero {
             
             index_ = 0 ;         
             start_time_ = getTankDrive().getRobot().getTime() ;
+
+            start_angle_ = getTankDrive().getAngle() ;
 
             if (getTankDrive().hasGearShifter())
                 getTankDrive().highGear() ;
@@ -67,7 +69,6 @@ namespace xero {
             plotid_ = getTankDrive().getRobot().startPlot(toString(), plot_columns_) ;
         }
 
-
         void TankDriveFollowPathAction::run() {
             auto &td = getTankDrive() ;
             auto &rb = td.getRobot() ;
@@ -81,6 +82,7 @@ namespace xero {
 
                 double laccel, lvel, lpos ;
                 double raccel, rvel, rpos ;
+                double thead ;
 
                 if (reverse_) {
                     laccel = -lseg.getAccel() ;
@@ -89,6 +91,7 @@ namespace xero {
                     raccel = -rseg.getAccel() ;
                     rvel = -rseg.getVelocity() ;
                     rpos = -rseg.getPOS() ;
+                    thead = xero::math::normalizeAngleDegrees(-lseg.getHeading()) ;
                 }
                 else {
                     laccel = lseg.getAccel() ;
@@ -97,20 +100,23 @@ namespace xero {
                     raccel = rseg.getAccel() ;
                     rvel = rseg.getVelocity() ;
                     rpos = rseg.getPOS() ;
+                    thead = xero::math::normalizeAngleDegrees(lseg.getHeading()) ;                    
                 }
 
                 double lout = left_follower_->getOutput(laccel, lvel, lpos, td.getLeftDistance() -  left_start_, dt) ;
                 double rout = right_follower_->getOutput(raccel, rvel, rpos, td.getRightDistance() - right_start_, dt) ;
+
+                double ahead = xero::math::normalizeAngleDegrees(getTankDrive().getAngle() - start_angle_) ;
 
                 double dv = lseg.getVelocity() - rseg.getVelocity() ;
                 double correct = dv * turn_correction_ ;
                 lout += correct ;
                 rout -= correct ;
 
-                double angerr = lseg.getHeading() - td.getAngle() ;
-                angle_error_ = angle_error_ * angle_decay_ + angerr ;
+                double angerr = lseg.getHeading() - ahead ;
+                double turn = 0.8 * (-1.0 / 80.0) * angerr ;
 
-                setMotorsToPercents(lout, rout) ;
+                setMotorsToPercents(lout + turn, rout - turn) ;
 
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << td.getRobot().getTime() ;
@@ -150,10 +156,8 @@ namespace xero {
                 rb.addPlotData(plotid_, index_, 12, rout) ;                
 
                 // XY data
-                rb.addPlotData(plotid_, index_, 13, getTankDrive().getX()) ;
-                rb.addPlotData(plotid_, index_, 14, getTankDrive().getY()) ;
-                rb.addPlotData(plotid_, index_, 15, (lseg.getX() + rseg.getX())/ 2.0) ;
-                rb.addPlotData(plotid_, index_, 16, (lseg.getY() + rseg.getY())/ 2.0) ;                                     
+                rb.addPlotData(plotid_, index_, 13, thead) ;
+                rb.addPlotData(plotid_, index_, 14, ahead) ;
             }
             else {
                 if (index_ == path_->size())
