@@ -10,6 +10,7 @@ namespace xero{
         class TerminateAction : public Action {
         public:
             TerminateAction(ActionPtr a, Robot &robot, double delay = 0.0) ;
+            TerminateAction(std::shared_ptr<Subsystem> sub, ActionPtr , Robot &robot, double delay = 0.0) ;
 
             virtual void start() ;
 

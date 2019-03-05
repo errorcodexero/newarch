@@ -1,4 +1,5 @@
 #include "TerminateAction.h"
+#include "DispatchAction.h"
 #include "basegroups.h"
 #include <iostream>
 
@@ -11,6 +12,12 @@ namespace xero {
             action_ = a ;
             delay_ = delay ;
         }
+
+        TerminateAction::TerminateAction(std::shared_ptr<Subsystem> sub, ActionPtr a, Robot &robot, double delay) : robot_(robot)
+        {
+            action_ = std::make_shared<DispatchAction>(sub, a, true) ;
+            delay_ = delay ;
+        }        
 
         void TerminateAction::start(){
             action_->start() ;
