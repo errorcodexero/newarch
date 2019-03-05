@@ -40,87 +40,113 @@ namespace xero {
             act = std::make_shared<CameraChangeAction>(*vision, 0, CameraTracker::CameraMode::TargetTracking) ;
             pushSubActionPair(vision, act) ;
 
+            ////////////////////////////////////////////////////
+            //
+            // Start the initial hatch
+            //
+            ////////////////////////////////////////////////////            
+
             //
             // Go score the first hatch on the cargo ship
             //
             parallel = std::make_shared<ParallelAction>() ;
 
-            if (left)
-                act = std::make_shared<TankDriveFollowPathAction>(*db, "CenterHab2CargoFrontLeft", "curve2") ;
-            else
-                act = std::make_shared<TankDriveFollowPathAction>(*db, "CenterHab2CargoFrontRight", "curve2") ;            
-                
-            dispatch = std::make_shared<DispatchAction>(db, act, true) ;
-            parallel->addAction(dispatch) ;
-            
             const char *angle = "turntable:angle:hatch:place:north" ;
             const char *height = "lifter:height:hatch:place:north:1" ;
             act = std::make_shared<ReadyAction>(*game, height, angle) ;
             dispatch = std::make_shared<DispatchAction>(game, act, true) ;
             parallel->addAction(dispatch) ;
 
-            term = std::make_shared<TerminateAction>(parallel, phaser) ;
+
+            seq = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
+
+            if (left)
+                act = std::make_shared<TankDriveFollowPathAction>(*db, "CenterHab2CargoFrontLeft", "curve2") ;
+            else
+                act = std::make_shared<TankDriveFollowPathAction>(*db, "CenterHab2CargoFrontRight", "curve2") ;            
+                
+        
+            term = std::make_shared<TerminateAction>(db, act, phaser) ;
             term->addTerminator(vision) ;
-            pushAction(term) ;
+            seq->pushAction(term) ;
 
             act = std::make_shared<DriveByVisionAction>(*db, *vision) ;
-
-            term = std::make_shared<TerminateAction>(act, phaser) ;
+            term = std::make_shared<TerminateAction>(db, act, phaser) ;
             term->addTerminator(frontline) ;
-            pushAction(term) ;
+            seq->pushAction(term) ;
 
             const char *power = "linefollower:front:power" ;
             const char *dist = "linefollower:front:distance" ;
             const char *adjust = "linefollower:front:adjust" ;
             act = std::make_shared<LineFollowAction>(*frontline, *db, power, dist, adjust) ;
-            pushSubActionPair(db, act) ;
+            seq->pushSubActionPair(db, act) ;
 
             act = std::make_shared<ScoreHatch>(*game) ;
-            pushSubActionPair(game, act) ;
+            seq->pushSubActionPair(game, act) ;
+
+            parallel->addAction(seq) ;
+
+            pushAction(parallel) ;
+
+            ////////////////////////////////////////////////////
+            //
+            // Finihshed the initial hatch
+            //
+            ////////////////////////////////////////////////////
+
+
+            ////////////////////////////////////////////////////
+            //
+            // Start the second hatch
+            //
+            ////////////////////////////////////////////////////            
+
 
             //
-            // Now head for the load station
-            //            
-            parallel = std::make_shared<ParallelAction>() ;            
+            // Go score the first hatch on the cargo ship
+            //
+            parallel = std::make_shared<ParallelAction>() ;
 
-            if (left)
-                act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSLeft", "curve2", true) ;
-            else {
-                assert(false) ;
-            }
-                
-            dispatch = std::make_shared<DispatchAction>(db, act, true) ;
-            parallel->addAction(dispatch) ;
-
-            seq = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
-            seq->pushAction(std::make_shared<DelayAction>(0.5)) ;
-            
             angle = "turntable:angle:hatch:collect:south" ;
             height = "lifter:height:hatch:collect:south" ;
             act = std::make_shared<ReadyAction>(*game, height, angle) ;
             dispatch = std::make_shared<DispatchAction>(game, act, true) ;
-            seq->pushAction(dispatch) ;
+            parallel->addAction(dispatch) ;
 
-            parallel->addAction(seq) ;
+            seq = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
 
-            term = std::make_shared<TerminateAction>(parallel, phaser, 3.0) ;
+            if (left)
+                act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSLeft", "curve2") ;
+            else
+                act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSRight", "curve2") ;
+        
+            term = std::make_shared<TerminateAction>(db, act, phaser) ;
             term->addTerminator(vision) ;
-            pushAction(term) ;
+            seq->pushAction(term) ;
 
             act = std::make_shared<DriveByVisionAction>(*db, *vision, true) ;
-
-            term = std::make_shared<TerminateAction>(act, phaser) ;
+            term = std::make_shared<TerminateAction>(db, act, phaser) ;
             term->addTerminator(rearline) ;
-            pushAction(term) ;
+            seq->pushAction(term) ;
 
             power = "linefollower:back:power" ;
             dist = "linefollower:back:distance" ;
             adjust = "linefollower:back:adjust" ;
             act = std::make_shared<LineFollowAction>(*rearline, *db, power, dist, adjust) ;
-            pushSubActionPair(db, act) ;
+            seq->pushSubActionPair(db, act) ;
 
-            act = std::make_shared<CompleteLSHatchCollect>(*game) ;            
+            act = std::make_shared<CompleteLSHatchCollect>(*game) ;
             pushSubActionPair(game, act) ;
+
+            parallel->addAction(seq) ;
+
+            pushAction(parallel) ;
+
+            ////////////////////////////////////////////////////
+            //
+            // Finihshed the second hatch
+            //
+            ////////////////////////////////////////////////////            
         }
 
         CenterHabTwoHatch::~CenterHabTwoHatch()
