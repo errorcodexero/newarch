@@ -15,12 +15,12 @@ namespace xero {
             "thead", "ahead"
         } ;
 
-        TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name, const std::string &follow, bool reverse) : TankDriveAction(db)  {
+        TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name, bool reverse) : TankDriveAction(db)  {
             reverse_ = reverse;
             path_ = db.getRobot().getPathManager()->getPath(name) ;
             assert(path_ != nullptr) ;
 
-            std::string pname = "tankdrive:follower:" + follow + ":";
+            std::string pname = "tankdrive:follower:";
             
             left_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), pname + "left:kv", 
                                 pname + "left:ka", pname + "left:kp", pname + "left:kd") ;

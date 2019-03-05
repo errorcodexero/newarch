@@ -61,9 +61,9 @@ namespace xero {
             seq = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
 
             if (left)
-                act = std::make_shared<TankDriveFollowPathAction>(*db, "CenterHab2CargoFrontLeft", "curve2") ;
+                act = std::make_shared<TankDriveFollowPathAction>(*db, "CenterHab2CargoFrontLeft") ;
             else
-                act = std::make_shared<TankDriveFollowPathAction>(*db, "CenterHab2CargoFrontRight", "curve2") ;            
+                act = std::make_shared<TankDriveFollowPathAction>(*db, "CenterHab2CargoFrontRight") ;            
                 
         
             term = std::make_shared<TerminateAction>(db, act, phaser) ;
@@ -116,9 +116,9 @@ namespace xero {
             seq = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
 
             if (left)
-                act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSLeft", "curve2") ;
+                act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSLeft") ;
             else
-                act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSRight", "curve2") ;
+                act = std::make_shared<TankDriveFollowPathAction>(*db, "CargoFrontLeftLSRight") ;
         
             term = std::make_shared<TerminateAction>(db, act, phaser) ;
             term->addTerminator(vision) ;

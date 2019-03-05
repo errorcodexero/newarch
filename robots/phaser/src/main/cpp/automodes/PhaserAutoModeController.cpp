@@ -24,23 +24,21 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = std::make_shared<StraightCharAutoMode>(getRobot(), 0.5, 3.0) ;
+                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true) ;
                 break ;
 
             case 1:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "Straight", "straight") ;
+                mode = std::make_shared<StraightCharAutoMode>(getRobot(), 0.5, 3.0) ;            
                 break ;
 
             case 2:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "CurveLeft", "straight") ;            
                 break ;
 
             case 3:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "Curve", "curve2") ;
                 break ;
 
             case 4:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true) ;
+
                 break ;
 
             case 5:
