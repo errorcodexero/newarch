@@ -457,8 +457,8 @@ namespace {
         if (cam_no != -1 && !cam_mode.empty()) {     // Selection published by robot ==> don't use chooser
             //std::cout << "From robot: " << cam_no << "    " << cam_mode << "\n";
             new_selected_camera = (cam_no == 0)? 0 : 1;
-            new_viewing_mode = (cam_mode == "TargetTracking") ? false : true;
-        } else {
+            new_viewing_mode = (cam_mode != "TargetTracking");
+        } else if (nobot_mode) {
             // Chooser for viewing mode
             int chooser_val = viewing_mode_chooser.GetSelected();
             if (chooser_val != 0) {  // Not unspecified
@@ -475,13 +475,13 @@ namespace {
         }
         
         if (viewing_mode != new_viewing_mode) {
-            //std::cout << "Changing viewing mode to " << (new_viewing_mode ? 1 : 0) << "\n" << std::flush;
+            std::cout << "Changing viewing mode to " << (new_viewing_mode ? 1 : 0) << "\n" << std::flush;
             viewing_mode = new_viewing_mode;
             setViewingExposure(viewing_mode);
         }
         
         if (selected_camera != new_selected_camera) {
-            //std::cout << "Changing selected camera to " << new_selected_camera << "\n" << std::flush;
+            std::cout << "Changing selected camera to " << new_selected_camera << "\n" << std::flush;
             selected_camera = new_selected_camera;
             cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
             server.SetSource(cameras[selected_camera]);
