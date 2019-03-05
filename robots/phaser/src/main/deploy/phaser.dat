@@ -163,7 +163,7 @@ driver:power:default                                            0.6
 driver:turn:max                                                 0.8
 driver:turn:default                                             0.4
 driver:power:slowby                                             0.5
-driver:power:tolerance                                          0.1
+driver:power:tolerance                                          0.2
 driver:power:nudge_straight                                     0.2
 driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
@@ -196,10 +196,6 @@ endif
 turntable:maxa                                                  270
 turntable:maxd                                                  -270
 turntable:maxv                                                  270
-
-#turntable:maxa                                                  270
-#turntable:maxd                                                  -270
-#turntable:maxv                                                  270
 
 turntable:base                                                  0.0
 turntable:threshold                                             1.0
@@ -399,11 +395,11 @@ hatchholder:place:totaldelay                                    0.20
 hatchholder:default:delay                                       0.5
 hatchholder:finger:autodelay                                    1.0
 
-climb:backup_distance                                           12.0
+climb:backup_distance                                           0
 climb:deploy_delay                                              0.3
-climb:drive:left                                                0.5
-climb:drive:right                                               0.5
-climb:drive:duration                                            3.0
+climb:drive:left                                                -0.6
+climb:drive:right                                               -0.6
+climb:drive:duration                                            3.5
 
 score_cargo:power                                               -0.3
 score_cargo:time                                                2

@@ -31,6 +31,7 @@ namespace xero {
                 else
                     getTankDrive().highGear() ;
             }
+            std::cout << getTankDrive().getRobot().getTime() << " Set motors timed " << left_ << " " << right_ << std::endl ;
             setMotorsToPercents(left_, right_) ;
         }
 
@@ -38,6 +39,7 @@ namespace xero {
             isdone_ = (getTankDrive().getRobot().getTime() > start_ + duration_) ;
             if (isdone_) {
                 setMotorsToPercents(0.0, 0.0) ;
+                std::cout << getTankDrive().getRobot().getTime() << " stop motors" << std::endl ;
             }
         }
 

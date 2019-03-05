@@ -2,7 +2,7 @@
 #include "Phaser.h"
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/TankDriveCharAction.h>
-
+#include <tankdrive/TankDriveTimedPowerAction.h>
 using namespace xero::base ;
 using namespace xero::misc ;
 
@@ -14,7 +14,10 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
 
-            pushSubActionPair(db, std::make_shared<TankDriveCharAction>(*db, duration, power, highgear)) ;
+            ActionPtr p = std::make_shared<TankDriveTimedPowerAction>(*db, "climb:drive:left", 
+                            "climb:drive:right", "climb:drive:duration", true) ;
+            pushSubActionPair(db, p) ;
+            // pushSubActionPair(db, std::make_shared<TankDriveCharAction>(*db, duration, power, highgear)) ;
         }
 
         StraightCharAutoMode::~StraightCharAutoMode()
