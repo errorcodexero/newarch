@@ -94,6 +94,7 @@ namespace {
     bool nobot_mode = false;  // When true, running off robot.  Set Network table in server mode, etc.
     int  selected_camera;     // Currently selected camera for viewing/tracking
     bool no_set_resolution;   // If set, don't explicitly set resolution from param file and use what's in frc.json.
+    int  strategy = 0;        // Detection strategy.  0=rotated rect (default), 1=SolvePnP
 
     // Chooser(s) from SmartDashboard
     frc::SendableChooser<int> viewing_mode_chooser;
@@ -183,12 +184,14 @@ namespace {
         int viewing_mode_flag = 0;
         int nobot_mode_flag = 0;
         int nores_flag = 0;
+        int set_strategy = -1;
         static struct option long_options[] =
             {
              /* These options set a flag. */
-             {"view",    no_argument, &viewing_mode_flag, 1},
-             {"nobot",   no_argument, &nobot_mode_flag, 1},
-             {"nores",   no_argument, &nores_flag, 1},
+             {"view",     no_argument,       &viewing_mode_flag, 1},
+             {"nobot",    no_argument,       &nobot_mode_flag, 1},
+             {"nores",    no_argument,       &nores_flag, 1},
+             {"strategy", required_argument, 0, 's'},
              {0, 0, 0, 0}
             };
 
@@ -197,7 +200,7 @@ namespace {
             /* getopt_long stores the option index here. */
             int option_index = 0;
 
-            int opt = getopt_long (argc, argv, "",
+            int opt = getopt_long (argc, argv, "s:",
                                    long_options, &option_index);
 
             /* Detect the end of the options. */
@@ -205,20 +208,36 @@ namespace {
                 break;
 
             switch (opt) {
+            case 0:
+                /* If this option set a flag, do nothing else now. */
+                if (long_options[option_index].flag != 0)
+                    break;
+                printf("option %s", long_options[option_index].name);
+                if (optarg)
+                    printf (" with arg %s", optarg);
+                printf ("\n");
+                break;
             case '?':
                 /* getopt_long already printed an error message. */
                 err = true;
+                break;
+            case 's':
+                if (!xero::string::hasOnlyDigits(optarg)) {
+                    err = true;
+                    break;
+                }
+                set_strategy = std::atoi(optarg);
                 break;
             }
 
         }
 
         if (err) {
-            std::cout << "Usage: " << argv[0] << " [--view] [--nobot] [--nores]\n";
+            std::cout << "Usage: " << argv[0] << " [--view] [--nobot] [--nores] [--strategy <n>]\n";
             return false;
         }
 
-        // Set options based on what was parser
+        // Set options based on what was parsed
         viewing_mode      = (viewing_mode_flag != 0);
         nobot_mode        = (nobot_mode_flag != 0);
         no_set_resolution = (nores_flag != 0);
@@ -231,6 +250,10 @@ namespace {
         }
         if (nores_flag) {
             std::cout << "Disabling overriding of resolution that's in frc.json\n" << std::flush;
+        }
+        if (set_strategy != -1) {
+            strategy = set_strategy;
+            std::cout << "Set strategy to " << strategy << "\n" << std::flush;
         }
               
         return true;
@@ -434,8 +457,8 @@ namespace {
         if (cam_no != -1 && !cam_mode.empty()) {     // Selection published by robot ==> don't use chooser
             //std::cout << "From robot: " << cam_no << "    " << cam_mode << "\n";
             new_selected_camera = (cam_no == 0)? 0 : 1;
-            new_viewing_mode = (cam_mode == "TargetTracking") ? false : true;
-        } else {
+            new_viewing_mode = (cam_mode != "TargetTracking");
+        } else if (nobot_mode) {
             // Chooser for viewing mode
             int chooser_val = viewing_mode_chooser.GetSelected();
             if (chooser_val != 0) {  // Not unspecified
@@ -452,13 +475,13 @@ namespace {
         }
         
         if (viewing_mode != new_viewing_mode) {
-            //std::cout << "Changing viewing mode to " << (new_viewing_mode ? 1 : 0) << "\n" << std::flush;
+            std::cout << "Changing viewing mode to " << (new_viewing_mode ? 1 : 0) << "\n" << std::flush;
             viewing_mode = new_viewing_mode;
             setViewingExposure(viewing_mode);
         }
         
         if (selected_camera != new_selected_camera) {
-            //std::cout << "Changing selected camera to " << new_selected_camera << "\n" << std::flush;
+            std::cout << "Changing selected camera to " << new_selected_camera << "\n" << std::flush;
             selected_camera = new_selected_camera;
             cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
             server.SetSource(cameras[selected_camera]);
@@ -889,7 +912,7 @@ namespace {
         }
         
         virtual void Process(cv::Mat& frame_in) {
-            // Confirm input binary image to a viewable object.
+            // Convert input binary image to a viewable object.
             // Further detection will be added to this image.
             if (stream_pipeline_output) {
                 cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
@@ -1040,6 +1063,13 @@ namespace {
                 return;
             }
 
+            // Optionally use solvePnP() to find pose.
+            // Note that rotated rect is approximation of actual shape so vertices may not be accurate.
+            // Explore other options to find vertices.  (approxPolyDP(), goodFeaturesToTrack())
+            if (strategy == 1) {
+                findPose(left_rect, right_rect);
+            }
+
             // Distance to target in inches
             // At 640x460 of C270 and 640x480 resolution, pixels_bet_centres * dist_to_target_in_FEET ~ 760
             // Product at 432x240 is 650.  So not proportional to width.
@@ -1115,13 +1145,194 @@ namespace {
 
     private:
 
+        void findPose(const RRect& left_rect, const RRect& right_rect) const;
+
         Contours contours;
         std::vector<cv::Vec4i> hierarchy;
 
     };
 
+
+    void XeroPipelineElementFindContours::findPose(const RRect& left_rect,
+                                                   const RRect& right_rect) const {
+        std::vector<cv::Point3f> object_points;
+        cv::Mat                  object_points_mat;
+
+        cv::Mat_<double> camera_matrix;
+        cv::Mat_<double> distortion_coeffs;
+        
+        object_points.push_back(cv::Point3f(-5.93, -2.91, 0));
+        object_points.push_back(cv::Point3f(-7.31,  2.41, 0));
+        object_points.push_back(cv::Point3f(-5.38,  2.91, 0));
+        object_points.push_back(cv::Point3f(-4   , -2.41, 0));
+        object_points.push_back(cv::Point3f( 4   , -2.41, 0));
+        object_points.push_back(cv::Point3f( 5.38,  2.91, 0));
+        object_points.push_back(cv::Point3f( 7.31,  2.41, 0));
+        object_points.push_back(cv::Point3f( 5.93, -2.91, 0));
+        object_points_mat = cv::Mat(object_points);
+
+        // To be initialized properly later after we add camera calibration.
+        // For now, just allow solvePnP() to run.
+        int focal_length = 1642;  // From example. Probably incorrect.
+        int center_x = width_pixels / 2;
+        int center_y = height_pixels / 2;
+
+        camera_matrix.create(3, 3);
+        camera_matrix = 0.;
+        camera_matrix(0, 0) = focal_length;
+        camera_matrix(1, 1) = focal_length;
+        camera_matrix(0, 2) = center_x;
+        camera_matrix(1, 2) = center_y;
+        camera_matrix(2, 2) = 1.f;        
+
+        distortion_coeffs.create(1, 4);
+        distortion_coeffs = 0.f;
+
+        distortion_coeffs(0, 0) = 0.09059;
+        distortion_coeffs(0, 1) = -0.16979;
+        distortion_coeffs(0, 2) = -0.00796;
+        distortion_coeffs(0, 3) = -0.00078;
+
+        std::vector<cv::Point2f> image_pts(8);
+        cv::Point2f rect_points[4];
+        left_rect.points(rect_points);
+        for (int i=0; i<4; ++i) {
+            image_pts[i] = rect_points[0];
+            for (int j=1; j<4; ++j) {
+                switch (i) {
+                case 0:
+                    if (rect_points[j].y < image_pts[i].y) {
+                        image_pts[i] = rect_points[j];
+                    }
+                    break;
+                case 1:
+                    if (rect_points[j].x < image_pts[i].x) {
+                        image_pts[i] = rect_points[j];
+                    }
+                    break;
+                case 2:
+                    if (rect_points[j].y > image_pts[i].y) {
+                        image_pts[i] = rect_points[j];
+                    }
+                    break;
+                case 3:
+                    if (rect_points[j].x > image_pts[i].x) {
+                        image_pts[i] = rect_points[j];
+                    }
+                    break;
+                }
+            }
+        }        
+        right_rect.points(rect_points);
+        for (int i=4; i<8; ++i) {
+            image_pts[i] = rect_points[0];
+            for (int j=1; j<4; ++j) {
+                switch (i) {
+                case 4:
+                    if (rect_points[j].x < image_pts[i].x) {
+                        image_pts[i] = rect_points[j];
+                    }
+                    break;
+                case 5:
+                    if (rect_points[j].y > image_pts[i].y) {
+                        image_pts[i] = rect_points[j];
+                    }
+                    break;
+                case 6:
+                    if (rect_points[j].x > image_pts[i].x) {
+                        image_pts[i] = rect_points[j];
+                    }
+                    break;
+                case 7:
+                    if (rect_points[j].y < image_pts[i].y) {
+                        image_pts[i] = rect_points[j];
+                    }
+                    break;
+                }
+            }
+        }        
+        
+        cv::Mat_<double> rvec(cv::Size(3, 1));;
+        cv::Mat_<double> tvec(cv::Size(3, 1));;
+        bool res = cv::solvePnP(object_points_mat, image_pts, camera_matrix, distortion_coeffs, rvec, tvec, cv::SOLVEPNP_ITERATIVE /*cv::SOLVEPNP_AP3P*/);
+
+        // Switch to perspective of camera relative to target
+        cv::Mat_<double> rvec2(cv::Size(3, 1));;
+        cv::Mat_<double> tvec2(cv::Size(3, 1));;
+        cv::Mat R;
+        cv::Rodrigues(rvec, R);
+        R = R.t();
+        tvec2 = -R*tvec;
+        cv::Rodrigues(R, rvec2);
+ 
+        double tx = tvec2.at<double>(0, 0);
+        double ty = tvec2.at<double>(1, 0);
+        double tz = tvec2.at<double>(2, 0);
+        double dist = std::sqrt(tx*tx + ty*ty + tz*tz);
+
+        std::cout << "solvePnP result = " << res << ",  tx/ty/tz/dist = " << tx << ", " << ty << ", " << tz << ", " << dist << "\n";
+    }
+
+
+    /*
+    // Pipeline element for: using solvePnP() for pose detection
+    class XeroPipelineElementSolvePnP : public XeroPipelineElement {
+        
+    public:
+        
+        XeroPipelineElementSolvePnP(std::string name);
+        
+        virtual void Process(cv::Mat& frame_in);
+        
+    private:
+        
+        std::vector<cv::Point3f> object_points;
+        cv::Mat                  object_points_mat;
+
+        cv::Mat_<double> camera_matrix;
+        cv::Mat_<double> distortion_coeffs;
+    };
+        
+        
+    XeroPipelineElementSolvePnP::XeroPipelineElementSolvePnP(std::string name) : XeroPipelineElement(name) {
+        object_points.push_back(cv::Point3f(-5.93, -2.91, 0));
+        object_points.push_back(cv::Point3f(-7.31,  2.41, 0));
+        object_points.push_back(cv::Point3f(-5.38,  2.91, 0));
+        object_points.push_back(cv::Point3f(-4   , -2.41, 0));
+        object_points.push_back(cv::Point3f( 4   , -2.41, 0));
+        object_points.push_back(cv::Point3f( 5.38,  2.91, 0));
+        object_points.push_back(cv::Point3f( 7.31,  2.41, 0));
+        object_points.push_back(cv::Point3f( 5.93, -2.91, 0));
+        object_points_mat = cv::Mat(object_points);
+
+        // To be initialized properly later after we add camera calibration.
+        // For now, just allow solvePnP() to run.
+        camera_matrix.create(3, 3);
+        camera_matrix = 0.;
+        camera_matrix(0, 0) = 1; //3844.4400000000001f;
+        camera_matrix(1, 1) = 1; //3841.0599999999999f;
+        camera_matrix(0, 2) = 1; //640.f;
+        camera_matrix(1, 2) = 1; //380.f;
+        camera_matrix(2, 2) = 1.f;
+
+        distortion_coeffs.create(1, 4);
+        distortion_coeffs = 0.f;
+    }
     
-    // Example pipeline
+    void XeroPipelineElementSolvePnP::Process(cv::Mat& frame_in) {
+        // Convert input binary image to a viewable object.
+        // Further detection will be added to this image.
+        if (stream_pipeline_output) {
+            cv::cvtColor(frame_in, frame_out_, cv::COLOR_GRAY2BGR);
+        }
+
+        cv::Mat_<double> rvec(cv::Size(3, 1));;
+        cv::Mat_<double> tvec(cv::Size(3, 1));;
+        cv::solvePnP(object_points_mat, frame_in, camera_matrix, distortion_coeffs, rvec, tvec, cv::SOLVEPNP_ITERATIVE);
+    }
+    */
+    
+    // Pipeline that combines all pipeline elements and is called on every frame
     class XeroPipeline : public frc::VisionPipeline {
     public:
         const int frames_to_sample_per_report = 20;
@@ -1131,6 +1342,20 @@ namespace {
         XeroPipeline() {
             pipe_elements_.push_back(new XeroPipelineElementHsvThreshold("HSV Threshold"));
             pipe_elements_.push_back(new XeroPipelineElementFindContours("Find Contours"));
+
+#if 0
+            switch (strategy) {
+            case 0:
+                pipe_elements_.push_back(new XeroPipelineElementFindContours("Find Contours"));
+                break;
+            case 1:
+                pipe_elements_.push_back(new XeroPipelineElementSolvePnP("solvePnP"));
+                break;
+            default:
+                std::cout << "Invalid strategy\n";
+                exit(-1);
+            }
+#endif
         }
 
         virtual ~XeroPipeline();
@@ -1347,6 +1572,13 @@ int main(int argc, char* argv[]) {
     }
     width_pixels = params.getValue("vision:camera:width_pixels");
     height_pixels = params.getValue("vision:camera:height_pixels");
+
+    // For solvePnP, temporarily set high resolution and ignore param file
+    if (strategy == 1) {
+        width_pixels = 960;
+        height_pixels = 720;
+        std::cout << "Setting resolution to " << width_pixels << "x" << height_pixels << " to support detection strategy\n";
+    }
 
     // Start network table in client or server mode + configure it
     // nt_server_mode may have been configured via command-line args already. Envar overrides it.
