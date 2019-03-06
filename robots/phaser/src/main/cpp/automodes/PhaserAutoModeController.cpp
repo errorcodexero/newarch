@@ -33,11 +33,11 @@ namespace xero {
                 break ;
 
             case 2:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, false) ;                
+                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true, false) ;                
                 break ;
 
             case 3:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true, false) ;                 
+                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, false) ;                 
                 break ;
 
             case 4:
