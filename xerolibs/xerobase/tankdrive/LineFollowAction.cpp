@@ -46,6 +46,11 @@ namespace xero {
             if (!is_done_) {
                 double traveled = distances_.front() - distances_.back() ;
                 if (distances_.size() == 4 && std::fabs(traveled) < 0.1) {
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
+                    logger << "LineFollowAction:" ;
+                    logger << " subsystem " << ls_subsystem_.getName() ;  
+                    logger << " - action terminates because robot is not moving" ;
+                    logger.endMessage() ;                  
                     is_done_ = true ;
                 } else {
                     bool is_detected = ls_subsystem_.detectedObject() ;                
@@ -65,6 +70,7 @@ namespace xero {
                         
                         logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
                         logger << "LineFollowAction:" ;
+                        logger << " subsystem " << ls_subsystem_.getName() ;
                         logger << " sensor_values " << ls_subsystem_.getSensorsState() ;
                         logger << " guidance_angle " << guidance_angle ;
                         logger << " left " << left_m ;
@@ -81,6 +87,8 @@ namespace xero {
                         rb.addPlotData(plotid_, index_, 2, left_m) ;
                         rb.addPlotData(plotid_, index_, 3, right_m) ;
                         rb.addPlotData(plotid_, index_, 4, getTankDrive().getDist() - start_distance_) ;
+
+                        index_++ ;
 
                         if (is_done_)
                             rb.endPlot(plotid_) ;

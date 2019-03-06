@@ -26,10 +26,8 @@ namespace xero {
         /// \brief Cancel the action
         /// This method calls the cancel method on each of the parallel actions to be executes
         void ParallelAction::cancel() {
-            std::cout << "ParallelAction: cancel" << std::endl ;
             for(auto act : action_list_) {
                 if (!act->isDone()) {
-                    std::cout << "ParallelAction: cancel child " << act->toString() << std::endl ;
                     act->cancel() ;
                 }
             }

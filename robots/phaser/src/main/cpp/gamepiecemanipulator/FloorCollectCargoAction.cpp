@@ -130,14 +130,10 @@ namespace xero {
                     cargo_holder->setAction(stop_cargo_holder_motor_) ;
 
                     state_ = State::StopAllMotors ;
-
-                    std::cout << "Got cargo in holder" << std::endl ;
                 }
                 else if (cargo_intake->hasCargo()) {
                     cargo_intake->setAction(retract_cargo_intake_) ;
                     state_ = State::WaitForCargo2 ;
-
-                    std::cout << "Got cargo in intake" << std::endl; 
                 }
                 break ;
         

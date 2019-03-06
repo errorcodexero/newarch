@@ -1,8 +1,11 @@
 #include <TurnTableModel.h>
 #include <frc/RobotSimBase.h>
 #include <xeromath.h>
+#include <MessageLogger.h>
 #include <cmath>
+
 using namespace frc ;
+using namespace xero::misc ;
 
 namespace xero {
     namespace sim {
@@ -26,6 +29,25 @@ namespace xero {
         }
 
         TurnTableModel::~TurnTableModel() {
+        }
+
+        bool TurnTableModel::processEvent(const std::string &name, int value) {
+            bool ret = false ;
+            if (name == "verify") {
+                ret = true ;
+                double angle = static_cast<double>(value) / 100.0 ;
+                double err = std::fabs(angle - getAngle()) ;
+                if (err > 2.0) {
+                    MessageLogger &logger = getRobotMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::error) ;
+                    logger << "VerifyError: turntable" ;
+                    logger << " expected " << angle ;
+                    logger << " actual " << getAngle() ;
+                    logger.endMessage() ;
+                }
+            }
+
+            return ret ;
         }
 
         void TurnTableModel::generateDisplayInformation(std::list<std::string> &lines) {
@@ -63,8 +85,18 @@ namespace xero {
             //
             // Note, this only works for the phaser turntable
             //
-            double ddeg = power_ * degrees_per_sec_per_volt_ * dt ;
+            double speed = power_ * degrees_per_sec_per_volt_;
+            double ddeg = speed * dt ;
             angle_ = xero::math::normalizeAngleDegrees(angle_ + ddeg) ;
+
+#ifdef NOTYET
+            std::cout << "Turntable:" ;
+            std::cout << " power " << power_ ;
+            std::cout << " speed " << speed ;
+            std::cout << " delta " << ddeg ;
+            std::cout << " angle " << angle_ ;
+            std::cout << std::endl ;
+#endif
 
             double encangle = angle_ ;
             if (angle_ < max_limit_boundary_)
@@ -72,7 +104,7 @@ namespace xero {
 
             encoder_value_ = static_cast<int>(encangle / degrees_per_tick_) ;
             if (enc_ != nullptr)
-                enc_->SimulatorSetValue(encoder_value_) ;
+                enc_->SimulatorSetValue(-encoder_value_) ;
 
             min_limit_ = false ;
             max_limit_ = false ;

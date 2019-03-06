@@ -24,12 +24,16 @@ namespace xero {
             HatchIntakeModel::~HatchIntakeModel() {
             }
 
-            void HatchIntakeModel::processEvent(const std::string &event, int value) {
+            bool HatchIntakeModel::processEvent(const std::string &event, int value) {
+                bool ret = false ;
                 if (event == "hatch") {
+                    ret = true ;
                     has_hatch_ = (value ? true : false) ;
                     if (hatch_sensor_ != nullptr)
                         hatch_sensor_->SimulatorSetValue(has_hatch_) ;
                 }
+
+                return ret ;
             }            
 
             void HatchIntakeModel::generateDisplayInformation(std::list<std::string> &lines) {

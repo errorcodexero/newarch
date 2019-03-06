@@ -16,7 +16,7 @@ namespace xero {
             friend class TurntablePowerAction ;
         
         public:
-             Turntable(xero::base::Robot &robot, xero::base::Lifter &lifter, uint64_t id) ;
+             Turntable(xero::base::Robot &robot, xero::base::Lifter &lifter, uint64_t id, uint64_t verboseid) ;
              virtual ~Turntable() ;
 
              virtual bool canAcceptAction(xero::base::ActionPtr action) ;
@@ -97,6 +97,7 @@ namespace xero {
             double last_angle_;
 
             uint64_t msg_id_ ;
+            uint64_t msg_verbose_id_ ;
 
             xero::base::Lifter &lifter_ ;
         };

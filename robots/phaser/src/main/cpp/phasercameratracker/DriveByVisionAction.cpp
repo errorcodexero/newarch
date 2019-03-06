@@ -123,7 +123,6 @@ namespace xero {
         /// \brief Cancel the action
         void DriveByVisionAction::cancel() { 
             state_ = State::Done ;
-            std::cout << "DriveByVision canceled" << std::endl ;
         }
 
         /// \brief Return true if the action is complete

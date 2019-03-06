@@ -135,7 +135,10 @@ namespace frc
                 }   
 
                 RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
-                sim.readEvents(m_args[index++]) ;                             
+                if (!sim.readEvents(m_args[index++])) {
+                    std::cerr << "--events provide file name is not valid" << std::endl ;
+                    exit(1) ;
+                }
             }
             else if (m_args[index] == "--start")
             {

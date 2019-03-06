@@ -9,6 +9,7 @@
 #include "Timer.h"
 #include "AHRS.h"
 #include "Relay.h"
+#include <MessageLogger.h>
 #include <mutex>
 #include <map>
 #include <vector>
@@ -57,7 +58,7 @@ namespace xero {
             virtual void addDevice(frc::Relay *relay) {                
             }
 
-            virtual void processEvent(const std::string &name, int value) {                
+            virtual bool processEvent(const std::string &name, int value) {                
             }
 
             std::mutex &getLockMutex() ;
@@ -69,6 +70,8 @@ namespace xero {
             RobotSimBase &getSimulator() {
                 return simbase_ ;
             }
+
+            xero::misc::MessageLogger &getRobotMessageLogger()  ;
 
             virtual void generateDisplayInformation(std::list<std::string> &lines) ;
 

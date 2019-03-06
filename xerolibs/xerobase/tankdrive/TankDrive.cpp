@@ -213,8 +213,8 @@ namespace xero {
 
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE_VERBOSE);
-            logger << "time " << getRobot().getTime() ;
-            logger << ", linear dist " << getDist() ;
+            logger << "TankDrive: " ;
+            logger << " linear dist " << getDist() ;
             logger << ", velocity " << getVelocity() ;
             logger << ", accel " << getAcceleration() ;
             logger << ", angle dist " << getAngle() ;

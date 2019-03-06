@@ -98,6 +98,7 @@ namespace xero {
             double left_ ;
             double right_ ; 
             double tolerance_ ;
+            double zerolevel_ ;
 
             ActionPtr nudge_forward_ ;
             ActionPtr nudge_backward_ ;

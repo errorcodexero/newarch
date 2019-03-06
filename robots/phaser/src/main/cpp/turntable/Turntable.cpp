@@ -12,10 +12,11 @@ using namespace xero::misc ;
 
 namespace xero{
     namespace phaser{
-        Turntable::Turntable(Robot &robot, Lifter &lifter, uint64_t id) : Subsystem(robot, "turntable"), lifter_(lifter) {
+        Turntable::Turntable(Robot &robot, Lifter &lifter, uint64_t id, uint64_t verboseid) : Subsystem(robot, "turntable"), lifter_(lifter) {
 
             SettingsParser &parser = robot.getSettingsParser() ;
             msg_id_ = id ;
+            msg_verbose_id_ = verboseid ;
             
             getMotors(robot) ;
             assert(motors_.size() > 0) ;
@@ -130,7 +131,7 @@ namespace xero{
             }
 
             auto &logger = getRobot().getMessageLogger() ;
-            logger.startMessage(MessageLogger::MessageType::debug, msg_id_) ;
+            logger.startMessage(MessageLogger::MessageType::debug, msg_verbose_id_) ;
             logger << "Turntable:" ;
             logger << " ticks " << encoder_value_ ;
             logger << " calibrated " << is_calibrated_ ;

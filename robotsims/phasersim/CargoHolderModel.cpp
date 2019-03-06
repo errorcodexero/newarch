@@ -21,12 +21,16 @@ namespace xero {
             CargoHolderModel::~CargoHolderModel() {
             }
 
-            void CargoHolderModel::processEvent(const std::string &name, int value) {
+            bool CargoHolderModel::processEvent(const std::string &name, int value) {
+                bool ret = false ;
                 if (name == "cargo") {
+                    ret = true ;
                     has_cargo_ = (value ? true : false) ;
                     if (cargo_sensor_ != nullptr)
                         cargo_sensor_->SimulatorSetValue(has_cargo_) ;
                 }
+
+                return ret ;
             }
 
             void CargoHolderModel::generateDisplayInformation(std::list<std::string> &lines) {

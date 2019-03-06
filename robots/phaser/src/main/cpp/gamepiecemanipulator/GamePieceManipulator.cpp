@@ -31,7 +31,7 @@ namespace xero {
             lifter_ = std::make_shared<Lifter>(robot, MSG_GROUP_PHASER_LIFTER) ;
             addChild(lifter_) ;
 
-            turntable_ = std::make_shared<Turntable>(robot, *lifter_, MSG_GROUP_PHASER_TURNTABLE) ;
+            turntable_ = std::make_shared<Turntable>(robot, *lifter_, MSG_GROUP_PHASER_TURNTABLE, MSG_GROUP_PHASER_TURNTABLE_VERBOSE) ;
             addChild(turntable_) ;
         }
 

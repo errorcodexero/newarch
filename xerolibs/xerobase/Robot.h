@@ -148,7 +148,11 @@ namespace xero {
             /// \brief return the current controller
             std::shared_ptr<ControllerBase> getCurrentController() {
                 return controller_ ;
-            }            
+            }
+
+            void switchToTeleop() {
+                switch_to_teleop_ = true ;
+            }
 
         protected:
 
@@ -296,6 +300,9 @@ namespace xero {
 
             // The total number of columns for plot data
             int columns_ ;        
+
+            // If true, switch from automode to teleop
+            bool switch_to_teleop_ ;
         } ;
     }
 }

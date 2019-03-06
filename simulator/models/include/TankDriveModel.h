@@ -18,6 +18,8 @@ namespace xero
             TankDriveModel(RobotSimBase &);
             virtual ~TankDriveModel();
 
+            virtual bool processEvent(const std::string &name, int value) ;             
+
             virtual void run(double dt);
             virtual void inputChanged(SimulatedObject *obj);
             virtual std::string toString()  ;

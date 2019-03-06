@@ -2,6 +2,8 @@
 #include <frc/RobotSimBase.h>
 #include <cctype>
 
+using namespace xero::misc ;
+
 namespace xero {
     namespace sim {
         SubsystemModel::SubsystemModel(RobotSimBase &simbase, const std::string &name) : simbase_(simbase) {
@@ -18,6 +20,10 @@ namespace xero {
         std::mutex &SubsystemModel::getLockMutex() {
             RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
             return sim.getLockMutex() ;            
+        }
+
+        MessageLogger &SubsystemModel::getRobotMessageLogger() {
+            return simbase_.getRobotMessageLogger() ;
         }
     }
 }

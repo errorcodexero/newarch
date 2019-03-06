@@ -22,6 +22,9 @@ public:
 
     double GetYaw();
     void ZeroYaw();
+    double GetAngle() {
+        return 0.0 ;
+    }
 
     void SimulatorSetYaw(double yaw) {
         yaw_ = yaw ;

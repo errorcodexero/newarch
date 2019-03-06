@@ -53,6 +53,8 @@ namespace xero {
             sender_ = nullptr ;
 
             message_logger_.setTimeFunction(getTimeFunc) ;
+
+            switch_to_teleop_ = false ;
         }
 #pragma GCC diagnostic pop
 
@@ -440,6 +442,7 @@ namespace xero {
         }
 
         void Robot::Autonomous() {
+            LoopType type = LoopType::Autonomous ;
             //
             // Just in case something like the field data changes as we enter
             // the autonomous state
@@ -449,10 +452,19 @@ namespace xero {
 
             controller_ = auto_controller_ ;
 
-            robot_subsystem_->init(LoopType::Autonomous) ;
+            robot_subsystem_->init(type) ;
 
-            while (IsAutonomous() && IsEnabled())
-                robotLoop(LoopType::Autonomous);
+            while (IsAutonomous() && IsEnabled()) {
+                robotLoop(type);
+                if (switch_to_teleop_) {
+                    controller_ = createTeleopController() ;
+                    if (controller_ == nullptr)
+                        controller_ = std::make_shared<TeleopController>(*this) ;
+                    type = LoopType::OperatorControl ;
+                    robot_subsystem_->init(type) ;
+                    switch_to_teleop_ = false ;
+                }
+            }
 
             controller_ = nullptr ;
 

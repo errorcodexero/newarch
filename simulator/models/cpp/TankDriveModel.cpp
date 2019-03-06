@@ -52,6 +52,24 @@ namespace xero {
         TankDriveModel::~TankDriveModel() {
         }
 
+        bool TankDriveModel::processEvent(const std::string &name, int value) {
+            bool ret = false ;
+            if (name == "xpos") {
+                double pos = static_cast<double>(value) / 100.0 ;
+                xpos_ = pos ;
+                last_xpos_ = pos ;
+                ret = true ;
+            }
+            else if (name == "ypos") {
+                double pos = static_cast<double>(value) / 100.0 ;
+                xpos_ = pos ;
+                last_xpos_ = pos ;
+                ret = true ;
+            }            
+
+            return ret ;
+        }                
+
         void TankDriveModel::generateDisplayInformation(std::list<std::string> &lines) {
             lines.push_back("  X: " + std::to_string(getXPos())) ;
             lines.push_back("  Y: " + std::to_string(getYPos())) ;
@@ -145,10 +163,15 @@ namespace xero {
         }
 
         void TankDriveModel::run(double dt) {
+            double average = (left_volts_ + right_volts_) / 2.0 ;
+
+            if (std::fabs(left_volts_) > 0.05 || std::fabs(right_volts_) > 0.05)
+                average += 1.0 ;
+
             //
             // Calculate the new desired revolutions per second (RPS)
             //
-            double desired_left_rps = -left_volts_ * left_rps_per_volt_per_time_ ;
+            double desired_left_rps = left_volts_ * left_rps_per_volt_per_time_ ;
             double desired_right_rps = right_volts_ * right_rps_per_volt_per_time_ ;
 
             //

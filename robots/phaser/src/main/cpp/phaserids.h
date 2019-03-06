@@ -27,3 +27,5 @@
 #define MSG_GROUP_PHASER_OI                         (1ull << 39)
 
 #define MSG_GROUP_VISION_TERMINATOR                 (1ull << 40)
+
+#define MSG_GROUP_PHASER_TURNTABLE_VERBOSE          (1ull << 41)

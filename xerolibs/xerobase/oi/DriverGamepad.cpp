@@ -75,6 +75,7 @@ namespace xero {
             turn_default_duty_cycle_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:turn:default") ;
             turn_max_duty_cycle_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:turn:max") ;            
             slow_factor_= getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:slowby") ;
+            zerolevel_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:zerolevel") ;
 
             tolerance_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:tolerance") ;
 
@@ -187,11 +188,9 @@ namespace xero {
 
             if (ds.GetStickButton(getIndex(), ButtonNumber::LB)) {
                 high_gear_ = false ;
-                std::cout << "LowGear" << std::endl ;
             }
             else if (ds.GetStickButton(getIndex(), ButtonNumber::RB)) {
                 high_gear_ = true ;
-                std::cout << "HighGear" << std::endl ;
             }
 
             double ly = ds.GetStickAxis(getIndex(),AxisNumber::LEFTY) ;
@@ -201,7 +200,6 @@ namespace xero {
                 seq.pushSubActionPair(db_, nudge_clockwise_, false) ;
             }
             else if (pov == POVAngle::UP) {
-                std::cout << "Nudge forward" << std::endl ;
                 seq.pushSubActionPair(db_, nudge_forward_, false) ;
             }
             else if (pov == POVAngle::DOWN) {
@@ -211,21 +209,27 @@ namespace xero {
                 seq.pushSubActionPair(db_, nudge_counter_clockwise_, false) ;
             }
             else {
-                bool slow = ds.GetStickButton(getIndex(),ButtonNumber::LB) ;
-                double boost = ds.GetStickAxis(getIndex(),AxisNumber::LTRIGGER) ;
-
-                double power = scalePower(-ly, boost, slow) ;
-                double spin = (std::fabs(rx) > 0.01) ? scaleTurn(rx, boost, slow) : 0.0 ;
-
                 double left, right ;
 
-                if (reverse_) {
-                    left = power - spin ;
-                    right = power + spin ;
+                if (std::fabs(ly) < zerolevel_ && std::fabs(rx) < zerolevel_) {
+                    left = 0.0 ;
+                    right = 0.0 ;
                 }
                 else {
-                    left = power + spin ;
-                    right = power - spin ;
+                    bool slow = ds.GetStickButton(getIndex(),ButtonNumber::LB) ;
+                    double boost = ds.GetStickAxis(getIndex(),AxisNumber::LTRIGGER) ;
+
+                    double power = scalePower(-ly, boost, slow) ;
+                    double spin = (std::fabs(rx) > 0.01) ? scaleTurn(rx, boost, slow) : 0.0 ;
+
+                    if (reverse_) {
+                        left = power - spin ;
+                        right = power + spin ;
+                    }
+                    else {
+                        left = power + spin ;
+                        right = power - spin ;
+                    }
                 }
                 
                 if (std::fabs(left - left_) > tolerance_ || std::fabs(right - right_) > tolerance_) {

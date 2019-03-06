@@ -4,7 +4,8 @@ AUTOMODES = \
 	src/main/cpp/automodes/PhaserAutoModeController.cpp\
 	src/main/cpp/automodes/PhaserAutoModeBase.cpp\
 	src/main/cpp/automodes/StraightCharAutoMode.cpp\
-	src/main/cpp/automodes/CenterHabTwoHatch.cpp
+	src/main/cpp/automodes/CenterHabTwoHatch.cpp\
+	src/main/cpp/automodes/HabCargoMode.cpp
 
 SOURCES = \
 	src/main/cpp/main.cpp\

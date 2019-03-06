@@ -49,11 +49,6 @@ namespace xero {
                     driver_->init(db) ;
                     inited_ = true ;
                 }
-                else {
-                    std::cout << "We got a null db" << std::endl ;
-                    if (sub != nullptr)
-                        std::cout << "But it was a " << sub->getName() << std::endl ;
-                }
             }
             for(auto dev: hiddevices_)
                 dev->computeState() ;

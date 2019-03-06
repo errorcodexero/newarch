@@ -26,7 +26,6 @@ namespace xero {
         class TankDrive : public DriveBase {
             /// \brief class for tank drive actions
             friend class TankDriveAction;      
-        
 
         public:
             /// \brief Create a new tank drive object
@@ -142,12 +141,6 @@ namespace xero {
 
             double getTotalAngle() const {
                 return total_angle_ ;
-            }
-
-            void resetNavX() {
-                if (navx_ != nullptr) {
-                    navx_->Reset() ;
-                }
             }
 
             /// \brief Invert the output of the left motors

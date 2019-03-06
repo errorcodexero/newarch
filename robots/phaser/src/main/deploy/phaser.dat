@@ -57,8 +57,7 @@ hw:hatchintake:solenoid                                         3               
 
 hw:lifter:encoder1                                              8               # Digital IO
 hw:lifter:encoder2                                              9               # Digital IO
-hw:lifter:motor:1                                               10               # TalonSRX
-hw:lifter:motor:2                                               11               # TalonSRX
+hw:lifter:motor:1                                               11              # TalonSRX
 hw:lifter:reversemotors                                         true            
 
 hw:turntable:encoder1                                           4               # Digital IO
@@ -77,7 +76,7 @@ hw:driverstation:hid:driver                                     0               
 hw:driverstation:hid:oi                                         2               # HID Device Index
 
 hw:cargoholder:sensor                                           20              # Digital IO
-hw:cargoholder:motor                                            7               # Victor SPX
+hw:cargoholder:motor                                            10              # Victor SPX
 
 hw:cargointake:motor                                            9               # Victor SPX
 hw:cargointake:solenoid                                         1               # Solenoid
@@ -143,10 +142,11 @@ driver:power:default                                            0.6
 driver:turn:max                                                 0.8
 driver:turn:default                                             0.4
 driver:power:slowby                                             0.5
-driver:power:tolerance                                          0.2
+driver:power:tolerance                                          0.05
 driver:power:nudge_straight                                     0.2
 driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
+driver:zerolevel                                                0.1
 
 if COMPETITION
 driver:spin:reverse                                             false

@@ -1,9 +1,9 @@
 TOPDIR=../..
 
 SOURCES = \
-
 	ActionSequence.cpp\
 	AutoMode.cpp\
+	AutoController.cpp\
 	ControllerBase.cpp\
 	DelayAction.cpp\
 	TerminateAction.cpp\
@@ -19,7 +19,7 @@ SOURCES = \
 	oi/DriverGamepadRumbleAction.cpp\
 	oi/OIDevice.cpp\
 	oi/OIOutputAction.cpp\
-	oi/OISubsystem.cpp\	
+	oi/OISubsystem.cpp\
 	MessageListener/MessageListener.cpp\
 	tankdrive/TankDrive.cpp\
 	tankdrive/TankDriveDistanceAction.cpp\
@@ -36,7 +36,7 @@ SOURCES = \
 	lifter/Lifter.cpp\
 	lifter/LifterCalibrateAction.cpp\
 	lifter/LifterGoToHeightAction.cpp\
-	lifter/LifterPowerAction.cpp\	
+	lifter/LifterPowerAction.cpp\
 	singlemotorsubsystem/SingleMotorPowerAction.cpp\
 	singlemotorsubsystem/SingleMotorSubsystem.cpp\
 	lightsensor/LightSensorSubsystem.cpp\

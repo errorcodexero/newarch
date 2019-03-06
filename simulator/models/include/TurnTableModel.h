@@ -22,6 +22,8 @@ namespace xero  {
             /// \param dt the time difference since the last code loop
             virtual void run(double dt);
 
+            virtual bool processEvent(const std::string &name, int value) ;
+
             /// \brief Update the state of the model.  Called when one of its inputs changes.
             /// \param obj the input object which changed state
             virtual void inputChanged(SimulatedObject *obj);

@@ -16,12 +16,14 @@ namespace xero {
             OIModel::~OIModel() {               
             }
 
-            void OIModel::processEvent(const std::string &event, int value) {
+            bool OIModel::processEvent(const std::string &event, int value) {
+                bool ret = false ;
                 SettingsParser &settings =  getSimulator().getSettingsParser() ;
                 std::string name = "oi:button:" + event ;
                 if (settings.isDefined(name)) {
                     int button = settings.getInteger(name) ;
                     setButton(2, button, (value ? true : false)) ;
+                    ret = true ;
                 }
                 else {
                     name = "oi:axis:" + event ;
@@ -29,8 +31,11 @@ namespace xero {
                         int axis = settings.getInteger(name) ;
                         double v = static_cast<double>(value) / 100.0 ;
                         setAxis(2, axis, v) ;
+                        ret = true ;
                     }                        
                 }
+
+                return ret ;
             }
 
             std::string OIModel::toString() {

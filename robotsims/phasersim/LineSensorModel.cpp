@@ -31,27 +31,29 @@ namespace xero {
             LineSensorModel::~LineSensorModel() {
             }
 
-            void LineSensorModel::processEvent(const std::string &event, int value) {
+            bool LineSensorModel::processEvent(const std::string &event, int value) {
+                bool ret = false ;
                 if (event == "values") {
+                    ret = true ;
                     if ((value & 1) != 0) {
-                        i0state_ = true ;
+                        i0state_ = false ;
                     }
                     else {
-                        i0state_ = false ;
+                        i0state_ = true ;
                     }
 
                     if ((value & 2) != 0) {
-                        i1state_ = true ;
+                        i1state_ = false ;
                     }
                     else {
-                        i1state_ = false ;
+                        i1state_ = true ;
                     }
 
                     if ((value & 4) != 0) {
-                        i2state_ = true ;
+                        i2state_ = false ;
                     }
                     else {
-                        i2state_ = false ;
+                        i2state_ = true ;
                     }
 
                     if (i0_ != nullptr)
@@ -63,6 +65,8 @@ namespace xero {
                     if (i2_ != nullptr)
                         i2_->SimulatorSetValue(i2state_) ;
                 }
+
+                return ret ;
             }
 
             void LineSensorModel::generateDisplayInformation(std::list<std::string> &lines) {
@@ -93,15 +97,15 @@ namespace xero {
             void LineSensorModel::addDevice(DigitalInput *input) {
                 if (input->GetChannel() == i0num_) {
                     i0_ = input ;
-                    input->SimulatorSetValue(false) ;
+                    input->SimulatorSetValue(true) ;
                 }
                 else if (input->GetChannel() == i1num_) {
                     i1_ = input ;
-                    input->SimulatorSetValue(false) ;                    
+                    input->SimulatorSetValue(true) ;                    
                 }
                 else if (input->GetChannel() == i2num_) {
                     i2_ = input ;
-                    input->SimulatorSetValue(false) ;                    
+                    input->SimulatorSetValue(true) ;                    
                 }
             }
         }
