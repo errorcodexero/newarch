@@ -26,8 +26,26 @@ namespace xero {
             extend_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM, "hatchholder:specialflow:delay") ;
             retract_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatchholder:default:delay") ;
 
-            safe_height_ = subsystem.getRobot().getSettingsParser().getDouble("lifter:height:safe_turn")  ;
+            safe_height_ = subsystem.getRobot().getSettingsParser().getDouble("lifter:height:safe_turn")  ;            
         }
+
+        ReadyAction::ReadyAction(GamePieceManipulator &subsystem, double height, const std::string &angle):GamePieceAction(subsystem) {
+        
+            auto lifter = getGamePiece().getLifter() ;
+            auto turntable = getGamePiece().getTurntable();
+            auto hatch_holder = getGamePiece().getHatchHolder() ;
+
+            height_ = height ;
+            angle_ = angle ;
+
+            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
+            set_lifter_final_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
+            set_turntable_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, angle) ;
+            extend_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM, "hatchholder:specialflow:delay") ;
+            retract_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatchholder:default:delay") ;
+
+            safe_height_ = subsystem.getRobot().getSettingsParser().getDouble("lifter:height:safe_turn")  ;            
+        }        
 
         ReadyAction::~ReadyAction(){
         }

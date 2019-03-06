@@ -55,6 +55,7 @@ namespace xero {
             mode_ = OperationMode::Invalid ;     
 
             has_hatch_state_ = false ;
+            
         }
 
         PhaserOIDevice::~PhaserOIDevice() {
@@ -239,6 +240,8 @@ namespace xero {
             auto hatch_holder = game->getHatchHolder() ;
             auto climber = ph.getPhaserRobotSubsystem()->getClimber() ;
 
+            safe_height_ = getSubsystem().getRobot().getSettingsParser().getDouble("lifter:height:safe_turn") ;
+
             finish_collect_hatch_ = std::make_shared<CompleteLSHatchCollect>(*game) ;
             finish_collect_cargo_ = std::make_shared<CompleteLSCargoCollect>(*game) ;
             finish_place_hatch_  = std::make_shared<ScoreHatch>(*game) ;
@@ -357,6 +360,8 @@ namespace xero {
             GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;     
             ActionPtr act, finish ;
             std::string height, angle ;     
+            double heightnum ;
+            bool heightnumset = false ; ;
 
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
@@ -397,8 +402,13 @@ namespace xero {
                     // The robot is holding cargo, the action will be to place the cargo
                     // at the requested height
                     //
-                    height = "lifter:height:cargo:place:" ;
-                    height += dirToString() + ":1" ;
+                    if (game->getLifter()->getHeight() >= safe_height_) {
+                        heightnum = game->getLifter()->getHeight() ;
+                        heightnumset = true ;
+                    } else {
+                        height = "lifter:height:cargo:place:" ;
+                        height += dirToString() + ":1" ;
+                    }
                     angle = "turntable:angle:cargo:place:" ;
                     angle += dirToString() ;                      
                 }
@@ -437,8 +447,11 @@ namespace xero {
             log.endMessage() ;
 
             SettingsParser &parser = getSubsystem().getRobot().getSettingsParser() ;
-            if (parser.isDefined(height) && parser.isDefined(angle)) {
-                act = std::make_shared<ReadyAction>(*game, height, angle) ;
+            if ((heightnumset || parser.isDefined(height)) && parser.isDefined(angle)) {
+                if (heightnumset)
+                    act = std::make_shared<ReadyAction>(*game, heightnum, angle) ;
+                else
+                    act = std::make_shared<ReadyAction>(*game, height, angle) ;                
                 seq.pushSubActionPair(game, act, false) ;
             }
             else {

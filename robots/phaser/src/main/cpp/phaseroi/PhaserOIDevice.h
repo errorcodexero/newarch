@@ -126,6 +126,8 @@ namespace xero {
 
             xero::base::ActionPtr deploy_climber_ ;
             xero::base::ActionPtr climb_action_ ; 
+            
+            double safe_height_ ;
         } ;
     }
 }
