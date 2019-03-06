@@ -179,9 +179,9 @@ if COMPETITION
 turntable:degrees_per_tick                                      0.546283784
 endif
 
-turntable:maxa                                                  270
-turntable:maxd                                                  -270
-turntable:maxv                                                  270
+turntable:maxa                                                  180
+turntable:maxd                                                  -180
+turntable:maxv                                                  180
 
 turntable:base                                                  0.0
 turntable:threshold                                             1.0
@@ -211,22 +211,22 @@ turntable:angle:cargo:place:south                               -90
 turntable:angle:cargo:place:east                                0
 turntable:angle:cargo:place:west                                180
 
-turntable:angle:hatch:collect:north                             0                #TODO
-turntable:angle:hatch:collect:south                             180                #TODO
-turntable:angle:hatch:collect:east                              -90                #TODO
-turntable:angle:hatch:collect:west                              90                #TODO
+turntable:angle:hatch:collect:north                             0                
+turntable:angle:hatch:collect:south                             180                
+turntable:angle:hatch:collect:east                              -90                
+turntable:angle:hatch:collect:west                              90                
  
-turntable:angle:hatch:place:north                               0                #TODO
-turntable:angle:hatch:place:south                               180                #TODO
-turntable:angle:hatch:place:east                                -90                #TODO
-turntable:angle:hatch:place:west                                90                #TODO
+turntable:angle:hatch:place:north                               0                
+turntable:angle:hatch:place:south                               180                
+turntable:angle:hatch:place:east                                -90                
+turntable:angle:hatch:place:west                                90                
 
 #
 # Variables for the lifter
 #
 lifter:base							                            8.75
 if PRACTICE
-lifter:inches_per_tick                                          0.177951389                # old number 0.05925
+lifter:inches_per_tick                                          0.058691309
 endif
 if COMPETITION
 lifter:inches_per_tick                                          0.059099901
@@ -247,7 +247,7 @@ lifter:follower:down:ka                                         0.0
 lifter:follower:down:kv                                         0.017
 lifter:follower:down:kd                                         0.0
 
-lifter:hold:p                                                   -0.1                
+lifter:hold:p                                                   -0.15              
 lifter:hold:i                                                   0.0                 
 lifter:hold:d                                                   0.0                 
 lifter:hold:f                                                   0.0                 
@@ -292,18 +292,18 @@ lifter:height:cargo:collect:south                             37
 lifter:height:cargo:collect:east                              37
 lifter:height:cargo:collect:west                              37
 
-lifter:height:cargo:place:north:1                             19.5
-lifter:height:cargo:place:south:1                             19.5
-lifter:height:cargo:place:east:1                              19.5
-lifter:height:cargo:place:west:1                              19.5
-lifter:height:cargo:place:north:2                             47.5
-lifter:height:cargo:place:south:2                             47.5
-lifter:height:cargo:place:east:2                              47.5
-lifter:height:cargo:place:west:2                              47.5
-lifter:height:cargo:place:north:3                             75.5
-lifter:height:cargo:place:south:3                             75.5
-lifter:height:cargo:place:east:3                              75.5
-lifter:height:cargo:place:west:3                              75.5
+lifter:height:cargo:place:north:1                             22.5
+lifter:height:cargo:place:south:1                             22.5
+lifter:height:cargo:place:east:1                              22.5
+lifter:height:cargo:place:west:1                              22.5
+lifter:height:cargo:place:north:2                             50.5
+lifter:height:cargo:place:south:2                             50.5
+lifter:height:cargo:place:east:2                              50.5
+lifter:height:cargo:place:west:2                              50.5
+lifter:height:cargo:place:north:3                             79.5
+lifter:height:cargo:place:south:3                             79.5
+lifter:height:cargo:place:east:3                              79.5
+lifter:height:cargo:place:west:3                              79.5
 lifter:height:cargo:place:north:c                             38
 lifter:height:cargo:place:south:c                             38
 lifter:height:cargo:place:east:c                              38
@@ -402,6 +402,6 @@ oi:collect_floor                                                5               
 oi:go                                                           10                  # Button
 oi:turtle                                                       6                   # Button
 oi:climb                                                        8                   # Button
-oi:extra_button                                                 7                   # Button
+oi:calibrate                                                    7                   # Button
 oi:automode                                                     6                   # Axis
 oi:tracking_viewing_nothing_switch                              3                   # Axis

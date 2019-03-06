@@ -21,3 +21,7 @@ Wednesday (unbag)
 4. Run/Tune autmode							                        6:30 - 7:45
 5. Climb								                            7:45 - 8:00
 6. Driver practice							                        8:00 - 9:00
+
+BUGS
+----
+Cargo automode does not work from back of robot

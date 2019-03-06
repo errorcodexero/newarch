@@ -39,6 +39,7 @@ namespace xero {
             controller_ = std::make_shared<frc::XboxController>(index) ;
             reverse_ = false ;
             high_gear_ = true ;
+            rumbling_ = false ;
 
             auto &parser = oi.getRobot().getSettingsParser() ;
             if (parser.isDefined("driver:spin:reverse")) {
@@ -186,9 +187,11 @@ namespace xero {
 
             if (ds.GetStickButton(getIndex(), ButtonNumber::LB)) {
                 high_gear_ = false ;
+                std::cout << "LowGear" << std::endl ;
             }
             else if (ds.GetStickButton(getIndex(), ButtonNumber::RB)) {
                 high_gear_ = true ;
+                std::cout << "HighGear" << std::endl ;
             }
 
             double ly = ds.GetStickAxis(getIndex(),AxisNumber::LEFTY) ;

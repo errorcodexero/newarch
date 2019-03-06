@@ -28,6 +28,10 @@ namespace xero {
                 return height_ ;
             }
 
+            void setHeight(double h) {
+                height_ = h ;
+            }
+
             double getVelocity() const {
                 return speed_ ;
             }

@@ -2,6 +2,7 @@
 #include "LifterAction.h"
 #include <Robot.h>
 #include <MessageLogger.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -173,6 +174,8 @@ namespace xero {
             logger << " speed " << speed_ ;
             logger << " power " << power_ ;
             logger.endMessage() ;
+
+            frc::SmartDashboard::PutNumber("Lift", height_) ;              
 
         }
 

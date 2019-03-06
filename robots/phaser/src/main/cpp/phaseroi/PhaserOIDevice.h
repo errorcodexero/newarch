@@ -106,7 +106,7 @@ namespace xero {
             size_t climb_lock_switch_ ;
             size_t climb_ ;
 
-            size_t extra_button_ ; 
+            size_t calibrate_ ; 
 
             Direction dir_ ;
             ActionHeight height_ ;

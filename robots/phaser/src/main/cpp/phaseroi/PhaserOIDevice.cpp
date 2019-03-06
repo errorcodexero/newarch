@@ -5,7 +5,6 @@
 #include <cameratracker/CameraChangeAction.h>
 #include <ActionSequence.h>
 #include <ParallelAction.h>
-
 #include "gamepiecemanipulator/GamePieceAction.h"
 #include "gamepiecemanipulator/FloorCollectCargoAction.h"
 #include "gamepiecemanipulator/FloorCollectHatchAction.h"
@@ -222,8 +221,8 @@ namespace xero {
             button= settings.getInteger("oi:climb") ;
             climb_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
-            button= settings.getInteger("oi:extra_button") ;
-            extra_button_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            button= settings.getInteger("oi:calibrate") ;
+            calibrate_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
         }
 
         //
