@@ -1,20 +1,23 @@
-
 Tuesday
 -------
 1. Setup full field							                        5:00 - 5:15
-2. Change turntable speed to 180, check turntable angle error		5:15 - 5:30
-3. Run cargo cycles (tune heights)					                5:30 - 6:00
+2. Debug turntable accumulated error                        		5:15 - 5:30
+3. Run cargo cycles (tune operations)				                5:30 - 6:00
 4. Calibration mode                                                 6:00 - 6:15
-5. Debug vision during teleop mode                                  6:15 - 7:00
-6. Calibrate vision for cargo                                       7:00 - 7:15
-7. Automode: Reverify first segment (path + vision + line + place)	7:15 - 7:45
-8. Automode: Tune second segment (path + vision + line + collect)	7:45 - 8:15
-9. Driver practice							                        8:15 - 9:00 (or later)
+5. Automodes                                                        6:15 - 8:00
+   - Verify first leg of center auto mode
+   - Verify second leg of center auto mode
+   - Add option to skip second leg
+   - Simple automode for left or right start
+5. Debug vision during teleop mode                                  8:00 - 8:30
+6. Calibrate vision for cargo                                       8:30 - 8:45
+9. Driver practice							                        8:45 - 10:00
 
 Wednesday (unbag)
 --------- 
-1. Run straight characterization mode (get Kv)				        6:00 - 6:15
-2. Run rotational characterization mode (get Weffective)		    6:15 - 6:30
-3. Run/Tune autmode							                        6:30 - 7:45
-4. Climb								                            7:45 - 8:00
-5. Driver practice							                        8:00 - 9:00
+1. Prepart for unbag                                                5:30 - 6:00
+2. Run straight characterization modes (kv, kp, weff, etc.)         6:00 - 6:30
+3. Run rotational characterization mode (get Weffective)		    6:15 - 6:30
+4. Run/Tune autmode							                        6:30 - 7:45
+5. Climb								                            7:45 - 8:00
+6. Driver practice							                        8:00 - 9:00

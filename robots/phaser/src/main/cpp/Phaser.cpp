@@ -81,13 +81,14 @@ namespace xero {
         
         void Phaser::loadPaths() {
             auto paths = getPathManager() ;
-            paths->loadPath("Straight") ;
-            paths->loadPath("CurveLeft") ;
-            paths->loadPath("CurveRight") ;
+            paths->loadPath("CargoFrontLeftLSLeft") ;     
+            paths->loadPath("CargoFrontRightLSRight") ;            
             paths->loadPath("CenterHab2CargoFrontLeft") ;
             paths->loadPath("CenterHab2CargoFrontRight") ;  
-            paths->loadPath("CargoFrontLeftLSLeft") ;          
-            paths->loadPath("Curve") ;
+            paths->loadPath("LSLeftCargoFrontRight") ;
+            paths->loadPath("LSRightCargoFrontLeft") ;
+            paths->loadPath("LeftHABLeftCargo") ;
+            paths->loadPath("RightHABRightCargo") ;
         }
         
         void Phaser::RobotHardwareInit() {

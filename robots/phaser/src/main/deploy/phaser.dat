@@ -147,17 +147,21 @@ driver:power:tolerance                                          0.2
 driver:power:nudge_straight                                     0.2
 driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
+
 if COMPETITION
 driver:spin:reverse                                             false
 endif
+
 if PRACTICE
 driver:spin:reverse                                             true
 endif
+
 #
 # Setup the data plotter
 #
+if PRACTICE
 plotter:port                                                    5555
-
+endif
 
 #
 # Variables for the turntable
@@ -166,9 +170,11 @@ turntable:safe_lifter_height                                    22
 turntable:keepout:minimum                                       130
 turntable:keepout:maximum                                       160
 turntable:keepout:dangerzone                                    15
+
 if PRACTICE
 turntable:degrees_per_tick                                      0.585472973
 endif
+
 if COMPETITION
 turntable:degrees_per_tick                                      0.546283784
 endif
@@ -194,8 +200,6 @@ turntable:hold:imax                                             0.0
 
 turntable:angle:cargo:floor_collect                             -90.0
 turntable:angle:hatch:floor_collect                             0.0
-turntable:angle:score:hatch                                     90.0                #TODO
-turntable:angle:score:cargo                                     90.0                #TODO
 
 turntable:angle:cargo:collect:north                             90
 turntable:angle:cargo:collect:south                             -90

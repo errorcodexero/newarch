@@ -173,7 +173,7 @@ namespace xero {
 
         void TankDriveFollowPathAction::cancel()  {
             index_ = path_->size() ;
-            std::cout << "TankDriveFollowPath canceled" << std::endl ;
+            getTankDrive().getRobot().endPlot(plotid_) ;            
         }
 
         std::string TankDriveFollowPathAction::toString() {

@@ -5,7 +5,7 @@
 #include "cargoholder/CargoHolder.h"
 #include "hatchintake/HatchIntake.h"
 #include "cargointake/CargoIntake.h"
-#include "turntable/TurnTable.h"
+#include "turntable/Turntable.h"
 #include <lifter/Lifter.h>
 #include <Subsystem.h>
 
