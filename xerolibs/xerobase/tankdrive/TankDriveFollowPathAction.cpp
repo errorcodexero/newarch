@@ -124,15 +124,15 @@ namespace xero {
                 setMotorsToPercents(lout + turn, rout - turn) ;
 
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
-                logger << "," << td.getRobot().getTime() - start_time_ ;
-                logger << "," << lout ;
-                logger << "," << ldist ;
+                logger << td.getRobot().getTime() - start_time_ ;
                 logger << "," << lpos ;
-                logger << "," << lvel ;               
-                logger << "," << rout ;
-                logger << "," << rdist ;
+                logger << "," << ldist ;
+                logger << "," << lvel ;                
+                logger << "," << lout ;
                 logger << "," << rpos ;
-                logger << "," << rvel ;
+                logger << "," << rdist ;
+                logger << "," << rvel ;                
+                logger << "," << rout ;
                 logger << "," << angerr ;
                 logger << "," << turn ;
                 logger.endMessage() ;

@@ -30,10 +30,11 @@
 #
 # Start up conditions
 #
-0.1,oi,automode,-100                                    # Automode switch set to zero
+0.1,oi,automode,-60                                      # Automode switch set to zero
 
-0.1,tankdrive,xpos,6500
-0.1,tankdrive,ypos,16300
+0.1,tankdrive,xpos,6500                                 # Start center hab platform
+0.1,tankdrive,ypos,16300                                # Start center hab platform
+0.1,tankdrive,angle,0                                   # Start center hab platform    
 
 #
 # Put cargo in the cargo holder

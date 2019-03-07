@@ -9,11 +9,11 @@ using namespace xero::misc;
 namespace xero {
 namespace base {
 
-    
-const char *TankDriveDistanceAction::kvname_ = "tankdrive:follower:kv" ;
-const char *TankDriveDistanceAction::kaname_ = "tankdrive:follower:ka" ;
-const char *TankDriveDistanceAction::kpname_ = "tankdrive:follower:kp" ;
-const char *TankDriveDistanceAction::kdname_ = "tankdrive:follower:kd" ; 
+
+const char *TankDriveDistanceAction::kvname_ = "tankdrive:follower:left:kv" ;
+const char *TankDriveDistanceAction::kaname_ = "tankdrive:follower:left:ka" ;
+const char *TankDriveDistanceAction::kpname_ = "tankdrive:follower:left:kp" ;
+const char *TankDriveDistanceAction::kdname_ = "tankdrive:follower:left:kd" ; 
 
 TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, double target_distance) : TankDriveAction(tank_drive) {
     target_distance_ = target_distance; 

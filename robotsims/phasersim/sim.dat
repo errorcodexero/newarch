@@ -67,10 +67,10 @@ hw:climber:deploy                    2                                  # Soleno
 #
 # These are the real world characteristics of the drivebase
 #
-tankdrive:high:maxvelocity                              144             # in / sec
-tankdrive:high:maxacceleration                          72              # in / sec / sec
+tankdrive:high:maxvelocity                              160             # in / sec
+tankdrive:high:maxacceleration                          80              # in / sec / sec
 tankdrive:low:maxvelocity                               36              # in / sec
-tankdrive:low:maxacceleration                           27              # in / sec
+tankdrive:low:maxacceleration                           18              # in / sec
 
 #
 # The maximum random error applied to the left and right
@@ -84,24 +84,24 @@ tankdrive:sim:error_per_side                            0.0
 # The number of ticks per revolution of the wheel for the 
 # encoders
 #
-tankdrive:sim:ticks_per_rev                             200
+tankdrive:sim:ticks_per_rev                             2570
 
 #
 # The diameter of the robot wheel
 #
-tankdrive:sim:diameter                                  5.0
+tankdrive:sim:diameter                                  8.5
 
 #
 # The percent of the angle that is applied to the robot based on the
 # distance the wheels travel vs an ideal case were the wheels are
 # frictionless
 #
-tankdrive:sim:scrub                                     1.0
+tankdrive:sim:scrub                                     0.95177665
 
 #
 # The width of the drivebase for the robot
 #
-tankdrive:sim:width                                     24.0
+tankdrive:sim:width                                     22.5
 
 
 ######################################################################################

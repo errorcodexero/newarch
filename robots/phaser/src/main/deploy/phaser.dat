@@ -94,40 +94,36 @@ hw:climber:solenoid                                             2               
 #
 # Variables for the tankdrive subsystem code.
 #
-
 tankdrive:inches_per_tick                                       0.010385891
 tankdrive:width                                                 22
-tankdrive:scrub                                                 0.9
+tankdrive:scrub                                                 0.95177665
 
-tankdrive:follower:left:ka                                      0.00
 if PRACTICE
-tankdrive:follower:left:kv                                      0.005882353         # 0.006112469
-tankdrive:follower:left:kp                                      0.02032             # Recommended 0.02032 - 0.03048
-endif
-if COMPETITION
+tankdrive:follower:left:ka                                      0.00
 tankdrive:follower:left:kv                                      0.005882353
 tankdrive:follower:left:kp                                      0.02032             # Recommended 0.02032 - 0.03048
-endif
 tankdrive:follower:left:kd                                      0.0
 
 tankdrive:follower:right:ka                                     0.00
-if PRACTICE
 tankdrive:follower:right:kv                                     0.005882353         # 0.006112469
 tankdrive:follower:right:kp                                     0.02032             # Recommended 0.02032 - 0.03048
-endif
-if COMPETITION
-tankdrive:follower:right:kv                                     0.005882353
-tankdrive:follower:right:kp                                     0.02032             # Recommended 0.02032 - 0.03048
-endif
 tankdrive:follower:right:kd                                     0.0
+endif
 
-tankdrive:follower:ka                                           0.0
-tankdrive:follower:kv                                           0.00637
-tankdrive:follower:kp                                           0.005
-tankdrive:follower:kd                                           0.0
+if COMPETITION
+tankdrive:follower:left:ka                                      0.00
+tankdrive:follower:left:kv                                      0.006112469
+tankdrive:follower:left:kp                                      0.02032             # Recommended 0.02032 - 0.03048
+tankdrive:follower:left:kd                                      0.0
+
+tankdrive:follower:right:ka                                     0.00
+tankdrive:follower:right:kv                                     0.006112469
+tankdrive:follower:right:kp                                     0.02032             # Recommended 0.02032 - 0.03048
+tankdrive:follower:right:kd                                     0.0
+endif
 
 tankdrive:follower:turn_correction                              0
-tankdrive:follower:angle_error                                  -0.015
+tankdrive:follower:angle_error                                  -0.01
 
 tankdrive:distance_action:maxa                                  36.0
 tankdrive:distance_action:maxd                                  -36.0

@@ -64,9 +64,6 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_PHASER_OI) ;  
             // logger.enableSubsystem(MSG_GROUP_PARSER) ;                  
                
-            logger.enableSubsystem(MSG_GROUP_ACTIONS); 
-            logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);                
-            logger.enableSubsystem(MSG_GROUP_PHASER_OI) ;     
             logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
 
             //

@@ -1,6 +1,7 @@
 #include "ActionSequence.h"
 #include "basegroups.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <cassert>
 
 using namespace xero::misc ;
 
@@ -30,6 +31,7 @@ void ActionSequence::startNextAction()
     index_++;
     if (static_cast<size_t>(index_) < actionSequence_.size())
     {
+        assert(group_ != 0) ;
         logger_.startMessage(MessageLogger::MessageType::debug, group_) ;
         logger_ << "Actions: starting " << index_ << " of " << actionSequence_.size() - 1 ;
         logger_ << " '" << actionSequence_[index_]->toString() << "'" ;

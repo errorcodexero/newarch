@@ -89,15 +89,6 @@ namespace xero {
             double ddeg = speed * dt ;
             angle_ = xero::math::normalizeAngleDegrees(angle_ + ddeg) ;
 
-#ifdef NOTYET
-            std::cout << "Turntable:" ;
-            std::cout << " power " << power_ ;
-            std::cout << " speed " << speed ;
-            std::cout << " delta " << ddeg ;
-            std::cout << " angle " << angle_ ;
-            std::cout << std::endl ;
-#endif
-
             double encangle = angle_ ;
             if (angle_ < max_limit_boundary_)
                 encangle += 360.0 ;

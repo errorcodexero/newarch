@@ -1,6 +1,7 @@
 #include <TankDriveModel.h>
 #include <frc/RobotSimBase.h>
 #include <xeromath.h>
+#include <MessageLogger.h>
 #include <algorithm>
 #include <cmath>
 #include <random>
@@ -14,16 +15,12 @@ using namespace ctre::phoenix::motorcontrol::can ;
 namespace xero {
     namespace sim {
         TankDriveModel::TankDriveModel(RobotSimBase &simbase) : SubsystemModel(simbase, "tankdrive") {
-            inited_ = false ;
-
             left_ = 0.0;
             right_ = 0.0;
             angle_ = 0.0;
             navx_offset_ = 0.0 ;
-            left_volts_ = 0.0;
-            right_volts_ = 0.0;
-            time_interval_ = 100000.0;
-            last_output_ = 0.0;            
+            left_power_ = 0.0;
+            right_power_ = 0.0;
             xpos_ = 0.0 ;
             ypos_ = 0.0 ;
             last_xpos_ = 0.0 ;
@@ -45,8 +42,8 @@ namespace xero {
             right_enc_ = nullptr ;
             navx_ = nullptr ;
 
-            left_volts_ = 0.0 ;
-            right_volts_ = 0.0 ;
+            left_power_ = 0.0 ;
+            right_power_ = 0.0 ;
         }
 
         TankDriveModel::~TankDriveModel() {
@@ -62,10 +59,15 @@ namespace xero {
             }
             else if (name == "ypos") {
                 double pos = static_cast<double>(value) / 100.0 ;
-                xpos_ = pos ;
-                last_xpos_ = pos ;
+                ypos_ = pos ;
+                last_ypos_ = pos ;
                 ret = true ;
             }            
+            else if (name == "angle") {
+                double pos = static_cast<double>(value) / 100.0 ;
+                angle_ = pos ;
+                ret = true ;                
+            }
 
             return ret ;
         }                
@@ -87,8 +89,8 @@ namespace xero {
 
             double circum = diameter_ * PI ;
 
-            high_rps_per_volt_per_time_ = maxhighvel / circum ;
-            low_rps_per_volt_per_time_ = maxlowvel / circum ;
+            high_rps_per_power_per_time_ = maxhighvel / circum ;
+            low_rps_per_power_per_time_ = maxlowvel / circum ;
             high_max_change_ = maxhighaccel / circum ;
             low_max_change_ = maxlowaccel / circum ;
         }
@@ -97,13 +99,13 @@ namespace xero {
             if (left_right_error_ > 1e-6) {
                 std::uniform_real_distribution<double> unif(0.95, 1.05) ;
                 std::default_random_engine re ;
-                right_rps_per_volt_per_time_ = low_rps_per_volt_per_time_ * unif(re) ;
-                left_rps_per_volt_per_time_ = low_rps_per_volt_per_time_ * unif(re) ;
+                right_rps_per_power_per_time_ = low_rps_per_power_per_time_ * unif(re) ;
+                left_rps_per_power_per_time_ = low_rps_per_power_per_time_ * unif(re) ;
                 current_max_change_ = low_max_change_ ;                
             }
             else {
-                right_rps_per_volt_per_time_ = low_rps_per_volt_per_time_  ;
-                left_rps_per_volt_per_time_ = low_rps_per_volt_per_time_ ;
+                right_rps_per_power_per_time_ = low_rps_per_power_per_time_  ;
+                left_rps_per_power_per_time_ = low_rps_per_power_per_time_ ;
                 current_max_change_ = low_max_change_ ;
             }
 
@@ -114,13 +116,13 @@ namespace xero {
             if (left_right_error_ > 1e-6) {
                 std::uniform_real_distribution<double> unif(0.95, 1.05) ;
                 std::default_random_engine re ;
-                right_rps_per_volt_per_time_ = high_rps_per_volt_per_time_ * unif(re) ;
-                left_rps_per_volt_per_time_ = high_rps_per_volt_per_time_ * unif(re) ;
+                right_rps_per_power_per_time_ = high_rps_per_power_per_time_ * unif(re) ;
+                left_rps_per_power_per_time_ = high_rps_per_power_per_time_ * unif(re) ;
                 current_max_change_ = high_max_change_ ;                
             }
             else {
-                right_rps_per_volt_per_time_ = high_rps_per_volt_per_time_  ;
-                left_rps_per_volt_per_time_ = high_rps_per_volt_per_time_ ;
+                right_rps_per_power_per_time_ = high_rps_per_power_per_time_  ;
+                left_rps_per_power_per_time_ = high_rps_per_power_per_time_ ;
                 current_max_change_ = high_max_change_ ;                  
             }
 
@@ -130,8 +132,8 @@ namespace xero {
         std::string TankDriveModel::toString() {
             std::string result("TankDrive: ") ;
 
-            result += "leftv " + std::to_string(left_volts_) ;
-            result += ", rightv " + std::to_string(right_volts_) ;
+            result += "leftv " + std::to_string(left_power_) ;
+            result += ", rightv " + std::to_string(right_power_) ;
             result += ", left " + std::to_string(left_) ;
             result += ", right " + std::to_string(right_) ;
             result += ", angle " + std::to_string(angle_) ;
@@ -163,16 +165,16 @@ namespace xero {
         }
 
         void TankDriveModel::run(double dt) {
-            double average = (left_volts_ + right_volts_) / 2.0 ;
+            double average = (left_power_ + right_power_) / 2.0 ;
 
-            if (std::fabs(left_volts_) > 0.05 || std::fabs(right_volts_) > 0.05)
+            if (std::fabs(left_power_) > 0.05 || std::fabs(right_power_) > 0.05)
                 average += 1.0 ;
 
             //
             // Calculate the new desired revolutions per second (RPS)
             //
-            double desired_left_rps = left_volts_ * left_rps_per_volt_per_time_ ;
-            double desired_right_rps = right_volts_ * right_rps_per_volt_per_time_ ;
+            double desired_left_rps = left_power_ * left_rps_per_power_per_time_ ;
+            double desired_right_rps = right_power_ * right_rps_per_power_per_time_ ;
 
             //
             // Now, see how much our RPS can actually changes
@@ -219,6 +221,16 @@ namespace xero {
                 double deg = normalizeAngleDegrees(rad2deg(angle_ + navx_offset_)) ;
                 navx_->SimulatorSetYaw(deg) ;
             }
+
+#ifdef NOTYET
+            MessageLogger &logger = getRobotMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::info) ;
+            logger << "TankDriveModel:" ;
+            logger << " x " << xpos_ ;
+            logger << " y " << ypos_ ;
+            logger << " angle " << angle_ ;
+            logger.endMessage() ;
+#endif
         }
 
         void TankDriveModel::inputChanged(SimulatedObject *obj) {
@@ -228,12 +240,12 @@ namespace xero {
             if (talon != nullptr) {
                 auto itl = std::find(std::begin(left_motors_), std::end(left_motors_), talon) ;
                 if (itl != std::end(left_motors_)) {
-                    left_volts_ = talon->Get() ;
+                    left_power_ = talon->Get() ;
                 }
 
                 auto itr = std::find(std::begin(right_motors_), std::end(right_motors_), talon) ;
                 if (itr != std::end(right_motors_)) {
-                    right_volts_ = talon->Get() ;
+                    right_power_ = talon->Get() ;
                 }
             }
             else if (obj == left_enc_) {
