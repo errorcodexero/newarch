@@ -47,26 +47,22 @@ namespace xero {
 
             auto &logger = getTankDrive().getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
-            logger << "time" ;
-            logger << ",runtime" ;
+            logger << "runtime" ;
             logger << ",ltpos" ;
             logger << ",lapos" ;
             logger << ",ltvel" ;
-            logger << ",lavel";
-            logger << ",ltaccel" ;
             logger << ",lout" ;
-            logger << ",lticks" ;
+            logger << "," ;
             logger << ",rtpos" ;
             logger << ",rapos" ;
             logger << ",rtvel" ;
-            logger << ",ravel" ;
-            logger << ",rtaccel" ;
             logger << ",rout" ;
-            logger << ",rticks" ;
+            logger << "," ;
+            logger << ",thead" ;
+            logger << ",ahead" ;
             logger << ",angerr" ;
             logger << ",turn" ;
             logger.endMessage() ;
-
             plotid_ = getTankDrive().getRobot().startPlot(toString(), plot_columns_) ;
         }
 
@@ -120,8 +116,10 @@ namespace xero {
 
                 double angerr = xero::math::normalizeAngleDegrees(thead - ahead) ;
                 double turn = angle_error_ * angerr ;
+                lout += turn ;
+                rout -= turn ;
 
-                setMotorsToPercents(lout + turn, rout - turn) ;
+                setMotorsToPercents(lout, rout) ;
 
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << td.getRobot().getTime() - start_time_ ;
@@ -129,10 +127,14 @@ namespace xero {
                 logger << "," << ldist ;
                 logger << "," << lvel ;                
                 logger << "," << lout ;
+                logger << "," ;
                 logger << "," << rpos ;
                 logger << "," << rdist ;
                 logger << "," << rvel ;                
                 logger << "," << rout ;
+                logger << "," ;
+                logger << "," << thead ;
+                logger << "," << ahead ;
                 logger << "," << angerr ;
                 logger << "," << turn ;
                 logger.endMessage() ;
@@ -159,12 +161,9 @@ namespace xero {
                 rb.addPlotData(plotid_, index_, 13, thead) ;
                 rb.addPlotData(plotid_, index_, 14, ahead) ;
             }
-            else {
-                if (index_ == path_->size())
-                    rb.endPlot(plotid_) ;
-            }
-
-            index_++ ;            
+            index_++ ;     
+            if (index_ == path_->size())
+                rb.endPlot(plotid_) ;                   
         }
 
         bool TankDriveFollowPathAction::isDone() {

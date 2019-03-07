@@ -30,7 +30,7 @@ namespace xero {
             if (!is_done_) {
                 action_->run() ;
                 is_done_ = action_->isDone() ;
-
+                
                 if (robot_.getTime() - start_ > delay_) {
                     bool termstate = false ;
                     for(auto term : terminators_) {

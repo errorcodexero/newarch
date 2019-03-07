@@ -105,7 +105,7 @@ namespace xero {
             }
             else {
                 right_rps_per_power_per_time_ = low_rps_per_power_per_time_  ;
-                left_rps_per_power_per_time_ = low_rps_per_power_per_time_ ;
+                left_rps_per_power_per_time_ = -low_rps_per_power_per_time_ ;
                 current_max_change_ = low_max_change_ ;
             }
 
@@ -122,7 +122,7 @@ namespace xero {
             }
             else {
                 right_rps_per_power_per_time_ = high_rps_per_power_per_time_  ;
-                left_rps_per_power_per_time_ = high_rps_per_power_per_time_ ;
+                left_rps_per_power_per_time_ = -high_rps_per_power_per_time_ ;
                 current_max_change_ = high_max_change_ ;                  
             }
 
@@ -167,7 +167,7 @@ namespace xero {
         void TankDriveModel::run(double dt) {
             double average = (left_power_ + right_power_) / 2.0 ;
 
-            if (std::fabs(left_power_) > 0.05 || std::fabs(right_power_) > 0.05)
+            if (std::fabs(left_power_) > 0.0005 || std::fabs(right_power_) > 0.0005)
                 average += 1.0 ;
 
             //
@@ -209,10 +209,10 @@ namespace xero {
             last_ypos_ = ypos_ ;
 
             left_enc_value_ = static_cast<int32_t>(lrevs * ticks_per_rev_) ;
-            right_enc_value_ = -static_cast<int32_t>(rrevs * ticks_per_rev_) ;
+            right_enc_value_ = static_cast<int32_t>(rrevs * ticks_per_rev_) ;
 
             if (left_enc_ != nullptr)
-                left_enc_->SimulatorSetValue(-left_enc_value_) ;
+                left_enc_->SimulatorSetValue(left_enc_value_) ;
 
             if (right_enc_ != nullptr)
                 right_enc_->SimulatorSetValue(right_enc_value_) ;
@@ -222,15 +222,15 @@ namespace xero {
                 navx_->SimulatorSetYaw(deg) ;
             }
 
-#ifdef NOTYET
             MessageLogger &logger = getRobotMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::info) ;
             logger << "TankDriveModel:" ;
             logger << " x " << xpos_ ;
             logger << " y " << ypos_ ;
             logger << " angle " << angle_ ;
+            logger << " ldist " << left_ ;
+            logger << " rdist " << right_ ;
             logger.endMessage() ;
-#endif
         }
 
         void TankDriveModel::inputChanged(SimulatedObject *obj) {

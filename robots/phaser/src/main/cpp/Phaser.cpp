@@ -65,7 +65,8 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_PARSER) ;                  
                
             logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
-
+            logger.enableSubsystem(MSG_GROUP_ACTIONS);
+            
             //
             // This should stay on.  It will have no effect on the real robot
             // but will show information about injected events in the simulation
@@ -82,8 +83,6 @@ namespace xero {
             paths->loadPath("CenterHab2CargoFrontRight") ;  
             paths->loadPath("LSLeftCargoFrontRight") ;
             paths->loadPath("LSRightCargoFrontLeft") ;
-            paths->loadPath("LeftHABLeftCargo") ;
-            paths->loadPath("RightHABRightCargo") ;
         }
         
         void Phaser::RobotHardwareInit() {
