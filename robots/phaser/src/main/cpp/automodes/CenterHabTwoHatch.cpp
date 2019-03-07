@@ -31,7 +31,7 @@ namespace xero {
             const char *height = "lifter:height:hatch:place:north:1" ;
             std::string path ;
 
-            if (!left)
+            if (left)
                 path = "CenterHab2CargoFrontLeft" ;
             else            
                 path = "CenterHab2CargoFrontRight" ;
@@ -47,7 +47,7 @@ namespace xero {
                 angle = "turntable:angle:hatch:collect:south" ;
                 height = "lifter:height:hatch:collect:south" ;
 
-                if (!left)
+                if (left)
                     path = "CargoFrontLeftLSLeft" ;
                 else
                     path = "CargoFrontRightLSRight" ;
@@ -62,7 +62,7 @@ namespace xero {
                 const char *height = "lifter:height:hatch:place:north:1" ;
                 std::string path ;
 
-                if (!left)
+                if (left)
                     path = "LSLeftCargoFrontRight" ;
                 else
                     path = "LSRightCargoFrontLeft" ;
