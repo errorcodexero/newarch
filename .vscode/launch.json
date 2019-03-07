@@ -30,7 +30,8 @@
           "--start", "0",
           "--auto","30.0",
           "--oper", "0.0",
-          "--events","robots/phaser/sims/automode_2.sti"
+          "--events","robots/phaser/sims/automode_2.sti",
+          "--simscreen"
         ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

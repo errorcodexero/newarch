@@ -31,7 +31,6 @@ namespace xero {
                 break ;
 
             case 1:
-                //mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false) ;            
                 break ;
 
             case 2:
@@ -39,7 +38,6 @@ namespace xero {
                 break ;
 
             case 3:
-                //mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, false) ;                 
                 break ;
 
             case 4:
@@ -49,12 +47,10 @@ namespace xero {
                 break ;
 
             case 6:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "CargoFrontLeftLSLeft", true)  ;          
                 break ;
 
             case 7:
                 break ;
-
 
             case 8:
                 mode = std::make_shared<StraightCharAutoMode>(getRobot(), 0.5, 3.0) ;                 

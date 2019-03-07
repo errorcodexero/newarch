@@ -194,7 +194,7 @@ namespace xero {
             left_ += dleft;
             right_ += dright;
 
-            double dv = (dleft - dright) / 2 * scrub_;
+            double dv = (dright - dleft) / 2 * scrub_;
 
             double lrevs = left_ / (PI * diameter_);
             double rrevs = right_ / (PI * diameter_) ;
@@ -212,7 +212,7 @@ namespace xero {
             right_enc_value_ = static_cast<int32_t>(rrevs * ticks_per_rev_) ;
 
             if (left_enc_ != nullptr)
-                left_enc_->SimulatorSetValue(left_enc_value_) ;
+                left_enc_->SimulatorSetValue(-left_enc_value_) ;
 
             if (right_enc_ != nullptr)
                 right_enc_->SimulatorSetValue(right_enc_value_) ;
@@ -222,6 +222,7 @@ namespace xero {
                 navx_->SimulatorSetYaw(deg) ;
             }
 
+#ifdef NOTYET
             MessageLogger &logger = getRobotMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::info) ;
             logger << "TankDriveModel:" ;
@@ -230,7 +231,8 @@ namespace xero {
             logger << " angle " << angle_ ;
             logger << " ldist " << left_ ;
             logger << " rdist " << right_ ;
-            logger.endMessage() ;
+            logger.endMessage()  ;
+#endif
         }
 
         void TankDriveModel::inputChanged(SimulatedObject *obj) {

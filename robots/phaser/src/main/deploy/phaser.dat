@@ -167,9 +167,9 @@ endif
 #
 # Setup the data plotter
 #
-#if PRACTICE
+if PRACTICE
 plotter:port                                                    5555
-#endif
+endif
 
 #
 # Variables for the turntable

@@ -82,7 +82,6 @@ std::string ActionSequence::toString()
     result += " [" ;
     for(size_t i = 0 ; i < actionSequence_.size() ; i++) {
         auto ptr = actionSequence_[i] ;
-        std::cout << ptr->toString() << std::endl ;
         if (i != 0)
             result += "," ;
         result += actionSequence_[i]->toString() ;

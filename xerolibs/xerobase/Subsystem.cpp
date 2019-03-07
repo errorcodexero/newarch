@@ -26,7 +26,7 @@ namespace xero {
                 action_->run() ;
                 if (pending_ != nullptr && action_->isDone()) {
                     MessageLogger &logger = getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
                     logger << "Actions: subsystem '" << getName() << "' pending action '" << pending_->toString() ;
                     logger << "' was started" ;
                     logger.endMessage() ;
@@ -57,7 +57,7 @@ namespace xero {
             //
             if (action != nullptr && !canAcceptAction(action)) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
-                logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
                 logger << "Actions: subsystem '" << getName() << "' rejected action '" << action->toString() << "'" ;
                 logger.endMessage() ;
                 return false ;
@@ -84,7 +84,7 @@ namespace xero {
                 if (force) {
 
                     MessageLogger &logger = getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
                     logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString() << "' was aborted" ;
                     logger.endMessage() ;                    
 
@@ -117,7 +117,7 @@ namespace xero {
                         pending_ = action ;
 
                         MessageLogger &logger = getRobot().getMessageLogger() ;
-                        logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS_VERBOSE) ;
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
                         logger << "Actions: subsystem '" << getName() << "' action '" << action->toString() << "' was pended" ;
                         logger.endMessage() ;                    
                     }
