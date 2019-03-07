@@ -1,10 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 // C++ lib
 #include <cstdio>
 #include <string>
@@ -445,8 +438,8 @@ namespace {
         ntinst.Flush();
     }
 
-    void processCameraParamChanges(std::vector<cs::VideoSource>& cameras) {
-        bool new_viewing_mode = false;
+    void processCameraParamChanges(std::vector<cs::VideoSource>& cameras, bool force_update_even_if_no_change = false) {
+        bool new_viewing_mode = true;
         int  new_selected_camera = 0;
         
         // If data published by robot, use it and ignore SendableChooser so
@@ -458,30 +451,35 @@ namespace {
             //std::cout << "From robot: " << cam_no << "    " << cam_mode << "\n";
             new_selected_camera = (cam_no == 0)? 0 : 1;
             new_viewing_mode = (cam_mode != "TargetTracking");
-        } else if (nobot_mode) {
-            // Chooser for viewing mode
-            int chooser_val = viewing_mode_chooser.GetSelected();
-            if (chooser_val != 0) {  // Not unspecified
-                assert(chooser_val == 1 || chooser_val == 2);
-                new_viewing_mode = (chooser_val == 2);
-            }
+        } else {
+            if (nobot_mode) {
+                // Chooser for viewing mode
+                int chooser_val = viewing_mode_chooser.GetSelected();
+                if (chooser_val != 0) {  // Not unspecified
+                    assert(chooser_val == 1 || chooser_val == 2);
+                    new_viewing_mode = (chooser_val == 2);
+                }
 
-            // Chooser for camera
-            chooser_val = camera_chooser.GetSelected();
-            if (chooser_val != 0) {  // Not unspecified
-                assert(chooser_val == 1 || chooser_val == 2);
-                new_selected_camera = chooser_val - 1;
+                // Chooser for camera
+                chooser_val = camera_chooser.GetSelected();
+                if (chooser_val != 0) {  // Not unspecified
+                    assert(chooser_val == 1 || chooser_val == 2);
+                    new_selected_camera = chooser_val - 1;
+                }
+            } else {
+                // On robot but the 2 keys expected were not set.  Report values read.
+                std::cout << "On bot but camera values invalid/not set.  cam_no='" << cam_no << "', cam_mode='" << cam_mode << "'\n"; 
             }
         }
         
-        if (viewing_mode != new_viewing_mode) {
-            std::cout << "Changing viewing mode to " << (new_viewing_mode ? 1 : 0) << "\n" << std::flush;
+        if (force_update_even_if_no_change || (viewing_mode != new_viewing_mode)) {
+            std::cout << "Setting viewing mode to " << (new_viewing_mode ? 1 : 0) << "\n" << std::flush;
             viewing_mode = new_viewing_mode;
             setViewingExposure(viewing_mode);
         }
         
-        if (selected_camera != new_selected_camera) {
-            std::cout << "Changing selected camera to " << new_selected_camera << "\n" << std::flush;
+        if (force_update_even_if_no_change || (selected_camera != new_selected_camera)) {
+            std::cout << "Setting selected camera to " << new_selected_camera << "\n" << std::flush;
             selected_camera = new_selected_camera;
             cs::VideoSink server = frc::CameraServer::GetInstance()->GetServer();
             server.SetSource(cameras[selected_camera]);
@@ -1465,29 +1463,30 @@ namespace {
             std::cout << "Starting vision pipeline\n";
 
             std::thread t([&] {
-                              auto pipe = std::make_shared<XeroPipeline>();
-                              typedef frc::VisionRunner<XeroPipeline> PipeRunner;
-                              VisionPipelineResultProcessor result_processor(stream_pipeline_output);
-                              std::vector<std::shared_ptr<PipeRunner> > runners(2);
-                              runners[0] = std::make_shared<PipeRunner>(cameras[0],
-                                                                        pipe.get(),
-                                                                        result_processor);
-                              runners[1] = std::make_shared<PipeRunner>(cameras[1],
-                                                                        pipe.get(),
-                                                                        result_processor);
-                              while (1) {
-                                  processCameraParamChanges(cameras);
-                                  runners[selected_camera].get()->RunOnce();
-                              }
+                            auto pipe = std::make_shared<XeroPipeline>();
+                            typedef frc::VisionRunner<XeroPipeline> PipeRunner;
+                            VisionPipelineResultProcessor result_processor(stream_pipeline_output);
+                            std::vector<std::shared_ptr<PipeRunner> > runners(2);
+                            runners[0] = std::make_shared<PipeRunner>(cameras[0],
+                                                                      pipe.get(),
+                                                                      result_processor);
+                            runners[1] = std::make_shared<PipeRunner>(cameras[1],
+                                                                      pipe.get(),
+                                                                      result_processor);
+
+                            // Before starting loop, ensure exposure set consistent with the viewing mode.
+                            // Manually set camera controls directly using v4l2-ctl. More granularity than cscore APIs.
+                            // Apparently only works after starting the pipeline + small delay.
+                            std::this_thread::sleep_for(std::chrono::seconds(2));
+                            processCameraParamChanges(cameras, true /*force update*/);
+
+                            while (1) {
+                                processCameraParamChanges(cameras);
+                                runners[selected_camera].get()->RunOnce();
+                            }
                           });
             t.detach();
         }
-
-        // Manually set camera controls directly using v2l4-ctl.
-        // Apparently only works after starting the pipeline + small delay.
-        // TODO: Don't hardcode device id.  Get it from json.
-        std::this_thread::sleep_for(std::chrono::seconds(2));
-        setViewingExposure(viewing_mode);
 
         // Loop forever
         for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
