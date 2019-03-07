@@ -57,7 +57,7 @@ hw:hatchintake:solenoid                                         3               
 
 hw:lifter:encoder1                                              8               # Digital IO
 hw:lifter:encoder2                                              9               # Digital IO
-hw:lifter:motor:1                                               11              # TalonSRX
+hw:lifter:motor:1                                               10              # TalonSRX
 hw:lifter:reversemotors                                         true            
 
 hw:turntable:encoder1                                           4               # Digital IO
@@ -76,7 +76,7 @@ hw:driverstation:hid:driver                                     0               
 hw:driverstation:hid:oi                                         2               # HID Device Index
 
 hw:cargoholder:sensor                                           20              # Digital IO
-hw:cargoholder:motor                                            10              # Victor SPX
+hw:cargoholder:motor                                            7              # Victor SPX
 
 hw:cargointake:motor                                            9               # Victor SPX
 hw:cargointake:solenoid                                         1               # Solenoid
@@ -100,13 +100,25 @@ tankdrive:width                                                 22
 tankdrive:scrub                                                 0.9
 
 tankdrive:follower:left:ka                                      0.00
+if PRACTICE
+tankdrive:follower:left:kv                                      0.005882353         # 0.006112469
+tankdrive:follower:left:kp                                      0.02032             # Recommended 0.02032 - 0.03048
+endif
+if COMPETITION
 tankdrive:follower:left:kv                                      0.005882353
-tankdrive:follower:left:kp                                      0.03048             # Recommended 0.02032 - 0.03048
+tankdrive:follower:left:kp                                      0.02032             # Recommended 0.02032 - 0.03048
+endif
 tankdrive:follower:left:kd                                      0.0
 
 tankdrive:follower:right:ka                                     0.00
+if PRACTICE
+tankdrive:follower:right:kv                                     0.005882353         # 0.006112469
+tankdrive:follower:right:kp                                     0.02032             # Recommended 0.02032 - 0.03048
+endif
+if COMPETITION
 tankdrive:follower:right:kv                                     0.005882353
-tankdrive:follower:right:kp                                     0.03048             # Recommended 0.02032 - 0.03048
+tankdrive:follower:right:kp                                     0.02032             # Recommended 0.02032 - 0.03048
+endif
 tankdrive:follower:right:kd                                     0.0
 
 tankdrive:follower:ka                                           0.0
@@ -115,7 +127,7 @@ tankdrive:follower:kp                                           0.005
 tankdrive:follower:kd                                           0.0
 
 tankdrive:follower:turn_correction                              0
-tankdrive:follower:angle_error                                  -0.01
+tankdrive:follower:angle_error                                  -0.015
 
 tankdrive:distance_action:maxa                                  36.0
 tankdrive:distance_action:maxd                                  -36.0
@@ -159,9 +171,9 @@ endif
 #
 # Setup the data plotter
 #
-if PRACTICE
+#if PRACTICE
 plotter:port                                                    5555
-endif
+#endif
 
 #
 # Variables for the turntable
@@ -323,10 +335,10 @@ lifter:height:hatch:place:south:2                             44
 lifter:height:hatch:place:east:2                              44                 
 lifter:height:hatch:place:west:2                              44
                
-lifter:height:hatch:place:north:3                             74                 
-lifter:height:hatch:place:south:3                             74                
-lifter:height:hatch:place:east:3                              74                 
-lifter:height:hatch:place:west:3                              74                 
+lifter:height:hatch:place:north:3                             72                 
+lifter:height:hatch:place:south:3                             72                
+lifter:height:hatch:place:east:3                              72                 
+lifter:height:hatch:place:west:3                              72                 
 lifter:height:hatch:place:north:c                             15
 lifter:height:hatch:place:south:c                             15
 lifter:height:hatch:place:east:c                              15          
@@ -341,14 +353,19 @@ cameratracker:rect_ratio_min                                    0.9
 cameratracker:rect_ratio_max                                    1.1
 
 drivebyvision:yaw_base_power                                    0.15
-drivebyvision:yaw_p                                             -0.04
+drivebyvision:yaw_p                                             -0.03
 
 #
 # Variables for the linefollower
 #
 linefollower:front:power                                          0.3
 linefollower:front:distance                                       12
+if PRACTICE
 linefollower:front:adjust                                         -0.3
+endif
+if COMPETITION
+linefollower:front:adjust                                         0.3
+endif
 linefollower:back:power                                           -0.3
 linefollower:back:distance                                        -12
 linefollower:back:adjust                                          0.3

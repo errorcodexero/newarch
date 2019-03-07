@@ -14,10 +14,7 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
 
-            ActionPtr p = std::make_shared<TankDriveTimedPowerAction>(*db, "climb:drive:left", 
-                            "climb:drive:right", "climb:drive:duration", true) ;
-            pushSubActionPair(db, p) ;
-            // pushSubActionPair(db, std::make_shared<TankDriveCharAction>(*db, duration, power, highgear)) ;
+            pushSubActionPair(db, std::make_shared<TankDriveCharAction>(*db, duration, power, highgear)) ;
         }
 
         StraightCharAutoMode::~StraightCharAutoMode()

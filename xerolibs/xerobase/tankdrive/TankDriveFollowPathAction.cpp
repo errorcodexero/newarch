@@ -40,7 +40,6 @@ namespace xero {
             
             index_ = 0 ;         
             start_time_ = getTankDrive().getRobot().getTime() ;
-
             start_angle_ = getTankDrive().getAngle() ;
 
             if (getTankDrive().hasGearShifter())
@@ -64,6 +63,8 @@ namespace xero {
             logger << ",rtaccel" ;
             logger << ",rout" ;
             logger << ",rticks" ;
+            logger << ",angerr" ;
+            logger << ",turn" ;
             logger.endMessage() ;
 
             plotid_ = getTankDrive().getRobot().startPlot(toString(), plot_columns_) ;
@@ -82,7 +83,7 @@ namespace xero {
 
                 double laccel, lvel, lpos ;
                 double raccel, rvel, rpos ;
-                double thead ;
+                double thead , ahead ;
 
                 if (reverse_) {
                     laccel = -lseg.getAccel() ;
@@ -91,7 +92,8 @@ namespace xero {
                     raccel = -rseg.getAccel() ;
                     rvel = -rseg.getVelocity() ;
                     rpos = -rseg.getPOS() ;
-                    thead = xero::math::normalizeAngleDegrees(-lseg.getHeading()) ;
+                    thead = xero::math::normalizeAngleDegrees(-180 + lseg.getHeading()) ;
+                    ahead = xero::math::normalizeAngleDegrees(getTankDrive().getAngle() - start_angle_) ;                       
                 }
                 else {
                     laccel = lseg.getAccel() ;
@@ -100,41 +102,39 @@ namespace xero {
                     raccel = rseg.getAccel() ;
                     rvel = rseg.getVelocity() ;
                     rpos = rseg.getPOS() ;
-                    thead = xero::math::normalizeAngleDegrees(lseg.getHeading()) ;                    
+                    thead = xero::math::normalizeAngleDegrees(lseg.getHeading()) ;  
+                    ahead = xero::math::normalizeAngleDegrees(getTankDrive().getAngle() - start_angle_) ;                                      
                 }
 
-                double lout = left_follower_->getOutput(laccel, lvel, lpos, td.getLeftDistance() -  left_start_, dt) ;
-                double rout = right_follower_->getOutput(raccel, rvel, rpos, td.getRightDistance() - right_start_, dt) ;
+                double ldist, rdist ;
 
-                double ahead = xero::math::normalizeAngleDegrees(getTankDrive().getAngle() - start_angle_) ;
+                ldist = td.getLeftDistance() - left_start_ ;
+                rdist = td.getRightDistance() - right_start_ ;
+                double lout = left_follower_->getOutput(laccel, lvel, lpos, ldist, dt) ;
+                double rout = right_follower_->getOutput(raccel, rvel, rpos, rdist, dt) ;
 
                 double dv = lseg.getVelocity() - rseg.getVelocity() ;
                 double correct = dv * turn_correction_ ;
                 lout += correct ;
-                rout -= correct ;
+                rout += correct ;
 
-                double angerr = lseg.getHeading() - ahead ;
-                double turn = 0.8 * (-1.0 / 80.0) * angerr ;
+                double angerr = xero::math::normalizeAngleDegrees(thead - ahead) ;
+                double turn = angle_error_ * angerr ;
 
                 setMotorsToPercents(lout + turn, rout - turn) ;
 
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
-                logger << td.getRobot().getTime() ;
                 logger << "," << td.getRobot().getTime() - start_time_ ;
-                logger << "," << lpos ;
-                logger << "," << td.getLeftDistance() - left_start_ ;
-                logger << "," << lvel ;
-                logger << "," << td.getLeftVelocity() ;
-                logger << "," << laccel ;
                 logger << "," << lout ;
-                logger << "," << td.getLeftTickCount() ;
-                logger << "," << rpos ;
-                logger << "," << td.getRightDistance() - right_start_;                
-                logger << "," << rvel ;
-                logger << "," << td.getRightVelocity() ;                
-                logger << "," << raccel ;                
+                logger << "," << ldist ;
+                logger << "," << lpos ;
+                logger << "," << lvel ;               
                 logger << "," << rout ;
-                logger << "," << td.getRightTickCount() ;
+                logger << "," << rdist ;
+                logger << "," << rpos ;
+                logger << "," << rvel ;
+                logger << "," << angerr ;
+                logger << "," << turn ;
                 logger.endMessage() ;
 
                 rb.addPlotData(plotid_, index_, 0, rb.getTime() - start_time_) ;

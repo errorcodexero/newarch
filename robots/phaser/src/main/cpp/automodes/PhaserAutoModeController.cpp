@@ -4,6 +4,8 @@
 #include "automodes/CenterHabTwoHatch.h"
 #include "automodes/HabCargoMode.h"
 #include "automodes/TankDriveScrubMode.h"
+#include <tankdrive/TankDriveCharAction.h>
+#include <tankdrive/TankDriveScrubCharAction.h>
 #include "Phaser.h"
 
 #include <frc/DriverStation.h>
@@ -29,7 +31,7 @@ namespace xero {
                 break ;
 
             case 1:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false) ;            
+                //mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false) ;            
                 break ;
 
             case 2:
@@ -37,27 +39,29 @@ namespace xero {
                 break ;
 
             case 3:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, false) ;                 
+                //mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, false) ;                 
                 break ;
 
             case 4:
-                mode = std::make_shared<HabCargoMode>(getRobot(), true) ;            
                 break ;
 
             case 5:
-                mode = std::make_shared<HabCargoMode>(getRobot(), false) ;               
                 break ;
 
             case 6:
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), "CargoFrontLeftLSLeft", true)  ;          
                 break ;
 
             case 7:
                 break ;
 
+
             case 8:
+                mode = std::make_shared<StraightCharAutoMode>(getRobot(), 0.5, 3.0) ;                 
                 break ;
 
             case 9:
+                mode = std::make_shared<TankDriveScrubMode>(getRobot(), 0.5, 6.0, true) ;          
                 break ;
             }
             setAction(mode) ;

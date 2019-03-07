@@ -31,10 +31,10 @@ namespace xero {
             const char *height = "lifter:height:hatch:place:north:1" ;
             std::string path ;
 
-            if (left)
-                path = "CenterHab2CargoFrontLeft" ;
-            else
+            if (!left)
                 path = "CenterHab2CargoFrontRight" ;
+            else
+                path = "CenterHab2CargoFrontLeft" ;
 
             act = std::make_shared<ScoreHatch>(*game) ;            
             insertAutoModeLeg(height, angle, path, false, act) ;
@@ -50,7 +50,7 @@ namespace xero {
                 if (left)
                     path = "CargoFrontLeftLSLeft" ;
                 else
-                    path = "CargoFrontLeftLSRight" ;
+                    path = "CargoFrontRightLSRight" ;
 
                 act = std::make_shared<CompleteLSHatchCollect>(*game) ;
                 insertAutoModeLeg(height, angle, path, true, act) ;

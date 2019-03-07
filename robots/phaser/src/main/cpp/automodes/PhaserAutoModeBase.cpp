@@ -79,7 +79,7 @@ namespace xero {
             // to line following
             //
             seq = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
-            act = std::make_shared<TankDriveFollowPathAction>(*db, path) ;
+            act = std::make_shared<TankDriveFollowPathAction>(*db, path, rear) ;
         
             //
             // This is a terminatable sequence that follows a path and terminates
