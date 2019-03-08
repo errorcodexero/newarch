@@ -47,6 +47,7 @@ namespace xero {
                 break ;
 
             case 6:
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), "CenterHab2CargoFrontLeft") ;
                 break ;
 
             case 7:
