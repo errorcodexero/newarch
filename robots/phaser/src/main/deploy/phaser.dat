@@ -15,10 +15,18 @@ hw:tankdrive:leftmotor:3                                        3               
 hw:tankdrive:rightmotor:1                                       4               # TALON SRX
 hw:tankdrive:rightmotor:2                                       5               # TALON SRX
 hw:tankdrive:rightmotor:3                                       6               # TALON SRX
+if PRACTICE
 hw:tankdrive:leftencoder:1                                      0               # Digital IO
 hw:tankdrive:leftencoder:2                                      1               # Digital IO
 hw:tankdrive:rightencoder:1                                     2               # Digital IO
 hw:tankdrive:rightencoder:2                                     3               # Digital IO
+endif
+if COMPETITION
+hw:tankdrive:leftencoder:1                                      3               # Digital IO
+hw:tankdrive:leftencoder:2                                      2               # Digital IO
+hw:tankdrive:rightencoder:1                                     1               # Digital IO
+hw:tankdrive:rightencoder:2                                     0               # Digital IO
+endif
 hw:tankdrive:shifter                                            0               # Solenoid
 
 
@@ -283,7 +291,7 @@ lifter:height:offset:hatch_hook_center                          8.6
 lifter:height:hatch:floor_collect                               12.0
 lifter:height:hatch:undock_intake                               22.00
 lifter:height:loadingstation:hatch:shift_up                     5
-lifter:height:score:hatch:shift_down                            -3.2
+lifter:height:score:hatch:shift_down                            -4.5
 
 lifter:height:hatch:tracking_height:north                       13
 lifter:height:hatch:tracking_height:south                       13
@@ -356,12 +364,7 @@ drivebyvision:yaw_p                                             -0.03
 #
 linefollower:front:power                                          0.3
 linefollower:front:distance                                       12
-if PRACTICE
-linefollower:front:adjust                                         -0.3
-endif
-if COMPETITION
 linefollower:front:adjust                                         0.3
-endif
 linefollower:back:power                                           -0.3
 linefollower:back:distance                                        -12
 linefollower:back:adjust                                          0.3

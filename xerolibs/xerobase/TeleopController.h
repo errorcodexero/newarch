@@ -7,7 +7,6 @@
 
 /// \file
 
-
 namespace xero {
     namespace base {
         /// \brief base class for the operator mode controller

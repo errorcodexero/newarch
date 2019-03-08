@@ -299,6 +299,10 @@ namespace xero {
             auto_controller_ = std::dynamic_pointer_cast<AutoController>(createAutoController()) ;
             assert(auto_controller_ != nullptr) ;
 
+            teleop_controller_ = createTeleopController() ;
+            if (teleop_controller_ == nullptr)
+                teleop_controller_ = std::make_shared<TeleopController>(*this) ;            
+
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
             message_logger_ << "Robot Initialization complete." ;
             message_logger_.endMessage() ;              
@@ -457,11 +461,8 @@ namespace xero {
             while (IsAutonomous() && IsEnabled()) {
                 robotLoop(type);
                 if (switch_to_teleop_) {
-                    controller_ = createTeleopController() ;
-                    if (controller_ == nullptr)
-                        controller_ = std::make_shared<TeleopController>(*this) ;
+                    controller_ = teleop_controller_ ;
                     type = LoopType::OperatorControl ;
-                    robot_subsystem_->init(type) ;
                     switch_to_teleop_ = false ;
                 }
             }
@@ -480,12 +481,7 @@ namespace xero {
             message_logger_ << "Starting Teleop mode" ;
             message_logger_.endMessage() ;           
 
-            controller_ = createTeleopController() ;
-            if (controller_ == nullptr)
-                controller_ = std::make_shared<TeleopController>(*this) ;
-
-            robot_subsystem_->init(LoopType::OperatorControl) ;         
-
+            controller_ = teleop_controller_ ;
             while (IsOperatorControl() && IsEnabled())
                 robotLoop(LoopType::OperatorControl) ;
 

@@ -10,16 +10,11 @@ namespace xero {
             TurntableCalibrateAction(Turntable &Turntable) ;
             virtual ~TurntableCalibrateAction() ;
 
-            virtual void start() {
-                getTurntable().calibrate() ;
-            }
+            virtual void start() ;
 
-            virtual void run() {                
-            }
+            virtual void run() ;
 
-            virtual bool isDone() {
-                return true ;
-            }
+            virtual bool isDone() ;
 
             virtual void cancel() {
             }
@@ -30,6 +25,8 @@ namespace xero {
 
         private:
             static std::string action_name ;
+            bool is_done_ ;
+            std::list<int> ticks_ ;
         } ;
     }
 }
