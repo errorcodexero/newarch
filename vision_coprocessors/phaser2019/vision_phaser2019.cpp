@@ -469,6 +469,10 @@ namespace {
             } else {
                 // On robot but the 2 keys expected were not set.  Report values read.
                 std::cout << "On bot but camera values invalid/not set.  cam_no='" << cam_no << "', cam_mode='" << cam_mode << "'\n"; 
+                if (!force_update_even_if_no_change) {
+                    // Unless initializing at the start, return rather than set default values when we can't read request from bot.
+                    return;
+                }
             }
         }
         
