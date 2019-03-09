@@ -175,9 +175,9 @@ endif
 #
 # Setup the data plotter
 #
-if PRACTICE
+#if PRACTICE
 plotter:port                                                    5555
-endif
+#endif
 
 #
 # Variables for the turntable
@@ -253,7 +253,7 @@ lifter:threshold                                                1.0
 lifter:maxv                                                     23.0
 lifter:maxa                                                     50
 lifter:maxd                                                     -50
-lifter:follower:up:kp                                           0.05              
+lifter:follower:up:kp                                           0.055              
 lifter:follower:up:ka                                           0.0                 
 lifter:follower:up:kv                                           0.035
 lifter:follower:up:kd                                           0.0
@@ -291,7 +291,7 @@ lifter:height:offset:hatch_hook_center                          8.6
 lifter:height:hatch:floor_collect                               12.0
 lifter:height:hatch:undock_intake                               22.00
 lifter:height:loadingstation:hatch:shift_up                     5
-lifter:height:score:hatch:shift_down                            -4.5
+lifter:height:score:hatch:shift_down                            -7.0
 
 lifter:height:hatch:tracking_height:north                       13
 lifter:height:hatch:tracking_height:south                       13
@@ -364,10 +364,10 @@ drivebyvision:yaw_p                                             -0.03
 #
 linefollower:front:power                                          0.3
 linefollower:front:distance                                       12
-linefollower:front:adjust                                         0.3
+linefollower:front:adjust                                         0.25
 linefollower:back:power                                           -0.3
 linefollower:back:distance                                        -12
-linefollower:back:adjust                                          0.3
+linefollower:back:adjust                                          0.25
 
 
 cargointake:power                                               -0.6
@@ -387,12 +387,12 @@ cargoholder:score:time                                          2.0
 
 hatchintake:power                                               0.6
 
-hatchholder:collect:delay                                       0.15
-hatchholder:collect:totaldelay                                  0.2
+hatchholder:collect:delay                                       0.5
+hatchholder:collect:totaldelay                                  0.5
 hatchholder:specialflow:delay                                   0.1
-hatchholder:place:delay                                         0.15
+hatchholder:place:delay                                         0.25
 hatchholder:place:totaldelay                                    0.20
-hatchholder:default:delay                                       0.5
+hatchholder:default:delay                                       0.750
 hatchholder:finger:autodelay                                    1.0
 
 climb:backup_distance                                           0

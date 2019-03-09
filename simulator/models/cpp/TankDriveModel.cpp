@@ -194,13 +194,12 @@ namespace xero {
             left_ += dleft;
             right_ += dright;
 
-            double dv = (dright - dleft) / 2 * scrub_;
-
             double lrevs = left_ / (PI * diameter_);
             double rrevs = right_ / (PI * diameter_) ;
 
-            updatePosition(dleft, dright, angle_) ;
+            double dv = (dleft - dright) / 2 * scrub_;
             angle_ = normalizeAngleRadians(angle_ + (dv * 2.0) / width_) ;
+            updatePosition(dleft, dright, angle_) ;
 
             double dist = std::sqrt((xpos_ - last_xpos_) * (xpos_ - last_xpos_) + (ypos_ - last_ypos_) * (ypos_ - last_ypos_)) ;
             speed_ = dist / dt ;
