@@ -25,6 +25,7 @@ namespace xero {
             double target_ ;
             double threshold_ ;
             double offset_ ;
+            double delay_start_ ;
             std::shared_ptr<xero::misc::PIDACtrl> ctrl_ ;
             std::shared_ptr<xero::misc::TrapezoidalProfile> profile_ ;
             xero::misc::PIDCtrl pid_ctrl_ ;            

@@ -291,7 +291,7 @@ lifter:height:offset:hatch_hook_center                          8.6
 lifter:height:hatch:floor_collect                               12.0
 lifter:height:hatch:undock_intake                               22.00
 lifter:height:loadingstation:hatch:shift_up                     5
-lifter:height:score:hatch:shift_down                            -7.0
+lifter:height:score:hatch:shift_down                            -6.0
 
 lifter:height:hatch:tracking_height:north                       13
 lifter:height:hatch:tracking_height:south                       13
@@ -327,9 +327,9 @@ lifter:height:cargo:place:west:c                              38
 
 lifter:height:hatch:collect:north                             11.2              
 lifter:height:hatch:collect:south                             11.2                 
-lifter:height:hatch:collect:east                              11.2                 
+lifter:height:hatch:collect:east                              11.2
 lifter:height:hatch:collect:west                              11.2                 
- 
+
 lifter:height:hatch:place:north:1                             15      
 lifter:height:hatch:place:south:1                             15       
 lifter:height:hatch:place:east:1                              15               
@@ -394,6 +394,7 @@ hatchholder:place:delay                                         0.25
 hatchholder:place:totaldelay                                    0.20
 hatchholder:default:delay                                       0.750
 hatchholder:finger:autodelay                                    1.0
+hatchholder:debounce                                            0.2
 
 climb:backup_distance                                           0
 climb:deploy_delay                                              0.3
