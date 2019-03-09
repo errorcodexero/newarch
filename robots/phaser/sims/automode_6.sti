@@ -1,0 +1,36 @@
+#
+# This file does a floor collect cargo
+#
+
+#
+# Automode values
+#
+#  Value        Setting
+#    0          -100
+#    1          -80
+#    2          -60
+#    3          -40
+#    4          -20
+#    5           10
+#    6           30
+#    7           50
+#    8           70
+#    9           90
+#
+
+#
+# Tracking Viewing Nothing switch
+#
+#  Value         Mode
+#  100           manual
+#  0             semi-auto
+#  -100          auto
+#
+
+#
+# Start up conditions
+#
+0.4,oi,automode,30                                    # Automode switch set to zero
+
+0.4,tankdrive,xpos,6500
+0.4,tankdrive,ypos,16300
