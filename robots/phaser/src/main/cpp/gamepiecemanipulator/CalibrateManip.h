@@ -18,17 +18,22 @@ namespace xero{
 
         private:
             enum class State {
-                LifterCalibrate,
-                LifterToSafeHeight,
+                LifterUp,
                 TurntableCalibrate,
+                TurntableNorth,
+                LifterCalibrate,
                 Idle
             } ;
 
         private:
-            xero::base::ActionPtr lift_calibrate_ ;
-            xero::base::ActionPtr lift_to_safe_height ;
+            xero::base::ActionPtr lifter_calibrate_ ;
+            xero::base::ActionPtr turntable_north_ ;
             xero::base::ActionPtr turntable_calibrate_ ;
+            xero::base::ActionPtr lifter_up_ ;
+            xero::base::ActionPtr lifter_hold_ ;
 
+            double lifter_up_duration_ ;
+            double lifter_up_start_ ;
             State state_ ;
         } ;
     }

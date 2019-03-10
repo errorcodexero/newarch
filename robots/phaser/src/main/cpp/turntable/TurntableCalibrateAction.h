@@ -24,9 +24,16 @@ namespace xero {
             }
 
         private:
+            void getMinMax(int &minval, int &maxval) ;            
+
+        private:
             static std::string action_name ;
             bool is_done_ ;
-            std::list<int> ticks_ ;
+            std::list<int> counts_ ;
+            int threshold_ ;
+            int encbase_ ;
+            int samples_ ;
+            double power_ ;
         } ;
     }
 }

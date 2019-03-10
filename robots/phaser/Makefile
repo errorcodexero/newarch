@@ -40,6 +40,7 @@ SOURCES = \
 	src/main/cpp/gamepiecemanipulator/ScoreHatch.cpp\
 	src/main/cpp/gamepiecemanipulator/ReadyAction.cpp\
 	src/main/cpp/gamepiecemanipulator/ResetIntakesAction.cpp\
+	src/main/cpp/gamepiecemanipulator/CalibrateManip.cpp\
 	$(AUTOMODES)
 
 TARGET = phaser

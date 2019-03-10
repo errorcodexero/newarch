@@ -8,7 +8,7 @@ namespace xero {
     namespace base {
         class LifterCalibrateAction : public LifterAction {
         public:
-            LifterCalibrateAction(Lifter &lifter, double height, double power, size_t samples) ;
+            LifterCalibrateAction(Lifter &lifter) ;
             virtual ~LifterCalibrateAction() ;
 
             virtual void start() ;
@@ -25,8 +25,12 @@ namespace xero {
             virtual std::string toString() ;
 
         private:
+            void getMinMax(int &minval, int &maxval) ;
+
+        private:
             double power_ ;
-            double height_ ;
+            int encbase_ ;
+            int threshold_ ;
             bool is_done_ ;
             size_t samples_ ;
             std::list<int> counts_ ;

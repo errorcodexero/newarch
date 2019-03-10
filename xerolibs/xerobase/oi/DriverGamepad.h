@@ -100,10 +100,15 @@ namespace xero {
             double tolerance_ ;
             double zerolevel_ ;
 
-            ActionPtr nudge_forward_ ;
-            ActionPtr nudge_backward_ ;
-            ActionPtr nudge_clockwise_ ;
-            ActionPtr nudge_counter_clockwise_ ;
+            ActionPtr nudge_forward_low_ ;
+            ActionPtr nudge_backward_low_ ;
+            ActionPtr nudge_clockwise_low_ ;
+            ActionPtr nudge_counter_clockwise_low_ ;
+
+            ActionPtr nudge_forward_high_ ;
+            ActionPtr nudge_backward_high_ ;
+            ActionPtr nudge_clockwise_high_ ;
+            ActionPtr nudge_counter_clockwise_high_ ;            
 
             bool reverse_ ;
             bool high_gear_ ;

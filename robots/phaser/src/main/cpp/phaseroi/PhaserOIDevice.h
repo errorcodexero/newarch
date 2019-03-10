@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gamepiecemanipulator/GamePieceManipulator.h"
+#include "gamepiecemanipulator/FloorCollectCargoAction.h"
 #include <oi/OIDevice.h> 
 #include <Action.h>
 
@@ -126,6 +127,8 @@ namespace xero {
 
             xero::base::ActionPtr deploy_climber_ ;
             xero::base::ActionPtr climb_action_ ; 
+
+            xero::base::ActionPtr calibrate_action_ ;
             
             double safe_height_ ;
         } ;

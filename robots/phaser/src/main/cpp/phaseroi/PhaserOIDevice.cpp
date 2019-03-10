@@ -14,6 +14,7 @@
 #include "gamepiecemanipulator/ScoreHatch.h"
 #include "gamepiecemanipulator/ReadyAction.h"
 #include "gamepiecemanipulator/ResetIntakesAction.h"
+#include "gamepiecemanipulator/CalibrateManip.h"
 #include "cargointake/CargoIntakeAction.h"
 #include "singlemotorsubsystem/SingleMotorPowerAction.h"
 #include "phasercameratracker/DriveByVisionAction.h"
@@ -254,6 +255,8 @@ namespace xero {
             climb_action_ = std::make_shared<ClimbAction>(*ph.getPhaserRobotSubsystem()) ;
 
             deploy_climber_ = std::make_shared<ClimberDeployAction>(*climber) ;
+
+            calibrate_action_ = std::make_shared<CalibrateManip>(*game) ;
         }
 
         //
@@ -811,7 +814,8 @@ namespace xero {
         void PhaserOIDevice::generateActions(ActionSequence &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
-            auto hatch_holder = game->getHatchHolder() ;     
+            auto hatch_holder = game->getHatchHolder() ;    
+            auto fcol = std::dynamic_pointer_cast<FloorCollectCargoAction>(set_collect_cargo_floor_) ; 
     
             //
             // Get the tracking mode, either auto, semi-auto, or manual
@@ -827,7 +831,10 @@ namespace xero {
             // Cannot execute turtle mode if we are already executing turtle mode, or if we have
             // triggered the climb sequence.
             //
-            if (getValue(turtle_mode_) && reset_intakes_->isDone() && climb_action_->isDone()) {
+            if (getValue(calibrate_)) {
+                game->setAction(calibrate_action_) ;
+            }
+            else if (getValue(turtle_mode_) && reset_intakes_->isDone() && climb_action_->isDone()) {
                 //
                 // Directly assign the action and make it forcing to ensure this
                 // action takes priority over everything else.
@@ -835,6 +842,11 @@ namespace xero {
                 game->setAction(reset_intakes_, true) ;
                 hatch_finger_start_ = getSubsystem().getRobot().getTime() ;
             }
+#ifdef NOTYET
+            else if (!fcol->isDone() && getValue(calibrate_)) {
+                fcol->reverseIntake() ;
+            }
+#endif            
             else if (game->isDone()) {
                 if (getValue(climb_lock_switch_) && getValue(climb_)) {
                     //

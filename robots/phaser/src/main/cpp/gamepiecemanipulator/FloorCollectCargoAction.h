@@ -3,9 +3,9 @@
 #include "GamePieceAction.h"
 #include "GamePieceManipulator.h"
 
-namespace xero{
-    namespace phaser{
-        class FloorCollectCargoAction : public GamePieceAction{
+namespace xero {
+    namespace phaser {
+        class FloorCollectCargoAction : public GamePieceAction {
         public:
             FloorCollectCargoAction(GamePieceManipulator &subsystem) ;
             virtual ~FloorCollectCargoAction() ;
@@ -17,6 +17,8 @@ namespace xero{
             virtual void abort() ;
             virtual std::string toString() ;
 
+            virtual void reverseIntake() ;
+
         private:
             enum class State {
                 Idle,
@@ -27,7 +29,7 @@ namespace xero{
                 WaitForCargo2,
                 StopAllMotors,
                 RaiseLifter,
-                RetractIntake
+                RetractIntake,
             } ;
 
         private:
@@ -47,8 +49,12 @@ namespace xero{
             xero::base::ActionPtr stop_cargo_intake_motor_ ;
             xero::base::ActionPtr set_cargo_holder_motor_ ;
             xero::base::ActionPtr stop_cargo_holder_motor_ ;
+
+            xero::base::ActionPtr reverse_cargo_intake_motor_ ;
             
-            xero::base::ActionPtr rumble_ ;            
+            xero::base::ActionPtr rumble_ ;          
+
+            bool reversed_ ;  
         };
     }
 }

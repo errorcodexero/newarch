@@ -42,7 +42,7 @@ namespace xero {
             double right_start_ ;
             double start_time_ ;
             double turn_correction_ ;
-            double angle_error_ ;
+            double angle_correction_ ;
             std::shared_ptr<xero::misc::XeroPath> path_ ;
             std::shared_ptr<xero::misc::PIDACtrl> left_follower_ ;
             std::shared_ptr<xero::misc::PIDACtrl> right_follower_ ;

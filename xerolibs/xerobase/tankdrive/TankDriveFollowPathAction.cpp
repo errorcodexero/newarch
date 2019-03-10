@@ -28,7 +28,7 @@ namespace xero {
                                 pname + "right:ka", pname + "right:kp", pname + "right:kd") ;
 
             turn_correction_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:turn_correction") ;
-            angle_error_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:angle_error") ;
+            angle_correction_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:angle_correction") ;
         }
 
         TankDriveFollowPathAction::~TankDriveFollowPathAction() {                
@@ -115,7 +115,7 @@ namespace xero {
                 rout += correct ;
 
                 double angerr = xero::math::normalizeAngleDegrees(thead - ahead) ;
-                double turn = angle_error_ * angerr ;
+                double turn = angle_correction_ * angerr ;
                 lout += turn ;
                 rout -= turn ;
 

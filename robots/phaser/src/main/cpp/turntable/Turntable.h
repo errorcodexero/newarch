@@ -47,7 +47,7 @@ namespace xero {
             }
 
         private:
-            void calibrate() ;
+            void calibrate(int encbase) ;
             void setMotorPower(double v) ;
 
             double getSafeRotateHeight() {
@@ -68,6 +68,7 @@ namespace xero {
             std::list<std::shared_ptr<TalonSRX>> motors_ ;
             std::shared_ptr<frc::Encoder> encoder_ ;
 
+            int encoder_base_ ;
             int encoder_value_;
             double min_angle_;
             double max_angle_;

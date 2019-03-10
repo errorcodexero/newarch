@@ -15,12 +15,14 @@ hw:tankdrive:leftmotor:3                                        3               
 hw:tankdrive:rightmotor:1                                       4               # TALON SRX
 hw:tankdrive:rightmotor:2                                       5               # TALON SRX
 hw:tankdrive:rightmotor:3                                       6               # TALON SRX
+
 if PRACTICE
 hw:tankdrive:leftencoder:1                                      0               # Digital IO
 hw:tankdrive:leftencoder:2                                      1               # Digital IO
 hw:tankdrive:rightencoder:1                                     2               # Digital IO
 hw:tankdrive:rightencoder:2                                     3               # Digital IO
 endif
+
 if COMPETITION
 hw:tankdrive:leftencoder:1                                      3               # Digital IO
 hw:tankdrive:leftencoder:2                                      2               # Digital IO
@@ -131,7 +133,7 @@ tankdrive:follower:right:kd                                     0.0
 endif
 
 tankdrive:follower:turn_correction                              0
-tankdrive:follower:angle_error                                  -0.01
+tankdrive:follower:angle_correction                             -0.01
 
 tankdrive:distance_action:maxa                                  36.0
 tankdrive:distance_action:maxd                                  -36.0
@@ -187,6 +189,11 @@ turntable:keepout:minimum                                       130
 turntable:keepout:maximum                                       160
 turntable:keepout:dangerzone                                    15
 
+turntable:calibrate:threshold                                   2               # TODO
+turntable:calibrate:encbase                                     238             # TODO
+turntable:calibrate:power                                       0.1             # TODO
+turntable:calibrate:samples                                     4               # TODO
+
 if PRACTICE
 turntable:degrees_per_tick                                      0.585472973
 endif
@@ -241,12 +248,23 @@ turntable:angle:hatch:place:west                                90
 # Variables for the lifter
 #
 lifter:base							                            8.75
+
 if PRACTICE
 lifter:inches_per_tick                                          0.058691309
 endif
+
 if COMPETITION
 lifter:inches_per_tick                                          0.059099901
 endif
+
+lifter:calibrate:up:power                                       0.5                         # TODO
+lifter:calibrate:hold:power                                    0.1                         # TODO
+lifter:calibrate:up:time                                        0.5                         # TODO
+lifter:calibrate:threshold                                      2                           # TODO
+lifter:calibrate:encbase                                        34                          # TODO
+lifter:calibrate:power                                          -0.1                        # TODO
+lifter:calibrate:samples                                        4                           # TODO
+
 lifter:max_height                                               83.66
 lifter:min_height                                               8.46
 lifter:threshold                                                1.0
@@ -371,6 +389,7 @@ linefollower:back:adjust                                          0.25
 
 
 cargointake:power                                               -0.6
+cargointake:reverse:power                                        0.6
 
 if COMPETITION
 cargoholder:collect:power                                       0.6

@@ -83,10 +83,15 @@ namespace xero {
             double nudge_rotate = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:nudge_rotate") ;
             double nudge_time = getSubsystem().getRobot().getSettingsParser().getDouble("driver:nudge_time") ;
 
-            nudge_forward_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_straight, nudge_straight, nudge_time) ;
-            nudge_backward_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_straight, -nudge_straight, nudge_time) ;
-            nudge_clockwise_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_rotate, nudge_rotate, nudge_time) ;
-            nudge_counter_clockwise_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_rotate, -nudge_rotate, nudge_time) ;
+            nudge_forward_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_straight, nudge_straight, nudge_time, false) ;
+            nudge_backward_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_straight, -nudge_straight, nudge_time, false) ;
+            nudge_clockwise_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_rotate, nudge_rotate, nudge_time, false) ;
+            nudge_counter_clockwise_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_rotate, -nudge_rotate, nudge_time, false) ;
+
+            nudge_forward_high_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_straight, nudge_straight, nudge_time, true) ;
+            nudge_backward_high_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_straight, -nudge_straight, nudge_time, true) ;
+            nudge_clockwise_high_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_rotate, nudge_rotate, nudge_time, true) ;
+            nudge_counter_clockwise_high_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_rotate, -nudge_rotate, nudge_time, true) ;            
         }
 
         double DriverGamepad::scalePower(double axis, double boost, bool slow) {
@@ -174,7 +179,7 @@ namespace xero {
                 logger.endMessage() ;
             }            
 
-            if (nudge_forward_ == nullptr)
+            if (nudge_forward_low_ == nullptr)
                 init(db_) ;
 
             if (getIndex() == -1)
@@ -197,16 +202,28 @@ namespace xero {
             double rx = ds.GetStickAxis(getIndex(),AxisNumber::RIGHTX) ;
 
             if (pov == POVAngle::LEFT) {
-                seq.pushSubActionPair(db_, nudge_clockwise_, false) ;
+                if (high_gear_)
+                    seq.pushSubActionPair(db_, nudge_clockwise_high_, false) ;                
+                else
+                    seq.pushSubActionPair(db_, nudge_clockwise_low_, false) ;
             }
             else if (pov == POVAngle::UP) {
-                seq.pushSubActionPair(db_, nudge_forward_, false) ;
+                if (high_gear_)                
+                    seq.pushSubActionPair(db_, nudge_forward_high_, false) ;
+                else
+                    seq.pushSubActionPair(db_, nudge_forward_low_, false) ;                
             }
             else if (pov == POVAngle::DOWN) {
-                seq.pushSubActionPair(db_, nudge_backward_, false) ;
+                if (high_gear_)                
+                    seq.pushSubActionPair(db_, nudge_backward_high_, false) ;
+                else
+                    seq.pushSubActionPair(db_, nudge_backward_low_, false) ;                
             }
             else if (pov == POVAngle::RIGHT) {
-                seq.pushSubActionPair(db_, nudge_counter_clockwise_, false) ;
+                if (high_gear_)                
+                    seq.pushSubActionPair(db_, nudge_counter_clockwise_high_, false) ;
+                else
+                    seq.pushSubActionPair(db_, nudge_counter_clockwise_low_, false) ;                
             }
             else {
                 double left, right ;

@@ -4,10 +4,11 @@
 
 namespace xero {
     namespace base {
-        LifterCalibrateAction::LifterCalibrateAction(Lifter &lifter, double height, double power, size_t samples) : LifterAction(lifter) {
-            power_ = power ;
-            samples_ = samples ;
-            height_ = height ;
+        LifterCalibrateAction::LifterCalibrateAction(Lifter &lifter) : LifterAction(lifter) {
+            power_ = lifter.getRobot().getSettingsParser().getDouble("lifter:calibrate:power") ;
+            encbase_ = lifter.getRobot().getSettingsParser().getInteger("lifter:calibrate:encbase") ;
+            samples_ = lifter.getRobot().getSettingsParser().getInteger("lifter:calibrate:samples") ;
+            threshold_ = lifter.getRobot().getSettingsParser().getInteger("lifter:calibrate:threshold") ;
         }
 
         LifterCalibrateAction::~LifterCalibrateAction() {            
@@ -23,14 +24,31 @@ namespace xero {
             getLifter().setMotorPower(power_) ;
         }
 
-        void LifterCalibrateAction::run() {
-            counts_.push_back(getLifter().getEncoderValue()) ;
-            if (counts_.size() > samples_)
-                counts_.pop_front() ;
+        void LifterCalibrateAction::getMinMax(int &minval, int &maxval) {
+            minval = std::numeric_limits<int>::max() ;
+            maxval = std::numeric_limits<int>::min() ;
 
-            if (std::abs(counts_.front() - counts_.back()) < 2) {
-                getLifter().setHeight(height_) ;
-                is_done_ = true ;
+            for(const int &d : counts_) {
+                if (d < minval)
+                    minval = d ;
+
+                if (d > maxval)
+                    maxval = d ;
+            }
+        }
+
+        void LifterCalibrateAction::run() {
+            if (!is_done_) {
+                int minval, maxval ;
+                counts_.push_back(getLifter().getEncoderValue()) ;
+                if (counts_.size() > static_cast<size_t>(samples_))
+                    counts_.pop_front() ;
+
+                getMinMax(minval, maxval) ;
+                if (counts_.size() == static_cast<size_t>(samples_) && maxval - minval <= threshold_) {
+                    getLifter().calibrate(encbase_) ;
+                    is_done_ = true ;
+                }
             }
         }
     }

@@ -31,10 +31,14 @@ namespace xero {
             
             set_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, "cargointake:power") ;
             stop_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, 0.0) ;
+            reverse_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, "cargointake:reverse:power") ;
             set_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, "cargoholder:collect:power") ;
             stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
-            
+                     
             rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1, 1.0, 1.0) ;            
+
+            state_ = State::Idle ;
+            reversed_ = false ;
         }
 
         FloorCollectCargoAction::~FloorCollectCargoAction() {
@@ -49,6 +53,21 @@ namespace xero {
             auto lifter = getGamePiece().getLifter() ;
             lifter->setAction(set_lifter_safe_height_) ;
             state_ = State::LifterGoToSafeHeight ;
+            reversed_ = false ;
+        }
+
+        void FloorCollectCargoAction::reverseIntake() {
+            if (state_ == State::WaitForCargo || state_ == State::WaitForCargo2) {            
+                auto cargo_holder = getGamePiece().getCargoHolder() ;
+                reversed_ = !reversed_ ;
+
+                if (reversed_) {
+                    cargo_holder->setAction(reverse_cargo_intake_motor_) ;
+                }
+                else {
+                    cargo_holder->setAction(set_cargo_holder_motor_) ;                    
+                }
+            }
         }
 
         void FloorCollectCargoAction::run() {

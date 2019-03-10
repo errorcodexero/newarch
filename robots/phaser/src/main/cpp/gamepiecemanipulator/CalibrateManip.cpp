@@ -1,7 +1,8 @@
 #include "CalibrateManip.h"
-#include <lifter/LifterCalibrateAction.h>
-#include <lifter/LifterGoToHeightAction.h>
+#include "turntable/TurntableGoToAngleAction.h"
 #include "turntable/TurntableCalibrateAction.h"
+#include <lifter/LifterPowerAction.h>
+#include <lifter/LifterCalibrateAction.h>
 using namespace xero::base ;
 
 namespace xero {
@@ -10,9 +11,12 @@ namespace xero {
             auto lifter = subsystem.getLifter() ;
             auto turntable = subsystem.getTurntable() ;
 
-            lift_calibrate_ = std::make_shared<LifterCalibrateAction>(*lifter, 9.0, -0.1, 4) ;
-            lift_to_safe_height = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
+            lifter_calibrate_ = std::make_shared<LifterCalibrateAction>(*lifter) ;
+            turntable_north_ = std::make_shared<TurntableGoToAngleAction>(*turntable, 0.0) ;
             turntable_calibrate_ = std::make_shared<TurntableCalibrateAction>(*turntable) ;
+            lifter_up_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:calibrate:up:power") ;
+            lifter_up_duration_ = subsystem.getRobot().getSettingsParser().getDouble("lifter:calibrate:up:time") ;
+            lifter_hold_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:calibrate:hold:power") ;
         }
 
         CalibrateManip::~CalibrateManip(){
@@ -21,36 +25,46 @@ namespace xero {
         void CalibrateManip::start() {
             auto lifter = getGamePiece().getLifter() ;
 
-            state_ = State::LifterCalibrate ;
-            lifter->setAction(lift_calibrate_) ;
+            state_ = State::LifterUp ;
+            lifter->setAction(lifter_up_) ;
+            lifter_up_start_ = getGamePiece().getRobot().getTime() ;
         }
 
-        void CalibrateManip::run(){
-            switch(state_) {
-                case State::LifterCalibrate:
-                    if (lift_calibrate_->isDone()) {
-                        state_ = State::LifterToSafeHeight ;
-                        auto lifter = getGamePiece().getLifter() ;
-                        lifter->setAction(lift_to_safe_height) ;
-                    }
-                break ;
+        void CalibrateManip::run() {
+            auto turntable = getGamePiece().getTurntable() ;            
+            auto lifter = getGamePiece().getLifter() ;
 
-                case State::LifterToSafeHeight:
-                    if (lift_to_safe_height->isDone()) {
+            switch(state_) {
+                case State::LifterUp:
+                    if (getGamePiece().getRobot().getTime() - lifter_up_start_ > lifter_up_duration_) {
                         state_ = State::TurntableCalibrate ;
-                        auto turntable = getGamePiece().getTurntable() ;
                         turntable->setAction(turntable_calibrate_) ;
+                        lifter->setAction(lifter_hold_) ;
                     }
-                break ;
+                    break ;
 
                 case State::TurntableCalibrate:
                     if (turntable_calibrate_->isDone()) {
+                        state_ = State::TurntableNorth ;
+                        turntable->setAction(turntable_north_) ;
+                    }
+                    break ;
+
+                case State::TurntableNorth:
+                    if (turntable_north_->isDone()) {
+                        state_ = State::LifterCalibrate ;
+                        lifter->setAction(lifter_calibrate_) ;
+                    }
+                    break;
+
+                case State::LifterCalibrate:
+                    if (lifter_calibrate_->isDone()) {
                         state_ = State::Idle ;
                     }
-                break ;
+                    break ;
 
                 case State::Idle:
-                break ;
+                    break ;
             }
         }
 
