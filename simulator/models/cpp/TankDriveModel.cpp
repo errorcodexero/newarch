@@ -167,7 +167,7 @@ namespace xero {
         void TankDriveModel::run(double dt) {
             double average = (left_power_ + right_power_) / 2.0 ;
 
-            if (std::fabs(left_power_) > 0.0005 || std::fabs(right_power_) > 0.0005)
+            if (std::fabs(left_power_) > 0.01 || std::fabs(right_power_) > 0.01)
                 average += 1.0 ;
 
             //
@@ -283,11 +283,11 @@ namespace xero {
         void TankDriveModel::addDevice(Encoder *encoder) {
             int first, second ;
             encoder->SimulatorGetDigitalIOs(first, second) ;
-            if (first == 0 && second == 1) {
+            if (first == 3 && second == 2) {
                 left_enc_ = encoder ;
                 left_enc_->addModel(this) ;
             }
-            else if (first == 2 && second == 3) {
+            else if (first == 1 && second == 0) {
                 right_enc_ = encoder ;
                 right_enc_->addModel(this) ;
             }
