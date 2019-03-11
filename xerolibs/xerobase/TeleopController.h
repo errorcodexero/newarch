@@ -31,6 +31,8 @@ namespace xero {
 
             void removeDetector(DetectAutoSequence *det) ;
 
+            void printDetectors() ;
+
         private:
             std::shared_ptr<AutoMode> seq_ ;     
             std::list<std::shared_ptr<DetectAutoSequence>> auto_sequences_ ;

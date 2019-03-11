@@ -47,7 +47,7 @@ namespace xero {
             }
 
         private:
-            void calibrate(int encbase) ;
+            void calibrate(int value) ;
             void setMotorPower(double v) ;
 
             double getSafeRotateHeight() {

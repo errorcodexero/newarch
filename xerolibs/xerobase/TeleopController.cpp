@@ -15,6 +15,15 @@ namespace xero {
         TeleopController::~TeleopController() {            
         }
 
+        void TeleopController::printDetectors() {
+            std::cout << "Detectors:" ;
+            for(auto it = auto_sequences_.begin() ; it != auto_sequences_.end() ; it++) {
+                DetectAutoSequence *tryme = (*it).get() ;
+                std::cout << " " << tryme->getName() ;                
+            }
+            std::cout << std::endl ;
+        }
+
         void TeleopController::removeDetector(DetectAutoSequence *detector) {
             std::list<std::shared_ptr<DetectAutoSequence>>::iterator theone ;
             bool found = false ;
@@ -27,8 +36,12 @@ namespace xero {
                 }
             }
 
-            if (found)
+            if (found) {
+                std::cout << "Found detected" << std::endl ;
+                printDetectors() ;
                 auto_sequences_.erase(theone) ;
+                printDetectors() ;
+            }
         }
 
         void TeleopController::run() {

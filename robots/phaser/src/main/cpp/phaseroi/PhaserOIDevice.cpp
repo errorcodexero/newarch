@@ -225,6 +225,9 @@ namespace xero {
 
             button= settings.getInteger("oi:calibrate") ;
             calibrate_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+
+            button= settings.getInteger("oi:reverse") ;
+            reverse_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;      
         }
 
         //
@@ -658,12 +661,14 @@ namespace xero {
             std::shared_ptr<LineFollowAction> drive ;
             std::shared_ptr<ParallelAction> parallel = std::make_shared<ParallelAction>() ;
 
+            std::cout << "adding in line follower" ;
             if (dir_ == Direction::North && teleop != nullptr) {
+                std::cout << " - north " ;
                 line = ph.getPhaserRobotSubsystem()->getFrontLineSensor() ;
                 drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:front:power", "linefollower:front:distance", "linefollower:front:adjust") ;
-
             }
             else if (dir_ == Direction::South && teleop != nullptr) {
+                std::cout << " - south " ;                
                 line = ph.getPhaserRobotSubsystem()->getBackLineSensor() ;                
                 drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:back:power", "linefollower:back:distance", "linefollower:back:adjust") ;
             }
@@ -680,7 +685,9 @@ namespace xero {
             parallel->addSubActionPair(lifter, lift) ;
             parallel->addSubActionPair(oi, rumble) ;
 
+            std::cout << "Added line detector" << std::endl ;
             teleop->addDetector(std::make_shared<LineFollowerTakeover>(teleop, parallel, *line)) ;            
+            teleop->printDetectors() ;
         }
 
         //
@@ -715,7 +722,9 @@ namespace xero {
             parallel->addAction(seq) ;
             parallel->addSubActionPair(oi, rumble) ;
 
+            std::cout << "Added vision detectors" << std::endl ;
             teleop->addDetector(std::make_shared<VisionDetectTakeover>(teleop, parallel, *camera)) ;
+            teleop->printDetectors() ;
         }
 
         //
@@ -779,20 +788,28 @@ namespace xero {
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
             size_t camerano = HatchCamera ;
 
-            GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;         
+            GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;    
 
             if (piece == GamePieceManipulator::GamePieceType::Cargo) {
                 camerano = CargoCamera ;
+                frc::SmartDashboard::PutBoolean("PlaceCollect", true) ;                
+                frc::SmartDashboard::PutBoolean("CargoHatch", true) ;                 
             }   
             else if (piece == GamePieceManipulator::GamePieceType::Hatch) {
                 camerano = HatchCamera ;
+                frc::SmartDashboard::PutBoolean("PlaceCollect", true) ;               
+                frc::SmartDashboard::PutBoolean("CargoHatch", false) ;                  
             }   
             else {
                 if (getValue(hatch_cargo_switch_)) {
                     camerano = CargoCamera ;
+                    frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;                
+                    frc::SmartDashboard::PutBoolean("CargoHatch", true) ;                     
                 }
                 else {
                     camerano = HatchCamera ;
+                    frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;                
+                    frc::SmartDashboard::PutBoolean("CargoHatch", false) ;                     
                 }
             }
 
@@ -842,11 +859,12 @@ namespace xero {
                 game->setAction(reset_intakes_, true) ;
                 hatch_finger_start_ = getSubsystem().getRobot().getTime() ;
             }
-#ifdef NOTYET
-            else if (!fcol->isDone() && getValue(calibrate_)) {
+            else if (!fcol->isDone() && getValue(reverse_)) {
+                //
+                // Reverse the direction of the intake rollers
+                //
                 fcol->reverseIntake() ;
             }
-#endif            
             else if (game->isDone()) {
                 if (getValue(climb_lock_switch_) && getValue(climb_)) {
                     //
@@ -881,23 +899,26 @@ namespace xero {
                     hatch_finger_start_ = getSubsystem().getRobot().getTime() ;                     
                 }
                 else if (getValue(collect_floor_)) {
-                    if (game->getGamePieceType() == GamePieceManipulator::GamePieceType::None) {
+                    auto gp = game->getGamePieceType() ;
+                    if (gp == GamePieceManipulator::GamePieceType::None) {
                         //
                         // Collect game pieces from the floor
                         //
                         if (getValue(hatch_cargo_switch_))
                             game->setAction(set_collect_cargo_floor_) ;
-#ifdef NOTYET
                         else
                             game->setAction(set_collect_hatch_floor_) ;
-#endif
-
                         hatch_finger_start_ = getSubsystem().getRobot().getTime() ;                             
                     }
                     else {
                         MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
                         log.startMessage(MessageLogger::MessageType::error) ;
-                        log << "Pressed FloorCollect button while holding a game piece" ;
+                        log << "Pressed FloorCollect button while holding a game piece - " ;
+                        if (gp == GamePieceManipulator::GamePieceType::Cargo)
+                            log << "Cargo" ;
+                        else
+                            log << "Hatch" ;
+                            
                         log.endMessage() ;                          
                     }
                 }

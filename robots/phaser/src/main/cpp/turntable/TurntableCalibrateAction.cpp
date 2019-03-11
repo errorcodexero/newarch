@@ -2,6 +2,7 @@
 #include <Robot.h>
 #include <MessageLogger.h>
 #include <cstdlib>
+#include <iostream>
 
 using namespace xero::misc ;
 
@@ -21,7 +22,7 @@ namespace xero {
         }
 
         void TurntableCalibrateAction::start() {
-            getTurntable().setMotorPower(-0.1) ;
+            getTurntable().setMotorPower(power_) ;
             is_done_ = false ;
         }
 
@@ -40,16 +41,22 @@ namespace xero {
         }        
 
         void TurntableCalibrateAction::run() {
-            int minval, maxval ;            
-            counts_.push_back(getTurntable().getEncoderValue()) ;
-            if (counts_.size() > static_cast<size_t>(samples_))
-                counts_.pop_front() ;
+            if (!is_done_) {
+                int minval, maxval ;            
+                counts_.push_back(getTurntable().getEncoderValue()) ;
+                if (counts_.size() > static_cast<size_t>(samples_))
+                    counts_.pop_front() ;
 
-            getMinMax(minval, maxval) ;
-            if (counts_.size() == static_cast<size_t>(samples_) && maxval - minval <= threshold_) {
-                getTurntable().calibrate(encbase_) ;
-                is_done_ = true ;
-            }                
+
+                getMinMax(minval, maxval) ;
+                if (counts_.size() == static_cast<size_t>(samples_) && maxval - minval <= threshold_) {
+                    getTurntable().calibrate(encbase_) ;
+                    is_done_ = true ;
+                }                
+            }
+            else {
+                getTurntable().setMotorPower(0.0) ;
+            }
         }
 
         bool TurntableCalibrateAction::isDone() {

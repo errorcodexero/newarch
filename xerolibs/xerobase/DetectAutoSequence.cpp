@@ -15,5 +15,9 @@ namespace xero {
         void DetectAutoSequence::removeMe() {
             teleop_->removeDetector(this) ;
         }
+
+        void DetectAutoSequence::printDetectors() {
+            teleop_->printDetectors() ;
+        }
     }
 }

@@ -3,6 +3,7 @@
 #include <Robot.h>
 #include <MessageLogger.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <iostream>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -20,6 +21,7 @@ namespace xero {
             int e1 = parser.getInteger("hw:lifter:encoder1");
             int e2 = parser.getInteger("hw:lifter:encoder2");
             encoder_ = std::make_shared<frc::Encoder>(e1, e2) ;
+            encoder_->Reset() ;
 
             if (parser.isDefined("hw:lifter:limit:bottom")) {
                 int lbottom = parser.getInteger("hw:lifter:limit:bottom");
@@ -60,7 +62,6 @@ namespace xero {
             // The minimum height of the lifter independent of limit switches
             min_height_ = parser.getDouble("lifter:min_height") ;
 
-            // And we start without calibration
             calibrate(0) ;
 
             // Initialize to false, only gets reset if we have a limit switch
@@ -98,7 +99,7 @@ namespace xero {
                 talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
 
                 // TODO - generalize this for the lifter
-                talon->ConfigForwardLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyOpen) ;
+                talon->ConfigForwardLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyClosed) ;
                                 
                 if (motors_.size() > 0)
                     talon->Follow(*motors_.front()) ;
@@ -168,7 +169,6 @@ namespace xero {
             logger.endMessage() ;
 
             frc::SmartDashboard::PutNumber("Lift", height_) ;              
-
         }
 
         void Lifter::calibrate(int encbase) {
@@ -180,6 +180,7 @@ namespace xero {
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::info) ;
             logger << "Lifter: calibrated with encoder base " << encbase ;
+            logger << " encoders is " << encoder_->Get() ;
             logger.endMessage() ;            
         }
     }

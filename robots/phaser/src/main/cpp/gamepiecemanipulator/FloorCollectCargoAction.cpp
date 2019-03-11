@@ -58,15 +58,17 @@ namespace xero {
 
         void FloorCollectCargoAction::reverseIntake() {
             if (state_ == State::WaitForCargo || state_ == State::WaitForCargo2) {            
-                auto cargo_holder = getGamePiece().getCargoHolder() ;
+                auto cargo_intake = getGamePiece().getCargoIntake() ;
                 reversed_ = !reversed_ ;
 
                 if (reversed_) {
-                    cargo_holder->setAction(reverse_cargo_intake_motor_) ;
+                    cargo_intake->setAction(reverse_cargo_intake_motor_) ;
                 }
                 else {
-                    cargo_holder->setAction(set_cargo_holder_motor_) ;                    
+                    cargo_intake->setAction(set_cargo_intake_motor_) ;                    
                 }
+
+                state_ = State::WaitForCargo ;
             }
         }
 

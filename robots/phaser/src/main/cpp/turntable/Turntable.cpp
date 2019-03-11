@@ -25,6 +25,7 @@ namespace xero{
             int enc2 = robot.getSettingsParser().getInteger("hw:turntable:encoder2") ;           
             encoder_ = std::make_shared<frc::Encoder>(enc1, enc2) ;
             encoder_->SetReverseDirection(true) ;
+            encoder_->Reset() ;
 
             min_angle_ = robot.getSettingsParser().getDouble("turntable:keepout:minimum") ;
             max_angle_ = robot.getSettingsParser().getDouble("turntable:keepout:maximum") ;
@@ -137,7 +138,7 @@ namespace xero{
             frc::SmartDashboard::PutNumber("Turntable", angle_) ;                       
         }
 
-        void Turntable::calibrate(int encbase) {
+        void Turntable::calibrate(int cal) {
             //
             // The calibrate action assumes the turntable is at the bottom of travel
             // This may be because the turntable put there at the start of the match
@@ -145,14 +146,15 @@ namespace xero{
             // has activated and we are recalibrating to the limit switch
             //
             is_calibrated_ = true ;
-            encoder_->Reset() ;
             angle_ = 0.0 ;
             last_angle_ = 0.0 ;
-            encoder_base_ = encbase ;
+            encoder_base_ = cal ;
+
+            encoder_->Reset() ;
 
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::info) ;
-            logger << "Turntable: calibrated with encoder base " << encbase ;
+            logger << "Turntable: calibrated with encoder base " << encoder_base_ ;
             logger.endMessage() ;
         }
     }

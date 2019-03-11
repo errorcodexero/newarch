@@ -4,6 +4,7 @@
 #include "automodes/CenterHabTwoHatch.h"
 #include "automodes/HabCargoMode.h"
 #include "automodes/TankDriveScrubMode.h"
+#include "automodes/LifterHeightMode.h"
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveScrubCharAction.h>
 #include "Phaser.h"
@@ -47,10 +48,11 @@ namespace xero {
                 break ;
 
             case 6:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "CenterHab2CargoFrontLeft") ;
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), "Curve") ;
                 break ;
 
             case 7:
+                mode = std::make_shared<LifterHeightMode>(getRobot(), 55.0) ;
                 break ;
 
             case 8:

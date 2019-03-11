@@ -44,6 +44,13 @@ namespace xero {
                 if (counts_.size() > static_cast<size_t>(samples_))
                     counts_.pop_front() ;
 
+#ifdef NOTYET
+                std::cout << "lifter samples:" ;
+                for(int d: counts_)
+                    std::cout << " " << d ;
+                std::cout << std::endl ;                    
+#endif
+
                 getMinMax(minval, maxval) ;
                 if (counts_.size() == static_cast<size_t>(samples_) && maxval - minval <= threshold_) {
                     getLifter().calibrate(encbase_) ;

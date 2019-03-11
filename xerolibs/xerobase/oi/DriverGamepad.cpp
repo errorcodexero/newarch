@@ -83,15 +83,15 @@ namespace xero {
             double nudge_rotate = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:nudge_rotate") ;
             double nudge_time = getSubsystem().getRobot().getSettingsParser().getDouble("driver:nudge_time") ;
 
-            nudge_forward_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_straight, nudge_straight, nudge_time, false) ;
-            nudge_backward_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_straight, -nudge_straight, nudge_time, false) ;
-            nudge_clockwise_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_rotate, nudge_rotate, nudge_time, false) ;
-            nudge_counter_clockwise_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_rotate, -nudge_rotate, nudge_time, false) ;
+            nudge_forward_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_straight, nudge_straight, nudge_time, true) ;
+            nudge_backward_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_straight, -nudge_straight, nudge_time, true) ;
+            nudge_clockwise_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_rotate, nudge_rotate, nudge_time, true) ;
+            nudge_counter_clockwise_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_rotate, -nudge_rotate, nudge_time, true) ;
 
-            nudge_forward_high_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_straight, nudge_straight, nudge_time, true) ;
-            nudge_backward_high_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_straight, -nudge_straight, nudge_time, true) ;
-            nudge_clockwise_high_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_rotate, nudge_rotate, nudge_time, true) ;
-            nudge_counter_clockwise_high_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_rotate, -nudge_rotate, nudge_time, true) ;            
+            nudge_forward_high_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_straight, nudge_straight, nudge_time, false) ;
+            nudge_backward_high_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_straight, -nudge_straight, nudge_time, false) ;
+            nudge_clockwise_high_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_rotate, nudge_rotate, nudge_time, false) ;
+            nudge_counter_clockwise_high_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_rotate, -nudge_rotate, nudge_time, false) ;            
         }
 
         double DriverGamepad::scalePower(double axis, double boost, bool slow) {

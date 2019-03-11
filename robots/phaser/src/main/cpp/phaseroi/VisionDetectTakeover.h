@@ -20,8 +20,11 @@ namespace xero
 
             virtual bool isTakeoverValid() {
                 bool ret = camera_.shouldTerminate() ;
-                if (ret)
+                if (ret) {
+                    std::cout << "Vision detected" << std::endl ;
                     removeMe() ;
+                    printDetectors() ;
+                }
 
                 return ret ;
             }
