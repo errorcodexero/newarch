@@ -1,6 +1,9 @@
 #include "LifterCalibrateAction.h"
 #include "Lifter.h"
 #include <Robot.h>
+#include <MessageLogger.h>
+
+using namespace xero::misc ;
 
 namespace xero {
     namespace base {
@@ -44,12 +47,11 @@ namespace xero {
                 if (counts_.size() > static_cast<size_t>(samples_))
                     counts_.pop_front() ;
 
-#ifdef NOTYET
-                std::cout << "lifter samples:" ;
+                MessageLogger &logger = getLifter().getRobot().getMessageLogger() ;
+                logger << "lifter samples:" ;
                 for(int d: counts_)
-                    std::cout << " " << d ;
-                std::cout << std::endl ;                    
-#endif
+                    logger << " " << d ;
+                logger.endMessage() ;
 
                 getMinMax(minval, maxval) ;
                 if (counts_.size() == static_cast<size_t>(samples_) && maxval - minval <= threshold_) {

@@ -39,7 +39,6 @@ namespace xero {
             switch(state_) {
                 case State::LifterUp:
                     if (getGamePiece().getRobot().getTime() - lifter_up_start_ > lifter_up_duration_) {
-                        std::cout << "LifterUp done" << std::endl ;
                         state_ = State::TurntableCalibrate ;
                         turntable->setAction(turntable_calibrate_) ;
                         lifter->setAction(lifter_hold_) ;
@@ -48,7 +47,6 @@ namespace xero {
 
                 case State::TurntableCalibrate:
                     if (turntable_calibrate_->isDone()) {
-                        std::cout << "TurntableCalibrate done" << std::endl ;                        
                         state_ = State::TurntableNorth;
                         turntable->setAction(turntable_north_) ;
                     }
@@ -56,7 +54,6 @@ namespace xero {
 
                 case State::TurntableNorth:
                     if (turntable_north_->isDone()) {
-                        std::cout << "TurntableNorth done" << std::endl ;                          
                         state_ = State::LifterCalibrate ;
                         lifter->setAction(lifter_calibrate_) ;
                     }
@@ -64,7 +61,6 @@ namespace xero {
 
                 case State::LifterCalibrate:
                     if (lifter_calibrate_->isDone()) {
-                        std::cout << "LifterCalibrate done" << std::endl ;                            
                         state_ = State::Idle ;
                     }
                     break ;

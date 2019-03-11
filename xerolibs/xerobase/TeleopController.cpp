@@ -16,12 +16,13 @@ namespace xero {
         }
 
         void TeleopController::printDetectors() {
-            std::cout << "Detectors:" ;
+            MessageLogger &logger = getRobot().getMessageLogger() ;
+            logger << "Detectors:" ;
             for(auto it = auto_sequences_.begin() ; it != auto_sequences_.end() ; it++) {
                 DetectAutoSequence *tryme = (*it).get() ;
-                std::cout << " " << tryme->getName() ;                
+                logger << " " << tryme->getName() ;                
             }
-            std::cout << std::endl ;
+            logger.endMessage() ;
         }
 
         void TeleopController::removeDetector(DetectAutoSequence *detector) {

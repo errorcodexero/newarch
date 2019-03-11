@@ -661,14 +661,11 @@ namespace xero {
             std::shared_ptr<LineFollowAction> drive ;
             std::shared_ptr<ParallelAction> parallel = std::make_shared<ParallelAction>() ;
 
-            std::cout << "adding in line follower" ;
             if (dir_ == Direction::North && teleop != nullptr) {
-                std::cout << " - north " ;
                 line = ph.getPhaserRobotSubsystem()->getFrontLineSensor() ;
                 drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:front:power", "linefollower:front:distance", "linefollower:front:adjust") ;
             }
             else if (dir_ == Direction::South && teleop != nullptr) {
-                std::cout << " - south " ;                
                 line = ph.getPhaserRobotSubsystem()->getBackLineSensor() ;                
                 drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:back:power", "linefollower:back:distance", "linefollower:back:adjust") ;
             }
@@ -685,7 +682,6 @@ namespace xero {
             parallel->addSubActionPair(lifter, lift) ;
             parallel->addSubActionPair(oi, rumble) ;
 
-            std::cout << "Added line detector" << std::endl ;
             teleop->addDetector(std::make_shared<LineFollowerTakeover>(teleop, parallel, *line)) ;            
             teleop->printDetectors() ;
         }
@@ -722,7 +718,6 @@ namespace xero {
             parallel->addAction(seq) ;
             parallel->addSubActionPair(oi, rumble) ;
 
-            std::cout << "Added vision detectors" << std::endl ;
             teleop->addDetector(std::make_shared<VisionDetectTakeover>(teleop, parallel, *camera)) ;
             teleop->printDetectors() ;
         }
