@@ -788,23 +788,27 @@ namespace xero {
             if (piece == GamePieceManipulator::GamePieceType::Cargo) {
                 camerano = CargoCamera ;
                 frc::SmartDashboard::PutBoolean("PlaceCollect", true) ;                
-                frc::SmartDashboard::PutBoolean("CargoHatch", true) ;                 
+                frc::SmartDashboard::PutBoolean("CargoHatch", true) ;
+                frc::SmartDashboard::PutString("GameMode", "Place Cargo") ;
             }   
             else if (piece == GamePieceManipulator::GamePieceType::Hatch) {
                 camerano = HatchCamera ;
                 frc::SmartDashboard::PutBoolean("PlaceCollect", true) ;               
-                frc::SmartDashboard::PutBoolean("CargoHatch", false) ;                  
+                frc::SmartDashboard::PutBoolean("CargoHatch", false) ;    
+                frc::SmartDashboard::PutString("GameMode", "Place Hatch") ;                              
             }   
             else {
                 if (getValue(hatch_cargo_switch_)) {
                     camerano = CargoCamera ;
                     frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;                
-                    frc::SmartDashboard::PutBoolean("CargoHatch", true) ;                     
+                    frc::SmartDashboard::PutBoolean("CargoHatch", true) ;   
+                    frc::SmartDashboard::PutString("GameMode", "Collect Cargo") ;
                 }
                 else {
                     camerano = HatchCamera ;
                     frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;                
-                    frc::SmartDashboard::PutBoolean("CargoHatch", false) ;                     
+                    frc::SmartDashboard::PutBoolean("CargoHatch", false) ; 
+                    frc::SmartDashboard::PutString("GameMode", "Collect Hatch") ;                                        
                 }
             }
 

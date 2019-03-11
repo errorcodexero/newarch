@@ -7,7 +7,8 @@ AUTOMODES = \
 	src/main/cpp/automodes/TankDriveScrubMode.cpp\
 	src/main/cpp/automodes/CenterHabTwoHatch.cpp\
 	src/main/cpp/automodes/HabCargoMode.cpp\
-	src/main/cpp/automodes/FollowPathAutomode.cpp
+	src/main/cpp/automodes/FollowPathAutomode.cpp\
+	src/main/cpp/automodes/LifterHeightMode.cpp
 
 SOURCES = \
 	src/main/cpp/main.cpp\
