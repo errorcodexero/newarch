@@ -5,7 +5,7 @@ namespace xero {
         class LifterHeightMode : public PhaserAutoModeBase
         {
         public:
-            LifterHeightMode(xero::base::Robot &robot, double height, bool rel=true) ;
+            LifterHeightMode(xero::base::Robot &robot) ;
             virtual ~LifterHeightMode() ;
         } ;
     }

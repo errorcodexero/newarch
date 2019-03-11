@@ -17,7 +17,7 @@ namespace xero {
 
         void TeleopController::printDetectors() {
             MessageLogger &logger = getRobot().getMessageLogger() ;
-            logger << "Detectors:" ;
+            logger << "Currently Installed Detectors:" ;
             for(auto it = auto_sequences_.begin() ; it != auto_sequences_.end() ; it++) {
                 DetectAutoSequence *tryme = (*it).get() ;
                 logger << " " << tryme->getName() ;                
@@ -38,7 +38,6 @@ namespace xero {
             }
 
             if (found) {
-                std::cout << "Found detected" << std::endl ;
                 printDetectors() ;
                 auto_sequences_.erase(theone) ;
                 printDetectors() ;
