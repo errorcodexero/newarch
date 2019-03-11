@@ -84,7 +84,8 @@ namespace xero {
                     profile_->update(dist, 0.0, 0.0) ;
                     start_time_ = getLifter().getRobot().getTime() ;
                     start_height_ = getLifter().getHeight() ;
-                    plotid_ = getLifter().getRobot().startPlot("LifterGoToHeight", plot_columns_) ;
+                    std::string targetstr = std::to_string(target_) ;
+                    plotid_ = getLifter().getRobot().startPlot("LifterGoToHeight-" + targetstr, plot_columns_) ;
                     index_ = 0 ;
 
                     MessageLogger &logger = lifter.getRobot().getMessageLogger() ;

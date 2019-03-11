@@ -14,7 +14,7 @@ namespace xero {
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
             auto db = phaserrobot->getTankDrive() ;
 
-            pushSubActionPair(db, std::make_shared<TankDriveScrubCharAction>(*db, duration, power, -power, highgear)) ;
+            pushSubActionPair(db, std::make_shared<TankDriveScrubCharAction>(*db, 1.0, 0.0, 0.3, highgear)) ;
         }
 
         TankDriveScrubMode::~TankDriveScrubMode()

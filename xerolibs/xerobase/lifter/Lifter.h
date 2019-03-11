@@ -53,7 +53,7 @@ namespace xero {
             }
 
         private:            
-            void calibrate() ;
+            void calibrate(int encbase) ;
             void setMotorPower(double v) ;
 
             uint64_t getMsgID() const {
@@ -74,6 +74,7 @@ namespace xero {
             bool calibrate_from_limit_switch_ ;
 
             int encoder_value_ ;
+            int encoder_base_ ;
 
             double lifter_offset ;
             double inches_per_tick_ ;

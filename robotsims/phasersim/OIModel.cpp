@@ -10,7 +10,7 @@ namespace xero {
     namespace sim {
         namespace phaser {
             OIModel::OIModel(RobotSimBase &simbase) : SubsystemModel(simbase, "oi") {
-                ds_ = nullptr ;
+                ds_ = &frc::DriverStation::GetInstance() ;
             }
 
             OIModel::~OIModel() {               
@@ -51,7 +51,6 @@ namespace xero {
             }    
 
             void OIModel::addDevice(frc::DriverStation *ds) {
-                ds_ = ds ;
             }     
 
             void OIModel::setButton(int which, int button, bool value) {

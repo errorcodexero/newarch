@@ -11,10 +11,10 @@ hw:tankdrive:leftmotor:3             3                                  # TalonS
 hw:tankdrive:rightmotor:1            4                                  # TalonSRX 4
 hw:tankdrive:rightmotor:2            5                                  # TalonSRX 5
 hw:tankdrive:rightmotor:3            6                                  # TalonSRX 6
-hw:tankdrive:leftencoder:1           0                                  # DIO 0
-hw:tankdrive:leftencoder:2           1                                  # DIO 1
-hw:tankdrive:rightencoder:1          2                                  # DIO 2
-hw:tankdrive:rightencoder:2          3                                  # DIO 3
+hw:tankdrive:leftencoder:1           2                                  # DIO 0
+hw:tankdrive:leftencoder:2           3                                  # DIO 1
+hw:tankdrive:rightencoder:1          0                                  # DIO 2
+hw:tankdrive:rightencoder:2          1                                  # DIO 3
 hw:tankdrive:shifter                 0                                  # Solenoid 0
 
 # Hatch Holder

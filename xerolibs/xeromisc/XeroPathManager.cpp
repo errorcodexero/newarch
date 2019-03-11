@@ -34,7 +34,8 @@ namespace xero {
             if (leftData.size() == 0)
                 return false ;
 
-            paths_[pathName] = std::make_shared<XeroPath>(pathName, leftData, rightData);
+            // Path weaver has the data wrong, swap the left and right data
+            paths_[pathName] = std::make_shared<XeroPath>(pathName, rightData, leftData);
 
             return true;
         }

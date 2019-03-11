@@ -10,8 +10,8 @@ namespace xero {
     namespace base {
         std::list<std::string> TankDriveFollowPathAction::plot_columns_ = {
             "time", 
-            "ltpos", "lapos", "ltvel", "lavel", "ltaccel", "lout",
-            "rtpos", "rapos", "rtvel", "ravel", "rtaccel", "rout",
+            "ltpos", "lapos", "ltvel", "lavel", "ltaccel", "lout","lticks",
+            "rtpos", "rapos", "rtvel", "ravel", "rtaccel", "rout","rticks",
             "thead", "ahead"
         } ;
 
@@ -28,7 +28,7 @@ namespace xero {
                                 pname + "right:ka", pname + "right:kp", pname + "right:kd") ;
 
             turn_correction_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:turn_correction") ;
-            angle_error_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:angle_error") ;
+            angle_correction_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:angle_correction") ;
         }
 
         TankDriveFollowPathAction::~TankDriveFollowPathAction() {                
@@ -115,7 +115,7 @@ namespace xero {
                 rout += correct ;
 
                 double angerr = xero::math::normalizeAngleDegrees(thead - ahead) ;
-                double turn = angle_error_ * angerr ;
+                double turn = angle_correction_ * angerr ;
                 lout += turn ;
                 rout -= turn ;
 
@@ -148,18 +148,20 @@ namespace xero {
                 rb.addPlotData(plotid_, index_, 4, td.getLeftVelocity()) ;
                 rb.addPlotData(plotid_, index_, 5, laccel) ;
                 rb.addPlotData(plotid_, index_, 6, lout) ;
+                rb.addPlotData(plotid_, index_, 7, td.getLeftTickCount()) ;
 
                 // Right side
-                rb.addPlotData(plotid_, index_, 7, rpos) ;
-                rb.addPlotData(plotid_, index_, 8, td.getRightDistance()- right_start_) ;
-                rb.addPlotData(plotid_, index_, 9, rvel) ;
-                rb.addPlotData(plotid_, index_, 10, td.getRightVelocity()) ;
-                rb.addPlotData(plotid_, index_, 11, raccel) ;
-                rb.addPlotData(plotid_, index_, 12, rout) ;                
+                rb.addPlotData(plotid_, index_, 8, rpos) ;
+                rb.addPlotData(plotid_, index_, 9, td.getRightDistance()- right_start_) ;
+                rb.addPlotData(plotid_, index_, 10, rvel) ;
+                rb.addPlotData(plotid_, index_, 11, td.getRightVelocity()) ;
+                rb.addPlotData(plotid_, index_, 12, raccel) ;
+                rb.addPlotData(plotid_, index_, 13, rout) ;
+                rb.addPlotData(plotid_, index_, 14, td.getRightTickCount()) ;
 
-                // XY data
-                rb.addPlotData(plotid_, index_, 13, thead) ;
-                rb.addPlotData(plotid_, index_, 14, ahead) ;
+                // Angle data
+                rb.addPlotData(plotid_, index_, 15, thead) ;
+                rb.addPlotData(plotid_, index_, 16, ahead) ;
             }
             index_++ ;     
             if (index_ == path_->size())

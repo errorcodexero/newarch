@@ -15,7 +15,24 @@ namespace xero {
         TeleopController::~TeleopController() {            
         }
 
+        void TeleopController::printDetectors() {
+            MessageLogger &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::info) ;            
+            logger << "Currently Installed Detectors:" ;
+            for(auto it = auto_sequences_.begin() ; it != auto_sequences_.end() ; it++) {
+                DetectAutoSequence *tryme = (*it).get() ;
+                logger << " " << tryme->getName() ;                
+            }
+            logger.endMessage() ;
+        }
+
         void TeleopController::removeDetector(DetectAutoSequence *detector) {
+            MessageLogger &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::info) ;
+            logger << "Removing detectors :" ;
+            logger << detector->getName() ;
+            logger.endMessage() ;
+
             std::list<std::shared_ptr<DetectAutoSequence>>::iterator theone ;
             bool found = false ;
 
@@ -27,8 +44,14 @@ namespace xero {
                 }
             }
 
-            if (found)
+            if (found) {
+                logger.startMessage(MessageLogger::MessageType::info) ;                
+                logger << "    detector found in detector list" ;
+                logger.endMessage() ;                
                 auto_sequences_.erase(theone) ;
+            }
+
+            printDetectors() ;
         }
 
         void TeleopController::run() {

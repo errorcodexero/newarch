@@ -71,7 +71,7 @@ namespace xero {
             void setMotor(double power) {
                 motor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, power) ;
                 current_power_ = power ;
-            }       
+            }
 
         private:
             // The TalonSRX motor controller is a talon is used

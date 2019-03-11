@@ -93,7 +93,8 @@ namespace xero {
                 auto &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << "Shifted tankdrive to low gear" ;
-                logger.endMessage() ;                
+                logger.endMessage() ;    
+                frc::SmartDashboard::PutBoolean("HighGear", false) ;
             } else {
                 auto &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::warning) ;
@@ -107,7 +108,8 @@ namespace xero {
                 auto &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << "Shifted tankdrive to high gear" ;
-                logger.endMessage() ;                
+                logger.endMessage() ;  
+                frc::SmartDashboard::PutBoolean("HighGear", true) ;
             } else {
                 auto &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::warning) ;

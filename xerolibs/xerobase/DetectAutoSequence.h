@@ -23,6 +23,7 @@ namespace xero
             }
 
             void removeMe() ;
+            void printDetectors() ;
 
             const std::string &getName() {
                 return name_ ;

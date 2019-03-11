@@ -247,6 +247,8 @@ namespace xero {
             // Auto mode controller, created at the start and stored
             std::shared_ptr<AutoController> auto_controller_;           
 
+            std::shared_ptr<ControllerBase> teleop_controller_ ;
+
             // The list of subsystem that belong to the robot
             SubsystemPtr robot_subsystem_ ;
             std::shared_ptr<DriveBase> drivebase_subsystem_ ;

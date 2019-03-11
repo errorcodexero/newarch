@@ -14,6 +14,7 @@
 #include "gamepiecemanipulator/ScoreHatch.h"
 #include "gamepiecemanipulator/ReadyAction.h"
 #include "gamepiecemanipulator/ResetIntakesAction.h"
+#include "gamepiecemanipulator/CalibrateManip.h"
 #include "cargointake/CargoIntakeAction.h"
 #include "singlemotorsubsystem/SingleMotorPowerAction.h"
 #include "phasercameratracker/DriveByVisionAction.h"
@@ -55,7 +56,6 @@ namespace xero {
             mode_ = OperationMode::Invalid ;     
 
             has_hatch_state_ = false ;
-            
         }
 
         PhaserOIDevice::~PhaserOIDevice() {
@@ -133,34 +133,34 @@ namespace xero {
         //
         // Update the mode of the robot.  This should changes the camera mode if necessary
         //
-        void PhaserOIDevice::updateMode(OperationMode mode) {
+        void PhaserOIDevice::updateMode(OperationMode newmode) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;  
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
 
-            if ((mode_ == OperationMode::Manual || mode_ == OperationMode::SemiAuto || mode_ == OperationMode::Invalid) && mode == OperationMode::Auto)
+            if ((mode_ == OperationMode::Manual || mode_ == OperationMode::SemiAuto || mode_ == OperationMode::Invalid) && newmode == OperationMode::Auto)
             {
                 // Switch camera to tracking mode
                 auto act = std::make_shared<CameraChangeAction>(*camera, camera->getCameraIndex(), CameraTracker::CameraMode::TargetTracking) ;
                 camera->setAction(act) ;         
             }
-            else if (mode_ == OperationMode::Auto && (mode == OperationMode::Manual || mode == OperationMode::SemiAuto || mode_ == OperationMode::Invalid))
+            else if (mode_ == OperationMode::Auto && (newmode == OperationMode::Manual || newmode == OperationMode::SemiAuto || mode_ == OperationMode::Invalid))
             {
                 // Switch camera to viewing mode
                 auto act = std::make_shared<CameraChangeAction>(*camera, camera->getCameraIndex(), CameraTracker::CameraMode::DriverViewing) ;
                 camera->setAction(act) ;
             }
 
-            std::string newmode = toString(mode) ;
+            std::string newmodestr = toString(newmode) ;
 
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
             log << "OI: updating mode" ;
             log << ", old mode " << toString(mode_) ;
-            log << ", new mode " << newmode ; ;
+            log << ", new mode " << newmodestr ; ;
             log.endMessage() ;            
 
-            mode_ = mode ;
-            frc::SmartDashboard::PutString("RobotMode", newmode) ;
+            mode_ = newmode ;
+            frc::SmartDashboard::PutString("RobotMode", newmodestr) ;
         }        
         
         //
@@ -224,6 +224,9 @@ namespace xero {
 
             button= settings.getInteger("oi:calibrate") ;
             calibrate_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+
+            button= settings.getInteger("oi:reverse") ;
+            reverse_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;      
         }
 
         //
@@ -254,6 +257,8 @@ namespace xero {
             climb_action_ = std::make_shared<ClimbAction>(*ph.getPhaserRobotSubsystem()) ;
 
             deploy_climber_ = std::make_shared<ClimberDeployAction>(*climber) ;
+
+            calibrate_action_ = std::make_shared<CalibrateManip>(*game) ;
         }
 
         //
@@ -658,7 +663,6 @@ namespace xero {
             if (dir_ == Direction::North && teleop != nullptr) {
                 line = ph.getPhaserRobotSubsystem()->getFrontLineSensor() ;
                 drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:front:power", "linefollower:front:distance", "linefollower:front:adjust") ;
-
             }
             else if (dir_ == Direction::South && teleop != nullptr) {
                 line = ph.getPhaserRobotSubsystem()->getBackLineSensor() ;                
@@ -678,6 +682,12 @@ namespace xero {
             parallel->addSubActionPair(oi, rumble) ;
 
             teleop->addDetector(std::make_shared<LineFollowerTakeover>(teleop, parallel, *line)) ;            
+            teleop->printDetectors() ;
+
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: setup line detector" ;
+            log.endMessage() ;
+            teleop->printDetectors() ;            
         }
 
         //
@@ -688,31 +698,30 @@ namespace xero {
         //
         void PhaserOIDevice::setupVisionDetectors() {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ; 
+            MessageLogger &log = ph.getMessageLogger() ;               
             auto oi = ph.getOI() ;
             auto db = ph.getPhaserRobotSubsystem()->getTankDrive() ;  
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
             std::shared_ptr<ParallelAction> parallel = std::make_shared<ParallelAction>() ;
-            
-            ActionPtr finish = getFinishAction() ;
-            ActionPtr drive ;
-            auto ctrl = ph.getCurrentController() ;
-
-            std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;    
-            MessageLogger &log = ph.getMessageLogger() ;    
 
             ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
-            drive = std::make_shared<DriveByVisionAction>(*db, *camera) ;
+            ActionPtr drive = std::make_shared<DriveByVisionAction>(*db, *camera) ;
 
             ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 3, 1.0, 0.3333333) ;            
 
-            seq->pushSubActionPair(db, drive) ;
-            seq->pushSubActionPair(game, finish) ;
-
-            parallel->addAction(seq) ;
+            parallel->addAction(drive) ;
             parallel->addSubActionPair(oi, rumble) ;
 
+            auto ctrl = ph.getCurrentController() ;
+            std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;  
             teleop->addDetector(std::make_shared<VisionDetectTakeover>(teleop, parallel, *camera)) ;
+            teleop->printDetectors() ;
+
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: setup vision detector" ;
+            log.endMessage() ;
+            teleop->printDetectors() ;
         }
 
         //
@@ -776,20 +785,32 @@ namespace xero {
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
             size_t camerano = HatchCamera ;
 
-            GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;         
+            GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;    
 
             if (piece == GamePieceManipulator::GamePieceType::Cargo) {
                 camerano = CargoCamera ;
+                frc::SmartDashboard::PutBoolean("PlaceCollect", true) ;                
+                frc::SmartDashboard::PutBoolean("CargoHatch", true) ;
+                frc::SmartDashboard::PutString("GameMode", "Place Cargo") ;
             }   
             else if (piece == GamePieceManipulator::GamePieceType::Hatch) {
                 camerano = HatchCamera ;
+                frc::SmartDashboard::PutBoolean("PlaceCollect", true) ;               
+                frc::SmartDashboard::PutBoolean("CargoHatch", false) ;    
+                frc::SmartDashboard::PutString("GameMode", "Place Hatch") ;                              
             }   
             else {
                 if (getValue(hatch_cargo_switch_)) {
                     camerano = CargoCamera ;
+                    frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;                
+                    frc::SmartDashboard::PutBoolean("CargoHatch", true) ;   
+                    frc::SmartDashboard::PutString("GameMode", "Collect Cargo") ;
                 }
                 else {
                     camerano = HatchCamera ;
+                    frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;                
+                    frc::SmartDashboard::PutBoolean("CargoHatch", false) ; 
+                    frc::SmartDashboard::PutString("GameMode", "Collect Hatch") ;                                        
                 }
             }
 
@@ -811,7 +832,8 @@ namespace xero {
         void PhaserOIDevice::generateActions(ActionSequence &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
-            auto hatch_holder = game->getHatchHolder() ;     
+            auto hatch_holder = game->getHatchHolder() ;    
+            auto fcol = std::dynamic_pointer_cast<FloorCollectCargoAction>(set_collect_cargo_floor_) ; 
     
             //
             // Get the tracking mode, either auto, semi-auto, or manual
@@ -827,13 +849,22 @@ namespace xero {
             // Cannot execute turtle mode if we are already executing turtle mode, or if we have
             // triggered the climb sequence.
             //
-            if (getValue(turtle_mode_) && reset_intakes_->isDone() && climb_action_->isDone()) {
+            if (getValue(calibrate_)) {
+                game->setAction(calibrate_action_) ;
+            }
+            else if (getValue(turtle_mode_) && reset_intakes_->isDone() && climb_action_->isDone()) {
                 //
                 // Directly assign the action and make it forcing to ensure this
                 // action takes priority over everything else.
                 //
                 game->setAction(reset_intakes_, true) ;
                 hatch_finger_start_ = getSubsystem().getRobot().getTime() ;
+            }
+            else if (!fcol->isDone() && getValue(reverse_)) {
+                //
+                // Reverse the direction of the intake rollers
+                //
+                fcol->reverseIntake() ;
             }
             else if (game->isDone()) {
                 if (getValue(climb_lock_switch_) && getValue(climb_)) {
@@ -869,23 +900,26 @@ namespace xero {
                     hatch_finger_start_ = getSubsystem().getRobot().getTime() ;                     
                 }
                 else if (getValue(collect_floor_)) {
-                    if (game->getGamePieceType() == GamePieceManipulator::GamePieceType::None) {
+                    auto gp = game->getGamePieceType() ;
+                    if (gp == GamePieceManipulator::GamePieceType::None) {
                         //
                         // Collect game pieces from the floor
                         //
                         if (getValue(hatch_cargo_switch_))
                             game->setAction(set_collect_cargo_floor_) ;
-#ifdef NOTYET
                         else
                             game->setAction(set_collect_hatch_floor_) ;
-#endif
-
                         hatch_finger_start_ = getSubsystem().getRobot().getTime() ;                             
                     }
                     else {
                         MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
                         log.startMessage(MessageLogger::MessageType::error) ;
-                        log << "Pressed FloorCollect button while holding a game piece" ;
+                        log << "Pressed FloorCollect button while holding a game piece - " ;
+                        if (gp == GamePieceManipulator::GamePieceType::Cargo)
+                            log << "Cargo" ;
+                        else
+                            log << "Hatch" ;
+                            
                         log.endMessage() ;                          
                     }
                 }

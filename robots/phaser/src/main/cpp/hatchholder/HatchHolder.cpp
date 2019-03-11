@@ -17,6 +17,8 @@ namespace xero {
             finger_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:hatchholder:finger"));
             sensor_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:hatchholder:sensor"));
 
+            duration_ = robot.getSettingsParser().getDouble("hatchholder:debounce") ;
+
             finger_->Set(false) ;
             arm_extend_->Set(false) ;
             arm_retract_->Set(false) ;
@@ -25,6 +27,11 @@ namespace xero {
             arm_deployed_ = false ;
 
             auto_hatch_enabled_ = true ;
+            
+            has_hatch_ = false ;
+            last_switch_state_ = false ;
+            last_switch_time_ = robot.getTime() ;
+            pending_ = false ;
         }   
 
         HatchHolder::~HatchHolder() {
@@ -37,7 +44,26 @@ namespace xero {
         }  
 
         void HatchHolder::computeState() {
-            has_hatch_ = sensor_->Get() ;
+            bool current = sensor_->Get() ;
+
+            if (pending_) {
+                if (current != last_switch_state_) {
+                    last_switch_state_ = current ;
+                    last_switch_time_ = getRobot().getTime() ;
+                }
+                else if (getRobot().getTime() - last_switch_time_ > duration_) {
+                    has_hatch_ = current ;
+                    pending_ = false ;
+                }
+            }
+            else
+            {
+                if (current != has_hatch_) {
+                    last_switch_state_ = current ;
+                    last_switch_time_ = getRobot().getTime() ;
+                    pending_ = true ;
+                }
+            }
 
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;

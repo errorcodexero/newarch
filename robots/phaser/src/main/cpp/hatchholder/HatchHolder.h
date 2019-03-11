@@ -52,6 +52,11 @@ namespace xero {
             std::shared_ptr<frc::Solenoid> arm_extend_ ;
             std::shared_ptr<frc::Solenoid> arm_retract_ ;
             std::shared_ptr<frc::Solenoid> finger_ ;
+
+            bool last_switch_state_;
+            bool pending_ ;
+            double last_switch_time_ ;
+            double duration_ ;
         } ;
     }
 }

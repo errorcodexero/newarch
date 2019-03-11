@@ -3,6 +3,7 @@
 #include <Robot.h>
 #include <MessageLogger.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <iostream>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -20,6 +21,7 @@ namespace xero {
             int e1 = parser.getInteger("hw:lifter:encoder1");
             int e2 = parser.getInteger("hw:lifter:encoder2");
             encoder_ = std::make_shared<frc::Encoder>(e1, e2) ;
+            encoder_->Reset() ;
 
             if (parser.isDefined("hw:lifter:limit:bottom")) {
                 int lbottom = parser.getInteger("hw:lifter:limit:bottom");
@@ -60,18 +62,11 @@ namespace xero {
             // The minimum height of the lifter independent of limit switches
             min_height_ = parser.getDouble("lifter:min_height") ;
 
-            // And we start without calibration
-            is_calibrated_ = true ;
-
-            // The base encoder value
-            encoder_value_ = 0 ;
+            calibrate(0) ;
 
             // Initialize to false, only gets reset if we have a limit switch
             bottom_limit_switch_ = false ;
             top_limit_switch_ = false ;
-
-            height_ = 0.0 ;
-            speed_ = 0.0 ;
         }
 
         Lifter::~Lifter() {
@@ -104,7 +99,7 @@ namespace xero {
                 talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
 
                 // TODO - generalize this for the lifter
-                talon->ConfigForwardLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyOpen) ;
+                talon->ConfigForwardLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyClosed) ;
                                 
                 if (motors_.size() > 0)
                     talon->Follow(*motors_.front()) ;
@@ -156,11 +151,8 @@ namespace xero {
             if (top_limit_ != nullptr)
                 top_limit_switch_ = !top_limit_->Get() ;
 
-            if (bottom_limit_switch_ && calibrate_from_limit_switch_)
-                calibrate() ;
-
             if (is_calibrated_) {
-                height_ = encoder_value_ * inches_per_tick_ + lifter_offset ;
+                height_ = (encoder_value_ + encoder_base_) * inches_per_tick_ + lifter_offset ;
                 speed_ = (height_ - last_height_) / getRobot().getDeltaTime() ;
                 last_height_ = height_ ;
             }
@@ -169,6 +161,7 @@ namespace xero {
             logger.startMessage(MessageLogger::MessageType::debug, msg_id_) ;
             logger << "Lifter:" ;
             logger << " ticks " << encoder_value_ ;
+            logger << " encbase " << encoder_base_ ;
             logger << " calibrated " << is_calibrated_ ;
             logger << " height " << height_ ;
             logger << " speed " << speed_ ;
@@ -176,20 +169,19 @@ namespace xero {
             logger.endMessage() ;
 
             frc::SmartDashboard::PutNumber("Lift", height_) ;              
-
         }
 
-        void Lifter::calibrate() {
-            //
-            // The calibrate action assumes the lifter is at the bottom of travel
-            // This may be because the lifter put there at the start of the match
-            // and calibrate is called.  It may also be because the bottom limit
-            // has activated and we are recalibrating to the limit switch
-            //
+        void Lifter::calibrate(int encbase) {
             is_calibrated_ = true ;
             encoder_->Reset() ;
-            last_height_ = min_height_ ;
-            height_ = min_height_ ;
+            encoder_base_ = encbase ;
+            speed_ = 0.0 ;
+
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::info) ;
+            logger << "Lifter: calibrated with encoder base " << encbase ;
+            logger << " encoders is " << encoder_->Get() ;
+            logger.endMessage() ;            
         }
     }
 }
