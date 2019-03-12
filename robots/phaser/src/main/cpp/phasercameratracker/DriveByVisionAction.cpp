@@ -79,12 +79,9 @@ namespace xero {
                     lost_count_ = 0 ;
 
                     double desired_yaw = 0.0031 * dist * dist - 0.3855 * dist + 14.938 ;
-                    if (reverse_) 
-                        desired_yaw = -desired_yaw ;
+                    double yawerror = yaw - desired_yaw ;
 
-                    yaw -= desired_yaw ;
-
-                    double yawadj = yaw * yaw_p_ ;
+                    double yawadj = yawerror * yaw_p_ ;
                     double left = yaw_base_power_ + yawadj ;
                     double right = yaw_base_power_ - yawadj ;
                     setMotorsToPercents(left, right) ;
@@ -93,6 +90,8 @@ namespace xero {
                     logger << "DriveByVision:" ;
                     logger << " state " << toString(state_) ;
                     logger << " yaw " << yaw ;
+                    logger << " desired " << desired_yaw ;
+                    logger << " yawerror " << yawerror ; 
                     logger << " yawadj " << yawadj ;
                     logger << " left " << left ;
                     logger << " right " << right ;

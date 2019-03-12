@@ -70,7 +70,7 @@ namespace xero {
             std::string heightToString() ;
             std::string toString(OperationMode mode) ;
 
-            std::string generateActionHeightName() ;
+            std::string generateActionHeightName(bool tracking) ;
 
         private:
             static const size_t HatchCamera = 0 ;
