@@ -283,7 +283,7 @@ namespace xero {
         void TankDriveModel::addDevice(Encoder *encoder) {
             int first, second ;
             encoder->SimulatorGetDigitalIOs(first, second) ;
-            if (first == 3 && second == 2) {
+            if (first == 2 && second == 3) {
                 left_enc_ = encoder ;
                 left_enc_->addModel(this) ;
             }

@@ -69,8 +69,7 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_ACTIONS);               
             logger.enableSubsystem(MSG_GROUP_OI) ;
             logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE); 
-            logger.enableSubsystem(MSG_GROUP_VISION_DRIVING); 
-            logger.enableSubsystem(MSG_GROUP_LINE_FOLLOWER);  
+            logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
 
             //
             // This should stay on.  It will have no effect on the real robot
@@ -83,12 +82,15 @@ namespace xero {
         void Phaser::loadPaths() {
             auto paths = getPathManager() ;
             paths->loadPath("CenterHab2CargoFrontLeft") ; 
-            paths->loadPath("Curve") ;
-            paths->loadPath("CargoFrontRightLSRight") ;                  
-            paths->loadPath("CargoFrontLeftLSLeft") ;
             paths->loadPath("CenterHab2CargoFrontRight") ;  
+            paths->loadPath("CargoFrontLeftLSLeft") ;
+            paths->loadPath("CargoFrontRightLSRight") ;
+            paths->loadPath("LeftHABLeftRocket") ;
+            paths->loadPath("LeftRocketLSLeft") ;
             paths->loadPath("LSLeftCargoFrontRight") ;
             paths->loadPath("LSRightCargoFrontLeft") ;
+            paths->loadPath("RightHABRightCargo") ;
+            paths->loadPath("RightRocketLSRight") ;
         }
         
         void Phaser::RobotHardwareInit() {

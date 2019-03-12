@@ -6,5 +6,5 @@
   "maxJerk": 20000.0,
   "wheelBase": 23.64,
   "gameName": "Destination: Deep Space",
-  "outputDir": "../deploy"
+  "outputDir": "../../deploy"
 }

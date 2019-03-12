@@ -27,7 +27,7 @@ namespace xero{
             else
                 current_error = dtarget - dactual ;
                 
-            double output = v * kv_ + a * ka_ + last_error_ * kp_ + ((current_error - last_error_) / dt -v) * kd_ ;
+            double output = v * kv_ + a * ka_ + current_error * kp_ + ((current_error - last_error_) / dt -v) * kd_ ;
             last_error_ = current_error ;
             return output ;
         }
