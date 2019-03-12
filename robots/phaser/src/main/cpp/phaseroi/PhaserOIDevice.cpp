@@ -58,7 +58,6 @@ namespace xero {
             mode_ = OperationMode::Invalid ;     
 
             has_hatch_state_ = false ;
-            
         }
 
         PhaserOIDevice::~PhaserOIDevice() {
@@ -136,34 +135,34 @@ namespace xero {
         //
         // Update the mode of the robot.  This should changes the camera mode if necessary
         //
-        void PhaserOIDevice::updateMode(OperationMode mode) {
+        void PhaserOIDevice::updateMode(OperationMode newmode) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;  
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
 
-            if ((mode_ == OperationMode::Manual || mode_ == OperationMode::SemiAuto || mode_ == OperationMode::Invalid) && mode == OperationMode::Auto)
+            if ((mode_ == OperationMode::Manual || mode_ == OperationMode::SemiAuto || mode_ == OperationMode::Invalid) && newmode == OperationMode::Auto)
             {
                 // Switch camera to tracking mode
                 auto act = std::make_shared<CameraChangeAction>(*camera, camera->getCameraIndex(), CameraTracker::CameraMode::TargetTracking) ;
                 camera->setAction(act) ;         
             }
-            else if (mode_ == OperationMode::Auto && (mode == OperationMode::Manual || mode == OperationMode::SemiAuto || mode_ == OperationMode::Invalid))
+            else if (mode_ == OperationMode::Auto && (newmode == OperationMode::Manual || newmode == OperationMode::SemiAuto || mode_ == OperationMode::Invalid))
             {
                 // Switch camera to viewing mode
                 auto act = std::make_shared<CameraChangeAction>(*camera, camera->getCameraIndex(), CameraTracker::CameraMode::DriverViewing) ;
                 camera->setAction(act) ;
             }
 
-            std::string newmode = toString(mode) ;
+            std::string newmodestr = toString(newmode) ;
 
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
             log << "OI: updating mode" ;
             log << ", old mode " << toString(mode_) ;
-            log << ", new mode " << newmode ; ;
+            log << ", new mode " << newmodestr ; ;
             log.endMessage() ;            
 
-            mode_ = mode ;
-            frc::SmartDashboard::PutString("RobotMode", newmode) ;
+            mode_ = newmode ;
+            frc::SmartDashboard::PutString("RobotMode", newmodestr) ;
         }        
         
         //
@@ -662,14 +661,11 @@ namespace xero {
             std::shared_ptr<LineFollowAction> drive ;
             std::shared_ptr<ParallelAction> parallel = std::make_shared<ParallelAction>() ;
 
-            std::cout << "adding in line follower" ;
             if (dir_ == Direction::North && teleop != nullptr) {
-                std::cout << " - north " ;
                 line = ph.getPhaserRobotSubsystem()->getFrontLineSensor() ;
                 drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:front:power", "linefollower:front:distance", "linefollower:front:adjust") ;
             }
             else if (dir_ == Direction::South && teleop != nullptr) {
-                std::cout << " - south " ;                
                 line = ph.getPhaserRobotSubsystem()->getBackLineSensor() ;                
                 drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:back:power", "linefollower:back:distance", "linefollower:back:adjust") ;
             }
@@ -686,9 +682,13 @@ namespace xero {
             parallel->addSubActionPair(lifter, lift) ;
             parallel->addSubActionPair(oi, rumble) ;
 
-            std::cout << "Added line detector" << std::endl ;
             teleop->addDetector(std::make_shared<LineFollowerTakeover>(teleop, parallel, *line)) ;            
             teleop->printDetectors() ;
+
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: setup line detector" ;
+            log.endMessage() ;
+            teleop->printDetectors() ;            
         }
 
         //
@@ -699,6 +699,7 @@ namespace xero {
         //
         void PhaserOIDevice::setupVisionDetectors() {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ; 
+            MessageLogger &log = ph.getMessageLogger() ;               
             auto oi = ph.getOI() ;
             auto db = ph.getPhaserRobotSubsystem()->getTankDrive() ;  
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
@@ -748,8 +749,14 @@ namespace xero {
             parallel->addAction(seq) ;
             parallel->addSubActionPair(oi, rumble) ;
 
-            std::cout << "Added vision detectors" << std::endl ;
+            auto ctrl = ph.getCurrentController() ;
+            std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;  
             teleop->addDetector(std::make_shared<VisionDetectTakeover>(teleop, parallel, *camera)) ;
+            teleop->printDetectors() ;
+
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: setup vision detector" ;
+            log.endMessage() ;
             teleop->printDetectors() ;
         }
 
@@ -819,23 +826,27 @@ namespace xero {
             if (piece == GamePieceManipulator::GamePieceType::Cargo) {
                 camerano = CargoCamera ;
                 frc::SmartDashboard::PutBoolean("PlaceCollect", true) ;                
-                frc::SmartDashboard::PutBoolean("CargoHatch", true) ;                 
+                frc::SmartDashboard::PutBoolean("CargoHatch", true) ;
+                frc::SmartDashboard::PutString("GameMode", "Place Cargo") ;
             }   
             else if (piece == GamePieceManipulator::GamePieceType::Hatch) {
                 camerano = HatchCamera ;
                 frc::SmartDashboard::PutBoolean("PlaceCollect", true) ;               
-                frc::SmartDashboard::PutBoolean("CargoHatch", false) ;                  
+                frc::SmartDashboard::PutBoolean("CargoHatch", false) ;    
+                frc::SmartDashboard::PutString("GameMode", "Place Hatch") ;                              
             }   
             else {
                 if (getValue(hatch_cargo_switch_)) {
                     camerano = CargoCamera ;
                     frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;                
-                    frc::SmartDashboard::PutBoolean("CargoHatch", true) ;                     
+                    frc::SmartDashboard::PutBoolean("CargoHatch", true) ;   
+                    frc::SmartDashboard::PutString("GameMode", "Collect Cargo") ;
                 }
                 else {
                     camerano = HatchCamera ;
                     frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;                
-                    frc::SmartDashboard::PutBoolean("CargoHatch", false) ;                     
+                    frc::SmartDashboard::PutBoolean("CargoHatch", false) ; 
+                    frc::SmartDashboard::PutString("GameMode", "Collect Hatch") ;                                        
                 }
             }
 

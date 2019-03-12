@@ -52,7 +52,7 @@ namespace xero {
                 break ;
 
             case 7:
-                mode = std::make_shared<LifterHeightMode>(getRobot(), 55.0) ;
+                mode = std::make_shared<LifterHeightMode>(getRobot()) ;
                 break ;
 
             case 8:
