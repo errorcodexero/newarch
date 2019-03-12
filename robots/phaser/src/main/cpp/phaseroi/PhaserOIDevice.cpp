@@ -714,7 +714,6 @@ namespace xero {
             auto ctrl = ph.getCurrentController() ;
 
             std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;    
-            MessageLogger &log = ph.getMessageLogger() ;    
 
             ActionPtr lineaction ;            
 
@@ -749,8 +748,6 @@ namespace xero {
             parallel->addAction(seq) ;
             parallel->addSubActionPair(oi, rumble) ;
 
-            auto ctrl = ph.getCurrentController() ;
-            std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;  
             teleop->addDetector(std::make_shared<VisionDetectTakeover>(teleop, parallel, *camera)) ;
             teleop->printDetectors() ;
 
