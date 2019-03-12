@@ -118,7 +118,12 @@ namespace xero {
 
                         MessageLogger &logger = getRobot().getMessageLogger() ;
                         logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
-                        logger << "Actions: subsystem '" << getName() << "' action '" << action->toString() << "' was pended" ;
+                        if (action == nullptr) {
+                            logger << "Actions: subsystem '" << getName() << "' action NULL was pended" ;
+                        }
+                        else {
+                            logger << "Actions: subsystem '" << getName() << "' action '" << action->toString() << "' was pended" ;                            
+                        }
                         logger.endMessage() ;                    
                     }
                 }

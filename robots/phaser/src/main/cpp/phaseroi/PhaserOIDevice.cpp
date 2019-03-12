@@ -32,8 +32,10 @@
 #include "phaserids.h"
 
 #include <Robot.h>
+#include <lightsensor/LightSensorSubsystem.h>
 #include <TeleopController.h>
 #include <SettingsParser.h>
+#include <TerminateAction.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::base ;
@@ -484,7 +486,7 @@ namespace xero {
         // trying to complete.  IT takes into account place/collect, mode (auto, semi, manual), 
         // height, and cargo/hatch.
         //
-        std::string PhaserOIDevice::generateActionHeightName() {
+        std::string PhaserOIDevice::generateActionHeightName(bool tracking) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto lifter = game->getLifter() ;
@@ -493,7 +495,7 @@ namespace xero {
             std::string height ;
 
             if (piece == GamePieceManipulator::GamePieceType::Hatch) {
-                if (mode_ == OperationMode::Auto) {
+                if (mode_ == OperationMode::Auto && tracking) {
                     //
                     // The robot is holding a hatch and we are in auto mode, set the
                     // height so that the camera can see the vision targets
@@ -512,7 +514,7 @@ namespace xero {
                 }
             }
             else if (piece == GamePieceManipulator::GamePieceType::Cargo) {
-                if (mode_ == OperationMode::Auto) {
+                if (mode_ == OperationMode::Auto && tracking) {
                     //
                     // The roboti sholding cargo and we are in auto mode, set the
                     // height so that the camera can see the vision targets.
@@ -571,7 +573,7 @@ namespace xero {
             log << "OI: generating height related actions: " ;
             log << "mode " << toString(mode_) << " " ;
           
-            height = generateActionHeightName() ;
+            height = generateActionHeightName(true) ;
 
             log << height ;
             log.endMessage() ;                      
@@ -637,8 +639,7 @@ namespace xero {
 
             if (vision)
                 setupVisionDetectors() ;
-
-            if (linefollower)
+            else if (linefollower)
                 setupLineFollowingDetectors() ;
         }
 
@@ -669,7 +670,7 @@ namespace xero {
                 drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:back:power", "linefollower:back:distance", "linefollower:back:adjust") ;
             }
 
-            std::string height = generateActionHeightName() ;
+            std::string height = generateActionHeightName(false) ;
             ActionPtr lift = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
 
             ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 2, 1.0, 0.5) ;
@@ -703,14 +704,49 @@ namespace xero {
             auto db = ph.getPhaserRobotSubsystem()->getTankDrive() ;  
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
+            auto lifter = game->getLifter() ;
+            std::shared_ptr<LightSensorSubsystem> linefollower ;
             std::shared_ptr<ParallelAction> parallel = std::make_shared<ParallelAction>() ;
+            
+            ActionPtr finish = getFinishAction() ;
+            ActionPtr drive ;
+
+            auto ctrl = ph.getCurrentController() ;
+
+            std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;    
+            MessageLogger &log = ph.getMessageLogger() ;    
+
+            ActionPtr lineaction ;            
 
             ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
-            ActionPtr drive = std::make_shared<DriveByVisionAction>(*db, *camera) ;
+            if (dir_ == Direction::North) {
+                drive = std::make_shared<DriveByVisionAction>(*db, *camera) ;
+                linefollower = ph.getPhaserRobotSubsystem()->getFrontLineSensor() ;
+                lineaction = std::make_shared<LineFollowAction>(*linefollower, *db, "linefollower:front:power", "linefollower:front:distance", "linefollower:front:adjust") ;
+            }
+            else if (dir_ == Direction::South) {
+                drive = std::make_shared<DriveByVisionAction>(*db, *camera, true) ;            
+                linefollower = ph.getPhaserRobotSubsystem()->getBackLineSensor() ;
+                lineaction = std::make_shared<LineFollowAction>(*linefollower, *db, "linefollower:back:power", "linefollower:back:distance", "linefollower:back:adjust") ;
+            }
 
-            ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 3, 1.0, 0.3333333) ;            
+            std::shared_ptr<TerminateAction> term = std::make_shared<TerminateAction>(db, drive, getSubsystem().getRobot()) ;
+            term->addTerminator(linefollower) ;
 
-            parallel->addAction(drive) ;
+
+            std::string height = generateActionHeightName(false) ;
+            ActionPtr lift = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;      
+            std::cout << "Height " << height << std::endl ;      
+
+            ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 3, 1.0, 0.3333333) ;   
+            seq->pushAction(term) ;
+            std::shared_ptr<ParallelAction> p2 = std::make_shared<ParallelAction>() ;
+            p2->addSubActionPair(db, lineaction) ;
+            p2->addSubActionPair(lifter, lift) ;
+            seq->pushAction(p2) ;
+            seq->pushSubActionPair(game, finish) ;
+
+            parallel->addAction(seq) ;
             parallel->addSubActionPair(oi, rumble) ;
 
             auto ctrl = ph.getCurrentController() ;

@@ -113,12 +113,12 @@ endif
 if COMPETITION
 tankdrive:follower:left:ka                                      0.00
 tankdrive:follower:left:kv                                      0.006112469
-tankdrive:follower:left:kp                                      0.02032             # Recommended 0.02032 - 0.03048
+tankdrive:follower:left:kp                                      0.03048             # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kd                                      0.0
 
 tankdrive:follower:right:ka                                     0.00
 tankdrive:follower:right:kv                                     0.006112469
-tankdrive:follower:right:kp                                     0.02032             # Recommended 0.02032 - 0.03048
+tankdrive:follower:right:kp                                     0.03048             # Recommended 0.02032 - 0.03048
 tankdrive:follower:right:kd                                     0.0
 endif
 
@@ -184,9 +184,9 @@ if COMPETITION
 turntable:degrees_per_tick                                      0.546283784
 endif
 
-turntable:maxa                                                  180
-turntable:maxd                                                  -180
-turntable:maxv                                                  180
+turntable:maxa                                                  270
+turntable:maxd                                                  -270
+turntable:maxv                                                  270
 
 turntable:base                                                  0.0
 turntable:threshold                                             1.0
@@ -360,12 +360,12 @@ drivebyvision:yaw_p                                             0.03
 #
 # Variables for the linefollower
 #
-linefollower:front:power                                          0.3
-linefollower:front:distance                                       12
-linefollower:front:adjust                                         0.25
-linefollower:back:power                                           -0.3
-linefollower:back:distance                                        -12
-linefollower:back:adjust                                          0.25
+linefollower:front:power                                          0.30
+linefollower:front:distance                                       18
+linefollower:front:adjust                                         0.30
+linefollower:back:power                                           -0.30
+linefollower:back:distance                                        -18
+linefollower:back:adjust                                          -0.30
 
 
 cargointake:power                                               -0.6
@@ -389,8 +389,8 @@ hatchintake:power                                               0.6
 hatchholder:collect:delay                                       0.5
 hatchholder:collect:totaldelay                                  0.5
 hatchholder:specialflow:delay                                   0.1
-hatchholder:place:delay                                         0.25
-hatchholder:place:totaldelay                                    0.20
+hatchholder:place:delay                                         0.5
+hatchholder:place:totaldelay                                    0.5
 hatchholder:default:delay                                       0.750
 hatchholder:finger:autodelay                                    1.0
 hatchholder:debounce                                            0.2
