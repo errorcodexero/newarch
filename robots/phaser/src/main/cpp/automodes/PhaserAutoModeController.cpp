@@ -15,6 +15,9 @@
 using namespace xero::base ;
 using namespace xero::misc ;
 
+std::vector<std::string> paths = { "CenterHab2CargoFrontLeft", "CargoFrontLeftLSLeft"} ;
+std::vector<bool> reverses = { false, true } ;
+
 namespace xero {
     namespace phaser {
         PhaserAutoModeController::PhaserAutoModeController(Robot &robot) : AutoController(robot) {
@@ -48,7 +51,7 @@ namespace xero {
                 break ;
 
             case 6:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "Curve") ;
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), paths, reverses) ;
                 break ;
 
             case 7:

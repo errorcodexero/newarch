@@ -48,6 +48,7 @@ namespace xero {
             std::shared_ptr<xero::misc::PIDACtrl> right_follower_ ;
             bool reverse_ ;
             double start_angle_ ;
+            double target_start_angle_ ;
 
             int plotid_ ;
             static std::list<std::string> plot_columns_ ;            

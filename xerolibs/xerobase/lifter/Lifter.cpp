@@ -99,8 +99,9 @@ namespace xero {
                 talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
 
                 // TODO - generalize this for the lifter
-                talon->ConfigForwardLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyClosed) ;
-                                
+                talon->ConfigForwardLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyOpen) ;
+                talon->ConfigReverseLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyClosed) ;
+
                 if (motors_.size() > 0)
                     talon->Follow(*motors_.front()) ;
 

@@ -34,6 +34,7 @@ hw:tankdrive:leftencoder:1                                      2               
 hw:tankdrive:leftencoder:2                                      3               # Digital IO
 hw:tankdrive:rightencoder:1                                     1               # Digital IO
 hw:tankdrive:rightencoder:2                                     0               # Digital IO
+hw:tankdrive:invert:motors:left                                 true
 endif
 
 hw:tankdrive:shifter                                            0               # Solenoid
@@ -57,7 +58,12 @@ hw:hatchintake:solenoid                                         3               
 
 hw:lifter:encoder1                                              8               # Digital IO
 hw:lifter:encoder2                                              9               # Digital IO
-hw:lifter:motor:1                                               10              # TalonSRX
+if PRACTICE
+hw:lifter:motor:1                                               11              # TalonSRX
+endif
+if COMPETITION
+hw:lifter:motor:1                                               10
+endif
 hw:lifter:reversemotors                                         true            
 
 hw:turntable:encoder1                                           4               # Digital IO
@@ -177,7 +183,7 @@ turntable:calibrate:power                                       0.3             
 turntable:calibrate:samples                                     16              # TODO
 
 if PRACTICE
-turntable:degrees_per_tick                                      0.585472973
+turntable:degrees_per_tick                                      0.60916263086705202312138728323699
 endif
 
 if COMPETITION
@@ -251,12 +257,12 @@ lifter:threshold                                                1.0
 lifter:maxv                                                     23.0
 lifter:maxa                                                     50
 lifter:maxd                                                     -50
-lifter:follower:up:kp                                           0.055              
+lifter:follower:up:kp                                           0.055                        # 0.055              
 lifter:follower:up:ka                                           0.0                 
 lifter:follower:up:kv                                           0.035
 lifter:follower:up:kd                                           0.0
 
-lifter:follower:down:kp                                         0.01
+lifter:follower:down:kp                                         0.7
 lifter:follower:down:ka                                         0.0
 lifter:follower:down:kv                                         0.017
 lifter:follower:down:kd                                         0.0
@@ -289,7 +295,7 @@ lifter:height:offset:hatch_hook_center                          8.6
 lifter:height:hatch:floor_collect                               12.0
 lifter:height:hatch:undock_intake                               22.00
 lifter:height:loadingstation:hatch:shift_up                     5
-lifter:height:score:hatch:shift_down                            -6.0
+lifter:height:score:hatch:shift_down                            -4.0
 
 lifter:height:hatch:tracking_height:north                       13
 lifter:height:hatch:tracking_height:south                       13
@@ -354,17 +360,17 @@ cameratracker:distance_threshold                                48.0
 cameratracker:rect_ratio_min                                    0.9
 cameratracker:rect_ratio_max                                    1.1
 
-drivebyvision:yaw_base_power                                    0.15
-drivebyvision:yaw_p                                             0.03
+drivebyvision:yaw_base_power                                    0.10
+drivebyvision:yaw_p                                             0.045
 
 #
 # Variables for the linefollower
 #
 linefollower:front:power                                          0.30
-linefollower:front:distance                                       18
+linefollower:front:distance                                       11
 linefollower:front:adjust                                         0.30
 linefollower:back:power                                           -0.30
-linefollower:back:distance                                        -18
+linefollower:back:distance                                        -11
 linefollower:back:adjust                                          -0.30
 
 

@@ -41,6 +41,7 @@ namespace xero {
             index_ = 0 ;         
             start_time_ = getTankDrive().getRobot().getTime() ;
             start_angle_ = getTankDrive().getAngle() ;
+            target_start_angle_ = path_->getLeftSegment(0).getHeading() ;
 
             if (getTankDrive().hasGearShifter())
                 getTankDrive().highGear() ;
@@ -82,13 +83,13 @@ namespace xero {
                 double thead , ahead ;
 
                 if (reverse_) {
-                    laccel = -lseg.getAccel() ;
-                    lvel = -lseg.getVelocity() ;
-                    lpos = -lseg.getPOS() ;
-                    raccel = -rseg.getAccel() ;
-                    rvel = -rseg.getVelocity() ;
-                    rpos = -rseg.getPOS() ;
-                    thead = xero::math::normalizeAngleDegrees(-180 + lseg.getHeading()) ;
+                    laccel = -rseg.getAccel() ;
+                    lvel = -rseg.getVelocity() ;
+                    lpos = -rseg.getPOS() ;
+                    raccel = -lseg.getAccel() ;
+                    rvel = -lseg.getVelocity() ;
+                    rpos = -lseg.getPOS() ;
+                    thead = xero::math::normalizeAngleDegrees(lseg.getHeading() - target_start_angle_) ;
                     ahead = xero::math::normalizeAngleDegrees(getTankDrive().getAngle() - start_angle_) ;                       
                 }
                 else {
@@ -98,7 +99,7 @@ namespace xero {
                     raccel = rseg.getAccel() ;
                     rvel = rseg.getVelocity() ;
                     rpos = rseg.getPOS() ;
-                    thead = xero::math::normalizeAngleDegrees(lseg.getHeading()) ;  
+                    thead = xero::math::normalizeAngleDegrees(lseg.getHeading() - target_start_angle_) ;  
                     ahead = xero::math::normalizeAngleDegrees(getTankDrive().getAngle() - start_angle_) ;                                      
                 }
 

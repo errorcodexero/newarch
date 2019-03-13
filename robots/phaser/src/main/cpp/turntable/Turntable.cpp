@@ -1,6 +1,7 @@
 #include "Turntable.h"
 #include "TurntableAction.h"
 #include "TurntableCalibrateAction.h"
+#include "TurntableGoToAngleAction.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <Robot.h>
 #include <MessageLogger.h>
@@ -41,6 +42,12 @@ namespace xero{
             
             calibrate(0) ;
             loops_ = 0 ;
+
+            //
+            // Hold the turntable at its starting position
+            //
+            auto action = std::make_shared<TurntableGoToAngleAction>(*this, angle_) ;
+            setAction(action) ;
         }
 
         Turntable::~Turntable() {
