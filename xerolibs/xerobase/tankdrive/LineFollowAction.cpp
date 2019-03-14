@@ -35,9 +35,7 @@ namespace xero {
         }
 
         void LineFollowAction::run() {
-            MessageLogger &logger = ls_subsystem_.getRobot().getMessageLogger() ;                
-
-            Robot &rb = getTankDrive().getRobot() ;   
+            MessageLogger &logger = ls_subsystem_.getRobot().getMessageLogger() ;
 
             distances_.push_front(getTankDrive().getDist()) ;
             if (distances_.size() > 4)
@@ -52,46 +50,41 @@ namespace xero {
                     logger << " - action terminates because robot is not moving" ;
                     logger.endMessage() ;                  
                     is_done_ = true ;
+                }
+                else if (std::fabs(traveled) > distance_) {
+                    is_done_ = true ;
                 } else {
                     bool is_detected = ls_subsystem_.detectedObject() ;                
-                    if(is_detected == true){
+                    if(is_detected == true) {
+                        double left = power_ ;
+                        double right = power_ ;
 
-                        double guidance_angle = ls_subsystem_.guidanceAngle() ;
-                        double left_m = power_ + guidance_angle*power_adjust_ ;
-                        double right_m = power_ - guidance_angle*power_adjust_ ;
-
-                        setMotorsToPercents(left_m, right_m) ;
-
-                        double traveled = getTankDrive().getDist() - start_distance_ ;
-                        if (distance_ < 0)
-                            is_done_ = traveled < distance_ ;
-                        else
-                            is_done_ = traveled > distance_ ;
-                        
-                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
-                        logger << "LineFollowAction:" ;
-                        logger << " subsystem " << ls_subsystem_.getName() ;
-                        logger << " sensor_values " << ls_subsystem_.getSensorsState() ;
-                        logger << " guidance_angle " << guidance_angle ;
-                        logger << " left " << left_m ;
-                        logger << " right " << right_m ;
-                        logger << " dist " << getTankDrive().getDist() - start_distance_ ;
-                        logger << " target " << distance_ ;
-                        logger.endMessage() ;
-
-
-                        rb.addPlotData(plotid_, index_, 0, rb.getTime() - start_time_) ;
-
-                        // Left side
-                        rb.addPlotData(plotid_, index_, 1, guidance_angle) ;
-                        rb.addPlotData(plotid_, index_, 2, left_m) ;
-                        rb.addPlotData(plotid_, index_, 3, right_m) ;
-                        rb.addPlotData(plotid_, index_, 4, getTankDrive().getDist() - start_distance_) ;
-
-                        index_++ ;
-
-                        if (is_done_)
-                            rb.endPlot(plotid_) ;
+                        uint32_t st = ls_subsystem_.getSensorsState() ;
+                        switch(st) {
+                            case 0:
+                                break ;
+                            case 1:
+                                left -= power_adjust_ ;
+                                right += power_adjust_ ;
+                                break ;
+                            case 2:
+                                left += power_adjust_ / 2.0 ;
+                                right -= power_adjust_ / 2.0 ;
+                                break ;
+                            case 3:
+                                break ;                                
+                            case 4:
+                                left += power_adjust_ ;
+                                right -= power_adjust_ ;    
+                                break ;                            
+                            case 5:
+                                break ;   
+                            case 6:
+                                break ;                              
+                            case 7:
+                                break ;
+                        }
+                        setMotorsToPercents(left, right) ;
                     }
                 }
             }

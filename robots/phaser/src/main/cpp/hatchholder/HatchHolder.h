@@ -42,7 +42,6 @@ namespace xero {
                 return finger_deployed_ ;
             }
 
-
         private:
             bool has_hatch_ ;
             bool arm_deployed_ ;
@@ -56,7 +55,8 @@ namespace xero {
             bool last_switch_state_;
             bool pending_ ;
             double last_switch_time_ ;
-            double duration_ ;
+            double duration_low2high_ ;
+            double duration_high2low_ ;            
         } ;
     }
 }

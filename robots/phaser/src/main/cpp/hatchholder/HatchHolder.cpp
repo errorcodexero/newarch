@@ -17,7 +17,8 @@ namespace xero {
             finger_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:hatchholder:finger"));
             sensor_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:hatchholder:sensor"));
 
-            duration_ = robot.getSettingsParser().getDouble("hatchholder:debounce") ;
+            duration_low2high_ = robot.getSettingsParser().getDouble("hatchholder:debounce:low2high") ;
+            duration_high2low_ = robot.getSettingsParser().getDouble("hatchholder:debounce:high2low") ;
 
             finger_->Set(false) ;
             arm_extend_->Set(false) ;
@@ -47,11 +48,18 @@ namespace xero {
             bool current = sensor_->Get() ;
 
             if (pending_) {
+                double dur ;
+                if (has_hatch_)
+                    dur = duration_high2low_ ;
+                else
+                    dur = duration_low2high_ ;
+
+
                 if (current != last_switch_state_) {
                     last_switch_state_ = current ;
                     last_switch_time_ = getRobot().getTime() ;
                 }
-                else if (getRobot().getTime() - last_switch_time_ > duration_) {
+                else if (getRobot().getTime() - last_switch_time_ > dur) {
                     has_hatch_ = current ;
                     pending_ = false ;
                 }
