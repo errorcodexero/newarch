@@ -51,6 +51,11 @@ namespace xero {
             double yaw_p_ ;
 
             int lost_count_ ;
+
+            double start_ ;
+            size_t index_ ;
+            int plotid_ ;
+            static std::list<std::string> plot_columns_ ;             
         } ;
     }
 }

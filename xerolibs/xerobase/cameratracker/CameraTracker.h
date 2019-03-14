@@ -13,6 +13,7 @@ namespace xero {
             {
                 TargetTracking,
                 DriverViewing,
+                Invalid,
             } ;
 
         public:
@@ -55,6 +56,9 @@ namespace xero {
                         break ;
                     case CameraMode::TargetTracking:
                         ret = "TargetTracking" ;
+                        break ;
+                    case CameraMode::Invalid:
+                        ret = "Invalid" ;
                         break ;
                 }
 

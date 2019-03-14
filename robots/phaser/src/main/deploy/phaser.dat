@@ -360,8 +360,8 @@ cameratracker:distance_threshold                                48.0
 cameratracker:rect_ratio_min                                    0.9
 cameratracker:rect_ratio_max                                    1.1
 
-drivebyvision:yaw_base_power                                    0.10
-drivebyvision:yaw_p                                             0.045
+drivebyvision:yaw_base_power                                    0.15
+drivebyvision:yaw_p                                             0.025
 
 #
 # Variables for the linefollower
@@ -392,12 +392,24 @@ cargoholder:score:time                                          2.0
 
 hatchintake:power                                               0.6
 
+if PRACTICE
+hatchholder:collect:delay                                       0.2
+hatchholder:collect:totaldelay                                  0.2
+hatchholder:specialflow:delay                                   0.1
+hatchholder:place:delay                                         0.2
+hatchholder:place:totaldelay                                    0.2
+hatchholder:default:delay                                       0.750
+endif
+
+if COMPETITION
 hatchholder:collect:delay                                       0.5
 hatchholder:collect:totaldelay                                  0.5
 hatchholder:specialflow:delay                                   0.1
 hatchholder:place:delay                                         0.5
 hatchholder:place:totaldelay                                    0.5
 hatchholder:default:delay                                       0.750
+endif
+
 hatchholder:finger:autodelay                                    1.0
 hatchholder:debounce                                            0.2
 

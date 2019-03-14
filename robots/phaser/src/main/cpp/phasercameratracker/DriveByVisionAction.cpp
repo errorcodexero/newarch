@@ -7,6 +7,11 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
+        std::list<std::string> DriveByVisionAction::plot_columns_ = {
+            "time", 
+            "tyaw", "ayaw", "error", "adj", "left", "right"
+        } ;
+
         DriveByVisionAction::DriveByVisionAction(TankDrive &tank_drive, PhaserCameraTracker &camera, bool reverse) : TankDriveAction(tank_drive), camera_(camera)
         {
             yaw_base_power_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_base_power") ;
@@ -41,6 +46,10 @@ namespace xero {
         void DriveByVisionAction::start() {
             state_ = State::DriveYaw ;
             lost_count_ = 0 ;
+
+            plotid_ = getTankDrive().getRobot().startPlot("DriveByVision", plot_columns_) ;            
+            start_ = getTankDrive().getRobot().getTime() ;
+            index_ = 0 ;
         }
 
         void DriveByVisionAction::driveTracking() {
@@ -48,6 +57,7 @@ namespace xero {
 
         void DriveByVisionAction::driveByYaw() {
             MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
+            double elapsed = getTankDrive().getRobot().getTime() - start_ ;
 
             if (!camera_.isValid()) {
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
@@ -61,7 +71,8 @@ namespace xero {
 
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision: action done due to too many lost targets conditions" ;
-                    logger.endMessage() ;                        
+                    logger.endMessage() ; 
+                    getTankDrive().getRobot().endPlot(plotid_) ;                                            
                 }
             }
             else {
@@ -72,7 +83,8 @@ namespace xero {
                     state_ = State::Done ;
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision: action done due to being too close" ;
-                    logger.endMessage() ;                         
+                    logger.endMessage() ;     
+                    getTankDrive().getRobot().endPlot(plotid_) ;                                        
                 }
                 else {
 
@@ -85,6 +97,16 @@ namespace xero {
                     double left = yaw_base_power_ + yawadj ;
                     double right = yaw_base_power_ - yawadj ;
                     setMotorsToPercents(left, right) ;
+
+                    getTankDrive().getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
+                    getTankDrive().getRobot().addPlotData(plotid_, index_, 1, desired_yaw) ;
+                    getTankDrive().getRobot().addPlotData(plotid_, index_, 2, yaw) ;
+                    getTankDrive().getRobot().addPlotData(plotid_, index_, 3, yawerror) ;
+                    getTankDrive().getRobot().addPlotData(plotid_, index_, 4, yawadj) ;
+                    getTankDrive().getRobot().addPlotData(plotid_, index_, 5, left) ;                    
+                    getTankDrive().getRobot().addPlotData(plotid_, index_, 6, right) ;  
+
+                    index_++ ;    
 
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision:" ;
@@ -121,7 +143,17 @@ namespace xero {
         
         /// \brief Cancel the action
         void DriveByVisionAction::cancel() { 
+            MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
+
             state_ = State::Done ;
+            getTankDrive().getRobot().endPlot(plotid_) ;
+
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
+            logger << "DriveByVision: action canceled" ;
+            logger << " yaw " << camera_.getYaw() ;
+            logger << " dist " << camera_.getDistance() ;
+            logger << " rect " << camera_.getRectRatio() ;
+            logger.endMessage() ;             
         }
 
         /// \brief Return true if the action is complete

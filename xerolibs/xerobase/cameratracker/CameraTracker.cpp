@@ -17,6 +17,9 @@ namespace xero {
             relay_ = std::make_shared<frc::Relay>(0) ;
             relay_->Set(frc::Relay::Value::kOff) ;   
             relay_state_ = frc::Relay::Value::kOff ;      
+
+            camera_ = -1 ;
+            mode_ = CameraMode::Invalid ;
         }
 
         CameraTracker::~CameraTracker()
@@ -77,6 +80,8 @@ namespace xero {
                     break ;
                 case CameraMode::DriverViewing:
                     table_->PutString(CameraModeName, "DriverViewing") ;                
+                    break ;
+                case CameraMode::Invalid:
                     break ;
                 }
             }

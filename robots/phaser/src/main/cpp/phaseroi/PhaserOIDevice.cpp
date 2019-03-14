@@ -735,7 +735,6 @@ namespace xero {
 
             std::string height = generateActionHeightName(false) ;
             ActionPtr lift = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;      
-            std::cout << "Height " << height << std::endl ;      
 
             ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 3, 1.0, 0.3333333) ;   
             seq->pushAction(term) ;
