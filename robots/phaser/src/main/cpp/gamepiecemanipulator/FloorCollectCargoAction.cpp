@@ -28,6 +28,7 @@ namespace xero {
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
             set_lifter_cargo_collected_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:collected") ;            
 
+            cargo_delay_ = 0.06 ;       // 60 ms
             
             set_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, "cargointake:power") ;
             stop_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, 0.0) ;
@@ -148,9 +149,9 @@ namespace xero {
                     //    and the holder.
                     //
                     cargo_intake->setAction(stop_cargo_intake_motor_) ;
-                    cargo_holder->setAction(stop_cargo_holder_motor_) ;
 
-                    state_ = State::StopAllMotors ;
+                    state_ = State::DelayForCargo ;
+                    cargo_start_ = getGamePiece().getRobot().getTime() ;
                 }
                 else if (cargo_intake->hasCargo()) {
                     cargo_intake->setAction(retract_cargo_intake_) ;
@@ -165,11 +166,18 @@ namespace xero {
                     //    and the holder.
                     //
                     cargo_intake->setAction(stop_cargo_intake_motor_) ;
-                    cargo_holder->setAction(stop_cargo_holder_motor_) ;
 
-                    state_ = State::StopAllMotors ;
+                    state_ = State::DelayForCargo ;
+                    cargo_start_ = getGamePiece().getRobot().getTime() ;
                 }
                 break ;            
+
+            case State::DelayForCargo:
+                if (getGamePiece().getRobot().getTime() - cargo_start_ > cargo_delay_) {
+                    cargo_holder->setAction(stop_cargo_holder_motor_) ;
+                    state_ = State::StopAllMotors ;                    
+                }
+                break ;
 
             case State::StopAllMotors:
                 //
@@ -251,6 +259,7 @@ namespace xero {
 
             case State::WaitForCargo:
             case State::WaitForCargo2:
+            case State::DelayForCargo:
                 // We are deploying the intake, must get it back into the robot before
                 // the cancel operation is done
                 cargo_intake->setAction(stop_cargo_intake_motor_) ;
