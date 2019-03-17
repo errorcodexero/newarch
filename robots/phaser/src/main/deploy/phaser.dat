@@ -412,7 +412,7 @@ hatchholder:collect:totaldelay                                  0.25
 hatchholder:specialflow:delay                                   0.1
 hatchholder:place:delay                                         0.5
 hatchholder:place:totaldelay                                    0.5
-hatchholder:default:delay                                       0.750
+hatchholder:default:delay                                       0.75
 endif
 
 hatchholder:finger:autodelay                                    1.0
@@ -423,7 +423,7 @@ climb:backup_distance                                           0
 climb:deploy_delay                                              0.3
 climb:drive:left                                                -0.6
 climb:drive:right                                               -0.6
-climb:drive:duration                                            3.5
+climb:drive:duration                                            2.5
 
 score_cargo:power                                               -0.3
 score_cargo:time                                                2
