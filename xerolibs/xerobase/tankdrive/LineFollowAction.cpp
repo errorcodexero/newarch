@@ -52,7 +52,8 @@ namespace xero {
                     //         line the first time.
                     //
                     is_done_ = true ;
-                } if (ls_subsystem.detectedObject()) {
+                } 
+                else if (ls_subsystem_.detectedObject()) {
                     //
                     // Case 3: We have still following the line
                     //
@@ -96,7 +97,6 @@ namespace xero {
             else {
                 setMotorsToPercents(0, 0) ;
             }
-            index_++ ;
         }
 
         bool LineFollowAction::isDone() {
