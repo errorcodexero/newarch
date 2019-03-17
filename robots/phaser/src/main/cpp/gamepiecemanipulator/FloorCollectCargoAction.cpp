@@ -28,7 +28,7 @@ namespace xero {
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
             set_lifter_cargo_collected_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:collected") ;            
 
-            cargo_delay_ = 0.06 ;       // 60 ms
+            cargo_delay_ = getGamePiece().getRobot().getSettingsParser().getDouble("cargointake:delay") ;
             
             set_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, "cargointake:power") ;
             stop_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, 0.0) ;

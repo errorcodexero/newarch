@@ -6,13 +6,8 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        std::list<std::string> LineFollowAction::plot_columns_ = {
-            "time", 
-            "angle", "left", "right",
-            "distance"
-        } ;
-
         LineFollowAction::LineFollowAction(LightSensorSubsystem &ls_subsystem, TankDrive &db_subsystem, double power, double distance, double power_adjust) : TankDriveAction(db_subsystem), ls_subsystem_(ls_subsystem), distance_(distance), power_(power), power_adjust_(power_adjust)  {
+            stalled_threshold_ = db_subsystem.getRobot().getSettingsParser().getDouble("linefollower:stalled_threshold") ;
         }
 
         LineFollowAction::LineFollowAction(LightSensorSubsystem &ls_subsystem, TankDrive &db_subsystem, const std::string &power_name, const std::string &distance_name, const std::string &power_adjust_name) 
@@ -21,6 +16,7 @@ namespace xero {
             power_ = settings_parser.getDouble(power_name) ;
             distance_ = settings_parser.getDouble(distance_name) ;
             power_adjust_ = settings_parser.getDouble(power_adjust_name) ;
+            stalled_threshold_ = db_subsystem.getRobot().getSettingsParser().getDouble("linefollower:stalled_threshold") ;            
         }
 
         LineFollowAction::~LineFollowAction() {
@@ -28,10 +24,6 @@ namespace xero {
 
         void LineFollowAction::start() {
             start_distance_ = getTankDrive().getDist() ;
-            is_done_ = false ;
-            plotid_ = getTankDrive().getRobot().startPlot(toString(), plot_columns_) ;
-            start_time_ = getTankDrive().getRobot().getTime() ;
-            index_ = 0 ;
         }
 
         void LineFollowAction::run() {
@@ -43,7 +35,10 @@ namespace xero {
 
             if (!is_done_) {
                 double traveled = distances_.front() - distances_.back() ;
-                if (distances_.size() == 4 && std::fabs(traveled) < 0.1) {
+                if (distances_.size() == 4 && std::fabs(traveled) < stalled_threshold_) {
+                    //
+                    // Case 1: the drivebase has stalled, must have hit the target
+                    //
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
                     logger << "LineFollowAction:" ;
                     logger << " subsystem " << ls_subsystem_.getName() ;  
@@ -52,40 +47,50 @@ namespace xero {
                     is_done_ = true ;
                 }
                 else if (std::fabs(traveled) > distance_) {
+                    //
+                    // Case 2: We have traveled the desired distance after hitting the
+                    //         line the first time.
+                    //
                     is_done_ = true ;
-                } else {
-                    bool is_detected = ls_subsystem_.detectedObject() ;                
-                    if(is_detected == true) {
-                        double left = power_ ;
-                        double right = power_ ;
+                } if (ls_subsystem.detectedObject()) {
+                    //
+                    // Case 3: We have still following the line
+                    //
+                    double left = power_ ;
+                    double right = power_ ;
 
-                        uint32_t st = ls_subsystem_.getSensorsState() ;
-                        switch(st) {
-                            case 0:
-                                break ;
-                            case 1:
-                                left -= power_adjust_ ;
-                                right += power_adjust_ ;
-                                break ;
-                            case 2:
-                                left += power_adjust_ / 2.0 ;
-                                right -= power_adjust_ / 2.0 ;
-                                break ;
-                            case 3:
-                                break ;                                
-                            case 4:
-                                left += power_adjust_ ;
-                                right -= power_adjust_ ;    
-                                break ;                            
-                            case 5:
-                                break ;   
-                            case 6:
-                                break ;                              
-                            case 7:
-                                break ;
-                        }
-                        setMotorsToPercents(left, right) ;
+                    uint32_t st = ls_subsystem_.getSensorsState() ;
+                    switch(st) {
+                        case 0:
+                            break ;
+                        case 1:
+                            left -= power_adjust_ ;
+                            right += power_adjust_ ;
+                            break ;
+                        case 2:
+                            left += power_adjust_ / 2.0 ;
+                            right -= power_adjust_ / 2.0 ;
+                            break ;
+                        case 3:
+                            break ;                                
+                        case 4:
+                            left += power_adjust_ ;
+                            right -= power_adjust_ ;    
+                            break ;                            
+                        case 5:
+                            break ;   
+                        case 6:
+                            break ;                              
+                        case 7:
+                            break ;
                     }
+                    setMotorsToPercents(left, right) ;
+                }
+                else {
+                    //
+                    // Case 4: We have lost the target, keep driving just in case we hit it again.  We
+                    //         will stop after the distance is covered or if we hit something
+                    //
                 }
             }
             else {

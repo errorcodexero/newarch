@@ -5,9 +5,16 @@
 # update to reflect phaser (the 2019 robot)
 #
 
+###################################################################################################
+#
+# Hardware definitions, this is the equivalent of the old signal power table, 
+# at least the signal part of it.
+#
+###################################################################################################
+
 
 #
-# The definition of the drivebase (for now this is phoenix)
+# Drivebase
 #
 if PRACTICE
 hw:tankdrive:leftmotor:1                                        4               # TALON SRX
@@ -21,6 +28,7 @@ hw:tankdrive:leftencoder:2                                      0               
 hw:tankdrive:rightencoder:1                                     2               # Digital IO
 hw:tankdrive:rightencoder:2                                     3               # Digital IO
 hw:tankdrive:invert:motors:left                                 true
+hw:tankdrive:shifter                                            0               # Solenoid
 endif
 
 if COMPETITION
@@ -35,10 +43,13 @@ hw:tankdrive:leftencoder:2                                      3               
 hw:tankdrive:rightencoder:1                                     1               # Digital IO
 hw:tankdrive:rightencoder:2                                     0               # Digital IO
 hw:tankdrive:invert:motors:left                                 true
+hw:tankdrive:shifter                                            0               # Solenoid
 endif
 
-hw:tankdrive:shifter                                            0               # Solenoid
 
+#
+# Hatch holder
+#
 if PRACTICE
 hw:hatchholder:arm:extend                                        6              # Solenoid
 hw:hatchholder:arm:retract                                       7              # Solenoid
@@ -56,38 +67,62 @@ hw:hatchintake:motor                                            12              
 hw:hatchintake:sensor                                           23              # Digital IO
 hw:hatchintake:solenoid                                         3               # Solenoid
 
-hw:lifter:encoder1                                              8               # Digital IO
-hw:lifter:encoder2                                              9               # Digital IO
+#
+# Lift
+#
 if PRACTICE
 hw:lifter:motor:1                                               11              # TalonSRX
 endif
 if COMPETITION
 hw:lifter:motor:1                                               10
 endif
+hw:lifter:encoder1                                              8               # Digital IO
+hw:lifter:encoder2                                              9               # Digital IO
 hw:lifter:reversemotors                                         true            
 
+#
+# turntable
+#
 hw:turntable:encoder1                                           4               # Digital IO
 hw:turntable:encoder2                                           5               # Ditigal IO
 hw:turntable:motor:1                                            8               # TALON SRX
 
+#
+# Front line sensors
+#
 hw:linesensor:front:0                                           10              # Digital IO
 hw:linesensor:front:1                                           11              # Digital IO
 hw:linesensor:front:2                                           12              # Digital IO
 
+#
+# Back line sensors
+#
 hw:linesensor:back:0                                            13              # Digital IO
 hw:linesensor:back:1                                            18              # Digital IO
 hw:linesensor:back:2                                            19              # Digital IO
 
+#
+# Driver station
+#
 hw:driverstation:hid:driver                                     0               # HID Device Index
 hw:driverstation:hid:oi                                         2               # HID Device Index
 
+#
+# cargoholder
+#
 hw:cargoholder:sensor                                           20              # Digital IO
 hw:cargoholder:motor                                            7              # Victor SPX
 
+#
+# cargo intake
+#
 hw:cargointake:motor                                            9               # Victor SPX
 hw:cargointake:solenoid                                         1               # Solenoid
 hw:cargointake:sensor                                           22              # Sensor
 
+#
+# Climber
+#
 hw:climber:solenoid                                             2               # Solenoid
 
 ###################################################################
@@ -96,6 +131,23 @@ hw:climber:solenoid                                             2               
 # robot subsystems
 #
 ###################################################################
+
+###################################################################################################
+# misc
+###################################################################################################
+
+#
+# Setup the data plotter.  If the value plotter:plot is set, many of the subsystem send data out
+# in UDP packets that the DataPlotter can plot.  Very useful for tuning PID and follower control
+# We generally keep this on with the practice bot and off for the competition bot
+#
+if PRACTICE
+plotter:port                                                    5555
+endif
+
+###################################################################################################
+# tankdrive
+###################################################################################################
 
 #
 # Variables for the tankdrive subsystem code.
@@ -148,26 +200,10 @@ tankdrive:distance_action:profile_outdated_error_long           8.0
 tankdrive:distance_action:profile_outdated_error_short          4.0
 tankdrive:distance_action:profile_outdated_error_dist           12.0
 
-#
-# Variables for the driver gamepad
-#
-driver:power:max                                                1.0
-driver:power:default                                            0.6
-driver:turn:max                                                 0.8
-driver:turn:default                                             0.4
-driver:power:slowby                                             0.5
-driver:power:tolerance                                          0.05
-driver:power:nudge_straight                                     0.2
-driver:power:nudge_rotate                                       0.2
-driver:nudge_time                                               0.1
-driver:zerolevel                                                0.1
 
-#
-# Setup the data plotter
-#
-if PRACTICE
-plotter:port                                                    5555
-endif
+###################################################################################################
+# turntable
+###################################################################################################
 
 #
 # Variables for the turntable
@@ -235,7 +271,11 @@ turntable:angle:hatch:collect:west                              90
 turntable:angle:hatch:place:north                               0                
 turntable:angle:hatch:place:south                               180                
 turntable:angle:hatch:place:east                                -90                
-turntable:angle:hatch:place:west                                90                
+turntable:angle:hatch:place:west                                90      
+
+###################################################################################################
+# lifter
+###################################################################################################
 
 #
 # Variables for the lifter
@@ -361,23 +401,32 @@ lifter:height:offset:hatch_hook_center                          8.6
 lifter:height:cargo:undock_height                               22.00
 lifter:height:cargo:collected                                   16.0
 
+###################################################################################################
+# cameratracker
+###################################################################################################
+
 cameratracker:distance_threshold                                48.0
 cameratracker:rect_ratio_min                                    0.9
 cameratracker:rect_ratio_max                                    1.1
 
+###################################################################################################
+# drive by vision (simple P only control)
+###################################################################################################
+
 drivebyvision:yaw_base_power                                    0.15
 drivebyvision:yaw_p                                             0.025
 
-#
-# Variables for the linefollower
-#
+###################################################################################################
+# drive by line follower
+###################################################################################################
+
 linefollower:front:power                                          0.2
 linefollower:front:distance                                       14
 linefollower:front:adjust                                         0.15
 linefollower:back:power                                           -0.20
 linefollower:back:distance                                        14
 linefollower:back:adjust                                          -0.15
-
+linefollower:stalled_threshold                                    0.1
 
 cargointake:power                                               -0.6
 cargointake:reverse:power                                        0.6
@@ -396,6 +445,8 @@ endif
 cargoholder:score:time                                          1.0
 
 hatchintake:power                                               0.6
+
+cargointake:delay                                               0.06
 
 if PRACTICE
 hatchholder:collect:delay                                       0.2
@@ -427,6 +478,21 @@ climb:drive:duration                                            2.5
 
 score_cargo:power                                               -0.3
 score_cargo:time                                                2
+
+
+#
+# Variables for the driver gamepad
+#
+driver:power:max                                                1.0
+driver:power:default                                            0.6
+driver:turn:max                                                 0.8
+driver:turn:default                                             0.4
+driver:power:slowby                                             0.5
+driver:power:tolerance                                          0.05
+driver:power:nudge_straight                                     0.2
+driver:power:nudge_rotate                                       0.2
+driver:nudge_time                                               0.1
+driver:zerolevel                                                0.1
 
 oi:hatch_cargo_switch                                           11                  # Button
 oi:climb_lock_switch                                            15                  # Button

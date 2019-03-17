@@ -56,13 +56,10 @@ namespace xero {
             double power_;
             double power_adjust_;
             double start_distance_;
+            double stalled_threshold_ ;
             bool is_done_ ;
-            int plotid_ ;
-            double start_time_ ;
-            size_t index_ ;
             
             std::list<double> distances_ ;
-            static std::list<std::string> plot_columns_ ;
         };
     }
 }
