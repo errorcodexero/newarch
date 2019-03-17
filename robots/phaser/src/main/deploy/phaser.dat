@@ -165,9 +165,9 @@ driver:zerolevel                                                0.1
 #
 # Setup the data plotter
 #
-#if PRACTICE
+if PRACTICE
 plotter:port                                                    5555
-#endif
+endif
 
 #
 # Variables for the turntable
@@ -182,10 +182,10 @@ if PRACTICE
 turntable:calibrate:encbase                                     238             # TODO
 endif
 if COMPETITION
-turntable:calibrate:encbase                                     264             # TODO
+turntable:calibrate:encbase                                     261             # TODO
 endif
-turntable:calibrate:power                                       0.3             # TODO
-turntable:calibrate:samples                                     16              # TODO
+turntable:calibrate:power                                       0.2             # TODO
+turntable:calibrate:samples                                     32              # TODO
 
 if PRACTICE
 turntable:degrees_per_tick                                      0.60916263086705202312138728323699
@@ -253,13 +253,13 @@ lifter:calibrate:hold:power                                     0.25            
 lifter:calibrate:up:time                                        1.0                         # TODO
 lifter:calibrate:threshold                                      2                           # TODO
 lifter:calibrate:encbase                                        29                          # TODO
-lifter:calibrate:power                                          -0.25                        # TODO
+lifter:calibrate:power                                          -0.4                        # TODO
 lifter:calibrate:samples                                        16                           # TODO
 
 lifter:max_height                                               83.66
 lifter:min_height                                               8.46
 lifter:threshold                                                1.0
-lifter:maxv                                                     46.0
+lifter:maxv                                                     32.0
 lifter:maxa                                                     50
 lifter:maxd                                                     -50
 lifter:follower:up:kp                                           0.055                        # 0.055              
@@ -412,7 +412,7 @@ hatchholder:collect:totaldelay                                  0.25
 hatchholder:specialflow:delay                                   0.1
 hatchholder:place:delay                                         0.5
 hatchholder:place:totaldelay                                    0.5
-hatchholder:default:delay                                       0.750
+hatchholder:default:delay                                       0.75
 endif
 
 hatchholder:finger:autodelay                                    1.0
@@ -423,7 +423,7 @@ climb:backup_distance                                           0
 climb:deploy_delay                                              0.3
 climb:drive:left                                                -0.6
 climb:drive:right                                               -0.6
-climb:drive:duration                                            3.5
+climb:drive:duration                                            2.5
 
 score_cargo:power                                               -0.3
 score_cargo:time                                                2

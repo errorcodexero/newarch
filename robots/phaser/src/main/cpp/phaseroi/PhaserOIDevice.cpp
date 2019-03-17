@@ -898,7 +898,9 @@ namespace xero {
                 //
                 fcol->reverseIntake() ;
             }
-            else if (game->isDone()) {
+            else if (!finish_collect_cargo_->isDone() && getValue(go_)) {
+                game->cancelAction() ;
+            } else if (game->isDone()) {
                 if (getValue(climb_lock_switch_) && getValue(climb_)) {
                     //
                     // Climb lock switch is off and the climb button is pushed.  

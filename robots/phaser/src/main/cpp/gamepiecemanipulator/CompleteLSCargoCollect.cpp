@@ -15,6 +15,8 @@ namespace xero {
             set_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, "cargoholder:collect:power") ;
             stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
             rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1, 1.0, 1.0) ;
+
+            state_ = State::Idle ;
         }
 
         CompleteLSCargoCollect::~CompleteLSCargoCollect() {

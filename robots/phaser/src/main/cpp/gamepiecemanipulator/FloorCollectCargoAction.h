@@ -27,6 +27,7 @@ namespace xero {
                 LifterGoToCollectHeightDeployIntake,
                 WaitForCargo,
                 WaitForCargo2,
+                DelayForCargo,
                 StopAllMotors,
                 RaiseLifter,
                 RetractIntake,
@@ -34,7 +35,9 @@ namespace xero {
 
         private:
             State state_ ;
-
+            double cargo_start_ ;
+            double cargo_delay_ ;
+            
             bool retracted_intake_ ;
 
             xero::base::ActionPtr set_lifter_safe_height_ ; 

@@ -48,6 +48,8 @@ namespace xero {
             auto cargo_holder = getGamePiece().getCargoHolder() ;
             auto hatch_holder = getGamePiece().getHatchHolder() ;
 
+            hatch_holder->setAction(retract_arm_) ;            
+
             hatch_intake->setAction(stop_hatch_intake_motor_) ;
             cargo_intake->setAction(stop_cargo_intake_motor_) ;
             cargo_holder->setAction(stop_cargo_holder_motor_) ;
