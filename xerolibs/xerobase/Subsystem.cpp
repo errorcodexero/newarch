@@ -150,8 +150,9 @@ namespace xero {
         }
 
         void Subsystem::init(LoopType ltype) {
-            for(auto child: children_)
-                child->init(ltype) ;            
+            for(auto child: children_) {
+                child->init(ltype) ;
+            }
         }
     }
 }

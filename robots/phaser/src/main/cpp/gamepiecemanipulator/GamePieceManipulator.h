@@ -7,6 +7,7 @@
 #include "cargointake/CargoIntake.h"
 #include "turntable/Turntable.h"
 #include <lifter/Lifter.h>
+#include <LoopType.h>
 #include <Subsystem.h>
 
 namespace xero {
@@ -51,6 +52,7 @@ namespace xero {
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             virtual void run() ;
+            virtual void init(xero::base::LoopType ltype) ;
 
             GamePieceType getGamePieceType() ;
 

@@ -447,6 +447,7 @@ namespace xero {
 
         void Robot::Autonomous() {
             LoopType type = LoopType::Autonomous ;
+
             //
             // Just in case something like the field data changes as we enter
             // the autonomous state
@@ -455,11 +456,10 @@ namespace xero {
             logAutoModeState() ;
 
             controller_ = auto_controller_ ;
-
             robot_subsystem_->init(type) ;
 
             while (IsAutonomous() && IsEnabled()) {
-                robotLoop(type);
+                robotLoop(type) ;
                 if (switch_to_teleop_) {
                     controller_ = teleop_controller_ ;
                     type = LoopType::OperatorControl ;
@@ -482,6 +482,7 @@ namespace xero {
             message_logger_.endMessage() ;           
 
             controller_ = teleop_controller_ ;
+            robot_subsystem_->init(LoopType::OperatorControl) ;
             while (IsOperatorControl() && IsEnabled())
                 robotLoop(LoopType::OperatorControl) ;
 
@@ -500,7 +501,6 @@ namespace xero {
             message_logger_.endMessage() ;
 
             controller_ = createTestController() ;
-
             robot_subsystem_->init(LoopType::Test) ;
 
             while (IsTest() && IsEnabled())
@@ -522,6 +522,7 @@ namespace xero {
             message_logger_.endMessage() ;
 
             automode_ = -1 ;
+            robot_subsystem_->init(LoopType::Disabled) ;
 
             while (IsDisabled()) {
                 updateAutoMode() ;

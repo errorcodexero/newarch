@@ -9,7 +9,8 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
-        GamePieceManipulator::GamePieceManipulator(Robot &robot) : Subsystem(robot, "gamepiecemanipulator") {
+        GamePieceManipulator::GamePieceManipulator(Robot &robot) : Subsystem(robot, "gamepiecemanipulator") 
+        {
             SettingsParser &settings = robot.getSettingsParser() ;            
             bool victor = true ;
 
@@ -35,10 +36,21 @@ namespace xero {
             addChild(turntable_) ;
         }
 
-        GamePieceManipulator::~GamePieceManipulator() {
+        GamePieceManipulator::~GamePieceManipulator() 
+        {
         }
-        
-        void GamePieceManipulator::run() {
+
+        void GamePieceManipulator::init(LoopType ltype)
+        {
+            if (ltype == LoopType::OperatorControl) {
+                auto action = getAction() ;
+                if (action != nullptr && !action->isDone())
+                    setAction(action) ;
+            }
+        }
+
+        void GamePieceManipulator::run() 
+        {
             Subsystem::run() ;
 
             auto hatch_holder = getHatchHolder() ;
