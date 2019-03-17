@@ -39,6 +39,8 @@ namespace xero{
             //
             turntable_offset_ = parser.getDouble("turntable:base") ;
             safe_rotate_height_ = parser.getDouble("turntable:safe_lifter_height") ;
+            safe_rotate_margin_= parser.getDouble("turntable:safe_lifter_margin") ;
+            safe_rotate_hatch_height_ = parser.getDouble("turntable:safe_lifter_height_hatch") ;            
             
             calibrate(0) ;
             loops_ = 0 ;
@@ -112,10 +114,24 @@ namespace xero{
             if (calib_p != nullptr)
                 return true ;
 
-            if (!lifter_.isCalibrated() || lifter_.getHeight() < getSafeRotateHeight()) {
+            if (!lifter_.isCalibrated()) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::error) ;
-                logger << "Turntable: canAcceptAction failed, lifter to to low to rotate turntable\n" ;
+                logger << "Turntable: canAcceptAction failed, lifter not calibrated\n" ;
+                logger << "           " << action->toString() ;
+                logger.endMessage() ;
+                return false ;
+            }
+
+            //
+            // We assume no hatch here.  This is a safety check to ensure we don't destroy
+            // the robot.  Higher level systems should ensure we are at the right height to
+            // rotate without losing a hatch.
+            //
+            if (!isSafeToRotate(false)) {
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << "Turntable: canAcceptAction failed, lifter too low to rotate\n" ;
                 logger << "           " << action->toString() ;
                 logger.endMessage() ;
                 return false ;

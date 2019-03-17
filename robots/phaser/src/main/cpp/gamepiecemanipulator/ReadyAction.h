@@ -20,25 +20,29 @@ namespace xero{
 
         private:
             bool alreadyOnCorrectSide() ;
-            bool isSpecialHatchFlow() ;
+            void startTurnLiftSequence() ;
 
         private:
-            enum class State{
-                Idle,
+            enum class State {
                 ExtendHatchHolder,
-                LifterSafeHeight,
-                TurntableGoToAngle,
-                LifterGoToFinalHeight,
+                TurntableAndLift,
                 RetractHatchHolder,
+                TurntableAndSafeHeight,
+                LifterSafeHeight,
+                LifterFinalHeight,
+                Idle,
             } ;
 
         private:
             State state_ ;
             std::string height_ ;
             std::string angle_ ;
-            double safe_height_ ;
 
-            bool special_hatch_flow_ ;
+            double height_value_ ;
+            double angle_value_ ;
+
+
+            bool hatch_holder_extended_ ;
 
             xero::base::ActionPtr set_lifter_safe_height_ ;
             xero::base::ActionPtr set_lifter_final_height_ ;

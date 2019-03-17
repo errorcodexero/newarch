@@ -21,7 +21,7 @@ namespace xero {
             // Pre-create all of the actions needed so that we are not constantly creating and
             // destroying this during the robot loop
             //
-            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
+            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "turntable:safe_lifter_height") ;
             set_turntable_cargo_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:cargo:floor_collect") ;
             set_lifter_cargo_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;            
             deploy_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, true) ;

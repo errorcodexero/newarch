@@ -208,7 +208,9 @@ tankdrive:distance_action:profile_outdated_error_dist           12.0
 #
 # Variables for the turntable
 #
-turntable:safe_lifter_height                                    22
+turntable:safe_lifter_height                                    24
+turntable:safe_lifter_height_hatch                              24
+turntable:safe_lifter_margin                                    4
 turntable:keepout:minimum                                       130
 turntable:keepout:maximum                                       160
 turntable:keepout:dangerzone                                    15
@@ -332,7 +334,6 @@ lifter:hold:imax                                                0.0
 # hatch_hook_center, the height of the center of the hatch holder above the lifter height
 #
 lifter:height:bottom                                            8.46
-lifter:height:safe_turn                                         24.0
 lifter:height:cargo:floor_collect                               9.0
 lifter:height:offset:cargo_holder_center                        6.75
 lifter:height:offset:hatch_center                               5.5

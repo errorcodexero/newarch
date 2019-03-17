@@ -84,10 +84,10 @@ namespace xero {
             return ret ;
         }        
 
-        std::string PhaserOIDevice::dirToString() {
+        std::string PhaserOIDevice::dirToString(Direction dir) {
             std::string ret = "????" ;
 
-            switch(dir_) {
+            switch(dir) {
             case Direction::North:
                 ret = "north" ;
                 break ;
@@ -245,7 +245,7 @@ namespace xero {
             auto hatch_holder = game->getHatchHolder() ;
             auto climber = ph.getPhaserRobotSubsystem()->getClimber() ;
 
-            safe_height_ = getSubsystem().getRobot().getSettingsParser().getDouble("lifter:height:safe_turn") ;
+            safe_height_ = getSubsystem().getRobot().getSettingsParser().getDouble("turntable:safe_lifter_height") ;
 
             finish_collect_hatch_ = std::make_shared<CompleteLSHatchCollect>(*game) ;
             finish_collect_cargo_ = std::make_shared<CompleteLSCargoCollect>(*game) ;
@@ -263,36 +263,71 @@ namespace xero {
             calibrate_action_ = std::make_shared<CalibrateManip>(*game) ;
         }
 
+        PhaserOIDevice::Direction PhaserOIDevice::getRobotDirection() {
+            Direction ret = Direction::North ;
+            double angle = getSubsystem().getRobot().getDriveBase()->getAngle() ;
+
+            if (angle <= 45.0 && angle >= -45.0)
+                ret = Direction::North ;
+            else if (angle <= 135.0 && angle > 45.0)
+                ret = Direction::West ;
+            else if (angle > 135.0 || angle < -135.0)
+                ret = Direction::South ;
+            else if (angle < -45.0 && angle >= -135.0)
+                ret = Direction::East ;
+
+            return ret ;
+        }
+
+        PhaserOIDevice::Direction PhaserOIDevice::compassToFieldRelative(PhaserOIDevice::Direction compass)
+        {
+            static Direction fieldmapping[4][4] = {
+                { Direction::North, Direction::South, Direction::East, Direction::West },            // Robot direction N
+                { Direction::South, Direction::North, Direction::West, Direction::East },            // Robot direction S
+                { Direction::West, Direction::East, Direction::North, Direction::South },            // Robot direction E
+                { Direction::East, Direction::West, Direction::South, Direction::North },            // Robot direction W
+            } ;
+
+            Direction robotdir = getRobotDirection() ;
+            int rdir = static_cast<int>(robotdir) ;
+            int cdir = static_cast<int>(compass) ;
+            return fieldmapping[rdir][cdir] ;
+        }
+
         //
         // See if a direction is being pressed on the joystick and if so, store the
         // direction and return true.
         //
         bool PhaserOIDevice::getDirection() {
             bool ret = false ;
+            Direction compass = Direction::North ;
 
-            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
-            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+
             if (getValue(compass_north_)) {
-                dir_ = Direction::North ;
+                compass = Direction::North ;
                 ret = true ;
-                log << "OI: North" ;
             }
             else if (getValue(compass_south_)) {
-                dir_ = Direction::South ;
+                compass = Direction::South ;
                 ret = true ;                
-                log << "OI: South" ;
             }
             else if (getValue(compass_east_)) {
-                dir_ = Direction::East ;
+                compass = Direction::East ;
                 ret = true ;             
-                log << "OI: East" ;                   
             }
             else if (getValue(compass_west_)) {
-                dir_ = Direction::West ;
+                compass = Direction::West ;
                 ret = true ;            
-                log << "OI: West" ;                    
             }
-            log.endMessage() ;
+
+            if (ret) {
+                dir_ = compassToFieldRelative(compass) ;
+                MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+                log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+                log << "OI: stick " << dirToString(compass) ;
+                log << " field " << dirToString(dir_) ;
+                log.endMessage() ;
+            }
 
             return ret ;
         }
@@ -381,15 +416,15 @@ namespace xero {
                     // at the requested height
                     //
                     height = "lifter:height:hatch:tracking_height:" ;
-                    height += dirToString() ;
+                    height += dirToString(dir_) ;
                     angle = "turntable:angle:hatch:place:" ;
-                    angle += dirToString() ;                    
+                    angle += dirToString(dir_) ;                    
                 }
                 else {                
                     height = "lifter:height:hatch:place:" ;
-                    height += dirToString() + ":1" ;
+                    height += dirToString(dir_) + ":1" ;
                     angle = "turntable:angle:hatch:place:" ;
-                    angle += dirToString() ;
+                    angle += dirToString(dir_) ;
                 }
             }
             else if (piece == GamePieceManipulator::GamePieceType::Cargo) {
@@ -399,10 +434,10 @@ namespace xero {
                     // height so that the camera can see the vision targets.
                     //
                     height = "lifter:height:cargo:tracking_height:" ;
-                    height += dirToString() + ":" ;
+                    height += dirToString(dir_) + ":" ;
                     height += heightToString() ;
                     angle = "turntable:angle:cargo:place:" ;
-                    angle += dirToString() ;                    
+                    angle += dirToString(dir_) ;                    
                 }
                 else {
                     //
@@ -414,10 +449,10 @@ namespace xero {
                         heightnumset = true ;
                     } else {
                         height = "lifter:height:cargo:place:" ;
-                        height += dirToString() + ":1" ;
+                        height += dirToString(dir_) + ":1" ;
                     }
                     angle = "turntable:angle:cargo:place:" ;
-                    angle += dirToString() ;                      
+                    angle += dirToString(dir_) ;                      
                 }
             }
             else if (piece == GamePieceManipulator::GamePieceType::None) {
@@ -429,10 +464,10 @@ namespace xero {
                     // Loading cargo from the loading station
                     //
                     height = "lifter:height:cargo:collect:" ;
-                    height += dirToString() ;
+                    height += dirToString(dir_) ;
 
                     angle = "turntable:angle:cargo:collect:" ;
-                    angle += dirToString() ;
+                    angle += dirToString(dir_) ;
 
                     piece = GamePieceManipulator::GamePieceType::Cargo ;
                 }
@@ -441,10 +476,10 @@ namespace xero {
                     // Loading hatch from the loading station
                     //
                     height = "lifter:height:hatch:collect:" ;
-                    height += dirToString()  ;
+                    height += dirToString(dir_)  ;
 
                     angle = "turntable:angle:hatch:collect:" ;
-                    angle += dirToString() ;  
+                    angle += dirToString(dir_) ;  
 
                     piece = GamePieceManipulator::GamePieceType::Hatch ;    
                 }
@@ -501,7 +536,7 @@ namespace xero {
                     // height so that the camera can see the vision targets
                     //
                     height = "lifter:height:hatch:tracking_height:" ;
-                    height += dirToString() ;
+                    height += dirToString(dir_) ;
                 }
                 else {
                     //
@@ -509,7 +544,7 @@ namespace xero {
                     // at the requested height
                     //
                     height = "lifter:height:hatch:place:" ;
-                    height += dirToString() + ":" ;
+                    height += dirToString(dir_) + ":" ;
                     height += heightToString() ;
                 }
             }
@@ -520,7 +555,7 @@ namespace xero {
                     // height so that the camera can see the vision targets.
                     //
                     height = "lifter:height:cargo:tracking_height:" ;
-                    height += dirToString() + ":" ;
+                    height += dirToString(dir_) + ":" ;
                     height += heightToString() ;
                 }
                 else {
@@ -529,7 +564,7 @@ namespace xero {
                     // at the requested height
                     //
                     height = "lifter:height:cargo:place:" ;
-                    height += dirToString() + ":" ;
+                    height += dirToString(dir_) + ":" ;
                     height += heightToString() ;
                 }
             }
@@ -542,14 +577,14 @@ namespace xero {
                     // Loading hatch from the loading station
                     //
                     height = "lifter:height:cargo:collect:" ;
-                    height += dirToString() ;
+                    height += dirToString(dir_) ;
                 }
                 else {
                     //
                     // Loading cargo from the loading station
                     //
                     height = "lifter:height:hatch:collect:" ;
-                    height += dirToString()  ;
+                    height += dirToString(dir_)  ;
                 }
             }
 

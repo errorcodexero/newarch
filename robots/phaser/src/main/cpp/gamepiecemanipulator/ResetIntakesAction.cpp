@@ -22,7 +22,7 @@ namespace xero {
             auto hatch_holder = getGamePiece().getHatchHolder() ;
             auto cargo_holder = getGamePiece().getCargoHolder() ;
 
-            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
+            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "turntable:safe_lifter_height") ;
             set_lifter_level_one_  = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:bottom") ;
             set_turntable_zero_ = std::make_shared<TurntableGoToAngleAction>(*turntable, 0.0) ;
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;

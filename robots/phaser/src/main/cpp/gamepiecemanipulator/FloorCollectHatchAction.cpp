@@ -23,7 +23,7 @@ namespace xero {
             // destroying this during the robot loop
             //
 
-            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
+            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "turntable:safe_lifter_height") ;
             set_turntable_hatch_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:hatch:floor_collect") ;
             set_lifter_hatch_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:hatch:floor_collect") ;            
             set_lifter_undock_hatch_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:hatch:undock_intake") ;

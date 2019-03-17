@@ -13,10 +13,10 @@ namespace xero {
         public:
             enum class Direction
             {
-                North,
-                South,
-                East,
-                West,
+                North = 0,
+                South = 1,
+                East = 2,
+                West = 3,
             } ;
 
             enum class ActionHeight
@@ -54,6 +54,9 @@ namespace xero {
             bool getDirection() ;
             bool getHeightButton() ;
 
+            Direction getRobotDirection() ;
+            Direction compassToFieldRelative(Direction dir) ;
+
             void updateMode(OperationMode mode) ;
             void generateDirectionActions(xero::base::ActionSequence &seq) ;
             void generateHeightButtonActions(xero::base::ActionSequence &seq) ;
@@ -66,7 +69,7 @@ namespace xero {
 
             xero::base::ActionPtr getFinishAction() ;
 
-            std::string dirToString() ;
+            std::string dirToString(Direction dir) ;
             std::string heightToString() ;
             std::string toString(OperationMode mode) ;
 

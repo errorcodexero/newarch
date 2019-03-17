@@ -46,13 +46,18 @@ namespace xero {
                 return is_calibrated_ ;
             }
 
+            double getSafeRotateHeight(bool hatch) {
+                return (hatch ? safe_rotate_hatch_height_ : safe_rotate_height_) ;                
+            }
+
+            bool isSafeToRotate(bool hatch) {
+                return lifter_.getHeight() > getSafeRotateHeight(hatch) - safe_rotate_margin_ ;
+            }            
+
         private:
             void calibrate(int value) ;
             void setMotorPower(double v) ;
 
-            double getSafeRotateHeight() {
-                return safe_rotate_height_ ;
-            }
 
             xero::base::Lifter &getLifter() {
                 return lifter_ ;
@@ -83,6 +88,19 @@ namespace xero {
             // The height required of the lifter before the turntable should be rotated
             //
             double safe_rotate_height_ ;
+
+            //
+            // The height required of the lifter before the turntable should be rotated when
+            // holding a hatch
+            //
+            double safe_rotate_hatch_height_ ;
+
+            //
+            // The margin below the safe height where we will still rotate the turntable.  The
+            // safe_rotate_height_ is our target to be able to safely rotate the turntable.  We will
+            // hit our target plus/minus some small amount.  This margin the small amount below the
+            // safe height where is it ok to still rotate the turntable.
+            double safe_rotate_margin_ ;
 
             //
             // This is the angle of the turntable when the encoder is at
