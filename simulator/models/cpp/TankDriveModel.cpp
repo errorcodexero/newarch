@@ -217,7 +217,7 @@ namespace xero {
                 right_enc_->SimulatorSetValue(right_enc_value_) ;
 
             if (navx_ != nullptr) {
-                double deg = normalizeAngleDegrees(rad2deg(angle_ + navx_offset_)) ;
+                double deg = normalizeAngleDegrees(-rad2deg(angle_ + navx_offset_)) ;
                 navx_->SimulatorSetYaw(deg) ;
             }
 
@@ -312,7 +312,7 @@ namespace xero {
                 ypos_ += dr * std::sin(angle) ;
             }
             else {
-                double r = width_ * (dl + dr) / (2 * (dr - dl)) ;
+                double r = width_ * (dl + dr) / (2 * (dl - dr)) ;
                 double wd = (dr - dl) / width_ ;
                 xpos_ = xpos_ + r * std::sin(wd + angle) - r * std::sin(angle) ;
                 ypos_ = ypos_ - r * std::cos(wd + angle) + r * std::cos(angle) ;

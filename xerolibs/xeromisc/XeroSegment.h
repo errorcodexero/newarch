@@ -10,8 +10,8 @@ namespace xero {
         class XeroSegment {    
         public:
             XeroSegment(double x, double y, double linPos,
-                        double vel, double jerk, double heading) 
-                        : x_(x), y_(y), linPos_(linPos), vel_(vel),
+                        double vel, double accel, double jerk, double heading) 
+                        : x_(x), y_(y), linPos_(linPos), vel_(vel), accel_(accel),
                         jerk_(jerk) {
                 heading_ = xero::math::normalizeAngleDegrees(heading / xero::math::PI * 180.0) ;
             }
