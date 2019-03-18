@@ -301,9 +301,9 @@ lifter:calibrate:samples                                        16              
 lifter:max_height                                               83.66
 lifter:min_height                                               8.46
 lifter:threshold                                                1.0
-lifter:maxv                                                     32.0
-lifter:maxa                                                     50
-lifter:maxd                                                     -50
+lifter:maxv                                                     58.0
+lifter:maxa                                                     58
+lifter:maxd                                                     -58
 lifter:follower:up:kp                                           0.055                        # 0.055              
 lifter:follower:up:ka                                           0.0                 
 lifter:follower:up:kv                                           0.035
