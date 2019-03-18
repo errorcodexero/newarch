@@ -1,7 +1,6 @@
 #include "PhaserOIDevice.h"
 #include "PhaserOISubsystem.h"
 #include "Phaser.h"
-#include "phaserrobotsubsystem/PhaserRobotSubsystem.h"
 #include <cameratracker/CameraChangeAction.h>
 #include <ActionSequence.h>
 #include <ParallelAction.h>
@@ -24,6 +23,7 @@
 #include "hatchholder/HatchHolderAction.h"
 #include "phaserrobotsubsystem/PhaserRobotSubsystem.h"
 #include "phaserrobotsubsystem/ClimbAction.h"
+#include "phaserrobotsubsystem/StrafeAction.h"
 #include "climber/ClimberDeployAction.h"
 #include <oi/DriverGamepadRumbleAction.h>
 
@@ -301,7 +301,7 @@ namespace xero {
         bool PhaserOIDevice::getDirection() {
             bool ret = false ;
             Direction compass = Direction::North ;
-
+            double angle = getSubsystem().getRobot().getDriveBase()->getAngle() ;            
 
             if (getValue(compass_north_)) {
                 compass = Direction::North ;
@@ -324,7 +324,9 @@ namespace xero {
                 dir_ = compassToFieldRelative(compass) ;
                 MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
                 log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
-                log << "OI: stick " << dirToString(compass) ;
+                log << "OI:" ;
+                log << " angle " << angle ;
+                log << " stick " << dirToString(compass) ;
                 log << " field " << dirToString(dir_) ;
                 log.endMessage() ;
             }
@@ -630,10 +632,62 @@ namespace xero {
             }
         }        
 
+        void PhaserOIDevice::generateHeightButtonActionsCargo(ActionSequence &seq) {
+            bool targetheight = false ;
+            bool strafe = false ;
+
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: generating height button actions hatch:" ;            
+
+            if (dir_ == Direction::North || dir_ == Direction::South) {
+                    targetheight = true ;
+                    log << " lifter_height" ;                
+            } 
+            else {
+                if (mode_ == OperationMode::Auto) {
+                    targetheight = true ;
+                    strafe = true ;
+                    log << " strafe " ;
+                    log << " lifter_height" ;
+                }
+                else if (mode_ == OperationMode::SemiAuto) {
+                    targetheight = true ;
+                    log << " lifter_height" ;                
+                }
+                else {
+                    targetheight = true ;
+                    log << " lifter_height" ;                  
+                }
+            }
+            log.endMessage() ;
+
+            if (targetheight)
+                generateTargetHeightActions(seq) ;
+
+            if (strafe)
+                generateStrafe(seq) ;
+        }
+
+        void PhaserOIDevice::generateStrafe(ActionSequence &seq)
+        {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ; 
+            auto robotsub = ph.getPhaserRobotSubsystem() ; 
+            int count = static_cast<int>(height_) ;
+            if (count >= 4)
+                count = 3 ;
+
+            //
+            // TODO - disable game pad until after this completes
+            //
+            ActionPtr act = std::make_shared<StrafeAction>(*robotsub, false, count) ;
+            seq.pushSubActionPair(robotsub, act, false) ;
+        }
+
         //
         // Generates all of the actions associated with the height button
         //
-        void PhaserOIDevice::generateHeightButtonActions(ActionSequence &seq) {
+        void PhaserOIDevice::generateHeightButtonActionsHatch(ActionSequence &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;            
             bool targetheight = false ;
             bool vision = false ;
@@ -641,25 +695,32 @@ namespace xero {
 
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
-            log << "OI: generating height button actions:" ;
-               
-            if (mode_ == OperationMode::Auto) {
-                vision = true ;
-                linefollower = true ;
-                log << " vision_detector" ;
-                log << " linefollower_detector" ;
-                log << " lifter_height" ;
-            }
-            else if (mode_ == OperationMode::SemiAuto) {
-                targetheight = true ;
-                linefollower = true ;
-                log << " linefollower_detector" ;
-                log << " lifter_height" ;                
+            log << "OI: generating height button actions hatch:" ;
+
+            if (dir_ == Direction::North || dir_ == Direction::South) {
+                if (mode_ == OperationMode::Auto) {
+                    vision = true ;
+                    linefollower = true ;
+                    log << " vision_detector" ;
+                    log << " linefollower_detector" ;
+                    log << " lifter_height" ;
+                }
+                else if (mode_ == OperationMode::SemiAuto) {
+                    targetheight = true ;
+                    linefollower = true ;
+                    log << " linefollower_detector" ;
+                    log << " lifter_height" ;                
+                }
+                else {
+                    targetheight = true ;
+                    log << " lifter_height" ;                  
+                }
             }
             else {
+                log << "lifter_height" ;
                 targetheight = true ;
-                log << " lifter_height" ;                  
             }
+
             log.endMessage() ;               
 
             if (targetheight)
@@ -677,6 +738,7 @@ namespace xero {
             else if (linefollower)
                 setupLineFollowingDetectors() ;
         }
+        
 
         //
         // Setup detector that will take over if the line follower detects a line.
@@ -767,7 +829,6 @@ namespace xero {
             std::shared_ptr<TerminateAction> term = std::make_shared<TerminateAction>(db, drive, getSubsystem().getRobot()) ;
             term->addTerminator(linefollower) ;
 
-
             std::string height = generateActionHeightName(false) ;
             ActionPtr lift = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;      
 
@@ -789,6 +850,25 @@ namespace xero {
             log << "OI: setup vision detector" ;
             log.endMessage() ;
             teleop->printDetectors() ;
+        }
+
+        void PhaserOIDevice::generateHeightButtonActions(ActionSequence &seq) {      
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;               
+            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
+            auto piece = game->getGamePieceType() ;
+
+            if (piece == GamePieceManipulator::GamePieceType::Hatch)
+                generateHeightButtonActionsHatch(seq) ;
+            else if (piece == GamePieceManipulator::GamePieceType::Cargo)
+                generateHeightButtonActionsCargo(seq) ;            
+            else if (piece == GamePieceManipulator::GamePieceType::None) {
+                if (getValue(hatch_cargo_switch_)) {
+                    generateHeightButtonActionsCargo(seq) ;
+                }
+                else {
+                    generateHeightButtonActionsHatch(seq) ;                    
+                }
+            }
         }
 
         //
@@ -913,12 +993,15 @@ namespace xero {
             getCargoHatchMode(seq) ;
 
             //
-            // Cannot execute turtle mode if we are already executing turtle mode, or if we have
-            // triggered the climb sequence.
+            // Calibrate takes precedence over everything
             //
             if (getValue(calibrate_)) {
                 game->setAction(calibrate_action_) ;
             }
+            //
+            // Cannot execute turtle mode if we are already executing turtle mode, or if we have
+            // triggered the climb sequence.
+            //            
             else if (getValue(turtle_mode_) && reset_intakes_->isDone() && climb_action_->isDone()) {
                 //
                 // Directly assign the action and make it forcing to ensure this

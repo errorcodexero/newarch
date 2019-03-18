@@ -21,10 +21,10 @@ namespace xero {
 
             enum class ActionHeight
             {
-                LevelOne,
-                LevelTwo,
-                LevelThree,
-                CargoBay,
+                LevelOne = 1,
+                LevelTwo = 2,
+                LevelThree = 3,
+                CargoBay = 4,
             } ;
 
             enum class OperationMode
@@ -61,6 +61,9 @@ namespace xero {
             void generateDirectionActions(xero::base::ActionSequence &seq) ;
             void generateHeightButtonActions(xero::base::ActionSequence &seq) ;
             void generateTargetHeightActions(xero::base::ActionSequence &seq) ;
+            void generateHeightButtonActionsCargo(xero::base::ActionSequence &seq) ;
+            void generateHeightButtonActionsHatch(xero::base::ActionSequence &seq) ;
+            void generateStrafe(xero::base::ActionSequence &seq) ;
 
             void setupVisionDetectors() ;
             void setupLineFollowingDetectors() ;
