@@ -39,7 +39,7 @@ namespace xero {
                 path = "CenterHab2CargoFrontRight" ;
 
             act = std::make_shared<ScoreHatch>(*game) ;            
-            insertAutoModeLeg(height, angle, path, false, act) ;
+            insertAutoModeLeg(height, angle, path, false, 2.0, act) ;
 
             if (left)
                 path = "CargoFrontLeftBalls" ;

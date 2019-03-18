@@ -4,7 +4,6 @@
 #include "automodes/CenterHabTwoHatch.h"
 #include "automodes/LeftRocketTwoHatch.h"
 #include "automodes/RightRocketTwoHatch.h"
-#include "automodes/HabCargoMode.h"
 #include "automodes/TankDriveScrubMode.h"
 #include "automodes/LifterHeightMode.h"
 #include <tankdrive/TankDriveCharAction.h>

@@ -25,7 +25,7 @@ namespace xero {
         {            
         }
 
-        void PhaserAutoModeBase::insertAutoModeLeg(const std::string &height, const std::string &angle, const std::string &path, bool rear, ActionPtr finish)
+        void PhaserAutoModeBase::insertAutoModeLeg(const std::string &height, const std::string &angle, const std::string &path, bool rear, double delay, ActionPtr finish)
         {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto db = phaser.getPhaserRobotSubsystem()->getTankDrive() ;
@@ -85,7 +85,7 @@ namespace xero {
             // This is a terminatable sequence that follows a path and terminates
             // when vision picks up the targets
             //
-            term = std::make_shared<TerminateAction>(db, act, phaser) ;
+            term = std::make_shared<TerminateAction>(db, act, phaser, delay) ;
             term->addTerminator(vision) ;
             seq->pushAction(term) ;
 
