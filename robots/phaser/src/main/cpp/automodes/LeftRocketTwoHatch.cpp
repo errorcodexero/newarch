@@ -1,4 +1,4 @@
-#include "automodes/CenterHabTwoHatch.h"
+#include "automodes/LeftRocketTwoHatch.h"
 #include "Phaser.h"
 #include <phasercameratracker/PhaserCameraTracker.h>
 #include <cameratracker/CameraChangeAction.h>
@@ -10,7 +10,8 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
-        CenterHabTwoHatch::CenterHabTwoHatch(Robot &robot, bool left, bool second, const char *name, const char *desc) : PhaserAutoModeBase(robot, name, desc)
+
+        LeftRocketTwoHatch::LeftRocketTwoHatch(Robot &robot, bool second) : PhaserAutoModeBase(robot, "LeftRocketTwoHatch", (second ? "Start on left hab level, score two on rocket" : "start on left hab level, score one on rocket"))
         {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto game = phaser.getPhaserRobotSubsystem()->getGameManipulator() ;
@@ -31,10 +32,7 @@ namespace xero {
             const char *height = "lifter:height:hatch:place:north:1" ;
             std::string path ;
 
-            if (left)
-                path = "CenterHab2CargoFrontLeft" ;
-            else            
-                path = "CenterHab2CargoFrontRight" ;
+            path = "LeftHABLeftRocket" ;
 
             act = std::make_shared<ScoreHatch>(*game) ;            
             insertAutoModeLeg(height, angle, path, false, act) ;
@@ -47,10 +45,7 @@ namespace xero {
                 angle = "turntable:angle:hatch:collect:south" ;
                 height = "lifter:height:hatch:collect:south" ;
 
-                if (left)
-                    path = "CargoFrontLeftLSLeft" ;
-                else
-                    path = "CargoFrontRightLSRight" ;
+                path = "LeftRocketLSLeft" ;
 
                 act = std::make_shared<CompleteLSHatchCollect>(*game) ;
                 insertAutoModeLeg(height, angle, path, true, act) ;
@@ -59,20 +54,17 @@ namespace xero {
                 // Place the second hatch
                 //
                 const char *angle = "turntable:angle:hatch:place:north" ;
-                const char *height = "lifter:height:hatch:place:north:1" ;
+                const char *height = "lifter:height:hatch:place:north:2" ;
                 std::string path ;
 
-                if (left)
-                    path = "LSLeftCargoFrontRight" ;
-                else
-                    path = "LSRightCargoFrontLeft" ;
+                path = "LSLeftRocketLeft" ;
 
                 act = std::make_shared<ScoreHatch>(*game) ;            
                 insertAutoModeLeg(height, angle, path, false, act) ;
             }
         }
 
-        CenterHabTwoHatch::~CenterHabTwoHatch()
+        LeftRocketTwoHatch::~LeftRocketTwoHatch()
         {            
         }    
     }

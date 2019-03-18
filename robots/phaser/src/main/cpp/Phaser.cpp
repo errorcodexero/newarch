@@ -80,15 +80,20 @@ namespace xero {
         
         void Phaser::loadPaths() {
             auto paths = getPathManager() ;
+            // 40 in per second paths
             paths->loadPath("CenterHab2CargoFrontLeft") ; 
             paths->loadPath("CenterHab2CargoFrontRight") ;  
+            paths->loadPath("LeftHABLeftRocket") ;
+            paths->loadPath("RightHABRightRocket") ;            
+
+            // 60 in per second paths
             paths->loadPath("CargoFrontLeftLSLeft") ;
             paths->loadPath("CargoFrontRightLSRight") ;
-            paths->loadPath("LeftHABLeftRocket") ;
             paths->loadPath("LeftRocketLSLeft") ;
             paths->loadPath("LSLeftCargoFrontRight") ;
+            paths->loadPath("LSLeftRocketLeft") ;
             paths->loadPath("LSRightCargoFrontLeft") ;
-            paths->loadPath("RightHABRightCargo") ;
+            paths->loadPath("LSRightRocketRight") ;
             paths->loadPath("RightRocketLSRight") ;
         }
         
