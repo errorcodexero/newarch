@@ -95,6 +95,8 @@ namespace xero {
             paths->loadPath("LSRightCargoFrontLeft") ;
             paths->loadPath("LSRightRocketRight") ;
             paths->loadPath("RightRocketLSRight") ;
+            paths->loadPath("CargoFrontLeftBalls") ;
+            paths->loadPath("CargoFrontRightBalls") ;
         }
         
         void Phaser::RobotHardwareInit() {
