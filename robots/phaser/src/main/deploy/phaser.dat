@@ -480,7 +480,6 @@ climb:drive:duration                                            2.5
 score_cargo:power                                               -0.3
 score_cargo:time                                                2
 
-
 #
 # Variables for the driver gamepad
 #
@@ -513,3 +512,11 @@ oi:calibrate                                                    16              
 oi:reverse                                                      7                   # Button
 oi:automode                                                     6                   # Axis
 oi:tracking_viewing_nothing_switch                              3                   # Axis
+
+
+#
+# Semi-auto modes
+#
+strafe:drive_distance                                           88
+strafe:maxv                                                     40
+strafe:shoot_distance                                           24

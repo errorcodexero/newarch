@@ -56,7 +56,7 @@ namespace xero {
             virtual bool shouldTerminate() {
                 return is_detected_ ;
             }
-
+            
             bool getSensorState(uint32_t index) {
                 if (sensor_data_.size() == 0)
                     return false ;
