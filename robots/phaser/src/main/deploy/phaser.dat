@@ -398,9 +398,9 @@ lifter:height:hatch:place:south:c                             15
 lifter:height:hatch:place:east:c                              15          
 lifter:height:hatch:place:west:c                              15            
 
-lifter:height:offset:hatch_hook_center                          8.6
-lifter:height:cargo:undock_height                               22.00
-lifter:height:cargo:collected                                   16.0
+lifter:height:offset:hatch_hook_center                        8.6
+lifter:height:cargo:undock_height                             22.00
+lifter:height:cargo:collected                                 38
 
 ###################################################################################################
 # cameratracker
