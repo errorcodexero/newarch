@@ -37,6 +37,7 @@ namespace xero {
             std::shared_ptr<ParallelAction> parallel ;
             std::shared_ptr<TerminateAction> term ;
             ActionSequencePtr seq ;
+            ActionSequencePtr seq2 ;
 
             const char *power ;
             const char *dist ;
@@ -68,11 +69,17 @@ namespace xero {
             //
             parallel = std::make_shared<ParallelAction>() ;
 
+            seq2 = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
+            seq2->pushAction(std::make_shared<DelayAction>(0.5)) ;
+
             //
             // Move the turntable to the right spot
             //
             act = std::make_shared<ReadyAction>(*game, height, angle) ;
-            parallel->addSubActionPair(game, act, true) ;
+            seq2->pushSubActionPair(game, act, true) ;
+            parallel->addAction(seq2) ;
+            
+            // parallel->addSubActionPair(game, act, true) ;
 
             //
             // Create the sequence that follows the path, switches to vision, switches

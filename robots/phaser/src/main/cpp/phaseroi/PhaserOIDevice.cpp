@@ -284,8 +284,8 @@ namespace xero {
             static Direction fieldmapping[4][4] = {
                 { Direction::North, Direction::South, Direction::East, Direction::West },            // Robot direction N
                 { Direction::South, Direction::North, Direction::West, Direction::East },            // Robot direction S
-                { Direction::West, Direction::East, Direction::North, Direction::South },            // Robot direction E
-                { Direction::East, Direction::West, Direction::South, Direction::North },            // Robot direction W
+                { Direction::East, Direction::West, Direction::South, Direction::North },            // Robot direction E
+                { Direction::West, Direction::East, Direction::North, Direction::South },            // Robot direction W
             } ;
 
             Direction robotdir = getRobotDirection() ;

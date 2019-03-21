@@ -47,11 +47,13 @@ namespace xero {
                 logger .endMessage() ;
                 navx_ = nullptr ;
             }
+            else {
+                navx_->Reset() ;
+            }
 
             double width = settings.getDouble("tankdrive:width") ;
             double scrub = settings.getDouble("tankdrive:scrub") ;
             kin_ = std::make_shared<xero::misc::Kinematics>(width, scrub) ;
-
         }
 
         TankDrive::~TankDrive() {   

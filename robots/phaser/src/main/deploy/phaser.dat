@@ -233,8 +233,8 @@ if COMPETITION
 turntable:degrees_per_tick                                      0.546283784
 endif
 
-turntable:maxa                                                  270
-turntable:maxd                                                  -270
+turntable:maxa                                                  480
+turntable:maxd                                                  -480
 turntable:maxv                                                  270
 
 turntable:base                                                  0.0
@@ -301,9 +301,11 @@ lifter:calibrate:samples                                        16              
 lifter:max_height                                               83.66
 lifter:min_height                                               8.46
 lifter:threshold                                                1.0
+
 lifter:maxv                                                     58.0
-lifter:maxa                                                     58
-lifter:maxd                                                     -58
+lifter:maxa                                                     75
+lifter:maxd                                                     -75
+
 lifter:follower:up:kp                                           0.055                        # 0.055              
 lifter:follower:up:ka                                           0.0                 
 lifter:follower:up:kv                                           0.035
@@ -319,8 +321,8 @@ lifter:hold:i                                                   0.0
 lifter:hold:d                                                   0.0                 
 lifter:hold:f                                                   0.0                 
 lifter:hold:a                                                   0.0                 
-lifter:hold:min                                                 -0.4                
-lifter:hold:max                                                 0.4                 
+lifter:hold:min                                                -1.0                
+lifter:hold:max                                                 1.0                
 lifter:hold:imax                                                0.0                 
 
 #

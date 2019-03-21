@@ -52,12 +52,14 @@ namespace xero {
 
             is_detected_ = (sensors_on > 0) ;
 
+#ifdef NOTYET
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER_VERBOSE) ;
             logger << "LightSensor :" ;
             logger << getName() << " " ;
             logger << sensor_data_.front() ;      
-            logger.endMessage() ;
+            logger.endMessage() ;            
+#endif
         }
     }
 }

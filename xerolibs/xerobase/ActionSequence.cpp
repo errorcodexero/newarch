@@ -51,6 +51,9 @@ void ActionSequence::run()
 {
     while (1)
     {
+        if (index_ == static_cast<int>(actionSequence_.size()))
+            break ;
+
         if (index_ == -1 || actionSequence_[index_]->isDone())
         {
             startNextAction();

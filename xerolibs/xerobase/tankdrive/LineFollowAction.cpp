@@ -24,6 +24,7 @@ namespace xero {
 
         void LineFollowAction::start() {
             start_distance_ = getTankDrive().getDist() ;
+            is_done_ = false ;
         }
 
         void LineFollowAction::run() {
@@ -34,6 +35,12 @@ namespace xero {
                 distances_.pop_back() ;
 
             if (!is_done_) {
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
+                logger << "LineFollowAction: running" ;
+                for(double d : distances_)
+                    logger << " " << d ;
+                logger.endMessage() ;  
+
                 double traveled = distances_.front() - distances_.back() ;
                 if (distances_.size() == 4 && std::fabs(traveled) < stalled_threshold_) {
                     //
@@ -52,6 +59,12 @@ namespace xero {
                     //         line the first time.
                     //
                     is_done_ = true ;
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
+                    logger << "LineFollowAction:" ;
+                    logger << " subsystem " << ls_subsystem_.getName() ;  
+                    logger << " - distance " ;
+                    logger << distance_ << "reached" ;
+                    logger.endMessage() ;                        
                 } 
                 else if (ls_subsystem_.detectedObject()) {
                     //
