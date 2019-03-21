@@ -45,13 +45,6 @@ namespace xero {
                 return gear_ != nullptr ;
             }
 
-            /// \brief set to dump state each cycle
-            /// If true, the state of the tankdrive is printed after each iteration of the robot loop
-            /// \param state the value of the flag
-            void setDumpStateFlag(bool state) {
-                dumpstate_ = state ;
-            }
-
             /// \brief Create encoders for the tank drive that are not attached to the TalonSRX controllers
             /// \param l1 first digital IO for left encoder
             /// \param l2 second digital IO for left encoder
@@ -195,6 +188,10 @@ namespace xero {
                 return kin_->getY() ;
             }
 
+            double getXYZVelocity() {
+                return xyz_velocity_ ;
+            }
+
         private:
             /// \brief Set the motors to output at the given percentages
             /// \param left_percent the percent output for the left motors
@@ -235,8 +232,7 @@ namespace xero {
 
             std::shared_ptr<xero::misc::Kinematics> kin_ ;
 
-            bool dumpstate_ ;
-
+            double xyz_velocity_ ;
         };
     }
 }

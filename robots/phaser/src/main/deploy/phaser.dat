@@ -478,6 +478,11 @@ climb:deploy_delay                                              0.3
 climb:drive:left                                                -0.6
 climb:drive:right                                               -0.6
 climb:drive:duration                                            2.5
+climb:backup:left                                               0.4
+climb:backup:right                                              0.4
+climb:backup:duration                                           0.5
+climb:velocity_samples                                          16
+climb:still_threshold                                           0.0508              # 2 in per second
 
 score_cargo:power                                               -0.3
 score_cargo:time                                                2

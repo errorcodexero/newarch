@@ -11,15 +11,18 @@ using namespace xero::base ;
 
 namespace xero {
     namespace phaser {
-        ClimbAction::ClimbAction(PhaserRobotSubsystem &subsystem): subsystem_(subsystem)
+        ClimbAction::ClimbAction(PhaserRobotSubsystem &subsystem, bool complete): subsystem_(subsystem)
         {
             auto cargo_intake = subsystem_.getGameManipulator()->getCargoIntake() ;
             auto db = subsystem_.getTankDrive() ;
             auto climber = subsystem_.getClimber() ;
 
+            complete_ = complete ;
+
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
             extend_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, true) ;
-            drive_back_ = std::make_shared<TankDriveDistanceAction>(*db, "climb:backup_distance") ;
+            drive_back_ = std::make_shared<TankDriveTimedPowerAction>(*db, "climb:backup:left",
+                            "climb:backup:right", "climb:backup:duration", true) ;
             deploy_grasshopper_ = std::make_shared<ClimberDeployAction>(*climber) ;
             drivebase_power_ = std::make_shared<TankDriveTimedPowerAction>(*db, "climb:drive:left", 
                             "climb:drive:right", "climb:drive:duration", true) ;
@@ -27,6 +30,8 @@ namespace xero {
             delay_duration_ = subsystem_.getRobot().getSettingsParser().getDouble("climb:deploy_delay") ;
             
             state_ = State::Idle ;
+            velocity_sample_count_ = subsystem_.getRobot().getSettingsParser().getInteger("climb:velocity_samples") ;
+            velocity_still_threshold_ = subsystem_.getRobot().getSettingsParser().getDouble("climb:still_threshold") ;
         }
 
 
@@ -34,36 +39,16 @@ namespace xero {
         }
 
         void ClimbAction::start() {
-            auto cargo_intake = subsystem_.getGameManipulator()->getCargoIntake() ;
-            cargo_intake->setAction(retract_cargo_intake_) ;
+            auto climber = subsystem_.getClimber() ;
+            climber->setAction(deploy_grasshopper_) ;
 
-            state_ = State::RetractCargoIntake ;
+            state_ = State::ReleaseGrasshopper ;
         }
 
         void ClimbAction::run() {
+            auto db = subsystem_.getTankDrive() ;
+
             switch(state_) {
-            case State::RetractCargoIntake:
-                if (retract_cargo_intake_->isDone()) {
-                    //auto db = subsystem_.getTankDrive() ;
-                    //db->setAction(drive_back_) ;
-                    state_ = State::BackupDrivebase ;
-                }
-                break ;
-
-            case State::BackupDrivebase:
-                //if (drive_back_->isDone()) {
-                {
-                    auto climber = subsystem_.getClimber() ;
-                    climber->setAction(deploy_grasshopper_) ;
-
-                    //auto cargo_intake = subsystem_.getGameManipulator()->getCargoIntake() ;
-                    //cargo_intake->setAction(extend_cargo_intake_) ;
-
-                    state_ = State::ReleaseGrasshopper ;
-                
-                }
-                break ;
-
             case State::ReleaseGrasshopper:
                 if (deploy_grasshopper_->isDone()) {
                     delay_start_ = subsystem_.getRobot().getTime() ;
@@ -81,9 +66,43 @@ namespace xero {
 
             case State::StartWheels:
                 if (drivebase_power_->isDone()) {
-                    state_ = State::Idle ;
+                    auto cargo = subsystem_.getGameManipulator()->getCargoIntake() ;
+                    cargo->setAction(extend_cargo_intake_) ;
+                    state_ = State::DeployCargoCollector ;
                 }
                 break ;
+
+            case State::DeployCargoCollector:
+                if (extend_cargo_intake_->isDone()) {
+                    if (!complete_)
+                        state_ = State::Idle ;
+                    else
+                        state_ = State::WaitForStopped ;
+                }
+                break ;
+
+            case State::WaitForStopped:
+                velocities_.push_back(db->getXYZVelocity()) ;
+                if (velocities_.size() > velocity_sample_count_)
+                    velocities_.pop_back() ;
+
+                if (velocities_.size() == velocity_sample_count_) {
+                    double sum = 0.0 ;
+                    for(double d : velocities_)
+                        sum += d ;
+
+                    sum /= static_cast<double>(velocities_.size()) ;
+                    if (sum < velocity_still_threshold_) {
+                        state_ = State::Backup ;
+                        db->setAction(drive_back_) ;
+                    }
+                }
+                break ;
+
+            case State::Backup:
+                if (drive_back_->isDone()) {
+                    state_ = State::Idle ;
+                }
 
             case State::Idle:
                 break ;

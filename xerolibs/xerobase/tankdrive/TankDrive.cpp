@@ -32,7 +32,6 @@ namespace xero {
             dist_r_ = 0.0 ;
             last_dist_l_ = 0.0 ;
             last_dist_r_ = 0.0 ;
-            dumpstate_ = false ;
 
 #ifdef GOPIGO
             navx_ = std::make_shared<AHRS>(frc::SerialPort::Port::Port_0) ;
@@ -232,6 +231,17 @@ namespace xero {
 
             last_dist_l_ = dist_l_ ;
             last_dist_r_ = dist_r_ ;
+
+
+            if (navx_ != nullptr) {
+                double vx = navx_->GetVelocityX() ;
+                double vy = navx_->GetVelocityY() ;
+                double vz = navx_->GetVelocityZ() ;
+                xyz_velocity_ = std::sqrt(vx * vx + vy * vy + vz * vz) ;
+            }
+            else {
+                xyz_velocity_ = 0.0 ;
+            }
         }
 
         void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
