@@ -25,13 +25,18 @@ namespace xero {
         void LineFollowAction::start() {
             start_distance_ = getTankDrive().getDist() ;
             is_done_ = false ;
+
+            MessageLogger &logger = ls_subsystem_.getRobot().getMessageLogger() ;
+            logger << "LineFollowAction: " ;
+            logger << "start distance " << start_distance_ ;
+            logger.endMessage() ;            
         }
 
         void LineFollowAction::run() {
             MessageLogger &logger = ls_subsystem_.getRobot().getMessageLogger() ;
 
             distances_.push_front(getTankDrive().getDist()) ;
-            if (distances_.size() > 4)
+            if (distances_.size() > 16)
                 distances_.pop_back() ;
 
             if (!is_done_) {
@@ -42,7 +47,8 @@ namespace xero {
                 logger.endMessage() ;  
 
                 double traveled = distances_.front() - distances_.back() ;
-                if (distances_.size() == 4 && std::fabs(traveled) < stalled_threshold_) {
+                double linetraveled = distances_.front() - start_distance_ ;
+                if (distances_.size() == 16 && std::fabs(traveled) < stalled_threshold_) {
                     //
                     // Case 1: the drivebase has stalled, must have hit the target
                     //
@@ -53,7 +59,7 @@ namespace xero {
                     logger.endMessage() ;                  
                     is_done_ = true ;
                 }
-                else if (std::fabs(traveled) > distance_) {
+                else if (std::fabs(linetraveled) > distance_) {
                     //
                     // Case 2: We have traveled the desired distance after hitting the
                     //         line the first time.

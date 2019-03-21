@@ -157,12 +157,12 @@ tankdrive:width                                                 22
 tankdrive:scrub                                                 0.95177665
 
 if PRACTICE
-tankdrive:follower:left:ka                                      0.00
+tankdrive:follower:left:ka                                      0.00011764706
 tankdrive:follower:left:kv                                      0.005882353
 tankdrive:follower:left:kp                                      0.03048             # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kd                                      0.0
 
-tankdrive:follower:right:ka                                     0.00
+tankdrive:follower:right:ka                                     0.00011764706
 tankdrive:follower:right:kv                                     0.005882353         # 0.006112469
 tankdrive:follower:right:kp                                     0.03048             # Recommended 0.02032 - 0.03048
 tankdrive:follower:right:kd                                     0.0
@@ -181,7 +181,7 @@ tankdrive:follower:right:kd                                     0.0
 endif
 
 tankdrive:follower:turn_correction                              0
-tankdrive:follower:angle_correction                             0.01
+tankdrive:follower:angle_correction                             0.014
 
 tankdrive:distance_action:maxa                                  36.0
 tankdrive:distance_action:maxd                                  -36.0
@@ -233,8 +233,8 @@ if COMPETITION
 turntable:degrees_per_tick                                      0.546283784
 endif
 
-turntable:maxa                                                  480
-turntable:maxd                                                  -480
+turntable:maxa                                                  520
+turntable:maxd                                                  -520
 turntable:maxv                                                  270
 
 turntable:base                                                  0.0
@@ -416,19 +416,19 @@ cameratracker:rect_ratio_max                                    1.1
 # drive by vision (simple P only control)
 ###################################################################################################
 
-drivebyvision:yaw_base_power                                    0.15
+drivebyvision:yaw_base_power                                    0.20
 drivebyvision:yaw_p                                             0.025
 
 ###################################################################################################
 # drive by line follower
 ###################################################################################################
 
-linefollower:front:power                                          0.2
-linefollower:front:distance                                       14
-linefollower:front:adjust                                         0.15
-linefollower:back:power                                           -0.20
-linefollower:back:distance                                        14
-linefollower:back:adjust                                          -0.15
+linefollower:front:power                                          0.25
+linefollower:front:distance                                       10
+linefollower:front:adjust                                         0.17
+linefollower:back:power                                           -0.25
+linefollower:back:distance                                        10
+linefollower:back:adjust                                          -0.17
 linefollower:stalled_threshold                                    0.1
 
 cargointake:power                                               -0.6

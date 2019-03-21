@@ -44,9 +44,9 @@ namespace xero {
             const char *adjust ;
 
             if (rear) {
-                power = "linefollower:front:power" ;
-                dist = "linefollower:front:distance" ;
-                adjust = "linefollower:front:adjust" ;
+                power = "linefollower:back:power" ;
+                dist = "linefollower:back:distance" ;
+                adjust = "linefollower:back:adjust" ;
                 lines = phaser.getPhaserRobotSubsystem()->getBackLineSensor() ;                     
             }
             else
@@ -70,7 +70,7 @@ namespace xero {
             parallel = std::make_shared<ParallelAction>() ;
 
             seq2 = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
-            seq2->pushAction(std::make_shared<DelayAction>(0.5)) ;
+            seq2->pushAction(std::make_shared<DelayAction>(0.2)) ;
 
             //
             // Move the turntable to the right spot
