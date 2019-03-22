@@ -1,5 +1,6 @@
 This is the new architecture for Error Code Xero robot code.
 
+
 bin - various utility shell scripts designed to be run from bash in cygwin 
 
 doc - the directory for the Doxygen generated documentation 
