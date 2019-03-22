@@ -66,6 +66,7 @@ namespace xero{
 
         private:
             State state_ ;
+            State oldstate_ ;
             std::string height_ ;
             std::string angle_ ;
 
