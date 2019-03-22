@@ -29,3 +29,4 @@ rtf
 makebuild
 logs
 /deploy
+.vscode/ipch

@@ -5,10 +5,12 @@ AUTOMODES = \
 	src/main/cpp/automodes/PhaserAutoModeBase.cpp\
 	src/main/cpp/automodes/StraightCharAutoMode.cpp\
 	src/main/cpp/automodes/TankDriveScrubMode.cpp\
-	src/main/cpp/automodes/CenterHabTwoHatch.cpp\
-	src/main/cpp/automodes/HabCargoMode.cpp\
 	src/main/cpp/automodes/FollowPathAutomode.cpp\
-	src/main/cpp/automodes/LifterHeightMode.cpp
+	src/main/cpp/automodes/LifterHeightMode.cpp\
+	src/main/cpp/automodes/CenterHabTwoHatch.cpp\
+	src/main/cpp/automodes/CenterHabHatchCargo.cpp\
+	src/main/cpp/automodes/LeftRocketTwoHatch.cpp\
+	src/main/cpp/automodes/RightRocketTwoHatch.cpp
 
 SOURCES = \
 	src/main/cpp/main.cpp\
@@ -17,6 +19,7 @@ SOURCES = \
 	src/main/cpp/phaseroi/PhaserOISubsystem.cpp\
 	src/main/cpp/phaserrobotsubsystem/PhaserRobotSubsystem.cpp\
 	src/main/cpp/phaserrobotsubsystem/ClimbAction.cpp\
+	src/main/cpp/phaserrobotsubsystem/StrafeAction.cpp\
 	src/main/cpp/turntable/Turntable.cpp\
 	src/main/cpp/turntable/TurntableCalibrateAction.cpp\
 	src/main/cpp/turntable/TurntableGoToAngleAction.cpp\

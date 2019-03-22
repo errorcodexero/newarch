@@ -34,6 +34,37 @@ namespace xero{
             } ;
 
         private:
+            std::string toString(State st) {
+                std::string ret = "????" ;
+
+                switch(st) {
+                    case State::ExtendHatchHolder:
+                        ret = "ExtendHatchHolder" ;
+                        break ;
+                    case State::TurntableAndLift:
+                        ret = "TurntableAndLift" ;
+                        break ;                    
+                    case State::RetractHatchHolder:
+                        ret = "RetractHatchHolder" ;
+                        break ;                    
+                    case State::TurntableAndSafeHeight:
+                        ret = "TurntableAndSafeHeight" ;
+                        break ;                    
+                    case State::LifterSafeHeight:
+                        ret = "LifterSafeHeight" ;
+                        break ;                    
+                    case State::LifterFinalHeight:
+                        ret = "LifterFinalHeight" ;
+                        break ;                    
+                    case State::Idle:
+                        ret = "Idle" ;
+                        break ;                    
+                }
+
+                return ret ;
+            }
+
+        private:
             State state_ ;
             std::string height_ ;
             std::string angle_ ;
