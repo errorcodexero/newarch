@@ -111,17 +111,18 @@ namespace xero {
 
             MessageLogger &logger = getGamePiece().getRobot().getMessageLogger() ;            
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;
-            logger << "ReadAction: startTurnLiftSequence " ;            
+            logger << "ReadyAction: startTurnLiftSequence " ;            
 
             if (alreadyOnCorrectSide()) {
+                logger << "already on correct side" ;
+                logger.endMessage() ; 
+
                 //
                 // No rotation needed, just go to right height
                 //
                 lifter->setAction(set_lifter_final_height_) ;
                 state_ = State::LifterFinalHeight ;
-
-                logger << "already on correct side" ;
-                logger.endMessage() ;                
+               
             }
             else {
                 //
@@ -151,6 +152,7 @@ namespace xero {
                     else {
                         logger << "need to turn, above safe height, target below safe height" ;                        
                         logger.endMessage() ;
+
                         //
                         // The destination height is below the safe lift height, so we
                         // rotate and go to the safe height conncurrently
@@ -163,6 +165,7 @@ namespace xero {
                 else {
                     logger << "need to turn, below safe height" ;
                     logger.endMessage() ;
+
                     //
                     // The turntable is below the safe height, so go to the safe height
                     // first.
