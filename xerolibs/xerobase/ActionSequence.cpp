@@ -56,6 +56,13 @@ void ActionSequence::run()
 
         if (index_ == -1 || actionSequence_[index_]->isDone())
         {
+            if (index_ != -1) {
+                logger_.startMessage(MessageLogger::MessageType::debug, group_) ;
+                logger_ << "Actions: completed " << index_ << " of " << actionSequence_.size() - 1 ;
+                logger_ << " '" << actionSequence_[index_]->toString() << "'" ;
+                logger_.endMessage() ;
+            }
+            
             startNextAction();
             if (static_cast<size_t>(index_) == actionSequence_.size())
                 break;

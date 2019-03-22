@@ -28,8 +28,6 @@ namespace xero {
             set_turntable_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, angle) ;
             extend_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM, "hatchholder:specialflow:delay") ;
             retract_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatchholder:default:delay") ;
-
-
         }
 
         ReadyAction::ReadyAction(GamePieceManipulator &subsystem, double height, const std::string &angle):GamePieceAction(subsystem) {

@@ -256,7 +256,7 @@ namespace xero {
             reset_intakes_ = std::make_shared<ResetIntakeAction>(*game) ;
             extend_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_FINGER, "hatchholder:default:delay") ;
             retract_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER, "hatchholder:default:delay") ;     
-            climb_action_ = std::make_shared<ClimbAction>(*ph.getPhaserRobotSubsystem()) ;
+            climb_action_ = std::make_shared<ClimbAction>(*ph.getPhaserRobotSubsystem(), false) ;
 
             deploy_climber_ = std::make_shared<ClimberDeployAction>(*climber) ;
 
@@ -1018,6 +1018,12 @@ namespace xero {
             }
             else if (!finish_collect_cargo_->isDone() && getValue(go_)) {
                 game->cancelAction() ;
+            }
+            else if (!set_collect_cargo_floor_->isDone() && getValue(go_)) {
+                //
+                // We are floor collecting, cancel
+                //
+                set_collect_cargo_floor_->cancel() ;
             } else if (game->isDone()) {
                 if (getValue(climb_lock_switch_) && getValue(climb_)) {
                     //

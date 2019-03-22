@@ -35,7 +35,8 @@ namespace xero{
             double delay_start_ ;
             double delay_duration_ ;
 
-            xero::base::ActionPtr extend_cargo_intake_ ;     
+            xero::base::ActionPtr extend_cargo_intake_ ;   
+            xero::base::ActionPtr retract_cargo_intake_ ;               
             xero::base::ActionPtr drive_back_ ;   
             xero::base::ActionPtr deploy_grasshopper_ ;    
             xero::base::ActionPtr drivebase_power_ ;
