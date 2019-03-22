@@ -4,8 +4,6 @@
 #include <turntable/TurntableGoToAngleAction.h>
 #include <cargointake/CargoIntake.h>
 #include <cargointake/CargoIntakeAction.h>
-#include <hatchintake/HatchIntake.h>
-#include <hatchintake/HatchIntakeAction.h>
 #include <hatchholder/HatchHolderAction.h>
 #include <cmath>
 
@@ -17,7 +15,6 @@ namespace xero {
 
             auto lifter = getGamePiece().getLifter() ; 
             auto turntable = getGamePiece().getTurntable() ;
-            auto hatch_intake = getGamePiece().getHatchIntake();
             auto cargo_intake = getGamePiece().getCargoIntake() ;
             auto hatch_holder = getGamePiece().getHatchHolder() ;
             auto cargo_holder = getGamePiece().getCargoHolder() ;
@@ -26,11 +23,9 @@ namespace xero {
             set_lifter_level_one_  = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:bottom") ;
             set_turntable_zero_ = std::make_shared<TurntableGoToAngleAction>(*turntable, 0.0) ;
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
-            retract_hatch_intake_ = std::make_shared<HatchIntakeAction>(*hatch_intake, false) ;
             retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatchholder:default:delay") ;
             retract_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER, "hatchholder:default:delay") ;
 
-            stop_hatch_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*hatch_intake, 0.0) ;
             stop_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, 0.0) ;
             stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
 
@@ -43,18 +38,16 @@ namespace xero {
         void ResetIntakeAction::start() {
             auto lifter = getGamePiece().getLifter() ;
             auto turntable = getGamePiece().getTurntable() ;
-            auto hatch_intake = getGamePiece().getHatchIntake();
             auto cargo_intake = getGamePiece().getCargoIntake() ;
             auto cargo_holder = getGamePiece().getCargoHolder() ;
             auto hatch_holder = getGamePiece().getHatchHolder() ;
 
             hatch_holder->setAction(retract_arm_) ;            
 
-            hatch_intake->setAction(stop_hatch_intake_motor_) ;
             cargo_intake->setAction(stop_cargo_intake_motor_) ;
             cargo_holder->setAction(stop_cargo_holder_motor_) ;
 
-            if (hatch_intake->isDeployed() || cargo_intake->isDeployed() || std::fabs(turntable->getAngleValue()) > epsilon) {
+            if (cargo_intake->isDeployed() || std::fabs(turntable->getAngleValue()) > epsilon) {
                 lifter->setAction(set_lifter_safe_height_) ;
                 state_ = State::SafeHeight ;
             }
@@ -84,9 +77,6 @@ namespace xero {
                 break ;
             case State::RotateZero:
                 if (set_turntable_zero_->isDone()) {
-                    auto hatch_intake = getGamePiece().getHatchIntake();
-                    hatch_intake->setAction(retract_hatch_intake_) ;
-
                     auto cargo_intake = getGamePiece().getCargoIntake();  
                     cargo_intake->setAction(retract_cargo_intake_) ;
 

@@ -6,7 +6,6 @@
 #include <ParallelAction.h>
 #include "gamepiecemanipulator/GamePieceAction.h"
 #include "gamepiecemanipulator/FloorCollectCargoAction.h"
-#include "gamepiecemanipulator/FloorCollectHatchAction.h"
 #include "gamepiecemanipulator/CompleteLSHatchCollect.h"
 #include "gamepiecemanipulator/CompleteLSCargoCollect.h"
 #include "gamepiecemanipulator/ScoreCargo.h"

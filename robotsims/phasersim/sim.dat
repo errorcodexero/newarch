@@ -23,15 +23,10 @@ hw:hatchholder:arm:retract           7                                  # Soleno
 hw:hatchholder:finger                5                                  # Solenoid
 hw:hatchholder:sensor               21                                  # DIO 10
 
-# Hatch Intake
-hw:hatchintake:motor                12                                  # VictorSPX 11
-hw:hatchintake:sensor               23                                  # DIO 12
-hw:hatchintake:deploy                3                                  # Solenoid 3
-
 # Lifter
 hw:lifter:encoder1                   8                                  # DIO 6
 hw:lifter:encoder2                   9                                  # DIO 7
-hw:lifter:motor:1                    11                                 # TalonSRX
+hw:lifter:motor:1                    10                                 # TalonSRX
 
 # Turntable
 hw:turntable:encoder1                4                                  # DIO 4

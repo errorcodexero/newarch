@@ -17,9 +17,6 @@ namespace xero {
             hatch_holder_ = std::make_shared<HatchHolder>(robot) ;
             addChild(hatch_holder_) ;
 
-            hatch_intake_ = std::make_shared<HatchIntake>(robot, MSG_GROUP_HATCH_INTAKE) ;
-            addChild(hatch_intake_) ;
-
             if (settings.isDefined("cargoholder:TalonSRX"))
                 victor = !settings.getBoolean("cargoholder:TalonSRX") ;
 

@@ -46,7 +46,6 @@ hw:tankdrive:invert:motors:left                                 true
 hw:tankdrive:shifter                                            0               # Solenoid
 endif
 
-
 #
 # Hatch holder
 #
@@ -63,9 +62,6 @@ hw:hatchholder:finger                                            7              
 endif
 
 hw:hatchholder:sensor                                           21              # Digital IO
-hw:hatchintake:motor                                            12              # Victor SPX
-hw:hatchintake:sensor                                           23              # Digital IO
-hw:hatchintake:solenoid                                         3               # Solenoid
 
 #
 # Lift
@@ -446,8 +442,6 @@ cargoholder:score:power                                         0.8
 endif
 
 cargoholder:score:time                                          1.0
-
-hatchintake:power                                               0.6
 
 cargointake:delay                                               0.06
 

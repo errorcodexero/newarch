@@ -28,7 +28,6 @@ namespace xero {
             xero::base::AutoModePtr testTurntableRaw() ;
 
             xero::base::AutoModePtr testHatchHolder() ;
-            xero::base::AutoModePtr testHatchIntake() ;
             xero::base::AutoModePtr testCargoHolder() ;
             xero::base::AutoModePtr testCargoIntake() ;
             xero::base::AutoModePtr testClimber() ;

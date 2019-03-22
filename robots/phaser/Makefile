@@ -12,11 +12,7 @@ AUTOMODES = \
 	src/main/cpp/automodes/LeftRocketTwoHatch.cpp\
 	src/main/cpp/automodes/RightRocketTwoHatch.cpp
 
-SOURCES = \
-	src/main/cpp/main.cpp\
-	src/main/cpp/Phaser.cpp\
-	src/main/cpp/phaseroi/PhaserOIDevice.cpp\
-	src/main/cpp/phaseroi/PhaserOISubsystem.cpp\
+SUBSYSTEMS = \
 	src/main/cpp/phaserrobotsubsystem/PhaserRobotSubsystem.cpp\
 	src/main/cpp/phaserrobotsubsystem/ClimbAction.cpp\
 	src/main/cpp/phaserrobotsubsystem/StrafeAction.cpp\
@@ -28,8 +24,6 @@ SOURCES = \
 	src/main/cpp/phasercameratracker/DriveByVisionAction.cpp\
 	src/main/cpp/hatchholder/HatchHolder.cpp\
 	src/main/cpp/hatchholder/HatchHolderAction.cpp\
-	src/main/cpp/hatchintake/HatchIntake.cpp\
-	src/main/cpp/hatchintake/HatchIntakeAction.cpp\
 	src/main/cpp/cargoholder/CargoHolder.cpp\
 	src/main/cpp/cargointake/CargoIntake.cpp\
 	src/main/cpp/cargointake/CargoIntakeAction.cpp\
@@ -39,12 +33,18 @@ SOURCES = \
 	src/main/cpp/gamepiecemanipulator/CompleteLSHatchCollect.cpp\
 	src/main/cpp/gamepiecemanipulator/CompleteLSCargoCollect.cpp\
 	src/main/cpp/gamepiecemanipulator/FloorCollectCargoAction.cpp\
-	src/main/cpp/gamepiecemanipulator/FloorCollectHatchAction.cpp\
 	src/main/cpp/gamepiecemanipulator/ScoreCargo.cpp\
 	src/main/cpp/gamepiecemanipulator/ScoreHatch.cpp\
 	src/main/cpp/gamepiecemanipulator/ReadyAction.cpp\
 	src/main/cpp/gamepiecemanipulator/ResetIntakesAction.cpp\
-	src/main/cpp/gamepiecemanipulator/CalibrateManip.cpp\
+	src/main/cpp/gamepiecemanipulator/CalibrateManip.cpp
+	
+SOURCES = \
+	src/main/cpp/main.cpp\
+	src/main/cpp/Phaser.cpp\
+	src/main/cpp/phaseroi/PhaserOIDevice.cpp\
+	src/main/cpp/phaseroi/PhaserOISubsystem.cpp\
+	$(SUBSYSTEMS)\
 	$(AUTOMODES)
 
 TARGET = phaser

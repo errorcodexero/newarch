@@ -100,6 +100,12 @@ namespace xero {
         }
 
         void LifterModel::run(double dt) {
+            double i = 99.0 ;
+
+            if (power_ > 0.1) {
+                i *= 2.0 ;
+            }
+
             double dh = power_ * inch_per_sec_per_volt_* dt + gravity_equivalent_speed_ * dt ;
             height_ += dh ;
 

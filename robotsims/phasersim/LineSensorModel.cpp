@@ -87,7 +87,7 @@ namespace xero {
             }
 
             std::string LineSensorModel::toString() {
-                std::string result("hatchintake: ") ;
+                std::string result("linesensor: ") ;
                 return result ;
             }
 
