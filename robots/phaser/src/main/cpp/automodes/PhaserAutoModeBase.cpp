@@ -1,5 +1,6 @@
 #include "PhaserAutoModeBase.h"
 #include "Phaser.h"
+#include <gamepiecemanipulator/WaitForHatch.h>
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/TankDriveFollowPathAction.h>
 #include <tankdrive/LineFollowAction.h>
@@ -25,7 +26,7 @@ namespace xero {
         {            
         }
 
-        void PhaserAutoModeBase::insertAutoModeLeg(const std::string &height, const std::string &angle, const std::string &path, bool rear, double delay, ActionPtr finish)
+        void PhaserAutoModeBase::insertAutoModeLeg(const std::string &height, const std::string &angle, const std::string &path, bool rear, bool hashatch, double delay, ActionPtr finish)
         {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto db = phaser.getPhaserRobotSubsystem()->getTankDrive() ;
@@ -60,7 +61,7 @@ namespace xero {
 
             ////////////////////////////////////////////////////
             //
-            // Start the initial hatch
+            // Start the initial path
             //
             ////////////////////////////////////////////////////            
 
@@ -115,6 +116,12 @@ namespace xero {
             // This is the finish action
             //
             seq->pushSubActionPair(game, finish) ;
+
+            //
+            // And finally the action that freezes if the hatch was not placed
+            // or collected sucessfully
+            //
+            seq->pushSubActionPair(game, std::make_shared<WaitForHatch>(*game, hashatch)) ;
 
             //
             // Add the sequence to the parallel
