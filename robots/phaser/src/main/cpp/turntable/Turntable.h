@@ -14,6 +14,7 @@ namespace xero {
             friend class TurntableCalibrateAction ;
             friend class TurntableGoToAngleAction ;
             friend class TurntablePowerAction ;
+            friend class CargoTrackerAction ;
         
         public:
              Turntable(xero::base::Robot &robot, xero::base::Lifter &lifter, uint64_t id, uint64_t verboseid) ;

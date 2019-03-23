@@ -521,3 +521,10 @@ oi:tracking_viewing_nothing_switch                              3               
 strafe:drive_distance                                           88
 strafe:maxv                                                     40
 strafe:shoot_distance                                           24
+
+
+#
+# Cargo tracking
+#
+cargotracking:kp                                                0.1
+cargotracking:width                                             14.0
