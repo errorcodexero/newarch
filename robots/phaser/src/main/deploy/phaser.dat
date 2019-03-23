@@ -46,7 +46,6 @@ hw:tankdrive:invert:motors:left                                 true
 hw:tankdrive:shifter                                            0               # Solenoid
 endif
 
-
 #
 # Hatch holder
 #
@@ -63,9 +62,6 @@ hw:hatchholder:finger                                            7              
 endif
 
 hw:hatchholder:sensor                                           21              # Digital IO
-hw:hatchintake:motor                                            12              # Victor SPX
-hw:hatchintake:sensor                                           23              # Digital IO
-hw:hatchintake:solenoid                                         3               # Solenoid
 
 #
 # Lift
@@ -447,8 +443,6 @@ endif
 
 cargoholder:score:time                                          1.0
 
-hatchintake:power                                               0.6
-
 cargointake:delay                                               0.06
 
 if PRACTICE
@@ -527,3 +521,10 @@ oi:tracking_viewing_nothing_switch                              3               
 strafe:drive_distance                                           88
 strafe:maxv                                                     40
 strafe:shoot_distance                                           24
+
+
+#
+# Cargo tracking
+#
+cargotracking:kp                                                0.1
+cargotracking:width                                             14.0

@@ -46,7 +46,7 @@ namespace xero {
             }
 
             std::string CargoIntakeModel::toString() {
-                std::string result("hatchintake: ") ;
+                std::string result("cargointake: ") ;
                 return result ;
             }
 

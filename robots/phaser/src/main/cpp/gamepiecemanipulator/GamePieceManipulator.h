@@ -3,7 +3,6 @@
 #include "phaseroi/PhaserOISubsystem.h"
 #include "hatchholder/HatchHolder.h"
 #include "cargoholder/CargoHolder.h"
-#include "hatchintake/HatchIntake.h"
 #include "cargointake/CargoIntake.h"
 #include "turntable/Turntable.h"
 #include <lifter/Lifter.h>
@@ -30,10 +29,6 @@ namespace xero {
                 return hatch_holder_ ;
             }
 
-            std::shared_ptr<HatchIntake> getHatchIntake() {
-                return hatch_intake_ ;
-            }
-
             std::shared_ptr<CargoHolder> getCargoHolder(){
                 return cargo_holder_ ;
             } 
@@ -58,7 +53,6 @@ namespace xero {
 
         private:
             std::shared_ptr<HatchHolder> hatch_holder_ ;
-            std::shared_ptr<HatchIntake> hatch_intake_ ;
             std::shared_ptr<CargoHolder> cargo_holder_ ;
             std::shared_ptr<CargoIntake> cargo_intake_ ;
             std::shared_ptr<xero::base::Lifter> lifter_ ;

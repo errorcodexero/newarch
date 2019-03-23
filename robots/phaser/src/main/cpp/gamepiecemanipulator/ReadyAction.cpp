@@ -67,7 +67,7 @@ namespace xero {
             auto hatch_holder = getGamePiece().getHatchHolder() ;
             MessageLogger &logger = getGamePiece().getRobot().getMessageLogger() ;
 
-            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;
+            oldstate_ = State::Idle ;
 
             //
             // We have to do two things here, rotate the turntable to the right angle and get the
@@ -77,6 +77,10 @@ namespace xero {
             //
 
             if (hatch_holder->hasHatch() && !alreadyOnCorrectSide()) {
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;                
+                logger << "ReadyAction: start with extend hatch" ;
+                logger.endMessage() ;
+
                 //
                 // We are going to rotate with a hatch, we always have to
                 // extend the hatch holder
@@ -84,12 +88,14 @@ namespace xero {
                 hatch_holder->setAction(extend_hatch_holder_) ;
                 hatch_holder_extended_ = true ;
                 state_ = State::ExtendHatchHolder ;
-                logger << "ReadyAction: start with extend hatch" ;
             }
             else {
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;                
+                logger << "ReadyAction: start with turntable/lift sequence" ;                   
+                logger.endMessage() ;
+
                 startTurnLiftSequence() ;
-                hatch_holder_extended_ = false ;                
-                logger << "ReadyAction: start with turntable/lift sequence" ;                
+                hatch_holder_extended_ = false ;                             
             }
 
             logger.endMessage() ;
@@ -103,17 +109,18 @@ namespace xero {
 
             MessageLogger &logger = getGamePiece().getRobot().getMessageLogger() ;            
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;
-            logger << "ReadAction: startTurnLiftSequence " ;            
+            logger << "ReadyAction: startTurnLiftSequence " ;            
 
             if (alreadyOnCorrectSide()) {
+                logger << "already on correct side" ;
+                logger.endMessage() ; 
+
                 //
                 // No rotation needed, just go to right height
                 //
                 lifter->setAction(set_lifter_final_height_) ;
                 state_ = State::LifterFinalHeight ;
-
-                logger << "already on correct side" ;
-                logger.endMessage() ;                
+               
             }
             else {
                 //
@@ -166,10 +173,15 @@ namespace xero {
         }
 
         void ReadyAction::run() {
-            MessageLogger &logger = getGamePiece().getRobot().getMessageLogger() ;            
-            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;
-            logger << "ReadyAction: entering run, state " << toString(state_) ;
-            logger.endMessage() ;
+            MessageLogger &logger = getGamePiece().getRobot().getMessageLogger() ;          
+
+            if (oldstate_ != state_) {
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;
+                logger << "ReadyAction: run, state " << toString(oldstate_) << " -> " << toString(state_) ;
+                logger.endMessage() ;
+
+                oldstate_ = state_ ;
+            }
 
             switch(state_) {
             case State::ExtendHatchHolder:

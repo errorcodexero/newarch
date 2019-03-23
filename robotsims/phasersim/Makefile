@@ -6,7 +6,6 @@ SOURCES = \
 	OIModel.cpp\
 	HatchHolderModel.cpp\
 	CargoHolderModel.cpp\
-	HatchIntakeModel.cpp\
 	CargoIntakeModel.cpp\
 	ClimberModel.cpp\
 	LineSensorModel.cpp

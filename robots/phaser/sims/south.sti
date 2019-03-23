@@ -31,11 +31,12 @@
 # Start up conditions
 #
 0.1,oi,automode,-100                                    # Automode switch set to zero
-0.1,oi,tracking_viewing_nothing_switch,100              # Set the auto/semi/manual switch to manual
+0.1,oi,tracking_viewing_nothing_switch,0                # Set the auto/semi/manual switch to manual
+0.1,oi,hatch_cargo_switch,1                             # Hatch
 
-3.0,oi,hatch_cargo_switch,1                             # Set the cargo/hatch switch to hatch
-4.0,oi,collect_floor,1                                  # Press the floor collect button
-4.2,oi,collect_floor,0                                  # Release the floor collect button
-
-6.0,hatchintake,hatch,1                                 # Hatch detected in the hatch intack
-8.0,hatchholder,hatch,1                                 # Hatch detected in the hatch hatchholder
+#
+# Press the south joystick button to rotate the cargo holder to the
+# south positio
+#
+3.0,oi,compass_south,1                                   # Press the joystick north button
+3.2,oi,compass_south,0                                   # Release the joystick north button
