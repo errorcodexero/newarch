@@ -13,6 +13,7 @@
 #include "gamepiecemanipulator/ReadyAction.h"
 #include "gamepiecemanipulator/ResetIntakesAction.h"
 #include "gamepiecemanipulator/CalibrateManip.h"
+#include "gamepiecemanipulator/CargoShootAction.h"
 #include "cargointake/CargoIntakeAction.h"
 #include "singlemotorsubsystem/SingleMotorPowerAction.h"
 #include "phasercameratracker/DriveByVisionAction.h"
@@ -24,6 +25,8 @@
 #include "phaserrobotsubsystem/ClimbAction.h"
 #include "phaserrobotsubsystem/StrafeAction.h"
 #include "climber/ClimberDeployAction.h"
+#include "turntable/CargoTrackerAction.h"
+
 #include <oi/DriverGamepadRumbleAction.h>
 
 #include "LineFollowerTakeover.h"
@@ -243,6 +246,8 @@ namespace xero {
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto hatch_holder = game->getHatchHolder() ;
             auto climber = ph.getPhaserRobotSubsystem()->getClimber() ;
+            auto turntable = game->getTurntable() ;
+            auto vision = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
 
             safe_height_ = getSubsystem().getRobot().getSettingsParser().getDouble("turntable:safe_lifter_height") ;
 
@@ -260,6 +265,9 @@ namespace xero {
             deploy_climber_ = std::make_shared<ClimberDeployAction>(*climber) ;
 
             calibrate_action_ = std::make_shared<CalibrateManip>(*game) ;
+
+            track_cargo_target_ = std::make_shared<CargoTrackerAction>(*turntable, *vision) ;
+            shoot_target_target_ = std::make_shared<CargoShootAction>(*game, *vision) ;
         }
 
         PhaserOIDevice::Direction PhaserOIDevice::getRobotDirection() {
@@ -671,16 +679,8 @@ namespace xero {
         void PhaserOIDevice::generateStrafe(ActionSequence &seq)
         {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ; 
-            auto robotsub = ph.getPhaserRobotSubsystem() ; 
-            int count = static_cast<int>(height_) ;
-            if (count >= 4)
-                count = 3 ;
-
-            //
-            // TODO - disable game pad until after this completes
-            //
-            ActionPtr act = std::make_shared<StrafeAction>(*robotsub, false, count) ;
-            seq.pushSubActionPair(robotsub, act, false) ;
+            auto turntable = ph.getPhaserRobotSubsystem()->getGameManipulator()->getTurntable() ;
+            turntable->setAction(track_cargo_target_) ;
         }
 
         //
@@ -882,7 +882,12 @@ namespace xero {
 
             if (piece == GamePieceManipulator::GamePieceType::Cargo) {
                 // Place cargo
-                ret = finish_place_cargo_ ;
+                if (mode_ == OperationMode::Auto) {
+                    ret = shoot_target_target_ ;
+                }
+                else {
+                    ret = finish_place_cargo_ ;
+                }
             }
             else if (piece == GamePieceManipulator::GamePieceType::Hatch) {
                 // Place hatch

@@ -137,6 +137,9 @@ namespace xero {
 
             xero::base::ActionPtr calibrate_action_ ;
             
+            xero::base::ActionPtr track_cargo_target_ ;
+            xero::base::ActionPtr shoot_target_target_ ;
+            
             double safe_height_ ;
         } ;
     }
