@@ -60,7 +60,7 @@ namespace xero {
                 path = "LSLeftRocketLeft" ;
 
                 act = std::make_shared<ScoreHatch>(*game) ;            
-                insertAutoModeLeg(height, angle, path, false, false, 2.0, act) ;
+                insertAutoModeLeg(height, angle, path, false, false, 3.0, act) ;
             }
         }
 

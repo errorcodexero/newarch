@@ -1,5 +1,6 @@
 #include "PhaserRobotSubsystem.h"
 #include "ClimbAction.h"
+#include "StrafeAction.h"
 #include "phaserids.h"
 #include <Robot.h>
 #include <list>
@@ -45,7 +46,12 @@ namespace xero {
 
         bool PhaserRobotSubsystem::canAcceptAction(ActionPtr act) {
             std::shared_ptr<ClimbAction> climb = std::dynamic_pointer_cast<ClimbAction>(act) ;
-            return climb != nullptr ;
+            if (climb != nullptr)
+                return true ;
+
+            std::shared_ptr<StrafeAction> strafe = std::dynamic_pointer_cast<StrafeAction>(act) ;
+            return strafe != nullptr ;
         }
     }
 }
+

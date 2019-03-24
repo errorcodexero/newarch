@@ -230,7 +230,10 @@ namespace xero {
             calibrate_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
 
             button= settings.getInteger("oi:reverse") ;
-            reverse_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;      
+            reverse_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;  
+
+            button = settings.getInteger("oi:ship_rocket") ;
+            ship_rocket_ = mapAxisSwitch(button, 3) ;    
         }
 
         //
@@ -255,7 +258,6 @@ namespace xero {
             finish_collect_cargo_ = std::make_shared<CompleteLSCargoCollect>(*game) ;
             finish_place_hatch_  = std::make_shared<ScoreHatch>(*game) ;
             finish_place_cargo_  = std::make_shared<ScoreCargo>(*game) ;
-            // set_collect_hatch_floor_  = std::make_shared<FloorCollectHatchAction>(*game) ;
             set_collect_cargo_floor_  = std::make_shared<FloorCollectCargoAction>(*game) ;
             reset_intakes_ = std::make_shared<ResetIntakeAction>(*game) ;
             extend_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_FINGER, "hatchholder:default:delay") ;
@@ -398,7 +400,6 @@ namespace xero {
                 updateMode(mode) ;                
         }
 
-
         //
         // Generate the actions associated with a direction button on the joystick.  The
         // generated action raises the lift to a safe height, rotates the turntable to the
@@ -442,11 +443,16 @@ namespace xero {
                     // The roboti sholding cargo and we are in auto mode, set the
                     // height so that the camera can see the vision targets.
                     //
-                    height = "lifter:height:cargo:tracking_height:" ;
+                    height = "lifter:height:cargo:place:" ;
                     height += dirToString(dir_) + ":" ;
-                    height += heightToString() ;
+
+                    if (getValue(ship_rocket_))
+                        height += "c" ;
+                    else
+                        height += heightToString() ;
+
                     angle = "turntable:angle:cargo:place:" ;
-                    angle += dirToString(dir_) ;                    
+                    angle += dirToString(dir_) ;       
                 }
                 else {
                     //
@@ -558,22 +564,16 @@ namespace xero {
                 }
             }
             else if (piece == GamePieceManipulator::GamePieceType::Cargo) {
-                if (mode_ == OperationMode::Auto && tracking) {
-                    //
-                    // The roboti sholding cargo and we are in auto mode, set the
-                    // height so that the camera can see the vision targets.
-                    //
-                    height = "lifter:height:cargo:tracking_height:" ;
-                    height += dirToString(dir_) + ":" ;
-                    height += heightToString() ;
+                //
+                // The robot is holding cargo, the action will be to place the cargo
+                // at the requested height
+                //
+                height = "lifter:height:cargo:place:" ;
+                height += dirToString(dir_) + ":" ;
+                if (getValue(ship_rocket_)) {
+                    height += "c" ;
                 }
                 else {
-                    //
-                    // The robot is holding cargo, the action will be to place the cargo
-                    // at the requested height
-                    //
-                    height = "lifter:height:cargo:place:" ;
-                    height += dirToString(dir_) + ":" ;
                     height += heightToString() ;
                 }
             }
@@ -678,9 +678,40 @@ namespace xero {
 
         void PhaserOIDevice::generateStrafe(ActionSequence &seq)
         {
-            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ; 
-            auto turntable = ph.getPhaserRobotSubsystem()->getGameManipulator()->getTurntable() ;
-            turntable->setAction(track_cargo_target_) ;
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
+            ActionPtr strafe ;
+
+            if (getValue(ship_rocket_)) {
+                //
+                // Cargo ship, the height buttons really tell us which line
+                //
+                switch(height_) {
+                case ActionHeight::CargoBay:
+                    break ;
+                case ActionHeight::LevelOne:
+                    strafe = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem(), 1) ;
+                    break ;
+                case ActionHeight::LevelTwo:
+                    strafe = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem(), 2) ;
+                    break ;
+                case ActionHeight::LevelThree:                                                
+                    strafe = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem(), 3) ;
+                    break ;
+                }
+
+                //
+                // TODO set which based on the height button
+                //
+                if (strafe != nullptr)
+                    ph.getPhaserRobotSubsystem()->setAction(strafe) ;
+            }
+            else {
+                //
+                // Rocket ship, always do first line
+                //
+                auto strafe = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem()) ;
+                ph.getPhaserRobotSubsystem()->setAction(strafe) ;
+            }
         }
 
         //

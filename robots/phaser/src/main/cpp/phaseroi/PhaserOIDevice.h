@@ -116,6 +116,8 @@ namespace xero {
             size_t calibrate_ ;
             size_t reverse_ ; 
 
+            size_t ship_rocket_ ;
+
             Direction dir_ ;
             ActionHeight height_ ;
             OperationMode mode_ ;

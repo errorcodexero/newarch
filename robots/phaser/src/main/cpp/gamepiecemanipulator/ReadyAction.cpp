@@ -239,10 +239,6 @@ namespace xero {
             case State::Idle:
                 break ; 
             }
-
-            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;
-            logger << "ReadyAction: leaving run, state " << toString(state_) ;
-            logger.endMessage() ;            
         }
 
         bool ReadyAction::isDone() {

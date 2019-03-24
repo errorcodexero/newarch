@@ -64,6 +64,14 @@ endif
 hw:hatchholder:sensor                                           21              # Digital IO
 
 #
+# Carlos hatch holder
+#
+hw:carloshatch:arm:extend                                       6
+hw:carloshatch:arm:retract                                      7
+hw:carloshatch:sensor                                           21
+hw:carloshatch:impact                                           23
+
+#
 # Lift
 #
 if PRACTICE
@@ -154,12 +162,12 @@ tankdrive:scrub                                                 0.95177665
 
 if PRACTICE
 tankdrive:follower:left:ka                                      0.0025
-tankdrive:follower:left:kv                                      0.005
+tankdrive:follower:left:kv                                      0.006112469         # 0.005
 tankdrive:follower:left:kp                                      0.03048             # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kd                                      0.0
 
 tankdrive:follower:right:ka                                     0.0025
-tankdrive:follower:right:kv                                     0.005               # 0.006112469
+tankdrive:follower:right:kv                                     0.006112469         # 0.005
 tankdrive:follower:right:kp                                     0.03048             # Recommended 0.02032 - 0.03048
 tankdrive:follower:right:kd                                     0.0
 endif
@@ -177,7 +185,7 @@ tankdrive:follower:right:kd                                     0.0
 endif
 
 tankdrive:follower:turn_correction                              0
-tankdrive:follower:angle_correction                             0.014
+tankdrive:follower:angle_correction                             0.02
 
 tankdrive:distance_action:maxa                                  36.0
 tankdrive:distance_action:maxd                                  -36.0
@@ -229,8 +237,8 @@ if COMPETITION
 turntable:degrees_per_tick                                      0.546283784
 endif
 
-turntable:maxa                                                  520
-turntable:maxd                                                  -520
+turntable:maxa                                                  360
+turntable:maxd                                                  -360
 turntable:maxv                                                  270
 
 turntable:base                                                  0.0
@@ -278,7 +286,7 @@ turntable:angle:hatch:place:west                                90
 #
 # Variables for the lifter
 #
-lifter:base							                            8.75
+lifter:base							                            10.75
 
 ifdef COMPETITION
 lifter:inches_per_tick                                          0.059099901
@@ -317,8 +325,8 @@ lifter:hold:i                                                   0.0
 lifter:hold:d                                                   0.0                 
 lifter:hold:f                                                   0.0                 
 lifter:hold:a                                                   0.0                 
-lifter:hold:min                                                -1.0                
-lifter:hold:max                                                 1.0                
+lifter:hold:min                                                -0.6          
+lifter:hold:max                                                 0.6                
 lifter:hold:imax                                                0.0                 
 
 #
@@ -404,7 +412,7 @@ lifter:height:cargo:collected                                 38
 # cameratracker
 ###################################################################################################
 
-cameratracker:distance_threshold                                48.0
+cameratracker:distance_threshold                                60.0
 cameratracker:rect_ratio_min                                    0.9
 cameratracker:rect_ratio_max                                    1.1
 
@@ -413,7 +421,7 @@ cameratracker:rect_ratio_max                                    1.1
 ###################################################################################################
 
 drivebyvision:yaw_base_power                                    0.20
-drivebyvision:yaw_p                                             0.025
+drivebyvision:yaw_p                                             0.03
 
 ###################################################################################################
 # drive by line follower
@@ -421,10 +429,10 @@ drivebyvision:yaw_p                                             0.025
 
 linefollower:front:power                                          0.25
 linefollower:front:distance                                       10
-linefollower:front:adjust                                         0.17
+linefollower:front:adjust                                         0.20
 linefollower:back:power                                           -0.25
 linefollower:back:distance                                        10
-linefollower:back:adjust                                          -0.17
+linefollower:back:adjust                                          -0.20
 linefollower:stalled_threshold                                    0.1
 
 cargointake:power                                               -0.6
@@ -513,15 +521,15 @@ oi:calibrate                                                    16              
 oi:reverse                                                      7                   # Button
 oi:automode                                                     6                   # Axis
 oi:tracking_viewing_nothing_switch                              3                   # Axis
-
+oi:ship_rocket                                                  4                   # Axis
 
 #
 # Semi-auto modes
 #
-strafe:drive_distance                                           88
-strafe:maxv                                                     40
-strafe:shoot_distance                                           24
-
+strafe:ship:shoot_distance                                           15.5
+strafe:ship:velocity_factor                                          0.3
+strafe:rocket:shoot_distance                                         17
+strafe:rocket:velocity_factor                                        0.20
 
 #
 # Cargo tracking
