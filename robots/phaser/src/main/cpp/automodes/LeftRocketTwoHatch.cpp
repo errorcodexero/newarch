@@ -48,7 +48,7 @@ namespace xero {
                 path = "LeftRocketLSLeft" ;
 
                 act = std::make_shared<CompleteLSHatchCollect>(*game) ;
-                insertAutoModeLeg(height, angle, path, true, true, 2.0, act) ;
+                insertAutoModeLeg(height, angle, path, true, true, 0.0, act) ;
 
                 //
                 // Place the second hatch
@@ -60,7 +60,7 @@ namespace xero {
                 path = "LSLeftRocketLeft" ;
 
                 act = std::make_shared<ScoreHatch>(*game) ;            
-                insertAutoModeLeg(height, angle, path, false, false, 3.0, act) ;
+                insertAutoModeLeg(height, angle, path, false, false, 0.0, act) ;
             }
         }
 

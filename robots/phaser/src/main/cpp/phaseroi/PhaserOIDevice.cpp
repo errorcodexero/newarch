@@ -291,6 +291,7 @@ namespace xero {
 
         PhaserOIDevice::Direction PhaserOIDevice::compassToFieldRelative(PhaserOIDevice::Direction compass)
         {
+#ifdef FIELD_RELATIVE
             static Direction fieldmapping[4][4] = {
                 { Direction::North, Direction::South, Direction::East, Direction::West },            // Robot direction N
                 { Direction::South, Direction::North, Direction::West, Direction::East },            // Robot direction S
@@ -302,6 +303,9 @@ namespace xero {
             int rdir = static_cast<int>(robotdir) ;
             int cdir = static_cast<int>(compass) ;
             return fieldmapping[rdir][cdir] ;
+#else
+            return compass ;
+#endif
         }
 
         //

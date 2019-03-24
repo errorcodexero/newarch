@@ -71,7 +71,7 @@ namespace xero {
             parallel = std::make_shared<ParallelAction>() ;
 
             seq2 = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
-            seq2->pushAction(std::make_shared<DelayAction>(0.2)) ;
+            seq2->pushAction(std::make_shared<DelayAction>(delay)) ;
 
             //
             // Move the turntable to the right spot
@@ -80,8 +80,6 @@ namespace xero {
             seq2->pushSubActionPair(game, act, true) ;
             parallel->addAction(seq2) ;
             
-            // parallel->addSubActionPair(game, act, true) ;
-
             //
             // Create the sequence that follows the path, switches to vision, switches
             // to line following

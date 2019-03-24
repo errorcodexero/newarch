@@ -440,13 +440,13 @@ cargointake:reverse:power                                        0.6
 
 if COMPETITION
 cargoholder:collect:power                                       0.6
-cargoholder:score:power                                         -0.8
+cargoholder:score:power                                         -0.4
 endif
 
 if PRACTICE
 cargoholder:collect:power                                       -0.6
 cargoholder:TalonSRX                                            true
-cargoholder:score:power                                         0.8
+cargoholder:score:power                                         0.4
 endif
 
 cargoholder:score:time                                          1.0
