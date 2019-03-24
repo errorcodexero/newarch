@@ -35,6 +35,13 @@ namespace xero {
                 Invalid
             } ;
 
+            enum class RocketShipMode
+            {
+                Rocket,
+                CargoShip,
+                Invalid,
+            } ;
+
         public:
             PhaserOIDevice(PhaserOISubsystem &sub, int index) ;
             virtual ~PhaserOIDevice() ;
@@ -53,6 +60,7 @@ namespace xero {
             void getCargoHatchMode(xero::base::ActionSequence &seq) ;
             bool getDirection() ;
             bool getHeightButton() ;
+            void getShipRocketMode() ;
 
             Direction getRobotDirection() ;
             Direction compassToFieldRelative(Direction dir) ;
@@ -121,6 +129,7 @@ namespace xero {
             Direction dir_ ;
             ActionHeight height_ ;
             OperationMode mode_ ;
+            RocketShipMode ship_cargo_state_ ;
 
             xero::base::ActionPtr set_collect_hatch_floor_ ;
             xero::base::ActionPtr set_collect_cargo_floor_ ;
@@ -141,6 +150,8 @@ namespace xero {
             
             xero::base::ActionPtr track_cargo_target_ ;
             xero::base::ActionPtr shoot_target_target_ ;
+
+            xero::base::ActionPtr strafe_ ;
             
             double safe_height_ ;
         } ;

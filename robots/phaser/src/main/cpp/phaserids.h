@@ -31,3 +31,5 @@
 #define MSG_GROUP_PHASER_TURNTABLE_VERBOSE          (1ull << 41)
 
 #define MSG_GROUP_READY_ACTION                      (1ull << 42)
+
+#define MSG_GROUP_STRAFE                      (1ull << 43)

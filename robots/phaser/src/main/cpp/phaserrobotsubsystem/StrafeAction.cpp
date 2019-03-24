@@ -1,15 +1,20 @@
 #include "StrafeAction.h"
 #include "gamepiecemanipulator/ScoreCargo.h"
+#include "phaserids.h"
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/TankDriveDistanceAction.h>
 #include <tankdrive/TankDrivePowerAction.h>
 #include <tankdrive/TankDriveTimedPowerAction.h>
 #include <oi/DriverGamepadRumbleAction.h>
+#include <MessageLogger.h>
 
 using namespace xero::base ;
+using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
+        int StrafeAction::which_one_ = 0 ;
+
         StrafeAction::StrafeAction(PhaserRobotSubsystem &subsystem): subsystem_(subsystem)
         {
             auto db = subsystem_.getTankDrive() ;
@@ -25,6 +30,8 @@ namespace xero {
 
             shoot_ = std::make_shared<ScoreCargo>(*game) ;
             rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1, 1.0, 1.0) ;
+
+            which_ = which_one_++ ;
         }
 
         StrafeAction::StrafeAction(PhaserRobotSubsystem &subsystem, int count): subsystem_(subsystem)
@@ -35,12 +42,15 @@ namespace xero {
 
             count_ = count ;
             state_ = State::Idle ;
+            ship_ = true ;
 
             shoot_dist_ = subsystem.getRobot().getSettingsParser().getDouble("strafe:ship:shoot_distance") ;
             vel_factor_ = subsystem.getRobot().getSettingsParser().getDouble("strafe:ship:velocity_factor") ;
 
             shoot_ = std::make_shared<ScoreCargo>(*game) ;
             rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1, 1.0, 1.0) ;
+
+            which_ = which_one_++ ;            
         }
 
         StrafeAction::~StrafeAction() {
@@ -88,6 +98,7 @@ namespace xero {
         }        
 
         void StrafeAction::run() {
+            MessageLogger &logger = subsystem_.getRobot().getMessageLogger() ;
             auto db = subsystem_.getTankDrive() ;
             auto game = subsystem_.getGameManipulator() ;
             auto oi = subsystem_.getOI() ;
@@ -96,6 +107,9 @@ namespace xero {
 
             switch(state_) {
             case State::ArmedRocket:
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_STRAFE) ;
+                logger << "Strafe ArmedRocket" ;
+                logger.endMessage() ;
                 if (front && db->getVelocity() > 0) {
                     start_dist_ = db->getDist() ;
                     target_dist_ = shoot_dist_ - vel_factor_ * db->getVelocity() ;
@@ -108,7 +122,10 @@ namespace xero {
                 }
                 break ;
 
-            case State::ArmedShip:
+            case State::ArmedShip: 
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_STRAFE) ;
+                logger << "Strafe ArmedShip" ;
+                logger.endMessage() ;
                 if (front && db->getVelocity() > 0) {
                     thiscount_-- ;
 
@@ -124,6 +141,13 @@ namespace xero {
                 break ;
 
             case State::WaitForDistanceForward:
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_STRAFE) ;
+                logger << "Strafe WaitForDistanceForward" ;
+                logger << " start " << start_dist_ ;
+                logger << " current " << db->getDist() ;
+                logger << " target " << target_dist_ ;
+                logger.endMessage() ;               
+
                 if (db->getDist() - start_dist_ > target_dist_) {
                     game->setAction(shoot_);
                     state_ = State::Shooting ;
@@ -135,6 +159,12 @@ namespace xero {
                 break ;
 
             case State::WaitForDistanceBack:
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_STRAFE) ;
+                logger << "Strafe WaitForDistanceBack" ;
+                logger << " start " << start_dist_ ;
+                logger << " current " << db->getDist() ;
+                logger << " target " << target_dist_ ;
+                logger.endMessage() ;  ;            
                 if (db->getDist() - start_dist_ < target_dist_) {
                     game->setAction(shoot_);
                     state_ = State::Shooting ;
@@ -142,12 +172,19 @@ namespace xero {
                 break ;
 
             case State::Shooting:
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_STRAFE) ;
+                logger << "Strafe Shooting" ;
+                logger.endMessage() ;            
                 if (shoot_->isDone()) {
                     oi->setAction(rumble_) ;
                     state_ = State::Idle ;
                 }
+                break ;
 
             case State::Idle:
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_STRAFE) ;
+                logger << "Strafe Idle" ;
+                logger.endMessage() ;    
                 break ;
             }
         }

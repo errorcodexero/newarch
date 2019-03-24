@@ -85,7 +85,7 @@ namespace xero {
                 break ;
 
             case State::RetractIntakes:
-                if (retract_hatch_intake_->isDone() && retract_cargo_intake_->isDone()) {
+                if (retract_cargo_intake_->isDone()) {
                     auto hatch_holder = getGamePiece().getHatchHolder() ;
                     if (hatch_holder->isArmDeployed()) {
                         hatch_holder->setAction(retract_arm_) ;

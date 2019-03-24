@@ -237,9 +237,9 @@ if COMPETITION
 turntable:degrees_per_tick                                      0.546283784
 endif
 
-turntable:maxa                                                  360
-turntable:maxd                                                  -360
-turntable:maxv                                                  270
+turntable:maxa                                                  420
+turntable:maxd                                                  -420
+turntable:maxv                                                  300
 
 turntable:base                                                  0.0
 turntable:threshold                                             1.0
@@ -427,10 +427,10 @@ drivebyvision:yaw_p                                             0.03
 # drive by line follower
 ###################################################################################################
 
-linefollower:front:power                                          0.25
+linefollower:front:power                                          0.20
 linefollower:front:distance                                       10
 linefollower:front:adjust                                         0.20
-linefollower:back:power                                           -0.25
+linefollower:back:power                                           -0.20
 linefollower:back:distance                                        10
 linefollower:back:adjust                                          -0.20
 linefollower:stalled_threshold                                    0.1

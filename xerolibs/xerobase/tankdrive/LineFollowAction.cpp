@@ -27,6 +27,7 @@ namespace xero {
             is_done_ = false ;
 
             MessageLogger &logger = ls_subsystem_.getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;            
             logger << "LineFollowAction: " ;
             logger << "start distance " << start_distance_ ;
             logger.endMessage() ;            
@@ -40,12 +41,13 @@ namespace xero {
                 distances_.pop_back() ;
 
             if (!is_done_) {
+#ifdef NOTYET                
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
                 logger << "LineFollowAction: running" ;
                 for(double d : distances_)
                     logger << " " << d ;
                 logger.endMessage() ;  
-
+#endif
                 double traveled = distances_.front() - distances_.back() ;
                 double linetraveled = distances_.front() - start_distance_ ;
                 if (distances_.size() == 16 && std::fabs(traveled) < stalled_threshold_) {

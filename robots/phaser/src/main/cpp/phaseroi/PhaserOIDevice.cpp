@@ -60,6 +60,7 @@ namespace xero {
             mode_ = OperationMode::Invalid ;     
 
             has_hatch_state_ = false ;
+            ship_cargo_state_ = RocketShipMode::Invalid ;
         }
 
         PhaserOIDevice::~PhaserOIDevice() {
@@ -679,8 +680,9 @@ namespace xero {
         void PhaserOIDevice::generateStrafe(ActionSequence &seq)
         {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
-            ActionPtr strafe ;
+            ph.getPhaserRobotSubsystem()->setAction(nullptr) ;
 
+            strafe_ = nullptr ;
             if (getValue(ship_rocket_)) {
                 //
                 // Cargo ship, the height buttons really tell us which line
@@ -689,28 +691,23 @@ namespace xero {
                 case ActionHeight::CargoBay:
                     break ;
                 case ActionHeight::LevelOne:
-                    strafe = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem(), 1) ;
+                    strafe_ = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem(), 1) ;
                     break ;
                 case ActionHeight::LevelTwo:
-                    strafe = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem(), 2) ;
+                    strafe_ = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem(), 2) ;
                     break ;
                 case ActionHeight::LevelThree:                                                
-                    strafe = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem(), 3) ;
+                    strafe_ = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem(), 3) ;
                     break ;
                 }
-
-                //
-                // TODO set which based on the height button
-                //
-                if (strafe != nullptr)
-                    ph.getPhaserRobotSubsystem()->setAction(strafe) ;
+                ph.getPhaserRobotSubsystem()->setAction(strafe_) ;
             }
             else {
                 //
                 // Rocket ship, always do first line
                 //
-                auto strafe = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem()) ;
-                ph.getPhaserRobotSubsystem()->setAction(strafe) ;
+                strafe_ = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem()) ;
+                ph.getPhaserRobotSubsystem()->setAction(strafe_) ;
             }
         }
 
@@ -936,6 +933,26 @@ namespace xero {
             return ret ;
         }
 
+        void PhaserOIDevice::getShipRocketMode()
+        {
+            RocketShipMode rst ;
+            if (getValue(ship_rocket_)) {
+                rst = RocketShipMode::CargoShip ;
+            }
+            else {
+                rst = RocketShipMode::Rocket ;
+            }
+
+            if (rst != ship_cargo_state_) {
+
+                if (ship_cargo_state_ == RocketShipMode::CargoShip) {
+                    height_ = ActionHeight::LevelTwo ;
+                }
+
+                ship_cargo_state_ = rst ;
+            }
+        }
+
         //
         // Manually finish an action if a detector has not taken over and
         // finished the action.
@@ -1028,6 +1045,11 @@ namespace xero {
             getCargoHatchMode(seq) ;
 
             //
+            // Check the rocket vs cargo ship switch
+            //
+            getShipRocketMode() ;
+
+            //
             // Calibrate takes precedence over everything
             //
             if (getValue(calibrate_)) {
@@ -1054,11 +1076,12 @@ namespace xero {
             else if (!finish_collect_cargo_->isDone() && getValue(go_)) {
                 game->cancelAction() ;
             }
-            else if (!set_collect_cargo_floor_->isDone() && getValue(go_)) {
+            else if (!set_collect_cargo_floor_->isDone() && getValue(collect_floor_)) {
                 //
                 // We are floor collecting, cancel
                 //
                 set_collect_cargo_floor_->cancel() ;
+                
             } else if (game->isDone()) {
                 if (getValue(climb_lock_switch_) && getValue(climb_)) {
                     //
