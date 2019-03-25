@@ -39,7 +39,9 @@ namespace xero{
             xero::base::ActionPtr set_deploy_hatch_finger_ ;
             xero::base::ActionPtr rumble_ ;        
             xero::base::ActionPtr rotate_ ;
-            std::shared_ptr<xero::base::LightSensorSubsystem> lines_ ;                              
+            std::shared_ptr<xero::base::LightSensorSubsystem> lines_ ;
+            static bool offsets_inited_ ;
+            static double place_offsets_[8] ;
         } ;
     }
 }

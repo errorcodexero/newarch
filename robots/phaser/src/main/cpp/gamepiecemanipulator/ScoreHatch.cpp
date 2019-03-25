@@ -10,11 +10,25 @@ using namespace xero::base ;
 
 namespace xero {
     namespace phaser {
+        bool ScoreHatch::offsets_inited_ = false ;
+        double ScoreHatch::place_offsets_[8] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0} ;
+
         ScoreHatch::ScoreHatch(GamePieceManipulator &subsystem, std::shared_ptr<xero::base::LightSensorSubsystem> lines):GamePieceAction(subsystem) {
             auto hatch_holder = getGamePiece().getHatchHolder() ;
             auto lifter = getGamePiece().getLifter() ;
             auto oi = getGamePiece().getRobot().getOI() ;
             lines_ = lines ;
+
+            if (!offsets_inited_) {
+                place_offsets_[0] = subsystem.getRobot().getSettingsParser().getDouble("scorehatch:offset:0") ;
+                place_offsets_[1] = subsystem.getRobot().getSettingsParser().getDouble("scorehatch:offset:1") ;
+                place_offsets_[2] = subsystem.getRobot().getSettingsParser().getDouble("scorehatch:offset:2") ;
+                place_offsets_[3] = subsystem.getRobot().getSettingsParser().getDouble("scorehatch:offset:3") ;
+                place_offsets_[4] = subsystem.getRobot().getSettingsParser().getDouble("scorehatch:offset:4") ;
+                place_offsets_[5] = subsystem.getRobot().getSettingsParser().getDouble("scorehatch:offset:5") ;
+                place_offsets_[6] = subsystem.getRobot().getSettingsParser().getDouble("scorehatch:offset:6") ;
+                place_offsets_[7] = subsystem.getRobot().getSettingsParser().getDouble("scorehatch:offset:7") ;                                                                                                                
+            }
             
             set_lifter_shift_down_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:score:hatch:shift_down", true) ;
 
@@ -30,25 +44,11 @@ namespace xero {
 
         void ScoreHatch::start() {
             auto turntable = getGamePiece().getTurntable() ;
-
-            static double angle[8] = { 
-                0.0,
-                2.0,
-                0.0,
-                1.0,
-                -2.0,
-                0.0,
-                -1.0,
-                0.0
-            } ;
             if (lines_ != nullptr) {
                 uint32_t off = lines_->getSensorsState() ;
-                rotate_ = std::make_shared<TurntableGoToAngleAction>(*turntable, turntable->getAngleValue() + angle[off]) ;
+                rotate_ = std::make_shared<TurntableGoToAngleAction>(*turntable, turntable->getAngleValue() + place_offsets_[off]) ;
                 turntable->setAction(rotate_) ;
                 state_ = State::Rotate ;
-                std::cout << "Adjusting angle" ;
-                std::cout << ": off " << off ;
-                std::cout << " angle " << angle[off] << std::endl ;
             }
             else {
                 auto hatch_holder = getGamePiece().getHatchHolder() ;

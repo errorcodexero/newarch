@@ -26,13 +26,10 @@
 #include "phaserrobotsubsystem/StrafeAction.h"
 #include "climber/ClimberDeployAction.h"
 #include "turntable/CargoTrackerAction.h"
-
 #include <oi/DriverGamepadRumbleAction.h>
-
 #include "LineFollowerTakeover.h"
 #include "VisionDetectTakeover.h"
 #include "phaserids.h"
-
 #include <Robot.h>
 #include <lightsensor/LightSensorSubsystem.h>
 #include <TeleopController.h>
@@ -58,8 +55,6 @@ namespace xero {
             height_ = ActionHeight::LevelOne ;
             dir_ = Direction::North ;
             mode_ = OperationMode::Invalid ;     
-
-            has_hatch_state_ = false ;
             ship_cargo_state_ = RocketShipMode::Invalid ;
         }
 
@@ -87,7 +82,7 @@ namespace xero {
             return ret ;
         }        
 
-        std::string PhaserOIDevice::dirToString(Direction dir) {
+        std::string PhaserOIDevice::toString(Direction dir) {
             std::string ret = "????" ;
 
             switch(dir) {
@@ -111,10 +106,10 @@ namespace xero {
             return ret ;
         }        
 
-        std::string PhaserOIDevice::heightToString() {
+        std::string PhaserOIDevice::toString(ActionHeight h) {
             std::string ret = "????" ;
 
-            switch(height_) {
+            switch(h) {
             case ActionHeight::LevelOne:
                 ret = "1" ;
                 break ;
@@ -341,8 +336,8 @@ namespace xero {
                 log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
                 log << "OI:" ;
                 log << " angle " << angle ;
-                log << " stick " << dirToString(compass) ;
-                log << " field " << dirToString(dir_) ;
+                log << " stick " << toString(compass) ;
+                log << " field " << toString(dir_) ;
                 log.endMessage() ;
             }
 
@@ -432,15 +427,15 @@ namespace xero {
                     // at the requested height
                     //
                     height = "lifter:height:hatch:tracking_height:" ;
-                    height += dirToString(dir_) ;
+                    height += toString(dir_) ;
                     angle = "turntable:angle:hatch:place:" ;
-                    angle += dirToString(dir_) ;                    
+                    angle += toString(dir_) ;                    
                 }
                 else {                
                     height = "lifter:height:hatch:place:" ;
-                    height += dirToString(dir_) + ":1" ;
+                    height += toString(dir_) + ":1" ;
                     angle = "turntable:angle:hatch:place:" ;
-                    angle += dirToString(dir_) ;
+                    angle += toString(dir_) ;
                 }
             }
             else if (piece == GamePieceManipulator::GamePieceType::Cargo) {
@@ -450,15 +445,15 @@ namespace xero {
                     // height so that the camera can see the vision targets.
                     //
                     height = "lifter:height:cargo:place:" ;
-                    height += dirToString(dir_) + ":" ;
+                    height += toString(dir_) + ":" ;
 
                     if (getValue(ship_rocket_))
                         height += "c" ;
                     else
-                        height += heightToString() ;
+                        height += toString(height_) ;
 
                     angle = "turntable:angle:cargo:place:" ;
-                    angle += dirToString(dir_) ;       
+                    angle += toString(dir_) ;       
                 }
                 else {
                     //
@@ -470,10 +465,10 @@ namespace xero {
                         heightnumset = true ;
                     } else {
                         height = "lifter:height:cargo:place:" ;
-                        height += dirToString(dir_) + ":1" ;
+                        height += toString(dir_) + ":1" ;
                     }
                     angle = "turntable:angle:cargo:place:" ;
-                    angle += dirToString(dir_) ;                      
+                    angle += toString(dir_) ;                      
                 }
             }
             else if (piece == GamePieceManipulator::GamePieceType::None) {
@@ -485,10 +480,10 @@ namespace xero {
                     // Loading cargo from the loading station
                     //
                     height = "lifter:height:cargo:collect:" ;
-                    height += dirToString(dir_) ;
+                    height += toString(dir_) ;
 
                     angle = "turntable:angle:cargo:collect:" ;
-                    angle += dirToString(dir_) ;
+                    angle += toString(dir_) ;
 
                     piece = GamePieceManipulator::GamePieceType::Cargo ;
                 }
@@ -497,10 +492,10 @@ namespace xero {
                     // Loading hatch from the loading station
                     //
                     height = "lifter:height:hatch:collect:" ;
-                    height += dirToString(dir_)  ;
+                    height += toString(dir_)  ;
 
                     angle = "turntable:angle:hatch:collect:" ;
-                    angle += dirToString(dir_) ;  
+                    angle += toString(dir_) ;  
 
                     piece = GamePieceManipulator::GamePieceType::Hatch ;    
                 }
@@ -557,7 +552,7 @@ namespace xero {
                     // height so that the camera can see the vision targets
                     //
                     height = "lifter:height:hatch:tracking_height:" ;
-                    height += dirToString(dir_) ;
+                    height += toString(dir_) ;
                 }
                 else {
                     //
@@ -565,8 +560,8 @@ namespace xero {
                     // at the requested height
                     //
                     height = "lifter:height:hatch:place:" ;
-                    height += dirToString(dir_) + ":" ;
-                    height += heightToString() ;
+                    height += toString(dir_) + ":" ;
+                    height += toString(height_) ;
                 }
             }
             else if (piece == GamePieceManipulator::GamePieceType::Cargo) {
@@ -575,12 +570,12 @@ namespace xero {
                 // at the requested height
                 //
                 height = "lifter:height:cargo:place:" ;
-                height += dirToString(dir_) + ":" ;
+                height += toString(dir_) + ":" ;
                 if (getValue(ship_rocket_) && mode_ == OperationMode::Auto) {
                     height += "c" ;
                 }
                 else {
-                    height += heightToString() ;
+                    height += toString(height_) ;
                 }
             }
             else if (piece == GamePieceManipulator::GamePieceType::None) {
@@ -592,18 +587,16 @@ namespace xero {
                     // Loading hatch from the loading station
                     //
                     height = "lifter:height:cargo:collect:" ;
-                    height += dirToString(dir_) ;
+                    height += toString(dir_) ;
                 }
                 else {
                     //
                     // Loading cargo from the loading station
                     //
                     height = "lifter:height:hatch:collect:" ;
-                    height += dirToString(dir_)  ;
+                    height += toString(dir_)  ;
                 }
             }
-
-            std::cout << "Testing " << height << std::endl ;
 
             return height ;
         }        
@@ -619,6 +612,7 @@ namespace xero {
             auto lifter = game->getLifter() ;
             ActionPtr act, finish ;
             std::string height ;        
+            std::string angle ;
 
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
@@ -626,14 +620,15 @@ namespace xero {
             log << "mode " << toString(mode_) << " " ;
           
             height = generateActionHeightName(true) ;
+            angle = toString(dir_) ;
 
             log << height ;
             log.endMessage() ;                      
 
             SettingsParser &parser = getSubsystem().getRobot().getSettingsParser() ;
             if (parser.isDefined(height)) {
-                act = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
-                seq.pushSubActionPair(lifter, act, false) ;
+                act = std::make_shared<ReadyAction>(*game, height, angle) ;
+                seq.pushSubActionPair(game, act, false) ;
             }
             else {
                 MessageLogger &logger = getSubsystem().getRobot().getMessageLogger() ;
@@ -1043,6 +1038,12 @@ namespace xero {
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto hatch_holder = game->getHatchHolder() ;    
             auto fcol = std::dynamic_pointer_cast<FloorCollectCargoAction>(set_collect_cargo_floor_) ; 
+
+            //
+            // If we were executing a direction action, and it is done, clear the direction action
+            //
+            if (direction_action_ != nullptr && direction_action_->isDone())
+                direction_action_ = nullptr ;
     
             //
             // Get the tracking mode, either auto, semi-auto, or manual
@@ -1075,7 +1076,6 @@ namespace xero {
                 // action takes priority over everything else.
                 //
                 game->setAction(reset_intakes_, true) ;
-                hatch_finger_start_ = getSubsystem().getRobot().getTime() ;
             }
             else if (!fcol->isDone() && getValue(reverse_)) {
                 //
@@ -1084,70 +1084,69 @@ namespace xero {
                 fcol->reverseIntake() ;
             }
             else if (!finish_collect_cargo_->isDone() && getValue(go_)) {
+                //
+                // We are collecting cargo from the loading station and go we
+                // hit again, cancel the action
+                //
                 game->cancelAction() ;
             }
             else if (!set_collect_cargo_floor_->isDone() && getValue(collect_floor_)) {
                 //
-                // We are floor collecting, cancel
+                // We are floor collecting caro and the floor collect buttons was hit
+                // again.  Cancel the operation
                 //
                 set_collect_cargo_floor_->cancel() ;
                 
-            } else if (game->isDone()) {
-                if (getValue(climb_lock_switch_) && getValue(climb_)) {
+            } else if (game->isDone() && getValue(climb_lock_switch_) && getValue(climb_)) {
+                //
+                // Climb lock switch is off and the climb button is pushed.  
+                //
+                // Time to fly .... like a grasshopper
+                //
+                auto robotsub = ph.getPhaserRobotSubsystem() ;
+                robotsub->setAction(climb_action_) ;
+            }
+            else if ((game->isDone() || direction_action_ != nullptr) && getDirection()) {
+                //
+                // The joystick has been pressed in a direction, move the
+                // lift and turntable to match to desired target.  Note this only work if
+                // the gamepiecemanipulator is finished with any previous action, or the
+                // action in progress is a direction action.
+                //
+                generateDirectionActions(seq) ;
+            }
+            else if ((game->isDone() || direction_action_ != nullptr) && getHeightButton()) {
+                //
+                // A height button has been pressed, ready the lift for the
+                // operation. Note this only work if the gamepiecemanipulator is finished 
+                // with any previous action, or the action in progress is a direction action.
+                //
+                generateHeightButtonActions(seq) ;
+            }
+            else if (game->isDone() && getValue(go_)) {
+                //
+                // Manually initiate the seleced operation
+                //
+                manuallyFinish(seq) ;
+            }
+            else if (game->isDone() && getValue(collect_floor_)) {
+                auto gp = game->getGamePieceType() ;
+                if (gp == GamePieceManipulator::GamePieceType::None) {
                     //
-                    // Climb lock switch is off and the climb button is pushed.  
+                    // Collect game pieces from the floor
                     //
-                    // Time to fly .... like a grasshopper
-                    //
-                    auto robotsub = ph.getPhaserRobotSubsystem() ;
-                    robotsub->setAction(climb_action_) ;
+                    game->setAction(set_collect_cargo_floor_) ;
                 }
-                else if (getDirection()) {
-                    //
-                    // The joystick has been pressed in a direction, move the
-                    // lift and turntable to match to desired target
-                    //
-                    generateDirectionActions(seq) ;
-                    hatch_finger_start_ = getSubsystem().getRobot().getTime() ;                    
-                }
-                else if (getHeightButton()) {
-                    //
-                    // A height button has been pressed, ready the lift for the
-                    // operation
-                    //
-                    generateHeightButtonActions(seq) ;
-                    hatch_finger_start_ = getSubsystem().getRobot().getTime() ;                                    
-                }
-                else if (getValue(go_)) {
-                    //
-                    // Manually initiate the seleced operation
-                    //
-                    manuallyFinish(seq) ;
-                    hatch_finger_start_ = getSubsystem().getRobot().getTime() ;                     
-                }
-                else if (getValue(collect_floor_)) {
-                    auto gp = game->getGamePieceType() ;
-                    if (gp == GamePieceManipulator::GamePieceType::None) {
-                        //
-                        // Collect game pieces from the floor
-                        //
-                        if (getValue(hatch_cargo_switch_))
-                            game->setAction(set_collect_cargo_floor_) ;
-                        else
-                            game->setAction(set_collect_hatch_floor_) ;
-                        hatch_finger_start_ = getSubsystem().getRobot().getTime() ;                             
-                    }
-                    else {
-                        MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
-                        log.startMessage(MessageLogger::MessageType::error) ;
-                        log << "Pressed FloorCollect button while holding a game piece - " ;
-                        if (gp == GamePieceManipulator::GamePieceType::Cargo)
-                            log << "Cargo" ;
-                        else
-                            log << "Hatch" ;
-                            
-                        log.endMessage() ;                          
-                    }
+                else {
+                    MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+                    log.startMessage(MessageLogger::MessageType::error) ;
+                    log << "Pressed FloorCollect button while holding a game piece - " ;
+                    if (gp == GamePieceManipulator::GamePieceType::Cargo)
+                        log << "Cargo" ;
+                    else
+                        log << "Hatch" ;
+                        
+                    log.endMessage() ;                          
                 }
             }
         }

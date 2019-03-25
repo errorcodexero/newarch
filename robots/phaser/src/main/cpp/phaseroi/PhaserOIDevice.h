@@ -80,8 +80,8 @@ namespace xero {
 
             xero::base::ActionPtr getFinishAction() ;
 
-            std::string dirToString(Direction dir) ;
-            std::string heightToString() ;
+            std::string toString(Direction dir) ;
+            std::string toString(ActionHeight height) ;
             std::string toString(OperationMode mode) ;
 
             std::string generateActionHeightName(bool tracking) ;
@@ -91,10 +91,6 @@ namespace xero {
             static const size_t CargoCamera = 1 ;
             
         private:
-            double hatch_finger_start_ ;
-            bool has_hatch_state_ ;
-            double hatch_finger_delay_ ;
-
             size_t automode_ ;
 
             size_t hatch_cargo_switch_ ;
@@ -131,12 +127,13 @@ namespace xero {
             OperationMode mode_ ;
             RocketShipMode ship_cargo_state_ ;
 
-            xero::base::ActionPtr set_collect_hatch_floor_ ;
             xero::base::ActionPtr set_collect_cargo_floor_ ;
 
             xero::base::ActionPtr reset_intakes_ ;
             xero::base::ActionPtr extend_finger_ ;
             xero::base::ActionPtr retract_finger_ ;
+
+            xero::base::ActionPtr direction_action_ ;
 
             xero::base::ActionPtr finish_collect_hatch_ ;
             xero::base::ActionPtr finish_collect_cargo_ ;

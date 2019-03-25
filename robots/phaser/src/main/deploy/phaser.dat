@@ -536,3 +536,15 @@ strafe:rocket:velocity_factor                                        0.20
 #
 cargotracking:kp                                                0.1
 cargotracking:width                                             14.0
+
+#
+# Score cargo
+#
+scorehatch:offset:0                                             0.0
+scorehatch:offset:1                                             0.0
+scorehatch:offset:2                                             0.0
+scorehatch:offset:3                                             0.0
+scorehatch:offset:4                                             0.0
+scorehatch:offset:5                                             0.0
+scorehatch:offset:6                                             0.0
+scorehatch:offset:7                                             0.0
