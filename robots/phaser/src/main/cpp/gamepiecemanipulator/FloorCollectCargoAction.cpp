@@ -149,6 +149,7 @@ namespace xero {
                     //    and the holder.
                     //
                     cargo_intake->setAction(stop_cargo_intake_motor_) ;
+                    cargo_intake->setAction(retract_cargo_intake_) ;
 
                     state_ = State::DelayForCargo ;
                     cargo_start_ = getGamePiece().getRobot().getTime() ;
@@ -192,15 +193,22 @@ namespace xero {
                     auto lifter = getGamePiece().getLifter() ;
                     lifter->setAction(set_lifter_cargo_collected_height_) ;
                     state_ = State::RaiseLifter ;
+
+                    auto oi = getGamePiece().getRobot().getOI() ;
+                    oi->setAction(rumble_) ;                     
                 }
                 break ;
 
             case State::RaiseLifter:
                 if (set_lifter_cargo_collected_height_->isDone()) {
                     auto cargo_intake = getGamePiece().getCargoIntake() ;                    
-                    cargo_intake->setAction(retract_cargo_intake_) ;
-                    auto lifter = getGamePiece().getLifter() ;
-                    state_ = State::RetractIntake ;
+                    if (cargo_intake->isDeployed()) {
+                        cargo_intake->setAction(retract_cargo_intake_) ;
+                        state_ = State::RetractIntake ;
+                    }
+                    else {
+                        state_ = State::Idle ;
+                    }
                 }
                 break ;
 
@@ -213,9 +221,6 @@ namespace xero {
                     // 7. We are done, move to the idle state
                     //
                     state_ = State::Idle ;
-
-                    auto oi = getGamePiece().getRobot().getOI() ;
-                    oi->setAction(rumble_) ;                    
                 }
                 break ;
 
