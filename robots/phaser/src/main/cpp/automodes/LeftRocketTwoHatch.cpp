@@ -16,6 +16,7 @@ namespace xero {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto game = phaser.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto vision = phaser.getPhaserRobotSubsystem()->getCameraTracker() ;
+            auto front = phaser.getPhaserRobotSubsystem()->getFrontLineSensor() ;
       
             ActionPtr act ;
             
@@ -34,7 +35,7 @@ namespace xero {
 
             path = "LeftHABLeftRocket" ;
 
-            act = std::make_shared<ScoreHatch>(*game) ;            
+            act = std::make_shared<ScoreHatch>(*game, front) ;            
             insertAutoModeLeg(height, angle, path, false, false, 0.0, act) ;
 
             if (second) {
@@ -48,7 +49,7 @@ namespace xero {
                 path = "LeftRocketLSLeft" ;
 
                 act = std::make_shared<CompleteLSHatchCollect>(*game) ;
-                insertAutoModeLeg(height, angle, path, true, true, 0.0, act) ;
+                insertAutoModeLeg(height, angle, path, true, true, 2.0, act) ;
 
                 //
                 // Place the second hatch
@@ -60,7 +61,7 @@ namespace xero {
                 path = "LSLeftRocketLeft" ;
 
                 act = std::make_shared<ScoreHatch>(*game) ;            
-                insertAutoModeLeg(height, angle, path, false, false, 0.0, act) ;
+                insertAutoModeLeg(height, angle, path, false, false, 2.0, act) ;
             }
         }
 

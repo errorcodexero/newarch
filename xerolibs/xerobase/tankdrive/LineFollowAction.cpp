@@ -71,7 +71,7 @@ namespace xero {
                     logger << "LineFollowAction:" ;
                     logger << " subsystem " << ls_subsystem_.getName() ;  
                     logger << " - distance " ;
-                    logger << distance_ << "reached" ;
+                    logger << distance_ << " reached" ;
                     logger.endMessage() ;                        
                 } 
                 else if (ls_subsystem_.detectedObject()) {

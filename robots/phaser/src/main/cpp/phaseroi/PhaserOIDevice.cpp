@@ -257,7 +257,8 @@ namespace xero {
 
             finish_collect_hatch_ = std::make_shared<CompleteLSHatchCollect>(*game) ;
             finish_collect_cargo_ = std::make_shared<CompleteLSCargoCollect>(*game) ;
-            finish_place_hatch_  = std::make_shared<ScoreHatch>(*game) ;
+            finish_place_hatch_front_ = std::make_shared<ScoreHatch>(*game, ph.getPhaserRobotSubsystem()->getFrontLineSensor()) ;
+            finish_place_hatch_back_  = std::make_shared<ScoreHatch>(*game, ph.getPhaserRobotSubsystem()->getBackLineSensor()) ;            
             finish_place_cargo_  = std::make_shared<ScoreCargo>(*game) ;
             set_collect_cargo_floor_  = std::make_shared<FloorCollectCargoAction>(*game) ;
             reset_intakes_ = std::make_shared<ResetIntakeAction>(*game) ;
@@ -575,7 +576,7 @@ namespace xero {
                 //
                 height = "lifter:height:cargo:place:" ;
                 height += dirToString(dir_) + ":" ;
-                if (getValue(ship_rocket_)) {
+                if (getValue(ship_rocket_) && mode_ == OperationMode::Auto) {
                     height += "c" ;
                 }
                 else {
@@ -601,6 +602,8 @@ namespace xero {
                     height += dirToString(dir_)  ;
                 }
             }
+
+            std::cout << "Testing " << height << std::endl ;
 
             return height ;
         }        
@@ -923,7 +926,10 @@ namespace xero {
             }
             else if (piece == GamePieceManipulator::GamePieceType::Hatch) {
                 // Place hatch
-                ret = finish_place_hatch_ ;
+                if (dir_ == Direction::North)
+                    ret = finish_place_hatch_front_ ;
+                else if (dir_ == Direction::South)
+                    ret = finish_place_hatch_back_ ;                
             }    
             else if (getValue(hatch_cargo_switch_)) {
                 // Collect cargo

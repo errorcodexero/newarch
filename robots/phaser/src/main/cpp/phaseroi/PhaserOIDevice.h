@@ -140,7 +140,8 @@ namespace xero {
 
             xero::base::ActionPtr finish_collect_hatch_ ;
             xero::base::ActionPtr finish_collect_cargo_ ;
-            xero::base::ActionPtr finish_place_hatch_ ;
+            xero::base::ActionPtr finish_place_hatch_front_ ;
+            xero::base::ActionPtr finish_place_hatch_back_ ;            
             xero::base::ActionPtr finish_place_cargo_ ;    
 
             xero::base::ActionPtr deploy_climber_ ;

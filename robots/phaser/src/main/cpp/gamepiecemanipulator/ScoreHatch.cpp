@@ -10,10 +10,11 @@ using namespace xero::base ;
 
 namespace xero {
     namespace phaser {
-        ScoreHatch::ScoreHatch(GamePieceManipulator &subsystem):GamePieceAction(subsystem) {
+        ScoreHatch::ScoreHatch(GamePieceManipulator &subsystem, std::shared_ptr<xero::base::LightSensorSubsystem> lines):GamePieceAction(subsystem) {
             auto hatch_holder = getGamePiece().getHatchHolder() ;
             auto lifter = getGamePiece().getLifter() ;
             auto oi = getGamePiece().getRobot().getOI() ;
+            lines_ = lines ;
             
             set_lifter_shift_down_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:score:hatch:shift_down", true) ;
 
@@ -28,9 +29,32 @@ namespace xero {
         }
 
         void ScoreHatch::start() {
-            auto hatch_holder = getGamePiece().getHatchHolder() ;
-            hatch_holder->setAction(set_extend_arm_) ;
-            state_ = State::ExtendArm ;
+            auto turntable = getGamePiece().getTurntable() ;
+
+            static double angle[8] = { 
+                0.0,
+                2.0,
+                0.0,
+                1.0,
+                -2.0,
+                0.0,
+                -1.0,
+                0.0
+            } ;
+            if (lines_ != nullptr) {
+                uint32_t off = lines_->getSensorsState() ;
+                rotate_ = std::make_shared<TurntableGoToAngleAction>(*turntable, turntable->getAngleValue() + angle[off]) ;
+                turntable->setAction(rotate_) ;
+                state_ = State::Rotate ;
+                std::cout << "Adjusting angle" ;
+                std::cout << ": off " << off ;
+                std::cout << " angle " << angle[off] << std::endl ;
+            }
+            else {
+                auto hatch_holder = getGamePiece().getHatchHolder() ;
+                hatch_holder->setAction(set_extend_arm_) ;
+                state_ = State::ExtendArm ;
+            }
         }
 
         void ScoreHatch::run(){
@@ -38,6 +62,13 @@ namespace xero {
             auto hatch_holder = getGamePiece().getHatchHolder() ;
 
             switch(state_) {
+            case State::Rotate:
+                if (rotate_->isDone()) {
+                    auto hatch_holder = getGamePiece().getHatchHolder() ;
+                    hatch_holder->setAction(set_extend_arm_) ;
+                    state_ = State::ExtendArm ;                    
+                }
+                break ;
             case State::ExtendArm:
                 if (set_extend_arm_->isDone()) {
                     auto hatch_holder = getGamePiece().getHatchHolder() ;                    

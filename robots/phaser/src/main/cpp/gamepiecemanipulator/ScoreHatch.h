@@ -2,12 +2,14 @@
 
 #include "GamePieceAction.h"
 #include "GamePieceManipulator.h"
+#include <lightsensor/LightSensorSubsystem.h>
+
 
 namespace xero{
     namespace phaser{
         class ScoreHatch : public GamePieceAction {
         public:
-            ScoreHatch(GamePieceManipulator &subsystem) ;
+            ScoreHatch(GamePieceManipulator &subsystem, std::shared_ptr<xero::base::LightSensorSubsystem> lines = nullptr) ;
             virtual ~ScoreHatch() ;
 
 
@@ -20,6 +22,7 @@ namespace xero{
         private:
             enum class State{
                 Idle,
+                Rotate,
                 ExtendArm,                    
                 ReleaseFinger,
                 LifterShiftDownHeight,
@@ -34,7 +37,9 @@ namespace xero{
             xero::base::ActionPtr set_retract_arm_ ;
             xero::base::ActionPtr set_retract_hatch_finger_ ;
             xero::base::ActionPtr set_deploy_hatch_finger_ ;
-            xero::base::ActionPtr rumble_ ;                
+            xero::base::ActionPtr rumble_ ;        
+            xero::base::ActionPtr rotate_ ;
+            std::shared_ptr<xero::base::LightSensorSubsystem> lines_ ;                              
         } ;
     }
 }
