@@ -2,6 +2,7 @@
 
 #include <Subsystem.h>
 #include <frc/DigitalInput.h>
+#include <frc/AnalogInput.h>
 #include <frc/Solenoid.h>
 #include <PIDCtrl.h>
 #include <Robot.h>
@@ -27,11 +28,12 @@ namespace xero {
             void activateHolder() ;
             void deactivateHolder() ;
 
-            bool hasHatch() {
-                return has_hatch_debounced_->get() ;
-            }
             bool isImpacting()  {
                 return has_impact_debounced_->get();
+            }
+
+            bool hasHatch() {
+                return true ;
             }
 
             bool isArmDeployed() {
@@ -46,13 +48,12 @@ namespace xero {
             bool arm_deployed_ ;
             bool holder_deployed_ ;
 
-            std::shared_ptr<frc::DigitalInput> sensor_ ;
+            std::shared_ptr<frc::AnalogInput> sensor_ ;
             std::shared_ptr<frc::DigitalInput> impact_ ;
             std::shared_ptr<frc::Solenoid> arm_extend_ ;
             std::shared_ptr<frc::Solenoid> arm_retract_ ;
             std::shared_ptr<frc::Solenoid> holder_ ;
 
-            std::shared_ptr<xero::misc::DebounceBoolean> has_hatch_debounced_ ;
             std::shared_ptr<xero::misc::DebounceBoolean> has_impact_debounced_ ;
         } ;
     }

@@ -1,8 +1,9 @@
 #pragma once
 
+#include "gamepiece.h"
 #include "phaseroi/PhaserOISubsystem.h"
-#include "hatchholder/HatchHolder.h"
 #include "cargoholder/CargoHolder.h"
+#include "carloshatch/CarlosHatch.h"
 #include "cargointake/CargoIntake.h"
 #include "turntable/Turntable.h"
 #include <lifter/Lifter.h>
@@ -14,23 +15,15 @@ namespace xero {
 
         class GamePieceManipulator : public xero::base::Subsystem {
         public:
-            enum class GamePieceType {
-                Hatch,
-                Cargo,
-                None,
-                Invalid
-            } ;
-
-        public:
             GamePieceManipulator(xero::base::Robot &robot) ;
             virtual ~GamePieceManipulator() ;
 
-            std::shared_ptr<HatchHolder> getHatchHolder() {
-                return hatch_holder_ ;
-            }
-
             std::shared_ptr<CargoHolder> getCargoHolder(){
                 return cargo_holder_ ;
+            } 
+
+            std::shared_ptr<CarlosHatch> getHatchHolder(){
+                return hatch_holder_ ;
             } 
 
             std::shared_ptr<CargoIntake> getCargoIntake() {
@@ -52,11 +45,12 @@ namespace xero {
             GamePieceType getGamePieceType() ;
 
         private:
-            std::shared_ptr<HatchHolder> hatch_holder_ ;
             std::shared_ptr<CargoHolder> cargo_holder_ ;
+            std::shared_ptr<CarlosHatch> hatch_holder_ ;
             std::shared_ptr<CargoIntake> cargo_intake_ ;
             std::shared_ptr<xero::base::Lifter> lifter_ ;
             std::shared_ptr<Turntable> turntable_ ;
+        
         } ;
     }
 }

@@ -1,8 +1,5 @@
 #
-# This file describes the phaser robot.  For now
-# it describes Grond as we are using grond as a base
-# for starting development.  Going forward this will base
-# update to reflect phaser (the 2019 robot)
+# This file describes the phaser robot.
 #
 
 ###################################################################################################
@@ -47,29 +44,13 @@ hw:tankdrive:shifter                                            0               
 endif
 
 #
-# Hatch holder
-#
-if PRACTICE
-hw:hatchholder:arm:extend                                        6              # Solenoid
-hw:hatchholder:arm:retract                                       7              # Solenoid
-hw:hatchholder:finger                                            5              # Solenoid
-endif
-
-if COMPETITION
-hw:hatchholder:arm:extend                                        5              # Solenoid
-hw:hatchholder:arm:retract                                       6              # Solenoid
-hw:hatchholder:finger                                            7              # Solenoid
-endif
-
-hw:hatchholder:sensor                                           21              # Digital IO
-
-#
 # Carlos hatch holder
 #
+hw:carloshatch:holder                                           5
 hw:carloshatch:arm:extend                                       6
 hw:carloshatch:arm:retract                                      7
-hw:carloshatch:sensor                                           21
-hw:carloshatch:impact                                           23
+hw:carloshatch:sensor                                           0
+hw:carloshatch:impact                                           21
 
 #
 # Lift
@@ -312,7 +293,7 @@ lifter:maxd                                                     -75
 
 lifter:follower:up:kp                                           0.055                        # 0.055              
 lifter:follower:up:ka                                           0.0                 
-lifter:follower:up:kv                                           0.035
+lifter:follower:up:kv                                           0.045
 lifter:follower:up:kd                                           0.0
 
 lifter:follower:down:kp                                         0.7
@@ -412,7 +393,7 @@ lifter:height:cargo:collected                                 38
 # cameratracker
 ###################################################################################################
 
-cameratracker:distance_threshold                                60.0
+cameratracker:distance_threshold                                48.0            # 60
 cameratracker:rect_ratio_min                                    0.9
 cameratracker:rect_ratio_max                                    1.1
 
@@ -421,7 +402,7 @@ cameratracker:rect_ratio_max                                    1.1
 ###################################################################################################
 
 drivebyvision:yaw_base_power                                    0.20
-drivebyvision:yaw_p                                             0.035
+drivebyvision:yaw_p                                             0.025
 
 ###################################################################################################
 # drive by line follower
@@ -429,10 +410,10 @@ drivebyvision:yaw_p                                             0.035
 
 linefollower:front:power                                          0.20
 linefollower:front:distance                                       10
-linefollower:front:adjust                                         0.15
+linefollower:front:adjust                                         0.2
 linefollower:back:power                                           -0.20
 linefollower:back:distance                                        10
-linefollower:back:adjust                                          -0.15
+linefollower:back:adjust                                          -0.2
 linefollower:stalled_threshold                                    0.1
 
 cargointake:power                                               -0.6
@@ -440,13 +421,13 @@ cargointake:reverse:power                                        0.6
 
 if COMPETITION
 cargoholder:collect:power                                       0.6
-cargoholder:score:power                                         -0.4
+cargoholder:score:power                                         -0.8
 endif
 
 if PRACTICE
 cargoholder:collect:power                                       -0.6
 cargoholder:TalonSRX                                            true
-cargoholder:score:power                                         0.4
+cargoholder:score:power                                         0.8
 endif
 
 cargoholder:score:time                                          1.0
@@ -486,9 +467,6 @@ climb:backup:duration                                           0.5
 climb:velocity_samples                                          16
 climb:still_threshold                                           0.0508              # 2 in per second
 
-score_cargo:power                                               -0.3
-score_cargo:time                                                2
-
 #
 # Variables for the driver gamepad
 #
@@ -526,10 +504,14 @@ oi:ship_rocket                                                  4               
 #
 # Semi-auto modes
 #
-strafe:ship:shoot_distance                                           15.5
-strafe:ship:velocity_factor                                          0.3
-strafe:rocket:shoot_distance                                         17
-strafe:rocket:velocity_factor                                        0.20
+#strafe:ship:shoot_distance                                           15.5
+#strafe:ship:velocity_factor                                          0.3
+
+strafe:ship:shoot_distance                                           16.0
+strafe:ship:velocity_factor                                          0.19
+
+strafe:rocket:shoot_distance                                         16
+strafe:rocket:velocity_factor                                        0.19
 
 #
 # Cargo tracking
@@ -548,3 +530,7 @@ scorehatch:offset:4                                             0.0
 scorehatch:offset:5                                             0.0
 scorehatch:offset:6                                             0.0
 scorehatch:offset:7                                             0.0
+
+carloshatch:impact:low2high                                      100
+carloshatch:impact:high2low                                      100
+carloshatch:impact:duration                                      250

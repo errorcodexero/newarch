@@ -199,6 +199,7 @@ namespace xero {
         }
 
         void TurntableGoToAngleAction::cancel() {
+            getTurntable().setMotorPower(0.0) ;
             is_done_ = true ;
         }
 

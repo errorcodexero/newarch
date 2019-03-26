@@ -24,9 +24,8 @@ namespace xero {
 
             /// \brief Create a new SingleMotorSubsystemAction
             /// \param subsystem SingleMotor subsystem
-            CarlosHatchArmAction(CarlosHatch &subsystem, Operation operation, const std::string &name) : CarlosHatchAction(subsystem), operation_(operation) {
+            CarlosHatchArmAction(CarlosHatch &subsystem, Operation operation) : CarlosHatchAction(subsystem), operation_(operation) {
                 is_done_ = false ;
-                duration_ = subsystem.getRobot().getSettingsParser().getDouble(name) ;
             }
 
             virtual ~CarlosHatchArmAction(){
@@ -45,9 +44,6 @@ namespace xero {
         private:
             Operation operation_;
             bool is_done_;
-            double start_ ;
-            double duration_ ;
-            bool stopped_ ;
         };
     }
 }

@@ -2,8 +2,7 @@
 #include "Phaser.h"
 #include <phasercameratracker/PhaserCameraTracker.h>
 #include <cameratracker/CameraChangeAction.h>
-#include "gamepiecemanipulator/ScoreHatch.h"
-#include "gamepiecemanipulator/CompleteLSHatchCollect.h"
+#include "carloshatch/CarlosHatchImpactAction.h"
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -35,21 +34,20 @@ namespace xero {
 
             path = "LeftHABLeftRocket" ;
 
-            act = std::make_shared<ScoreHatch>(*game, front) ;            
-            insertAutoModeLeg(height, angle, path, false, false, 0.0, act) ;
+            act = std::make_shared<CarlosHatchImpactAction>(*game->getHatchHolder()) ;
+            insertAutoModeLeg(height, angle, path, false, false, 0.0, act, 40.0) ;
 
             if (second) {
                 //
                 // Collect the second hatch
                 //
-
                 angle = "turntable:angle:hatch:collect:south" ;
                 height = "lifter:height:hatch:collect:south" ;
 
                 path = "LeftRocketLSLeft" ;
 
-                act = std::make_shared<CompleteLSHatchCollect>(*game) ;
-                insertAutoModeLeg(height, angle, path, true, true, 2.0, act) ;
+                act = std::make_shared<CarlosHatchImpactAction>(*game->getHatchHolder()) ;
+                insertAutoModeLeg(height, angle, path, true, true, 2.0, act, 60.0) ;
 
                 //
                 // Place the second hatch
@@ -60,8 +58,8 @@ namespace xero {
 
                 path = "LSLeftRocketLeft" ;
 
-                act = std::make_shared<ScoreHatch>(*game) ;            
-                insertAutoModeLeg(height, angle, path, false, false, 2.0, act) ;
+                act = std::make_shared<CarlosHatchImpactAction>(*game->getHatchHolder()) ;
+                insertAutoModeLeg(height, angle, path, false, false, 2.0, act, 48.0) ;
             }
         }
 

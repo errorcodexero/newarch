@@ -2,25 +2,22 @@
 #include "PhaserOISubsystem.h"
 #include "Phaser.h"
 #include <cameratracker/CameraChangeAction.h>
-#include <ActionSequence.h>
 #include <ParallelAction.h>
+#include "carloshatch/CarlosHatchImpactAction.h"
+#include "carloshatch/CarlosHatchArmAction.h"
 #include "gamepiecemanipulator/GamePieceAction.h"
 #include "gamepiecemanipulator/FloorCollectCargoAction.h"
-#include "gamepiecemanipulator/CompleteLSHatchCollect.h"
 #include "gamepiecemanipulator/CompleteLSCargoCollect.h"
 #include "gamepiecemanipulator/ScoreCargo.h"
-#include "gamepiecemanipulator/ScoreHatch.h"
 #include "gamepiecemanipulator/ReadyAction.h"
 #include "gamepiecemanipulator/ResetIntakesAction.h"
 #include "gamepiecemanipulator/CalibrateManip.h"
-#include "gamepiecemanipulator/CargoShootAction.h"
 #include "cargointake/CargoIntakeAction.h"
 #include "singlemotorsubsystem/SingleMotorPowerAction.h"
 #include "phasercameratracker/DriveByVisionAction.h"
 #include "lifter/LifterPowerAction.h"
 #include "lifter/LifterGoToHeightAction.h"
 #include "tankdrive/LineFollowAction.h"
-#include "hatchholder/HatchHolderAction.h"
 #include "phaserrobotsubsystem/PhaserRobotSubsystem.h"
 #include "phaserrobotsubsystem/ClimbAction.h"
 #include "phaserrobotsubsystem/StrafeAction.h"
@@ -56,6 +53,16 @@ namespace xero {
             dir_ = Direction::North ;
             mode_ = OperationMode::Invalid ;     
             ship_cargo_state_ = RocketShipMode::Invalid ;
+
+            last_angle_requested_ = "@" ;
+            last_height_requested_ = "@" ;
+
+            field_relative_ = false ;
+            const char *fr = "oi:fieldrelative" ;
+            if (sub.getRobot().getSettingsParser().isDefined(fr))
+                field_relative_ = sub.getRobot().getSettingsParser().getBoolean(fr) ;
+
+            piece_ = GamePieceType::Invalid ;
         }
 
         PhaserOIDevice::~PhaserOIDevice() {
@@ -130,8 +137,32 @@ namespace xero {
             return ret ;
         }          
 
+
         //
-        // Update the mode of the robot.  This should changes the camera mode if necessary
+        // Read the mode switch.  If it differs from the current mode, call UpdateMode()
+        // to update the current mode.
+        //
+        void PhaserOIDevice::getTrackingMode() {
+            OperationMode mode = OperationMode::Auto ;
+            int value = getValue(tracking_manual_switch_) ;
+
+            switch(value) {
+            case 0:
+                mode = OperationMode::Auto ;
+                break ;
+            case 1:
+                mode = OperationMode::SemiAuto ;
+                break ;            
+            case 2:
+                mode = OperationMode::Manual ;
+                break ;            
+            }        
+            if (mode != mode_)
+                updateMode(mode) ;                
+        }        
+
+        //
+        // Update the mode of the robot.  This should changes the camera mode and assocaited LED as necessary
         //
         void PhaserOIDevice::updateMode(OperationMode newmode) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;  
@@ -161,6 +192,88 @@ namespace xero {
 
             mode_ = newmode ;
             frc::SmartDashboard::PutString("RobotMode", newmodestr) ;
+        }        
+
+        //
+        // Get the cargo/hatch mode based on any game piece that is in the robot as well
+        // as the cargo/hatch switch
+        //
+        void PhaserOIDevice::getCargoHatchMode(ActionSequence &seq) {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;               
+            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
+            auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
+            size_t camerano = HatchCamera ;
+
+            piece_ = game->getGamePieceType() ;    
+
+            if (piece_ == GamePieceType::Cargo) {
+                activity_ = ActivityType::Place ;
+                camerano = CargoCamera ;
+                frc::SmartDashboard::PutBoolean("PlaceCollect", true) ;                
+                frc::SmartDashboard::PutBoolean("CargoHatch", true) ;
+            }   
+            else if (piece_ == GamePieceType::Hatch) {
+                activity_ = ActivityType::Place ;                
+                camerano = HatchCamera ;
+                frc::SmartDashboard::PutBoolean("PlaceCollect", true) ;               
+                frc::SmartDashboard::PutBoolean("CargoHatch", false) ;    
+            }   
+            else {
+                activity_ = ActivityType::Collect ;                
+                if (getValue(hatch_cargo_switch_)) {
+                    camerano = CargoCamera ;
+                    frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;                
+                    frc::SmartDashboard::PutBoolean("CargoHatch", true) ; 
+                    piece_ = GamePieceType::Cargo ;  
+                }
+                else {
+                    camerano = HatchCamera ;
+                    frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;                
+                    frc::SmartDashboard::PutBoolean("CargoHatch", false) ; 
+                    piece_ = GamePieceType::Hatch ;                      
+                }
+            }
+
+            if (camera->getCameraIndex() != camerano) {
+                MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+                log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+                log << "OI: getCargoHatchMode - changing camera to " ;
+                if (camerano == HatchCamera)
+                    log << "hatch" ;
+                else
+                    log << "cargo" ;
+                log.endMessage() ;     
+                            
+                ActionPtr ptr = std::make_shared<CameraChangeAction>(*camera, camerano, camera->getCameraMode()) ;
+                seq.pushSubActionPair(camera, ptr) ;
+            }
+        }
+
+        //
+        // Get the value of the rocker versus cargo ship switch.  
+        //
+        void PhaserOIDevice::getShipRocketMode()
+        {
+            RocketShipMode rst ;
+            if (getValue(ship_rocket_)) {
+                rst = RocketShipMode::CargoShip ;
+            }
+            else {
+                rst = RocketShipMode::Rocket ;
+            }
+
+            if (rst != ship_cargo_state_) {
+                if (ship_cargo_state_ == RocketShipMode::CargoShip && height_ == ActionHeight::LevelThree) {
+                    //
+                    // We are switching from cargo ship to rocket.  The height may be at level three when strafing
+                    // the third line on the ship.  Reset this to level two if this is the case so we don't suddenly
+                    // jump to level three just by changing this switch and hitting a direction.
+                    //
+                    height_ = ActionHeight::LevelTwo ;
+                }
+
+                ship_cargo_state_ = rst ;
+            }
         }        
         
         //
@@ -250,15 +363,13 @@ namespace xero {
 
             safe_height_ = getSubsystem().getRobot().getSettingsParser().getDouble("turntable:safe_lifter_height") ;
 
-            finish_collect_hatch_ = std::make_shared<CompleteLSHatchCollect>(*game) ;
-            finish_collect_cargo_ = std::make_shared<CompleteLSCargoCollect>(*game) ;
-            finish_place_hatch_front_ = std::make_shared<ScoreHatch>(*game, ph.getPhaserRobotSubsystem()->getFrontLineSensor()) ;
-            finish_place_hatch_back_  = std::make_shared<ScoreHatch>(*game, ph.getPhaserRobotSubsystem()->getBackLineSensor()) ;            
+            finish_collect_hatch_ = std::make_shared<CarlosHatchImpactAction>(*game->getHatchHolder()) ;
+            finish_place_hatch_ = std::make_shared<CarlosHatchImpactAction>(*game->getHatchHolder()) ;      
+            finish_collect_cargo_ = std::make_shared<CompleteLSCargoCollect>(*game) ;            
             finish_place_cargo_  = std::make_shared<ScoreCargo>(*game) ;
+
             set_collect_cargo_floor_  = std::make_shared<FloorCollectCargoAction>(*game) ;
             reset_intakes_ = std::make_shared<ResetIntakeAction>(*game) ;
-            extend_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_FINGER, "hatchholder:default:delay") ;
-            retract_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER, "hatchholder:default:delay") ;     
             climb_action_ = std::make_shared<ClimbAction>(*ph.getPhaserRobotSubsystem(), false) ;
 
             deploy_climber_ = std::make_shared<ClimberDeployAction>(*climber) ;
@@ -266,7 +377,6 @@ namespace xero {
             calibrate_action_ = std::make_shared<CalibrateManip>(*game) ;
 
             track_cargo_target_ = std::make_shared<CargoTrackerAction>(*turntable, *vision) ;
-            shoot_target_target_ = std::make_shared<CargoShootAction>(*game, *vision) ;
         }
 
         PhaserOIDevice::Direction PhaserOIDevice::getRobotDirection() {
@@ -287,7 +397,6 @@ namespace xero {
 
         PhaserOIDevice::Direction PhaserOIDevice::compassToFieldRelative(PhaserOIDevice::Direction compass)
         {
-#ifdef FIELD_RELATIVE
             static Direction fieldmapping[4][4] = {
                 { Direction::North, Direction::South, Direction::East, Direction::West },            // Robot direction N
                 { Direction::South, Direction::North, Direction::West, Direction::East },            // Robot direction S
@@ -299,9 +408,6 @@ namespace xero {
             int rdir = static_cast<int>(robotdir) ;
             int cdir = static_cast<int>(compass) ;
             return fieldmapping[rdir][cdir] ;
-#else
-            return compass ;
-#endif
         }
 
         //
@@ -331,7 +437,10 @@ namespace xero {
             }
 
             if (ret) {
-                dir_ = compassToFieldRelative(compass) ;
+                if (field_relative_)
+                    compass = compassToFieldRelative(compass) ;
+                dir_ = compass ;
+
                 MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
                 log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
                 log << "OI:" ;
@@ -378,29 +487,83 @@ namespace xero {
             return ret ;
         }
 
-        //
-        // Read the mode switch.  If it differs from the current mode, call UpdateMode()
-        // to update the current mode.
-        //
-        void PhaserOIDevice::getTrackingMode() {
-            OperationMode mode = OperationMode::Auto ;
-            int value = getValue(tracking_manual_switch_) ;
+        void PhaserOIDevice::generateDirectionActionsCollectHatch(std::string &height, std::string &angle) {
+            //
+            // Loading hatch from the loading station
+            //
+            height = "lifter:height:hatch:collect:" ;
+            height += toString(dir_)  ;
 
-            switch(value) {
-            case 0:
-                mode = OperationMode::Auto ;
-                break ;
-            case 1:
-                mode = OperationMode::SemiAuto ;
-                break ;            
-            case 2:
-                mode = OperationMode::Manual ;
-                break ;            
-            }        
-            if (mode != mode_)
-                updateMode(mode) ;                
+            angle = "turntable:angle:hatch:collect:" ;
+            angle += toString(dir_) ;              
         }
 
+        void PhaserOIDevice::generateDirectionActionsCollectCargo(std::string &height, std::string &angle) {
+                //
+                // Loading cargo from the loading station
+                //
+                height = "lifter:height:cargo:collect:" ;
+                height += toString(dir_) ;
+
+                angle = "turntable:angle:cargo:collect:" ;
+                angle += toString(dir_) ;            
+        }
+
+        void PhaserOIDevice::generateDirectionActionsPlaceHatch(std::string &height, std::string &angle) {
+            if (mode_ == OperationMode::Auto) {
+                //
+                // The robot is holding a hatch, the action will be to place a hatch
+                // at the requested height
+                //
+                height = "lifter:height:hatch:tracking_height:" ;
+                height += toString(dir_) ;
+                angle = "turntable:angle:hatch:place:" ;
+                angle += toString(dir_) ;                    
+            }
+            else {                
+                height = "lifter:height:hatch:place:" ;
+                height += toString(dir_) + ":1" ;
+                angle = "turntable:angle:hatch:place:" ;
+                angle += toString(dir_) ;
+            }            
+        }
+
+        void PhaserOIDevice::generateDirectionActionsPlaceCargo(std::string &height, std::string &angle) {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
+            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
+
+            if (mode_ == OperationMode::Auto) {
+                //
+                // The roboti sholding cargo and we are in auto mode, set the
+                // height so that the camera can see the vision targets.
+                //
+                height = "lifter:height:cargo:place:" ;
+                height += toString(dir_) + ":" ;
+
+                if (getValue(ship_rocket_))
+                    height += "c" ;
+                else
+                    height += toString(height_) ;
+
+                angle = "turntable:angle:cargo:place:" ;
+                angle += toString(dir_) ;       
+            }
+            else {
+                //
+                // The robot is holding cargo, the action will be to place the cargo
+                // at the requested height
+                //
+                if (game->getLifter()->getHeight() >= safe_height_) {
+                    height = "@" ;
+                } else {
+                    height = "lifter:height:cargo:place:" ;
+                    height += toString(dir_) + ":1" ;
+                }
+                angle = "turntable:angle:cargo:place:" ;
+                angle += toString(dir_) ;                      
+            }            
+        }                        
+        
         //
         // Generate the actions associated with a direction button on the joystick.  The
         // generated action raises the lift to a safe height, rotates the turntable to the
@@ -410,107 +573,41 @@ namespace xero {
         void PhaserOIDevice::generateDirectionActions(ActionSequence &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
-            GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;     
             ActionPtr act, finish ;
             std::string height, angle ;     
-            double heightnum ;
-            bool heightnumset = false ; ;
+
+            if (piece_ == GamePieceType::Hatch && activity_ == ActivityType::Place)
+                generateDirectionActionsPlaceHatch(height, angle) ;
+            else if (piece_ == GamePieceType::Cargo && activity_ == ActivityType::Place)
+                generateDirectionActionsPlaceCargo(height, angle)  ;
+            else if (piece_ == GamePieceType::Hatch && activity_ == ActivityType::Collect)
+                generateDirectionActionsCollectHatch(height, angle) ;            
+            else if (piece_ == GamePieceType::Cargo && activity_ == ActivityType::Collect)
+                generateDirectionActionsCollectCargo(height, angle) ;
+
+            gotoHeightAngle(seq, height, angle) ;
+        }
+
+        void PhaserOIDevice::gotoHeightAngle(ActionSequence &seq, const std::string &height, const std::string &angle) {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
+            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;            
+            ActionPtr act ;
+
+            last_angle_requested_ = angle ;
+            last_height_requested_ = height ;
 
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
             log << "OI: generating direction related actions: " ;
-
-            if (piece == GamePieceManipulator::GamePieceType::Hatch) {
-                if (mode_ == OperationMode::Auto) {
-                    //
-                    // The robot is holding a hatch, the action will be to place a hatch
-                    // at the requested height
-                    //
-                    height = "lifter:height:hatch:tracking_height:" ;
-                    height += toString(dir_) ;
-                    angle = "turntable:angle:hatch:place:" ;
-                    angle += toString(dir_) ;                    
-                }
-                else {                
-                    height = "lifter:height:hatch:place:" ;
-                    height += toString(dir_) + ":1" ;
-                    angle = "turntable:angle:hatch:place:" ;
-                    angle += toString(dir_) ;
-                }
-            }
-            else if (piece == GamePieceManipulator::GamePieceType::Cargo) {
-                if (mode_ == OperationMode::Auto) {
-                    //
-                    // The roboti sholding cargo and we are in auto mode, set the
-                    // height so that the camera can see the vision targets.
-                    //
-                    height = "lifter:height:cargo:place:" ;
-                    height += toString(dir_) + ":" ;
-
-                    if (getValue(ship_rocket_))
-                        height += "c" ;
-                    else
-                        height += toString(height_) ;
-
-                    angle = "turntable:angle:cargo:place:" ;
-                    angle += toString(dir_) ;       
-                }
-                else {
-                    //
-                    // The robot is holding cargo, the action will be to place the cargo
-                    // at the requested height
-                    //
-                    if (game->getLifter()->getHeight() >= safe_height_) {
-                        heightnum = game->getLifter()->getHeight() ;
-                        heightnumset = true ;
-                    } else {
-                        height = "lifter:height:cargo:place:" ;
-                        height += toString(dir_) + ":1" ;
-                    }
-                    angle = "turntable:angle:cargo:place:" ;
-                    angle += toString(dir_) ;                      
-                }
-            }
-            else if (piece == GamePieceManipulator::GamePieceType::None) {
-                //
-                // We are going to collect, read the hatch/cargo switch
-                //
-                if (getValue(hatch_cargo_switch_)) {
-                    //
-                    // Loading cargo from the loading station
-                    //
-                    height = "lifter:height:cargo:collect:" ;
-                    height += toString(dir_) ;
-
-                    angle = "turntable:angle:cargo:collect:" ;
-                    angle += toString(dir_) ;
-
-                    piece = GamePieceManipulator::GamePieceType::Cargo ;
-                }
-                else {
-                    //
-                    // Loading hatch from the loading station
-                    //
-                    height = "lifter:height:hatch:collect:" ;
-                    height += toString(dir_)  ;
-
-                    angle = "turntable:angle:hatch:collect:" ;
-                    angle += toString(dir_) ;  
-
-                    piece = GamePieceManipulator::GamePieceType::Hatch ;    
-                }
-            }  
             log << "height " << height ;
             log << ", angle " << angle ;
             log.endMessage() ;
 
             SettingsParser &parser = getSubsystem().getRobot().getSettingsParser() ;
-            if ((heightnumset || parser.isDefined(height)) && parser.isDefined(angle)) {
-                if (heightnumset)
-                    act = std::make_shared<ReadyAction>(*game, heightnum, angle) ;
-                else
-                    act = std::make_shared<ReadyAction>(*game, height, angle) ;                
+            if (parser.isDefined(height) && parser.isDefined(angle)) {
+                act = std::make_shared<ReadyAction>(*game, height, angle) ;       
                 seq.pushSubActionPair(game, act, false) ;
+                direction_action_ = act ;
             }
             else {
                 MessageLogger &logger = getSubsystem().getRobot().getMessageLogger() ;
@@ -531,155 +628,197 @@ namespace xero {
                 }
             }
         }
-
-        //
-        // Generate the name of the height parameter in the params file for the operation we are
-        // trying to complete.  IT takes into account place/collect, mode (auto, semi, manual), 
-        // height, and cargo/hatch.
-        //
-        std::string PhaserOIDevice::generateActionHeightName(bool tracking) {
-            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
-            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
-            auto lifter = game->getLifter() ;
-            GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;  
-
-            std::string height ;
-
-            if (piece == GamePieceManipulator::GamePieceType::Hatch) {
-                if (mode_ == OperationMode::Auto && tracking) {
-                    //
-                    // The robot is holding a hatch and we are in auto mode, set the
-                    // height so that the camera can see the vision targets
-                    //
-                    height = "lifter:height:hatch:tracking_height:" ;
-                    height += toString(dir_) ;
-                }
-                else {
-                    //
-                    // The robot is holding a hatch, the action will be to place a hatch
-                    // at the requested height
-                    //
-                    height = "lifter:height:hatch:place:" ;
-                    height += toString(dir_) + ":" ;
-                    height += toString(height_) ;
-                }
-            }
-            else if (piece == GamePieceManipulator::GamePieceType::Cargo) {
+    
+        void PhaserOIDevice::generateHeightActionsPlaceHatch(std::string &height, std::string &angle)
+        {
                 //
-                // The robot is holding cargo, the action will be to place the cargo
+                // The robot is holding a hatch, the action will be to place a hatch
                 // at the requested height
                 //
-                height = "lifter:height:cargo:place:" ;
+                height = "lifter:height:hatch:place:" ;
                 height += toString(dir_) + ":" ;
-                if (getValue(ship_rocket_) && mode_ == OperationMode::Auto) {
-                    height += "c" ;
-                }
-                else {
-                    height += toString(height_) ;
-                }
-            }
-            else if (piece == GamePieceManipulator::GamePieceType::None) {
-                //
-                // We are going to collect, read the hatch/cargo switch
-                //
-                if (getValue(hatch_cargo_switch_)) {
-                    //
-                    // Loading hatch from the loading station
-                    //
-                    height = "lifter:height:cargo:collect:" ;
-                    height += toString(dir_) ;
-                }
-                else {
-                    //
-                    // Loading cargo from the loading station
-                    //
-                    height = "lifter:height:hatch:collect:" ;
-                    height += toString(dir_)  ;
-                }
-            }
+                height += toString(height_) ;
 
-            return height ;
-        }        
-
-        //
-        // Generate actions assocaited with the current height.  This assumes the 
-        // turntable is already positioned.  This just rasies the lift to the
-        // right height based on the action to perform.
-        //
-        void PhaserOIDevice::generateTargetHeightActions(ActionSequence &seq) {
-            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
-            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
-            auto lifter = game->getLifter() ;
-            ActionPtr act, finish ;
-            std::string height ;        
-            std::string angle ;
-
-            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
-            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
-            log << "OI: generating height related actions: " ;
-            log << "mode " << toString(mode_) << " " ;
-          
-            height = generateActionHeightName(true) ;
-            angle = toString(dir_) ;
-
-            log << height ;
-            log.endMessage() ;                      
-
-            SettingsParser &parser = getSubsystem().getRobot().getSettingsParser() ;
-            if (parser.isDefined(height)) {
-                act = std::make_shared<ReadyAction>(*game, height, angle) ;
-                seq.pushSubActionPair(game, act, false) ;
-            }
-            else {
-                MessageLogger &logger = getSubsystem().getRobot().getMessageLogger() ;
-                if (!parser.isDefined(height)) {
-                    logger.startMessage(MessageLogger::MessageType::error) ;
-                    logger << "Missing expected param file value '" ;
-                    logger << height ;
-                    logger << "'" ;
-                    logger.endMessage() ;
-                }
-            }
-        }        
-
-        void PhaserOIDevice::generateHeightButtonActionsCargo(ActionSequence &seq) {
-            bool targetheight = false ;
-            bool strafe = false ;
-
-            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
-            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
-            log << "OI: generating height button actions hatch:" ;            
-
-            if (dir_ == Direction::North || dir_ == Direction::South) {
-                    targetheight = true ;
-                    log << " lifter_height" ;                
-            } 
-            else {
-                if (mode_ == OperationMode::Auto) {
-                    targetheight = true ;
-                    strafe = true ;
-                    log << " strafe " ;
-                    log << " lifter_height" ;
-                }
-                else if (mode_ == OperationMode::SemiAuto) {
-                    targetheight = true ;
-                    log << " lifter_height" ;                
-                }
-                else {
-                    targetheight = true ;
-                    log << " lifter_height" ;                  
-                }
-            }
-            log.endMessage() ;
-
-            if (targetheight)
-                generateTargetHeightActions(seq) ;
-
-            if (strafe)
-                generateStrafe(seq) ;
+                angle = last_angle_requested_ ;
         }
 
-        void PhaserOIDevice::generateStrafe(ActionSequence &seq)
+        void PhaserOIDevice::generateHeightActionsPlaceCargo(std::string &height, std::string &angle)
+        {        
+            //
+            // The robot is holding cargo, the action will be to place the cargo
+            // at the requested height
+            //
+            height = "lifter:height:cargo:place:" ;
+            height += toString(dir_) + ":" ;
+            if (ship_cargo_state_ == RocketShipMode::CargoShip && mode_ == OperationMode::Auto) {
+                //
+                // If we are in auto strafe mode, and we are in cargo ship mode, we always go to 
+                // cargo ship height as the level 1, level 2, level 3 switches set which line to
+                // hit
+                //
+                height += "c" ;
+            }
+            else {
+                height += toString(height_) ;
+            }            
+
+            angle = last_angle_requested_ ;
+        }
+
+        void PhaserOIDevice::generateHeightActionsCollectCargo(std::string &height, std::string &angle)        
+        {
+            //
+            // Loading hatch from the loading station
+            //
+            height = "lifter:height:cargo:collect:" ;
+            height += toString(dir_) ;
+
+            angle = last_angle_requested_ ;                
+        }
+
+        void PhaserOIDevice::generateHeightActionsCollectHatch(std::string &height, std::string &angle)        
+        {
+            //
+            // Loading hatch from the loading station
+            //
+            height = "lifter:height:hatch:collect:" ;
+            height += toString(dir_)  ;    
+
+            angle = last_angle_requested_ ;        
+        }        
+
+        void PhaserOIDevice::generateHeightActions(ActionSequence &seq) {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;               
+            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
+            auto piece = game->getGamePieceType() ;
+            std::string height, angle ;
+
+            if (piece == GamePieceType::Hatch && activity_ == ActivityType::Place)
+                generateHeightActionsPlaceHatch(height, angle) ;
+            else if (piece == GamePieceType::Cargo && activity_ == ActivityType::Place)
+                generateHeightActionsPlaceCargo(height, angle) ;            
+            else if (piece == GamePieceType::Hatch && activity_ == ActivityType::Collect)
+                generateHeightActionsCollectHatch(height, angle) ;
+            else if (piece == GamePieceType::Cargo && activity_ == ActivityType::Collect)
+                generateHeightActionsCollectCargo(height, angle) ;
+
+            gotoHeightAngle(seq, height, angle) ;
+        }
+
+        void PhaserOIDevice::generateArmActionsHatchVisionLine(ActionSequence &seq) 
+        {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
+            auto hatchholder = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
+
+            if (dir_ == Direction::East || dir_ == Direction::West) {
+                //
+                // Trying to do auto hatch placement based on the side
+                //
+                MessageLogger &logger = getSubsystem().getRobot().getMessageLogger() ;                    
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << "Hatch placement on the side of the robot not supported" ;
+                logger.endMessage() ;                
+            }
+            else {
+                //
+                // Doing north or south
+                //
+
+                //
+                // Always clear out any existing detectors in the teleop controller
+                //
+                auto ctrl = ph.getCurrentController() ;
+                std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;
+                teleop->clearDetectors() ;     
+
+                ActionPtr act = std::make_shared<CarlosHatchArmAction>(*hatchholder, CarlosHatchArmAction::Operation::EXTEND) ;
+                seq.pushSubActionPair(hatchholder, act) ;
+                setupVisionDetectors() ;
+                setupLineFollowingDetectors() ;            
+            }
+        }
+
+        void PhaserOIDevice::generateArmActionsHatchLine(ActionSequence &seq)
+        {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;   
+            auto hatchholder = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
+
+            if (dir_ == Direction::East || dir_ == Direction::West) {
+                //
+                // Trying to do auto hatch placement based on the side, not supported
+                //
+                MessageLogger &logger = getSubsystem().getRobot().getMessageLogger() ;                    
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << "Hatch placement on the side of the robot not supported" ;
+                logger.endMessage() ;                    
+            }
+            else {
+                //
+                // Doing north or south
+                //
+
+                //
+                // Always clear out any existing detectors in the teleop controller
+                //
+                auto ctrl = ph.getCurrentController() ;
+                std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;
+                teleop->clearDetectors() ;     
+
+                ActionPtr act = std::make_shared<CarlosHatchArmAction>(*hatchholder, CarlosHatchArmAction::Operation::EXTEND) ;
+                seq.pushSubActionPair(hatchholder, act) ;
+                setupLineFollowingDetectors() ;            
+            }
+        }
+
+        void PhaserOIDevice::generateArmActionsHatchManual(ActionSequence &seq)
+        {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;            
+            auto hatchholder = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
+            ActionPtr act = std::make_shared<CarlosHatchArmAction>(*hatchholder, CarlosHatchArmAction::Operation::EXTEND) ;
+            seq.pushSubActionPair(hatchholder, act) ;
+        }
+
+        void PhaserOIDevice::generateArmActionsCargoVisionLine(ActionSequence &seq)
+        {
+            if (dir_ == Direction::East || dir_ == Direction::West)
+                setupStrafe(seq) ;
+            else {
+                setupVisionDetectors() ;
+                setupLineFollowingDetectors() ;
+            }
+        }
+
+        void PhaserOIDevice::generateArmActionsCargoLine(ActionSequence &seq)
+        {
+            if (dir_ == Direction::East || dir_ == Direction::West)
+                setupStrafe(seq) ;
+            else {
+                setupLineFollowingDetectors() ;                
+            }
+        }
+
+        void PhaserOIDevice::generateArmActionsCargoManual(ActionSequence &seq)
+        {
+            // NOP
+        }
+
+        void PhaserOIDevice::generateArmActions(ActionSequence &seq) 
+        {
+            if (piece_ == GamePieceType::Hatch && mode_ == OperationMode::Auto)
+                generateArmActionsHatchVisionLine(seq) ;
+            else if (piece_ == GamePieceType::Hatch && mode_ == OperationMode::SemiAuto)
+                generateArmActionsHatchLine(seq) ;
+            else if (piece_ == GamePieceType::Hatch && mode_ == OperationMode::Manual)
+                generateArmActionsHatchManual(seq) ;    
+            else if (piece_ == GamePieceType::Cargo && mode_ == OperationMode::Auto)
+                generateArmActionsCargoVisionLine(seq) ;
+            else if (piece_ == GamePieceType::Cargo && mode_ == OperationMode::SemiAuto)
+                generateArmActionsCargoLine(seq) ;
+            else if (piece_ == GamePieceType::Cargo && mode_ == OperationMode::Manual)
+                generateArmActionsCargoManual(seq) ;                                  
+        }
+
+        void PhaserOIDevice::setupStrafe(ActionSequence &seq)
         {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             ph.getPhaserRobotSubsystem()->setAction(nullptr) ;
@@ -711,63 +850,78 @@ namespace xero {
                 strafe_ = std::make_shared<StrafeAction>(*ph.getPhaserRobotSubsystem()) ;
                 ph.getPhaserRobotSubsystem()->setAction(strafe_) ;
             }
-        }
+        }        
 
         //
-        // Generates all of the actions associated with the height button
+        // Setup detector that will take over if the vision detects a target that meets the
+        // takeover critera.  For now, this assumes that the vision target will cause the
+        // line followers to take over.  We may want to enhance this in the future so that if the
+        // DriveByVision finished, we execute the finish action.
         //
-        void PhaserOIDevice::generateHeightButtonActionsHatch(ActionSequence &seq) {
-            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;            
-            bool targetheight = false ;
-            bool vision = false ;
-            bool linefollower = false ;
+        void PhaserOIDevice::setupVisionDetectors() {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ; 
+            MessageLogger &log = ph.getMessageLogger() ;               
+            auto oi = ph.getOI() ;
+            auto db = ph.getPhaserRobotSubsystem()->getTankDrive() ;  
+            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
+            auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
+            auto lifter = game->getLifter() ;
+            std::shared_ptr<LightSensorSubsystem> linefollower ;
+            std::shared_ptr<ParallelAction> parallel = std::make_shared<ParallelAction>() ;
+            
+            ActionPtr finish = getFinishAction() ;
+            ActionPtr drive ;
 
-            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
-            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
-            log << "OI: generating height button actions hatch:" ;
-
-            if (dir_ == Direction::North || dir_ == Direction::South) {
-                if (mode_ == OperationMode::Auto) {
-                    vision = true ;
-                    linefollower = true ;
-                    log << " vision_detector" ;
-                    log << " linefollower_detector" ;
-                    log << " lifter_height" ;
-                }
-                else if (mode_ == OperationMode::SemiAuto) {
-                    targetheight = true ;
-                    linefollower = true ;
-                    log << " linefollower_detector" ;
-                    log << " lifter_height" ;                
-                }
-                else {
-                    targetheight = true ;
-                    log << " lifter_height" ;                  
-                }
-            }
-            else {
-                log << "lifter_height" ;
-                targetheight = true ;
-            }
-
-            log.endMessage() ;               
-
-            if (targetheight)
-                generateTargetHeightActions(seq) ;
-
-            //
-            // Always clear out any existing detectors in the teleop controller
-            //
             auto ctrl = ph.getCurrentController() ;
-            std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;
-            teleop->clearDetectors() ;                
 
-            if (vision)
-                setupVisionDetectors() ;
-            else if (linefollower)
-                setupLineFollowingDetectors() ;
-        }
-        
+            std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;    
+
+            ActionPtr lineaction ;            
+
+
+            if (dir_ == Direction::North) {
+                drive = std::make_shared<DriveByVisionAction>(*db, *camera, false) ;
+                linefollower = ph.getPhaserRobotSubsystem()->getFrontLineSensor() ;
+                lineaction = std::make_shared<LineFollowAction>(*linefollower, *db, "linefollower:front:power", "linefollower:front:distance", "linefollower:front:adjust") ;
+            }
+            else if (dir_ == Direction::South) {
+                drive = std::make_shared<DriveByVisionAction>(*db, *camera, true) ;            
+                linefollower = ph.getPhaserRobotSubsystem()->getBackLineSensor() ;
+                lineaction = std::make_shared<LineFollowAction>(*linefollower, *db, "linefollower:back:power", "linefollower:back:distance", "linefollower:back:adjust") ;
+            }
+
+            ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
+
+            //
+            // Create the drive by vision action, it is terminated by detecting a line on the right line follower
+            //
+            std::shared_ptr<TerminateAction> term = std::make_shared<TerminateAction>(db, drive, getSubsystem().getRobot()) ;
+            term->addTerminator(linefollower) ;
+
+            // First action in sequence, drive by vision
+            seq->pushAction(term) ;
+
+            // Second action in sequence, drive by line follower
+            seq->pushSubActionPair(db, lineaction) ;
+
+            //
+            // Third action in sequence, finish the action
+            //
+            seq->pushSubActionPair(game, finish) ;
+
+            //
+            // Last action in sequence, rumble the game controller
+            //
+            ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 3, 1.0, 0.3333333) ;
+            seq->pushSubActionPair(oi, rumble) ;
+
+            teleop->addDetector(std::make_shared<VisionDetectTakeover>(teleop, seq, *camera)) ;
+
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
+            log << "OI: setup vision detector" ;
+            log.endMessage() ;
+            teleop->printDetectors() ;
+        }        
 
         //
         // Setup detector that will take over if the line follower detects a line.
@@ -796,108 +950,34 @@ namespace xero {
                 drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:back:power", "linefollower:back:distance", "linefollower:back:adjust") ;
             }
 
-            std::string height = generateActionHeightName(false) ;
-            ActionPtr lift = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
-
             ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 2, 1.0, 0.5) ;
 
             seq->pushSubActionPair(db, drive) ;
             seq->pushSubActionPair(game, finish) ;
+            seq->pushSubActionPair(oi, rumble) ;
 
-            parallel->addAction(seq) ;
-            parallel->addSubActionPair(lifter, lift) ;
-            parallel->addSubActionPair(oi, rumble) ;
-
-            teleop->addDetector(std::make_shared<LineFollowerTakeover>(teleop, parallel, *line)) ;            
-            teleop->printDetectors() ;
+            teleop->addDetector(std::make_shared<LineFollowerTakeover>(teleop, seq, *line)) ;            
 
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
             log << "OI: setup line detector" ;
             log.endMessage() ;
             teleop->printDetectors() ;            
-        }
+        }        
 
         //
-        // Setup detector that will take over if the vision detects a target that meets the
-        // takeover critera.  For now, this assumes that the vision target will cause the
-        // line followers to take over.  We may want to enhance this in the future so that if the
-        // DriveByVision finished, we execute the finish action.
+        // Called when a height button is pressed
         //
-        void PhaserOIDevice::setupVisionDetectors() {
-            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ; 
-            MessageLogger &log = ph.getMessageLogger() ;               
-            auto oi = ph.getOI() ;
-            auto db = ph.getPhaserRobotSubsystem()->getTankDrive() ;  
-            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
-            auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
-            auto lifter = game->getLifter() ;
-            std::shared_ptr<LightSensorSubsystem> linefollower ;
-            std::shared_ptr<ParallelAction> parallel = std::make_shared<ParallelAction>() ;
-            
-            ActionPtr finish = getFinishAction() ;
-            ActionPtr drive ;
-
-            auto ctrl = ph.getCurrentController() ;
-
-            std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;    
-
-            ActionPtr lineaction ;            
-
-            ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
-            if (dir_ == Direction::North) {
-                drive = std::make_shared<DriveByVisionAction>(*db, *camera) ;
-                linefollower = ph.getPhaserRobotSubsystem()->getFrontLineSensor() ;
-                lineaction = std::make_shared<LineFollowAction>(*linefollower, *db, "linefollower:front:power", "linefollower:front:distance", "linefollower:front:adjust") ;
-            }
-            else if (dir_ == Direction::South) {
-                drive = std::make_shared<DriveByVisionAction>(*db, *camera, true) ;            
-                linefollower = ph.getPhaserRobotSubsystem()->getBackLineSensor() ;
-                lineaction = std::make_shared<LineFollowAction>(*linefollower, *db, "linefollower:back:power", "linefollower:back:distance", "linefollower:back:adjust") ;
-            }
-
-            std::shared_ptr<TerminateAction> term = std::make_shared<TerminateAction>(db, drive, getSubsystem().getRobot()) ;
-            term->addTerminator(linefollower) ;
-
-            std::string height = generateActionHeightName(false) ;
-            ActionPtr lift = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;      
-
-            ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 3, 1.0, 0.3333333) ;   
-            seq->pushAction(term) ;
-            std::shared_ptr<ParallelAction> p2 = std::make_shared<ParallelAction>() ;
-            p2->addSubActionPair(db, lineaction) ;
-            p2->addSubActionPair(lifter, lift) ;
-            seq->pushAction(p2) ;
-            seq->pushSubActionPair(game, finish) ;
-
-            parallel->addAction(seq) ;
-            parallel->addSubActionPair(oi, rumble) ;
-
-            teleop->addDetector(std::make_shared<VisionDetectTakeover>(teleop, parallel, *camera)) ;
-            teleop->printDetectors() ;
-
-            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
-            log << "OI: setup vision detector" ;
-            log.endMessage() ;
-            teleop->printDetectors() ;
-        }
-
         void PhaserOIDevice::generateHeightButtonActions(ActionSequence &seq) {      
-            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;               
-            auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
-            auto piece = game->getGamePieceType() ;
 
-            if (piece == GamePieceManipulator::GamePieceType::Hatch)
-                generateHeightButtonActionsHatch(seq) ;
-            else if (piece == GamePieceManipulator::GamePieceType::Cargo)
-                generateHeightButtonActionsCargo(seq) ;            
-            else if (piece == GamePieceManipulator::GamePieceType::None) {
-                if (getValue(hatch_cargo_switch_)) {
-                    generateHeightButtonActionsCargo(seq) ;
-                }
-                else {
-                    generateHeightButtonActionsHatch(seq) ;                    
-                }
-            }
+            //
+            // Generate actions to move to the right height and angle
+            //
+            generateHeightActions(seq) ;
+
+            //
+            // Arm the robot to complete the action
+            //
+            generateArmActions(seq) ;
         }
 
         //
@@ -908,54 +988,21 @@ namespace xero {
             ActionPtr ret = nullptr ;;
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;               
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
-            GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;
 
-            if (piece == GamePieceManipulator::GamePieceType::Cargo) {
-                // Place cargo
-                if (mode_ == OperationMode::Auto) {
-                    ret = shoot_target_target_ ;
-                }
-                else {
-                    ret = finish_place_cargo_ ;
-                }
-            }
-            else if (piece == GamePieceManipulator::GamePieceType::Hatch) {
-                // Place hatch
-                if (dir_ == Direction::North)
-                    ret = finish_place_hatch_front_ ;
-                else if (dir_ == Direction::South)
-                    ret = finish_place_hatch_back_ ;                
-            }    
-            else if (getValue(hatch_cargo_switch_)) {
-                // Collect cargo
-                ret = finish_collect_cargo_ ;
-            }                   
-            else {
-                // Collect hatch
+            if (piece_ == GamePieceType::Hatch && activity_ == ActivityType::Collect) {
                 ret = finish_collect_hatch_ ;
-            }     
+            }
+            else if (piece_ == GamePieceType::Cargo && activity_ == ActivityType::Collect) {
+                ret = finish_collect_cargo_ ;
+            }       
+            else if (piece_ == GamePieceType::Hatch && activity_ == ActivityType::Place) {
+                ret = finish_place_hatch_ ;
+            }
+            else if (piece_ == GamePieceType::Cargo && activity_ == ActivityType::Place) {
+                ret = finish_place_cargo_ ;
+            }                    
 
             return ret ;
-        }
-
-        void PhaserOIDevice::getShipRocketMode()
-        {
-            RocketShipMode rst ;
-            if (getValue(ship_rocket_)) {
-                rst = RocketShipMode::CargoShip ;
-            }
-            else {
-                rst = RocketShipMode::Rocket ;
-            }
-
-            if (rst != ship_cargo_state_) {
-
-                if (ship_cargo_state_ == RocketShipMode::CargoShip) {
-                    height_ = ActionHeight::LevelTwo ;
-                }
-
-                ship_cargo_state_ = rst ;
-            }
         }
 
         //
@@ -979,58 +1026,15 @@ namespace xero {
             seq.pushSubActionPair(game, act) ;
         }
 
-        //
-        // Get the cargo/hatch mode based on any game piece that is in the robot as well
-        // as the cargo/hatch switch
-        //
-        void PhaserOIDevice::getCargoHatchMode(ActionSequence &seq) {
-            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;               
+        bool PhaserOIDevice::isIdleOrReadyAction() {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
-            auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
-            size_t camerano = HatchCamera ;
 
-            GamePieceManipulator::GamePieceType piece = game->getGamePieceType() ;    
+            if (game->isDone())
+                return true ;
 
-            if (piece == GamePieceManipulator::GamePieceType::Cargo) {
-                camerano = CargoCamera ;
-                frc::SmartDashboard::PutBoolean("PlaceCollect", true) ;                
-                frc::SmartDashboard::PutBoolean("CargoHatch", true) ;
-                frc::SmartDashboard::PutString("GameMode", "Place Cargo") ;
-            }   
-            else if (piece == GamePieceManipulator::GamePieceType::Hatch) {
-                camerano = HatchCamera ;
-                frc::SmartDashboard::PutBoolean("PlaceCollect", true) ;               
-                frc::SmartDashboard::PutBoolean("CargoHatch", false) ;    
-                frc::SmartDashboard::PutString("GameMode", "Place Hatch") ;                              
-            }   
-            else {
-                if (getValue(hatch_cargo_switch_)) {
-                    camerano = CargoCamera ;
-                    frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;                
-                    frc::SmartDashboard::PutBoolean("CargoHatch", true) ;   
-                    frc::SmartDashboard::PutString("GameMode", "Collect Cargo") ;
-                }
-                else {
-                    camerano = HatchCamera ;
-                    frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;                
-                    frc::SmartDashboard::PutBoolean("CargoHatch", false) ; 
-                    frc::SmartDashboard::PutString("GameMode", "Collect Hatch") ;                                        
-                }
-            }
-
-            if (camera->getCameraIndex() != camerano) {
-                MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
-                log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
-                log << "OI: getCargoHatchMode - changing camera to " ;
-                if (camerano == HatchCamera)
-                    log << "hatch" ;
-                else
-                    log << "cargo" ;
-                log.endMessage() ;     
-                            
-                ActionPtr ptr = std::make_shared<CameraChangeAction>(*camera, camerano, camera->getCameraMode()) ;
-                seq.pushSubActionPair(camera, ptr) ;
-            }
+            auto rdyact = std::dynamic_pointer_cast<ReadyAction>(game->getAction()) ;
+            return rdyact != nullptr ;
         }
 
         void PhaserOIDevice::generateActions(ActionSequence &seq) {
@@ -1042,8 +1046,10 @@ namespace xero {
             //
             // If we were executing a direction action, and it is done, clear the direction action
             //
-            if (direction_action_ != nullptr && direction_action_->isDone())
+            if (direction_action_ != nullptr && direction_action_->isDone()) {
+                std::cout << "Clearing complete direction action" << std::endl ;
                 direction_action_ = nullptr ;
+            }
     
             //
             // Get the tracking mode, either auto, semi-auto, or manual
@@ -1065,11 +1071,7 @@ namespace xero {
             //
             if (getValue(calibrate_)) {
                 game->setAction(calibrate_action_) ;
-            }
-            //
-            // Cannot execute turtle mode if we are already executing turtle mode, or if we have
-            // triggered the climb sequence.
-            //            
+            }       
             else if (getValue(turtle_mode_) && reset_intakes_->isDone() && climb_action_->isDone()) {
                 //
                 // Directly assign the action and make it forcing to ensure this
@@ -1095,7 +1097,7 @@ namespace xero {
                 // We are floor collecting caro and the floor collect buttons was hit
                 // again.  Cancel the operation
                 //
-                set_collect_cargo_floor_->cancel() ;
+                game->cancelAction() ;
                 
             } else if (game->isDone() && getValue(climb_lock_switch_) && getValue(climb_)) {
                 //
@@ -1106,7 +1108,7 @@ namespace xero {
                 auto robotsub = ph.getPhaserRobotSubsystem() ;
                 robotsub->setAction(climb_action_) ;
             }
-            else if ((game->isDone() || direction_action_ != nullptr) && getDirection()) {
+            else if (isIdleOrReadyAction() && getDirection()) {
                 //
                 // The joystick has been pressed in a direction, move the
                 // lift and turntable to match to desired target.  Note this only work if
@@ -1115,12 +1117,7 @@ namespace xero {
                 //
                 generateDirectionActions(seq) ;
             }
-            else if ((game->isDone() || direction_action_ != nullptr) && getHeightButton()) {
-                //
-                // A height button has been pressed, ready the lift for the
-                // operation. Note this only work if the gamepiecemanipulator is finished 
-                // with any previous action, or the action in progress is a direction action.
-                //
+            else if (isIdleOrReadyAction() && getHeightButton()) {
                 generateHeightButtonActions(seq) ;
             }
             else if (game->isDone() && getValue(go_)) {
@@ -1130,23 +1127,11 @@ namespace xero {
                 manuallyFinish(seq) ;
             }
             else if (game->isDone() && getValue(collect_floor_)) {
-                auto gp = game->getGamePieceType() ;
-                if (gp == GamePieceManipulator::GamePieceType::None) {
+                if (game->getGamePieceType()  == GamePieceType::None) {
                     //
                     // Collect game pieces from the floor
                     //
                     game->setAction(set_collect_cargo_floor_) ;
-                }
-                else {
-                    MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
-                    log.startMessage(MessageLogger::MessageType::error) ;
-                    log << "Pressed FloorCollect button while holding a game piece - " ;
-                    if (gp == GamePieceManipulator::GamePieceType::Cargo)
-                        log << "Cargo" ;
-                    else
-                        log << "Hatch" ;
-                        
-                    log.endMessage() ;                          
                 }
             }
         }

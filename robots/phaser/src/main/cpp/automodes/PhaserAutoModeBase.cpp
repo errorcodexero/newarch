@@ -1,5 +1,7 @@
 #include "PhaserAutoModeBase.h"
 #include "Phaser.h"
+#include "phasercameratracker/SetThresholdAction.h"
+#include "carloshatch/CarlosHatchArmAction.h"
 #include <gamepiecemanipulator/WaitForHatch.h>
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/TankDriveFollowPathAction.h>
@@ -26,12 +28,14 @@ namespace xero {
         {            
         }
 
-        void PhaserAutoModeBase::insertAutoModeLeg(const std::string &height, const std::string &angle, const std::string &path, bool rear, bool hashatch, double delay, ActionPtr finish)
+        void PhaserAutoModeBase::insertAutoModeLeg(const std::string &height, const std::string &angle, const std::string &path, bool rear, 
+                                bool hashatch, double delay, ActionPtr finish, double detect)
         {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto db = phaser.getPhaserRobotSubsystem()->getTankDrive() ;
             auto game = phaser.getPhaserRobotSubsystem()->getGameManipulator() ;           
             auto vision = phaser.getPhaserRobotSubsystem()->getCameraTracker() ;
+            auto hatchholder = phaser.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
             std::shared_ptr<xero::base::LightSensorSubsystem> lines ;
 
             ActionPtr act ;
@@ -70,6 +74,9 @@ namespace xero {
             //
             parallel = std::make_shared<ParallelAction>() ;
 
+            act = std::make_shared<SetThresholdAction>(*vision, detect) ;
+            parallel->addSubActionPair(vision, act) ;
+
             seq2 = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
             seq2->pushAction(std::make_shared<DelayAction>(0.1)) ;
 
@@ -78,6 +85,13 @@ namespace xero {
             //
             act = std::make_shared<ReadyAction>(*game, height, angle) ;
             seq2->pushSubActionPair(game, act, true) ;
+
+            //
+            // And stick out our arm
+            //
+            act = std::make_shared<CarlosHatchArmAction>(*hatchholder, CarlosHatchArmAction::Operation::EXTEND) ;
+            seq2->pushSubActionPair(hatchholder, act) ;
+
             parallel->addAction(seq2) ;
             
             //

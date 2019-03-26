@@ -11,26 +11,26 @@ using namespace xero::misc ;
 namespace xero {
     namespace phaser {
         CarlosHatch::CarlosHatch(xero::base::Robot &robot) : Subsystem(robot, "CarlosHatch") {
-            arm_extend_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:carloshatch:arm:extend"));
-            arm_retract_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:carlosthatch:arm:retract"));
-            holder_ =  std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:carlosthatch:arm:holder"));
-            sensor_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:carloshatch:sensor"));
-            sensor_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:carloshatch:impact"));
+            std::cout << "Started Build" << std::endl ;
 
-            arm_extend_->Set(false) ;
+            arm_extend_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:carloshatch:arm:extend"));
+            arm_retract_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:carloshatch:arm:retract"));
+            holder_ =  std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:carloshatch:holder"));
+            sensor_ = std::make_shared<frc::AnalogInput>(robot.getSettingsParser().getInteger("hw:carloshatch:sensor"));
+            impact_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:carloshatch:impact"));
+
+            arm_extend_->Set(true) ;
             arm_retract_->Set(false) ;
             holder_->Set(false) ;
 
             arm_deployed_ = false ;
             holder_deployed_ = false ;
 
-            double low2high = robot.getSettingsParser().getDouble("carloshatch:hatch:low2high") ;
-            double high2low = robot.getSettingsParser().getDouble("carloshatch:hatch:high2low") ;
-            has_hatch_debounced_ = std::make_shared<DebounceBoolean>(false, low2high, high2low) ;
-
-            low2high = robot.getSettingsParser().getDouble("carloshatch:impact:low2high") ;
-            high2low = robot.getSettingsParser().getDouble("carloshatch:impact:high2low") ;
+            double low2high = robot.getSettingsParser().getDouble("carloshatch:impact:low2high") ;
+            double high2low = robot.getSettingsParser().getDouble("carloshatch:impact:high2low") ;
             has_impact_debounced_ = std::make_shared<DebounceBoolean>(false, low2high, high2low) ;
+
+            std::cout << "Constructed" << std::endl ;
         }
 
         CarlosHatch::~CarlosHatch() {
@@ -43,16 +43,13 @@ namespace xero {
 
         void CarlosHatch::computeState() {
             double now = getRobot().getTime() ;
-            has_hatch_debounced_->update(sensor_->Get(), now) ;
             has_impact_debounced_->update(impact_->Get(), now) ;
 
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
             logger << "CarlosHatch:" ;
-            logger << " HasHatch(DIO) " << sensor_->GetChannel() ;
-            logger << " HasHatch " << has_hatch_debounced_->get() ;
-            logger << " Impact(DIO) " << impact_->GetChannel() ;
-            logger << " Impact " << has_impact_debounced_->get() ;
+            logger << " voltage " << sensor_->GetVoltage() ;
+            logger << " impact " << impact_->Get() ;
             logger.endMessage() ;       
         }
 

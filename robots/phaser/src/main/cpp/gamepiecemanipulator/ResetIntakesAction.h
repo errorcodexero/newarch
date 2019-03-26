@@ -22,7 +22,6 @@ namespace xero{
                 RotateZero,
                 RetractIntakes,             
                 RetractArm,
-                RetractFinger,
                 FinalHeight,
                 Idle
             } ;

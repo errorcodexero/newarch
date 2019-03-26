@@ -1,5 +1,6 @@
 #include "PhaserCameraTracker.h"
 #include "phaserids.h"
+#include "SetThresholdAction.h"
 #include <Robot.h>
 
 using namespace xero::base ;
@@ -15,6 +16,14 @@ namespace xero {
         }
 
         PhaserCameraTracker::~PhaserCameraTracker() {            
+        }
+
+        bool PhaserCameraTracker::canAcceptAction(ActionPtr ptr) {
+            if (CameraTracker::canAcceptAction(ptr))
+                return true ;
+
+            auto act = std::dynamic_pointer_cast<SetThresholdAction>(ptr) ;
+            return act != nullptr ;
         }
 
         void PhaserCameraTracker::computeState() {

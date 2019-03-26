@@ -2,7 +2,7 @@
 #include <lifter/Lifter.h>
 #include <lifter/LifterGoToHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
-#include "hatchholder/HatchHolderAction.h"
+#include "carloshatch/CarlosHatchArmAction.h"
 #include "phaserids.h"
 #include <Robot.h>
 #include <xeromath.h>
@@ -23,34 +23,24 @@ namespace xero {
             height_ = height ;
             angle_ = angle ;
 
-            height_value_ = subsystem.getRobot().getSettingsParser().getDouble(height) ;
-            angle_value_ = subsystem.getRobot().getSettingsParser().getDouble(angle) ;
+            if (height == "@")
+                height_value_ = lifter->getHeight() ;
+            else
+                height_value_ = subsystem.getRobot().getSettingsParser().getDouble(height) ;
+
+            if (angle == "@")
+                angle_value_ = turntable->getAngleValue() ;
+            else
+                angle_value_ = subsystem.getRobot().getSettingsParser().getDouble(angle) ;
 
             set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "turntable:safe_lifter_height") ;
             set_lifter_final_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
             set_turntable_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, angle) ;
-            extend_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM, "hatchholder:specialflow:delay") ;
-            retract_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatchholder:default:delay") ;
+            extend_hatch_holder_ = std::make_shared<CarlosHatchArmAction>(*hatch_holder, CarlosHatchArmAction::Operation::EXTEND) ;
+            retract_hatch_holder_ = std::make_shared<CarlosHatchArmAction>(*hatch_holder, CarlosHatchArmAction::Operation::RETRACT) ;
+
+            turntable_velocity_threshold_ = 5.0 ;
         }
-
-        ReadyAction::ReadyAction(GamePieceManipulator &subsystem, double height, const std::string &angle):GamePieceAction(subsystem) {
-        
-            auto lifter = getGamePiece().getLifter() ;
-            auto turntable = getGamePiece().getTurntable();
-            auto hatch_holder = getGamePiece().getHatchHolder() ;
-
-            height_ = std::to_string(height) ;
-            angle_ = angle ;
-
-            height_value_ = height ;
-            angle_value_ = subsystem.getRobot().getSettingsParser().getDouble(angle) ;            
-
-            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "turntable:safe_lifter_height") ;
-            set_lifter_final_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
-            set_turntable_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, angle) ;
-            extend_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM, "hatchholder:specialflow:delay") ;
-            retract_hatch_holder_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatchholder:default:delay") ;
-        }        
 
         ReadyAction::~ReadyAction(){
         }
@@ -69,14 +59,16 @@ namespace xero {
 
             oldstate_ = State::Idle ;
 
+            if (turntable->getVelocity() > turntable_velocity_threshold_) {
+                state_ = State::WaitForStop ;
+            }
             //
             // We have to do two things here, rotate the turntable to the right angle and get the
             // lifter to the right height.  We cannot rotate the turntable until the lift is above the
             // safe height.  If the destination height is below the safe height, we need to go to the safe
             // height first, rotate, then drop down.
             //
-
-            if (hatch_holder->hasHatch() && !alreadyOnCorrectSide()) {
+            else if (hatch_holder->hasHatch() && !alreadyOnCorrectSide()) {
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;                
                 logger << "ReadyAction: start with extend hatch" ;
                 logger.endMessage() ;
@@ -173,7 +165,9 @@ namespace xero {
         }
 
         void ReadyAction::run() {
-            MessageLogger &logger = getGamePiece().getRobot().getMessageLogger() ;          
+            MessageLogger &logger = getGamePiece().getRobot().getMessageLogger() ;
+            auto turntable = getGamePiece().getTurntable() ;
+            auto hatch_holder = getGamePiece().getHatchHolder() ;
 
             if (oldstate_ != state_) {
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;
@@ -184,6 +178,32 @@ namespace xero {
             }
 
             switch(state_) {
+            case State::WaitForStop:
+                if (turntable->getVelocity() < turntable_velocity_threshold_) {
+                    if (hatch_holder->hasHatch() && !alreadyOnCorrectSide()) {
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;                
+                        logger << "ReadyAction: start with extend hatch" ;
+                        logger.endMessage() ;
+
+                        //
+                        // We are going to rotate with a hatch, we always have to
+                        // extend the hatch holder
+                        //
+                        hatch_holder->setAction(extend_hatch_holder_) ;
+                        hatch_holder_extended_ = true ;
+                        state_ = State::ExtendHatchHolder ;
+                    }
+                    else {
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;                
+                        logger << "ReadyAction: start with turntable/lift sequence" ;                   
+                        logger.endMessage() ;
+
+                        startTurnLiftSequence() ;
+                        hatch_holder_extended_ = false ;                             
+                    }
+                }
+                break ;
+
             case State::ExtendHatchHolder:
                 if (extend_hatch_holder_->isDone()) {
                     startTurnLiftSequence() ;

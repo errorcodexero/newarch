@@ -103,6 +103,7 @@ namespace xero {
                 if (drive_back_->isDone()) {
                     state_ = State::Idle ;
                 }
+                break ;
 
             case State::Idle:
                 break ;

@@ -14,7 +14,7 @@ namespace xero {
             SettingsParser &settings = robot.getSettingsParser() ;            
             bool victor = true ;
 
-            hatch_holder_ = std::make_shared<HatchHolder>(robot) ;
+            hatch_holder_ = std::make_shared<CarlosHatch>(robot) ;
             addChild(hatch_holder_) ;
 
             if (settings.isDefined("cargoholder:TalonSRX"))
@@ -49,13 +49,6 @@ namespace xero {
         void GamePieceManipulator::run() 
         {
             Subsystem::run() ;
-
-            auto hatch_holder = getHatchHolder() ;
-            ActionPtr act = getAction() ;
-            if (act == nullptr || act->isDone())
-                hatch_holder->autoHatchEnable(true) ;
-            else
-                hatch_holder->autoHatchEnable(false) ;
         }
 
         bool GamePieceManipulator::canAcceptAction(ActionPtr action) {
@@ -63,7 +56,7 @@ namespace xero {
             return gact != nullptr ;
         }
 
-        GamePieceManipulator::GamePieceType GamePieceManipulator::getGamePieceType() {
+        GamePieceType GamePieceManipulator::getGamePieceType() {
             GamePieceType ret = GamePieceType::Invalid ;
             bool hatch = hatch_holder_->hasHatch() ;
             bool cargo = cargo_holder_->hasCargo() ;

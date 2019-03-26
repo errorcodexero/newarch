@@ -4,7 +4,7 @@
 #include <turntable/TurntableGoToAngleAction.h>
 #include <cargointake/CargoIntake.h>
 #include <cargointake/CargoIntakeAction.h>
-#include <hatchholder/HatchHolderAction.h>
+#include <carloshatch/CarlosHatchArmAction.h>
 #include <cmath>
 
 using namespace xero::base ;
@@ -23,8 +23,7 @@ namespace xero {
             set_lifter_level_one_  = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:bottom") ;
             set_turntable_zero_ = std::make_shared<TurntableGoToAngleAction>(*turntable, 0.0) ;
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
-            retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatchholder:default:delay") ;
-            retract_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER, "hatchholder:default:delay") ;
+            retract_arm_ = std::make_shared<CarlosHatchArmAction>(*hatch_holder, CarlosHatchArmAction::Operation::RETRACT) ;
 
             stop_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, 0.0) ;
             stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
@@ -55,10 +54,6 @@ namespace xero {
                 hatch_holder->setAction(retract_arm_) ;
                 state_ = State::RetractArm ;
 
-            }
-            else if (hatch_holder->isFingerDeployed()) {
-                hatch_holder->setAction(retract_finger_) ;
-                state_ = State::RetractFinger ;
             }
             else {
                 lifter->setAction(set_lifter_level_one_) ;
@@ -91,10 +86,6 @@ namespace xero {
                         hatch_holder->setAction(retract_arm_) ;
                         state_ = State::RetractArm ;
                     }
-                    else if (hatch_holder->isFingerDeployed()) {
-                        hatch_holder->setAction(retract_finger_) ;
-                        state_ = State::RetractFinger ;
-                    }
                     else {
                         auto lifter = getGamePiece().getLifter() ;
                         lifter->setAction(set_lifter_level_one_) ;
@@ -105,29 +96,16 @@ namespace xero {
 
             case State::RetractArm:
                 if (retract_arm_->isDone()) {
-                    auto hatch_holder = getGamePiece().getHatchHolder() ;
-                    if (hatch_holder->isFingerDeployed()) {
-                        hatch_holder->setAction(retract_finger_) ;
-                        state_ = State::RetractFinger ;
-                    }
-                    else {
-                        auto lifter = getGamePiece().getLifter() ;
-                        lifter->setAction(set_lifter_level_one_) ;
-                        state_ = State::FinalHeight ;                                                
-                    }
-                }
-                break ;
-
-            case State::RetractFinger:
-                if (retract_finger_->isDone()) {
                     auto lifter = getGamePiece().getLifter() ;
                     lifter->setAction(set_lifter_level_one_) ;
-                    state_ = State::FinalHeight ;                          
+                    state_ = State::FinalHeight ;                                                
                 }
+                break ;
 
             case State::FinalHeight:
                 if (set_lifter_level_one_->isDone()) 
                     state_ = State::Idle ;
+                break;
 
             case State::Idle:
                 break ;

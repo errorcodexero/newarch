@@ -9,7 +9,6 @@ namespace xero{
         class ReadyAction : public GamePieceAction {
         public:
             ReadyAction(GamePieceManipulator &subsystem, const std::string &height, const std::string &angle) ;
-            ReadyAction(GamePieceManipulator &subsystem, double height, const std::string &angle) ;            
             virtual ~ReadyAction() ;
 
             virtual void start() ;
@@ -24,6 +23,7 @@ namespace xero{
 
         private:
             enum class State {
+                WaitForStop,
                 ExtendHatchHolder,
                 TurntableAndLift,
                 RetractHatchHolder,
@@ -38,6 +38,9 @@ namespace xero{
                 std::string ret = "????" ;
 
                 switch(st) {
+                    case State::WaitForStop:
+                        ret = "WaitForStop" ;
+                        break ;
                     case State::ExtendHatchHolder:
                         ret = "ExtendHatchHolder" ;
                         break ;
@@ -81,6 +84,8 @@ namespace xero{
             xero::base::ActionPtr extend_hatch_holder_ ;
             xero::base::ActionPtr retract_hatch_holder_ ;            
             std::shared_ptr<TurntableGoToAngleAction> set_turntable_angle_ ;
+
+            double turntable_velocity_threshold_ ;
         } ;
     }
 }

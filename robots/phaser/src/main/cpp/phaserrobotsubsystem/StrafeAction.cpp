@@ -104,6 +104,7 @@ namespace xero {
             auto oi = subsystem_.getOI() ;
             bool front = isLineDetectedFront() ;
             bool back = isLineDetectedBack() ;
+            // double traveled = db->getDist() - start_dist_ ;
 
             switch(state_) {
             case State::ArmedRocket:
@@ -146,7 +147,9 @@ namespace xero {
                 logger << " start " << start_dist_ ;
                 logger << " current " << db->getDist() ;
                 logger << " target " << target_dist_ ;
-                logger.endMessage() ;               
+                logger << " velocity " << db->getVelocity() ;
+                logger.endMessage() ;         
+      
 
                 if (db->getDist() - start_dist_ > target_dist_) {
                     game->setAction(shoot_);
@@ -156,6 +159,9 @@ namespace xero {
                     thiscount_++ ;
                     state_ = State::ArmedShip ;
                 }
+
+                //start_dist_ = db->getDist() ;
+                //target_dist_ = shoot_dist_ - traveled - vel_factor_ * db->getVelocity() ;
                 break ;
 
             case State::WaitForDistanceBack:
@@ -164,11 +170,15 @@ namespace xero {
                 logger << " start " << start_dist_ ;
                 logger << " current " << db->getDist() ;
                 logger << " target " << target_dist_ ;
+                logger << " velocity " << db->getVelocity() ;
                 logger.endMessage() ;  ;            
                 if (db->getDist() - start_dist_ < target_dist_) {
                     game->setAction(shoot_);
                     state_ = State::Shooting ;
                 }
+
+                //start_dist_ = db->getDist() ;
+                //target_dist_ = -shoot_dist_ + traveled - vel_factor_ * db->getVelocity() ;
                 break ;
 
             case State::Shooting:

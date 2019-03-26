@@ -21,6 +21,12 @@ namespace xero {
                 return rect_ratio_ ;
             }            
 
+            void setVisionDetectThreshold(double d) {
+                distance_threshold_ = d ;
+            }
+
+            virtual bool canAcceptAction(xero::base::ActionPtr act) ;
+
         private:
             constexpr static const char *TargetRectRatio = "rect_ratio" ;
 
