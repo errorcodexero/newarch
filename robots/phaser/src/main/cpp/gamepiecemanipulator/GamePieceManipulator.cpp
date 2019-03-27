@@ -1,6 +1,5 @@
 #include "GamePieceManipulator.h"
 #include "GamePieceAction.h"
-#include "carloshatch/CarlosHatchImpactAction.h"
 #include "phaserids.h"
 #include <Robot.h>
 #include <list>

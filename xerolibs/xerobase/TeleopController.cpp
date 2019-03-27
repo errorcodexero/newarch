@@ -26,55 +26,46 @@ namespace xero {
             logger.endMessage() ;
         }
 
-        void TeleopController::removeDetector(DetectAutoSequence *detector) {
-            MessageLogger &logger = getRobot().getMessageLogger() ;
-            logger.startMessage(MessageLogger::MessageType::info) ;
-            logger << "Removing detectors :" ;
-            logger << detector->getName() ;
-            logger.endMessage() ;
-
+        void TeleopController::removeDetector(std::shared_ptr<DetectAutoSequence> detector) {
             std::list<std::shared_ptr<DetectAutoSequence>>::iterator theone ;
             bool found = false ;
 
             for(auto it = auto_sequences_.begin() ; it != auto_sequences_.end() ; it++) {
                 DetectAutoSequence *tryme = (*it).get() ;
-                if (tryme == detector) {
+                if (tryme == detector.get()) {
                     theone = it ;
                     found = true ;
                 }
             }
 
             if (found) {
-                logger.startMessage(MessageLogger::MessageType::info) ;                
-                logger << "    detector found in detector list" ;
-                logger.endMessage() ;                
                 auto_sequences_.erase(theone) ;
             }
-
-            printDetectors() ;
         }
 
         void TeleopController::run() {
             MessageLogger &logger = getRobot().getMessageLogger() ;            
             auto oi = getRobot().getOI() ;
 
-            if (running_auto_seq_ != nullptr) {
+            if (running_detector_ != nullptr) {
                 if (oi->getDriverGamepad()->isCancelPressed()) {
-                    running_auto_seq_->cancel() ;
-                    running_auto_seq_ = nullptr ;
+                    running_detector_->getSequence()->cancel() ;
+                    removeDetector(running_detector_) ;
+                    running_detector_ = nullptr ;
                     oi->getDriverGamepad()->enable(true) ;
                 }
                 else {
                     //
                     // Run the auto sequence
                     //
-                    running_auto_seq_->run() ;
+                    running_detector_->getSequence()->run() ;
                 
                     //
                     // We are running an auto sequence
                     //
-                    if (running_auto_seq_->isDone()) {
-                        running_auto_seq_ = nullptr ;
+                    if (running_detector_->getSequence()->isDone()) {
+                        removeDetector(running_detector_) ;                        
+                        running_detector_ = nullptr ;
                         oi->getDriverGamepad()->enable(true) ;
                     }
                 }                
@@ -85,27 +76,22 @@ namespace xero {
                 //
 
                 //
-                // Check for a switch to an auto sequence
+                // If I am currently running teleop, look for something to interrupt
+                // and take over
                 //
-                if (running_auto_seq_ == nullptr) {
-                    //
-                    // If I am currently running teleop, look for something to interrupt
-                    // and take over
-                    //
-                    for(std::shared_ptr<DetectAutoSequence> autoseq: auto_sequences_) {
-                        if (autoseq->isTakeoverValid()) {
-                            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
-                            logger << "Teleop: detector fired: " << autoseq->getName() ;
-                            logger.endMessage() ;
-                            running_auto_seq_ = autoseq->getSequence() ;
-                            running_auto_seq_->start() ;
-                            oi->getDriverGamepad()->enable(false) ;
-                            break ;
-                        }
+                for(std::shared_ptr<DetectAutoSequence> autoseq: auto_sequences_) {
+                    if (autoseq->isTakeoverValid()) {
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
+                        logger << "Teleop: detector fired: " << autoseq->getName() ;
+                        logger.endMessage() ;
+                        running_detector_ = autoseq ; ;
+                        running_detector_->getSequence()->start() ;
+                        oi->getDriverGamepad()->enable(false) ;
+                        break ;
                     }
                 }
 
-                if (running_auto_seq_ == nullptr) {
+                if (running_detector_ == nullptr) {
                     //
                     // Still not running an auto sequence
                     //

@@ -1,7 +1,7 @@
 #include "PhaserAutoModeBase.h"
 #include "Phaser.h"
 #include "phasercameratracker/SetThresholdAction.h"
-#include "carloshatch/CarlosHatchArmAction.h"
+#include "carloshatch/CarlosHatchStartAction.h"
 #include <gamepiecemanipulator/WaitForHatch.h>
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/TankDriveFollowPathAction.h>
@@ -87,9 +87,9 @@ namespace xero {
             seq2->pushSubActionPair(game, act, true) ;
 
             //
-            // And stick out our arm
+            // And stick out our arm and ready it for a collect or place action
             //
-            act = std::make_shared<CarlosHatchArmAction>(*hatchholder, CarlosHatchArmAction::Operation::EXTEND) ;
+            act = std::make_shared<CarlosHatchStartAction>(*hatchholder) ;
             seq2->pushSubActionPair(hatchholder, act) ;
 
             parallel->addAction(seq2) ;

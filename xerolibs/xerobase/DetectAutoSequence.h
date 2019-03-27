@@ -22,9 +22,6 @@ namespace xero
                 return sequence_ ;
             }
 
-            void removeMe() ;
-            void printDetectors() ;
-
             const std::string &getName() {
                 return name_ ;
             }

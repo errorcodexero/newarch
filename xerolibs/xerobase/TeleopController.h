@@ -29,14 +29,14 @@ namespace xero {
                 auto_sequences_.clear() ;
             }
 
-            void removeDetector(DetectAutoSequence *det) ;
+            void removeDetector(std::shared_ptr<DetectAutoSequence> det) ;
 
             void printDetectors() ;
 
         private:
             std::shared_ptr<AutoMode> seq_ ;     
             std::list<std::shared_ptr<DetectAutoSequence>> auto_sequences_ ;
-            std::shared_ptr<Action> running_auto_seq_ ;
+            std::shared_ptr<DetectAutoSequence> running_detector_ ;
         } ;
     }
 }

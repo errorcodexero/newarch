@@ -19,11 +19,7 @@ namespace xero
             }
             
             virtual bool isTakeoverValid() {
-                bool ret = lights_.detectedObject() ;
-                if (ret)
-                    removeMe() ;
-
-                return ret ;
+                return lights_.detectedObject() ;
             }
 
         private:

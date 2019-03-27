@@ -2,7 +2,8 @@
 #include "Phaser.h"
 #include <phasercameratracker/PhaserCameraTracker.h>
 #include <cameratracker/CameraChangeAction.h>
-#include "carloshatch/CarlosHatchImpactAction.h"
+#include "carloshatch/CarlosHatchStartAction.h"
+#include "carloshatch/CarlosHatchEndAction.h"
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -34,7 +35,7 @@ namespace xero {
 
             path = "LeftHABLeftRocket" ;
 
-            act = std::make_shared<CarlosHatchImpactAction>(*game->getHatchHolder()) ;
+            act = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;
             insertAutoModeLeg(height, angle, path, false, false, 0.0, act, 40.0) ;
 
             if (second) {
@@ -46,7 +47,7 @@ namespace xero {
 
                 path = "LeftRocketLSLeft" ;
 
-                act = std::make_shared<CarlosHatchImpactAction>(*game->getHatchHolder()) ;
+                act = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;
                 insertAutoModeLeg(height, angle, path, true, true, 2.0, act, 60.0) ;
 
                 //
@@ -58,7 +59,7 @@ namespace xero {
 
                 path = "LSLeftRocketLeft" ;
 
-                act = std::make_shared<CarlosHatchImpactAction>(*game->getHatchHolder()) ;
+                act = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;
                 insertAutoModeLeg(height, angle, path, false, false, 2.0, act, 48.0) ;
             }
         }

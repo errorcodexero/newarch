@@ -12,10 +12,10 @@ namespace xero {
 
         /// \brief This is the base class for all actions that can be assigned to the SingleMotorSubsystem
         /// \sa SingleMotorSubsystem
-        class CarlosHatchImpactAction : public CarlosHatchAction {
+        class CarlosHatchEndAction : public CarlosHatchAction {
         public:
-            CarlosHatchImpactAction(CarlosHatch &subsystem) ;
-            virtual ~CarlosHatchImpactAction()  ;
+            CarlosHatchEndAction(CarlosHatch &subsystem) ;
+            virtual ~CarlosHatchEndAction()  ;
 
             virtual void start() ;
             virtual void run() ;
@@ -27,7 +27,6 @@ namespace xero {
             enum class State
             {
                 Idle,
-                WaitForSwitch,
                 WaitForImpact,
                 WaitForHooks
             } ;

@@ -19,12 +19,7 @@ namespace xero
             }
 
             virtual bool isTakeoverValid() {
-                bool ret = camera_.shouldTerminate() ;
-                if (ret) {
-                    removeMe() ;
-                }
-
-                return ret ;
+                return camera_.shouldTerminate() ;
             }
 
         private:
