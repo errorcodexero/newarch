@@ -32,12 +32,12 @@ namespace xero {
             std::string path ;
 
             if (left)
-                path = "CenterHab2CargoFrontLeft" ;
-            else            
                 path = "CenterHab2CargoFrontRight" ;
+            else            
+                path = "CenterHab2CargoFrontLeft" ;
 
             act = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;            
-            insertAutoModeLeg(height, angle, path, false, false, 0.0, act) ;
+            insertAutoModeLeg(height, angle, path, false, false, 0.0, 0.2, act, 60.0) ;
 
             if (second) {
                 //
@@ -48,12 +48,12 @@ namespace xero {
                 height = "lifter:height:hatch:collect:south" ;
 
                 if (left)
-                    path = "CargoFrontLeftLSLeft" ;
+                    path = "CargoFrontRightLSLeft" ;
                 else
-                    path = "CargoFrontRightLSRight" ;
+                    path = "CargoFrontLeftLSRight" ;
 
                 act = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;
-                insertAutoModeLeg(height, angle, path, true, true, 2.0, act) ;
+                insertAutoModeLeg(height, angle, path, true, true, 2.0, 0.2, act, 36.0) ;
 
                 //
                 // Place the second hatch
@@ -63,12 +63,12 @@ namespace xero {
                 std::string path ;
 
                 if (left)
-                    path = "LSLeftCargoFrontRight" ;
+                    path = "LSLeftCargoFrontLeft" ;
                 else
-                    path = "LSRightCargoFrontLeft" ;
+                    path = "LSRightCargoFrontRight" ;
 
                 act = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;              
-                insertAutoModeLeg(height, angle, path, false, false, 2.0, act) ;
+                insertAutoModeLeg(height, angle, path, false, false, 2.0, 0.2, act, 36.0) ;
             }
         }
 

@@ -29,7 +29,7 @@ namespace xero {
         }
 
         void PhaserAutoModeBase::insertAutoModeLeg(const std::string &height, const std::string &angle, const std::string &path, bool rear, 
-                                bool hashatch, double delay, ActionPtr finish, double detect)
+                                bool hashatch, double visiondelay, double turndelay, ActionPtr finish, double detect)
         {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto db = phaser.getPhaserRobotSubsystem()->getTankDrive() ;
@@ -42,7 +42,6 @@ namespace xero {
             std::shared_ptr<ParallelAction> parallel ;
             std::shared_ptr<TerminateAction> term ;
             ActionSequencePtr seq ;
-            ActionSequencePtr seq2 ;
 
             const char *power ;
             const char *dist ;
@@ -74,44 +73,69 @@ namespace xero {
             //
             parallel = std::make_shared<ParallelAction>() ;
 
+            //
+            // The first action in the parallel sets the vision detection threshold
+            //
             act = std::make_shared<SetThresholdAction>(*vision, detect) ;
             parallel->addSubActionPair(vision, act) ;
 
-            seq2 = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
-            seq2->pushAction(std::make_shared<DelayAction>(0.1)) ;
+            //
+            // The second entry in the parallel entry is a sequence
+            //
+            seq = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
+
+            //
+            // Add a delay to ensure the robot has moved away from the previous
+            // feature before we start turning the turntable.  This might be a rocks,
+            // cargo ship, or loading station.
+            //
+            act = std::make_shared<DelayAction>(turndelay) ;
+            seq->pushAction(act) ;
 
             //
             // Move the turntable to the right spot
             //
             act = std::make_shared<ReadyAction>(*game, height, angle) ;
-            seq2->pushSubActionPair(game, act, true) ;
+            seq->pushSubActionPair(game, act, true) ;
 
             //
             // And stick out our arm and ready it for a collect or place action
             //
             act = std::make_shared<CarlosHatchStartAction>(*hatchholder) ;
-            seq2->pushSubActionPair(hatchholder, act) ;
+            seq->pushSubActionPair(hatchholder, act) ;
 
-            parallel->addAction(seq2) ;
+            //
+            // Add this sequence as the second entry in the parallel
+            //
+            parallel->addAction(seq) ;
+
+            //
+            // The third entry in the parallel entry is a sequence as well
+            //
+            seq = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;            
             
             //
             // Create the sequence that follows the path, switches to vision, switches
             // to line following
             //
-            seq = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
             act = std::make_shared<TankDriveFollowPathAction>(*db, path, rear) ;
         
             //
-            // This is a terminatable sequence that follows a path and terminates
-            // when vision picks up the targets
+            // This is a terminatable action that follows a path and terminates
+            // when vision picks up the targets.  The visiondelay ensures we get away
+            // from the previous target before we start looking for a new vision target.
             //
-            term = std::make_shared<TerminateAction>(db, act, phaser, delay) ;
+            // A terminatable action is one that may be canceled by another object that
+            // detects specific conditions.  In this case it is vision detecting a vision
+            // target.
+            //
+            term = std::make_shared<TerminateAction>(db, act, phaser, visiondelay) ;
             term->addTerminator(vision) ;
             seq->pushAction(term) ;
 
             //
             // This is a terminatable sequence that drives via vision and terminates
-            // when the line follower picks up the line
+            // when the line follower picks up the line.
             //
             act = std::make_shared<DriveByVisionAction>(*db, *vision, rear) ;
             term = std::make_shared<TerminateAction>(db, act, phaser) ;
@@ -125,7 +149,7 @@ namespace xero {
             seq->pushSubActionPair(db, act) ;
 
             //
-            // This is the finish action
+            // This is the finish action which places a hatch.
             //
             seq->pushSubActionPair(game, finish) ;
 
@@ -141,7 +165,7 @@ namespace xero {
             parallel->addAction(seq) ;
 
             //
-            // And push the entire mess onto the automode
+            // And push the entire parallel sequence onto this automode
             //
             pushAction(parallel) ;            
         }

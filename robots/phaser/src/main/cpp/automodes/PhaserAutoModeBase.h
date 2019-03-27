@@ -13,7 +13,7 @@ namespace xero {
 
         protected:
             void insertAutoModeLeg(const std::string &height, const std::string &angle, const std::string &path, 
-                                    bool rear, bool hashatch, double delay, xero::base::ActionPtr finish, double vdist = 60.0) ;
+                                    bool rear, bool hashatch, double visiondelay, double turndelay, xero::base::ActionPtr finish, double vdist) ;
 
         private:
         } ;

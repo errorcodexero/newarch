@@ -35,7 +35,7 @@ namespace xero {
             path = "RightHABRightRocket" ;
 
             act = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;            
-            insertAutoModeLeg(height, angle, path, false, true, 0.0, act) ;
+            insertAutoModeLeg(height, angle, path, false, true, 0.0, 0.0, act, 36.0) ;
 
             if (second) {
                 //
@@ -48,7 +48,7 @@ namespace xero {
                 path = "RightRocketLSRight" ;
 
                 act = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;
-                insertAutoModeLeg(height, angle, path, true, false, 2.0, act) ;
+                insertAutoModeLeg(height, angle, path, true, false, 2.0, 0.2, act, 60.0) ;
 
                 //
                 // Place the second hatch
@@ -60,7 +60,7 @@ namespace xero {
                 path = "LSRightRocketRight" ;
 
                 act = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;            
-                insertAutoModeLeg(height, angle, path, false, true, 2.0, act) ;
+                insertAutoModeLeg(height, angle, path, false, true, 2.0, 0.02, act, 36.0) ;
             }
         }
 
