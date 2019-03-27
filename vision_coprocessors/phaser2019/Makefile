@@ -33,7 +33,8 @@ clean:
 	rm -f ${BINS} *.o
 
 LDFLAGS = -pthread \
-	-L/cygwin64/usr/local/frc/lib
+	-L/cygwin64/usr/local/frc/lib \
+	-L/usr/local/frc/lib
 
 LDLIBS = -lwpilibc \
 	-lwpiHal \
