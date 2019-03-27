@@ -18,6 +18,14 @@ namespace xero {
                     getSubsystem().retractArm() ;
                     break;
 
+                case Operation::OPEN:
+                    getSubsystem().enableHooks() ;
+                    break ;
+
+                case Operation::CLOSE:
+                    getSubsystem().disableHooks() ;
+                    break ;
+
                 default:
                     getSubsystem().getRobot().getMessageLogger().startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                     getSubsystem().getRobot().getMessageLogger() << "Hatch Holder Action: Unexpected Operation";              
@@ -46,6 +54,14 @@ namespace xero {
 
             case Operation::RETRACT:
                 ret = "RETRACT" ;
+                break ;
+
+            case Operation::OPEN:
+                ret = "OPEN" ;
+                break ;
+
+            case Operation::CLOSE:
+                ret = "CLOSE" ;
                 break ;
             }
             return ret ;              

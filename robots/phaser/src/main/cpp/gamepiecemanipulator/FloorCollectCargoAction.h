@@ -48,6 +48,8 @@ namespace xero {
             xero::base::ActionPtr deploy_cargo_intake_ ;
             xero::base::ActionPtr retract_cargo_intake_ ;
 
+            xero::base::ActionPtr retract_arm_ ;
+
             xero::base::ActionPtr set_cargo_intake_motor_ ;
             xero::base::ActionPtr stop_cargo_intake_motor_ ;
             xero::base::ActionPtr set_cargo_holder_motor_ ;

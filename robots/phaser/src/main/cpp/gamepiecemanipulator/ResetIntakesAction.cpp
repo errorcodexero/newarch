@@ -5,6 +5,7 @@
 #include <cargointake/CargoIntake.h>
 #include <cargointake/CargoIntakeAction.h>
 #include <carloshatch/CarlosHatchArmAction.h>
+#include "ReadyAction.h"
 #include <cmath>
 
 using namespace xero::base ;
@@ -19,14 +20,14 @@ namespace xero {
             auto hatch_holder = getGamePiece().getHatchHolder() ;
             auto cargo_holder = getGamePiece().getCargoHolder() ;
 
-            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "turntable:safe_lifter_height") ;
-            set_lifter_level_one_  = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:bottom") ;
-            set_turntable_zero_ = std::make_shared<TurntableGoToAngleAction>(*turntable, 0.0) ;
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
             retract_arm_ = std::make_shared<CarlosHatchArmAction>(*hatch_holder, CarlosHatchArmAction::Operation::RETRACT) ;
 
             stop_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, 0.0) ;
             stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
+
+            goto_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:turtle") ;
+            goto_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:hatch:collect:north") ;
 
             state_ = State::Idle ;           
         }
@@ -41,72 +42,34 @@ namespace xero {
             auto cargo_holder = getGamePiece().getCargoHolder() ;
             auto hatch_holder = getGamePiece().getHatchHolder() ;
 
-            hatch_holder->setAction(retract_arm_) ;            
-
             cargo_intake->setAction(stop_cargo_intake_motor_) ;
             cargo_holder->setAction(stop_cargo_holder_motor_) ;
+            hatch_holder->setAction(retract_arm_) ;
 
-            if (cargo_intake->isDeployed() || std::fabs(turntable->getAngleValue()) > epsilon) {
-                lifter->setAction(set_lifter_safe_height_) ;
-                state_ = State::SafeHeight ;
-            }
-            else if (hatch_holder->isArmDeployed()) {
-                hatch_holder->setAction(retract_arm_) ;
-                state_ = State::RetractArm ;
-
-            }
-            else {
-                lifter->setAction(set_lifter_level_one_) ;
-                state_ = State::FinalHeight ;
-            }
+            lifter->setAction(goto_height_) ;
+            state_ = State::GoToHeight ;
         }
 
         void ResetIntakeAction::run() {
             switch(state_) {
-            case State::SafeHeight:
-                if (set_lifter_safe_height_->isDone()) {
-                    auto turntable = getGamePiece().getTurntable() ;
-                    turntable->setAction(set_turntable_zero_) ;
-                    state_ = State::RotateZero ;
-                }
-                break ;
-            case State::RotateZero:
-                if (set_turntable_zero_->isDone()) {
-                    auto cargo_intake = getGamePiece().getCargoIntake();  
-                    cargo_intake->setAction(retract_cargo_intake_) ;
-
-                    state_ = State::RetractIntakes ;
+            case State::GoToHeight:
+                if (goto_height_->isDone()) {
+                    getGamePiece().getTurntable()->setAction(goto_angle_) ;
+                    state_ = State::GoToAngle ;
                 }
                 break ;
 
-            case State::RetractIntakes:
+            case State::GoToAngle:
+                if (goto_angle_->isDone()) {
+                    getGamePiece().getCargoIntake()->setAction(retract_cargo_intake_) ;
+                    state_ = State::WaitForIntake ;                    
+                }
+                break ;
+            case State::WaitForIntake:
                 if (retract_cargo_intake_->isDone()) {
-                    auto hatch_holder = getGamePiece().getHatchHolder() ;
-                    if (hatch_holder->isArmDeployed()) {
-                        hatch_holder->setAction(retract_arm_) ;
-                        state_ = State::RetractArm ;
-                    }
-                    else {
-                        auto lifter = getGamePiece().getLifter() ;
-                        lifter->setAction(set_lifter_level_one_) ;
-                        state_ = State::FinalHeight ;
-                    }
-                }
-                break ;
-
-            case State::RetractArm:
-                if (retract_arm_->isDone()) {
-                    auto lifter = getGamePiece().getLifter() ;
-                    lifter->setAction(set_lifter_level_one_) ;
-                    state_ = State::FinalHeight ;                                                
-                }
-                break ;
-
-            case State::FinalHeight:
-                if (set_lifter_level_one_->isDone()) 
                     state_ = State::Idle ;
+                }
                 break;
-
             case State::Idle:
                 break ;
             }

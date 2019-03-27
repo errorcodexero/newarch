@@ -290,12 +290,12 @@ lifter:maxv                                                     30
 lifter:maxa                                                     30
 lifter:maxd                                                     -30
 
-lifter:follower:up:kp                                           1.5
+lifter:follower:up:kp                                           0.2
 lifter:follower:up:ka                                           0.00056179776
 lifter:follower:up:kv                                           0.028089888
 lifter:follower:up:kd                                           0.0
 
-lifter:follower:down:kp                                         0.7
+lifter:follower:down:kp                                         0.2
 lifter:follower:down:ka                                         0.00056179776
 lifter:follower:down:kv                                         0.028089888
 lifter:follower:down:kd                                         0.0
@@ -319,7 +319,6 @@ lifter:hold:imax                                                0.0
 # hatch_center, the height of the center of a hatch on the hatch holder above the lifter height
 # hatch_hook_center, the height of the center of the hatch holder above the lifter height
 #
-lifter:height:bottom                                            8.46
 lifter:height:cargo:floor_collect                               9.0
 lifter:height:offset:cargo_holder_center                        6.75
 lifter:height:offset:hatch_center                               5.5
@@ -329,55 +328,65 @@ lifter:height:hatch:undock_intake                               22.00
 lifter:height:loadingstation:hatch:shift_up                     5
 lifter:height:score:hatch:shift_down                            -4.0
 
+lifter:height:turtle                                            15.0
+
+#
+# Cargo
+#
+
 lifter:height:cargo:collect:north                               37
 lifter:height:cargo:collect:south                               37
 lifter:height:cargo:collect:east                                37
 lifter:height:cargo:collect:west                                37
 
-lifter:height:cargo:place:north:1                               11.5
-lifter:height:cargo:place:south:1                               11.5
-lifter:height:cargo:place:east:1                                11.5
-lifter:height:cargo:place:west:1                                11.5
+lifter:height:cargo:place:north:1                               22.5
+lifter:height:cargo:place:south:1                               22.5
+lifter:height:cargo:place:east:1                                22.5
+lifter:height:cargo:place:west:1                                22.5
 
-lifter:height:cargo:place:north:2                             40
-lifter:height:cargo:place:south:2                             40
-lifter:height:cargo:place:east:2                              40
-lifter:height:cargo:place:west:2                              40
+lifter:height:cargo:place:north:2                             50.5
+lifter:height:cargo:place:south:2                             50.5
+lifter:height:cargo:place:east:2                              50.5
+lifter:height:cargo:place:west:2                              50.5
 
-lifter:height:cargo:place:north:3                             70
-lifter:height:cargo:place:south:3                             70
-lifter:height:cargo:place:east:3                              70
-lifter:height:cargo:place:west:3                              70
+lifter:height:cargo:place:north:3                             79.5
+lifter:height:cargo:place:south:3                             79.5
+lifter:height:cargo:place:east:3                              79.5
+lifter:height:cargo:place:west:3                              79.5
 
 lifter:height:cargo:place:north:c                             38
 lifter:height:cargo:place:south:c                             38
 lifter:height:cargo:place:east:c                              38
 lifter:height:cargo:place:west:c                              38
 
-lifter:height:hatch:collect:north                             11.2              
-lifter:height:hatch:collect:south                             11.2                 
-lifter:height:hatch:collect:east                              11.2
-lifter:height:hatch:collect:west                              11.2                 
+#
+# Hatches
+#
 
-lifter:height:hatch:place:north:1                             11.2      
-lifter:height:hatch:place:south:1                             11.2       
-lifter:height:hatch:place:east:1                              11.2               
-lifter:height:hatch:place:west:1                              11.2   
+lifter:height:hatch:collect:north                             11.5              
+lifter:height:hatch:collect:south                             11.5                 
+lifter:height:hatch:collect:east                              11.5
+lifter:height:hatch:collect:west                              11.5                 
 
-lifter:height:hatch:place:north:2                             44           
-lifter:height:hatch:place:south:2                             44              
-lifter:height:hatch:place:east:2                              44                 
-lifter:height:hatch:place:west:2                              44
+lifter:height:hatch:place:north:1                             11.5      
+lifter:height:hatch:place:south:1                             11.5       
+lifter:height:hatch:place:east:1                              11.5               
+lifter:height:hatch:place:west:1                              11.5   
+
+lifter:height:hatch:place:north:2                             40           
+lifter:height:hatch:place:south:2                             40              
+lifter:height:hatch:place:east:2                              40                 
+lifter:height:hatch:place:west:2                              40
                
-lifter:height:hatch:place:north:3                             72                 
-lifter:height:hatch:place:south:3                             72                
-lifter:height:hatch:place:east:3                              72                 
-lifter:height:hatch:place:west:3                              72                 
+lifter:height:hatch:place:north:3                             70                 
+lifter:height:hatch:place:south:3                             70                
+lifter:height:hatch:place:east:3                              70                 
+lifter:height:hatch:place:west:3                              70                 
 
-lifter:height:hatch:place:north:c                             15
-lifter:height:hatch:place:south:c                             15
-lifter:height:hatch:place:east:c                              15          
-lifter:height:hatch:place:west:c                              15            
+lifter:height:hatch:place:north:c                             11.5
+lifter:height:hatch:place:south:c                             11.5
+lifter:height:hatch:place:east:c                              11.5        
+lifter:height:hatch:place:west:c                              11.5            
 
 lifter:height:offset:hatch_hook_center                        8.6
 lifter:height:cargo:undock_height                             22.00
@@ -410,18 +419,11 @@ linefollower:back:distance                                        10
 linefollower:back:adjust                                          -0.2
 linefollower:stalled_threshold                                    0.1
 
-cargointake:power                                               -0.6
+cargointake:power                                                -0.6
 cargointake:reverse:power                                        0.6
 
-if COMPETITION
 cargoholder:collect:power                                       0.6
 cargoholder:score:power                                         -0.8
-endif
-
-if PRACTICE
-cargoholder:collect:power                                       -0.6
-cargoholder:score:power                                         0.8
-endif
 
 cargoholder:score:time                                          1.0
 

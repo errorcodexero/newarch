@@ -1,6 +1,7 @@
 #include "PhaserOIDevice.h"
 #include "PhaserOISubsystem.h"
 #include "Phaser.h"
+#include "carloshatch/DumpHatch.h"
 #include <cameratracker/CameraChangeAction.h>
 #include <ParallelAction.h>
 #include "carloshatch/CarlosHatchStartAction.h"
@@ -780,6 +781,8 @@ namespace xero {
             auto hatchholder = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
             ActionPtr act = std::make_shared<CarlosHatchStartAction>(*hatchholder) ;
             seq.pushSubActionPair(hatchholder, act) ;
+            std::make_shared<CarlosHatchEndAction>(*hatchholder) ;
+            seq.pushSubActionPair(hatchholder, act) ;            
         }
 
         void PhaserOIDevice::generateArmActionsCargoVisionLine(ActionSequence &seq)
@@ -1036,6 +1039,8 @@ namespace xero {
             teleop->clearDetectors() ;
             if (piece_ == GamePieceType::Cargo)
                 seq.pushSubActionPair(game, act) ;
+            else
+                seq.pushSubActionPair(game->getHatchHolder(), act) ;
         }
 
         bool PhaserOIDevice::isIdleOrReadyAction() {
@@ -1095,6 +1100,10 @@ namespace xero {
                 // Reverse the direction of the intake rollers
                 //
                 fcol->reverseIntake() ;
+            }
+            else if (piece_ == GamePieceType::Hatch && activity_ == ActivityType::Place && getValue(reverse_)) {
+                auto act = std::make_shared<DumpHatch>(*hatch_holder) ;
+                seq.pushSubActionPair(hatch_holder, act) ;
             }
             else if (!finish_collect_cargo_->isDone() && getValue(go_)) {
                 //

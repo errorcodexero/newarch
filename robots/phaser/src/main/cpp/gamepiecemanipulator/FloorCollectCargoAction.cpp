@@ -1,4 +1,5 @@
 #include "FloorCollectCargoAction.h"
+#include <carloshatch/CarlosHatchArmAction.h>
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <lifter/LifterGoToHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
@@ -15,6 +16,7 @@ namespace xero {
             auto turntable = getGamePiece().getTurntable();
             auto cargo_intake = getGamePiece().getCargoIntake();
             auto cargo_holder = getGamePiece().getCargoHolder();
+            auto hatch_holder = getGamePiece().getHatchHolder() ;
             auto oi = getGamePiece().getRobot().getOI() ;
 
             //
@@ -26,7 +28,9 @@ namespace xero {
             set_lifter_cargo_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;            
             deploy_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, true) ;
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
-            set_lifter_cargo_collected_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:collected") ;            
+            set_lifter_cargo_collected_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:collected") ;      
+
+            retract_arm_ = std::make_shared<CarlosHatchArmAction>(*hatch_holder, CarlosHatchArmAction::Operation::RETRACT) ;      
 
             cargo_delay_ = getGamePiece().getRobot().getSettingsParser().getDouble("cargointake:delay") ;
             
@@ -51,6 +55,7 @@ namespace xero {
             //    our internal state (state_) to LifterGoToSafeHeight means we are in the process
             //    of moving the lifter to this safe height
             //
+            getGamePiece().getHatchHolder()->setAction(retract_arm_) ;
             auto lifter = getGamePiece().getLifter() ;
             lifter->setAction(set_lifter_safe_height_) ;
             state_ = State::LifterGoToSafeHeight ;
