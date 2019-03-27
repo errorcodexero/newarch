@@ -22,7 +22,6 @@ namespace xero
                 bool ret = camera_.shouldTerminate() ;
                 if (ret) {
                     removeMe() ;
-                    printDetectors() ;
                 }
 
                 return ret ;

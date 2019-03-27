@@ -25,15 +25,15 @@ namespace xero {
             void retractArm() ;
             void stopArm() ;
 
-            void activateHolder() ;
-            void deactivateHolder() ;
+            void enableHooks() ;
+            void disableHooks() ;
 
             bool isImpacting()  {
-                return has_impact_debounced_->get();
+                return has_impact_debounced_->get() ;
             }
 
             bool hasHatch() {
-                return true ;
+                return has_hatch_debounced_->get() ;
             }
 
             bool isArmDeployed() {
@@ -55,6 +55,11 @@ namespace xero {
             std::shared_ptr<frc::Solenoid> holder_ ;
 
             std::shared_ptr<xero::misc::DebounceBoolean> has_impact_debounced_ ;
+            std::shared_ptr<xero::misc::DebounceBoolean> has_hatch_debounced_ ;
+            double hatch_present_threshold_ ;
+
+            bool has_hatch_ ;
+            bool has_impact_ ;
         } ;
     }
 }

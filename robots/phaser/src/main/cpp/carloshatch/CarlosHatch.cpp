@@ -11,16 +11,16 @@ using namespace xero::misc ;
 namespace xero {
     namespace phaser {
         CarlosHatch::CarlosHatch(xero::base::Robot &robot) : Subsystem(robot, "CarlosHatch") {
-            std::cout << "Started Build" << std::endl ;
-
             arm_extend_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:carloshatch:arm:extend"));
             arm_retract_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:carloshatch:arm:retract"));
             holder_ =  std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:carloshatch:holder"));
             sensor_ = std::make_shared<frc::AnalogInput>(robot.getSettingsParser().getInteger("hw:carloshatch:sensor"));
             impact_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:carloshatch:impact"));
 
-            arm_extend_->Set(true) ;
-            arm_retract_->Set(false) ;
+            hatch_present_threshold_ = robot.getSettingsParser().getDouble("carloshatch:threshold") ;
+
+            arm_extend_->Set(false) ;
+            arm_retract_->Set(true) ;
             holder_->Set(false) ;
 
             arm_deployed_ = false ;
@@ -30,7 +30,9 @@ namespace xero {
             double high2low = robot.getSettingsParser().getDouble("carloshatch:impact:high2low") ;
             has_impact_debounced_ = std::make_shared<DebounceBoolean>(false, low2high, high2low) ;
 
-            std::cout << "Constructed" << std::endl ;
+            low2high = robot.getSettingsParser().getDouble("carloshatch:presence:low2high") ;
+            high2low = robot.getSettingsParser().getDouble("carloshatch:presence:high2low") ;
+            has_hatch_debounced_ = std::make_shared<DebounceBoolean>(false, low2high, high2low) ;
         }
 
         CarlosHatch::~CarlosHatch() {
@@ -43,13 +45,28 @@ namespace xero {
 
         void CarlosHatch::computeState() {
             double now = getRobot().getTime() ;
-            has_impact_debounced_->update(impact_->Get(), now) ;
+            bool hatchpres = false ;
+            bool impactval ;
+
+            double pres = sensor_->GetVoltage() ;
+            if (pres > hatch_present_threshold_)
+                hatchpres = true ;
+            else
+                hatchpres = false ;            
+
+            impactval = impact_->Get() ;
+            has_impact_debounced_->update(impactval, now) ;
+            has_hatch_debounced_->update(hatchpres, now) ;
 
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
             logger << "CarlosHatch:" ;
             logger << " voltage " << sensor_->GetVoltage() ;
-            logger << " impact " << impact_->Get() ;
+            logger << " threshold " << hatch_present_threshold_ ;
+            logger << " impact raw " << impactval ;
+            logger << " impact " << has_impact_debounced_->get() ;
+            logger << " presence raw " << hatchpres ;
+            logger << " presence " << has_hatch_debounced_->get() ;            
             logger.endMessage() ;       
         }
 
@@ -74,13 +91,13 @@ namespace xero {
             arm_retract_->Set(false) ;            
         }
 
-        void CarlosHatch::activateHolder() {
-            holder_->Set(true) ;
+        void CarlosHatch::enableHooks() {
+            holder_->Set(false) ;
             holder_deployed_ = true ;
         }
 
-        void CarlosHatch::deactivateHolder() {
-            holder_->Set(false) ;
+        void CarlosHatch::disableHooks() {
+            holder_->Set(true) ;
             holder_deployed_ = false ;
         }
     }

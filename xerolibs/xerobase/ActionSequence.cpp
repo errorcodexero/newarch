@@ -83,7 +83,8 @@ bool ActionSequence::isDone()
 void ActionSequence::cancel()
 {
     isDone_ = true;
-    actionSequence_[index_]->cancel() ;
+    if (index_ < static_cast<int>(actionSequence_.size()))
+        actionSequence_[index_]->cancel() ;
 }
 
 std::string ActionSequence::toString()

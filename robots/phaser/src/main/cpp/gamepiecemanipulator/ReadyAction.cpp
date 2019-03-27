@@ -34,8 +34,8 @@ namespace xero {
                 angle_value_ = subsystem.getRobot().getSettingsParser().getDouble(angle) ;
 
             set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "turntable:safe_lifter_height") ;
-            set_lifter_final_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, height) ;
-            set_turntable_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, angle) ;
+            set_lifter_final_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, height_value_) ;
+            set_turntable_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, angle_value_) ;
             extend_hatch_holder_ = std::make_shared<CarlosHatchArmAction>(*hatch_holder, CarlosHatchArmAction::Operation::EXTEND) ;
             retract_hatch_holder_ = std::make_shared<CarlosHatchArmAction>(*hatch_holder, CarlosHatchArmAction::Operation::RETRACT) ;
 
@@ -97,7 +97,6 @@ namespace xero {
             auto turntable = getGamePiece().getTurntable() ;  
             auto hatch_holder = getGamePiece().getHatchHolder() ;
             auto lifter = getGamePiece().getLifter() ;
-            bool hatch = hatch_holder->hasHatch() ;
 
             MessageLogger &logger = getGamePiece().getRobot().getMessageLogger() ;            
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;
@@ -119,14 +118,14 @@ namespace xero {
                 // Need to rotate to the correct angle, if the hatch
                 // holder needs to be extended, this is already done
                 //
-                if (turntable->isSafeToRotate(hatch)) {
+                if (turntable->isSafeToRotate()) {
                     //
                     // The turntable is already above the safe height to rotate so we
                     // start rotating right away. We also start any lift changes we can
                     // do concurrently.
                     //
 
-                    if (height_value_ > turntable->getSafeRotateHeight(hatch)) {
+                    if (height_value_ > turntable->getSafeRotateHeight()) {
                         logger << "need to turn, above safe height, target above safe height" ;
                         logger.endMessage() ;
 

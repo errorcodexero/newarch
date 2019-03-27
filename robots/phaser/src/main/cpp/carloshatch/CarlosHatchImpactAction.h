@@ -22,12 +22,20 @@ namespace xero {
             virtual bool isDone() ;
             virtual void cancel() ;
             virtual std::string toString() ;
+
+        private:
+            enum class State
+            {
+                Idle,
+                WaitForSwitch,
+                WaitForImpact,
+                WaitForHooks
+            } ;
             
         private:
-            bool timing_ ;
+            bool collecting_ ;
+            State state_ ;
             double start_ ;
-            double duration_ ;
-            bool is_done_ ;
         };
     }
 }

@@ -47,12 +47,12 @@ namespace xero {
                 return is_calibrated_ ;
             }
 
-            double getSafeRotateHeight(bool hatch) {
-                return (hatch ? safe_rotate_hatch_height_ : safe_rotate_height_) ;                
+            double getSafeRotateHeight() {
+                return safe_rotate_height_ ;                
             }
 
-            bool isSafeToRotate(bool hatch) {
-                return lifter_.getHeight() > getSafeRotateHeight(hatch) - safe_rotate_margin_ ;
+            bool isSafeToRotate() {
+                return lifter_.getHeight() > getSafeRotateHeight() - safe_rotate_margin_ ;
             }            
 
         private:
@@ -89,12 +89,6 @@ namespace xero {
             // The height required of the lifter before the turntable should be rotated
             //
             double safe_rotate_height_ ;
-
-            //
-            // The height required of the lifter before the turntable should be rotated when
-            // holding a hatch
-            //
-            double safe_rotate_hatch_height_ ;
 
             //
             // The margin below the safe height where we will still rotate the turntable.  The

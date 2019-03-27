@@ -46,24 +46,20 @@ endif
 #
 # Carlos hatch holder
 #
-hw:carloshatch:holder                                           5
-hw:carloshatch:arm:extend                                       6
-hw:carloshatch:arm:retract                                      7
-hw:carloshatch:sensor                                           0
-hw:carloshatch:impact                                           21
+hw:carloshatch:holder                                           5               # Solenoid
+hw:carloshatch:arm:extend                                       6               # Solenoid
+hw:carloshatch:arm:retract                                      7               # Solenoid
+hw:carloshatch:sensor                                           0               # Analog IO
+hw:carloshatch:impact                                           21              # Digital IO
 
 #
 # Lift
 #
-if PRACTICE
-hw:lifter:motor:1                                               11              # TalonSRX
-endif
-if COMPETITION
-hw:lifter:motor:1                                               10
-endif
+hw:lifter:motor:1                                               10              # TalonSRX
+hw:lifter:motor:2                                               11              # TalonSRC
 hw:lifter:encoder1                                              8               # Digital IO
 hw:lifter:encoder2                                              9               # Digital IO
-hw:lifter:reversemotors                                         true            
+hw:lifter:reversemotors                                         true
 
 #
 # turntable
@@ -96,7 +92,7 @@ hw:driverstation:hid:oi                                         2               
 # cargoholder
 #
 hw:cargoholder:sensor                                           20              # Digital IO
-hw:cargoholder:motor                                            7              # Victor SPX
+hw:cargoholder:motor                                            7               # Victor SPX
 
 #
 # cargo intake
@@ -193,22 +189,23 @@ tankdrive:distance_action:profile_outdated_error_dist           12.0
 #
 # Variables for the turntable
 #
-turntable:safe_lifter_height                                    24
-turntable:safe_lifter_height_hatch                              24
+turntable:safe_lifter_height                                    13
 turntable:safe_lifter_margin                                    4
 turntable:keepout:minimum                                       130
 turntable:keepout:maximum                                       160
 turntable:keepout:dangerzone                                    15
 
-turntable:calibrate:threshold                                   1               # TODO
+turntable:calibrate:threshold                                   1               
 if PRACTICE
-turntable:calibrate:encbase                                     238             # TODO
+turntable:calibrate:encbase                                     238             
 endif
+
 if COMPETITION
-turntable:calibrate:encbase                                     261             # TODO
+turntable:calibrate:encbase                                     261             
 endif
-turntable:calibrate:power                                       0.2             # TODO
-turntable:calibrate:samples                                     32              # TODO
+
+turntable:calibrate:power                                       0.2             
+turntable:calibrate:samples                                     32              
 
 if PRACTICE
 turntable:degrees_per_tick                                      0.60916263086705202312138728323699
@@ -272,33 +269,35 @@ lifter:base							                            10.75
 ifdef COMPETITION
 lifter:inches_per_tick                                          0.059099901
 endif
+
 ifdef PRACTICE
 lifter:inches_per_tick                                          0.058691309
 endif
-lifter:calibrate:up:power                                       0.4                         # TODO
-lifter:calibrate:hold:power                                     0.25                         # TODO
-lifter:calibrate:up:time                                        1.0                         # TODO
-lifter:calibrate:threshold                                      2                           # TODO
-lifter:calibrate:encbase                                        29                          # TODO
-lifter:calibrate:power                                          -0.4                        # TODO
-lifter:calibrate:samples                                        16                           # TODO
+
+lifter:calibrate:up:power                                       0.4                         
+lifter:calibrate:hold:power                                     0.25                         
+lifter:calibrate:up:time                                        1.0                         
+lifter:calibrate:threshold                                      2                           
+lifter:calibrate:encbase                                        29                          
+lifter:calibrate:power                                          -0.4                        
+lifter:calibrate:samples                                        16                           
 
 lifter:max_height                                               83.66
 lifter:min_height                                               8.46
 lifter:threshold                                                1.0
 
-lifter:maxv                                                     58.0
-lifter:maxa                                                     75
-lifter:maxd                                                     -75
+lifter:maxv                                                     30
+lifter:maxa                                                     30
+lifter:maxd                                                     -30
 
-lifter:follower:up:kp                                           0.055                        # 0.055              
-lifter:follower:up:ka                                           0.0                 
-lifter:follower:up:kv                                           0.045
+lifter:follower:up:kp                                           1.5
+lifter:follower:up:ka                                           0.00056179776
+lifter:follower:up:kv                                           0.028089888
 lifter:follower:up:kd                                           0.0
 
 lifter:follower:down:kp                                         0.7
-lifter:follower:down:ka                                         0.0
-lifter:follower:down:kv                                         0.017
+lifter:follower:down:ka                                         0.00056179776
+lifter:follower:down:kv                                         0.028089888
 lifter:follower:down:kd                                         0.0
 
 lifter:hold:p                                                   -0.15              
@@ -330,33 +329,26 @@ lifter:height:hatch:undock_intake                               22.00
 lifter:height:loadingstation:hatch:shift_up                     5
 lifter:height:score:hatch:shift_down                            -4.0
 
-lifter:height:hatch:tracking_height:north                       13
-lifter:height:hatch:tracking_height:south                       13
-lifter:height:hatch:tracking_height:east                        13
-lifter:height:hatch:tracking_height:west                        13
+lifter:height:cargo:collect:north                               37
+lifter:height:cargo:collect:south                               37
+lifter:height:cargo:collect:east                                37
+lifter:height:cargo:collect:west                                37
 
-lifter:height:cargo:tracking_height:north                       13
-lifter:height:cargo:tracking_height:south                       13
-lifter:height:cargo:tracking_height:east                        13
-lifter:height:cargo:tracking_height:west                        13
+lifter:height:cargo:place:north:1                               11.5
+lifter:height:cargo:place:south:1                               11.5
+lifter:height:cargo:place:east:1                                11.5
+lifter:height:cargo:place:west:1                                11.5
 
-lifter:height:cargo:collect:north                             37
-lifter:height:cargo:collect:south                             37
-lifter:height:cargo:collect:east                              37
-lifter:height:cargo:collect:west                              37
+lifter:height:cargo:place:north:2                             40
+lifter:height:cargo:place:south:2                             40
+lifter:height:cargo:place:east:2                              40
+lifter:height:cargo:place:west:2                              40
 
-lifter:height:cargo:place:north:1                             22.5
-lifter:height:cargo:place:south:1                             22.5
-lifter:height:cargo:place:east:1                              22.5
-lifter:height:cargo:place:west:1                              22.5
-lifter:height:cargo:place:north:2                             50.5
-lifter:height:cargo:place:south:2                             50.5
-lifter:height:cargo:place:east:2                              50.5
-lifter:height:cargo:place:west:2                              50.5
-lifter:height:cargo:place:north:3                             79.5
-lifter:height:cargo:place:south:3                             79.5
-lifter:height:cargo:place:east:3                              79.5
-lifter:height:cargo:place:west:3                              79.5
+lifter:height:cargo:place:north:3                             70
+lifter:height:cargo:place:south:3                             70
+lifter:height:cargo:place:east:3                              70
+lifter:height:cargo:place:west:3                              70
+
 lifter:height:cargo:place:north:c                             38
 lifter:height:cargo:place:south:c                             38
 lifter:height:cargo:place:east:c                              38
@@ -367,10 +359,11 @@ lifter:height:hatch:collect:south                             11.2
 lifter:height:hatch:collect:east                              11.2
 lifter:height:hatch:collect:west                              11.2                 
 
-lifter:height:hatch:place:north:1                             15      
-lifter:height:hatch:place:south:1                             15       
-lifter:height:hatch:place:east:1                              15               
-lifter:height:hatch:place:west:1                              15                
+lifter:height:hatch:place:north:1                             11.2      
+lifter:height:hatch:place:south:1                             11.2       
+lifter:height:hatch:place:east:1                              11.2               
+lifter:height:hatch:place:west:1                              11.2   
+
 lifter:height:hatch:place:north:2                             44           
 lifter:height:hatch:place:south:2                             44              
 lifter:height:hatch:place:east:2                              44                 
@@ -380,6 +373,7 @@ lifter:height:hatch:place:north:3                             72
 lifter:height:hatch:place:south:3                             72                
 lifter:height:hatch:place:east:3                              72                 
 lifter:height:hatch:place:west:3                              72                 
+
 lifter:height:hatch:place:north:c                             15
 lifter:height:hatch:place:south:c                             15
 lifter:height:hatch:place:east:c                              15          
@@ -401,8 +395,8 @@ cameratracker:rect_ratio_max                                    1.1
 # drive by vision (simple P only control)
 ###################################################################################################
 
-drivebyvision:yaw_base_power                                    0.20
-drivebyvision:yaw_p                                             0.025
+drivebyvision:yaw_base_power                                    0.30
+drivebyvision:yaw_p                                             0.02
 
 ###################################################################################################
 # drive by line follower
@@ -426,7 +420,6 @@ endif
 
 if PRACTICE
 cargoholder:collect:power                                       -0.6
-cargoholder:TalonSRX                                            true
 cargoholder:score:power                                         0.8
 endif
 
@@ -531,6 +524,8 @@ scorehatch:offset:5                                             0.0
 scorehatch:offset:6                                             0.0
 scorehatch:offset:7                                             0.0
 
-carloshatch:impact:low2high                                      100
-carloshatch:impact:high2low                                      100
-carloshatch:impact:duration                                      250
+carloshatch:impact:low2high                                      0.250
+carloshatch:impact:high2low                                      0.250
+carloshatch:presence:high2low                                    0.100
+carloshatch:presence:low2high                                    0.100
+carloshatch:threshold                                            1.0

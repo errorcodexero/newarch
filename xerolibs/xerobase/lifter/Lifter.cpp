@@ -62,6 +62,7 @@ namespace xero {
             // The minimum height of the lifter independent of limit switches
             min_height_ = parser.getDouble("lifter:min_height") ;
 
+            // Calibrate the lifter
             calibrate(0) ;
 
             // Initialize to false, only gets reset if we have a limit switch
@@ -74,6 +75,7 @@ namespace xero {
 
         void Lifter::getMotors(Robot &robot) {
             int i = 1 ;
+            int first = 0 ;
             bool reverse = false ;
 
             std::string revname = "hw:lifter:reversemotors" ;
@@ -92,18 +94,28 @@ namespace xero {
                     break ;
 
                 int motor = robot.getSettingsParser().getInteger(motorname) ;
+                if (i == 1)
+                    first = motor ;
                 auto talon = std::make_shared<ctre::phoenix::motorcontrol::can::TalonSRX>(motor) ;
                 talon->SetInverted(reverse) ;
                 talon->ConfigVoltageCompSaturation(12.0, 10) ;
                 talon->EnableVoltageCompensation(true) ;                
                 talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
 
-                // TODO - generalize this for the lifter
                 talon->ConfigForwardLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyOpen) ;
                 talon->ConfigReverseLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyClosed) ;
 
                 if (motors_.size() > 0)
+                {
                     talon->Follow(*motors_.front()) ;
+                    talon->ConfigForwardLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyOpen) ;
+                    talon->ConfigReverseLimitSwitchSource(RemoteLimitSwitchSource_RemoteTalonSRX, LimitSwitchNormal_NormallyClosed, first) ;                    
+                  
+                }
+                else {
+                    talon->ConfigForwardLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyOpen) ;
+                    talon->ConfigReverseLimitSwitchSource(LimitSwitchSource_FeedbackConnector, LimitSwitchNormal_NormallyClosed) ;  
+                }
 
                 motors_.push_back(talon) ;
 

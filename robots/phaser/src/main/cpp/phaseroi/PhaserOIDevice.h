@@ -115,6 +115,45 @@ namespace xero {
 
             bool isIdleOrReadyAction() ;
 
+            std::string toString(ActivityType a) {
+                std::string str ;
+
+                switch(a) {
+                case ActivityType::Collect:
+                    str = "Collect" ;
+                    break ;
+                case ActivityType::Place:
+                    str = "Place" ;
+                    break ;
+                }
+
+                return str ;
+            }
+
+            std::string toString(GamePieceType g) {
+                std::string str ;
+
+                switch(g) {
+                case GamePieceType::Cargo:
+                    str = "Cargo" ;
+                    break ;
+
+                case GamePieceType::Hatch:
+                    str = "Hatch" ;
+                    break ;
+
+                case GamePieceType::Invalid:
+                    str = "Invalid" ;
+                    break ;
+
+                case GamePieceType::None:
+                    str = "None" ;
+                    break ;
+                }
+
+                return str;
+            }
+
         private:
             static const size_t HatchCamera = 0 ;
             static const size_t CargoCamera = 1 ;

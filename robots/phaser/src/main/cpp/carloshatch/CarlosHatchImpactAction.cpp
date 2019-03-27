@@ -8,38 +8,68 @@ using namespace xero::misc ;
 namespace xero {
     namespace phaser {
         CarlosHatchImpactAction::CarlosHatchImpactAction(CarlosHatch &subsystem) : CarlosHatchAction(subsystem) {
-            duration_ = subsystem.getRobot().getSettingsParser().getDouble("carloshatch:impact:duration") ;
+            std::cout << "Creating CarloshatchImpactAction" << std::endl ;
         }
 
         CarlosHatchImpactAction::~CarlosHatchImpactAction() {
         }
 
+        static int cnt = 0 ;
         void CarlosHatchImpactAction::start() {
-            timing_ = false ;
+
+            std::cout << "Starting CarlosHatchImpactAction " << cnt++ << std::endl ;
+
+            CarlosHatch &hatchholder = getSubsystem() ;
+            if (!hatchholder.hasHatch())
+                hatchholder.disableHooks() ;
+
+            hatchholder.extendArm() ;
+            state_ = State::WaitForSwitch ;
+
+            collecting_ = !hatchholder.hasHatch() ;
         }
 
         void CarlosHatchImpactAction::run() {
             CarlosHatch &hatchholder = getSubsystem() ;
-            if (hatchholder.isImpacting()) {
-                if (hatchholder.isHolderDeployed())
-                    hatchholder.deactivateHolder() ;
-                else
-                    hatchholder.activateHolder() ;
 
-                start_ = getSubsystem().getRobot().getTime() ;
-                timing_ = true ;
+            switch(state_) {
+            case State::WaitForSwitch:
+                if (!hatchholder.isImpacting()) {
+                    state_ = State::WaitForImpact ;
+                    hatchholder.stopArm() ;
+                }
+                break ;
+
+            case State::WaitForImpact:
+                if (hatchholder.isImpacting()) {
+                    if (collecting_)
+                        hatchholder.enableHooks() ;
+                    else
+                        hatchholder.disableHooks() ;
+                        
+                    start_ = hatchholder.getRobot().getTime() ;
+                    state_ = State::WaitForHooks ;
+                }
+                break ;
+
+            case State::WaitForHooks:
+                if (hatchholder.getRobot().getTime() - start_ > 0.1) {
+                    hatchholder.retractArm() ;
+                    state_ = State::Idle ;
+                }
+                break ;
+
+            case State::Idle:
+                break ;
             }
-
-            if (timing_ && hatchholder.getRobot().getTime() - start_ > duration_)
-                is_done_ = true ;
         }
 
         bool CarlosHatchImpactAction::isDone() {
-            return is_done_ ;
+            return state_ == State::Idle ;
         }
 
         void CarlosHatchImpactAction::cancel() {
-            is_done_ = true ;
+            state_  = State::Idle ;
         }
 
         std::string CarlosHatchImpactAction::toString() {
