@@ -1,7 +1,8 @@
 #pragma once
 
 #include "gamepiecemanipulator/GamePieceManipulator.h"
-#include <OIDevice.h> 
+#include "gamepiecemanipulator/FloorCollectCargoAction.h"
+#include <oi/OIDevice.h> 
 #include <Action.h>
 
 namespace xero {
@@ -12,18 +13,18 @@ namespace xero {
         public:
             enum class Direction
             {
-                North,
-                South,
-                East,
-                West,
+                North = 0,
+                South = 1,
+                East = 2,
+                West = 3,
             } ;
 
             enum class ActionHeight
             {
-                LevelOne,
-                LevelTwo,
-                LevelThree,
-                CargoBay,
+                LevelOne = 1,
+                LevelTwo = 2,
+                LevelThree = 3,
+                CargoBay = 4,
             } ;
 
             enum class OperationMode
@@ -32,6 +33,13 @@ namespace xero {
                 SemiAuto,
                 Manual,
                 Invalid
+            } ;
+
+            enum class RocketShipMode
+            {
+                Rocket,
+                CargoShip,
+                Invalid,
             } ;
 
         public:
@@ -47,16 +55,23 @@ namespace xero {
             virtual void init() ;
 
         private:
-            void initialize() ;
+            void bindOI() ;
             void getTrackingMode() ;
             void getCargoHatchMode(xero::base::ActionSequence &seq) ;
             bool getDirection() ;
             bool getHeightButton() ;
+            void getShipRocketMode() ;
+
+            Direction getRobotDirection() ;
+            Direction compassToFieldRelative(Direction dir) ;
 
             void updateMode(OperationMode mode) ;
             void generateDirectionActions(xero::base::ActionSequence &seq) ;
             void generateHeightButtonActions(xero::base::ActionSequence &seq) ;
             void generateTargetHeightActions(xero::base::ActionSequence &seq) ;
+            void generateHeightButtonActionsCargo(xero::base::ActionSequence &seq) ;
+            void generateHeightButtonActionsHatch(xero::base::ActionSequence &seq) ;
+            void generateStrafe(xero::base::ActionSequence &seq) ;
 
             void setupVisionDetectors() ;
             void setupLineFollowingDetectors() ;
@@ -65,11 +80,11 @@ namespace xero {
 
             xero::base::ActionPtr getFinishAction() ;
 
-            std::string dirToString() ;
-            std::string heightToString() ;
+            std::string toString(Direction dir) ;
+            std::string toString(ActionHeight height) ;
             std::string toString(OperationMode mode) ;
 
-            std::string generateActionHeightName() ;
+            std::string generateActionHeightName(bool tracking) ;
 
         private:
             static const size_t HatchCamera = 0 ;
@@ -102,21 +117,41 @@ namespace xero {
             size_t climb_lock_switch_ ;
             size_t climb_ ;
 
-            size_t extra_button_ ; 
+            size_t calibrate_ ;
+            size_t reverse_ ; 
+
+            size_t ship_rocket_ ;
 
             Direction dir_ ;
             ActionHeight height_ ;
             OperationMode mode_ ;
+            RocketShipMode ship_cargo_state_ ;
 
-            xero::base::ActionPtr set_collect_hatch_floor_ ;
             xero::base::ActionPtr set_collect_cargo_floor_ ;
 
             xero::base::ActionPtr reset_intakes_ ;
+            xero::base::ActionPtr extend_finger_ ;
+            xero::base::ActionPtr retract_finger_ ;
+
+            xero::base::ActionPtr direction_action_ ;
 
             xero::base::ActionPtr finish_collect_hatch_ ;
             xero::base::ActionPtr finish_collect_cargo_ ;
-            xero::base::ActionPtr finish_place_hatch_ ;
-            xero::base::ActionPtr finish_place_cargo_ ;     
+            xero::base::ActionPtr finish_place_hatch_front_ ;
+            xero::base::ActionPtr finish_place_hatch_back_ ;            
+            xero::base::ActionPtr finish_place_cargo_ ;    
+
+            xero::base::ActionPtr deploy_climber_ ;
+            xero::base::ActionPtr climb_action_ ; 
+
+            xero::base::ActionPtr calibrate_action_ ;
+            
+            xero::base::ActionPtr track_cargo_target_ ;
+            xero::base::ActionPtr shoot_target_target_ ;
+
+            xero::base::ActionPtr strafe_ ;
+            
+            double safe_height_ ;
         } ;
     }
 }

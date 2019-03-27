@@ -26,7 +26,6 @@ namespace xero {
         class TankDrive : public DriveBase {
             /// \brief class for tank drive actions
             friend class TankDriveAction;      
-        
 
         public:
             /// \brief Create a new tank drive object
@@ -44,13 +43,6 @@ namespace xero {
             /// \returns true if the drivebase has a gear shifter
             bool hasGearShifter() const {
                 return gear_ != nullptr ;
-            }
-
-            /// \brief set to dump state each cycle
-            /// If true, the state of the tankdrive is printed after each iteration of the robot loop
-            /// \param state the value of the flag
-            void setDumpStateFlag(bool state) {
-                dumpstate_ = state ;
             }
 
             /// \brief Create encoders for the tank drive that are not attached to the TalonSRX controllers
@@ -140,6 +132,10 @@ namespace xero {
                 return angular_.getAcceleration() ;
             }
 
+            double getTotalAngle() const {
+                return total_angle_ ;
+            }
+
             /// \brief Invert the output of the left motors
             void invertLeftMotors() ;
 
@@ -192,6 +188,10 @@ namespace xero {
                 return kin_->getY() ;
             }
 
+            double getXYZVelocity() {
+                return xyz_velocity_ ;
+            }
+
         private:
             /// \brief Set the motors to output at the given percentages
             /// \param left_percent the percent output for the left motors
@@ -215,6 +215,8 @@ namespace xero {
 
             std::shared_ptr<AHRS> navx_ ;
 
+            double total_angle_ ;
+
             xero::misc::Speedometer angular_ ;
             xero::misc::Speedometer left_linear_ ;
             xero::misc::Speedometer right_linear_ ;
@@ -230,8 +232,7 @@ namespace xero {
 
             std::shared_ptr<xero::misc::Kinematics> kin_ ;
 
-            bool dumpstate_ ;
-
+            double xyz_velocity_ ;
         };
     }
 }

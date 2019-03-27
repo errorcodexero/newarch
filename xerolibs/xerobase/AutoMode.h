@@ -1,24 +1,21 @@
 #pragma once
 
 #include "ActionSequence.h"
-
+#include "Robot.h"
 
 
 namespace xero {
     namespace base {
         class AutoMode : public ActionSequence {
 
-            public:
+        public:
             /// \brief create an empty action sequence 
             /// \param logger the message logger action
             /// \param name the human readable name of this sequence
             /// \param desc a description of this automode
-            AutoMode(xero::misc::MessageLogger &logger, const std::string &name, const std::string &desc) ;
-
-            /// \brief create an empty action sequence 
-            /// \param logger the message logger action
-            /// \param name the human readable name of this sequence
-            AutoMode(xero::misc::MessageLogger &logger, const std::string &name) ;
+            AutoMode(Robot &robot, const std::string &name, const std::string &desc) ;
+            
+            virtual ~AutoMode() ;
 
             /// \brief return the name of the action sequence
             /// \returns the name of the action sequence
@@ -34,14 +31,21 @@ namespace xero {
             /// \returns a human readable string representing this action sequence
             std::string toString();
 
+        protected:
+            Robot &getRobot() {
+                return robot_ ;
+            }
 
-            private:
-            //names the overall objective of the actions in the sequence
+        private:
+
+            // The robot object
+            Robot &robot_ ;
+
+            // names the overall objective of the actions in the sequence
             std::string name_;
 
+            // human readable description of the auto mode
             std::string desc_ ;
-
-
         };
 
         

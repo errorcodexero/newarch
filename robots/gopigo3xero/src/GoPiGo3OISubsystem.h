@@ -1,6 +1,6 @@
 #pragma once
 
-#include <OISubsystem.h>
+#include <oi/OISubsystem.h>
 
 namespace xero {
     namespace gopigo {

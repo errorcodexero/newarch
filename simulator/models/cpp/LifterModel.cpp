@@ -1,6 +1,10 @@
 #include <LifterModel.h>
 #include <frc/RobotSimBase.h>
+#include <MessageLogger.h>
+#include <cmath>
+
 using namespace frc ;
+using namespace xero::misc ;
 
 namespace xero {
     namespace sim {
@@ -27,7 +31,6 @@ namespace xero {
             else
                 top_limit_channel_ = -1 ;
             motor_1_ = simbase.getSettingsParser().getInteger("hw:lifter:motor:1") ;
-            motor_2_ = simbase.getSettingsParser().getInteger("hw:lifter:motor:2") ;
 
             top_limit_ = nullptr ;
             bottom_limit_ = nullptr ;
@@ -41,6 +44,25 @@ namespace xero {
 
         LifterModel::~LifterModel() {
         }
+
+        bool LifterModel::processEvent(const std::string &name, int value) {
+            bool ret = false ;
+            if (name == "verify") {
+                double height = static_cast<double>(value) / 100.0 ;
+                double err = std::fabs(height - height_) ;
+                if (err > 2.0) {
+                    MessageLogger &logger = getRobotMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::error) ;
+                    logger << "VerifyError: lifte" ;
+                    logger << " expected " << height ;
+                    logger << " actual " << height_ ;
+                    logger.endMessage() ;
+                }
+                ret = true ;
+            }
+
+            return ret ;
+        }        
 
         void LifterModel::generateDisplayInformation(std::list<std::string> &lines) {
 
@@ -78,6 +100,12 @@ namespace xero {
         }
 
         void LifterModel::run(double dt) {
+            double i = 99.0 ;
+
+            if (power_ > 0.1) {
+                i *= 2.0 ;
+            }
+
             double dh = power_ * inch_per_sec_per_volt_* dt + gravity_equivalent_speed_ * dt ;
             height_ += dh ;
 
@@ -118,10 +146,6 @@ namespace xero {
             if (motor->GetDeviceID() == motor_1_) {
                 motor1_ = motor ;
                 motor1_->addModel(this) ;
-            }
-            else if (motor->GetDeviceID() == motor_2_) {
-                motor2_ = motor ;
-                motor2_->addModel(this) ;
             }
         }
 

@@ -1,6 +1,8 @@
 #include "Turntable.h"
 #include "TurntableAction.h"
 #include "TurntableCalibrateAction.h"
+#include "TurntableGoToAngleAction.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <Robot.h>
 #include <MessageLogger.h>
 #include <xeromath.h>
@@ -11,10 +13,11 @@ using namespace xero::misc ;
 
 namespace xero{
     namespace phaser{
-        Turntable::Turntable(Robot &robot, Lifter &lifter, uint64_t id) : Subsystem(robot, "turntable"), lifter_(lifter) {
+        Turntable::Turntable(Robot &robot, Lifter &lifter, uint64_t id, uint64_t verboseid) : Subsystem(robot, "turntable"), lifter_(lifter) {
 
             SettingsParser &parser = robot.getSettingsParser() ;
             msg_id_ = id ;
+            msg_verbose_id_ = verboseid ;
             
             getMotors(robot) ;
             assert(motors_.size() > 0) ;
@@ -23,6 +26,7 @@ namespace xero{
             int enc2 = robot.getSettingsParser().getInteger("hw:turntable:encoder2") ;           
             encoder_ = std::make_shared<frc::Encoder>(enc1, enc2) ;
             encoder_->SetReverseDirection(true) ;
+            encoder_->Reset() ;
 
             min_angle_ = robot.getSettingsParser().getDouble("turntable:keepout:minimum") ;
             max_angle_ = robot.getSettingsParser().getDouble("turntable:keepout:maximum") ;
@@ -34,14 +38,18 @@ namespace xero{
             // point.
             //
             turntable_offset_ = parser.getDouble("turntable:base") ;
-
             safe_rotate_height_ = parser.getDouble("turntable:safe_lifter_height") ;
+            safe_rotate_margin_= parser.getDouble("turntable:safe_lifter_margin") ;
+            safe_rotate_hatch_height_ = parser.getDouble("turntable:safe_lifter_height_hatch") ;            
             
-            // And we start without calibration
-            is_calibrated_ = true ;
+            calibrate(0) ;
+            loops_ = 0 ;
 
-            angle_ = 0.0 ;
-            last_angle_ = 0.0 ;
+            //
+            // Hold the turntable at its starting position
+            //
+            auto action = std::make_shared<TurntableGoToAngleAction>(*this, angle_) ;
+            setAction(action) ;
         }
 
         Turntable::~Turntable() {
@@ -106,10 +114,24 @@ namespace xero{
             if (calib_p != nullptr)
                 return true ;
 
-            if (!lifter_.isCalibrated() || lifter_.getHeight() < getSafeRotateHeight()) {
+            if (!lifter_.isCalibrated()) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::error) ;
-                logger << "Turntable: canAcceptAction failed, lifter to to low to rotate turntable\n" ;
+                logger << "Turntable: canAcceptAction failed, lifter not calibrated\n" ;
+                logger << "           " << action->toString() ;
+                logger.endMessage() ;
+                return false ;
+            }
+
+            //
+            // We assume no hatch here.  This is a safety check to ensure we don't destroy
+            // the robot.  Higher level systems should ensure we are at the right height to
+            // rotate without losing a hatch.
+            //
+            if (!isSafeToRotate(false)) {
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << "Turntable: canAcceptAction failed, lifter too low to rotate\n" ;
                 logger << "           " << action->toString() ;
                 logger.endMessage() ;
                 return false ;
@@ -118,27 +140,28 @@ namespace xero{
             return true ;
         }
 
-        static int count = 0 ;
         void Turntable::computeState(){
             encoder_value_ = encoder_->Get() ;
             if (is_calibrated_) {
-                angle_ = xero::math::normalizeAngleDegrees(encoder_value_ * degrees_per_tick_ + turntable_offset_) ;
+                angle_ = xero::math::normalizeAngleDegrees((encoder_value_ + encoder_base_) * degrees_per_tick_ + turntable_offset_) ;
                 speed_ = (angle_ - last_angle_) / getRobot().getDeltaTime() ;
                 last_angle_ = angle_ ;
             }
 
             auto &logger = getRobot().getMessageLogger() ;
-            logger.startMessage(MessageLogger::MessageType::debug, msg_id_) ;
+            logger.startMessage(MessageLogger::MessageType::debug, msg_verbose_id_) ;
             logger << "Turntable:" ;
-            logger << " count " << count++ ;
             logger << " ticks " << encoder_value_ ;
+            logger << " encbase " << encoder_base_ ;
             logger << " calibrated " << is_calibrated_ ;
             logger << " angle " << angle_ ;
             logger << " speed " << speed_ ;  
-            logger.endMessage() ;            
+            logger.endMessage() ; 
+
+            frc::SmartDashboard::PutNumber("Turntable", angle_) ;                       
         }
 
-        void Turntable::calibrate() {
+        void Turntable::calibrate(int cal) {
             //
             // The calibrate action assumes the turntable is at the bottom of travel
             // This may be because the turntable put there at the start of the match
@@ -146,8 +169,16 @@ namespace xero{
             // has activated and we are recalibrating to the limit switch
             //
             is_calibrated_ = true ;
-            encoder_->Reset() ;
+            angle_ = 0.0 ;
             last_angle_ = 0.0 ;
+            encoder_base_ = cal ;
+
+            encoder_->Reset() ;
+
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::info) ;
+            logger << "Turntable: calibrated with encoder base " << encoder_base_ ;
+            logger.endMessage() ;
         }
     }
 }

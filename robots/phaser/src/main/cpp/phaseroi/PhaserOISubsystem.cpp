@@ -4,7 +4,7 @@
 #include "phaserrobotsubsystem/PhaserRobotSubsystem.h"
 #include <Robot.h>
 #include <SettingsParser.h>
-#include <DriverGamepad.h>
+#include <oi/DriverGamepad.h>
 #include <ActionSequence.h>
 #include <frc/DriverStation.h>
 #include <iostream>

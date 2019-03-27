@@ -1,4 +1,5 @@
 #include "ParallelAction.h"
+#include <iostream>
 
 namespace xero {
     namespace base {
@@ -26,8 +27,9 @@ namespace xero {
         /// This method calls the cancel method on each of the parallel actions to be executes
         void ParallelAction::cancel() {
             for(auto act : action_list_) {
-                if (!act->isDone())
+                if (!act->isDone()) {
                     act->cancel() ;
+                }
             }
         }
 

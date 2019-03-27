@@ -33,9 +33,6 @@ namespace xero
                 cargo_holder_ = std::make_shared<CargoHolderModel>(*this) ;
                 addModel(cargo_holder_) ;                
 
-                hatch_intake_ = std::make_shared<HatchIntakeModel>(*this) ;
-                addModel(hatch_intake_) ;
-
                 cargo_intake_ = std::make_shared<CargoIntakeModel>(*this) ;
                 addModel(cargo_intake_) ;                
 

@@ -9,6 +9,12 @@ using namespace xero::misc;
 namespace xero {
 namespace base {
 
+
+const char *TankDriveDistanceAction::kvname_ = "tankdrive:follower:left:kv" ;
+const char *TankDriveDistanceAction::kaname_ = "tankdrive:follower:left:ka" ;
+const char *TankDriveDistanceAction::kpname_ = "tankdrive:follower:left:kp" ;
+const char *TankDriveDistanceAction::kdname_ = "tankdrive:follower:left:kd" ; 
+
 TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, double target_distance) : TankDriveAction(tank_drive) {
     target_distance_ = target_distance; 
     is_done_ = false;
@@ -16,6 +22,14 @@ TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, double t
     double maxd = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxd") ;
     double maxv = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxv") ;       
     profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
+
+    auto &parser = tank_drive.getRobot().getSettingsParser() ;
+
+    // Setup follower
+       
+    velocity_pid_ = std::make_shared<PIDACtrl>(parser, kvname_, kaname_, kpname_, kdname_) ;
+
+    angle_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:angle_pid", true);    
 }
 
 TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, const std::string &name) : TankDriveAction(tank_drive) {
@@ -25,6 +39,13 @@ TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, const st
     double maxd = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxd") ;
     double maxv = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxv") ;       
     profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
+
+    auto &parser = tank_drive.getRobot().getSettingsParser() ;    
+
+    // Setup follower
+    velocity_pid_ = std::make_shared<PIDACtrl>(parser,kvname_, kaname_, kpname_, kdname_) ;    
+
+    angle_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:angle_pid", true);    
 }
 
 TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, double target_distance, double maxv) : TankDriveAction(tank_drive) {
@@ -33,6 +54,13 @@ TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, double t
     double maxa = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxa") ;
     double maxd = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxd") ;
     profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
+
+    auto &parser = tank_drive.getRobot().getSettingsParser() ;
+
+    // Setup follower
+    velocity_pid_ = std::make_shared<PIDACtrl>(parser, kvname_, kaname_, kpname_, kdname_) ;    
+
+    angle_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:angle_pid", true);    
 }
 
 TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, const std::string &name, const std::string &maxvname) : TankDriveAction(tank_drive) {
@@ -42,10 +70,16 @@ TankDriveDistanceAction::TankDriveDistanceAction(TankDrive &tank_drive, const st
     double maxd = getTankDrive().getRobot().getSettingsParser().getDouble("tankdrive:distance_action:maxd") ;
     double maxv = getTankDrive().getRobot().getSettingsParser().getDouble(maxvname) ;       
     profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
+
+    auto &parser = tank_drive.getRobot().getSettingsParser() ;    
+
+    // Setup follower
+    velocity_pid_ = std::make_shared<PIDACtrl>(parser, kvname_, kaname_, kpname_, kdname_) ;    
+
+    angle_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:angle_pid", true);    
 }
 
 TankDriveDistanceAction::~TankDriveDistanceAction() {
-    
 }
 
 void TankDriveDistanceAction::start() {
@@ -53,9 +87,6 @@ void TankDriveDistanceAction::start() {
     profile_initial_dist_ = getTankDrive().getDist();
 
     xero::misc::SettingsParser &parser = getTankDrive().getRobot().getSettingsParser();
-
-    velocity_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:velocity_pid");
-    angle_pid_.initFromSettingsExtended(parser, "tankdrive:distance_action:angle_pid", true);
 
     distance_threshold_ = parser.getDouble("tankdrive:distance_action:distance_threshold");
     profile_outdated_error_long_ = parser.getDouble("tankdrive:distance_action:profile_outdated_error_long");
@@ -66,7 +97,6 @@ void TankDriveDistanceAction::start() {
     start_time_ = profile_start_time_ ;
 
     profile_->update(target_distance_, 0.0, 0.0);
-    std::cout << profile_->toString() << std::endl ;
     total_dist_so_far_ = 0.0 ;
 
     start_angle_ = getTankDrive().getAngle() ;
@@ -115,6 +145,7 @@ void TankDriveDistanceAction::run() {
     MessageLogger &logger = getTankDrive().getRobot().getMessageLogger();
 
     if (!is_done_) {
+        double dt = getTankDrive().getRobot().getDeltaTime() ;
         double current_distance = getTankDrive().getDist();
         double profile_distance_traveled = current_distance - profile_initial_dist_;
         double profile_remaining_distance = target_distance_ - profile_distance_traveled - total_dist_so_far_ ;
@@ -148,8 +179,10 @@ void TankDriveDistanceAction::run() {
                 logger.endMessage();
             }
 
+            double target_accel = profile_->getAccel(profile_delta_time) ;
             double target_velocity = profile_->getVelocity(profile_delta_time) ;
-            double base_power = velocity_pid_.getOutput(target_velocity, current_velocity, getTankDrive().getRobot().getDeltaTime());
+            double target_distance = profile_->getDistance(profile_delta_time) ;
+            double base_power = velocity_pid_->getOutput(target_accel, target_velocity, target_distance, profile_distance_traveled, dt) ;
 
             double current_angle = xero::math::normalizeAngleDegrees(getTankDrive().getAngle() - start_angle_) ;
             double straightness_offset = angle_pid_.getOutput(0, current_angle, getTankDrive().getRobot().getDeltaTime());

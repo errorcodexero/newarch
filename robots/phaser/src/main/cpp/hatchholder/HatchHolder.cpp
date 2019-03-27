@@ -17,12 +17,22 @@ namespace xero {
             finger_ = std::make_shared<frc::Solenoid>(robot.getSettingsParser().getInteger("hw:hatchholder:finger"));
             sensor_ = std::make_shared<frc::DigitalInput>(robot.getSettingsParser().getInteger("hw:hatchholder:sensor"));
 
+            duration_low2high_ = robot.getSettingsParser().getDouble("hatchholder:debounce:low2high") ;
+            duration_high2low_ = robot.getSettingsParser().getDouble("hatchholder:debounce:high2low") ;
+
             finger_->Set(false) ;
             arm_extend_->Set(false) ;
             arm_retract_->Set(false) ;
 
             finger_deployed_ = false ;
             arm_deployed_ = false ;
+
+            auto_hatch_enabled_ = true ;
+            
+            has_hatch_ = false ;
+            last_switch_state_ = false ;
+            last_switch_time_ = robot.getTime() ;
+            pending_ = false ;
         }   
 
         HatchHolder::~HatchHolder() {
@@ -35,13 +45,51 @@ namespace xero {
         }  
 
         void HatchHolder::computeState() {
-            has_hatch_ = sensor_->Get() ;
+            bool current = sensor_->Get() ;
+
+            if (pending_) {
+                double dur ;
+                if (has_hatch_)
+                    dur = duration_high2low_ ;
+                else
+                    dur = duration_low2high_ ;
+
+
+                if (current != last_switch_state_) {
+                    last_switch_state_ = current ;
+                    last_switch_time_ = getRobot().getTime() ;
+                }
+                else if (getRobot().getTime() - last_switch_time_ > dur) {
+                    has_hatch_ = current ;
+                    pending_ = false ;
+                }
+            }
+            else
+            {
+                if (current != has_hatch_) {
+                    last_switch_state_ = current ;
+                    last_switch_time_ = getRobot().getTime() ;
+                    pending_ = true ;
+                }
+            }
 
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
             logger << "HatchHolder:" ;
+            logger << " DIO " << sensor_->GetChannel() ;
             logger << " HasHatch " << has_hatch_ ;
-            logger.endMessage() ;            
+            logger.endMessage() ;       
+        }
+
+        void HatchHolder::run() {
+            Subsystem::run() ;
+
+            if (auto_hatch_enabled_) {
+                if (hasHatch() && !isFingerDeployed())
+                    extendFinger() ;
+                else if (!hasHatch() && isFingerDeployed())
+                    retractFinger() ;
+            }
         }
 
         void HatchHolder::extendArm() {

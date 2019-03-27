@@ -3,7 +3,7 @@
 #include "ControllerBase.h"
 #include "AutoController.h"
 #include "basegroups.h"
-#include "OISubsystem.h"
+#include "oi/OISubsystem.h"
 #include "TeleopController.h"
 #include <MessageDestStream.h>
 #include <MessageDestSeqFile.h>
@@ -40,10 +40,6 @@ namespace xero {
             parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;
             output_stream_ = nullptr ;
 
-            if (isCompBot())
-                parser_->addDefine("COMPETITION") ;
-            else
-                parser_->addDefine("PRACTICE") ;
 
             sleep_time_.resize(static_cast<int>(LoopType::MaxValue)) ;
             std::fill(sleep_time_.begin(), sleep_time_.end(), 0.0) ;
@@ -57,6 +53,8 @@ namespace xero {
             sender_ = nullptr ;
 
             message_logger_.setTimeFunction(getTimeFunc) ;
+
+            switch_to_teleop_ = false ;
         }
 #pragma GCC diagnostic pop
 
@@ -66,10 +64,6 @@ namespace xero {
             message_logger_.clear() ;
             if (output_stream_ != nullptr)
                 delete output_stream_ ;
-        }
-
-        bool Robot::isCompBot() {
-            return false ;
         }
 
         void Robot::setupPaths() {
@@ -151,6 +145,19 @@ namespace xero {
         }       
 
         bool Robot::readParamsFile(const std::string &filename) {
+
+            if (isCompBot())
+                parser_->addDefine("COMPETITION") ;
+            else
+                parser_->addDefine("PRACTICE") ;
+
+            message_logger_.startMessage(MessageLogger::MessageType::info) ;
+            message_logger_ << "Reading Params File, Defines:" ;
+            const auto &defines = parser_->getDefines() ;
+            for(const std::string &def : defines)
+                message_logger_ << " " << def ;
+            message_logger_.endMessage() ;
+
             return parser_->readFile(filename) ;
         }
 
@@ -291,6 +298,10 @@ namespace xero {
             //
             auto_controller_ = std::dynamic_pointer_cast<AutoController>(createAutoController()) ;
             assert(auto_controller_ != nullptr) ;
+
+            teleop_controller_ = createTeleopController() ;
+            if (teleop_controller_ == nullptr)
+                teleop_controller_ = std::make_shared<TeleopController>(*this) ;            
 
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
             message_logger_ << "Robot Initialization complete." ;
@@ -435,6 +446,8 @@ namespace xero {
         }
 
         void Robot::Autonomous() {
+            LoopType type = LoopType::Autonomous ;
+
             //
             // Just in case something like the field data changes as we enter
             // the autonomous state
@@ -443,11 +456,16 @@ namespace xero {
             logAutoModeState() ;
 
             controller_ = auto_controller_ ;
+            robot_subsystem_->init(type) ;
 
-            robot_subsystem_->init(LoopType::Autonomous) ;
-
-            while (IsAutonomous() && IsEnabled())
-                robotLoop(LoopType::Autonomous);
+            while (IsAutonomous() && IsEnabled()) {
+                robotLoop(type) ;
+                if (switch_to_teleop_) {
+                    controller_ = teleop_controller_ ;
+                    type = LoopType::OperatorControl ;
+                    switch_to_teleop_ = false ;
+                }
+            }
 
             controller_ = nullptr ;
 
@@ -463,12 +481,8 @@ namespace xero {
             message_logger_ << "Starting Teleop mode" ;
             message_logger_.endMessage() ;           
 
-            controller_ = createTeleopController() ;
-            if (controller_ == nullptr)
-                controller_ = std::make_shared<TeleopController>(*this) ;
-
-            robot_subsystem_->init(LoopType::OperatorControl) ;         
-
+            controller_ = teleop_controller_ ;
+            robot_subsystem_->init(LoopType::OperatorControl) ;
             while (IsOperatorControl() && IsEnabled())
                 robotLoop(LoopType::OperatorControl) ;
 
@@ -487,7 +501,6 @@ namespace xero {
             message_logger_.endMessage() ;
 
             controller_ = createTestController() ;
-
             robot_subsystem_->init(LoopType::Test) ;
 
             while (IsTest() && IsEnabled())
@@ -509,6 +522,7 @@ namespace xero {
             message_logger_.endMessage() ;
 
             automode_ = -1 ;
+            robot_subsystem_->init(LoopType::Disabled) ;
 
             while (IsDisabled()) {
                 updateAutoMode() ;

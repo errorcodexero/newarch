@@ -25,3 +25,11 @@
 #define MSG_GROUP_HATCH_HOLDER                      (1ull << 38)
 
 #define MSG_GROUP_PHASER_OI                         (1ull << 39)
+
+#define MSG_GROUP_VISION_TERMINATOR                 (1ull << 40)
+
+#define MSG_GROUP_PHASER_TURNTABLE_VERBOSE          (1ull << 41)
+
+#define MSG_GROUP_READY_ACTION                      (1ull << 42)
+
+#define MSG_GROUP_STRAFE                      (1ull << 43)

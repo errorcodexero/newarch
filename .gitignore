@@ -27,5 +27,6 @@ html
 rtf
 *.stackdump
 makebuild
-deploy
 logs
+/deploy
+.vscode/ipch

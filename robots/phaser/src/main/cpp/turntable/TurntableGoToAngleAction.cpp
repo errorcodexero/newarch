@@ -129,7 +129,7 @@ namespace xero {
             if (is_done_) {
                 if (!lost_encoders_) {
                     output_ = pidctrl_.getOutput(target_, angle, dt) ;
-                    turntable.setMotorPower(output_) ;                
+                    turntable.setMotorPower(output_) ;
                 }
             }
             else
@@ -143,6 +143,7 @@ namespace xero {
                 {
                     logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
                     logger << "TurntableGoToAngle: action completed " ;
+                    logger << ", time " << elapsed ;
                     logger << ", delta " << delta ;
                     logger.endMessage() ; 
 

@@ -10,6 +10,7 @@ Encoder::Encoder(int first, int second)
     first_ = first;
     second_ = second;
     value_ = 0;
+    reverse_ = false ;
 
     RobotSimBase &sim = RobotSimBase::getRobotSimulator();
     sim.connect(this);

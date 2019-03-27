@@ -2,7 +2,7 @@
 
 #include "ControllerBase.h"
 #include "AutoMode.h"
-#include "OISubsystem.h"
+#include "oi/OISubsystem.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <iostream>
 #include <cassert>
@@ -30,14 +30,8 @@ namespace xero {
             /// \brief This method is called once per robot loop by the main robot class
             /// For the AutoController class this method calls the action that is the current
             /// automode that is running.
-            virtual void run() {
-                if (actionptr_ != nullptr) {
-                    actionptr_ ->run();
+            virtual void run()  ;
 
-                    if (actionptr_->isDone())
-                        actionptr_ = nullptr ;
-                }
-            }
 
             /// \brief return a human readable name for the auto mode
             /// \returns auto mode name

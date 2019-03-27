@@ -14,7 +14,7 @@ namespace xero  {
                 virtual void run(double dt) ;
                 virtual std::string toString() ;
 
-                void processEvent(const std::string &event, int value) ;
+                bool processEvent(const std::string &event, int value) ;
 
                 virtual void addDevice(frc::DriverStation *station) ;
                 virtual void inputChanged(SimulatedObject *obj) ;

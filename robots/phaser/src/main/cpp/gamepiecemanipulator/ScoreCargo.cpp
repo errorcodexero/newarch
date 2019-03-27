@@ -2,6 +2,7 @@
 # include <singlemotorsubsystem/SingleMotorPowerAction.h>
 # include "turntable/TurntableGoToAngleAction.h"
 # include "cargoholder/CargoHolder.h"
+#include <oi/DriverGamepadRumbleAction.h>
 
 using namespace xero::base ;
 
@@ -12,9 +13,11 @@ namespace xero {
             auto lifter = getGamePiece().getLifter() ; 
             auto turntable = getGamePiece().getTurntable();
             auto cargo_holder = getGamePiece().getCargoHolder() ;
+            auto oi = getGamePiece().getRobot().getOI() ;            
 
             set_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, "cargoholder:score:power", "cargoholder:score:time") ;
             stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
+            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1, 1.0, 1.0) ;            
        }
 
        ScoreCargo::~ScoreCargo() {
@@ -34,6 +37,9 @@ namespace xero {
                 if (set_cargo_holder_motor_->isDone()) {
                     auto cargo_holder = getGamePiece().getCargoHolder() ;
                     cargo_holder->setAction(stop_cargo_holder_motor_) ;
+
+                    auto oi = getGamePiece().getRobot().getOI() ;
+                    oi->setAction(rumble_) ;                    
                     state_ = State::Idle ;
                 }
                 break ;

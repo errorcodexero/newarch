@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PIDCtrl.h>
+#include <PIDACtrl.h>
 #include <StallMonitor.h>
 #include <TrapezoidalProfile.h>
 
@@ -73,8 +74,13 @@ namespace xero {
         private:
             void checkTriggeredEvents(double dist) ;
 
+            static const char *kvname_ ;
+            static const char *kaname_ ;
+            static const char *kpname_ ;
+            static const char *kdname_ ;
+
         private:
-            xero::misc::PIDCtrl velocity_pid_ ;
+            std::shared_ptr<xero::misc::PIDACtrl> velocity_pid_ ;
             xero::misc::PIDCtrl angle_pid_;
             std::shared_ptr<xero::misc::TrapezoidalProfile> profile_;
             double start_time_ ;

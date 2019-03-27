@@ -24,18 +24,20 @@ namespace xero {
                 state_ = init ? State::high : State::low ;
                 delaylow_ = low ;
                 delayhigh_ = high ;
-            }            
+            } 
+
+            bool get() {
+                return state_ == State::high || state_ == State::maybelow ;
+            }
 
             /// \brief Return the debounced state of the boolean
             /// \param st the state of the original boolean
             /// \param now the current time
             /// \returns the debounced state of the boolean
-            bool getState(bool st, double now) {
-                bool ret = false ;
-
+            void update(bool st, double now) 
+            {
                 switch(state_) {
                 case State::low:
-                    ret = false ;
                     if (st) {
                         //
                         // Start the transition to high
@@ -46,17 +48,14 @@ namespace xero {
                     break ;
 
                 case State::maybehigh:
-                    ret = false ;
                     if (!st)
                         state_ = State::low ;
                     else if (now - start_ > delayhigh_) {
-                        ret = true ;
                         state_ = State::high ;
                     }
                     break ;
 
                 case State::high:
-                    ret = true ;
                     if (!st) {
                         state_ = State::maybelow ;
                         start_ = now ;
@@ -64,17 +63,13 @@ namespace xero {
                     break ;
 
                 case State::maybelow:
-                    ret = true ;
                     if (st)
                         state_ = State::high ;
                     else if (now - start_ > delaylow_) {
-                        ret = false ;
                         state_ = State::low ;
                     }
                     break ;
                 }
-
-                return ret ;
             }
 
         private:

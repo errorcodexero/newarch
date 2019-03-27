@@ -1,6 +1,7 @@
 #include <frc/SimEventManager.h>
 #include <algorithm>
 #include <fstream>
+#include <iostream>
 
 namespace xero {
     namespace sim {
@@ -41,16 +42,17 @@ namespace xero {
             }) ;
         }
 
-        void SimEventManager::readEvents(const std::string &filename) {
+        bool SimEventManager::readEvents(const std::string &filename) {
             std::ifstream in(filename) ;
             std::string line ;
             std::vector<std::string> words ;
+            size_t lineno = 0 ;
 
             if (in.bad() || in.fail())
-                return ;
+                return false ;
 
             while (std::getline(in, line)) {
-
+                lineno++ ;
                 size_t index = 0 ;
                 while (index < line.length() && std::isspace(line[index]))
                     index++ ;
@@ -78,11 +80,28 @@ namespace xero {
                 if (words.size() != 4)
                     continue ;
 
-                double time = std::stod(words[0]) ;
-                int value = std::stoi(words[3]) ;
+                int value ;
+                double time ;
+                try {
+                    time = std::stod(words[0]) ;
+                }
+                catch(...) {
+                    std::cerr << "ReadSimEvents: Invalid time value '" << words[0] << "' in line " << lineno << " - line ignored" << std::endl ;
+                    continue ;
+                }
+
+                try {
+                    value = std::stoi(words[3]) ;
+                }
+                catch(...) {
+                    std::cerr << "ReadSimEvents: Invalid event value '" << words[3] << "' in line " << lineno << " - line ignored" << std::endl ;
+                    continue ;                    
+                }
 
                 addEvent(words[1], words[2], time, value) ;                
             }
+
+            return true ;
         }
     }
 }

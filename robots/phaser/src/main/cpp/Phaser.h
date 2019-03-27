@@ -45,7 +45,8 @@ namespace xero {
 
         private:
             std::shared_ptr<frc::Compressor> compressor_ ;
-            frc::DigitalInput *comp_bot_ ;
+            bool comp_bot_flag_set_ ;
+            bool comp_bot_ ;
         } ;
     }
 }

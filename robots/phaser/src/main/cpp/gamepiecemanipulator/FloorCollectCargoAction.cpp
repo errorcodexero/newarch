@@ -3,6 +3,7 @@
 #include <lifter/LifterGoToHeightAction.h>
 #include "turntable/TurntableGoToAngleAction.h"
 #include "cargointake/CargoIntakeAction.h"
+#include <oi/DriverGamepadRumbleAction.h>
 
 using namespace xero::base ;
 
@@ -14,23 +15,31 @@ namespace xero {
             auto turntable = getGamePiece().getTurntable();
             auto cargo_intake = getGamePiece().getCargoIntake();
             auto cargo_holder = getGamePiece().getCargoHolder();
+            auto oi = getGamePiece().getRobot().getOI() ;
 
             //
             // Pre-create all of the actions needed so that we are not constantly creating and
             // destroying this during the robot loop
             //
-            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:safe_turn") ;
+            set_lifter_safe_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "turntable:safe_lifter_height") ;
             set_turntable_cargo_angle_ = std::make_shared<TurntableGoToAngleAction>(*turntable, "turntable:angle:cargo:floor_collect") ;
             set_lifter_cargo_intake_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:floor_collect") ;            
             deploy_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, true) ;
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
             set_lifter_cargo_collected_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:cargo:collected") ;            
 
+            cargo_delay_ = getGamePiece().getRobot().getSettingsParser().getDouble("cargointake:delay") ;
             
             set_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, "cargointake:power") ;
             stop_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, 0.0) ;
+            reverse_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, "cargointake:reverse:power") ;
             set_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, "cargoholder:collect:power") ;
             stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
+                     
+            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1, 1.0, 1.0) ;            
+
+            state_ = State::Idle ;
+            reversed_ = false ;
         }
 
         FloorCollectCargoAction::~FloorCollectCargoAction() {
@@ -45,6 +54,23 @@ namespace xero {
             auto lifter = getGamePiece().getLifter() ;
             lifter->setAction(set_lifter_safe_height_) ;
             state_ = State::LifterGoToSafeHeight ;
+            reversed_ = false ;
+        }
+
+        void FloorCollectCargoAction::reverseIntake() {
+            if (state_ == State::WaitForCargo || state_ == State::WaitForCargo2) {            
+                auto cargo_intake = getGamePiece().getCargoIntake() ;
+                reversed_ = !reversed_ ;
+
+                if (reversed_) {
+                    cargo_intake->setAction(reverse_cargo_intake_motor_) ;
+                }
+                else {
+                    cargo_intake->setAction(set_cargo_intake_motor_) ;                    
+                }
+
+                state_ = State::WaitForCargo ;
+            }
         }
 
         void FloorCollectCargoAction::run() {
@@ -123,9 +149,10 @@ namespace xero {
                     //    and the holder.
                     //
                     cargo_intake->setAction(stop_cargo_intake_motor_) ;
-                    cargo_holder->setAction(stop_cargo_holder_motor_) ;
+                    cargo_intake->setAction(retract_cargo_intake_) ;
 
-                    state_ = State::StopAllMotors ;
+                    state_ = State::DelayForCargo ;
+                    cargo_start_ = getGamePiece().getRobot().getTime() ;
                 }
                 else if (cargo_intake->hasCargo()) {
                     cargo_intake->setAction(retract_cargo_intake_) ;
@@ -140,11 +167,18 @@ namespace xero {
                     //    and the holder.
                     //
                     cargo_intake->setAction(stop_cargo_intake_motor_) ;
-                    cargo_holder->setAction(stop_cargo_holder_motor_) ;
 
-                    state_ = State::StopAllMotors ;
+                    state_ = State::DelayForCargo ;
+                    cargo_start_ = getGamePiece().getRobot().getTime() ;
                 }
                 break ;            
+
+            case State::DelayForCargo:
+                if (getGamePiece().getRobot().getTime() - cargo_start_ > cargo_delay_) {
+                    cargo_holder->setAction(stop_cargo_holder_motor_) ;
+                    state_ = State::StopAllMotors ;                    
+                }
+                break ;
 
             case State::StopAllMotors:
                 //
@@ -159,15 +193,22 @@ namespace xero {
                     auto lifter = getGamePiece().getLifter() ;
                     lifter->setAction(set_lifter_cargo_collected_height_) ;
                     state_ = State::RaiseLifter ;
+
+                    auto oi = getGamePiece().getRobot().getOI() ;
+                    oi->setAction(rumble_) ;                     
                 }
                 break ;
 
             case State::RaiseLifter:
                 if (set_lifter_cargo_collected_height_->isDone()) {
                     auto cargo_intake = getGamePiece().getCargoIntake() ;                    
-                    cargo_intake->setAction(retract_cargo_intake_) ;
-                    auto lifter = getGamePiece().getLifter() ;
-                    state_ = State::RetractIntake ;
+                    if (cargo_intake->isDeployed()) {
+                        cargo_intake->setAction(retract_cargo_intake_) ;
+                        state_ = State::RetractIntake ;
+                    }
+                    else {
+                        state_ = State::Idle ;
+                    }
                 }
                 break ;
 
@@ -223,6 +264,7 @@ namespace xero {
 
             case State::WaitForCargo:
             case State::WaitForCargo2:
+            case State::DelayForCargo:
                 // We are deploying the intake, must get it back into the robot before
                 // the cancel operation is done
                 cargo_intake->setAction(stop_cargo_intake_motor_) ;

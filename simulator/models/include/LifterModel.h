@@ -14,6 +14,9 @@ namespace xero  {
             /// \brief Destroy the model.
             virtual ~LifterModel() ;
 
+
+            virtual bool processEvent(const std::string &name, int value) ;            
+
             /// \brief Convert the model to a string.
             /// \returns details about the lifter's state
             virtual std::string toString() ;
@@ -73,14 +76,12 @@ namespace xero  {
             frc::DigitalInput *bottom_limit_ ;
             frc::DigitalInput *top_limit_ ;
             ctre::phoenix::motorcontrol::can::TalonSRX *motor1_ ;
-            ctre::phoenix::motorcontrol::can::TalonSRX *motor2_ ;            
 
             int encoder_1_ ;
             int encoder_2_ ;
             int bottom_limit_channel_ ;
             int top_limit_channel_ ;
             int motor_1_ ;
-            int motor_2_ ;
 
             double bottom_limit_height_ ;
             double top_limit_height_ ;

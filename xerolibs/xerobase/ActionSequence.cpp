@@ -1,6 +1,7 @@
 #include "ActionSequence.h"
 #include "basegroups.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <cassert>
 
 using namespace xero::misc ;
 
@@ -30,6 +31,7 @@ void ActionSequence::startNextAction()
     index_++;
     if (static_cast<size_t>(index_) < actionSequence_.size())
     {
+        assert(group_ != 0) ;
         logger_.startMessage(MessageLogger::MessageType::debug, group_) ;
         logger_ << "Actions: starting " << index_ << " of " << actionSequence_.size() - 1 ;
         logger_ << " '" << actionSequence_[index_]->toString() << "'" ;
@@ -49,8 +51,18 @@ void ActionSequence::run()
 {
     while (1)
     {
+        if (index_ == static_cast<int>(actionSequence_.size()))
+            break ;
+
         if (index_ == -1 || actionSequence_[index_]->isDone())
         {
+            if (index_ != -1) {
+                logger_.startMessage(MessageLogger::MessageType::debug, group_) ;
+                logger_ << "Actions: completed " << index_ << " of " << actionSequence_.size() - 1 ;
+                logger_ << " '" << actionSequence_[index_]->toString() << "'" ;
+                logger_.endMessage() ;
+            }
+            
             startNextAction();
             if (static_cast<size_t>(index_) == actionSequence_.size())
                 break;
@@ -80,7 +92,6 @@ std::string ActionSequence::toString()
     result += " [" ;
     for(size_t i = 0 ; i < actionSequence_.size() ; i++) {
         auto ptr = actionSequence_[i] ;
-        std::cout << ptr->toString() << std::endl ;
         if (i != 0)
             result += "," ;
         result += actionSequence_[i]->toString() ;

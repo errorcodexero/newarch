@@ -1,4 +1,6 @@
 #include "PhaserRobotSubsystem.h"
+#include "ClimbAction.h"
+#include "StrafeAction.h"
 #include "phaserids.h"
 #include <Robot.h>
 #include <list>
@@ -34,9 +36,22 @@ namespace xero {
 
             game_piece_man_ = std::make_shared<GamePieceManipulator>(robot) ;
             addChild(game_piece_man_) ;
+
+            climber_ = std::make_shared<Climber>(robot) ;
+            addChild(climber_) ;
         }
 
         PhaserRobotSubsystem::~PhaserRobotSubsystem() {
         }
+
+        bool PhaserRobotSubsystem::canAcceptAction(ActionPtr act) {
+            std::shared_ptr<ClimbAction> climb = std::dynamic_pointer_cast<ClimbAction>(act) ;
+            if (climb != nullptr)
+                return true ;
+
+            std::shared_ptr<StrafeAction> strafe = std::dynamic_pointer_cast<StrafeAction>(act) ;
+            return strafe != nullptr ;
+        }
     }
 }
+

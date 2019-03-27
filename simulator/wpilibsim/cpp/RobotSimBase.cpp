@@ -233,11 +233,49 @@ namespace xero {
             }
         }
 
-        void RobotSimBase::dispatchEvent(const SimEvent &ev) {
+        void RobotSimBase::dispatchEvent(const SimEvent &event) {
+            int count = 0 ;
+            int processed = 0 ;
             for(auto model : models_) {
-                if (model->getName() == ev.getModel())
-                    model->processEvent(ev.getName(), ev.getValue()) ;
+                if (model->getName() == event.getModel()) {
+                    if (model->processEvent(event.getName(), event.getValue()))
+                        processed++ ;
+
+                    count++ ;
+                }
             }
+
+            MessageLogger &logger = getRobotMessageLogger() ;
+
+            if (count == 0) {
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SIMULATOR) ;
+                logger << "Event Dispatch Error: " << event.getModel() ;
+                logger << " " << event.getName() ;
+                logger << " " << event.getValue() ;
+                logger << " - no model consumed the event" ;
+                logger.endMessage() ;
+            }
+            else if (processed == 0) {
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SIMULATOR) ;
+                logger << "Event Dispatch Error: " << event.getModel() ;
+                logger << " " << event.getName() ;
+                logger << " " << event.getValue() ;
+                logger << " - the model did not process the event" ;
+                logger.endMessage() ;                
+            }
+            else if (processed > 1) {
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SIMULATOR) ;
+                logger << "Event Dispatch Error: " << event.getModel() ;
+                logger << " " << event.getName() ;
+                logger << " " << event.getValue() ;
+                logger << " - more than one model consumed the event" ;
+                logger.endMessage() ;                
+            }            
+        }
+
+        MessageLogger &RobotSimBase::getRobotMessageLogger() {
+            xero::base::Robot *xerorobot = dynamic_cast<xero::base::Robot *>(robot_) ;
+            return xerorobot->getMessageLogger() ;
         }
 
         //
@@ -258,15 +296,12 @@ namespace xero {
 
                 while (events_.size() > 0 && events_.getFirstEventTime() < now) {
                     const SimEvent &event = events_.getFirstEvent() ;
-                    xero::base::Robot *xerorobot = dynamic_cast<xero::base::Robot *>(robot_) ;
-                    if (xerorobot != nullptr) {
-                        MessageLogger &logger = xerorobot->getMessageLogger() ;
-                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SIMULATOR) ;
-                        logger << "Simulation Event: " << event.getModel() ;
-                        logger << " " << event.getName() << " " << event.getTime() ;
-                        logger << " " << event.getValue() ;
-                        logger.endMessage() ;
-                    }
+                    MessageLogger &logger = getRobotMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SIMULATOR) ;
+                    logger << "Simulation Event: " << event.getModel() ;
+                    logger << " " << event.getName() ;
+                    logger << " " << event.getValue() ;
+                    logger.endMessage() ;
                     
                     dispatchEvent(event) ;
                     events_.removeFirstEvent() ;

@@ -13,7 +13,7 @@ namespace xero {
 
             void addEvent(const std::string &model, const std::string &event, double time, int value) ;
 
-            void readEvents(const std::string &evfile) ;
+            bool readEvents(const std::string &evfile) ;
 
             size_t size() {
                 return events_.size() ;

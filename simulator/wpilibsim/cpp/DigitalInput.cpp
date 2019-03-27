@@ -7,7 +7,7 @@ using namespace xero::sim ;
 namespace frc {
     DigitalInput::DigitalInput(int which) {
         which_ = which ;
-        value_ = false ;
+        value_ = true ;
         RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
         sim.connect(this) ;
     }
@@ -23,7 +23,10 @@ namespace frc {
     }
 
     void DigitalInput::SimulatorSetValue(bool v) {
-        std::lock_guard<std::mutex> lock(getLockMutex()) ;      
+        std::lock_guard<std::mutex> lock(getLockMutex()) ;   
+
+        if (which_ == 7)
+            value_ = false ;   
 
         value_ = v ;
     }

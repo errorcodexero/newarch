@@ -32,7 +32,6 @@ namespace xero {
             dist_r_ = 0.0 ;
             last_dist_l_ = 0.0 ;
             last_dist_r_ = 0.0 ;
-            dumpstate_ = false ;
 
 #ifdef GOPIGO
             navx_ = std::make_shared<AHRS>(frc::SerialPort::Port::Port_0) ;
@@ -47,11 +46,13 @@ namespace xero {
                 logger .endMessage() ;
                 navx_ = nullptr ;
             }
+            else {
+                navx_->Reset() ;
+            }
 
             double width = settings.getDouble("tankdrive:width") ;
             double scrub = settings.getDouble("tankdrive:scrub") ;
             kin_ = std::make_shared<xero::misc::Kinematics>(width, scrub) ;
-
         }
 
         TankDrive::~TankDrive() {   
@@ -93,7 +94,8 @@ namespace xero {
                 auto &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << "Shifted tankdrive to low gear" ;
-                logger.endMessage() ;                
+                logger.endMessage() ;    
+                frc::SmartDashboard::PutBoolean("HighGear", false) ;
             } else {
                 auto &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::warning) ;
@@ -107,7 +109,8 @@ namespace xero {
                 auto &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << "Shifted tankdrive to high gear" ;
-                logger.endMessage() ;                
+                logger.endMessage() ;  
+                frc::SmartDashboard::PutBoolean("HighGear", true) ;
             } else {
                 auto &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::warning) ;
@@ -204,6 +207,7 @@ namespace xero {
             if (navx_ != nullptr) {
                 angle = navx_->GetYaw() ;
                 angular_.update(getRobot().getDeltaTime(), angle) ;
+                total_angle_ = navx_->GetAngle() ;
             }
 
             left_linear_.update(getRobot().getDeltaTime(), getLeftDistance()) ;
@@ -211,8 +215,8 @@ namespace xero {
 
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE_VERBOSE);
-            logger << "time " << getRobot().getTime() ;
-            logger << ", linear dist " << getDist() ;
+            logger << "TankDrive: " ;
+            logger << " linear dist " << getDist() ;
             logger << ", velocity " << getVelocity() ;
             logger << ", accel " << getAcceleration() ;
             logger << ", angle dist " << getAngle() ;
@@ -226,6 +230,17 @@ namespace xero {
 
             last_dist_l_ = dist_l_ ;
             last_dist_r_ = dist_r_ ;
+
+
+            if (navx_ != nullptr) {
+                double vx = navx_->GetVelocityX() ;
+                double vy = navx_->GetVelocityY() ;
+                double vz = navx_->GetVelocityZ() ;
+                xyz_velocity_ = std::sqrt(vx * vx + vy * vy + vz * vz) ;
+            }
+            else {
+                xyz_velocity_ = 0.0 ;
+            }
         }
 
         void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {

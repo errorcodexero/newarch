@@ -20,6 +20,10 @@ namespace xero {
             virtual void cancel() ;
             virtual std::string toString() ;
 
+            double getTargetAngle() const {
+                return target_ ;
+            }
+
         private:
             double getAngleDifference(double start, double end) ;
 

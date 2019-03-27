@@ -148,11 +148,15 @@ namespace xero {
             /// \brief return the current controller
             std::shared_ptr<ControllerBase> getCurrentController() {
                 return controller_ ;
-            }            
+            }
+
+            void switchToTeleop() {
+                switch_to_teleop_ = true ;
+            }
 
         protected:
 
-            virtual bool isCompBot() ;
+            virtual bool isCompBot() = 0 ;
 
             /// \brief initialize the message logger subsystem
             virtual void initializeMessageLogger() ;
@@ -243,6 +247,8 @@ namespace xero {
             // Auto mode controller, created at the start and stored
             std::shared_ptr<AutoController> auto_controller_;           
 
+            std::shared_ptr<ControllerBase> teleop_controller_ ;
+
             // The list of subsystem that belong to the robot
             SubsystemPtr robot_subsystem_ ;
             std::shared_ptr<DriveBase> drivebase_subsystem_ ;
@@ -296,6 +302,9 @@ namespace xero {
 
             // The total number of columns for plot data
             int columns_ ;        
+
+            // If true, switch from automode to teleop
+            bool switch_to_teleop_ ;
         } ;
     }
 }

@@ -4,7 +4,7 @@
 #include "Encoder.h"
 #include "Solenoid.h"
 #include "Relay.h"
-#include <ctre/phoenix/motorcontrol/can/TalonSRX.h>
+#include <ctre/Phoenix.h>
 #include "VictorSP.h"
 #include "AHRS.h"
 #include "Timer.h"
@@ -89,9 +89,11 @@ namespace xero {
                 return tank_drive_model_->getYPos() ;
             }           
 
-            void readEvents(const std::string &filename) {
-                events_.readEvents(filename) ;
+            bool readEvents(const std::string &filename) {
+                return events_.readEvents(filename) ;
             }
+
+            xero::misc::MessageLogger &getRobotMessageLogger() ;
 
         protected:
             void addModel(std::shared_ptr<SubsystemModel> model) {

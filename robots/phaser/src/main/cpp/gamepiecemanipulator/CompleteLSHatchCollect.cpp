@@ -3,6 +3,7 @@
 #include "turntable/TurntableGoToAngleAction.h"
 #include "lifter/LifterGoToHeightAction.h"
 #include "hatchholder/HatchHolderAction.h"
+#include <oi/DriverGamepadRumbleAction.h>
 
 using namespace xero::base ;
 
@@ -13,13 +14,15 @@ namespace xero {
             auto lifter = getGamePiece().getLifter() ;
             auto turntable = getGamePiece().getTurntable();
             auto hatch_holder = getGamePiece().getHatchHolder() ;
+            auto oi = getGamePiece().getRobot().getOI() ;
 
             set_lifter_shift_up_height_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:loadingstation:hatch:shift_up", true) ;
 
-            set_extend_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM, "hatchholder:collect:delay") ;
-            set_retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatcholder:default:delay") ;
-            set_retract_hatch_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER, "hatcholder:default:delay") ;
-            set_deploy_hatch_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_FINGER, "hatcholder:default:delay") ;
+            set_extend_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_ARM, "hatchholder:collect:delay", "hatchholder:collect:totaldelay") ;
+            set_retract_arm_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_ARM, "hatchholder:default:delay") ;
+            set_retract_hatch_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::RETRACT_FINGER, "hatchholder:default:delay") ;
+            set_deploy_hatch_finger_ = std::make_shared<HatchHolderAction>(*hatch_holder, HatchHolderAction::Operation::EXTEND_FINGER, "hatchholder:default:delay") ;
+            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1, 1.0, 1.0) ;            
         }
 
         CompleteLSHatchCollect::~CompleteLSHatchCollect() {
@@ -67,11 +70,10 @@ namespace xero {
                 
             case State::RetractArm:
                 if(set_retract_arm_->isDone()){
-                    state_ = State::Idle ;
+                    auto oi = getGamePiece().getRobot().getOI() ;
+                    oi->setAction(rumble_) ;
 
-                    if (!hatch_holder->hasHatch())
-                        hatch_holder->setAction(set_retract_hatch_finger_) ;
-                        
+                    state_ = State::Idle ;
                 }
                 break ;
                 

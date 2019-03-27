@@ -7,7 +7,6 @@
 
 /// \file
 
-
 namespace xero {
     namespace base {
         /// \brief base class for the operator mode controller
@@ -31,6 +30,8 @@ namespace xero {
             }
 
             void removeDetector(DetectAutoSequence *det) ;
+
+            void printDetectors() ;
 
         private:
             std::shared_ptr<AutoMode> seq_ ;     

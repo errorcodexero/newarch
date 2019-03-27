@@ -94,14 +94,6 @@ namespace xero {
                 tank->invertRightMotors() ;
             }
 
-            if (isDefinedAndTrue("hw:tankdrive:invert:encoders:left")) {
-                tank->invertLeftEncoder() ;
-            }
-
-            if (isDefinedAndTrue("hw:tankdrive:invert:encoders:right")) {
-                tank->invertRightEncoder() ;
-            }
-
             db_ = tank ;
             addChild(db_) ;
         }

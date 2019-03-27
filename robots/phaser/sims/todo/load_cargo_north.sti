@@ -1,0 +1,52 @@
+#
+# This file does a floor collect cargo
+#
+
+#
+# Automode values
+#
+#  Value        Setting
+#    0          -100
+#    1          -80
+#    2          -60
+#    3          -40
+#    4          -20
+#    5           10
+#    6           30
+#    7           50
+#    8           70
+#    9           90
+#
+
+#
+# Tracking Viewing Nothing switch
+#
+#  Value         Mode
+#  100           manual
+#  0             semi-auto
+#  -100          auto
+#
+
+#
+# Start up conditions
+#
+0.1,oi,automode,-100                                    # Automode switch set to zero
+0.1,oi,tracking_viewing_nothing_switch,100              # Set the auto/semi/manual switch to manual
+0.1,oi,hatch_cargo_switch,0                             # set the hatch/cargo switch to cargo
+
+#
+# Should rotate the turntable if a safe manner to put the hatch 
+# holder on the north side of the robot
+#
+4.0,oi,compass_south,1                                  # Press the joystick north button
+4.2,oi,compass_south,0                                  # Release the joystick north button
+
+#
+# Should complete the place operation manually
+#
+12.0,oi,go,1                                             # Press the go button
+12.2,oi,go,0                                             # Release the go button
+18.0,cargoholder,cargo,1                                 # The cargo appears in the cargo holder
+
+22.0,oi,compass_north,1
+22.2,oi.compass_north,0

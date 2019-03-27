@@ -33,6 +33,20 @@ bool DispatchAction::isDone() {
 
 void DispatchAction::cancel() {
     if (block_) {
+        MessageLogger &logger = subsystem_->getRobot().getMessageLogger() ;
+        logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
+        logger << "Actions: dispatch action canceled '" << subsystem_->getName() << "' action '" ;
+        logger << action_->toString() << "'" ;
+        logger.endMessage() ;
+
+        if (subsystem_->getName() == "gamepiecemanipulator") {
+            MessageLogger &logger = subsystem_->getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
+            logger << "Actions: dispatch action canceled '" << subsystem_->getName() << "' action '" ;
+            logger << action_->toString() << "'" ;
+            logger.endMessage() ;            
+        }
+
         action_->cancel() ;
         subsystem_->setAction(nullptr) ;
     }

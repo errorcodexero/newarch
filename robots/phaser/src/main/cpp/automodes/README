@@ -1,9 +1,0 @@
-Targets auto modes to think about.
-
-Priority    Start       First Target           Second Target              Third Target
---------------------------------------------------------------------------------------
-1           Center      Center Hatch           Loading Station            Center Hatch
-2           Left/Right  Same Side Hatch        Loading Station            Center Hatch  (center bot must get out of way)
-3           Left/Right  Same Side Hatch        Loading Station            Same Side Hatch
-4           Left/Right  Same Side Hatch        Ball Loading Station       Same Wide Cargo
-

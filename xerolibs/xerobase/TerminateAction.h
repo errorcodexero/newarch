@@ -2,13 +2,15 @@
 #include "ITerminator.h"
 #include "MessageLogger.h"
 #include <list>
+#include "Robot.h"
 #include <memory>
 
 namespace xero{
     namespace base {
         class TerminateAction : public Action {
         public:
-            TerminateAction(ActionPtr a, xero::misc::MessageLogger &logger) ;
+            TerminateAction(ActionPtr a, Robot &robot, double delay = 0.0) ;
+            TerminateAction(std::shared_ptr<Subsystem> sub, ActionPtr , Robot &robot, double delay = 0.0) ;
 
             virtual void start() ;
 
@@ -28,7 +30,9 @@ namespace xero{
             ActionPtr action_ ;
             std::list<std::shared_ptr<ITerminator>> terminators_ ;
             bool is_done_ ;
-            xero::misc::MessageLogger &logger_ ;
+            Robot &robot_ ;
+            double delay_ ;
+            double start_ ;
         };
 
         typedef std::shared_ptr<TerminateAction> TermActionPtr ;

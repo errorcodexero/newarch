@@ -14,7 +14,7 @@ namespace xero {
             /// \brief this action applies power to the left and right side of the robot
             /// \param db the drivebase this action applies to
             /// \param path the name of the path to follow
-            TankDriveFollowPathAction(TankDrive &db, const std::string &path) ;
+            TankDriveFollowPathAction(TankDrive &db, const std::string &path, bool reverse = false) ;
 
             /// \brief destroy the action object
             virtual ~TankDriveFollowPathAction() ;
@@ -42,11 +42,13 @@ namespace xero {
             double right_start_ ;
             double start_time_ ;
             double turn_correction_ ;
-            double angle_error_ ;
-            double angle_decay_ ;
+            double angle_correction_ ;
             std::shared_ptr<xero::misc::XeroPath> path_ ;
             std::shared_ptr<xero::misc::PIDACtrl> left_follower_ ;
             std::shared_ptr<xero::misc::PIDACtrl> right_follower_ ;
+            bool reverse_ ;
+            double start_angle_ ;
+            double target_start_angle_ ;
 
             int plotid_ ;
             static std::list<std::string> plot_columns_ ;            

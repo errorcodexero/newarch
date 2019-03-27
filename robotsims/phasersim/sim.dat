@@ -11,32 +11,27 @@ hw:tankdrive:leftmotor:3             3                                  # TalonS
 hw:tankdrive:rightmotor:1            4                                  # TalonSRX 4
 hw:tankdrive:rightmotor:2            5                                  # TalonSRX 5
 hw:tankdrive:rightmotor:3            6                                  # TalonSRX 6
-hw:tankdrive:leftencoder:1           0                                  # DIO 0
-hw:tankdrive:leftencoder:2           1                                  # DIO 1
-hw:tankdrive:rightencoder:1          2                                  # DIO 2
-hw:tankdrive:rightencoder:2          3                                  # DIO 3
+hw:tankdrive:leftencoder:1           2                                  # DIO 0
+hw:tankdrive:leftencoder:2           3                                  # DIO 1
+hw:tankdrive:rightencoder:1          0                                  # DIO 2
+hw:tankdrive:rightencoder:2          1                                  # DIO 3
 hw:tankdrive:shifter                 0                                  # Solenoid 0
 
 # Hatch Holder
-hw:hatchholder:arm                   1                                  # Solenoid 1
-hw:hatchholder:finger                2                                  # Solenoid 2
+hw:hatchholder:arm:extend            6                                  # Solenoid
+hw:hatchholder:arm:retract           7                                  # Solenoid
+hw:hatchholder:finger                5                                  # Solenoid
 hw:hatchholder:sensor               21                                  # DIO 10
 
-# Hatch Intake
-hw:hatchintake:motor                11                                  # VictorSPX 11
-hw:hatchintake:sensor               23                                  # DIO 12
-hw:hatchintake:deploy                3                                  # Solenoid 3
-
 # Lifter
-hw:lifter:encoder1                   6                                  # DIO 6
-hw:lifter:encoder2                   7                                  # DIO 7
-hw:lifter:motor:1                    8                                  # TalonSRX 8
-hw:lifter:motor:2                    9                                  # TalonSRX 9
+hw:lifter:encoder1                   8                                  # DIO 6
+hw:lifter:encoder2                   9                                  # DIO 7
+hw:lifter:motor:1                    10                                 # TalonSRX
 
 # Turntable
 hw:turntable:encoder1                4                                  # DIO 4
 hw:turntable:encoder2                5                                  # DIO 5
-hw:turntable:motor                   7                                  # TalonSRX 7
+hw:turntable:motor                   8                                  # TalonSRX 7
 
 hw:linesensor:front:0                10                                 # Digital IO
 hw:linesensor:front:1                11                                 # Digital IO
@@ -51,12 +46,12 @@ hw:cargoholder:motor                10                                  # Victor
 hw:cargoholder:sensor               20                                  # DIO 11
 
 # Cargo Intake
-hw:cargointake:motor                12                                  # VictorSPX 12
-hw:cargointake:deploy                5                                  # Solenoid 5
+hw:cargointake:motor                 9                                  # VictorSPX 12
+hw:cargointake:deploy                1                                  # Solenoid 5
 hw:cargointake:sensor               22                                  # Sensor
 
 # Climber
-hw:climber:deploy                    6                                  # Solenoid 6
+hw:climber:deploy                    2                                  # Solenoid 6
 
 ######################################################################################
 #
@@ -67,10 +62,10 @@ hw:climber:deploy                    6                                  # Soleno
 #
 # These are the real world characteristics of the drivebase
 #
-tankdrive:high:maxvelocity                              144             # in / sec
-tankdrive:high:maxacceleration                          72              # in / sec / sec
+tankdrive:high:maxvelocity                              160             # in / sec
+tankdrive:high:maxacceleration                          80              # in / sec / sec
 tankdrive:low:maxvelocity                               36              # in / sec
-tankdrive:low:maxacceleration                           27              # in / sec
+tankdrive:low:maxacceleration                           18              # in / sec
 
 #
 # The maximum random error applied to the left and right
@@ -84,24 +79,24 @@ tankdrive:sim:error_per_side                            0.0
 # The number of ticks per revolution of the wheel for the 
 # encoders
 #
-tankdrive:sim:ticks_per_rev                             200
+tankdrive:sim:ticks_per_rev                             2570
 
 #
 # The diameter of the robot wheel
 #
-tankdrive:sim:diameter                                  5.0
+tankdrive:sim:diameter                                  8.5
 
 #
 # The percent of the angle that is applied to the robot based on the
 # distance the wheels travel vs an ideal case were the wheels are
 # frictionless
 #
-tankdrive:sim:scrub                                     1.0
+tankdrive:sim:scrub                                     0.95177665
 
 #
 # The width of the drivebase for the robot
 #
-tankdrive:sim:width                                     24.0
+tankdrive:sim:width                                     22.5
 
 
 ######################################################################################
@@ -114,18 +109,18 @@ tankdrive:sim:width                                     24.0
 # The boundaries for the limit switches and the mechanical hard stop for
 # the turntable
 #
-turntable:sim:max_limit_boundary                        -30
-turntable:sim:min_limit_boundary                        -60
+turntable:sim:max_limit_boundary                        130
+turntable:sim:min_limit_boundary                        160
 
 #
 # The number of degrees per encoder tick (assuming 200 ticks per revolution)
 #
-turntable:sim:degrees_per_tick                          0.135427952
+turntable:sim:degrees_per_tick                          0.585472973
 
 #
 # The number of degrees the turntable rotates per second per volt
 #
-turntable:sim:degrees_per_sec_per_volt                  90.0
+turntable:sim:degrees_per_sec_per_volt                  277.77778
 
 ######################################################################################
 #
@@ -135,8 +130,8 @@ turntable:sim:degrees_per_sec_per_volt                  90.0
 
 lifter:sim:bottom_limit_height                          8.46
 lifter:sim:top_limit_height                             83.66
-lifter:sim:inches_per_tick                              0.014861049
-lifter:sim:inches_per_sec_per_volt                      18.0
+lifter:sim:inches_per_tick                              0.058691309
+lifter:sim:inches_per_sec_per_volt                      -20.0
 lifter:sim:gravity_equivalent_speed                     0
 
 oi:button:hatch_cargo_switch                                    11                  # Button

@@ -18,12 +18,17 @@ namespace xero{
         private:
 
             enum class State {
-                Lifting,
-                Retracting,
-                StopMotors,
-                DropLift,
+                SafeHeight,   
+                RotateZero,
+                RetractIntakes,             
+                RetractArm,
+                RetractFinger,
+                FinalHeight,
                 Idle
             } ;
+
+        private:
+            constexpr static double epsilon = 5.0 ;
 
         private:
             State state_ ;
@@ -31,10 +36,9 @@ namespace xero{
             xero::base::ActionPtr set_lifter_level_one_ ;          
             xero::base::ActionPtr set_turntable_zero_ ;  
             xero::base::ActionPtr retract_cargo_intake_ ;
-            xero::base::ActionPtr retract_hatch_intake_ ;
             xero::base::ActionPtr retract_arm_ ;
+            xero::base::ActionPtr retract_finger_ ;
 
-            xero::base::ActionPtr stop_hatch_intake_motor_ ;
             xero::base::ActionPtr stop_cargo_intake_motor_ ;
             xero::base::ActionPtr stop_cargo_holder_motor_ ;
         } ;

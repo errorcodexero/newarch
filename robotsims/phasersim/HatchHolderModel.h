@@ -11,7 +11,7 @@ namespace xero {
 
                 virtual ~HatchHolderModel() ;
 
-                virtual void processEvent(const std::string &name, int value) ;
+                virtual bool processEvent(const std::string &name, int value) ;
 
                 /// \brief Convert the model to a string.
                 /// \returns details about the lifter's state
@@ -46,13 +46,18 @@ namespace xero {
                 virtual void generateDisplayInformation(std::list<std::string> &lines) ;
 
             private:
-                frc::Solenoid *extension_solenoid_ ;
+                frc::Solenoid *arm_retract_solenoid_ ;
+                frc::Solenoid *arm_extend_solenoid_ ;                
                 frc::Solenoid *finger_solenoid_ ;
                 frc::DigitalInput *hatch_sensor_ ;
 
-                int extension_channel_ ;
+                int arm_retract_channel_ ;
+                int arm_extend_channel_ ;
                 int finger_channel_ ;
                 int hatch_sensor_channel_ ;
+
+                bool extend_state_ ;
+                bool retract_state_ ;
 
                 bool extension_state_ ;
                 bool finger_state_ ;

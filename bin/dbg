@@ -31,5 +31,4 @@ gdb \
     --start $starttime\
     --auto $autotime\
     --oper $teleoptime\
-    --simscreen\
     $extra

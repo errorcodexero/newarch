@@ -22,12 +22,16 @@ namespace xero {
             CargoIntakeModel::~CargoIntakeModel() {
             }
 
-            void CargoIntakeModel::processEvent(const std::string &name, int value) {
+            bool CargoIntakeModel::processEvent(const std::string &name, int value) {
+                bool ret = false ;
                 if (name == "cargo") {
+                    ret = true ;
                     has_cargo_ = (value ? true : false) ;
                     if (cargo_sensor_ != nullptr)
                         cargo_sensor_->SimulatorSetValue(has_cargo_) ;
                 }
+
+                return ret ;
             }            
 
             void CargoIntakeModel::generateDisplayInformation(std::list<std::string> &lines) {
@@ -42,7 +46,7 @@ namespace xero {
             }
 
             std::string CargoIntakeModel::toString() {
-                std::string result("hatchintake: ") ;
+                std::string result("cargointake: ") ;
                 return result ;
             }
 

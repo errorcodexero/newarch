@@ -9,15 +9,13 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
-        GamePieceManipulator::GamePieceManipulator(Robot &robot) : Subsystem(robot, "gamepiecemanipulator") {
+        GamePieceManipulator::GamePieceManipulator(Robot &robot) : Subsystem(robot, "gamepiecemanipulator") 
+        {
             SettingsParser &settings = robot.getSettingsParser() ;            
             bool victor = true ;
 
             hatch_holder_ = std::make_shared<HatchHolder>(robot) ;
             addChild(hatch_holder_) ;
-
-            hatch_intake_ = std::make_shared<HatchIntake>(robot, MSG_GROUP_HATCH_INTAKE) ;
-            addChild(hatch_intake_) ;
 
             if (settings.isDefined("cargoholder:TalonSRX"))
                 victor = !settings.getBoolean("cargoholder:TalonSRX") ;
@@ -31,11 +29,33 @@ namespace xero {
             lifter_ = std::make_shared<Lifter>(robot, MSG_GROUP_PHASER_LIFTER) ;
             addChild(lifter_) ;
 
-            turntable_ = std::make_shared<Turntable>(robot, *lifter_, MSG_GROUP_PHASER_TURNTABLE) ;
+            turntable_ = std::make_shared<Turntable>(robot, *lifter_, MSG_GROUP_PHASER_TURNTABLE, MSG_GROUP_PHASER_TURNTABLE_VERBOSE) ;
             addChild(turntable_) ;
         }
 
-        GamePieceManipulator::~GamePieceManipulator() {
+        GamePieceManipulator::~GamePieceManipulator() 
+        {
+        }
+
+        void GamePieceManipulator::init(LoopType ltype)
+        {
+            if (ltype == LoopType::OperatorControl) {
+                auto action = getAction() ;
+                if (action != nullptr && !action->isDone())
+                    setAction(action) ;
+            }
+        }
+
+        void GamePieceManipulator::run() 
+        {
+            Subsystem::run() ;
+
+            auto hatch_holder = getHatchHolder() ;
+            ActionPtr act = getAction() ;
+            if (act == nullptr || act->isDone())
+                hatch_holder->autoHatchEnable(true) ;
+            else
+                hatch_holder->autoHatchEnable(false) ;
         }
 
         bool GamePieceManipulator::canAcceptAction(ActionPtr action) {

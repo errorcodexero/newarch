@@ -18,6 +18,8 @@ namespace xero
             TankDriveModel(RobotSimBase &);
             virtual ~TankDriveModel();
 
+            virtual bool processEvent(const std::string &name, int value) ;             
+
             virtual void run(double dt);
             virtual void inputChanged(SimulatedObject *obj);
             virtual std::string toString()  ;
@@ -28,19 +30,19 @@ namespace xero
             virtual void addDevice(frc::Solenoid *sol) ;
 
             double getXPos() { 
-              return xpos_ ;
+                return xpos_ ;
             }
 
             double getYPos() {
-              return ypos_ ;
+                return ypos_ ;
             }
 
             double getAngle() {
-              return angle_ ;
+                return angle_ ;
             }
 
             double getSpeed() {
-              return speed_ ;
+                return speed_ ;
             }
 
             void generateDisplayInformation(std::list<std::string> &lines) ;
@@ -55,51 +57,87 @@ namespace xero
 
             void calcLowLevelParams(RobotSimBase &simbase) ;
 
-          private:
-            bool inited_ ;
+        private:
+            // If true, we are in low gear.  Otherwise high gear
             bool gear_ ;
 
+            // The distance the left and right wheels have traveled
             double left_;
             double right_;
+
+            // The current angle of the robot
             double angle_;
+
+            // The navx offset, used to return the correct navx angle if the
+            // navx has been reset to zero yaw at an arbitrary robot angle
             double navx_offset_ ;
+
+            // The number of encoder ticks per revolution of the wheels
             double ticks_per_rev_;
+
+            // The diameter of the wheels of the robot
             double diameter_;
-            double left_volts_;
-            double right_volts_;
+
+            // The current power assigned to the robot
+            double left_power_;
+            double right_power_;
+
+            // The scrub and width of the driverbase, used in the kinematics to
+            // track the location of the driverbase
             double scrub_;
             double width_;
 
-            double high_rps_per_volt_per_time_;
-            double low_rps_per_volt_per_time_;
+            // High gear and low gear revolutions per second per power
+            double high_rps_per_power_per_time_;
+            double low_rps_per_power_per_time_;
+
+            // The maximum revolution per second change
             double high_max_change_ ;
             double low_max_change_ ;
+
+            // The current maximum revs per second change, will be either the high or low
             double current_max_change_ ;
 
+            // The percent error versus ideal (random, not tested well)
             double left_right_error_ ;
-            double right_rps_per_volt_per_time_;
-            double left_rps_per_volt_per_time_;                     
-            double time_interval_;
-            double last_output_;
+
+            // The left side revs per second per power
+            double right_rps_per_power_per_time_;
+            double left_rps_per_power_per_time_;                     
+
+            // Current linear speed of the robot
             double speed_ ;
 
+            // Current left RPS based on gear and power applied
             double current_left_rps_ ;
             double current_right_rps_ ;
 
+            // The X and Y position of the robot
             double xpos_ ;
             double ypos_ ;
 
+            // The previous X and Y positon of the robot.   Used to calculate the
+            // distance the robot has moved since the last time the model was run.  THis
+            // if used in the kinematics to track robot position and heading.
             double last_xpos_ ;
             double last_ypos_ ;
 
+            // The left and right encoder values
             int left_enc_value_ ;
             int right_enc_value_ ;
 
+            // The set of motors for the left and right side of the robot
             std::vector<ctre::phoenix::motorcontrol::can::TalonSRX *> left_motors_;
             std::vector<ctre::phoenix::motorcontrol::can::TalonSRX *> right_motors_;
+
+            // The left and right encoers for the robot
             frc::Encoder *left_enc_;
             frc::Encoder *right_enc_;
+
+            // The solenoid that engages the shifer
             frc::Solenoid *shifter_ ;
+
+            // The NAVX that supplies the robot angle
             AHRS *navx_;
         };
     } // namespace sim

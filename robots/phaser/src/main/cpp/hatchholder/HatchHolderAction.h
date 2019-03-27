@@ -30,7 +30,14 @@ namespace xero {
             HatchHolderAction(HatchHolder &subsystem, Operation operation, const std::string &name) : subsystem_(subsystem), operation_(operation) {
                 is_done_ = false ;
                 duration_ = subsystem.getRobot().getSettingsParser().getDouble(name) ;
+                action_duration_ = duration_ ;
             }
+
+            HatchHolderAction(HatchHolder &subsystem, Operation operation, const std::string &durname, const std::string &actdurname) : subsystem_(subsystem), operation_(operation) {
+                is_done_ = false ;
+                duration_ = subsystem.getRobot().getSettingsParser().getDouble(durname) ;
+                action_duration_ = subsystem.getRobot().getSettingsParser().getDouble(actdurname) ;
+            }            
 
             ~HatchHolderAction(){
             }
@@ -48,7 +55,9 @@ namespace xero {
             Operation operation_;
             bool is_done_;
             double start_ ;
+            double action_duration_ ;
             double duration_ ;
+            bool stopped_ ;
         };
     }
 }

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <OISubsystem.h>
+#include <oi/OISubsystem.h>
 #include "PhaserOIDevice.h"
-#include <DriverGamepad.h>
+#include <oi/DriverGamepad.h>
 #include <memory>
 
 namespace xero {

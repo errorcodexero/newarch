@@ -10,18 +10,20 @@ namespace xero {
     namespace sim {
         namespace phaser {
             OIModel::OIModel(RobotSimBase &simbase) : SubsystemModel(simbase, "oi") {
-                ds_ = nullptr ;
+                ds_ = &frc::DriverStation::GetInstance() ;
             }
 
             OIModel::~OIModel() {               
             }
 
-            void OIModel::processEvent(const std::string &event, int value) {
+            bool OIModel::processEvent(const std::string &event, int value) {
+                bool ret = false ;
                 SettingsParser &settings =  getSimulator().getSettingsParser() ;
                 std::string name = "oi:button:" + event ;
                 if (settings.isDefined(name)) {
                     int button = settings.getInteger(name) ;
                     setButton(2, button, (value ? true : false)) ;
+                    ret = true ;
                 }
                 else {
                     name = "oi:axis:" + event ;
@@ -29,8 +31,11 @@ namespace xero {
                         int axis = settings.getInteger(name) ;
                         double v = static_cast<double>(value) / 100.0 ;
                         setAxis(2, axis, v) ;
+                        ret = true ;
                     }                        
                 }
+
+                return ret ;
             }
 
             std::string OIModel::toString() {
@@ -46,7 +51,6 @@ namespace xero {
             }    
 
             void OIModel::addDevice(frc::DriverStation *ds) {
-                ds_ = ds ;
             }     
 
             void OIModel::setButton(int which, int button, bool value) {

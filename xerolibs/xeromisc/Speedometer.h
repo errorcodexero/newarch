@@ -4,7 +4,6 @@
 #include <cmath>
 #include <iostream>
 
-
 /// \file
 
 namespace xero {

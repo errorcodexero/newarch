@@ -24,7 +24,7 @@ namespace xero {
                 virtual void inputChanged(SimulatedObject *obj) {                    
                 }
 
-                virtual void processEvent(const std::string &event, int value) ;
+                virtual bool processEvent(const std::string &event, int value) ;
 
                 virtual void generateDisplayInformation(std::list<std::string> &lines) ;
 
