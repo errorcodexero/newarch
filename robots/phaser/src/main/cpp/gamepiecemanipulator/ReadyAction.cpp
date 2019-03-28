@@ -14,7 +14,9 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
-        ReadyAction::ReadyAction(GamePieceManipulator &subsystem, const std::string &height, const std::string &angle):GamePieceAction(subsystem) {
+        ReadyAction::ReadyAction(GamePieceManipulator &subsystem, const std::string &height, const std::string &angle, bool leave):GamePieceAction(subsystem) {
+
+            leave_ = leave ;
         
             auto lifter = getGamePiece().getLifter() ;
             auto turntable = getGamePiece().getTurntable();
@@ -68,7 +70,7 @@ namespace xero {
             // safe height.  If the destination height is below the safe height, we need to go to the safe
             // height first, rotate, then drop down.
             //
-            else if (hatch_holder->hasHatch() && !alreadyOnCorrectSide()) {
+            else if (hatch_holder->hasHatch() && !alreadyOnCorrectSide() && !hatch_holder->isArmDeployed() && !leave_) {
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;                
                 logger << "ReadyAction: start with extend hatch" ;
                 logger.endMessage() ;
@@ -179,7 +181,7 @@ namespace xero {
             switch(state_) {
             case State::WaitForStop:
                 if (turntable->getVelocity() < turntable_velocity_threshold_) {
-                    if (hatch_holder->hasHatch() && !alreadyOnCorrectSide()) {
+                    if (hatch_holder->hasHatch() && !alreadyOnCorrectSide() && !leave_) {
                         logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;                
                         logger << "ReadyAction: start with extend hatch" ;
                         logger.endMessage() ;
@@ -218,9 +220,20 @@ namespace xero {
             case State::TurntableAndLift:
                 if (set_turntable_angle_->isDone() && set_lifter_final_height_->isDone()) {
                     if (hatch_holder_extended_) {
-                        auto hatch_holder = getGamePiece().getHatchHolder() ;
-                        hatch_holder->setAction(retract_hatch_holder_) ;
-                        state_ = State::RetractHatchHolder ;
+                        if (leave_) {
+                            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;                
+                            logger << "ReadyAction: skipped retracting hatch, leave = true" ;
+                            logger.endMessage() ;
+                        }
+                        else {
+                            auto hatch_holder = getGamePiece().getHatchHolder() ;
+                            hatch_holder->setAction(retract_hatch_holder_) ;
+                            state_ = State::RetractHatchHolder ;
+
+                            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;                
+                            logger << "ReadyAction: retracting hatch" ;
+                            logger.endMessage() ;                            
+                        }
                     }
                     else {
                         state_ = State::Idle ;
@@ -239,9 +252,20 @@ namespace xero {
             case State::LifterFinalHeight:
                 if(set_lifter_final_height_->isDone()){
                     if (hatch_holder_extended_) {
-                        auto hatch_holder = getGamePiece().getHatchHolder() ;
-                        hatch_holder->setAction(retract_hatch_holder_) ;
-                        state_ = State::RetractHatchHolder ;
+                        if (leave_) {
+                            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;                
+                            logger << "ReadyAction: skipping hatch retract, leave = true" ;
+                            logger.endMessage() ;
+                        }
+                        else {
+                            auto hatch_holder = getGamePiece().getHatchHolder() ;
+                            hatch_holder->setAction(retract_hatch_holder_) ;
+                            state_ = State::RetractHatchHolder ;
+
+                            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_READY_ACTION) ;                
+                            logger << "ReadyAction: retracting hatch" ;
+                            logger.endMessage() ;                            
+                        }
                     }
                     else {
                         state_ = State::Idle ;

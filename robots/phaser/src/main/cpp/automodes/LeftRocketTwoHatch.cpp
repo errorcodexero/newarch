@@ -4,6 +4,7 @@
 #include <cameratracker/CameraChangeAction.h>
 #include "carloshatch/CarlosHatchStartAction.h"
 #include "carloshatch/CarlosHatchEndAction.h"
+#include <tankdrive/TankDriveTimedPowerAction.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -17,6 +18,7 @@ namespace xero {
             auto game = phaser.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto vision = phaser.getPhaserRobotSubsystem()->getCameraTracker() ;
             auto front = phaser.getPhaserRobotSubsystem()->getFrontLineSensor() ;
+            auto db = phaser.getPhaserRobotSubsystem()->getTankDrive() ;
       
             ActionPtr act ;
             
@@ -36,7 +38,7 @@ namespace xero {
             path = "LeftHABLeftRocket" ;
 
             act = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;
-            insertAutoModeLeg(height, angle, path, false, false, 0.0, 0.0, act, 36.0) ;
+            insertAutoModeLeg(height, angle, path, false, false, 0.0, 0.0, act, 48.0) ;
 
             if (second) {
                 //
@@ -60,7 +62,7 @@ namespace xero {
                 path = "LSLeftRocketLeft" ;
 
                 act = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;
-                insertAutoModeLeg(height, angle, path, false, false, 2.0, 0.2, act, 36.0) ;
+                insertAutoModeLeg(height, angle, path, false, false, 2.0, 0.2, act, 48.0) ;
             }
         }
 

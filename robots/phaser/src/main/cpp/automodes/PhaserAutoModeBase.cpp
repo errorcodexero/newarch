@@ -2,6 +2,7 @@
 #include "Phaser.h"
 #include "phasercameratracker/SetThresholdAction.h"
 #include "carloshatch/CarlosHatchStartAction.h"
+#include "carloshatch/CarlosHatchImpactAction.h"
 #include <gamepiecemanipulator/WaitForHatch.h>
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/TankDriveFollowPathAction.h>
@@ -95,13 +96,13 @@ namespace xero {
             //
             // Move the turntable to the right spot
             //
-            act = std::make_shared<ReadyAction>(*game, height, angle) ;
+            act = std::make_shared<ReadyAction>(*game, height, angle, true) ;
             seq->pushSubActionPair(game, act, true) ;
 
             //
             // And stick out our arm and ready it for a collect or place action
             //
-            act = std::make_shared<CarlosHatchStartAction>(*hatchholder) ;
+            act = std::make_shared<CarlosHatchImpactAction>(*hatchholder) ;
             seq->pushSubActionPair(hatchholder, act) ;
 
             //
@@ -148,6 +149,7 @@ namespace xero {
             act = std::make_shared<LineFollowAction>(*lines, *db, power, dist, adjust) ;
             seq->pushSubActionPair(db, act) ;
 
+#ifdef NOTYET
             //
             // This is the finish action which places a hatch.
             //
@@ -158,7 +160,7 @@ namespace xero {
             // or collected sucessfully
             //
             seq->pushSubActionPair(game, std::make_shared<WaitForHatch>(*game, hashatch)) ;
-
+#endif
             //
             // Add the sequence to the parallel
             //

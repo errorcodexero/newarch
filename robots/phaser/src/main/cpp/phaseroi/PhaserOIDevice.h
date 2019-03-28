@@ -73,7 +73,7 @@ namespace xero {
             Direction getRobotDirection() ;
             Direction compassToFieldRelative(Direction dir) ;
 
-            void gotoHeightAngle(xero::base::ActionSequence &seq, const std::string &height, const std::string &angle) ;
+            void gotoHeightAngle(xero::base::ActionSequence &seq, const std::string &height, const std::string &angle, bool leave = false) ;
 
             void updateMode(OperationMode mode) ;
 

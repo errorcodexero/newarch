@@ -32,4 +32,6 @@
 
 #define MSG_GROUP_READY_ACTION                      (1ull << 42)
 
-#define MSG_GROUP_STRAFE                      (1ull << 43)
+#define MSG_GROUP_STRAFE                            (1ull << 43)
+
+#define MSG_GROUP_HATCH_HOLDER_VERBOSE              (1ull << 44)

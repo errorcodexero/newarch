@@ -48,6 +48,8 @@ namespace xero {
             bool arm_deployed_ ;
             bool holder_deployed_ ;
 
+            bool prev_state_ ;
+
             std::shared_ptr<frc::AnalogInput> sensor_ ;
             std::shared_ptr<frc::DigitalInput> impact_ ;
             std::shared_ptr<frc::Solenoid> arm_extend_ ;

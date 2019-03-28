@@ -8,7 +8,7 @@ namespace xero{
     namespace phaser{
         class ReadyAction : public GamePieceAction {
         public:
-            ReadyAction(GamePieceManipulator &subsystem, const std::string &height, const std::string &angle) ;
+            ReadyAction(GamePieceManipulator &subsystem, const std::string &height, const std::string &angle, bool leave = false) ;
             virtual ~ReadyAction() ;
 
             virtual void start() ;
@@ -86,6 +86,7 @@ namespace xero{
             std::shared_ptr<TurntableGoToAngleAction> set_turntable_angle_ ;
 
             double turntable_velocity_threshold_ ;
+            bool leave_ ;
         } ;
     }
 }

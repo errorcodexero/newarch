@@ -7,7 +7,8 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
-        CarlosHatchStartAction::CarlosHatchStartAction(CarlosHatch &subsystem) : CarlosHatchAction(subsystem) {
+        CarlosHatchStartAction::CarlosHatchStartAction(CarlosHatch &subsystem, bool push) : CarlosHatchAction(subsystem) {
+            push_arm_ = push ;
         }
 
         CarlosHatchStartAction::~CarlosHatchStartAction() {
@@ -26,6 +27,8 @@ namespace xero {
             CarlosHatch &hatchholder = getSubsystem() ;
             if (waiting_) {
                 if (!hatchholder.isImpacting()) {
+                    if (!push_arm_)
+                        hatchholder.stopArm() ;                    
                     waiting_ = false ;
                 }
             }

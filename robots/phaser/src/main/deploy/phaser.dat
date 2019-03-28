@@ -448,8 +448,8 @@ hatchholder:default:delay                                       0.75
 endif
 
 hatchholder:finger:autodelay                                    1.0
-hatchholder:debounce:low2high                                   0.1
-hatchholder:debounce:high2low                                   0.2
+hatchholder:debounce:low2high                                   0.2
+hatchholder:debounce:high2low                                   0.4
 
 climb:backup_distance                                           0
 climb:deploy_delay                                              0.3

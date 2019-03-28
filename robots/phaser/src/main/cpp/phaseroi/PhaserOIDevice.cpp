@@ -15,6 +15,7 @@
 #include "gamepiecemanipulator/ResetIntakesAction.h"
 #include "gamepiecemanipulator/CalibrateManip.h"
 #include "cargointake/CargoIntakeAction.h"
+#include "carloshatch/CarlosHatchImpactAction.h"
 #include "singlemotorsubsystem/SingleMotorPowerAction.h"
 #include "phasercameratracker/DriveByVisionAction.h"
 #include "lifter/LifterPowerAction.h"
@@ -34,6 +35,7 @@
 #include <TeleopController.h>
 #include <SettingsParser.h>
 #include <TerminateAction.h>
+#include <DelayAction.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::base ;
@@ -365,8 +367,8 @@ namespace xero {
 
             safe_height_ = getSubsystem().getRobot().getSettingsParser().getDouble("turntable:safe_lifter_height") ;
 
-            finish_collect_hatch_ = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;
-            finish_place_hatch_ = std::make_shared<CarlosHatchEndAction>(*game->getHatchHolder()) ;
+            finish_collect_hatch_ = std::make_shared<CarlosHatchImpactAction>(*game->getHatchHolder()) ;
+            finish_place_hatch_ = std::make_shared<CarlosHatchImpactAction>(*game->getHatchHolder()) ;
             finish_collect_cargo_ = std::make_shared<CompleteLSCargoCollect>(*game) ;
             finish_place_cargo_  = std::make_shared<ScoreCargo>(*game) ;
 
@@ -586,7 +588,7 @@ namespace xero {
             gotoHeightAngle(seq, height, angle) ;
         }
 
-        void PhaserOIDevice::gotoHeightAngle(ActionSequence &seq, const std::string &height, const std::string &angle) {
+        void PhaserOIDevice::gotoHeightAngle(ActionSequence &seq, const std::string &height, const std::string &angle, bool leave) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             ActionPtr act ;
@@ -603,7 +605,7 @@ namespace xero {
 
             SettingsParser &parser = getSubsystem().getRobot().getSettingsParser() ;
             if ((height == "@" || parser.isDefined(height)) && (angle == "@" || parser.isDefined(angle))) {
-                act = std::make_shared<ReadyAction>(*game, height, angle) ;
+                act = std::make_shared<ReadyAction>(*game, height, angle, leave) ;
                 seq.pushSubActionPair(game, act, false) ;
                 direction_action_ = act ;
             }
@@ -689,6 +691,7 @@ namespace xero {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             std::string height, angle ;
+            bool leave = false ;
 
             MessageLogger &logger = getSubsystem().getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
@@ -698,16 +701,21 @@ namespace xero {
             logger << toString(activity_) ;
             logger.endMessage() ;
 
-            if (piece_ == GamePieceType::Hatch && activity_ == ActivityType::Place)
+            if (piece_ == GamePieceType::Hatch && activity_ == ActivityType::Place) {
                 generateHeightActionsPlaceHatch(height, angle) ;
-            else if (piece_ == GamePieceType::Cargo && activity_ == ActivityType::Place)
+                leave = true ;
+            }
+            else if (piece_ == GamePieceType::Cargo && activity_ == ActivityType::Place) 
                 generateHeightActionsPlaceCargo(height, angle) ;
-            else if (piece_ == GamePieceType::Hatch && activity_ == ActivityType::Collect)
+            else if (piece_ == GamePieceType::Hatch && activity_ == ActivityType::Collect) {
                 generateHeightActionsCollectHatch(height, angle) ;
+                leave = true ;
+            }
             else if (piece_ == GamePieceType::Cargo && activity_ == ActivityType::Collect)
                 generateHeightActionsCollectCargo(height, angle) ;
 
-            gotoHeightAngle(seq, height, angle) ;
+            gotoHeightAngle(seq, height, angle, leave) ;
+
         }
 
         void PhaserOIDevice::generateArmActionsHatchVisionLine(ActionSequence &seq)
@@ -728,6 +736,10 @@ namespace xero {
                 //
                 // Doing north or south
                 //
+                bool push = true ;
+
+                if (height_ == ActionHeight::LevelTwo || height_ == ActionHeight::LevelThree)
+                    push = false ;
 
                 //
                 // Always clear out any existing detectors in the teleop controller
@@ -736,7 +748,7 @@ namespace xero {
                 std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;
                 teleop->clearDetectors() ;
 
-                ActionPtr act = std::make_shared<CarlosHatchStartAction>(*hatchholder) ;
+                ActionPtr act = std::make_shared<CarlosHatchImpactAction>(*hatchholder, push) ;
                 seq.pushSubActionPair(hatchholder, act) ;
 
                 setupVisionDetectors() ;
@@ -779,10 +791,11 @@ namespace xero {
         {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto hatchholder = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
-            ActionPtr act = std::make_shared<CarlosHatchStartAction>(*hatchholder) ;
+            bool push = true ;
+            if (height_ == ActionHeight::LevelTwo || height_ == ActionHeight::LevelThree)
+                push = false ;
+            ActionPtr act = std::make_shared<CarlosHatchImpactAction>(*hatchholder, push) ;
             seq.pushSubActionPair(hatchholder, act) ;
-            std::make_shared<CarlosHatchEndAction>(*hatchholder) ;
-            seq.pushSubActionPair(hatchholder, act) ;            
         }
 
         void PhaserOIDevice::generateArmActionsCargoVisionLine(ActionSequence &seq)
@@ -902,6 +915,12 @@ namespace xero {
             ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
 
             //
+            // Push the rumble
+            //
+            ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 1, 0.25, 1.0) ;            
+            seq->pushSubActionPair(oi, rumble) ;
+
+            //
             // Create the drive by vision action, it is terminated by detecting a line on the right line follower
             //
             std::shared_ptr<TerminateAction> term = std::make_shared<TerminateAction>(db, drive, getSubsystem().getRobot()) ;
@@ -918,14 +937,18 @@ namespace xero {
                 seq->pushSubActionPair(game, getFinishAction()) ;
 
             // Last action in sequence, rumble the game controller
-            ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 3, 1.0, 0.3333333) ;
+            rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 1, 1.0, 1.0) ;
             seq->pushSubActionPair(oi, rumble) ;
 
             parallel->addAction(seq) ;            
 
-            if (piece_ == GamePieceType::Hatch)
-                parallel->addSubActionPair(game->getHatchHolder(), getFinishAction()) ;
-
+#ifdef NOTYET
+            if (piece_ == GamePieceType::Hatch) {
+                seq->pushAction(std::make_shared<DelayAction>(0.5)) ;
+                seq->pushSubActionPair(game->getHatchHolder(), getFinishAction()) ;
+                parallel->addAction(seq) ;
+            }
+#endif
             teleop->addDetector(std::make_shared<VisionDetectTakeover>(teleop, parallel, *camera)) ;
 
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;

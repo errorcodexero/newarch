@@ -33,6 +33,8 @@ namespace xero {
             low2high = robot.getSettingsParser().getDouble("carloshatch:presence:low2high") ;
             high2low = robot.getSettingsParser().getDouble("carloshatch:presence:high2low") ;
             has_hatch_debounced_ = std::make_shared<DebounceBoolean>(false, low2high, high2low) ;
+
+            prev_state_ = false ;
         }
 
         CarlosHatch::~CarlosHatch() {
@@ -58,8 +60,19 @@ namespace xero {
             has_impact_debounced_->update(impactval, now) ;
             has_hatch_debounced_->update(hatchpres, now) ;
 
-            auto &logger = getRobot().getMessageLogger() ;
-            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
+            auto &logger = getRobot().getMessageLogger() ;            
+
+            if (prev_state_ != has_impact_debounced_->get()) {
+                prev_state_ = has_impact_debounced_->get() ;
+
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER_VERBOSE) ;
+                logger << "CarlosHatch:" ;                
+                logger << " impact sensor toggled, state = " << prev_state_ ;
+                logger.endMessage() ;
+            }
+
+
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER_VERBOSE) ;
             logger << "CarlosHatch:" ;
             logger << " voltage " << sensor_->GetVoltage() ;
             logger << " threshold " << hatch_present_threshold_ ;
