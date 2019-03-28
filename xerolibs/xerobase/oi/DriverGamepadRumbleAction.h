@@ -14,7 +14,7 @@ namespace xero {
             /// \param subsystem the subsystem to assign an action to
             /// \param action the action to assign to the subsystem
             /// \param block if true, wait for the subsystem to complete the action before returning isDone() true
-            DriverGamepadRumbleAction(OISubsystem &subsystem, bool left, int count, double value, double duration) ;
+            DriverGamepadRumbleAction(OISubsystem &subsystem, bool left, double value, double duration) ;
 
             /// \brief start this wrapper action which just assigns the stored action to the subsystem
             void start();
@@ -38,7 +38,6 @@ namespace xero {
             bool left_ ;
             double value_ ;
             double duration_ ;
-            int count_ ;
         };
     }
 }

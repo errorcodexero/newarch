@@ -50,12 +50,8 @@ namespace xero{
             bool ship_ ;
             bool forward_ ;
 
-            int which_ ;
-
-            xero::base::ActionPtr rumble_ ;
             xero::base::ActionPtr shoot_ ;
 
-            static int which_one_ ;
         };
     }
 }

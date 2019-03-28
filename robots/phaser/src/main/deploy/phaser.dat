@@ -499,14 +499,15 @@ oi:ship_rocket                                                  4               
 #
 # Semi-auto modes
 #
-#strafe:ship:shoot_distance                                           15.5
-#strafe:ship:velocity_factor                                          0.3
+#strafe:ship:shoot_distance                                     15.5
+#strafe:ship:velocity_factor                                    0.3
 
-strafe:ship:shoot_distance                                           16.0
-strafe:ship:velocity_factor                                          0.19
+strafe:ship:shoot_distance                                      16.0
+strafe:ship:velocity_factor                                     0.19
 
-strafe:rocket:shoot_distance                                         16
-strafe:rocket:velocity_factor                                        0.19
+strafe:rocket:shoot_distance                                    16
+strafe:rocket:velocity_factor                                   0.19
+strafe:hatch:distance                                           15.5
 
 #
 # Cargo tracking
@@ -531,3 +532,5 @@ carloshatch:impact:high2low                                      0.250
 carloshatch:presence:high2low                                    0.100
 carloshatch:presence:low2high                                    0.100
 carloshatch:threshold                                            1.0
+carloshatch:pushtime                                             0.5
+carloshatch:waitforhooks                                         0.1

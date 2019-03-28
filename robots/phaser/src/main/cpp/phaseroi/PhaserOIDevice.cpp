@@ -4,8 +4,6 @@
 #include "carloshatch/DumpHatch.h"
 #include <cameratracker/CameraChangeAction.h>
 #include <ParallelAction.h>
-#include "carloshatch/CarlosHatchStartAction.h"
-#include "carloshatch/CarlosHatchEndAction.h"
 #include "carloshatch/CarlosHatchArmAction.h"
 #include "gamepiecemanipulator/GamePieceAction.h"
 #include "gamepiecemanipulator/FloorCollectCargoAction.h"
@@ -773,6 +771,10 @@ namespace xero {
                 //
                 // Doing north or south
                 //
+                bool push = true ;
+
+                if (height_ == ActionHeight::LevelTwo || height_ == ActionHeight::LevelThree)
+                    push = false ;                
 
                 //
                 // Always clear out any existing detectors in the teleop controller
@@ -781,8 +783,9 @@ namespace xero {
                 std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;
                 teleop->clearDetectors() ;
 
-                ActionPtr act = std::make_shared<CarlosHatchStartAction>(*hatchholder) ;
+                ActionPtr act = std::make_shared<CarlosHatchImpactAction>(*hatchholder, push) ;
                 seq.pushSubActionPair(hatchholder, act) ;
+
                 setupLineFollowingDetectors() ;
             }
         }
@@ -915,9 +918,9 @@ namespace xero {
             ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
 
             //
-            // Push the rumble
+            // Push the rumble to indicate we took over
             //
-            ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 1, 0.25, 1.0) ;            
+            ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 0.25, 0.5) ;
             seq->pushSubActionPair(oi, rumble) ;
 
             //
@@ -936,19 +939,7 @@ namespace xero {
             if (piece_ == GamePieceType::Cargo)
                 seq->pushSubActionPair(game, getFinishAction()) ;
 
-            // Last action in sequence, rumble the game controller
-            rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 1, 1.0, 1.0) ;
-            seq->pushSubActionPair(oi, rumble) ;
-
             parallel->addAction(seq) ;            
-
-#ifdef NOTYET
-            if (piece_ == GamePieceType::Hatch) {
-                seq->pushAction(std::make_shared<DelayAction>(0.5)) ;
-                seq->pushSubActionPair(game->getHatchHolder(), getFinishAction()) ;
-                parallel->addAction(seq) ;
-            }
-#endif
             teleop->addDetector(std::make_shared<VisionDetectTakeover>(teleop, parallel, *camera)) ;
 
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PHASER_OI) ;
@@ -983,13 +974,11 @@ namespace xero {
                 drive = std::make_shared<LineFollowAction>(*line, *db, "linefollower:back:power", "linefollower:back:distance", "linefollower:back:adjust") ;
             }
 
-            ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, false, 2, 1.0, 0.5) ;
+            ActionPtr rumble = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 0.25, 0.5) ;
 
             seq->pushSubActionPair(db, drive) ;
             if (piece_ == GamePieceType::Cargo)
                 seq->pushSubActionPair(game, getFinishAction()) ;
-            else
-                seq->pushSubActionPair(game->getHatchHolder(), getFinishAction()) ;
                 
             seq->pushSubActionPair(oi, rumble) ;
 

@@ -24,11 +24,11 @@ namespace xero {
             holder_->Set(false) ;
 
             arm_deployed_ = false ;
-            holder_deployed_ = false ;
+            hooks_enabled_ = false ;
 
             double low2high = robot.getSettingsParser().getDouble("carloshatch:impact:low2high") ;
             double high2low = robot.getSettingsParser().getDouble("carloshatch:impact:high2low") ;
-            has_impact_debounced_ = std::make_shared<DebounceBoolean>(false, low2high, high2low) ;
+            fully_extended_debounced_ = std::make_shared<DebounceBoolean>(false, low2high, high2low) ;
 
             low2high = robot.getSettingsParser().getDouble("carloshatch:presence:low2high") ;
             high2low = robot.getSettingsParser().getDouble("carloshatch:presence:high2low") ;
@@ -57,29 +57,27 @@ namespace xero {
                 hatchpres = false ;            
 
             impactval = impact_->Get() ;
-            has_impact_debounced_->update(impactval, now) ;
+            fully_extended_debounced_->update(impactval, now) ;
             has_hatch_debounced_->update(hatchpres, now) ;
 
             auto &logger = getRobot().getMessageLogger() ;            
 
-            if (prev_state_ != has_impact_debounced_->get()) {
-                prev_state_ = has_impact_debounced_->get() ;
-
+            if (prev_state_ != fully_extended_debounced_->get()) {
+                prev_state_ = fully_extended_debounced_->get() ;
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER_VERBOSE) ;
                 logger << "CarlosHatch:" ;                
                 logger << " impact sensor toggled, state = " << prev_state_ ;
                 logger.endMessage() ;
             }
 
-
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER_VERBOSE) ;
             logger << "CarlosHatch:" ;
             logger << " voltage " << sensor_->GetVoltage() ;
             logger << " threshold " << hatch_present_threshold_ ;
-            logger << " impact raw " << impactval ;
-            logger << " impact " << has_impact_debounced_->get() ;
+            logger << " fully extended raw " << impactval ;
+            logger << " funny extended deb " << fully_extended_debounced_->get() ;
             logger << " presence raw " << hatchpres ;
-            logger << " presence " << has_hatch_debounced_->get() ;            
+            logger << " presence deb " << has_hatch_debounced_->get() ;            
             logger.endMessage() ;       
         }
 
@@ -106,12 +104,12 @@ namespace xero {
 
         void CarlosHatch::enableHooks() {
             holder_->Set(false) ;
-            holder_deployed_ = true ;
+            hooks_enabled_ = true ;
         }
 
         void CarlosHatch::disableHooks() {
             holder_->Set(true) ;
-            holder_deployed_ = false ;
+            hooks_enabled_ = false ;
         }
     }
 }

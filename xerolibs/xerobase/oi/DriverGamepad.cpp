@@ -50,18 +50,15 @@ namespace xero {
         DriverGamepad::~DriverGamepad() {            
         }
 
-        void DriverGamepad::rumble(bool left, int count, double value, double duration) {
+        void DriverGamepad::rumble(bool left, double value, double duration) {
             if (controller_ != nullptr) {
                 rtype_ = frc::XboxController::RumbleType::kLeftRumble ;
 
                 if (!left)
                     rtype_ = frc::XboxController::RumbleType::kRightRumble ;
 
-                count_ = count ;
-                onoff_ = true ;
                 controller_->SetRumble(rtype_, value) ;
                 rumbling_ = true ;
-                value_ = value ;
                 start_ = getSubsystem().getRobot().getTime() ;
                 duration_ = duration ;
             }
@@ -131,35 +128,11 @@ namespace xero {
         void DriverGamepad::computeState() {
             if (rumbling_) {
                 if (getSubsystem().getRobot().getTime() - start_ > duration_) {
-                    onoff_ = !onoff_ ;
-                    if (!onoff_) {
-                        //
-                        // We are strting the rumble off side of the cycle
-                        //
-                        controller_->SetRumble(rtype_, 0.0) ;
-                        count_-- ;
-
-                        //
-                        // Store the start time for this side of the on/off cycle
-                        //
-                        start_ = getSubsystem().getRobot().getTime() ;
-                    }
-                    else {
-                        if (count_ == 0) {
-                            rumbling_ = false ;
-                        }
-                        else {
-                            //
-                            // We are starting the on side of the cycle
-                            //
-                            controller_->SetRumble(rtype_, value_) ;
-
-                            //
-                            // Store the start time for this side of the on/off cycle
-                            //
-                            start_ = getSubsystem().getRobot().getTime() ;        
-                        }                
-                    }
+                    //
+                    // We are strting the rumble off side of the cycle
+                    //
+                    controller_->SetRumble(rtype_, 0.0) ;
+                    rumbling_ = false ;
                 }
             }
         }

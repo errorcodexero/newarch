@@ -27,7 +27,7 @@ namespace xero {
             enum class State
             {
                 Idle,
-                WaitForSwitch,
+                WaitForFullyExtended,
                 WaitForImpact,
                 WaitForHooks
             } ;
@@ -37,6 +37,8 @@ namespace xero {
             State state_ ;
             double start_ ;
             bool push_arm_ ;
+            double wait_for_hooks_time_;
+            xero::base::ActionPtr rumble_ ;
         };
     }
 }

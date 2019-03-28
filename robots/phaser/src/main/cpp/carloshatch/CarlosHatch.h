@@ -28,8 +28,8 @@ namespace xero {
             void enableHooks() ;
             void disableHooks() ;
 
-            bool isImpacting()  {
-                return has_impact_debounced_->get() ;
+            bool isFullyExtended()  {
+                return fully_extended_debounced_->get() ;
             }
 
             bool hasHatch() {
@@ -40,13 +40,13 @@ namespace xero {
                 return arm_deployed_ ;
             }
 
-            bool isHolderDeployed() {
-                return holder_deployed_ ;
+            bool areHooksEnabled() {
+                return hooks_enabled_ ;
             }
 
         private:
             bool arm_deployed_ ;
-            bool holder_deployed_ ;
+            bool hooks_enabled_ ;
 
             bool prev_state_ ;
 
@@ -56,7 +56,7 @@ namespace xero {
             std::shared_ptr<frc::Solenoid> arm_retract_ ;
             std::shared_ptr<frc::Solenoid> holder_ ;
 
-            std::shared_ptr<xero::misc::DebounceBoolean> has_impact_debounced_ ;
+            std::shared_ptr<xero::misc::DebounceBoolean> fully_extended_debounced_ ;
             std::shared_ptr<xero::misc::DebounceBoolean> has_hatch_debounced_ ;
             double hatch_present_threshold_ ;
 

@@ -13,8 +13,6 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
-        int StrafeAction::which_one_ = 0 ;
-
         StrafeAction::StrafeAction(PhaserRobotSubsystem &subsystem): subsystem_(subsystem)
         {
             auto db = subsystem_.getTankDrive() ;
@@ -29,9 +27,6 @@ namespace xero {
             vel_factor_ = subsystem.getRobot().getSettingsParser().getDouble("strafe:rocket:velocity_factor") ;    
 
             shoot_ = std::make_shared<ScoreCargo>(*game) ;
-            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1, 1.0, 1.0) ;
-
-            which_ = which_one_++ ;
         }
 
         StrafeAction::StrafeAction(PhaserRobotSubsystem &subsystem, int count): subsystem_(subsystem)
@@ -48,9 +43,6 @@ namespace xero {
             vel_factor_ = subsystem.getRobot().getSettingsParser().getDouble("strafe:ship:velocity_factor") ;
 
             shoot_ = std::make_shared<ScoreCargo>(*game) ;
-            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1, 1.0, 1.0) ;
-
-            which_ = which_one_++ ;            
         }
 
         StrafeAction::~StrafeAction() {
@@ -104,7 +96,6 @@ namespace xero {
             auto oi = subsystem_.getOI() ;
             bool front = isLineDetectedFront() ;
             bool back = isLineDetectedBack() ;
-            // double traveled = db->getDist() - start_dist_ ;
 
             switch(state_) {
             case State::ArmedRocket:
@@ -159,9 +150,6 @@ namespace xero {
                     thiscount_++ ;
                     state_ = State::ArmedShip ;
                 }
-
-                //start_dist_ = db->getDist() ;
-                //target_dist_ = shoot_dist_ - traveled - vel_factor_ * db->getVelocity() ;
                 break ;
 
             case State::WaitForDistanceBack:
@@ -176,19 +164,15 @@ namespace xero {
                     game->setAction(shoot_);
                     state_ = State::Shooting ;
                 }
-
-                //start_dist_ = db->getDist() ;
-                //target_dist_ = -shoot_dist_ + traveled - vel_factor_ * db->getVelocity() ;
                 break ;
 
             case State::Shooting:
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_STRAFE) ;
                 logger << "Strafe Shooting" ;
                 logger.endMessage() ;            
-                if (shoot_->isDone()) {
-                    oi->setAction(rumble_) ;
+                if (shoot_->isDone())
                     state_ = State::Idle ;
-                }
+                    
                 break ;
 
             case State::Idle:
