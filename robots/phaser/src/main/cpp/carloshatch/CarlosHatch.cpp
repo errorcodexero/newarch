@@ -56,7 +56,7 @@ namespace xero {
             else
                 hatchpres = false ;            
 
-            impactval = impact_->Get() ;
+            impactval = !impact_->Get() ;
             fully_extended_debounced_->update(impactval, now) ;
             has_hatch_debounced_->update(hatchpres, now) ;
 
@@ -64,7 +64,7 @@ namespace xero {
 
             if (prev_state_ != fully_extended_debounced_->get()) {
                 prev_state_ = fully_extended_debounced_->get() ;
-                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER_VERBOSE) ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
                 logger << "CarlosHatch:" ;                
                 logger << " impact sensor toggled, state = " << prev_state_ ;
                 logger.endMessage() ;

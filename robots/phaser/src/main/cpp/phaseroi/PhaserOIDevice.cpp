@@ -65,6 +65,7 @@ namespace xero {
                 field_relative_ = sub.getRobot().getSettingsParser().getBoolean(fr) ;
 
             piece_ = GamePieceType::Invalid ;
+            prev_cargo_hatch_switch_ = -1 ;
         }
 
         PhaserOIDevice::~PhaserOIDevice() {
@@ -222,7 +223,12 @@ namespace xero {
             }
             else {
                 activity_ = ActivityType::Collect ;
-                if (getValue(hatch_cargo_switch_)) {
+                int v = getValue(hatch_cargo_switch_) ;
+                if (v != prev_cargo_hatch_switch_) {
+                    prev_cargo_hatch_switch_ = v ;
+                    height_ = ActionHeight::LevelOne ;
+                }
+                if (v) {
                     camerano = CargoCamera ;
                     frc::SmartDashboard::PutBoolean("PlaceCollect", false) ;
                     frc::SmartDashboard::PutBoolean("CargoHatch", true) ;
@@ -379,6 +385,8 @@ namespace xero {
             calibrate_action_ = std::make_shared<CalibrateManip>(*game) ;
 
             track_cargo_target_ = std::make_shared<CargoTrackerAction>(*turntable, *vision) ;
+
+            retract_arm_ = std::make_shared<CarlosHatchArmAction>(*game->getHatchHolder(), CarlosHatchArmAction::Operation::RETRACT) ;
         }
 
         PhaserOIDevice::Direction PhaserOIDevice::getRobotDirection() {
@@ -573,6 +581,11 @@ namespace xero {
             logger << " " ;
             logger << toString(activity_) ;
             logger.endMessage() ;
+
+            auto hh = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
+
+            if (piece_ == GamePieceType::Cargo && hh->isArmDeployed())
+                seq.pushSubActionPair(hh, retract_arm_) ;            
 
             if (piece_ == GamePieceType::Hatch && activity_ == ActivityType::Place)
                 generateDirectionActionsPlaceHatch(height, angle) ;
@@ -994,6 +1007,11 @@ namespace xero {
         // Called when a height button is pressed
         //
         void PhaserOIDevice::generateHeightButtonActions(ActionSequence &seq) {
+            Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
+            auto hh = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
+
+            if (piece_ == GamePieceType::Cargo && hh->isArmDeployed())
+                seq.pushSubActionPair(hh, retract_arm_) ;
 
             //
             // Generate actions to move to the right height and angle

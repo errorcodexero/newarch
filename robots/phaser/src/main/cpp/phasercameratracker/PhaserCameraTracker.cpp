@@ -1,7 +1,7 @@
 #include "PhaserCameraTracker.h"
 #include "phaserids.h"
 #include "SetThresholdAction.h"
-#include <Robot.h>
+#include <Phaser.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -40,12 +40,15 @@ namespace xero {
                 return false ;
             }
 
+            Phaser &ph = dynamic_cast<Phaser &>(getRobot()) ;
+            auto lifter = ph.getPhaserRobotSubsystem()->getGameManipulator()->getLifter() ;
+
             MessageLogger &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_TERMINATOR) ;
             logger << "PhaserCameraTracker: distance " << getDistance() ;
             logger.endMessage() ;  
 
-            if (getDistance() > distance_threshold_)
+            if (getDistance() > distance_threshold_ || !lifter->isDone())
                 return false ;
 
             return true ;

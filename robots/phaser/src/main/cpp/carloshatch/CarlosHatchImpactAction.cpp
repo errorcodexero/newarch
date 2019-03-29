@@ -1,5 +1,6 @@
 #include "CarlosHatchImpactAction.h"
 #include "CarlosHatch.h"
+#include "phaserids.h"
 #include <Robot.h>
 #include <oi/DriverGamepadRumbleAction.h>
 #include <oi/OISubsystem.h>
@@ -14,6 +15,9 @@ namespace xero {
             push_arm_ = push ;
             wait_for_hooks_time_ = subsystem.getRobot().getSettingsParser().getDouble("carloshatch:waitforhooks") ;
             rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1.0, 1.0) ;
+
+            push_arm_ = false ;
+            
         }
 
         CarlosHatchImpactAction::~CarlosHatchImpactAction() {
@@ -28,13 +32,22 @@ namespace xero {
 
             hatchholder.extendArm() ;
             state_ = State::WaitForFullyExtended ;
+
+            MessageLogger &logger = hatchholder.getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
+            logger << "HatchHolder: start impact action"  ;
+            logger.endMessage() ;
         }
 
         void CarlosHatchImpactAction::run() {
             CarlosHatch &hatchholder = getSubsystem() ;
+            MessageLogger &logger = hatchholder.getRobot().getMessageLogger() ; 
 
             switch(state_) {
             case State::WaitForFullyExtended:
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
+                logger << "HatchHolder: WaitForFullyExtended"  ;
+                logger.endMessage() ;            
                 if (hatchholder.isFullyExtended()) {
                     state_ = State::WaitForImpact ;
                     if (!push_arm_)
@@ -43,6 +56,9 @@ namespace xero {
                 break ;
 
             case State::WaitForImpact:
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
+                logger << "HatchHolder: WaitForImpact"  ;
+                logger.endMessage() ;               
                 if (!hatchholder.isFullyExtended()) {
                     if (collecting_)
                         hatchholder.enableHooks() ;
@@ -55,6 +71,9 @@ namespace xero {
                 break ;
 
             case State::WaitForHooks:
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
+                logger << "HatchHolder: WaitForHooks"  ;
+                logger.endMessage() ;                 
                 if (hatchholder.getRobot().getTime() - start_ > wait_for_hooks_time_) {
                     hatchholder.retractArm() ;
                     hatchholder.getRobot().getOI()->setAction(rumble_) ;

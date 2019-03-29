@@ -215,9 +215,17 @@ if COMPETITION
 turntable:degrees_per_tick                                      0.546283784
 endif
 
+if COMPETITION
 turntable:maxa                                                  420
 turntable:maxd                                                  -420
 turntable:maxv                                                  300
+endif
+
+if PRACTICE
+turntable:maxa                                                  420
+turntable:maxd                                                  -420
+turntable:maxv                                                  300
+endif
 
 turntable:base                                                  0.0
 turntable:threshold                                             1.0
@@ -240,20 +248,20 @@ turntable:angle:hatch:floor_collect                             0.0
 turntable:angle:cargo:collect:north                             90
 turntable:angle:cargo:collect:south                             -90
 turntable:angle:cargo:collect:east                              0
-turntable:angle:cargo:collect:west                              180
+turntable:angle:cargo:collect:west                              178
 
 turntable:angle:cargo:place:north                               90
 turntable:angle:cargo:place:south                               -90
 turntable:angle:cargo:place:east                                0
-turntable:angle:cargo:place:west                                180
+turntable:angle:cargo:place:west                                178
 
 turntable:angle:hatch:collect:north                             0                
-turntable:angle:hatch:collect:south                             180                
+turntable:angle:hatch:collect:south                             178                
 turntable:angle:hatch:collect:east                              -90                
 turntable:angle:hatch:collect:west                              90                
  
 turntable:angle:hatch:place:north                               0                
-turntable:angle:hatch:place:south                               180                
+turntable:angle:hatch:place:south                               178                
 turntable:angle:hatch:place:east                                -90                
 turntable:angle:hatch:place:west                                90      
 
@@ -411,12 +419,12 @@ drivebyvision:yaw_p                                             0.02
 # drive by line follower
 ###################################################################################################
 
-linefollower:front:power                                          0.20
-linefollower:front:distance                                       10
-linefollower:front:adjust                                         0.2
-linefollower:back:power                                           -0.20
-linefollower:back:distance                                        10
-linefollower:back:adjust                                          -0.2
+linefollower:front:power                                          0.10
+linefollower:front:distance                                       18
+linefollower:front:adjust                                         0.15
+linefollower:back:power                                           -0.10
+linefollower:back:distance                                        18
+linefollower:back:adjust                                          -0.15
 linefollower:stalled_threshold                                    0.1
 
 cargointake:power                                                -0.6
@@ -527,10 +535,10 @@ scorehatch:offset:5                                             0.0
 scorehatch:offset:6                                             0.0
 scorehatch:offset:7                                             0.0
 
-carloshatch:impact:low2high                                      0.250
-carloshatch:impact:high2low                                      0.250
+carloshatch:impact:low2high                                      0.200
+carloshatch:impact:high2low                                      0.200
 carloshatch:presence:high2low                                    0.100
 carloshatch:presence:low2high                                    0.100
 carloshatch:threshold                                            1.0
 carloshatch:pushtime                                             0.5
-carloshatch:waitforhooks                                         0.1
+carloshatch:waitforhooks                                         0.5

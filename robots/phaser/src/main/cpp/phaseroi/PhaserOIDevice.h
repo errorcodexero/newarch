@@ -196,11 +196,12 @@ namespace xero {
             OperationMode mode_ ;
             RocketShipMode ship_cargo_state_ ;
 
+            int prev_cargo_hatch_switch_ ;
+
             xero::base::ActionPtr set_collect_cargo_floor_ ;
 
             xero::base::ActionPtr reset_intakes_ ;
-            xero::base::ActionPtr extend_finger_ ;
-            xero::base::ActionPtr retract_finger_ ;
+            xero::base::ActionPtr retract_arm_ ;
 
             xero::base::ActionPtr direction_action_ ;
 

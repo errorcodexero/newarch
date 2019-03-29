@@ -75,7 +75,7 @@ namespace xero{
 
             double height_value_ ;
             double angle_value_ ;
-
+            double stopped_delay_ ;
 
             bool hatch_holder_extended_ ;
 
