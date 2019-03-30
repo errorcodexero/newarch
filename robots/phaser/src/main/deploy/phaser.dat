@@ -419,12 +419,12 @@ drivebyvision:yaw_p                                             0.02
 # drive by line follower
 ###################################################################################################
 
-linefollower:front:power                                          0.10
+linefollower:front:power                                          0.20
 linefollower:front:distance                                       18
-linefollower:front:adjust                                         0.15
-linefollower:back:power                                           -0.10
+linefollower:front:adjust                                         0.25
+linefollower:back:power                                           -0.20
 linefollower:back:distance                                        18
-linefollower:back:adjust                                          -0.15
+linefollower:back:adjust                                          -0.25
 linefollower:stalled_threshold                                    0.1
 
 cargointake:power                                                -0.6
@@ -507,9 +507,6 @@ oi:ship_rocket                                                  4               
 #
 # Semi-auto modes
 #
-#strafe:ship:shoot_distance                                     15.5
-#strafe:ship:velocity_factor                                    0.3
-
 strafe:ship:shoot_distance                                      16.0
 strafe:ship:velocity_factor                                     0.19
 

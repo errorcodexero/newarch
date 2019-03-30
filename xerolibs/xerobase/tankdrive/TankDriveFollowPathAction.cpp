@@ -110,11 +110,15 @@ namespace xero {
                 double lout = left_follower_->getOutput(laccel, lvel, lpos, ldist, dt) ;
                 double rout = right_follower_->getOutput(raccel, rvel, rpos, rdist, dt) ;
 
+#ifdef NOTYET
+                //
+                // This has not been tested yet
+                //
                 double dv = lseg.getVelocity() - rseg.getVelocity() ;
                 double correct = dv * turn_correction_ ;
                 lout += correct ;
                 rout += correct ;
-
+#endif
                 double angerr = xero::math::normalizeAngleDegrees(thead - ahead) ;
                 double turn = angle_correction_ * angerr ;
                 lout += turn ;
