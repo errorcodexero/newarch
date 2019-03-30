@@ -49,7 +49,7 @@ namespace xero {
                 else
                     path = "CargoFrontLeftLSRight" ;
 
-                insertAutoModeLeg(height, angle, path, true, true, 2.0, 0.2, 48.0) ;
+                insertAutoModeLeg(height, angle, path, true, true, 2.0, 0.2, 36.0) ;
 
                 //
                 // Place the second hatch

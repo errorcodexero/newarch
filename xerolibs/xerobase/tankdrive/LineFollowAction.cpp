@@ -41,13 +41,6 @@ namespace xero {
                 distances_.pop_back() ;
 
             if (!is_done_) {
-#ifdef NOTYET                
-                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
-                logger << "LineFollowAction: running" ;
-                for(double d : distances_)
-                    logger << " " << d ;
-                logger.endMessage() ;  
-#endif
                 double traveled = distances_.front() - distances_.back() ;
                 double linetraveled = distances_.front() - start_distance_ ;
                 if (distances_.size() == 16 && std::fabs(traveled) < stalled_threshold_) {
@@ -76,7 +69,7 @@ namespace xero {
                 } 
                 else if (ls_subsystem_.detectedObject()) {
                     //
-                    // Case 3: We have still following the line
+                    // Case 3: We are still following the line
                     //
                     double left = power_ ;
                     double right = power_ ;
@@ -107,6 +100,15 @@ namespace xero {
                             break ;
                     }
                     setMotorsToPercents(left, right) ;
+
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LINE_FOLLOWER) ;
+                    logger << "LineFollowAction:" ;
+                    logger << " line detected " << ls_subsystem_.getName() ;  
+                    logger << " distance " << linetraveled ;
+                    logger << " left " << left ;
+                    logger << " right " << right ;
+                    logger.endMessage() ;
+
                 }
                 else {
                     //

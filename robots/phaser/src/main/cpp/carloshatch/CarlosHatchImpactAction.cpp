@@ -16,8 +16,7 @@ namespace xero {
             wait_for_hooks_time_ = subsystem.getRobot().getSettingsParser().getDouble("carloshatch:waitforhooks") ;
             rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1.0, 1.0) ;
 
-            push_arm_ = false ;
-            
+            push_arm_ = true ;
         }
 
         CarlosHatchImpactAction::~CarlosHatchImpactAction() {

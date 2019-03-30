@@ -10,7 +10,7 @@ using namespace xero::misc ;
 namespace xero {
     namespace phaser {
 
-        LeftRocketTwoHatch::LeftRocketTwoHatch(Robot &robot, bool second) : PhaserAutoModeBase(robot, "LeftRocketTwoHatch", (second ? "Start on left hab level, score two on rocket" : "start on left hab level, score one on rocket"))
+        LeftRocketTwoHatch::LeftRocketTwoHatch(Robot &robot, bool second) : PhaserAutoModeBase(robot, (second ? "TwoOnRocketLeft" : "OneOnRocketLeft"), "Rocket left auto mode") 
         {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto game = phaser.getPhaserRobotSubsystem()->getGameManipulator() ;
@@ -57,7 +57,7 @@ namespace xero {
 
                 path = "LSLeftRocketLeft" ;
 
-                insertAutoModeLeg(height, angle, path, false, false, 2.0, 0.2, 48.0) ;
+                insertAutoModeLeg(height, angle, path, false, false, 2.0, 0.2, 36.0) ;
             }
         }
 

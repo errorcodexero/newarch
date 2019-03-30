@@ -413,18 +413,20 @@ cameratracker:rect_ratio_max                                    1.1
 ###################################################################################################
 
 drivebyvision:yaw_base_power                                    0.30
-drivebyvision:yaw_p                                             0.02
+drivebyvision:yaw_p                                             0.03
 
 ###################################################################################################
 # drive by line follower
 ###################################################################################################
 
-linefollower:front:power                                          0.20
-linefollower:front:distance                                       18
-linefollower:front:adjust                                         0.25
-linefollower:back:power                                           -0.20
-linefollower:back:distance                                        18
-linefollower:back:adjust                                          -0.25
+linefollower:front:power                                          0.25
+linefollower:front:distance                                       12
+linefollower:front:adjust                                         0.15
+
+linefollower:back:power                                           -0.25
+linefollower:back:distance                                        12
+linefollower:back:adjust                                          -0.15
+
 linefollower:stalled_threshold                                    0.1
 
 cargointake:power                                                -0.6

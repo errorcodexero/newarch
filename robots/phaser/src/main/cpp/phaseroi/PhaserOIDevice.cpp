@@ -905,6 +905,11 @@ namespace xero {
             std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;
             std::shared_ptr<ParallelAction> parallel = std::make_shared<ParallelAction>() ;
 
+            //
+            // Setup the threshold for vision
+            //
+            camera->setVisionDetectThreshold(60.0) ;
+
             std::shared_ptr<LightSensorSubsystem> linefollower ;
             ActionPtr drive , lineaction ;
 

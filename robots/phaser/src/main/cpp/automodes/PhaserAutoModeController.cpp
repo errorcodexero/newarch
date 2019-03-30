@@ -32,19 +32,19 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true, false, "CenterHabSingleCargo", "Start in center hab, score one on left front of cargo ship") ;
+                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true, false, "CenterHabSingleCargoRight", "Start in center hab, score one on right front of cargo ship") ;
                 break ;
 
             case 1:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true, true, "CenterHabTwoCargo", "Start in center hab, score two on front of cargo ship, collect second from left side") ;
+                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true, true, "CenterHabTwoCargoLeftLS", "Start in center hab, score two on front of cargo ship, collect second from left side") ;
                 break ;
 
             case 2:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, false, "CenterHabSingleCargo", "Start in center hab, score one on right front of cargo ship") ;
+                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, false, "CenterHabSingleCargoLeft", "Start in center hab, score one on left front of cargo ship") ;
                 break ;
 
             case 3:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, true, "CenterHabTwoCargo", "Start in center hab, score two on front of cargo ship, collect second from right side") ;
+                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, true, "CenterHabTwoCargoRightLS", "Start in center hab, score two on front of cargo ship, collect second from right side") ;
                 break ;
 
             case 4:
@@ -68,7 +68,7 @@ namespace xero {
                 break ;
 
             case 9:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "LeftHABLeftRocket") ;
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), "CargoFrontRightLSLeft", true) ;
                 break ;
             }
             setAction(mode) ;

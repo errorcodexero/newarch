@@ -39,7 +39,6 @@
 #define MSG_GROUP_TANKDRIVE_VERBOSE         (1ull << 8)
 
 #define MSG_GROUP_LINE_FOLLOWER             (1ull << 9)
-#define MSG_GROUP_LINE_FOLLOWER_VERBOSE     (1ull << 9)
 
 #define MSG_GROUP_CAMERA_TRACKER            (1ull << 10)
 
@@ -50,6 +49,8 @@
 #define MSG_GROUP_CAMERA_TRACKER_VERBOSE    (1ull << 13)
 
 #define MSG_GROUP_SIMULATOR                 (1ull << 14)
+
+#define MSG_GROUP_LINE_FOLLOWER_VERBOSE     (1ull << 15)
 
 /// \brief ID to get all messages
 #define MSG_GROUP_ALL                   (0xffffffffffffffffull)
