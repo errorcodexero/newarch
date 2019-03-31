@@ -34,6 +34,7 @@ namespace xero{
             State state_ ;
             double delay_start_ ;
             double delay_duration_ ;
+            double backup_delay_ ;
 
             xero::base::ActionPtr extend_cargo_intake_ ;   
             xero::base::ActionPtr retract_cargo_intake_ ;               

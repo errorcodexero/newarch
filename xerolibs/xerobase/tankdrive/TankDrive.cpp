@@ -236,7 +236,7 @@ namespace xero {
                 double vx = navx_->GetVelocityX() ;
                 double vy = navx_->GetVelocityY() ;
                 double vz = navx_->GetVelocityZ() ;
-                xyz_velocity_ = std::sqrt(vx * vx + vy * vy + vz * vz) ;
+                xyz_velocity_ = std::sqrt(vx * vx + vy * vy + vz * vz) * 39.3701 ;
             }
             else {
                 xyz_velocity_ = 0.0 ;

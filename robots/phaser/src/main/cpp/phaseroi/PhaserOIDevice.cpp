@@ -378,7 +378,7 @@ namespace xero {
 
             set_collect_cargo_floor_  = std::make_shared<FloorCollectCargoAction>(*game) ;
             reset_intakes_ = std::make_shared<ResetIntakeAction>(*game) ;
-            climb_action_ = std::make_shared<ClimbAction>(*ph.getPhaserRobotSubsystem(), false) ;
+            climb_action_ = std::make_shared<ClimbAction>(*ph.getPhaserRobotSubsystem(), true) ;
 
             deploy_climber_ = std::make_shared<ClimberDeployAction>(*climber) ;
 
@@ -1174,6 +1174,9 @@ namespace xero {
             }
             else if (isIdleOrReadyAction() && getHeightButton()) {
                 generateHeightButtonActions(seq) ;
+            }
+            else if (getValue(go_) && mode_ == OperationMode::Auto && piece_ == GamePieceType::Hatch && activity_ == ActivityType::Place && !hatch_holder->isDone()) {
+                hatch_holder->stopArm() ;
             }
             else if (game->isDone() && getValue(go_)) {
                 //
