@@ -461,17 +461,19 @@ hatchholder:finger:autodelay                                    1.0
 hatchholder:debounce:low2high                                   0.2
 hatchholder:debounce:high2low                                   0.4
 
-climb:backup_distance                                           0
-climb:deploy_delay                                              0.3
+climb:deploy_delay                                              1.25
+
 climb:drive:left                                                -0.4
 climb:drive:right                                               -0.4
 climb:drive:duration                                            2.5
-climb:backup:left                                               0.4
-climb:backup:right                                              0.4
-climb:backup:duration                                           0.5
+
+climb:backup:left                                               0.2
+climb:backup:right                                              0.2
+climb:backup:duration                                           0.3
+
 climb:velocity_samples                                          16
 climb:still_threshold                                           2           # in / sec
-climb:backup_delay                                              1.0
+climb:backup_delay                                              1.5
 
 #
 # Variables for the driver gamepad

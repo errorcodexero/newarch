@@ -32,8 +32,8 @@ namespace xero{
         private:
             PhaserRobotSubsystem &subsystem_ ;
             State state_ ;
-            double delay_start_ ;
-            double delay_duration_ ;
+            double start_ ;
+            double deploy_delay_ ;
             double backup_delay_ ;
 
             xero::base::ActionPtr extend_cargo_intake_ ;   

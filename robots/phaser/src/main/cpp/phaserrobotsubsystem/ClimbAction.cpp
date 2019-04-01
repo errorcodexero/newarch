@@ -22,19 +22,19 @@ namespace xero {
 
             retract_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, false) ;
             extend_cargo_intake_ = std::make_shared<CargoIntakeAction>(*cargo_intake, true) ;
+            deploy_grasshopper_ = std::make_shared<ClimberDeployAction>(*climber) ;            
             drive_back_ = std::make_shared<TankDriveTimedPowerAction>(*db, "climb:backup:left",
                             "climb:backup:right", "climb:backup:duration", true) ;
-            deploy_grasshopper_ = std::make_shared<ClimberDeployAction>(*climber) ;
             drivebase_power_ = std::make_shared<TankDriveTimedPowerAction>(*db, "climb:drive:left", 
                             "climb:drive:right", "climb:drive:duration", true) ;
-
-            delay_duration_ = subsystem_.getRobot().getSettingsParser().getDouble("climb:deploy_delay") ;
-
+                            
+            deploy_delay_ = subsystem_.getRobot().getSettingsParser().getDouble("climb:deploy_delay") ;
             backup_delay_ = subsystem_.getRobot().getSettingsParser().getDouble("climb:backup_delay") ;
             
-            state_ = State::Idle ;
             velocity_sample_count_ = subsystem_.getRobot().getSettingsParser().getInteger("climb:velocity_samples") ;
             velocity_still_threshold_ = subsystem_.getRobot().getSettingsParser().getDouble("climb:still_threshold") ;
+
+            state_ = State::Idle ;            
         }
 
 
@@ -55,40 +55,38 @@ namespace xero {
             case State::ReleaseGrasshopper:
                 std::cout << "ReleaseGrasshopper" << std::endl ;
                 if (deploy_grasshopper_->isDone()) {
-                    delay_start_ = subsystem_.getRobot().getTime() ;
+                    start_ = subsystem_.getRobot().getTime() ;
                     state_ = State::WaitForDeploy ;
                 }
                 break ;
 
             case State::WaitForDeploy:
                 std::cout << "WaitForDeploy" << std::endl ;            
-                if (subsystem_.getRobot().getTime() - delay_start_ > delay_duration_) {
+                if (subsystem_.getRobot().getTime() - start_ > deploy_delay_) {
                     auto cargo = subsystem_.getGameManipulator()->getCargoIntake() ;
                     cargo->setAction(extend_cargo_intake_) ;
-                    state_ = State::DeployCargoCollector ;                    
+     
+                    auto db = subsystem_.getTankDrive() ;
+                    db->setAction(drivebase_power_) ;   
+
+                    state_ = State::StartWheels ;   
                 }
                 break ;
 
             case State::DeployCargoCollector:
                 std::cout << "DeployCargoCollector" << std::endl ;           
-                if (extend_cargo_intake_->isDone()) {
-                    auto db = subsystem_.getTankDrive() ;
-                    db->setAction(drivebase_power_) ;   
-                    state_ = State::StartWheels ;                
-                }
                 break ;               
 
             case State::StartWheels:
                 std::cout << "StartWheels" << std::endl ;    
                 if (drivebase_power_->isDone()) {
-                    delay_start_ = subsystem_.getRobot().getTime() ;
+                    start_ = subsystem_.getRobot().getTime() ;
                     state_ = State::WaitForStopped ;
                 }
                 break ;
 
             case State::WaitForStopped:
                 std::cout << "WaitForStopped" << std::endl ;               
-
 #ifdef USE_NAVX
                 velocities_.push_back(db->getXYZVelocity()) ;
                 if (velocities_.size() > velocity_sample_count_)
@@ -107,7 +105,7 @@ namespace xero {
                     }
                 }
 #else
-                if (subsystem_.getRobot().getTime() - delay_start_ > backup_delay_) {
+                if (subsystem_.getRobot().getTime() - start_ > backup_delay_) {
                     db->setAction(drive_back_) ;                    
                     state_ = State::Backup ;
                 }

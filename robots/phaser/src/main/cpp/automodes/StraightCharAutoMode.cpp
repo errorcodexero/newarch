@@ -11,15 +11,13 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
-        StraightCharAutoMode::StraightCharAutoMode(Robot &robot) : PhaserAutoModeBase(robot, "StraightChar", "Characterize the drive base")
+        StraightCharAutoMode::StraightCharAutoMode(Robot &robot) : PhaserAutoModeBase(robot, "TestBackup", "Test the backup")
         {            
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto phaserrobot = phaser.getPhaserRobotSubsystem() ;
-            auto lifter = phaserrobot->getGameManipulator()->getLifter() ;
+            auto db = phaserrobot->getTankDrive() ;
 
-            pushSubActionPair(lifter, std::make_shared<LifterPowerAction>(*lifter, 0.5)) ;
-            pushAction(std::make_shared<DelayAction>(2.5)) ;
-            pushSubActionPair(lifter, std::make_shared<LifterPowerAction>(*lifter, 0.0)) ;            
+            pushSubActionPair(db, std::make_shared<TankDriveTimedPowerAction>(*db, 0.2, 0.2, 0.30, true)) ;
         }
 
         StraightCharAutoMode::~StraightCharAutoMode()
