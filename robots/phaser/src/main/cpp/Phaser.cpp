@@ -73,6 +73,7 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE); 
             logger.enableSubsystem(MSG_GROUP_PHASER_OI) ;    
             logger.enableSubsystem(MSG_GROUP_HATCH_HOLDER);
+            logger.enableSubsystem(MSG_GROUP_HATCH_HOLDER_VERBOSE);  
 
             //
             // This should stay on.  It will have no effect on the real robot
@@ -104,6 +105,8 @@ namespace xero {
             paths->loadPath("RightHABRightRocket") ;                    // RightHABRightRocket.pf1.csv
             paths->loadPath("RightRocketLSRight") ;                     // RightRocketLSRight.pf1.csv
             paths->loadPath("LSRightRocketRight") ;                     // LSRightRocketRight.pf1.csv
+
+            paths->loadPath("Tune") ;
         }
         
         void Phaser::RobotHardwareInit() {

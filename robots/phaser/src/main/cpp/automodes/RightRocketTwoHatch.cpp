@@ -43,7 +43,7 @@ namespace xero {
 
                 path = "RightRocketLSRight" ;
 
-                insertAutoModeLeg(height, angle, path, true, false, 2.0, 0.2, 60.0) ;
+                insertAutoModeLeg(height, angle, path, true, false, 2.0, 0.2, 36.0) ;
 
                 //
                 // Place the second hatch
@@ -54,7 +54,7 @@ namespace xero {
 
                 path = "LSRightRocketRight" ;
 
-                insertAutoModeLeg(height, angle, path, false, true, 2.0, 0.02, 36.0) ;
+                insertAutoModeLeg(height, angle, path, false, true, 2.0, 0.02, 18.0) ;
             }
         }
 

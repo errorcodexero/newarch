@@ -137,32 +137,19 @@ tankdrive:inches_per_tick                                       0.010385891
 tankdrive:width                                                 22
 tankdrive:scrub                                                 0.95177665
 
-if PRACTICE
 tankdrive:follower:left:ka                                      0.0025
 tankdrive:follower:left:kv                                      0.006112469         # 0.005
-tankdrive:follower:left:kp                                      0.03048             # Recommended 0.02032 - 0.03048
+tankdrive:follower:left:kp                                      0.03248             # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kd                                      0.0
 
 tankdrive:follower:right:ka                                     0.0025
 tankdrive:follower:right:kv                                     0.006112469         # 0.005
-tankdrive:follower:right:kp                                     0.03048             # Recommended 0.02032 - 0.03048
-tankdrive:follower:right:kd                                     0.0
-endif
-
-if COMPETITION
-tankdrive:follower:left:ka                                      0.00
-tankdrive:follower:left:kv                                      0.006112469
-tankdrive:follower:left:kp                                      0.03048             # Recommended 0.02032 - 0.03048
-tankdrive:follower:left:kd                                      0.0
-
-tankdrive:follower:right:ka                                     0.00
-tankdrive:follower:right:kv                                     0.006112469
-tankdrive:follower:right:kp                                     0.03048             # Recommended 0.02032 - 0.03048
+tankdrive:follower:right:kp                                     0.03248             # Recommended 0.02032 - 0.03048
 tankdrive:follower:right:kd                                     0.0
 endif
 
 tankdrive:follower:turn_correction                              0
-tankdrive:follower:angle_correction                             0.02
+tankdrive:follower:angle_correction                             0.06
 
 tankdrive:distance_action:maxa                                  36.0
 tankdrive:distance_action:maxd                                  -36.0
@@ -421,11 +408,11 @@ drivebyvision:yaw_p                                             0.03
 
 linefollower:front:power                                          0.25
 linefollower:front:distance                                       12
-linefollower:front:adjust                                         0.15
+linefollower:front:adjust                                         0.0 
 
 linefollower:back:power                                           -0.25
 linefollower:back:distance                                        12
-linefollower:back:adjust                                          -0.15
+linefollower:back:adjust                                          -0.0
 
 linefollower:stalled_threshold                                    0.1
 

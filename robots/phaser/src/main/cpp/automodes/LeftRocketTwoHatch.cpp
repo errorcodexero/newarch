@@ -57,7 +57,7 @@ namespace xero {
 
                 path = "LSLeftRocketLeft" ;
 
-                insertAutoModeLeg(height, angle, path, false, false, 2.0, 0.2, 36.0) ;
+                insertAutoModeLeg(height, angle, path, false, false, 2.0, 0.2, 18.0) ;
             }
         }
 
