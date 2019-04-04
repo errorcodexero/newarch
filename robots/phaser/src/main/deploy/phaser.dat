@@ -528,6 +528,6 @@ carloshatch:impact:low2high                                      0.200
 carloshatch:impact:high2low                                      0.200
 carloshatch:presence:high2low                                    0.100
 carloshatch:presence:low2high                                    0.100
-carloshatch:threshold                                            1.0
+carloshatch:threshold                                            0.75
 carloshatch:pushtime                                             0.5
 carloshatch:waitforhooks                                         0.5

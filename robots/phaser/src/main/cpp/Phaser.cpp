@@ -73,7 +73,6 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE); 
             logger.enableSubsystem(MSG_GROUP_PHASER_OI) ;    
             logger.enableSubsystem(MSG_GROUP_HATCH_HOLDER);
-            logger.enableSubsystem(MSG_GROUP_HATCH_HOLDER_VERBOSE);  
 
             //
             // This should stay on.  It will have no effect on the real robot
@@ -87,14 +86,14 @@ namespace xero {
             auto paths = getPathManager() ;
 
             // Center two hatch automode left ls
-            paths->loadPath("CenterHab2CargoFrontRight") ;              // CenterHab2CargoFrontRight.pf1.csv
-            paths->loadPath("CargoFrontRightLSLeft") ;                  // CargoFrontRightLSLeft.pf1.csv
-            paths->loadPath("LSLeftCargoFrontLeft") ;                   // LSLeftCargoFrontLeft.pf1.csv
+            paths->loadPath("CenterHab2CargoFrontLeft") ;              // CenterHab2CargoFrontRight.pf1.csv
+            paths->loadPath("CargoFrontLeftLSLeft") ;                  // CargoFrontRightLSLeft.pf1.csv
+            paths->loadPath("LSLeftCargoFrontRight") ;                   // LSLeftCargoFrontLeft.pf1.csv
             
             // Center two hatch automode right ls
-            paths->loadPath("CenterHab2CargoFrontLeft") ;               // CenterHab2CargoFrontLeft.pf1.csv
-            paths->loadPath("CargoFrontLeftLSRight") ;                  // CargoFrontLeftLSRight.pf1.csv
-            paths->loadPath("LSRightCargoFrontRight") ;                 // LSRightCargoFrontRight.pf1.csv
+            paths->loadPath("CenterHab2CargoFrontRight") ;               // CenterHab2CargoFrontLeft.pf1.csv
+            paths->loadPath("CargoFrontRightLSRight") ;                  // CargoFrontLeftLSRight.pf1.csv
+            paths->loadPath("LSRightCargoFrontLeft") ;                 // LSRightCargoFrontRight.pf1.csv
 
             // Left rocket two hatch
             paths->loadPath("LeftHABLeftRocket") ;                      // LeftHABLeftRocket.pf1.csv

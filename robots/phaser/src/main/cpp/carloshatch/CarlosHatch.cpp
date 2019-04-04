@@ -4,6 +4,7 @@
 #include <Robot.h>
 #include <ActionSequence.h>
 #include <MessageLogger.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -78,7 +79,9 @@ namespace xero {
             logger << " funny extended deb " << fully_extended_debounced_->get() ;
             logger << " presence raw " << hatchpres ;
             logger << " presence deb " << has_hatch_debounced_->get() ;            
-            logger.endMessage() ;       
+            logger.endMessage() ;  
+
+            frc::SmartDashboard::PutBoolean("Extended", has_hatch_debounced_->get()) ;                 
         }
 
         void CarlosHatch::run() {
@@ -105,11 +108,25 @@ namespace xero {
         void CarlosHatch::enableHooks() {
             holder_->Set(false) ;
             hooks_enabled_ = true ;
+
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
+            logger << "CarlosHatch:" ;                
+            logger << " enable hooks" ;
+            logger << " has hatch " << has_hatch_debounced_->get() ;            
+            logger.endMessage() ;            
         }
 
         void CarlosHatch::disableHooks() {
             holder_->Set(true) ;
             hooks_enabled_ = false ;
+
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
+            logger << "CarlosHatch:" ;                
+            logger << " disable hooks, " ;
+            logger << " has hatch " << has_hatch_debounced_->get() ;
+            logger.endMessage() ;              
         }
     }
 }

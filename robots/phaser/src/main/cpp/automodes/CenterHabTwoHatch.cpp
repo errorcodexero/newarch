@@ -2,6 +2,7 @@
 #include "Phaser.h"
 #include <phasercameratracker/PhaserCameraTracker.h>
 #include <cameratracker/CameraChangeAction.h>
+#include <tankdrive/TankDriveTimedPowerAction.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -13,6 +14,7 @@ namespace xero {
             auto &phaser = dynamic_cast<Phaser &>(getRobot()) ;
             auto game = phaser.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto vision = phaser.getPhaserRobotSubsystem()->getCameraTracker() ;
+            auto db = phaser.getPhaserRobotSubsystem()->getTankDrive() ;
       
             ActionPtr act ;
             
@@ -30,9 +32,9 @@ namespace xero {
             std::string path ;
 
             if (left)
-                path = "CenterHab2CargoFrontRight" ;
-            else            
                 path = "CenterHab2CargoFrontLeft" ;
+            else            
+                path = "CenterHab2CargoFrontRight" ;
 
             insertAutoModeLeg(height, angle, path, false, false, 0.0, 0.2, 60.0) ;
 
@@ -45,9 +47,9 @@ namespace xero {
                 height = "lifter:height:hatch:collect:south" ;
 
                 if (left)
-                    path = "CargoFrontRightLSLeft" ;
+                    path = "CargoFrontLeftLSLeft" ;
                 else
-                    path = "CargoFrontLeftLSRight" ;
+                    path = "CargoFrontRightLSRight" ;
 
                 insertAutoModeLeg(height, angle, path, true, true, 2.0, 0.2, 60.0) ;
 
@@ -59,11 +61,14 @@ namespace xero {
                 std::string path ;
 
                 if (left)
-                    path = "LSLeftCargoFrontLeft" ;
+                    path = "LSLeftCargoFrontRight" ;
                 else
-                    path = "LSRightCargoFrontRight" ;
+                    path = "LSRightCargoFrontLeft" ;
 
-                insertAutoModeLeg(height, angle, path, false, false, 2.0, 0.2, 36.0) ;
+                insertAutoModeLeg(height, angle, path, false, false, 2.0, 0.2, 24.0) ;
+
+                act = std::make_shared<TankDriveTimedPowerAction>(*db, 0.3, 0.3, 1.0) ;
+                pushSubActionPair(db, act) ;
             }
         }
 
