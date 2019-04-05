@@ -92,17 +92,34 @@ namespace xero {
             arm_extend_->Set(true) ;
             arm_retract_->Set(false) ;
             arm_deployed_ = true ;
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
+            logger << "CarlosHatch:" ;                
+            logger << " extendArm" ;
+            logger.endMessage() ;                 
         }
 
         void CarlosHatch::retractArm() {
             arm_extend_->Set(false) ;
             arm_retract_->Set(true) ;
             arm_deployed_ = false ;
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
+            logger << "CarlosHatch:" ;                
+            logger << " retractArm" ;
+            logger.endMessage() ;                 
         }
 
         void CarlosHatch::stopArm() {
             arm_extend_->Set(false) ;
             arm_retract_->Set(false) ;            
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_HATCH_HOLDER) ;
+            logger << "CarlosHatch:" ;                
+            logger << " stopArm" ;
+            logger.endMessage() ;                 
+
+            std::cout << "Stop Arm" << std::endl ;
         }
 
         void CarlosHatch::enableHooks() {

@@ -64,7 +64,6 @@ namespace xero {
                 break ;
 
             case 8:
-                mode = std::make_shared<StraightCharAutoMode>(getRobot()) ;
                 break ;
 
             case 9:

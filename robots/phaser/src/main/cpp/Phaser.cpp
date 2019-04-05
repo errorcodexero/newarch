@@ -57,7 +57,7 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_VISION_TERMINATOR);             
             // logger.enableSubsystem(MSG_GROUP_PHASER_TURNTABLE);
             // logger.enableSubsystem(MSG_GROUP_PHASER_TURNTABLE_VERBOSE);                  
-            // logger.enableSubsystem(MSG_GROUP_PHASER_LIFTER);
+            // logger.enableSubsystem(MSG_GROUP_PHASER_LIFTER);MSG_GROUP_PHASER_TURNTABLE_VERBOSE
             // logger.enableSubsystem(MSG_GROUP_CARGO_INTAKE);    
             // logger.enableSubsystem(MSG_GROUP_CARGO_HOLDER);   
             // logger.enableSubsystem(MSG_GROUP_HATCH_HOLDER);
@@ -72,8 +72,9 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_OI) ;
             logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE); 
             logger.enableSubsystem(MSG_GROUP_PHASER_OI) ;    
-            logger.enableSubsystem(MSG_GROUP_HATCH_HOLDER);
-
+            logger.enableSubsystem(MSG_GROUP_LINE_FOLLOWER);  
+            logger.enableSubsystem(MSG_GROUP_VISION_DRIVING);
+             
             //
             // This should stay on.  It will have no effect on the real robot
             // but will show information about injected events in the simulation

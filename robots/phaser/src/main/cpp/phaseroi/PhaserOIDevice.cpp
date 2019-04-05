@@ -1176,6 +1176,7 @@ namespace xero {
                 generateHeightButtonActions(seq) ;
             }
             else if (getValue(go_) && mode_ == OperationMode::Auto && piece_ == GamePieceType::Hatch && activity_ == ActivityType::Place && !hatch_holder->isDone()) {
+                std::cout << "OI Stopping Arm" << std::endl ;
                 hatch_holder->stopArm() ;
             }
             else if (game->isDone() && getValue(go_)) {

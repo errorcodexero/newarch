@@ -46,9 +46,9 @@ endif
 #
 # Carlos hatch holder
 #
-hw:carloshatch:holder                                           5               # Solenoid
-hw:carloshatch:arm:extend                                       6               # Solenoid
-hw:carloshatch:arm:retract                                      7               # Solenoid
+hw:carloshatch:holder                                           7               # Solenoid
+hw:carloshatch:arm:extend                                       5               # Solenoid
+hw:carloshatch:arm:retract                                      6               # Solenoid
 hw:carloshatch:sensor                                           0               # Analog IO
 hw:carloshatch:impact                                           21              # Digital IO
 
@@ -57,9 +57,9 @@ hw:carloshatch:impact                                           21              
 #
 hw:lifter:motor:1                                               10              # TalonSRX
 hw:lifter:motor:2                                               11              # TalonSRC
+hw:lifter:reversemotors                                         true
 hw:lifter:encoder1                                              8               # Digital IO
 hw:lifter:encoder2                                              9               # Digital IO
-hw:lifter:reversemotors                                         true
 
 #
 # turntable
@@ -146,7 +146,6 @@ tankdrive:follower:right:ka                                     0.0025
 tankdrive:follower:right:kv                                     0.006112469         # 0.005
 tankdrive:follower:right:kp                                     0.03248             # Recommended 0.02032 - 0.03048
 tankdrive:follower:right:kd                                     0.0
-endif
 
 tankdrive:follower:turn_correction                              0
 tankdrive:follower:angle_correction                             0.06
@@ -202,17 +201,9 @@ if COMPETITION
 turntable:degrees_per_tick                                      0.546283784
 endif
 
-if COMPETITION
 turntable:maxa                                                  420
 turntable:maxd                                                  -420
 turntable:maxv                                                  300
-endif
-
-if PRACTICE
-turntable:maxa                                                  420
-turntable:maxd                                                  -420
-turntable:maxv                                                  300
-endif
 
 turntable:base                                                  0.0
 turntable:threshold                                             1.0
@@ -260,14 +251,7 @@ turntable:angle:hatch:place:west                                90
 # Variables for the lifter
 #
 lifter:base							                            10.75
-
-ifdef COMPETITION
-lifter:inches_per_tick                                          0.059099901
-endif
-
-ifdef PRACTICE
 lifter:inches_per_tick                                          0.058691309
-endif
 
 lifter:calibrate:up:power                                       0.4                         
 lifter:calibrate:hold:power                                     0.25                         
@@ -329,30 +313,30 @@ lifter:height:turtle                                            15.0
 # Cargo
 #
 
-lifter:height:cargo:collect:north                               37
-lifter:height:cargo:collect:south                               37
-lifter:height:cargo:collect:east                                37
-lifter:height:cargo:collect:west                                37
+lifter:height:cargo:collect:north                               38
+lifter:height:cargo:collect:south                               38
+lifter:height:cargo:collect:east                                38
+lifter:height:cargo:collect:west                                38
 
-lifter:height:cargo:place:north:1                               22.5
-lifter:height:cargo:place:south:1                               22.5
-lifter:height:cargo:place:east:1                                22.5
-lifter:height:cargo:place:west:1                                22.5
+lifter:height:cargo:place:north:1                               21
+lifter:height:cargo:place:south:1                               21
+lifter:height:cargo:place:east:1                                21
+lifter:height:cargo:place:west:1                                21
 
-lifter:height:cargo:place:north:2                             50.5
-lifter:height:cargo:place:south:2                             50.5
-lifter:height:cargo:place:east:2                              50.5
-lifter:height:cargo:place:west:2                              50.5
+lifter:height:cargo:place:north:2                             50
+lifter:height:cargo:place:south:2                             50
+lifter:height:cargo:place:east:2                              50
+lifter:height:cargo:place:west:2                              50
 
-lifter:height:cargo:place:north:3                             79.5
-lifter:height:cargo:place:south:3                             79.5
-lifter:height:cargo:place:east:3                              79.5
-lifter:height:cargo:place:west:3                              79.5
+lifter:height:cargo:place:north:3                             79
+lifter:height:cargo:place:south:3                             79
+lifter:height:cargo:place:east:3                              79
+lifter:height:cargo:place:west:3                              79
 
-lifter:height:cargo:place:north:c                             38
-lifter:height:cargo:place:south:c                             38
-lifter:height:cargo:place:east:c                              38
-lifter:height:cargo:place:west:c                              38
+lifter:height:cargo:place:north:c                             40
+lifter:height:cargo:place:south:c                             40
+lifter:height:cargo:place:east:c                              40
+lifter:height:cargo:place:west:c                              40
 
 #
 # Hatches
@@ -368,12 +352,12 @@ lifter:height:hatch:place:south:1                             11.5
 lifter:height:hatch:place:east:1                              11.5               
 lifter:height:hatch:place:west:1                              11.5   
 
-lifter:height:hatch:place:north:2                             40           
-lifter:height:hatch:place:south:2                             40              
-lifter:height:hatch:place:east:2                              40                 
-lifter:height:hatch:place:west:2                              40
+lifter:height:hatch:place:north:2                             42           
+lifter:height:hatch:place:south:2                             42              
+lifter:height:hatch:place:east:2                              42                 
+lifter:height:hatch:place:west:2                              42
                
-lifter:height:hatch:place:north:3                             70                 
+lifter:height:hatch:place:north:3                             70
 lifter:height:hatch:place:south:3                             70                
 lifter:height:hatch:place:east:3                              70                 
 lifter:height:hatch:place:west:3                              70                 
@@ -385,7 +369,7 @@ lifter:height:hatch:place:west:c                              11.5
 
 lifter:height:offset:hatch_hook_center                        8.6
 lifter:height:cargo:undock_height                             22.00
-lifter:height:cargo:collected                                 38
+lifter:height:cargo:collected                                 40
 
 ###################################################################################################
 # cameratracker
@@ -408,7 +392,7 @@ drivebyvision:yaw_p                                             0.03
 
 linefollower:front:power                                          0.25
 linefollower:front:distance                                       12
-linefollower:front:adjust                                         0.0 
+linefollower:front:adjust                                         0.0
 
 linefollower:back:power                                           -0.25
 linefollower:back:distance                                        12
@@ -450,17 +434,17 @@ hatchholder:debounce:high2low                                   0.4
 
 climb:deploy_delay                                              1.25
 
-climb:drive:left                                                -0.4
-climb:drive:right                                               -0.4
+climb:drive:left                                                -0.3
+climb:drive:right                                               -0.3
 climb:drive:duration                                            2.5
 
 climb:backup:left                                               0.2
 climb:backup:right                                              0.2
-climb:backup:duration                                           0.3
+climb:backup:duration                                           0.25
 
 climb:velocity_samples                                          16
 climb:still_threshold                                           2           # in / sec
-climb:backup_delay                                              1.5
+climb:backup_delay                                              2.5
 
 #
 # Variables for the driver gamepad

@@ -90,8 +90,12 @@ namespace xero {
 
                     lost_count_ = 0 ;
 
-                    double desired_yaw = 0.0031 * dist * dist - 0.3855 * dist + 14.938 ;
+                    //double desired_yaw = 0.0031 * dist * dist - 0.3855 * dist + 14.938 ;
+                    //double desired_yaw = 0.0039 * dist *dist - 0.4214 * dist + 12.346 ;
+                    double desired_yaw = 0.0034 * dist * dist - 0.366 * dist + 11.065 ;
                     double yawerror = yaw - desired_yaw ;
+
+
 
                     double yawadj = yawerror * yaw_p_ ;
                     double left = yaw_base_power_ + yawadj ;
