@@ -384,7 +384,7 @@ cameratracker:rect_ratio_max                                    1.1
 ###################################################################################################
 
 drivebyvision:yaw_base_power                                    0.30
-drivebyvision:yaw_p                                             0.03
+drivebyvision:yaw_p                                             0.025
 
 ###################################################################################################
 # drive by line follower
@@ -479,6 +479,8 @@ oi:reverse                                                      7               
 oi:automode                                                     6                   # Axis
 oi:tracking_viewing_nothing_switch                              3                   # Axis
 oi:ship_rocket                                                  4                   # Axis
+
+oi:extra_arm_button                                             true                # Controls OI
 
 #
 # Semi-auto modes

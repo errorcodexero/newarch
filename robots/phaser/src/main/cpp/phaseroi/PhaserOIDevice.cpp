@@ -66,6 +66,8 @@ namespace xero {
 
             piece_ = GamePieceType::Invalid ;
             prev_cargo_hatch_switch_ = -1 ;
+
+            extra_arm_button_ = sub.getRobot().getSettingsParser().getBoolean("oi:extra_arm_button") ;
         }
 
         PhaserOIDevice::~PhaserOIDevice() {
@@ -618,7 +620,6 @@ namespace xero {
             if ((height == "@" || parser.isDefined(height)) && (angle == "@" || parser.isDefined(angle))) {
                 act = std::make_shared<ReadyAction>(*game, height, angle, leave) ;
                 seq.pushSubActionPair(game, act, false) ;
-                direction_action_ = act ;
             }
             else {
                 MessageLogger &logger = getSubsystem().getRobot().getMessageLogger() ;
@@ -1023,10 +1024,13 @@ namespace xero {
             //
             generateHeightActions(seq) ;
 
-            //
-            // Arm the robot to complete the action
-            //
-            generateArmActions(seq) ;
+            if (piece_ == GamePieceType::Cargo || !extra_arm_button_)
+            {
+                //
+                // Arm the robot to complete the action
+                //
+                generateArmActions(seq) ;
+            }
         }
 
         //
@@ -1096,13 +1100,6 @@ namespace xero {
             auto fcol = std::dynamic_pointer_cast<FloorCollectCargoAction>(set_collect_cargo_floor_) ;
 
             //
-            // If we were executing a direction action, and it is done, clear the direction action
-            //
-            if (direction_action_ != nullptr && direction_action_->isDone()) {
-                direction_action_ = nullptr ;
-            }
-
-            //
             // Get the tracking mode, either auto, semi-auto, or manual
             //
             getTrackingMode() ;
@@ -1120,23 +1117,37 @@ namespace xero {
             //
             // Calibrate takes precedence over everything
             //
-            if (getValue(calibrate_)) {
+            if (getValue(calibrate_) && calibrate_action_->isDone() && reset_intakes_->isDone() && climb_action_->isDone()) {
                 game->setAction(calibrate_action_) ;
             }
-            else if (getValue(turtle_mode_) && reset_intakes_->isDone() && climb_action_->isDone()) {
+            else if (getValue(turtle_mode_) && calibrate_action_->isDone() && reset_intakes_->isDone() && climb_action_->isDone()) {
                 //
                 // Directly assign the action and make it forcing to ensure this
                 // action takes priority over everything else.
                 //
                 game->setAction(reset_intakes_, true) ;
-            }
-            else if (!fcol->isDone() && getValue(reverse_)) {
+
+            } else if (game->isDone() && getValue(climb_lock_switch_) && getValue(climb_)) {
                 //
-                // Reverse the direction of the intake rollers
+                // Climb lock switch is off and the climb button is pushed.
+                //
+                // Time to fly .... like a grasshopper
+                //
+                auto robotsub = ph.getPhaserRobotSubsystem() ;
+                robotsub->setAction(climb_action_) ;
+            }            
+            else if (!set_collect_cargo_floor_->isDone() && getValue(reverse_)) {
+                //
+                // Reverse the direction of the intake rollers, but only if we are
+                // doing a floor collect
                 //
                 fcol->reverseIntake() ;
             }
             else if (piece_ == GamePieceType::Hatch && activity_ == ActivityType::Place && getValue(reverse_)) {
+                //
+                // Dump a hatch if we are setup to place one.  This can also be used to 
+                // place a hatch at level three.
+                //
                 auto act = std::make_shared<DumpHatch>(*hatch_holder) ;
                 seq.pushSubActionPair(hatch_holder, act) ;
             }
@@ -1154,14 +1165,6 @@ namespace xero {
                 //
                 game->cancelAction() ;
 
-            } else if (game->isDone() && getValue(climb_lock_switch_) && getValue(climb_)) {
-                //
-                // Climb lock switch is off and the climb button is pushed.
-                //
-                // Time to fly .... like a grasshopper
-                //
-                auto robotsub = ph.getPhaserRobotSubsystem() ;
-                robotsub->setAction(climb_action_) ;
             }
             else if (isIdleOrReadyAction() && getDirection()) {
                 //
@@ -1174,10 +1177,6 @@ namespace xero {
             }
             else if (isIdleOrReadyAction() && getHeightButton()) {
                 generateHeightButtonActions(seq) ;
-            }
-            else if (getValue(go_) && mode_ == OperationMode::Auto && piece_ == GamePieceType::Hatch && activity_ == ActivityType::Place && !hatch_holder->isDone()) {
-                std::cout << "OI Stopping Arm" << std::endl ;
-                hatch_holder->stopArm() ;
             }
             else if (game->isDone() && getValue(go_)) {
                 //

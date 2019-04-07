@@ -203,8 +203,6 @@ namespace xero {
             xero::base::ActionPtr reset_intakes_ ;
             xero::base::ActionPtr retract_arm_ ;
 
-            xero::base::ActionPtr direction_action_ ;
-
             xero::base::ActionPtr finish_collect_hatch_ ;
             xero::base::ActionPtr finish_collect_cargo_ ;
             xero::base::ActionPtr finish_place_hatch_ ;
@@ -227,6 +225,8 @@ namespace xero {
             bool field_relative_ ;
 
             GamePieceType piece_ ;
+
+            bool extra_arm_button_ ;
         } ;
     }
 }
