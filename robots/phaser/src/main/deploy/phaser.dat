@@ -187,7 +187,7 @@ turntable:calibrate:encbase                                     238
 endif
 
 if COMPETITION
-turntable:calibrate:encbase                                     261             
+turntable:calibrate:encbase                                     252
 endif
 
 turntable:calibrate:power                                       0.2             
@@ -257,7 +257,7 @@ lifter:calibrate:up:power                                       0.4
 lifter:calibrate:hold:power                                     0.25                         
 lifter:calibrate:up:time                                        1.0                         
 lifter:calibrate:threshold                                      2                           
-lifter:calibrate:encbase                                        29                          
+lifter:calibrate:encbase                                        0                         
 lifter:calibrate:power                                          -0.4                        
 lifter:calibrate:samples                                        16                           
 
@@ -328,10 +328,10 @@ lifter:height:cargo:place:south:2                             50
 lifter:height:cargo:place:east:2                              50
 lifter:height:cargo:place:west:2                              50
 
-lifter:height:cargo:place:north:3                             79
-lifter:height:cargo:place:south:3                             79
-lifter:height:cargo:place:east:3                              79
-lifter:height:cargo:place:west:3                              79
+lifter:height:cargo:place:north:3                             81
+lifter:height:cargo:place:south:3                             81
+lifter:height:cargo:place:east:3                              81
+lifter:height:cargo:place:west:3                              81
 
 lifter:height:cargo:place:north:c                             40
 lifter:height:cargo:place:south:c                             40
@@ -357,10 +357,10 @@ lifter:height:hatch:place:south:2                             42
 lifter:height:hatch:place:east:2                              42                 
 lifter:height:hatch:place:west:2                              42
                
-lifter:height:hatch:place:north:3                             70
-lifter:height:hatch:place:south:3                             70                
-lifter:height:hatch:place:east:3                              70                 
-lifter:height:hatch:place:west:3                              70                 
+lifter:height:hatch:place:north:3                             72
+lifter:height:hatch:place:south:3                             72                
+lifter:height:hatch:place:east:3                              72                 
+lifter:height:hatch:place:west:3                              72                 
 
 lifter:height:hatch:place:north:c                             11.5
 lifter:height:hatch:place:south:c                             11.5
@@ -434,8 +434,8 @@ hatchholder:debounce:high2low                                   0.4
 
 climb:deploy_delay                                              1.25
 
-climb:drive:left                                                -0.3
-climb:drive:right                                               -0.3
+climb:drive:left                                                0
+climb:drive:right                                               0
 climb:drive:duration                                            2.5
 
 climb:backup:left                                               0.2
