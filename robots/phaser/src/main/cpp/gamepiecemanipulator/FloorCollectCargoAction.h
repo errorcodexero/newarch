@@ -23,7 +23,7 @@ namespace xero {
             enum class State {
                 Idle,
                 LifterGoToSafeHeight,
-                TurntableGoToCollectAngle,
+                LifterAndTurntableConcurrently,
                 LifterGoToCollectHeightDeployIntake,
                 WaitForCargo,
                 WaitForCargo2,
@@ -60,6 +60,7 @@ namespace xero {
             xero::base::ActionPtr rumble_ ;          
 
             bool reversed_ ;  
+            double safeheight_ ;
         };
     }
 }

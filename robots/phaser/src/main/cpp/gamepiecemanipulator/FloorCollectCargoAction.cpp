@@ -33,14 +33,15 @@ namespace xero {
             retract_arm_ = std::make_shared<CarlosHatchArmAction>(*hatch_holder, CarlosHatchArmAction::Operation::RETRACT) ;      
 
             cargo_delay_ = getGamePiece().getRobot().getSettingsParser().getDouble("cargointake:delay") ;
-            
+            safeheight_ =   getGamePiece().getRobot().getSettingsParser().getDouble("turntable:safe_lifter_height") ;
+
             set_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, "cargointake:power") ;
             stop_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, 0.0) ;
             reverse_cargo_intake_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_intake, "cargointake:reverse:power") ;
             set_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, "cargoholder:collect:power") ;
             stop_cargo_holder_motor_ = std::make_shared<SingleMotorPowerAction>(*cargo_holder, 0.0) ;
                      
-            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1.0, 1.0) ;            
+            rumble_ = std::make_shared<DriverGamepadRumbleAction>(*oi, true, 1.0, 1.0) ;     
 
             state_ = State::Idle ;
             reversed_ = false ;
@@ -57,8 +58,20 @@ namespace xero {
             //
             getGamePiece().getHatchHolder()->setAction(retract_arm_) ;
             auto lifter = getGamePiece().getLifter() ;
-            lifter->setAction(set_lifter_safe_height_) ;
-            state_ = State::LifterGoToSafeHeight ;
+            auto turntable = getGamePiece().getTurntable();
+            auto cargo_intake = getGamePiece().getCargoIntake() ;   
+
+            if (lifter->getHeight() > safeheight_) {
+                lifter->setAction(set_lifter_cargo_intake_height_) ;
+                turntable->setAction(set_turntable_cargo_angle_) ;
+                cargo_intake->setAction(deploy_cargo_intake_) ;   
+
+                state_ = State::LifterAndTurntableConcurrently ;                  
+            }
+            else {
+                lifter->setAction(set_lifter_safe_height_) ;
+                state_ = State::LifterGoToSafeHeight ;
+            }
             reversed_ = false ;
         }
 
@@ -100,27 +113,21 @@ namespace xero {
                     auto turntable = getGamePiece().getTurntable();
                     auto lifter = getGamePiece().getLifter() ;
                     turntable->setAction(set_turntable_cargo_angle_) ;
-                    cargo_intake->setAction(deploy_cargo_intake_) ;       
+                    cargo_intake->setAction(deploy_cargo_intake_) ;  
+                    lifter->setAction(set_lifter_cargo_intake_height_) ;                         
 
-                    state_ = State::TurntableGoToCollectAngle ;
+                    state_ = State::LifterAndTurntableConcurrently ;
                 }
                 break ;
 
-            case State::TurntableGoToCollectAngle:
-                //
-                // Check to see if the turntable is at the desired angle.  The current state is not
-                // complete until the turntable is done with its action
-                //
-                if (set_turntable_cargo_angle_->isDone() && deploy_cargo_intake_->isDone()) {
-                    //
-                    // 3. The turntable action to move into the position to collect cargo from the
-                    //    floor is complete.  Move the lifter to the right height to capture cargo
-                    //    from the floor while simultaneously deploying the cargo intake. 
-                    //
+            case State::LifterAndTurntableConcurrently:
+                if (set_lifter_cargo_intake_height_->isDone() && set_turntable_cargo_angle_->isDone() && deploy_cargo_intake_->isDone()) {
+                    auto cargo_intake = getGamePiece().getCargoIntake() ;
                     auto lifter = getGamePiece().getLifter() ;
-                    lifter->setAction(set_lifter_cargo_intake_height_) ;
+                    cargo_intake->setAction(set_cargo_intake_motor_) ;
+                    cargo_holder->setAction(set_cargo_holder_motor_) ;
 
-                    state_ = State::LifterGoToCollectHeightDeployIntake ;                     
+                    state_ = State::WaitForCargo ;
                 }
                 break ;
 
@@ -253,7 +260,7 @@ namespace xero {
                 state_ = State::Idle ;
                 break ;
 
-            case State::TurntableGoToCollectAngle:
+            case State::LifterAndTurntableConcurrently:
                 // The turntable is changing angles, but that is ok, let the lift
                 // finish its height action
                 state_ = State::Idle ;            
