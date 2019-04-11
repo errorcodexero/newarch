@@ -46,9 +46,18 @@ endif
 #
 # Carlos hatch holder
 #
+if PRACTICE
+hw:carloshatch:holder                                           5               # Solenoid
+hw:carloshatch:arm:extend                                       6               # Solenoid
+hw:carloshatch:arm:retract                                      7               # Solenoid
+endif
+
+if COMPETITION
 hw:carloshatch:holder                                           7               # Solenoid
 hw:carloshatch:arm:extend                                       5               # Solenoid
 hw:carloshatch:arm:retract                                      6               # Solenoid
+endif
+
 hw:carloshatch:sensor                                           0               # Analog IO
 hw:carloshatch:impact                                           21              # Digital IO
 
@@ -479,8 +488,7 @@ oi:reverse                                                      7               
 oi:automode                                                     6                   # Axis
 oi:tracking_viewing_nothing_switch                              3                   # Axis
 oi:ship_rocket                                                  4                   # Axis
-
-oi:extra_arm_button                                             true                # Controls OI
+oi:extra_arm_button                                             false
 
 #
 # Semi-auto modes
