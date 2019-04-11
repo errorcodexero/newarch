@@ -32,7 +32,7 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true, false, "CenterHabSingleCargoRight", "Start in center hab, score one on right front of cargo ship") ;
+                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true, false, "CenterHabSingleCargoLeft", "Start in center hab, score one on right front of cargo ship") ;
                 break ;
 
             case 1:
@@ -40,7 +40,7 @@ namespace xero {
                 break ;
 
             case 2:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, false, "CenterHabSingleCargoLeft", "Start in center hab, score one on left front of cargo ship") ;
+                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, false, "CenterHabSingleCargoRight", "Start in center hab, score one on left front of cargo ship") ;
                 break ;
 
             case 3:
