@@ -8,6 +8,10 @@ namespace frc
             index_ = index ;
         }
 
+        double GetVoltage() {
+            return 0.0 ;
+        }
+
     private:
         int index_ ;
     } ;

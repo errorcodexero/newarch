@@ -8,7 +8,6 @@ AUTOMODES = \
 	src/main/cpp/automodes/FollowPathAutomode.cpp\
 	src/main/cpp/automodes/LifterHeightMode.cpp\
 	src/main/cpp/automodes/CenterHabTwoHatch.cpp\
-	src/main/cpp/automodes/CenterHabHatchCargo.cpp\
 	src/main/cpp/automodes/LeftRocketTwoHatch.cpp\
 	src/main/cpp/automodes/RightRocketTwoHatch.cpp
 
@@ -22,19 +21,19 @@ SUBSYSTEMS = \
 	src/main/cpp/turntable/TurntablePowerAction.cpp\
 	src/main/cpp/phasercameratracker/PhaserCameraTracker.cpp\
 	src/main/cpp/phasercameratracker/DriveByVisionAction.cpp\
-	src/main/cpp/hatchholder/HatchHolder.cpp\
-	src/main/cpp/hatchholder/HatchHolderAction.cpp\
+	src/main/cpp/carloshatch/CarlosHatch.cpp\
+	src/main/cpp/carloshatch/CarlosHatchArmAction.cpp\
+	src/main/cpp/carloshatch/CarlosHatchImpactAction.cpp\
+	src/main/cpp/carloshatch/DumpHatch.cpp\
 	src/main/cpp/cargoholder/CargoHolder.cpp\
 	src/main/cpp/cargointake/CargoIntake.cpp\
 	src/main/cpp/cargointake/CargoIntakeAction.cpp\
 	src/main/cpp/climber/Climber.cpp\
 	src/main/cpp/climber/ClimberDeployAction.cpp\
 	src/main/cpp/gamepiecemanipulator/GamePieceManipulator.cpp\
-	src/main/cpp/gamepiecemanipulator/CompleteLSHatchCollect.cpp\
 	src/main/cpp/gamepiecemanipulator/CompleteLSCargoCollect.cpp\
 	src/main/cpp/gamepiecemanipulator/FloorCollectCargoAction.cpp\
 	src/main/cpp/gamepiecemanipulator/ScoreCargo.cpp\
-	src/main/cpp/gamepiecemanipulator/ScoreHatch.cpp\
 	src/main/cpp/gamepiecemanipulator/ReadyAction.cpp\
 	src/main/cpp/gamepiecemanipulator/ResetIntakesAction.cpp\
 	src/main/cpp/gamepiecemanipulator/CalibrateManip.cpp

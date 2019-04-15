@@ -23,7 +23,6 @@
 #include "phaserrobotsubsystem/ClimbAction.h"
 #include "phaserrobotsubsystem/StrafeAction.h"
 #include "climber/ClimberDeployAction.h"
-#include "turntable/CargoTrackerAction.h"
 #include <oi/DriverGamepadRumbleAction.h>
 #include "LineFollowerTakeover.h"
 #include "VisionDetectTakeover.h"
@@ -385,8 +384,6 @@ namespace xero {
             deploy_climber_ = std::make_shared<ClimberDeployAction>(*climber) ;
 
             calibrate_action_ = std::make_shared<CalibrateManip>(*game) ;
-
-            track_cargo_target_ = std::make_shared<CargoTrackerAction>(*turntable, *vision) ;
 
             retract_arm_ = std::make_shared<CarlosHatchArmAction>(*game->getHatchHolder(), CarlosHatchArmAction::Operation::RETRACT) ;
         }
