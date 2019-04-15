@@ -45,9 +45,16 @@ namespace ctre {
 
                 void ConfigForwardLimitSwitchSource(LimitSwitchSource source, LimitSwitchNormal state, int to = 0) {
                 }    
-                void ConfigReverseLimitSwitchSource(LimitSwitchSource source, LimitSwitchNormal state, int to = 0) {
-                }                        
 
+                void ConfigReverseLimitSwitchSource(LimitSwitchSource source, LimitSwitchNormal state, int to = 0) {
+                }           
+
+                void ConfigForwardLimitSwitchSource(RemoteLimitSwitchSource type, LimitSwitchNormal state, int deviceID, int to = 0) {
+                }       
+
+                void ConfigReverseLimitSwitchSource(RemoteLimitSwitchSource type, LimitSwitchNormal state, int deviceID, int to = 0) {                    
+                }
+                
             private:
                 int index_ ;
                 double value_ ;
