@@ -207,7 +207,8 @@ turntable:degrees_per_tick                                      0.60916263086705
 endif
 
 if COMPETITION
-turntable:degrees_per_tick                                      0.546283784
+#turntable:degrees_per_tick                                      0.546283784
+turntable:degrees_per_tick                                      0.538800444
 endif
 
 turntable:maxa                                                  420
