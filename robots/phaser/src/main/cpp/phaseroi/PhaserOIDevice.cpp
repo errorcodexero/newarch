@@ -1117,7 +1117,14 @@ namespace xero {
             //
             // Calibrate takes precedence over everything
             //
-            if (getValue(calibrate_) && calibrate_action_->isDone() && reset_intakes_->isDone() && climb_action_->isDone()) {
+            if (getValue(calibrate_)) {
+                if (calibrate_action_->isDone())
+                    std::cout << "calibrate action still running" << std::endl ;;
+                if (reset_intakes_->isDone())
+                    std::cout << "reset intakes still running" << std::endl ;
+                if (climb_action_->isDone())
+                    std::cout << "climb_action still running" << std::endl ;
+                    
                 game->setAction(calibrate_action_) ;
             }
             else if (getValue(turtle_mode_) && calibrate_action_->isDone() && reset_intakes_->isDone() && climb_action_->isDone()) {

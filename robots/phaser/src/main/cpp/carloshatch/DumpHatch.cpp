@@ -15,15 +15,21 @@ namespace xero {
 
         void DumpHatch::start() {
             CarlosHatch &hatchholder = getSubsystem() ;
-            hatchholder.extendArm() ;
-            state_ = State::ExtendArm ;
-            start_ = getSubsystem().getRobot().getTime() ;
+            if (hatchholder.isArmDeployed()) {
+                hatchholder.disableHooks() ;
+                state_ = State::CloseFingers ;
+            }
+            else {
+                hatchholder.extendArm() ;
+                state_ = State::ExtendArm ;
+            }
+            start_ = getSubsystem().getRobot().getTime() ;            
         }
 
         void DumpHatch::run() {
             switch(state_) {
             case State::ExtendArm:
-                if (getSubsystem().getRobot().getTime() - start_ > 1.0) {
+                if (getSubsystem().getRobot().getTime() - start_ > 0.5) {
                     state_ = State::CloseFingers ;
                     getSubsystem().disableHooks() ;
                     start_ = getSubsystem().getRobot().getTime() ;
@@ -31,7 +37,7 @@ namespace xero {
                 break ;
 
             case State::CloseFingers:
-                if (getSubsystem().getRobot().getTime() - start_ > 0.5) {
+                if (getSubsystem().getRobot().getTime() - start_ > 0.25) {
                     getSubsystem().retractArm() ;
                     state_ = State::RetractArm ;
                     start_ = getSubsystem().getRobot().getTime() ;
