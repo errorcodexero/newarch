@@ -16,8 +16,6 @@
 if PRACTICE
 hw:tankdrive:leftmotor:1                                        4               # TALON SRX
 hw:tankdrive:leftmotor:2                                        5               # TALON SRX
-hw:tankdrive:leftmotor:3                                        6               # TALON SRX
-hw:tankdrive:rightmotor:1                                       1               # TALON SRX
 hw:tankdrive:rightmotor:2                                       2               # TALON SRX
 hw:tankdrive:rightmotor:3                                       3               # TALON SRX
 hw:tankdrive:leftencoder:1                                      1               # Digital IO
@@ -208,7 +206,8 @@ endif
 
 if COMPETITION
 #turntable:degrees_per_tick                                      0.546283784
-turntable:degrees_per_tick                                      0.538800444
+#turntable:degrees_per_tick                                      0.538800444
+turntable:degrees_per_tick                                      0.55387105877777777777777777777778
 endif
 
 turntable:maxa                                                  420
@@ -444,9 +443,9 @@ hatchholder:debounce:high2low                                   0.4
 
 climb:deploy_delay                                              1.25
 
-climb:drive:left                                                0
-climb:drive:right                                               0
-climb:drive:duration                                            2.5
+climb:drive:left                                                -0.4
+climb:drive:right                                               -0.4
+climb:drive:duration                                            4.0
 
 climb:backup:left                                               0.2
 climb:backup:right                                              0.2
