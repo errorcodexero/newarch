@@ -274,9 +274,9 @@ lifter:max_height                                               83.66
 lifter:min_height                                               8.46
 lifter:threshold                                                1.0
 
-lifter:maxv                                                     30               # 30
-lifter:maxa                                                     30               # 30
-lifter:maxd                                                     -30              # -30
+lifter:maxv                                                     33               # 30
+lifter:maxa                                                     60               # 30
+lifter:maxd                                                     -60              # -30
 
 lifter:follower:up:kp                                           0.2
 lifter:follower:up:ka                                           0.00056179776

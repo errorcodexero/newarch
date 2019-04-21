@@ -63,8 +63,8 @@ namespace xero {
             case State::WaitForDeploy:
                 std::cout << "WaitForDeploy" << std::endl ;            
                 if (subsystem_.getRobot().getTime() - start_ > deploy_delay_) {
-                    //auto cargo = subsystem_.getGameManipulator()->getCargoIntake() ;
-                    //cargo->setAction(extend_cargo_intake_) ;
+                    auto cargo = subsystem_.getGameManipulator()->getCargoIntake() ;
+                    cargo->setAction(extend_cargo_intake_) ;
      
                     auto db = subsystem_.getTankDrive() ;
                     db->setAction(drivebase_power_) ;   
