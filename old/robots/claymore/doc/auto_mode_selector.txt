@@ -1,0 +1,12 @@
+  Mode:             		What it does:
+0.Null				Nothing.
+1.Baseline			Crosses the baseline
+2.Baseline Extended		Crosses the baseline and continues across the field not crossing the launchpad line.
+3.Gear Boiler 			Crosses the baseline scores a gear on the boiler side peg and backs up.
+4.Gear Boiler Extended		Crosses the baseline scores a gear on the boiler side peg and crosses the field not crossing the launchpad line.
+5.Gear Loading 			Crosses the baseline scores a gear on the loading zone side peg and backs up.
+6.Gear Loading Extended		Crosses the baseline scores a gear on the loading zone side peg and crosses the field not crossing the launchpad line.
+7.Gear Mid       		Crosses the baseline scores a gear on the middle peg and backs up.
+8.Gear Mid Exteneded Right	Crosses the baseline scores a gear on the middle peg and goes around the right of the airship and heads to the other end of the field not crossing the launchpad line.
+9.Gear Mid Enteneded Left	Crosses the baseline scores a gear on the middle peg and goes around the left of the airship and heads to the other end of the field not crossing the launchpad line.
+10.Vision Test 			Temp vision test mode 

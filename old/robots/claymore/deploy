@@ -1,0 +1,27 @@
+#!/bin/bash
+
+team=1425
+file="FRCUserProgram"
+
+while getopts ":t:f:" opt; do
+        case $opt in
+                t)
+                        team=$OPTARG
+                        ;;
+                f)
+                        file=$OPTARG
+                        ;;
+                \?)
+                        echo "Invalid option: -$OPTARG" >&2
+                        exit 1
+                        ;;
+                :)
+                        echo "Option -$OPTARG requires an argument." >&2
+                        exit 1
+                        ;;
+        esac
+done
+
+ssh admin@roboRIO-$team-FRC.local rm /home/lvuser/FRCUserProgram
+scp $file admin@roboRIO-$team-FRC.local:/home/lvuser/FRCUserProgram
+ssh admin@roboRIO-$team-FRC.local ". /etc/profile.d/natinst-path.sh; chmod a+x /home/lvuser/FRCUserProgram; /usr/local/frc/bin/frcKillRobot.sh -t -r"

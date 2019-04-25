@@ -1,0 +1,119 @@
+#!/bin/bash
+
+team=1425
+restore=0
+backup_params=false
+backup_log=false
+open_n=0
+address="none"
+
+while getopts ":a:t:r:plo:" opt; do
+	case $opt in
+		a)
+			address=$OPTARG
+			;;
+		t)
+			team=$OPTARG
+			;;
+		r)
+			restore=$OPTARG
+			;;
+		p)
+			backup_params=true
+			;;
+		l)
+			backup_log=true
+			;;
+		o)
+			open_n=$OPTARG
+			;;
+		\?)
+			echo "Invalid option: -$OPTARG" >&2
+			exit 1
+			;;
+		:)
+			echo "Option -$OPTARG requires an argument." >&2
+			exit 1
+			;;
+	esac
+done
+
+if [ $address == "none" ]; then
+	address="roborio-$team-frc.local"
+fi
+
+if [ ! -d "backups" ]; then
+	mkdir backups
+fi
+
+backup_file () {
+	file_n=$(find backups -type f -name $2_\* | wc -l)	
+
+	file_n=$(find backups -type f -name $2_\* | wc -l)	
+	if [ $open_n -gt 0 ]; then
+		if [ $open_n -gt $file_n ]; then
+			echo $2 $open_n chosen, but only $file_n present. >&2
+			exit 1
+		fi
+		
+		to_open=$(find backups -type f -name $2_$(($open_n))_\*)
+		to_open_n=$(wc -w <<<$to_open)
+		if [ $to_open_n -eq 0 ]; then
+			echo No $2 with number $open_n found. >&2
+			exit 1
+		elif [ $to_open_n -gt 1 ]; then
+			echo Multiple $2 with number $open_n found. >&2
+			exit 1
+		else
+			echo Opening $2 $open_n ...
+			vim $to_open
+		fi
+
+		exit 0
+	fi
+
+	scp lvuser@$address:$1 ./backups/$2_$((file_n+1))_$(date +%Y-%m-%d_%H-%M-%S)
+	if [ $? -eq 0 ]; then
+		echo Saved as $2 file $((file_n+1)).
+	fi
+}
+
+if $backup_params || $backup_log; then
+	if $backup_params; then
+		backup_file params.txt params
+	fi
+	
+	if $backup_log; then
+		backup_file FRC_UserProgram.log log
+	fi
+
+	exit 0
+fi
+
+backup_n=$(find backups -type f -name FRCUserProgram_\* | wc -l)
+if [ $restore -lt 0 ]; then
+	echo "Backup number must be greater than 0." >&2
+	exit 1
+elif [ $restore -gt $backup_n ]; then
+	echo "Backup ${restore} chosen, but only ${backup_n} backups present." >&2
+	exit 1
+elif [ $restore -eq 0 ]; then
+	scp lvuser@$address:FRCUserProgram ./backups/FRCUserProgram_$(($backup_n+1))_$(date +%Y-%m-%d_%H-%M-%S)
+	if [ $? -eq 0 ]; then
+		echo "Saved as backup $(($backup_n+1))."
+	fi
+else
+	backup=$(find backups -type f -name FRCUserProgram_$restore\_\*)
+	backup_n2=$(wc -w <<<$backup)
+	if [ $backup_n2 -eq 0 ]; then
+		echo "No backup with the number ${restore} found." >&2
+		exit 1
+	elif [ $backup_n2 -gt 1 ]; then
+		echo "Multiple backups with the number ${restore} found." >&2
+		echo $backup
+		exit 1
+	else
+		echo "Deploying backup ${restore}..."
+		bash deploy -f $backup -t $team
+	fi
+fi

@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="PIDCtrl.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RobotControllerBase.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SubsystemBase.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="XeroRobotBase.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoDelay.cpp">
+      <Filter>Source\Auto</Filter>
+    </ClCompile>
+    <ClCompile Include="AutonomousControllerBase.cpp">
+      <Filter>Source\Auto</Filter>
+    </ClCompile>
+    <ClCompile Include="AutonomousStepBase.cpp">
+      <Filter>Source\Auto</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoSetMotorVoltage.cpp">
+      <Filter>Source\Auto</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoSetVelocity.cpp">
+      <Filter>Source\Auto</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageLogger.cpp">
+      <Filter>Source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageStreamDestination.cpp">
+      <Filter>Source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamsParser.cpp">
+      <Filter>Source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="TankDrive.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="OdometrySystem.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="KalmanOdometry.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DriveBase.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="IntelligentDriveBase.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFollowerController.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Position.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Rotation.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ModuleDefintions.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="RobotControllerBase.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SubsystemBase.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="XeroRobotBase.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoDelay.h">
+      <Filter>Headers\Auto</Filter>
+    </ClInclude>
+    <ClInclude Include="AutonomousControllerBase.h">
+      <Filter>Headers\Auto</Filter>
+    </ClInclude>
+    <ClInclude Include="AutonomousStepBase.h">
+      <Filter>Headers\Auto</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoSetMotorVoltage.h">
+      <Filter>Headers\Auto</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoSetVelocity.h">
+      <Filter>Headers\Auto</Filter>
+    </ClInclude>
+    <ClInclude Include="CountdownTimer.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageDestination.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageLogger.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageStreamDestination.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamsParser.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="PIDCtrl.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Speedometer.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="TankDrive.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="OdometrySystem.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DriveBase.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="IntelligentDriveBase.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="KalmanOdometry.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFollowerController.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PositionAngle.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Rotation.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{7d9ccb0e-e4df-4351-b57a-99078d0b5d56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{d986b888-da3e-45c0-9c47-a683964ecad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Auto">
+      <UniqueIdentifier>{b6580195-cd16-47aa-963f-89df15492441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Auto">
+      <UniqueIdentifier>{cde71a1d-799b-4e51-a35a-3fe752bab3fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Utils">
+      <UniqueIdentifier>{0fd877d8-335e-4645-b442-c108fd472612}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Utils">
+      <UniqueIdentifier>{3ed3db45-9cba-4965-847d-18ea9f59d406}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,69 @@
+#
+# Parameters for the robot
+#
+drivebase:diameter			2.61811				# 2.65 mm wheels per dexter industries
+drivebase:encoderPulsesPerRev    	720				# 6 ticks per rev * 120 ratio gear box
+
+#
+# Driving straight - distance PID
+#
+drivebase:straight:threshold		0.5			 	 	# when we are this close to the target, we are done
+drivebase:straight:switch:threshold	10000				# if the distance is less than this we switch to a distance PID
+
+drivebase:distance:p    0.02				# the P constant for the distance tracking PID controller
+drivebase:distance:i    	  0.02				# the I constant for the distance tracking PID controller
+drivebase:distance:d    		0				# the D constant for the distance tracking PID controller
+drivebase:distance:f    		0				# the F constant for the distance tracking PID controller
+drivebase:distance:imax			25				# defaults to max double
+                          
+#
+# PID constants for the angle correct PID while driving straight
+#
+drivebase:angleCorrection:p    0.1
+drivebase:angleCorrection:i    		0.1
+drivebase:angleCorrection:d    		0
+drivebase:angleCorrection:f    		0
+drivebase:angleCorrection:imax		10
+
+#
+# Rotating based on distance angle (not rotational velocity)
+#
+drivebase:angle:threshold	1   
+drivebase:angle:switch:threshold	100000				# if the angle is less than this we switch to an angle pid
+
+drivebase:angle:p    			0    
+drivebase:angle:i    			0		
+drivebase:angle:d    	 0
+drivebase:angle:f    			0
+drivebase:angle:imax			1e20
+
+#
+# Velocity profile straight driving
+#
+drivebase:straight:accel    	  	0				# maximum acceleration in the motion profile
+drivebase:straight:decel    	 0				# maximum deceleration in the motion profile
+drivebase:straight:maxspeed    		0				# maximum speed in the motion profile
+drivebase:straight:maxage    		0				# if the motion profile is older than this, we redo it
+
+drivebase:straight:p    		0				# the P constant for the velocity tracking PID controller
+drivebase:straight:i    		0				# the I constant for the velocity tracking PID controller
+drivebase:straight:d    		0				# the D constant for the velocity tracking PID controller
+drivebase:straight:f    		0				# the F constant for the velocity tracking PID controller
+drivebase:straight:imax			1e20  					# the max value for the acculated I error in the PID contorller
+
+drivebase:error:threshold		3.0				# distance to recal the motion profile
+
+#
+# Velocity profile rotation
+#
+drivebase:angle:accel    		0
+drivebase:angle:decel    		0
+drivebase:angle:maxspeed    		0
+drivebase:angle:maxage    		0
+
+drivebase:rotational:p    		0
+drivebase:rotational:i    		0
+drivebase:rotational:d    		0
+drivebase:rotational:f    		0
+drivebase:rotational:imax		1e20
+

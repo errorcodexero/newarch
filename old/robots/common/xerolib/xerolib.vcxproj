@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{d209eb32-4734-4437-bc69-30f2b01616ba}</ProjectGuid>
+    <Keyword>Linux</Keyword>
+    <RootNamespace>xerolib</RootNamespace>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <ApplicationType>Linux</ApplicationType>
+    <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
+    <TargetLinuxPlatform>Generic</TargetLinuxPlatform>
+    <LinuxProjectType>{D51BCBC9-82E9-4017-911E-C93873C4EA2B}</LinuxProjectType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <IncludePath>$(SolutionDir)..\gopigo3\gopigo3frc;$(SolutionDir)..\gopigo3\gopigo3navx;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <IncludePath>$(SolutionDir)..\gopigo3\gopigo3frc;$(SolutionDir)..\gopigo3\gopigo3navx;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemGroup>
+    <ClCompile Include="AdaptivePurePursuitController.cpp" />
+    <ClCompile Include="AutoDelay.cpp" />
+    <ClCompile Include="AutonomousControllerBase.cpp" />
+    <ClCompile Include="AutonomousStepBase.cpp" />
+    <ClCompile Include="AutoPrintPosition.cpp" />
+    <ClCompile Include="AutoSetMotorVoltage.cpp" />
+    <ClCompile Include="AutoSetVelocity.cpp" />
+    <ClCompile Include="DriveBase.cpp" />
+    <ClCompile Include="HeadingProfileFollower.cpp" />
+    <ClCompile Include="MessageLogger.cpp" />
+    <ClCompile Include="MessageStreamDestination.cpp" />
+    <ClCompile Include="MotionProfile.cpp" />
+    <ClCompile Include="ParamsParser.cpp" />
+    <ClCompile Include="Path.cpp" />
+    <ClCompile Include="PathBuilder.cpp" />
+    <ClCompile Include="PathFollower.cpp" />
+    <ClCompile Include="PathSegment.cpp" />
+    <ClCompile Include="PIDCtrl.cpp" />
+    <ClCompile Include="Position.cpp" />
+    <ClCompile Include="ProfileFollower.cpp" />
+    <ClCompile Include="ProfileGenerator.cpp" />
+    <ClCompile Include="ProfileGoal.cpp" />
+    <ClCompile Include="RobotControllerBase.cpp" />
+    <ClCompile Include="RobotState.cpp" />
+    <ClCompile Include="RobotStateEstimator.cpp" />
+    <ClCompile Include="Rotation.cpp" />
+    <ClCompile Include="Segment.cpp" />
+    <ClCompile Include="SetpointGenerator.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="SubsystemBase.cpp" />
+    <ClCompile Include="XeroRobotBase.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AdaptivePurePursuitController.h" />
+    <ClInclude Include="AutoDelay.h" />
+    <ClInclude Include="AutonomousControllerBase.h" />
+    <ClInclude Include="AutonomousStepBase.h" />
+    <ClInclude Include="AutoPath.h" />
+    <ClInclude Include="AutoPrintPosition.h" />
+    <ClInclude Include="AutoSetMotorVoltage.h" />
+    <ClInclude Include="AutoSetVelocity.h" />
+    <ClInclude Include="Constraints.h" />
+    <ClInclude Include="CountdownTimer.h" />
+    <ClInclude Include="DriveBase.h" />
+    <ClInclude Include="HeadingProfileFollower.h" />
+    <ClInclude Include="Kinematics.h" />
+    <ClInclude Include="Lookahead.h" />
+    <ClInclude Include="MathUtils.h" />
+    <ClInclude Include="MessageDestination.h" />
+    <ClInclude Include="MessageLogger.h" />
+    <ClInclude Include="MessageStreamDestination.h" />
+    <ClInclude Include="MotionProfile.h" />
+    <ClInclude Include="ParamsParser.h" />
+    <ClInclude Include="Path.h" />
+    <ClInclude Include="PathBuilder.h" />
+    <ClInclude Include="PathContainer.h" />
+    <ClInclude Include="PathDebugData.h" />
+    <ClInclude Include="PathFinderConstants.h" />
+    <ClInclude Include="PathFollower.h" />
+    <ClInclude Include="PathSegment.h" />
+    <ClInclude Include="PIDCtrl.h" />
+    <ClInclude Include="Position.h" />
+    <ClInclude Include="PositionAngle.h" />
+    <ClInclude Include="PositionCS.h" />
+    <ClInclude Include="ProfileFollower.h" />
+    <ClInclude Include="ProfileGenerator.h" />
+    <ClInclude Include="ProfileGoal.h" />
+    <ClInclude Include="RobotControllerBase.h" />
+    <ClInclude Include="RobotState.h" />
+    <ClInclude Include="RobotStateEstimator.h" />
+    <ClInclude Include="Rotation.h" />
+    <ClInclude Include="Segment.h" />
+    <ClInclude Include="SetpointGenerator.h" />
+    <ClInclude Include="Speedometer.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="Subsystem.h" />
+    <ClInclude Include="SubsystemBase.h" />
+    <ClInclude Include="ModuleDefintions.h" />
+    <ClInclude Include="Waypoint.h" />
+    <ClInclude Include="XeroRobotBase.h" />
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>../gopigo3imisc;../gopigo3frc;../gopigo3navx;../gopigo3hw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>../gopigo3imisc;../gopigo3frc;../gopigo3navx;../gopigo3hw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

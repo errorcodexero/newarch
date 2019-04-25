@@ -1,0 +1,29 @@
+This repository is for the 2018 competition robot.  The directory is self contained
+and can be built with make and the compilers.  The requirements for each platform are
+given below.  All invokations of make must include a CONFIG variable.  The only config
+types support are 'release' and 'debug'.  It is intended that the robot run competitions
+using the 'release' type.
+
+Just typing make without a target (e.g. make CONFIG=debug) will build the local target.
+This works at this robot level, or in any of the sub directories.
+
+Using the deploy target (e.g. make CONFIG=debug deploy) works only at the top level robot
+directory or in the roborio directory.  It builds the robot and deploys to the robot.  The
+robot is located using the mDNS address roborio-1425-frc.local.  This can be overridden with
+the DEPLOYHOST environment variable.  In base, export DEPLOYHOST=10.14.25.2 will set the
+robot as the IP address 10.14.25.2.  Note, using an IP address is generally much faster than
+waiting on the mDNS address to resolve.
+
+Windows:
+The cygwin packages should be installed and the development packages installed as part
+of that.  
+
+Linux:
+The ARM tool chains (c++ compiler) must be installed and in your path.
+
+Mac OS:
+The ARM tool chains (c++ compiler) must be instaleld and in your path.
+
+Note, the repository contains all required libraries including WPILIB, NavX, and
+CTRE.  No need to install these on your machine.
+

@@ -1,0 +1,76 @@
+Driver:
+ A          - 
+ B          - 
+ X          - 
+ Y          - 
+ Start      - 
+ Back       - 
+ RB         - Low gear
+ LB         - Slow
+ RT         - High gear
+ LT         - Turbo
+ L_Joy:
+  X Axis    - 
+  Y Axis    - Forward/backward
+  Pushed in - 
+ R_Joy:
+  X Axis    - Turning
+  Y Axis    - 
+  Pushed in - 
+POV:
+  Center     - 
+  Up         - Nudge forward
+  Up_left    - 
+  Left       - Nudge counterclockwise
+  Down_left  - 
+  Down       - Nudge backward
+  Down_right - 
+  Right      - Nudge clockwise
+  Up_right   - 
+
+Gunner:
+ A          - Collect closed
+              AO: 
+ B          - Collect open
+              AO: 
+ X          - Eject
+              AO: 
+ Y          - Drop
+              AO: 
+ Start      - Climb/wing lock
+ Back       - Wing release
+ RB         - Alternative Operation (AO) - changes what other buttons do if held
+ LB         - Calibrate grabber
+              AO: Calibrate lifter
+ RT         - Lifter high power
+ LT         - Climb
+ L_Joy:
+  Up        - Lifter up
+  Down      - Lifter down
+  Left      - 
+  Right     - 
+  Pushed in - 
+ R_Joy:
+  Up        - Scale end collection height
+  Down      - Switch end collection height
+  Left      - 
+  Right     - 
+  Pushed in - 
+ POV:        
+  Center     - 
+  Up         - Scale
+               AO: Intake out
+  Up_left    - 
+               AO: Intake out, grabber close
+  Left       - Exchange
+               AO: Grabber close
+  Down_left  - 
+               AO: Intake in, grabber close
+  Down       - Floor
+               AO: Intake in
+  Down_right - 
+               AO: Intake in, grabber open
+  Right      - Switch
+               AO: Grabber open
+  Up_right   - 
+               AO: Intake out, grabber open

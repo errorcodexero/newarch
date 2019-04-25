@@ -1,0 +1,110 @@
+<html>
+<head>
+	<title>1425 Camera Viewer</title>
+	<script>
+		function updateNC(loaded){
+			var nc_text=document.getElementById("nc_text");
+			nc_text.style.display=loaded?"none":"block";
+		}
+
+		function reloadCamera(){
+			var viewer=document.getElementById("camera_view");
+			var src=viewer.src;
+			viewer.src='';
+			viewer.src=src;
+		}
+
+		function updateImage(address){
+			var viewer=document.getElementById("camera_view");
+			viewer.src="http://" + address + "/mjpg/video.mjpg";
+		}		
+		
+		large_version=true;
+		function switchVersion(){
+			large_version=!large_version;
+			document.getElementById("version_button").value="Switch to " + (large_version?"small":"large") + " version";
+			document.getElementById("controls").style.display=large_version?"block":"none";
+			document.getElementById("view_container").style.float=large_version?"right":"left";
+		}
+		
+		var trigger_request = new XMLHttpRequest();
+		function trigger(enable){
+			address=document.getElementById("selector").value;
+			trigger_request.open("GET", "http://" + address + "/axis-cgi/io/virtualinput.cgi?action=6:" + (enable?"/":"\\"), true);
+			trigger_request.send(null);
+			document.getElementById("trigger_text").innerHTML="Trigger: " + (enable?"ON":"OFF");
+		}
+
+		document.addEventListener("DOMContentLoaded", function(){
+			document.getElementById("selector").selectedIndex = 3;
+			updateImage(document.getElementById("selector").value);
+		})
+	</script>
+	<style>
+		body {
+			background-color: black;
+			color: white;
+			font-family: "Bauhaus 93", serif;
+		}
+
+		@-moz-document url-prefix() {
+			select,input {
+				padding: 15px 0!important;
+				font-family: "Bauhaus 93", serif !important;
+			}
+		}
+
+		#controls_container {
+			float: left;
+			clear: left;
+		}
+		#controls {
+			display: block;
+		}
+		#header {
+			font-size: 80px;
+		}
+		#selector, #version_button, #reload_button, .trigger_button, #trigger_text {
+			font-size: 25px;
+		}
+		
+		#view_container {
+			float: right;
+			margin-bottom: 60px;
+		}
+		#camera_view {
+			/*transform: scale(-1,1) rotate(270deg);
+			transform-origin: 100% 0%;*/
+		}
+		#nc_text {
+			display: block;
+			font-size: 35px;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="view_container">
+		<img id="camera_view" onload="updateNC(true)" onerror="updateNC(false)" src="http://10.14.25.16/mjpg/video.mjpg" alt="" />
+		<span id="nc_text">Not connected</span>
+	</div>
+	<div id="controls_container">
+		<div id="controls">
+			<div id="header">1425 Camera Viewer</div>
+			<select id="selector" onchange="updateImage(this.value)">
+				<option value="10.14.25.16">10.14.25.16</option>
+				<option value="10.14.25.17">10.14.25.17</option>
+				<option value="10.14.25.18">10.14.25.18 (Practice Bot)</option>
+				<option select value="10.14.25.19">10.14.25.19 (Competition Robot)</option>
+			</select>
+			<input id="reload_button" type="button" onclick="reloadCamera()" value="Reload" />
+			<br /><br />
+			<input type="button" class="trigger_button" onclick="trigger(true)" value="Trigger On" />
+			<input type="button" class="trigger_button" onclick="trigger(false)" value="Trigger Off" />
+			<span id="trigger_text">Trigger: OFF</span>
+		</div>
+		<br />
+		<input id="version_button" type="button" onclick="switchVersion()" value="Switch to small version" />
+	</div>
+</body>
+</html>

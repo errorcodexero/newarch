@@ -1,0 +1,142 @@
+This is the list of automodes and what they do.
+-----------------------------------------------
+
+Number: 0
+Start: Left, Center, Right
+Objectives:
+a. Calibrate the lifter and grabber
+b. Drop the collector
+
+Number: 1
+Start: Left, Right
+Objectives:
+a. Calibrate the lifter and grabber
+b. Drop the collector
+c. Cross the line only
+
+Number: 2
+Start: Center
+Objectives:
+a. Calibrate the lifter and grabber
+b. Drop the collector
+c. If the right switch lights up
+   c1. Score the right side of the switch
+   c2. Collect second cube from center pile
+   c3. Move to the side of the field that is our scale.  Use the intake_auto and
+       grabber_auto switches to tell us if the alliance partner on that side has
+       a scale program.  If they do, we move further up the corridor outside the
+       switch and closer to the scale.
+d. If the left swidth lights up
+   d1. Score the left side of the switch
+   d2. Collect second cube from center pile
+   d3. Move to the side of the field that is our scale.  Use the intake_auto and
+       grabber_auto switches to tell us if the alliance partner on that side has
+       a scale program.  If they do, we move further up the corridor outside the
+       switch and closer to the scale.
+
+Number: 3
+Start: Left
+Objectives:
+a. Calibrate the lifter and grabber
+b. Drop the collector
+c. If the scale lights up on our side
+   c1. Score on scale
+   c2. Collect second cube behind switch
+   c3. Score second cube on scale
+d. If the switch lights upon our side
+   d1. Score switch on the side
+   d2. Collect second cube behind switch
+   d3. Head toward scale on other side
+
+Number: 4
+Start: Left
+Objectives
+a. Calibrate the lifter and grabber
+b. Drop the collector
+c. If the switch lights upon our side
+   c1. Score switch on the side
+   c2. Collect second cube behind switch
+   c3. Head toward scale on other side
+d. If the scale lights up on our side
+   d1. Score on scale
+   d2. Collect second cube behind switch
+   d3. Score second cube on scale
+
+Number: 5
+Start: Right
+Objectives:
+a. Calibrate the lifter and grabber
+b. Drop the collector
+c. If the scale lights up on our side
+   c1. Score on scale
+   c2. Collect second cube behind switch
+   c3. Score second cube on scale
+d. If the switch lights upon our side
+   d1. Score switch on the side
+   d2. Collect second cube behind switch
+   d3. Head toward scale on other side
+
+Number: 6
+Start: Left
+Objectives
+a. Calibrate the lifter and grabber
+b. Drop the collector
+c. If the switch lights upon our side
+   c1. Score switch on the side
+   c2. Collect second cube behind switch
+   c3. Head toward scale on other side
+d. If the scale lights up on our side
+   d1. Score on scale
+   d2. Collect second cube behind switch
+   d3. Score second cube on scale
+
+Completed Items:
+----------------
+1-6a.     Calibrate the lifter and grabber
+1c.   	  Cross the line
+2c-c1.	  Score the right scide of the switch
+2c-c2.    Collect second cube from center pile
+2d-d1.	  Socre the left side of the switch
+3c-c1.	  Score on scale
+3d-d1.	  Score switch on the left side
+4c-c1.	  Score switch on the left side
+4d-d1.	  Score on scale
+5c-c1. 	  Score on scale
+5d-d1.	  Score switch on the right side
+6c-c1.	  Score switch on the right side
+6d-d1.	  Score on scale
+
+
+Priority:														Status
+-------------------------------------------------------------------------------------
+1-6b.	  Drop the collector									Speedup needs testing
+2c-c3.    Move to the side of the field ...						Needs recipe (steps exist)
+2d-d2.	  Collect second cube from center pile					Needs recipe (steps exist)
+2d-d3.	  Move to the side of the field ...						Needs recipe (steps exist)
+
+3d-d2. 	  Collect second cube behind switch						Needs recipe (steps exist)
+4c-c2.	  Collect second cube behind switch						Duplicate of 3d-d2
+5d-d2.	  Collect second cube behind switch						Reflection of 3d-d2
+6c-c2.	  Collect second cube behind switch						Reflection of 3d-d2
+
+3c-c2.	  Collect second cube behind switch						Needs recipe (steps exist)
+4d-d2.	  Collect second cube behind switch						Duplicate of 3c-c2
+5c-c2.	  Collect second cube behind switch						Reflection of 3c-c2
+6d-d2.	  Collect second cube behind switch						Reflection of 3c-c2
+
+3c-c3.	  Score second cube on scale 							Needs recipe (steps exist)
+4d-d3.	  Score second cube on scale 							Duplicate of 3c-c3
+5c-c3.	  Score second cube on scale 							Reflection of 3c-c3
+6d-d3.	  Score second cube on scale 							Reflection of 3c-c3
+
+3d-d3.	  Head toward scale on other side						Needs recipe (steps exist)
+4c-c3.	  Head toward scale on other side						Duplicate of 3d-d3
+5d-d3.	  Head toward scale on other side						Reflection of 3d-d3
+6c-c3. 	  Head toward scale on other side						Duplicate of 5d-d3
+
+
+Notes:
+If the practice bot collector does not stay up, we may need to test the collector speedup on
+the practice field in Auburn.  It is trivial to test and can be easily reverted if we are
+worried
+

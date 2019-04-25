@@ -1,0 +1,13 @@
+**/obj
+**/bin
+**/.vs
+**/*.vcxproj.user
+**/*~
+**/builddir
+**/.vscode
+**/*.mp4
+**/Debug
+**/Win32
+robots/sim/simrobot/data
+robots/sim/simrobot/data/*
+external/googletest

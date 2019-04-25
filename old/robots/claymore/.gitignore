@@ -1,0 +1,12 @@
+*.o
+bazel-*
+t.mk
+FRCUserProgram
+*.swp
+backups/
+log/
+builddir
+codedocs
+control/x1.txt
+util/auto_distances.txt
+util/f1.tmp

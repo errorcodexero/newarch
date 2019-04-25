@@ -52,9 +52,7 @@ model {
         frcUserProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
 			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-				lib library: "xerobase", linkage: "static"
-				lib library: "xeromisc", linkage: "static"                
+				cppCompiler.args "-std=c++11", "-g", "-DCLAYMORE"
 			}            
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
@@ -62,20 +60,66 @@ model {
 
             sources.cpp {
                 source {
-                    srcDir 'robots/phaser/src/main/cpp'
+                    srcDir 'old/robots/claymore'
+                    include '**/*.cpp'
+                }
+                source {
+                    srcDir 'old/robots/common/helpers'
                     include '**/*.cpp'
                 }
                 exportedHeaders {
-                    srcDir 'robots/phaser/src/main/cpp'
+                    srcDir 'old/robots/claymore'
                     include '**/*.h'
                 }
-                                
+                exportedHeaders {
+                    srcDir 'old/robots/claymore/util'
+                    include '**/*.h'
+                }                
+                exportedHeaders {
+                    srcDir 'old/robots/claymore/control'
+                    include '**/*.h'
+                }                  
+                exportedHeaders {
+                    srcDir 'old/robots/common/helpers'
+                    include '**/*.h'
+                }                                                
             }
 
             // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
             useLibrary(it, "wpilib")
             wpi.deps.vendor.cpp(it)
-        }  
+        }         
+
+        //
+        // 2019 FRC Robot
+        //
+        // frcUserPhaserProgram(NativeExecutableSpec) {
+        //     targetPlatform wpi.platforms.roborio
+		// 	binaries.all {
+		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+		// 		lib library: "xerobase", linkage: "static"
+		// 		lib library: "xeromisc", linkage: "static"                
+		// 	}            
+        //     if (includeDesktopSupport) {
+        //         targetPlatform wpi.platforms.desktop
+        //     }
+
+        //     sources.cpp {
+        //         source {
+        //             srcDir 'robots/phaser/src/main/cpp'
+        //             include '**/*.cpp'
+        //         }
+        //         exportedHeaders {
+        //             srcDir 'robots/phaser/src/main/cpp'
+        //             include '**/*.h'
+        //         }
+                                
+        //     }
+
+        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
+        //     useLibrary(it, "wpilib")
+        //     wpi.deps.vendor.cpp(it)
+        // }  
 
         //
         // 2018 BunnyBots Robot
@@ -172,9 +216,7 @@ model {
         //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
         //     useLibrary(it, "wpilib")
         //     wpi.deps.vendor.cpp(it)
-        // }
-
-       
+        // }       
 
 		xeromisc(NativeLibrarySpec) {
             targetPlatform wpi.platforms.roborio

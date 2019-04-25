@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="HeadingProfileFollower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutonomousControllerBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutonomousStepBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoSetMotorVoltage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DriveBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageStreamDestination.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PIDCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RobotControllerBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SubsystemBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XeroRobotBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamsParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoDelay.cpp">
+      <Filter>Source Files\autosteps</Filter>
+    </ClCompile>
+    <ClCompile Include="AdaptivePurePursuitController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoPrintPosition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoSetVelocity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MotionProfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFollower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathSegment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Position.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfileFollower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfileGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfileGoal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RobotState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RobotStateEstimator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rotation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Segment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SetpointGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Constraints.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadingProfileFollower.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="Lookahead.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="MathUtils.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="MotionProfile.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="PathContainer.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFinderConstants.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="PathSegment.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="PositionAngle.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="PositionCS.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileFollower.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileGenerator.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileGoal.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="Rotation.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="Segment.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="SetpointGenerator.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="AutonomousControllerBase.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="AutonomousStepBase.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoSetMotorVoltage.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="DriveBase.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageDestination.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageLogger.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageStreamDestination.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="PIDCtrl.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="RobotControllerBase.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="Speedometer.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="SubsystemBase.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="XeroRobotBase.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFollower.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="RobotState.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="Kinematics.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamsParser.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoDelay.h">
+      <Filter>Header FIles\autosteps</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoPath.h">
+      <Filter>Header FIles\autosteps</Filter>
+    </ClInclude>
+    <ClInclude Include="RobotStateEstimator.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="Waypoint.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="PathBuilder.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDefintions.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="AdaptivePurePursuitController.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="PathDebugData.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoPrintPosition.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoSetVelocity.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="CountdownTimer.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="Subsystem.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header FIles">
+      <UniqueIdentifier>{dc016488-f850-4561-88c3-e60f99c2094b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{a0474fa6-0b2d-48e9-8877-09c094554449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header FIles\autosteps">
+      <UniqueIdentifier>{53c50e84-66e8-456f-8e4f-9d3debf65761}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\autosteps">
+      <UniqueIdentifier>{868c194c-3eda-43b7-80da-daf058994ff6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
