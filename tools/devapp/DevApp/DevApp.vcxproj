@@ -156,7 +156,9 @@
     <ClCompile Include="DistanceVelocityConstraint.cpp" />
     <ClCompile Include="DistanceView.cpp" />
     <ClCompile Include="JSON.cpp" />
+    <ClCompile Include="JSONPathReader.cpp" />
     <ClCompile Include="JSONValue.cpp" />
+    <ClCompile Include="LocationVelocityConstraint.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="PathGenerator.cpp" />
     <ClCompile Include="Pose2d.cpp" />
@@ -180,13 +182,18 @@
     <ClInclude Include="DistanceView.h" />
     <ClInclude Include="ICsv.h" />
     <ClInclude Include="JSON.h" />
+    <ClInclude Include="JSONPathReader.h" />
     <ClInclude Include="JSONValue.h" />
+    <ClInclude Include="LocationVelocityConstraint.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="MinMaxAcceleration.h" />
+    <ClInclude Include="PathCollection.h" />
     <ClInclude Include="PathGenerator.h" />
+    <ClInclude Include="PathGroup.h" />
     <ClInclude Include="Pose2d.h" />
     <ClInclude Include="Pose2dWithCurvature.h" />
     <ClInclude Include="QuinticHermiteSpline.h" />
+    <ClInclude Include="RobotPath.h" />
     <ClInclude Include="SplineGenerator.h" />
     <ClInclude Include="TimedTrajectory.h" />
     <ClInclude Include="TimedTrajectoryPoint.h" />
@@ -199,6 +206,9 @@
     <ClInclude Include="Rotation2d.h" />
     <ClInclude Include="Twist2d.h" />
     <ClInclude Include="WaypointReader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="pathfile.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

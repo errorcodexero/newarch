@@ -1,7 +1,8 @@
 // DevApp.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include "WaypointReader.h"
+#include "JSONPathReader.h"
+#include "PathCollection.h"
 #include "CSVWriter.h"
 #include "PathGenerator.h"
 #include "DistanceView.h"
@@ -10,70 +11,236 @@
 
 using namespace xero::paths;
 
-int main(int ac, char **av)
+double maxDx = 2.0;
+double maxDy = 0.25;
+double maxDTheta = MathUtils::degreesToRadians(5.0);
+double startvel = 0.0;
+double maxvel = 130.0;
+double endvel = 0.0;
+double maxaccel = 130.0;
+double step = 2.0;
+bool reverse = false;
+std::string pathfile;
+std::string outputdir;
+bool distancefile;
+bool splinefile;
+xero::paths::PathCollection collection;
+
+extern void generateForGroup(const std::string& group);
+extern void generateForPath(PathGroup& group, const std::string& path);
+
+int main(int ac, char** av)
 {
 	ac--;
 	av++;
-
-	double maxDx = 2.0;
-	double maxDy = 0.25;
-	double maxDTheta = MathUtils::degreesToRadians(5.0);
-	double startvel = 0.0;
-	double maxvel = 130.0;
-	double endvel = 0.0;
-	double maxaccel = 130.0;
 
 	//
 	// Process the command line arguments
 	//
 	while (ac > 0 && **av == '-')
 	{
-		std::string arg = *av;
+		size_t index;
+
+		std::string arg = *av++;
+		ac--;
+
 		if (arg == "--dx")
 		{
+			if (ac == 0) {
+				std::cerr << "pathgen: expected floating point nubmer following --dx argument" << std::endl;
+				return 1;
+			}
 
+			try {
+				maxDx = std::stod(*av, &index);
+			}
+			catch (...)
+			{
+				std::cerr << "pathgen: expected floating point nubmer following --dx argument" << std::endl;
+				return 1;
+			}
+
+			if (index != arg.length()) 
+			{
+				std::cerr << "pathgen: expected floating point nubmer following --dx argument" << std::endl;
+				return 1;
+			}
+			ac--;
+			av++;
 		}
 		else if (arg == "--dy")
 		{
+			if (ac == 0) {
+				std::cerr << "pathgen: expected floating point nubmer following --dy argument" << std::endl;
+				return 1;
+			}
 
+			try {
+				maxDy = std::stod(*av, &index);
+			}
+			catch (...)
+			{
+				std::cerr << "pathgen: expected floating point nubmer following --dy argument" << std::endl;
+				return 1;
+			}
+
+			if (index != arg.length())
+			{
+				std::cerr << "pathgen: expected floating point nubmer following --dy argument" << std::endl;
+				return 1;
+			}
+			ac--;
+			av++;
 		}
 		else if (arg == "--dtheta")
 		{
+			if (ac == 0) {
+				std::cerr << "pathgen: expected floating point nubmer following --dtheta argument" << std::endl;
+				return 1;
+			}
 
+			try {
+				maxDTheta = std::stod(*av, &index);
+			}
+			catch (...)
+			{
+				std::cerr << "pathgen: expected floating point nubmer following --dtheta argument" << std::endl;
+				return 1;
+			}
+
+			if (index != arg.length())
+			{
+				std::cerr << "pathgen: expected floating point nubmer following --dtheta argument" << std::endl;
+				return 1;
+			}
+			ac--;
+			av++;
 		}
-		else 
+		else if (arg == "--step")
 		{
-			std::cerr << "devapp: invalid command line argument '" << arg << "'" << std::endl;
+			if (ac == 0) {
+				std::cerr << "pathgen: expected floating point nubmer following --step argument" << std::endl;
+				return 1;
+			}
+
+			try {
+				step = std::stod(*av, &index);
+			}
+			catch (...)
+			{
+				std::cerr << "pathgen: expected floating point nubmer following --step argument" << std::endl;
+				return 1;
+			}
+
+			if (index != arg.length())
+			{
+				std::cerr << "pathgen: expected floating point nubmer following --step argument" << std::endl;
+				return 1;
+			}
+			ac--;
+			av++;
+		}
+		else if (arg == "--reverse")
+		{
+			reverse = true;
+		}
+		else if (arg == "--pathfile")
+		{
+			pathfile = true;
+		}
+		else if (arg == "--splinefile")
+		{
+			splinefile = true;
+		}
+		else if (arg == "--output")
+		{
+			if (ac == 0) {
+				std::cerr << "pathgen: expected directory name following --output argument" << std::endl;
+				return 1;
+			}
+		}
+		else
+		{
+			std::cerr << "pathgen: invalid command line argument '" << arg << "'" << std::endl;
 			return 1;
 		}
 	}
 
-	if (ac != 3)
-	{
-		std::cerr << "devapp: usage: devapp waypoint_file splinefile pathfile" << std::endl;
+	if (outputdir.length() == 0)
+		outputdir = ".";
+
+	if (!JSONPathReader::readJSONPathFile(pathfile, collection)) {
+		std::cerr << "pathgen: error reading path file '" << pathfile << "'" << std::endl;
 		return 1;
 	}
 
-	std::string wayfile = *av++;
-	std::string splinefile = *av++;
-	std::string pathfile = *av++;
+	std::vector<std::string> groups = collection.getGroupNames();
+	for (const std::string& group : groups)
+		generateForGroup(group);
+}
 
-	std::vector<Pose2d> waypoints;
-	if (!WaypointReader::readWaypoints(wayfile, waypoints))
+void generateForGroup(const std::string& group)
+{
+	auto gptr = collection.findGroupByName(group);
+	if (gptr == nullptr) 
 	{
-		std::cerr << "devapp: error reading waypoints from waypoint file" << std::endl;
-		return 1;
+		std::cerr << "pathgen: warning: path group '" << group << "' does not exist" << std::endl;
+		return;
 	}
 
+	std::vector<std::string> paths = gptr->getPathNames();
+	for(const std::string &path: paths)
+		generateForPath(*gptr, path);
+}
+
+void generateForPath(PathGroup& group, const std::string& path)
+{
+	auto pptr = group.findPathByName(path);
+	if (pptr == nullptr)
+	{
+		std::cerr << "pathgen: warning: path '" << path << "' does not exist in group '";
+		std::cerr << group.getName() << "'" << std::endl;
+		return;
+	}
+
+	//
+	// Turn the waypoints into a set of irregularly spaced trajectory points.  The spacing will be
+	// variable and will be given by the allowed differences between points in the X, Y, and THETA
+	// values.
+	//
 	PathGenerator gen(maxDx, maxDy, maxDTheta);
-	Trajectory trajectory = gen.generate(waypoints);
-	CSVWriter::write<std::vector<TrajectoryPoint>::const_iterator>(splinefile, trajectory.getPoints().begin(), trajectory.getPoints().end());
+	Trajectory trajectory = gen.generate(pptr->getPoints(), reverse);
+	if (splinefile)
+	{
+		std::string name = outputdir + "/" + group.getName() + "_" + path + "_spline";
+		if (reverse)
+			name += "_rev";
+		name += ".csv";
+		CSVWriter::write<std::vector<TrajectoryPoint>::const_iterator>(name, trajectory.getPoints().begin(), trajectory.getPoints().end());
+	}
 
-	ConstraintList clist;
-
+	//
+	// Turn the trajectory points into a set of evenly spaced points along the path.
+	//
 	DistanceView dist(trajectory);
-	TimedTrajectory ttj = TimingUtil::timeParameterizeTrajectory(false, dist, clist, 2.0, startvel, endvel, maxvel, maxaccel);
-	CSVWriter::write< std::vector<TimedTrajectoryPoint>::const_iterator>(pathfile, ttj.getPoints().begin(), ttj.getPoints().end());
+	if (distancefile)
+	{
+		std::string name = outputdir + "/" + group.getName() + "_" + path + "_distance";
+		if (reverse)
+			name += "_rev";
+		name += ".csv";
 
-	return 0;
+		std::vector<TrajectorySamplePoint> points;
+		for (double t = 0.0; t < dist.length(); t += step)
+			points.push_back(dist.sample(t));
+		CSVWriter::write< std::vector<TrajectorySamplePoint>::const_iterator>(name, points.begin(), points.end());
+	}
+
+	TimedTrajectory ttj = TimingUtil::timeParameterizeTrajectory(false, dist, pptr->getConstraints(), step,
+		pptr->getStartVelocity(), pptr->getEndVelocity(), pptr->getMaxVelocity(), pptr->getMaxAccel());
+	std::string name = outputdir + "/" + group.getName() + "_" + path + "_path";
+	if (reverse)
+		name += "_rev";
+	name += ".csv";
+	CSVWriter::write< std::vector<TimedTrajectoryPoint>::const_iterator>(name, ttj.getPoints().begin(), ttj.getPoints().end());
 }

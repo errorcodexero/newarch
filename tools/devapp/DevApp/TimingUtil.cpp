@@ -8,7 +8,7 @@
 namespace xero {
 	namespace paths {
 
-		TimedTrajectory TimingUtil::timeParameterizeTrajectory(bool reverse, DistanceView& distview, ConstraintList& constraints, double step_size,
+		TimedTrajectory TimingUtil::timeParameterizeTrajectory(bool reverse, DistanceView& distview, const ConstraintList& constraints, double step_size,
 			double startvel, double endvel, double maxvel, double maxaccel)
 		{
 			size_t num_states = static_cast<size_t>(std::ceil(distview.length() / step_size)) + 1 ;
@@ -24,7 +24,7 @@ namespace xero {
 			return timeParameterizeTrajectory(reverse, points, constraints, startvel, endvel, maxvel, maxaccel);
 		}
 
-		TimedTrajectory TimingUtil::timeParameterizeTrajectory(bool reverse, std::vector<TrajectorySamplePoint> &states, ConstraintList& constraints,
+		TimedTrajectory TimingUtil::timeParameterizeTrajectory(bool reverse, std::vector<TrajectorySamplePoint> &states, const ConstraintList& constraints,
 			double startvel, double endvel, double maxvel, double maxaccel)
 		{
 			std::vector<ConstrainedPoint> constrained_states;
