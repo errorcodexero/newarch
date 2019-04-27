@@ -1,0 +1,176 @@
+{
+  "groups": [
+    {
+      "name": "RocketAutoModeLeft",
+      "paths": [
+        {
+          "name": "LeftHabToLeftRocket",
+          "constraints": [
+            {
+              "type": "distance_velocity",
+              "distance": 48.0,
+              "velocity": 40.0,
+            },
+            {
+              "type": "centripetal",
+              "maxaccel" :  1000.0
+            }
+          ],
+          "points": [
+            {
+              "X": 0.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 0.0
+            },
+            {
+              "X": 162.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 324.0,
+              "Y": 81.0,
+              "Heading": 45.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 486.0,
+              "Y": 162.0,
+              "Heading": 90.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 486.0,
+              "Y": 324.0,
+              "Heading": 90.0,
+              "Velocity": 0.0
+            }
+          ]
+        },
+        {
+          "name": "LeftRocketToLeftLoadingStation",
+          "constraints": [
+            {
+              "type": "centripetal",
+              "maxaccel": 1000.0
+            }
+          ],
+          "points": [
+            {
+              "X": 0.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 0.0
+            },
+            {
+              "X": 100.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 200.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 160.0
+            },
+            {
+              "X": 300.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RocketAutoModeRight",
+      "paths": [
+        {
+          "name": "RightHabToRightRocket",
+          "constraints": [
+            {
+              "type": "distance_velocity",
+              "distance": 48.0,
+              "velocity": 40.0
+            },
+            {
+              "type": "centripetal",
+              "maxaccel": 1000.0
+            }
+          ],
+          "points": [
+            {
+              "X": 0.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 0.0
+            },
+            {
+              "X": 81.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 162.0,
+              "Y": 40.0,
+              "Heading": 45.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 243.0,
+              "Y": 81.0,
+              "Heading": 90.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 243.0,
+              "Y": 161.0,
+              "Heading": 90.0,
+              "Velocity": 0.0
+            }
+          ]
+        },
+        {
+          "name": "RightRocketToRightLoadingStation",
+          "constraints": [
+            {
+              "type": "centripetal",
+              "maxaccel": 1000.0
+            }
+          ],
+          "points": [
+            {
+              "X": 0.0,
+              "Y": 40.0,
+              "Heading": 0.0,
+              "Velocity": 0.0
+            },
+            {
+              "X": 100.0,
+              "Y": 40.0,
+              "Heading": 0.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 200.0,
+              "Y": 40.0,
+              "Heading": 0.0,
+              "Velocity": 160.0
+            },
+            {
+              "X": 300.0,
+              "Y": 40.0,
+              "Heading": 0.0,
+              "Velocity": 0.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

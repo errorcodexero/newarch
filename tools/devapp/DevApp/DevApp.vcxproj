@@ -155,6 +155,8 @@
     <ClCompile Include="DevApp.cpp" />
     <ClCompile Include="DistanceVelocityConstraint.cpp" />
     <ClCompile Include="DistanceView.cpp" />
+    <ClCompile Include="JSON.cpp" />
+    <ClCompile Include="JSONValue.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="PathGenerator.cpp" />
     <ClCompile Include="Pose2d.cpp" />
@@ -177,6 +179,8 @@
     <ClInclude Include="DistanceVelocityConstraint.h" />
     <ClInclude Include="DistanceView.h" />
     <ClInclude Include="ICsv.h" />
+    <ClInclude Include="JSON.h" />
+    <ClInclude Include="JSONValue.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="MinMaxAcceleration.h" />
     <ClInclude Include="PathGenerator.h" />
