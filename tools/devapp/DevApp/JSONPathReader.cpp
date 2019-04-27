@@ -249,7 +249,7 @@ namespace xero
 			}
 			onepath->setMaxAccel(path[L"maxacceleration"]->AsNumber());
 
-			if (path.find(L"constraints") != path.end())
+			if (path.find(L"constraints") != path.end() && !path[L"constraints"]->IsNull())
 			{
 				if (!path[L"constraints"]->IsArray())
 				{
