@@ -66,6 +66,9 @@
     <ClCompile Include="TrajectorySamplePoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DistanceVelocityConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QuinticHermiteSpline.h">
@@ -126,6 +129,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TrajectorySamplePoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TimingConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MinMaxAcceleration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CentripetalAccelerationConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DistanceVelocityConstraint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

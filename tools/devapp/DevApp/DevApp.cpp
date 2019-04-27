@@ -69,8 +69,10 @@ int main(int ac, char **av)
 	Trajectory trajectory = gen.generate(waypoints);
 	CSVWriter::write<std::vector<TrajectoryPoint>::const_iterator>(splinefile, trajectory.getPoints().begin(), trajectory.getPoints().end());
 
+	ConstraintList clist;
+
 	DistanceView dist(trajectory);
-	TimedTrajectory ttj = TimingUtil::timeParameterizeTrajectory(false, dist, 2.0, startvel, endvel, maxvel, maxaccel);
+	TimedTrajectory ttj = TimingUtil::timeParameterizeTrajectory(false, dist, clist, 2.0, startvel, endvel, maxvel, maxaccel);
 	CSVWriter::write< std::vector<TimedTrajectoryPoint>::const_iterator>(pathfile, ttj.getPoints().begin(), ttj.getPoints().end());
 
 	return 0;

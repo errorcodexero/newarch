@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="ConstrainedPoint.cpp" />
     <ClCompile Include="DevApp.cpp" />
+    <ClCompile Include="DistanceVelocityConstraint.cpp" />
     <ClCompile Include="DistanceView.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="PathGenerator.cpp" />
@@ -170,11 +171,14 @@
     <ClCompile Include="WaypointReader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CentripetalAccelerationConstraint.h" />
     <ClInclude Include="ConstrainedPoint.h" />
     <ClInclude Include="CSVWriter.h" />
+    <ClInclude Include="DistanceVelocityConstraint.h" />
     <ClInclude Include="DistanceView.h" />
     <ClInclude Include="ICsv.h" />
     <ClInclude Include="MathUtils.h" />
+    <ClInclude Include="MinMaxAcceleration.h" />
     <ClInclude Include="PathGenerator.h" />
     <ClInclude Include="Pose2d.h" />
     <ClInclude Include="Pose2dWithCurvature.h" />
@@ -182,6 +186,7 @@
     <ClInclude Include="SplineGenerator.h" />
     <ClInclude Include="TimedTrajectory.h" />
     <ClInclude Include="TimedTrajectoryPoint.h" />
+    <ClInclude Include="TimingConstraint.h" />
     <ClInclude Include="TimingUtil.h" />
     <ClInclude Include="Trajectory.h" />
     <ClInclude Include="TrajectoryPoint.h" />

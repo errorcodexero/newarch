@@ -10,6 +10,7 @@ namespace xero
 		class TimedTrajectory
 		{
 		public:
+			TimedTrajectory();
 			TimedTrajectory(std::vector<TimedTrajectoryPoint>& points);
 			virtual ~TimedTrajectory();
 
