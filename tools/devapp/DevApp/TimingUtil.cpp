@@ -114,6 +114,10 @@ namespace xero {
 					if (new_max_velocity >= cs.getMaxVelocity())
 						break;
 
+					if (std::isnan(new_max_velocity))
+					{
+						new_max_velocity = 0.0;
+					}
 					assert(!std::isnan(new_max_velocity));
 					cs.setMaxVelocity(new_max_velocity);
 

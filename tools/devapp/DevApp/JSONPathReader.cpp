@@ -130,7 +130,7 @@ namespace xero
 
 			name = toNarrow(group[L"name"]->AsString());
 
-			if (group.find(L"paths") != group.end())
+			if (group.find(L"paths")== group.end())
 			{
 				std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
 				std::cerr << "         group object does not contain 'paths' field" << std::endl;
@@ -179,22 +179,20 @@ namespace xero
 				std::cerr << "         path object does not contain 'name' field" << std::endl;
 				return false;
 			}
-			else {
-				if (!path[L"name"]->IsString())
-				{
-					std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
-					std::cerr << "         path object 'name' field is not a string" << std::endl;
-					return false;
-				}
-
-				name = toNarrow(path[L"name"]->AsString());
+			if (!path[L"name"]->IsString())
+			{
+				std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
+				std::cerr << "         path object 'name' field is not a string" << std::endl;
+				return false;
 			}
+
+			name = toNarrow(path[L"name"]->AsString());
 			onepath = std::make_shared<RobotPath>(name);
 
 			if (path.find(L"startvelocity") == path.end())
 			{
 				std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
-				std::cerr << "         path is missing 'startvelocity' field" << std::endl;
+				std::cerr << "         path '" << name << "' is missing 'startvelocity' field" << std::endl;
 				return false;
 			}
 
@@ -453,35 +451,35 @@ namespace xero
 				double heading;
 				double velocity;
 
-				if (pt.find(L"x") == pt.end())
+				if (pt.find(L"X") == pt.end())
 				{
 					std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
 					std::cerr << "         constraint 'distance_velocity' missing 'distance' field" << std::endl;
 					return false;
 				}
 
-				if (!pt[L"x"]->IsNumber())
+				if (!pt[L"X"]->IsNumber())
 				{
 					std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
 					std::cerr << "         constraint 'distance_velocity' has 'distance' field that is not a number" << std::endl;
 					return false;
 				}
-				x = pt[L"x"]->AsNumber();
+				x = pt[L"X"]->AsNumber();
 
-				if (pt.find(L"y") == pt.end())
+				if (pt.find(L"Y") == pt.end())
 				{
 					std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
 					std::cerr << "         constraint 'distance_velocity' missing 'distance' field" << std::endl;
 					return false;
 				}
 
-				if (!pt[L"y"]->IsNumber())
+				if (!pt[L"Y"]->IsNumber())
 				{
 					std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
 					std::cerr << "         constraint 'distance_velocity' has 'distance' field that is not a number" << std::endl;
 					return false;
 				}
-				y = pt[L"y"]->AsNumber();
+				y = pt[L"Y"]->AsNumber();
 
 				if (pt.find(L"Heading") == pt.end())
 				{

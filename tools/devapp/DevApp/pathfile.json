@@ -10,22 +10,6 @@
           "startvelocity": 0.0,
           "endvelocity" :  0.0,
           "constraints": [
-            {
-              "type": "distance_velocity",
-              "distance": 48.0,
-              "velocity": 40.0,
-            },
-            {
-              "type": "centripetal",
-              "maxaccel": 1000.0
-            },
-            {
-              "type": "location_velocity",
-              "x": 0.0,
-              "y": 0.0,
-              "distance": 4.0,
-              "velocity": 40.0
-            }
           ],
           "points": [
             {
@@ -62,11 +46,11 @@
         },
         {
           "name": "LeftRocketToLeftLoadingStation",
+          "maxvelocity": 80.0,
+          "maxacceleration": 160.0,
+          "startvelocity": 0.0,
+          "endvelocity": 0.0,
           "constraints": [
-            {
-              "type": "centripetal",
-              "maxaccel": 1000.0
-            }
           ],
           "points": [
             {
@@ -102,15 +86,15 @@
       "paths": [
         {
           "name": "RightHabToRightRocket",
+          "maxvelocity": 80.0,
+          "maxacceleration": 160.0,
+          "startvelocity": 0.0,
+          "endvelocity": 0.0,
           "constraints": [
             {
               "type": "distance_velocity",
               "distance": 48.0,
               "velocity": 40.0
-            },
-            {
-              "type": "centripetal",
-              "maxaccel": 1000.0
             }
           ],
           "points": [
@@ -148,11 +132,11 @@
         },
         {
           "name": "RightRocketToRightLoadingStation",
+          "maxvelocity": 80.0,
+          "maxacceleration": 160.0,
+          "startvelocity": 0.0,
+          "endvelocity": 0.0,
           "constraints": [
-            {
-              "type": "centripetal",
-              "maxaccel": 1000.0
-            }
           ],
           "points": [
             {

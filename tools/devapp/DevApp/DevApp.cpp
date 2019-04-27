@@ -146,11 +146,20 @@ int main(int ac, char** av)
 		}
 		else if (arg == "--pathfile")
 		{
-			pathfile = true;
+			if (ac == 0) {
+				std::cerr << "pathgen: expected directory name following --pathfile argument" << std::endl;
+				return 1;
+			}
+			pathfile = *av++;
+			ac--;
 		}
 		else if (arg == "--splinefile")
 		{
 			splinefile = true;
+		}
+		else if (arg == "--distancefile")
+		{
+			distancefile = true;
 		}
 		else if (arg == "--output")
 		{
@@ -158,6 +167,8 @@ int main(int ac, char** av)
 				std::cerr << "pathgen: expected directory name following --output argument" << std::endl;
 				return 1;
 			}
+			outputdir = *av++;
+			ac--;
 		}
 		else
 		{
@@ -188,6 +199,7 @@ void generateForGroup(const std::string& group)
 		return;
 	}
 
+	std::cout << "Generating paths for group " << group << " ... " << std::endl;
 	std::vector<std::string> paths = gptr->getPathNames();
 	for(const std::string &path: paths)
 		generateForPath(*gptr, path);
@@ -195,6 +207,7 @@ void generateForGroup(const std::string& group)
 
 void generateForPath(PathGroup& group, const std::string& path)
 {
+	std::cout << "  Generating paths for path " << path << " ... " << std::endl;
 	auto pptr = group.findPathByName(path);
 	if (pptr == nullptr)
 	{
