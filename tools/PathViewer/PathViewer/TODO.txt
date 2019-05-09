@@ -1,0 +1,21 @@
+﻿Completed
+---------
+
+- Change waypoint values in waypoint window, update display
+- Editing feature: move waypoint
+- Editing feature: rotate waypoing
+- Editing feature: delete waypoint
+
+ToDo
+----
+
+- Editing feature: add new waypoint
+
+- Add path generation interface (quick, accurate)
+- Add path generator search (assemblies)
+- Display feature: display actual path on screen
+
+- Add max velocity, max acceleration, and max jerk to RobotPath
+  data structure, and json read/write
+
+- Background generation of actual robot paths

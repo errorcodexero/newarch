@@ -1,0 +1,162 @@
+{
+  "groups": [
+    {
+      "name": "GroupA",
+      "paths": [
+        {
+          "name": "Path1",
+          "maxvelocity": 0.0,
+          "maxacceleration": 0.0,
+          "startvelocity": 0.0,
+          "endvelocity": 0.0,
+          "constraints": null,
+          "points": [
+            {
+              "X": 0.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 0.0
+            },
+            {
+              "X": 162.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 357.09848022460938,
+              "Y": 43.8920783996582,
+              "Heading": 45.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 486.0,
+              "Y": 162.0,
+              "Heading": 90.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 486.0,
+              "Y": 324.0,
+              "Heading": 90.0,
+              "Velocity": 0.0
+            }
+          ]
+        },
+        {
+          "name": "Path2",
+          "maxvelocity": 0.0,
+          "maxacceleration": 0.0,
+          "startvelocity": 0.0,
+          "endvelocity": 0.0,
+          "constraints": null,
+          "points": [
+            {
+              "X": 0.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 0.0
+            },
+            {
+              "X": 100.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 200.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 160.0
+            },
+            {
+              "X": 300.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "GroupB",
+      "paths": [
+        {
+          "name": "Path3",
+          "maxvelocity": 0.0,
+          "maxacceleration": 0.0,
+          "startvelocity": 0.0,
+          "endvelocity": 0.0,
+          "constraints": null,
+          "points": [
+            {
+              "X": 0.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 0.0
+            },
+            {
+              "X": 81.0,
+              "Y": 0.0,
+              "Heading": 0.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 162.0,
+              "Y": 40.0,
+              "Heading": 45.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 243.0,
+              "Y": 81.0,
+              "Heading": 90.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 243.0,
+              "Y": 161.0,
+              "Heading": 90.0,
+              "Velocity": 0.0
+            }
+          ]
+        },
+        {
+          "name": "Path4",
+          "maxvelocity": 0.0,
+          "maxacceleration": 0.0,
+          "startvelocity": 0.0,
+          "endvelocity": 0.0,
+          "constraints": null,
+          "points": [
+            {
+              "X": 0.0,
+              "Y": 40.0,
+              "Heading": 0.0,
+              "Velocity": 0.0
+            },
+            {
+              "X": 100.0,
+              "Y": 40.0,
+              "Heading": 0.0,
+              "Velocity": 80.0
+            },
+            {
+              "X": 200.0,
+              "Y": 40.0,
+              "Heading": 0.0,
+              "Velocity": 160.0
+            },
+            {
+              "X": 300.0,
+              "Y": 40.0,
+              "Heading": 0.0,
+              "Velocity": 0.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

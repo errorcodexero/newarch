@@ -1,0 +1,10 @@
+Questions
+
+1. In the class MotionKey, method calculateTangents
+   Lines 234 and 306 appear to do nothing, return value is not used.  Is there
+   something about Kotlin I don't understand.
+
+2. In the class CubicCoefficients1D, method secondDerivative
+   Should this be 6 * a * t + 2 * b ??  This method is not used anywhere so it does
+   not really matter but want to be sure I understand.
+
