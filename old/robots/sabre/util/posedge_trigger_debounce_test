@@ -1,0 +1,6 @@
+g++ -DPOSEDGE_TRIGGER_DEBOUNCE_TEST \
+	posedge_trigger_debounce.cpp \
+	debounce.cpp \
+	posedge_trigger.cpp \
+	countdown_timer.cpp \
+	-o posedge_trigger_debounce 2>&1 && ./posedge_trigger_debounce 2>&1

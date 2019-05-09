@@ -1,0 +1,44 @@
+File describing the various auto-modes which can be selected through use of the OI.
+
+Auto-Switch Positions (0-9) Default for empty is null mode
+	0. Null Mode
+	1. Reach Platform
+	2. Courtyard Mode - Low Bar
+	3. Courtyard Mode - Portcullis pos 1
+	4. Courtyard Mode - Portcullis pos 2
+	5. Courtyard Mode - Portcullis pos 3
+	6. Courtyard Mode - Portcullis pos 4
+	7. Courtyard Mode - Static Defense Cross
+	8. 
+	9. Full Mode - Low Bar
+	
+
+FULL MODE - Low Bar (assumes starting with ball in the bot):
+	1. Go through defense 
+		-Low Bar
+		-Others selectable from OI Auto-Select
+	2. Drive to edge of the field.
+	3. Position robot to score. (rotate and drive to low goal)
+	4. Score in low goal.
+	5. Backup to corner
+	6. Reposition to return to defenses.
+	7. Return to defenses.
+	8. Go back through defense to the center(low bar maybe?
+
+FULL MODE - Portcullis (assumes starting with ball in bot):
+	1. Lower Collector
+	2. Pass through defense, while moving collector to level position
+	3. Turn to drive to low goal (Varies based on which position the portcullis is in.
+	4. Drive to low goal
+	5. Set up to score
+	6. Score in low goal
+	7. Reposition to return to defenses
+	8. Return through defenses 
+	
+
+NULL MODE(No ball - or ball)
+	1. Does nothing the whole time
+
+REACH MODE (No Ball - or ball)
+	1. Drive forward to the reach the platform
+	2. Wait until the end of autonomous

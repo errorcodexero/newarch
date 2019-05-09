@@ -1,0 +1,20 @@
+To check connectivity:
+	- Check wifi connection through Network and Sharing Center on Windows
+	- Open driver station and go to diagnostics tab
+	- Ping robot radio
+	- Ping roborio
+	- Ethernet directly into the router and try all of these again
+	
+To debug, try:
+	- Make sure you're connected to the right router (and that no other routers are broadcasting with the same ip)
+	- Make sure driver station team number matches that of the radio and the roborio
+	- Check ethernet connection between roborio and radio (replace if necessary) and that it connects to the radio in the port farthest from the power cable
+	- If the diagnostics tab of the driver station reads connected to robot radio but not robot, restart the robotio
+	- Restart the robot
+	- Restart the driver station
+	- Restart the driver station computer
+	- Reconfigure the router using the Radio Configuration Utility
+
+Last resorts:
+	- Check software running on roborio and radio at https://wpilib.screenstepslive.com/s/4485/m/13503/l/305566-current-software-revisions 
+	- Reimage roborio

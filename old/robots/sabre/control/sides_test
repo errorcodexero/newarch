@@ -1,0 +1,7 @@
+g++ --std=c++11 -Wall -Werror -DSIDES_TEST \
+	sides.cpp \
+	front.cpp \
+	../util/interface.cpp \
+	../util/driver_station_interface.cpp \
+	../util/util.cpp \
+	-o sides 2>&1 && ./sides

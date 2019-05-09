@@ -1,0 +1,5 @@
+g++ -DINTERFACE_TEST -std=c++0x interface.cpp \
+	jag_interface.cpp \
+	driver_station_interface.cpp \
+	util.cpp \
+	-o interface 2>&1 && ./interface

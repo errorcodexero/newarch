@@ -1,0 +1,1 @@
+g++ -std=c++11 -DPERF_TRACKER_TEST -Wall -Werror perf_tracker.cpp -o perf_tracker 2>&1 && ./perf_tracker

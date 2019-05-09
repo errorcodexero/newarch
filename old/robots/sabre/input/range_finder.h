@@ -1,0 +1,2 @@
+#ifndef RANGE_FINDER_H
+#define RANGE_FINDER_H 

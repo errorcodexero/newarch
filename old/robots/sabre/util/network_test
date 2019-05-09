@@ -1,0 +1,2 @@
+g++ network.cpp -DNETWORK_TEST \
+ -o network 2&>1 && valgrind ./network 2>&1

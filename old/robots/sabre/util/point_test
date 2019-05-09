@@ -1,0 +1,1 @@
+g++ -std=c++11 -Wall -Werror -DPOINT_TEST point.cpp -o point 2>&1 && ./point 2>&1

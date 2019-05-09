@@ -1,0 +1,27 @@
+g++ -Wall -Werror -std=c++14 -DTELEOP_TEST \
+        teleop.cpp \
+        ../control/toplevel.cpp \
+	../util/fixVictor.cpp \
+        ../util/posedge_trigger.cpp \
+        ../util/negedge_trigger.cpp \
+        ../util/countup_timer.cpp \
+        ../control/pump.cpp \
+        ../control/sides.cpp \
+        ../control/front.cpp \
+        ../control/climb_release.cpp \
+        ../util/point.cpp \
+        ../control/drivebase.cpp \
+        ../util/interface.cpp \
+        ../util/jag_interface.cpp \
+        ../util/driver_station_interface.cpp \
+        ../util/util.cpp \
+        ../util/countdown_timer.cpp\
+        ../control/motor_check.cpp\
+        ../util/input.cpp\
+        ../util/output.cpp\
+        ../control/tote_sensors.cpp\
+        ../control/tilt.cpp\
+        ../control/winch.cpp\
+        ../control/shooter.cpp\
+        ../control/collector.cpp\
+        -o teleop 2>&1 && ./teleop 2>&1

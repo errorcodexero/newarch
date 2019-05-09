@@ -1,0 +1,37 @@
+g++ -Wall -Werror -std=c++0x --short-enums -DMAIN_TEST -I.. main.cpp \
+	force.cpp \
+	force_interface.cpp \
+	../util/fixVictor.cpp \
+	../util/interface.cpp \
+	../util/posedge_trigger.cpp \
+	../util/posedge_toggle.cpp \
+	../util/perf_tracker.cpp \
+	../util/util.cpp \
+	../util/countdown_timer.cpp \
+	../util/bound_tracker.cpp \
+	toplevel.cpp \
+	../util/point.cpp \
+	drivebase.cpp \
+	pump.cpp \
+	front.cpp \
+	sides.cpp \
+	shooter.cpp\
+	climb_release.cpp \
+	../util/countup_timer.cpp \
+	../util/negedge_trigger.cpp \
+	../input/util.cpp \
+	../util/nav.cpp \
+	../util/jag_interface.cpp \
+	../util/driver_station_interface.cpp \
+	monitor.cpp \
+	motor_check.cpp \
+	tote_sensors.cpp \
+	tilt.cpp \
+	winch.cpp\
+	../input/panel.cpp \
+	../util/nav2.cpp \
+	log.cpp \
+	collector.cpp \
+	../util/debounce.cpp \
+	../util/posedge_trigger_debounce.cpp \
+	-o main 2>&1 && ./main

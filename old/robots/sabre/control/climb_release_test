@@ -1,0 +1,7 @@
+g++ --std=c++11 -Wall -Werror -DCLIMB_RELEASE_TEST \
+	climb_release.cpp \
+	../util/countdown_timer.cpp \
+	../util/interface.cpp \
+	../util/driver_station_interface.cpp \
+	../util/util.cpp \
+	-o climb_release 2>&1 && ./climb_release

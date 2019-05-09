@@ -1,0 +1,56 @@
+Driver:
+ A          - Backward nudge
+ B          - Clockwise nudge
+ X          - Counter-clockwise nudge
+ Y          - Forward nudge
+ Start      - Collector auto up/down
+ Back       - Stop collector
+ RB         - 
+ LB         - 
+ RT         - Slow
+ LT         - Turbo
+ L_Joy:
+  X Axis    -
+  Y Axis    - Forward/backward
+  Pushed in -
+ R_Joy:
+  X Axis    - Turning
+  Y Axis    -
+  Pushed in -
+ POV        - 
+
+
+Gunner:
+ A          - Prep to shoot
+ B          - Learn (used in combination with the tilt positions buttons)
+ X          - Shoot low
+ Y          - Shoot high
+ Start      - Collector auto/manual toggle
+ Back       - All collector off
+ RB         - Side belt in
+ LB         - Side belt out
+ RT         - Front belt in
+ LT         - Front belt out
+ L_Joy:
+  Up        - Climb up
+  Down      - Climb down 
+  Left      -
+  Right     -
+  Pushed in - 
+ R_Joy:
+  Up        - Collector up
+  Down      - Collector down
+  Left      - Collector level
+  Right     - Collector low
+  Pushed in - Closed/open loop control
+ POV        
+  Center     -
+  Up         - Stow 
+  Up_left    -
+  Left       - Cheval - Disabled
+  Down_left  -
+  Down       -
+  Down_right -
+  Right      - Drawbridge
+  Up_right   -
+

@@ -1,0 +1,222 @@
+#!/usr/bin/env python
+
+#This is supposed to give a faster way to run all the tests.  It's not super elegant, oh well.
+
+from glob import glob
+import os,sys
+import commands
+
+#any(a) => int->[a]->[(int,a)]
+def enumerate_from(i,a):
+	r=[]
+	at=0
+	while at<len(a):
+		r.append((i,a[at]))
+		i+=1
+		at+=1
+	return r
+
+#str->bool
+def start_good(s):
+	for c in s:
+		if c.isdigit() or c.isalpha() or c in '#{}\t/*)->': return 1
+		if c==' ': return 0
+		print 'nyi \"%s\"'%c
+		raise
+	return 1
+
+#any(a) => [a]->[(a,a)]
+def adjacent_pairs(a):
+	r=[]
+	i=0
+	while i+1<len(a):
+		r.append((a[i],a[i+1]))
+		i+=1
+	return r
+
+def type_name_ok(s):
+	return s[0].isupper() or s in ['sockaddr_in','dirent','js_event','addrinfo','sigaction','sockaddr_storage']
+
+def rm_line_comment(s):
+	out=''
+	for (a,b) in adjacent_pairs(s):
+		if a=='/' and b=='/':
+			return out
+		out+=a
+	return out
+
+def decl_ok(s):
+	sp=rm_line_comment(s).split()
+	for (a,b) in adjacent_pairs(sp):
+		if a in ['struct','class'] or (a=='enum' and b!='class'):
+			if not type_name_ok(b):
+				return 0
+	return 1
+
+#str->[str(error)]
+def check_file(contents):
+	lines=contents.splitlines()
+	r=[]
+	for line_num,s in enumerate_from(1,lines):
+		if not start_good(s):
+			r.append((line_num,'starts w/ space',s))
+		if not decl_ok(s):
+			r.append((line_num,'type names',s))
+	return r
+
+#returns int
+def check_style():
+	cppfiles=commands.getoutput("find -name \*.cpp").splitlines()
+	hfiles=commands.getoutput("find -name \*.h").splitlines()
+	for filename in cppfiles+hfiles:
+		errors=check_file(file(filename).read())
+		if len(errors):
+			print filename
+			for e in errors: print '\t',e
+			return 1
+	return 0
+
+#output stream -> void
+def makefile(out):
+	def get_base(test_script):
+		return test_script[:-5].split('/')[1]
+
+	def get_target_name(test_script):
+		return test_script.replace('/','_')
+
+	def get_dir(test_script): return test_script.split('/')[0]
+
+	def get_cppfile(test_script):
+		return get_dir(test_script)+'/'+get_base(test_script)+'.cpp'
+
+	objdir='tobj'
+	test_scripts=filter(lambda x: 'joystick_linux' not in x and x.split('/')[0]!=objdir,glob('*/*_test'))
+	dirs=set(map(get_dir,test_scripts)+['roborio'])
+	map(lambda x: os.system('mkdir -p '+objdir+'/%s'%x),dirs)
+	map(lambda x: os.system('mkdir -p obj/%s'%x),dirs)
+
+	print>>out,'OBJDIR='+objdir
+	print>>out,'H_FILES=$(find -name \*.h)'
+	print>>out,'CXXFLAGS=-Wall -Wextra -Werror -std=c++14 -g -O2'
+	print>>out,'export SHELL=/bin/bash' #so that later stderr redirection will work
+	print>>out,'.PHONY: clean'
+	print>>out,''
+
+	print>>out,'all:',
+	for a in test_scripts: print>>out, objdir+'/log_'+get_target_name(a),
+	print>>out, ''
+
+	print>>out,'$(OBJDIR)/%.o: %.cpp ${H_FILES}'
+	print>>out,'\t$(CXX) $(CXXFLAGS) -c -o $@ $<'
+	print>>out,''
+
+	#str->[str]
+	def objects_needed(script_name):
+		#base=get_base(script_name)
+		cppfile=get_cppfile(script_name)
+		def expand_dir(x):
+			if x[:3]=='../': x=x[3:]
+			if '/' in x: return x
+			return get_dir(script_name)+'/'+x
+		m=map(expand_dir,
+			filter(lambda x: '.cpp' in x,file(script_name).read().split())
+			)
+		cpp_files=filter(lambda x: x!=cppfile,m)
+		return map(lambda x: x.split('.')[0]+'.o',cpp_files)
+
+	for test_script in test_scripts:
+		base=get_base(test_script)
+		dir=get_dir(test_script)
+
+		define=base.upper()+'_TEST'
+		if test_script=='input/util_test':
+			define='INPUT_UTIL_TEST'
+		
+		cppfile=get_cppfile(test_script)
+		objects=(' '+objdir+'/').join(objects_needed(test_script))
+		#objects=sorted(objects,key=lambda x: 'util.o' in x)
+		target=get_target_name(test_script)
+		print>>out, objdir+'/'+target+': ${H_FILES} '+objdir+'/util/util.o %s'%cppfile,objects
+		exe_name=objdir+'/'+target#'test_'+base
+		print>>out, '\t$(CXX) $(CXXFLAGS) -D%s'%define,objects,cppfile,'-o',exe_name
+		logfile=objdir+'/log_'+target
+		#print>>out, '\tvalgrind --error-exitcode=1 ./%s &> %s'%(exe_name,logfile)
+		#print>>out, '\t./%s'%exe_name
+
+		#The thing that actually runs the test program:
+		print>>out,objdir+'/log_%s: %s/%s'%(target,objdir,target)
+		print>>out, '\tvalgrind --error-exitcode=1 ./%s &> %s'%(exe_name,logfile)
+
+	print>>out, 'clean:'
+	print>>out, '\trm -f *_test'
+	print>>out, '\tfind -name \*.o | xargs rm -f'
+
+def cross_makefile(out):
+	import commands
+	def object_files():
+		cppfiles=commands.getoutput("find -name \*.cpp").splitlines()
+		cppfiles=filter(lambda x: 'Robot' not in x,cppfiles)
+		#print cppfiles
+		return map(lambda x: '.'.join(x.split('.')[:-1])+'.o',cppfiles)
+
+	print>>out,'OBJDIR=obj'
+	print>>out,"H_FILES=$(find -name \*.h)"
+	print>>out,"CXX=arm-frc-linux-gnueabi-g++"
+	print>>out,"CXXFLAGS=-Wall -Wextra -Werror -O2 -g -std=c++14 -I"+os.environ['HOME']+"/wpilib/cpp/current/include -fmessage-length=0"
+	print>>out,"LD_FLAGS=-L"+os.environ['HOME']+"/wpilib/cpp/current/lib -Wl,-rpath,/opt/GenICam_v2_3/bin/Linux_armv7-a -lwpi"
+	print>>out,".PHONY: clean\n"
+
+	print>>out,"all: FRCUserProgram"
+
+	print>>out,"FRCUserProgram:",
+	for elem in object_files():
+		print>>out,'obj/%s'%elem,
+	print>>out,""
+	print>>out,"\t$(CXX)",
+	for elem in object_files(): print>>out,'obj/%s'%elem,
+	print>>out," $(LD_FLAGS) -o FRCUserProgram -lwpi",
+	print>>out,"\n"
+
+
+	print>>out,"$(OBJDIR)/%.o: %.cpp ${H_FILES}"
+	print>>out,"\t$(CXX) $(CXXFLAGS) -c -o $@ $<\n"
+
+	print>>out,"clean:"
+	print>>out,"\trm -f FRCUserProgram"
+	print>>out,"\tfind -name \*.o | xargs rm -f"
+
+if __name__=='__main__':
+	import os,sys
+	from optparse import OptionParser
+	p=OptionParser()
+	p.add_option('--test',action='store_true',help="Run unit tests")
+	p.add_option('--build',action='store_true',help="Build the executable to load onto the robot")
+	p.add_option('--test_makefile',action='store_true')
+	p.add_option('--build_makefile',action='store_true')
+	options,args=p.parse_args()
+	assert len(args)==0
+
+	def test():
+		func=makefile
+		func(open('t.mk','w'))
+		#r=os.system('make -f t.mk && make -f t.mk clean')
+		r=os.system('make -f t.mk 2>&1')
+		assert r&0xff==0
+		return r>>8
+
+	def build():
+		cross_makefile(open('t.mk','w'))
+		r=os.system('make -j4 -f t.mk')
+		assert r&0xff==0
+		return r>>8
+
+	if check_style(): sys.exit(1)
+
+	if options.test: test()
+	if options.build: build()
+
+	if options.test_makefile:makefile(sys.stdout)
+	if options.build_makefile:cross_makefile(sys.stdout)
+
+	if not options.test and not options.build and not options.test_makefile and not options.build_makefile:
+		sys.exit(test() or build())

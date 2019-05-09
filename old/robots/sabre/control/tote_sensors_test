@@ -1,0 +1,7 @@
+g++ -Wall -Werror -std=c++11 -DTOTE_SENSORS_TEST \
+	tote_sensors.cpp \
+	../util/interface.cpp \
+	../util/jag_interface.cpp \
+	../util/driver_station_interface.cpp \
+	../util/util.cpp \
+	-o tote_sensors 2>&1 && ./tote_sensors 2>&1

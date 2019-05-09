@@ -1,0 +1,18 @@
+Valid for 2016 Competition Robots
+
+Connecting to the robot:
+1. Turn on computer (watch it and select either Windows 7 on the boot loader, if the computer is dual booted)
+2. Turn on robot
+3. Plug in the offboard (blue) router (Grond-Robot 1/1425, Practice-Robot 2/1426)
+3. Log into the Software account
+4. Open the Driverstation application
+5. Make sure that the team number in the Setup Tab (wrench icon) matches the robot (Grond-1425, Practice-1426)
+6. Make sure that the periferals are in the right slots on the USB Devices Tab (0-Driver, 1-Gunner, 2-OI)
+7. Connect to the appropriate offboard (blue) router (Grond-1425, Practice-1426)
+
+To debug problems, try:
+- If the Diagnostics Tab reads that it's connected to the robot, but the Operation Tab says it's not, then hit "reset" on the roboRIO
+- Turning the robot, router, and/or computer on and off again
+
+If problems persist, contact a member of the software team.
+

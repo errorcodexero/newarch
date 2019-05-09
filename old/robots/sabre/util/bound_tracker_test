@@ -1,0 +1,1 @@
+g++ -Wall -Werror -DBOUND_TRACKER_TEST bound_tracker.cpp -o bound_tracker 2>&1 && ./bound_tracker

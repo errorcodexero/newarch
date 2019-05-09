@@ -1,0 +1,8 @@
+g++ -Wall -Wextra --std=c++11 -DPANEL_TEST -o panel \
+	panel.cpp \
+	../util/util.cpp \
+	util.cpp \
+	../util/driver_station_interface.cpp \
+	../util/jag_interface.cpp \
+	../util/interface.cpp \
+	2>&1 && ./panel 2>&1

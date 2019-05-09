@@ -1,0 +1,63 @@
+HIGH PRIORITY for Offseason:
+	- High goal shooter code
+		- Make high goal rpm more consistent (and change pid values to be ones we actually want)
+		- Get printing talon_srx_controls to work
+		- Fix climbed shooting
+	- Autonomous 
+		- Drive Encoders
+		- Testing on carpet field with measurements
+		- Low goal auto mode 
+		- Vision run autonomous
+		- Rewrite structure
+	- Logging
+	- Fix ability to tell if partly climbed in winch estimator
+
+
+NOT AS HIGH PRIORITY for Offseason:
+	- Log Analysis - Nick
+	- Add auto-shut off for climber with the hall effect sensor	
+	- Prevent climber release when collector is at top
+	- Laptop configuration
+		-ssh config:
+			-Fix the "rm ~/.ssh/known_hosts" problem
+			-add "StrictHostKeyChecking no/UserKnownHostsFile=/dev/null" for robot
+
+
+NICE THINGS TO HAVE:
+	- Expand testing in main.cpp
+	- PWM outputs for blinky lights (DIO 9)
+	- Clean-up stuff:
+		- Use enum class more places
+		- Use std::array in place of C arrays in several places
+	- Update c++ compilers to use c++14 for runall2 tests	
+	- Clean up panel interpret
+	- Meta IO information
+		- Add a function that will discover which IOs different parts use (and make a nice list)
+		- Make a data type to talk about different inputs
+
+
+LOG LIST:
+	-RIO Time			10chars 
+	-RIO mode			4chars
+	-Collector Mode			4chars
+	-Climber Mode			4chars
+	-OI inputs (panel)		50chars
+	-PDP currents			120chars
+	-Robot Outputs			130chars
+	-Robot Inputs			30chars
+	-Driver inputs			120chars
+	-RIO Connection status and ip	12chars
+	-DriverStation outputs		4chars
+					488 chars total
+
+
+Eric's random thoughts:
+	-I should try to figure out how the learning logic interacts w/ going into auto, etc.
+	-Nav stuff should be a little more collected together
+	-Sim stuff could benefit from using Monitor
+	-Some of the nav types aren't following the naming convention
+	-I should try to figure out what the Joy_collector_position logic is doing
+	-Why is there a variable 'simtest' in main?
+	-Don't do this before Auburn: There shouldn't be seperate "panel output" and driver station output
+	-There's a better way to do SLOW_PRINT
+	-Probably not this season: Should try to put a little more structure so that autonomous modes are less prone to be spaghetti-like

@@ -1,0 +1,1 @@
+g++ -Wall -Werror -O3 -std=c++11 -DNAV_TEST nav.cpp -o nav 2>&1 && ./nav

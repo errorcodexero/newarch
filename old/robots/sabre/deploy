@@ -1,0 +1,12 @@
+#Deploy script for pit
+ssh admin@roboRIO-1425-FRC.local rm /home/lvuser/FRCUserProgram
+# if deploy script is run on linux, rsync can be used and a backup can be created
+#if [ $(uname -s) = Linux ]
+#then
+#	echo "We're using Linux, so we can copy using rsync!"
+#	rsync -bvpE FRCUserProgram admin@roboRIO-1425-FRC.local:/home/lvuser/FRCUserProgram
+#else
+	echo "We're not using Linux, so scp will be used"
+	scp FRCUserProgram admin@roboRIO-1425-FRC.local:/home/lvuser/FRCUserProgram
+#fi
+ssh admin@roboRIO-1425-FRC.local ". /etc/profile.d/natinst-path.sh; chmod a+x /home/lvuser/FRCUserProgram; /usr/local/frc/bin/frcKillRobot.sh -t -r"

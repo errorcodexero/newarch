@@ -47,12 +47,12 @@ model {
     components {
 
         //
-        // 2019 FRC Robot
+        // Old architecture code, 2016 robot (grond)
         //
         frcUserProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
 			binaries.all {
-				cppCompiler.args "-std=c++11", "-g", "-DCLAYMORE"
+				cppCompiler.args "-g"
 			}            
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
@@ -60,27 +60,23 @@ model {
 
             sources.cpp {
                 source {
-                    srcDir 'old/robots/claymore'
-                    include '**/*.cpp'
-                }
-                source {
-                    srcDir 'old/robots/common/helpers'
+                    srcDir 'old/robots/sabre'
                     include '**/*.cpp'
                 }
                 exportedHeaders {
-                    srcDir 'old/robots/claymore'
+                    srcDir 'old/robots/sabre'
                     include '**/*.h'
                 }
                 exportedHeaders {
-                    srcDir 'old/robots/claymore/util'
+                    srcDir 'old/robots/sabre/util'
                     include '**/*.h'
                 }                
                 exportedHeaders {
-                    srcDir 'old/robots/claymore/control'
+                    srcDir 'old/robots/sabre/control'
                     include '**/*.h'
                 }                  
                 exportedHeaders {
-                    srcDir 'old/robots/common/helpers'
+                    srcDir 'old/robots/sabre/helpers'
                     include '**/*.h'
                 }                                                
             }
@@ -88,7 +84,51 @@ model {
             // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
             useLibrary(it, "wpilib")
             wpi.deps.vendor.cpp(it)
-        }         
+        }   
+
+        // //
+        // // Old archiktecture code, 2018 robot (phoenix)
+        // //
+        // frcUserProgramPhoenix(NativeExecutableSpec) {
+        //     targetPlatform wpi.platforms.roborio
+		// 	binaries.all {
+		// 		cppCompiler.args "-std=c++11", "-g", "-DCLAYMORE"
+		// 	}            
+        //     if (includeDesktopSupport) {
+        //         targetPlatform wpi.platforms.desktop
+        //     }
+
+        //     sources.cpp {
+        //         source {
+        //             srcDir 'old/robots/claymore'
+        //             include '**/*.cpp'
+        //         }
+        //         source {
+        //             srcDir 'old/robots/common/helpers'
+        //             include '**/*.cpp'
+        //         }
+        //         exportedHeaders {
+        //             srcDir 'old/robots/claymore'
+        //             include '**/*.h'
+        //         }
+        //         exportedHeaders {
+        //             srcDir 'old/robots/claymore/util'
+        //             include '**/*.h'
+        //         }                
+        //         exportedHeaders {
+        //             srcDir 'old/robots/claymore/control'
+        //             include '**/*.h'
+        //         }                  
+        //         exportedHeaders {
+        //             srcDir 'old/robots/common/helpers'
+        //             include '**/*.h'
+        //         }                                                
+        //     }
+
+        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
+        //     useLibrary(it, "wpilib")
+        //     wpi.deps.vendor.cpp(it)
+        // }         
 
         //
         // 2019 FRC Robot
@@ -218,51 +258,51 @@ model {
         //     wpi.deps.vendor.cpp(it)
         // }       
 
-		xeromisc(NativeLibrarySpec) {
-            targetPlatform wpi.platforms.roborio
-			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
-			sources.cpp {
-			    source {
-				    srcDirs = ["xerolibs/xeromisc"]
-					include "**/*.cpp"
-				}
-				exportedHeaders {
-				    srcDirs = ["xerolibs/xeromisc"]
-					include "**/*.h"
-				}
-			}
-            useLibrary(it, "wpilib")       
-            wpi.deps.vendor.cpp(it)                           
-		}
+		// xeromisc(NativeLibrarySpec) {
+        //     targetPlatform wpi.platforms.roborio
+		// 	binaries.all {
+		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+		// 	}
+		// 	binaries.withType(SharedLibraryBinarySpec) {
+		// 		buildable = false
+		// 	}
+		// 	sources.cpp {
+		// 	    source {
+		// 		    srcDirs = ["xerolibs/xeromisc"]
+		// 			include "**/*.cpp"
+		// 		}
+		// 		exportedHeaders {
+		// 		    srcDirs = ["xerolibs/xeromisc"]
+		// 			include "**/*.h"
+		// 		}
+		// 	}
+        //     useLibrary(it, "wpilib")       
+        //     wpi.deps.vendor.cpp(it)                           
+		// }
 
-		xerobase(NativeLibrarySpec) {
-            targetPlatform wpi.platforms.roborio
-			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-			}
-			binaries.withType(SharedLibraryBinarySpec) {
-				buildable = false
-			}
-			sources.cpp {
-			    source {
-				    srcDirs = ["xerolibs/xerobase"]
-					include "**/*.cpp"
-				}
-				exportedHeaders {
-				    srcDirs = ["xerolibs/xerobase"]
-					include "*.h", "**/*.h"
-				}
+		// xerobase(NativeLibrarySpec) {
+        //     targetPlatform wpi.platforms.roborio
+		// 	binaries.all {
+		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+		// 	}
+		// 	binaries.withType(SharedLibraryBinarySpec) {
+		// 		buildable = false
+		// 	}
+		// 	sources.cpp {
+		// 	    source {
+		// 		    srcDirs = ["xerolibs/xerobase"]
+		// 			include "**/*.cpp"
+		// 		}
+		// 		exportedHeaders {
+		// 		    srcDirs = ["xerolibs/xerobase"]
+		// 			include "*.h", "**/*.h"
+		// 		}
 
-				lib library: "xeromisc", linkage: "static"
-			}
-            useLibrary(it, "wpilib")
-            wpi.deps.vendor.cpp(it)            
-		}        
+		// 		lib library: "xeromisc", linkage: "static"
+		// 	}
+        //     useLibrary(it, "wpilib")
+        //     wpi.deps.vendor.cpp(it)            
+		// }        
     }
 
     testSuites {

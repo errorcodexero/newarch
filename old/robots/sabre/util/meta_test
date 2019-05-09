@@ -1,0 +1,8 @@
+g++ -std=c++11 -g -Wall -DMETA_TEST \
+	meta.cpp \
+	interface.cpp\
+	driver_station_interface.cpp\
+	util.cpp\
+	../control/tilt.cpp\
+	../control/front.cpp\
+	-o meta 2>&1 && ./meta 2>&1

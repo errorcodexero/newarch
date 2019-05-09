@@ -1,0 +1,1 @@
+g++ --std=c++11 -DNAV2_TEST nav2.cpp nav.cpp -o nav2 2>&1 && ./nav2 2>&1

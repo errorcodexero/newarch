@@ -1,0 +1,1 @@
+g++ -Wall -Werror --std=c++11 -DSETTABLE_TOGGLE_TEST settable_toggle.cpp posedge_trigger.cpp -o settable_toggle 2>&1 && ./settable_toggle 2>&1

@@ -1,0 +1,17 @@
+Lift failure mode:
+	limit switches
+		stuck on
+		stuck off
+	encoder
+		no/small change
+		wrong direction
+	motor
+		not attached
+		wired backwards
+drivebase failure modes (per section)
+	motor
+		detached
+		wired backwards
+	endcoder
+		detached
+		wired backwards

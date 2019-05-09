@@ -1,0 +1,7 @@
+g++ --std=c++11 -Wall -Werror -DTILT_TEST \
+	tilt.cpp \
+	../util/interface.cpp \
+	../util/util.cpp \
+	../util/countdown_timer.cpp \
+	../util/driver_station_interface.cpp \
+	-o tilt 2>&1 && ./tilt

@@ -1,0 +1,7 @@
+g++ -Wall -Werror -std=c++0x -DPUMP_TEST \
+	pump.cpp \
+	../util/interface.cpp \
+	../util/jag_interface.cpp \
+	../util/driver_station_interface.cpp \
+	../util/util.cpp\
+	-o pump 2>&1 && ./pump

@@ -1,0 +1,1 @@
+g++ -DDEBOUNCE_TEST debounce.cpp countdown_timer.cpp -o debounce 2>&1 && ./debounce 2>&1

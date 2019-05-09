@@ -1,0 +1,4 @@
+g++ -Wall -Werror -std=c++0x -DDRIVER_STATION_INTERFACE_TEST \
+	driver_station_interface.cpp \
+	util.cpp \
+	-o driver_station_interface 2>&1 && ./driver_station_interface

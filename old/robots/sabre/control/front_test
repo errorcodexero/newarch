@@ -1,0 +1,6 @@
+g++ --std=c++11 -Wall -Werror -DFRONT_TEST \
+	front.cpp \
+	../util/interface.cpp \
+	../util/driver_station_interface.cpp \
+	../util/util.cpp \
+	-o front 2>&1 && ./front

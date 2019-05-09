@@ -1,0 +1,3 @@
+set -e
+g++ -DFORCE_INTERFACE_TEST -Wall -Werror -std=c++11 -I.. force_interface.cpp ../util/posedge_trigger.cpp force.cpp ../util/interface.cpp ../util/util.cpp ../util/jag_interface.cpp ../util/driver_station_interface.cpp -o force_interface 2>&1 | head
+./force_interface

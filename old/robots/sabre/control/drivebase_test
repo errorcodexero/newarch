@@ -1,0 +1,10 @@
+g++ --std=c++11 -Wall -Werror -DDRIVEBASE_TEST \
+	drivebase.cpp \
+	../util/fixVictor.cpp \
+	../util/interface.cpp \
+	../util/jag_interface.cpp \
+	../util/util.cpp \
+	../util/driver_station_interface.cpp \
+	motor_check.cpp\
+	../util/countdown_timer.cpp\
+	-o drivebase 2>&1 && ./drivebase

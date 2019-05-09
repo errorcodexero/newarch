@@ -1,0 +1,1 @@
+g++ -std=c++11 -Wall -Werror -DCOUNTUP_TIMER_TEST countup_timer.cpp -o countup_timer 2>&1 && ./countup_timer

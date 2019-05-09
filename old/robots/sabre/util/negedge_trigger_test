@@ -1,0 +1,3 @@
+set -e
+g++ -DNEGEDGE_TRIGGER_TEST negedge_trigger.cpp -o negedge_trigger
+./negedge_trigger

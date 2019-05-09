@@ -1,0 +1,1 @@
+g++ -std=c++11 -Wall -Werror -DMOTOR_CHECK_TEST motor_check.cpp -o motor_check 2>&1 && ./motor_check 2>&1
