@@ -16,8 +16,6 @@
 if PRACTICE
 hw:tankdrive:leftmotor:1                                        4               # TALON SRX
 hw:tankdrive:leftmotor:2                                        5               # TALON SRX
-hw:tankdrive:leftmotor:3                                        6               # TALON SRX
-hw:tankdrive:rightmotor:1                                       1               # TALON SRX
 hw:tankdrive:rightmotor:2                                       2               # TALON SRX
 hw:tankdrive:rightmotor:3                                       3               # TALON SRX
 hw:tankdrive:leftencoder:1                                      1               # Digital IO
@@ -207,7 +205,9 @@ turntable:degrees_per_tick                                      0.60916263086705
 endif
 
 if COMPETITION
-turntable:degrees_per_tick                                      0.546283784
+#turntable:degrees_per_tick                                      0.546283784
+#turntable:degrees_per_tick                                      0.538800444
+turntable:degrees_per_tick                                      0.55387105877777777777777777777778
 endif
 
 turntable:maxa                                                  420
@@ -274,9 +274,9 @@ lifter:max_height                                               83.66
 lifter:min_height                                               8.46
 lifter:threshold                                                1.0
 
-lifter:maxv                                                     30
-lifter:maxa                                                     30
-lifter:maxd                                                     -30
+lifter:maxv                                                     33               # 30
+lifter:maxa                                                     60               # 30
+lifter:maxd                                                     -60              # -30
 
 lifter:follower:up:kp                                           0.2
 lifter:follower:up:ka                                           0.00056179776
@@ -315,7 +315,6 @@ lifter:height:hatch:floor_collect                               12.0
 lifter:height:hatch:undock_intake                               22.00
 lifter:height:loadingstation:hatch:shift_up                     5
 lifter:height:score:hatch:shift_down                            -4.0
-
 lifter:height:turtle                                            15.0
 
 #
@@ -327,20 +326,20 @@ lifter:height:cargo:collect:south                               38
 lifter:height:cargo:collect:east                                38
 lifter:height:cargo:collect:west                                38
 
-lifter:height:cargo:place:north:1                               21
-lifter:height:cargo:place:south:1                               21
-lifter:height:cargo:place:east:1                                21
-lifter:height:cargo:place:west:1                                21
+lifter:height:cargo:place:north:1                               23
+lifter:height:cargo:place:south:1                               23
+lifter:height:cargo:place:east:1                                23
+lifter:height:cargo:place:west:1                                23
 
-lifter:height:cargo:place:north:2                             50
-lifter:height:cargo:place:south:2                             50
-lifter:height:cargo:place:east:2                              50
-lifter:height:cargo:place:west:2                              50
+lifter:height:cargo:place:north:2                             52
+lifter:height:cargo:place:south:2                             52
+lifter:height:cargo:place:east:2                              52
+lifter:height:cargo:place:west:2                              52
 
-lifter:height:cargo:place:north:3                             81
-lifter:height:cargo:place:south:3                             81
-lifter:height:cargo:place:east:3                              81
-lifter:height:cargo:place:west:3                              81
+lifter:height:cargo:place:north:3                             80
+lifter:height:cargo:place:south:3                             80
+lifter:height:cargo:place:east:3                              80
+lifter:height:cargo:place:west:3                              80
 
 lifter:height:cargo:place:north:c                             40
 lifter:height:cargo:place:south:c                             40
@@ -361,15 +360,15 @@ lifter:height:hatch:place:south:1                             11.5
 lifter:height:hatch:place:east:1                              11.5               
 lifter:height:hatch:place:west:1                              11.5   
 
-lifter:height:hatch:place:north:2                             42           
-lifter:height:hatch:place:south:2                             42              
-lifter:height:hatch:place:east:2                              42                 
-lifter:height:hatch:place:west:2                              42
+lifter:height:hatch:place:north:2                             41           
+lifter:height:hatch:place:south:2                             41              
+lifter:height:hatch:place:east:2                              41                 
+lifter:height:hatch:place:west:2                              41
                
-lifter:height:hatch:place:north:3                             72
-lifter:height:hatch:place:south:3                             72                
-lifter:height:hatch:place:east:3                              72                 
-lifter:height:hatch:place:west:3                              72                 
+lifter:height:hatch:place:north:3                             69
+lifter:height:hatch:place:south:3                             69                
+lifter:height:hatch:place:east:3                              69                 
+lifter:height:hatch:place:west:3                              69
 
 lifter:height:hatch:place:north:c                             11.5
 lifter:height:hatch:place:south:c                             11.5
@@ -378,7 +377,7 @@ lifter:height:hatch:place:west:c                              11.5
 
 lifter:height:offset:hatch_hook_center                        8.6
 lifter:height:cargo:undock_height                             22.00
-lifter:height:cargo:collected                                 40
+lifter:height:cargo:collected                                 23
 
 ###################################################################################################
 # cameratracker
@@ -393,7 +392,7 @@ cameratracker:rect_ratio_max                                    1.1
 ###################################################################################################
 
 drivebyvision:yaw_base_power                                    0.30
-drivebyvision:yaw_p                                             0.025
+drivebyvision:yaw_p                                             0.03
 
 ###################################################################################################
 # drive by line follower
@@ -443,13 +442,13 @@ hatchholder:debounce:high2low                                   0.4
 
 climb:deploy_delay                                              1.25
 
-climb:drive:left                                                0
-climb:drive:right                                               0
-climb:drive:duration                                            2.5
+climb:drive:left                                                -0.4
+climb:drive:right                                               -0.4
+climb:drive:duration                                            4.0
 
-climb:backup:left                                               0.2
-climb:backup:right                                              0.2
-climb:backup:duration                                           0.25
+climb:backup:left                                               0.0
+climb:backup:right                                              0.0
+climb:backup:duration                                           0.0
 
 climb:velocity_samples                                          16
 climb:still_threshold                                           2           # in / sec
