@@ -50,6 +50,21 @@ namespace PathViewer
             Points[Points.Length - 1] = pt;
         }
 
+        public bool InsertPoint(WayPoint pt)
+        {
+            int index = Array.IndexOf(Points, pt);
+            if (index == -1 || index == Points.Length - 1)
+                return false;
+
+            WayPoint after = Points[index + 1];
+
+            WayPoint newone = new WayPoint((pt.X + after.X) / 2, (pt.Y + after.Y) / 2, (pt.Heading + after.Heading) / 2, (pt.Velocity + after.Velocity) / 2);
+            Array.Resize(ref Points, Points.Length + 1);
+            Array.Copy(Points, index, Points, index + 1, Points.Length - index - 1);
+            Points[index + 1] = newone;
+            return true;
+        }
+
         public bool RemovePoint(WayPoint pt)
         {
             int index = Array.IndexOf(Points, pt);

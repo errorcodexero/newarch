@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Newtonsoft.Json;
 
 namespace PathViewer
 {
+    [DebuggerDisplay("X={X} Y={Y} Heading={Heading} Velocity={Velocity}")]
     [JsonObject(MemberSerialization.OptIn)]
     public class WayPoint
     {
@@ -36,6 +38,14 @@ namespace PathViewer
             Y = y;
             Heading = h;
             Velocity = v;
+        }
+
+        public double Distance(WayPoint other)
+        {
+            double dx = X - other.X;
+            double dy = Y - other.Y;
+
+            return Math.Sqrt(dx * dx + dy * dy);
         }
     }
 }

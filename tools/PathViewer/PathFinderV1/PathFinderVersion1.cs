@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PathViewer;
 
 namespace PathFinderV1
@@ -14,12 +15,17 @@ namespace PathFinderV1
             get { return "PathFinder Version One"; }
         }
 
-        public override PathSegment[] QuickGenerate(RobotPath path)
+        public override Version Version
         {
-            return null;
+            get { return new Version(1, 0); }
         }
 
-        public override PathSegment[] AccurateGenerate(RobotPath path)
+
+        public override void GenerateSplines(RobotPath path, List<Spline> xsplines, List<Spline> ysplines)
+        {
+        }
+
+        public override PathSegment[] GenerateDetailedPath(RobotPath path)
         {
             return null;
         }

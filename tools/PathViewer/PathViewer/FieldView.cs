@@ -105,6 +105,24 @@ namespace PathViewer
         #endregion
 
         #region public methods
+
+        public void InsertWaypoint()
+        {
+            if (m_selected == null)
+                return;
+
+            PathGroup gr;
+            RobotPath path;
+
+            if (m_file.FindPathByWaypoint(m_selected, out gr, out path))
+            {
+                if (path.InsertPoint(m_selected))
+                {
+                    Invalidate();
+                }
+            }
+        }
+
         public void DeleteSelectedWaypoint()
         {
             if (m_selected == null)
@@ -341,10 +359,17 @@ namespace PathViewer
             else
                 m_image_scale = sy;
 
+            m_world_to_window = new Matrix();
             float px = (float)m_game.FieldCorners.TopLeft[0] * m_image_scale;
             float py = (float)m_game.FieldCorners.BottomRight[1] * m_image_scale;
             m_world_to_window.Translate(px, py);
-            m_world_to_window.Scale(1.0f/m_image_scale, -1.0f/m_image_scale);
+
+            //
+            // Note, this scale between the field size in pixels in the image and the field size in inches
+            // is the game for the X and Y dimensions, so we just use the one (x) in both places
+            //
+            sx = (float)m_game.FieldSize[0] / (float)(m_game.FieldCorners.BottomRight[0] - m_game.FieldCorners.TopLeft[0]);
+            m_world_to_window.Scale(m_image_scale / sx, -m_image_scale / sx);
 
             float[] elems = m_world_to_window.Elements;
             m_window_to_world = new Matrix(elems[0], elems[1], elems[2], elems[3], elems[4], elems[5]);

@@ -12,7 +12,14 @@ namespace PathViewer
         {
             get;
         }
-        public abstract PathSegment[] QuickGenerate(RobotPath path);
-        public abstract PathSegment[] AccurateGenerate(RobotPath path);
+
+        public abstract Version Version
+        {
+            get;
+        }
+
+        public abstract void GenerateSplines(RobotPath path, List<Spline> xsplines, List<Spline> ysplines);
+
+        public abstract PathSegment[] GenerateDetailedPath(RobotPath path);
     }
 }
