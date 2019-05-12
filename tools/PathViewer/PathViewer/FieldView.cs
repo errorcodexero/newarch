@@ -23,6 +23,7 @@ namespace PathViewer
         private float m_radius = 8.0f;
         private float m_velocity_scale = 1.0f;
         private PathFile m_file;
+        private bool m_last_msg_selected;
         #endregion
 
         #region private enums
@@ -62,7 +63,7 @@ namespace PathViewer
             m_selected = null;
             m_rotating = null;
             m_dragging = false;
-
+            m_last_msg_selected = false;
             DoubleBuffered = true;
 
             InitializeComponent();
@@ -74,6 +75,7 @@ namespace PathViewer
         public WayPoint SelectedWaypoint
         {
             get { return m_selected; }
+            set { m_selected = value; Invalidate(); }
         }
 
         public Game FieldGame
@@ -99,47 +101,19 @@ namespace PathViewer
         public PathFile File
         {
             get { return m_file; }
-            set { m_file = value; }
+            set
+            {
+                PathFile pf = m_file;
+
+                m_selected = null;
+                m_file = value;
+                m_paths = new List<RobotPath>();
+            }
         }
 
         #endregion
 
         #region public methods
-
-        public void InsertWaypoint()
-        {
-            if (m_selected == null)
-                return;
-
-            PathGroup gr;
-            RobotPath path;
-
-            if (m_file.FindPathByWaypoint(m_selected, out gr, out path))
-            {
-                if (path.InsertPoint(m_selected))
-                {
-                    Invalidate();
-                }
-            }
-        }
-
-        public void DeleteSelectedWaypoint()
-        {
-            if (m_selected == null)
-                return;
-
-            PathGroup gr;
-            RobotPath path;
-
-            if (m_file.FindPathByWaypoint(m_selected, out gr, out path))
-            {
-                if (path.RemovePoint(m_selected))
-                {
-                    m_selected = null;
-                    Invalidate();
-                }
-            }
-        }
         #endregion
 
         #region overriden usercontrol methods
@@ -169,39 +143,68 @@ namespace PathViewer
             PointF pt = WindowToWorld(new PointF(e.X, e.Y));
             OnFieldMouseMoved(new FieldMouseMovedArgs(pt));
 
+            PathGroup gr;
+            RobotPath path;
+
+            m_file.FindPathByWaypoint(m_selected, out gr, out path);
+
             if (m_dragging && m_selected != null)
             {
+                if (m_last_msg_selected)
+                {
+                    if (m_selected != null)
+                        OnWayPointChanged(new WaypointEventArgs(WaypointEventArgs.ReasonType.StartChange, gr, path, m_selected));
+
+                    m_last_msg_selected = false;
+                }
+
                 InvalidateWaypoint(m_selected);
                 m_selected.X = pt.X;
                 m_selected.Y = pt.Y;
                 InvalidateWaypoint(m_selected);
 
-                OnWayPointChanged(new WaypointEventArgs(null, null, m_selected));
+                OnWayPointChanged(new WaypointEventArgs(WaypointEventArgs.ReasonType.Changing, gr, path, m_selected));
             }
             else if (m_rotating != null)
             {
+                if (m_last_msg_selected)
+                {
+                    if (m_selected != null)
+                        OnWayPointChanged(new WaypointEventArgs(WaypointEventArgs.ReasonType.StartChange, gr, path, m_selected));
+
+                    m_last_msg_selected = false;
+                }
+
                 m_rotating.Heading = FindAngle(new PointF((float)m_rotating.X, (float)m_rotating.Y), pt);
                 InvalidateWaypoint(m_rotating);
-                OnWayPointChanged(new WaypointEventArgs(null, null, m_rotating));
+                OnWayPointChanged(new WaypointEventArgs(WaypointEventArgs.ReasonType.Changing, gr, path, m_rotating));
             }
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
+            PathGroup gr = null;
+            RobotPath path = null;
+
             base.OnMouseUp(e);
 
             Capture = false;
             if (m_dragging)
             {
+                m_file.FindPathByWaypoint(m_selected, out gr, out path);
                 m_dragging = false;
-                OnWayPointChanged(new WaypointEventArgs(null, null, m_selected));
+                m_file.FindPathByWaypoint(m_selected, out gr, out path);
+                OnWayPointChanged(new WaypointEventArgs(WaypointEventArgs.ReasonType.EndChange, gr, path, m_selected));
+                Invalidate();
             }
             else if (m_rotating != null)
             {
-                m_selected = m_rotating ;
+                m_selected = m_rotating;
                 m_rotating = null;
                 InvalidateWaypoint(m_selected);
-                OnWayPointChanged(new WaypointEventArgs(null, null, m_selected));
+                m_file.FindPathByWaypoint(m_selected, out gr, out path);
+                OnWayPointChanged(new WaypointEventArgs(WaypointEventArgs.ReasonType.EndChange, gr, path, m_selected));
+                Invalidate();
             }
         }
 
@@ -230,7 +233,8 @@ namespace PathViewer
                     m_selected = pt;
                     m_dragging = true;
                     
-                    OnWayPointSelected(new WaypointEventArgs(group, path, pt));
+                    OnWayPointSelected(new WaypointEventArgs(WaypointEventArgs.ReasonType.Selected, group, path, pt));
+                    m_last_msg_selected = true;
                 }
                 else if (region == WaypointRegion.Tip)
                 {
@@ -251,6 +255,7 @@ namespace PathViewer
             base.OnSizeChanged(e);
             if (m_game != null)
                 CalculateScale();
+
             Invalidate();
         }
 
@@ -262,8 +267,8 @@ namespace PathViewer
             if (m_image != null)
                 DrawField(e.Graphics);
 
-            foreach(RobotPath s in m_paths)
-                DrawPoints(e.Graphics, s.Points);
+            foreach (RobotPath s in m_paths)
+                DrawPath(e.Graphics, s);
         }
         #endregion
 
@@ -331,13 +336,6 @@ namespace PathViewer
         private void InvalidateWaypoint(WayPoint pt)
         {
             Invalidate();
-            if (pt != null)
-            {
-                RectangleF r = WaypointBounds(pt);
-                r.Offset(-32.0f, -32.0f);
-                r.Inflate(64.0f, 64.0f);
-                Invalidate(new Rectangle((int)r.X, (int)(r.Y), (int)r.Width, (int)r.Height));
-            }
         }
 
         private RectangleF WaypointBounds(WayPoint pt)
@@ -396,6 +394,64 @@ namespace PathViewer
             g.DrawImage(m_image, rect);
         }
 
+        private void DrawPath(Graphics g, RobotPath path)
+        {
+            if (path.HasSplines)
+                DrawSplines(g, path);
+
+            DrawPoints(g, path.Points);
+        }
+
+        private void DrawSplines(Graphics g, RobotPath path)
+        {
+            for (int i = 0; i < path.Splines.Length; i++)
+                DrawSpline(g, path, i);
+        }
+
+        private void DrawSpline(Graphics g, RobotPath path, int index)
+        {
+            float diam = 2.0f;
+
+            using (Brush b = new SolidBrush(Color.LightCoral))
+            {
+                double step = 1.0 / 100.0;
+                for (double t = 0.0; t < 1.0; t += step)
+                {
+                    double x, y, heading;
+                    RectangleF rf;
+                    double px, py;
+                    PointF pt, w;
+
+                    path.Evaluate(index, t, out x, out y, out heading);
+                    heading = heading / 180.0 * Math.PI;
+                    double ca = Math.Cos(heading);
+                    double sa = Math.Sin(heading);
+
+                    px = x - m_file.Robot.Width * sa / 2.0;
+                    py = y + m_file.Robot.Width * ca / 2.0;
+
+                    pt = new PointF((float)px, (float)py);
+                    w = WorldToWindow(pt);
+
+                    rf = new RectangleF(w, new SizeF(0.0f, 0.0f));
+                    rf.Offset(diam / 2.0f, diam / 2.0f);
+                    rf.Inflate(diam, diam);
+                    g.FillEllipse(b, rf);
+
+                    px = x + m_file.Robot.Width * sa / 2.0;
+                    py = y - m_file.Robot.Width * ca / 2.0;
+
+                    pt = new PointF((float)px, (float)py);
+                    w = WorldToWindow(pt);
+
+                    rf = new RectangleF(w, new SizeF(0.0f, 0.0f));
+                    rf.Offset(diam / 2.0f, diam / 2.0f);
+                    rf.Inflate(diam, diam);
+                    g.FillEllipse(b, rf);
+                }
+            }
+        }
+
         private void DrawPoints(Graphics g, WayPoint[] pts)
         {
             using (Pen sel = new Pen(Color.Yellow, 2.0f))
@@ -408,6 +464,8 @@ namespace PathViewer
                         {
                             foreach (WayPoint pt in pts)
                             {
+                                Matrix mm;
+
                                 float angle = (float)(pt.Heading / 180.0f * Math.PI);
 
                                 //
@@ -427,13 +485,14 @@ namespace PathViewer
                                 //
                                 // Draw the waypoint triangle
                                 //
-                                PointF[] triangle = new PointF[] { new PointF(2.0f, 0.0f), new PointF(-1.0f, 1.0f), new PointF(-1.0F, -1.0f) };
+                                float tw = 10.0f;
+                                PointF[] triangle = new PointF[] { new PointF(tw, 0.0f), new PointF(-tw / 2.0f, tw / 2.0f), new PointF(-tw /2.0f, -tw / 2.0f) };
 
-                                Matrix mr = new Matrix();
-                                mr.Translate(p.X, p.Y);
-                                mr.Scale(12.0f, -12.0f);
-                                mr.Rotate((float)pt.Heading);
-                                mr.TransformPoints(triangle);
+                                mm = new Matrix();
+                                mm.Translate((float)pt.X, (float)pt.Y);
+                                mm.Rotate((float)pt.Heading);
+                                mm.TransformPoints(triangle);
+                                m_world_to_window.TransformPoints(triangle);
 
                                 g.FillPolygon(b, triangle);
                                 g.DrawPolygon(pn, triangle);
@@ -443,13 +502,16 @@ namespace PathViewer
                                 //
                                 if (m_selected == pt)
                                 {
-                                    PointF[] selbox = new PointF[] { new PointF(2.2f, -1.1f), new PointF(2.2f, 1.1f), new PointF(-1.1f, 1.1f), new PointF(-1.1f, -1.1f) };
+                                    PointF[] selbox = new PointF[]
+                                    {
+                                        new PointF((float)m_file.Robot.Width / 2.0f, (float)m_file.Robot.Length / 2.0f),
+                                        new PointF(-(float)m_file.Robot.Width / 2.0f, (float)m_file.Robot.Length / 2.0f),
+                                        new PointF(-(float)m_file.Robot.Width / 2.0f, -(float)m_file.Robot.Length / 2.0f),
+                                        new PointF((float)m_file.Robot.Width / 2.0f, -(float)m_file.Robot.Length / 2.0f),
+                                    };
 
-                                    Matrix m2 = new Matrix();
-                                    m2.Translate(p.X, p.Y);
-                                    m2.Scale(12.0f, -12.0f);
-                                    m2.Rotate((float)pt.Heading);
-                                    m2.TransformPoints(selbox);
+                                    mm.TransformPoints(selbox);
+                                    m_world_to_window.TransformPoints(selbox);
                                     g.DrawPolygon(sel, selbox);
                                 }
                             }

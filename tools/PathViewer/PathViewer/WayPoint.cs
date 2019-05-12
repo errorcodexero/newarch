@@ -40,6 +40,14 @@ namespace PathViewer
             Velocity = v;
         }
 
+        public WayPoint(WayPoint other)
+        {
+            X = other.X;
+            Y = other.Y;
+            Heading = other.Heading;
+            Velocity = other.Velocity;
+        }
+
         public double Distance(WayPoint other)
         {
             double dx = X - other.X;

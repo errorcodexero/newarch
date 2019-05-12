@@ -20,9 +20,22 @@ namespace PathViewer
         #endregion
 
         #region public properties
+        public IList<PathGenerator> Generators
+        {
+            get { return m_generators; }
+        }
+
+        public int Count
+        {
+            get { return m_generators.Count; }
+        }
         #endregion
 
         #region public methods
+        public void Clear()
+        {
+            m_generators.Clear();
+        }
         #endregion
 
         #region private methods

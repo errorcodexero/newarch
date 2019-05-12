@@ -1,24 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Diagnostics;
+using System.Text;
 using PathViewer;
 
 namespace CheesyPoofsGenerator
 {
     public class CheesyPoofsGen : PathGenerator
     {
+        #region public constructor
         public CheesyPoofsGen()
         {
         }
+        #endregion
 
+        #region public properties
         public override string Name
         {
             get { return "CheesyPoofs Path Generation"; }
         }
+
         public override Version Version
         {
             get { return new Version(1, 0); }
         }
+        #endregion
 
+        #region public methods
         public override void GenerateSplines(RobotPath path, List<Spline> xsplines, List<Spline> ysplines)
         {
             for(int i = 0; i < path.Points.Length - 1; i++)
@@ -31,25 +40,81 @@ namespace CheesyPoofsGenerator
             }
         }
 
-        public override PathSegment[] GenerateDetailedPath(RobotPath path)
+        public override PathSegment[] GenerateDetailedPath(RobotParams robot, RobotPath path)
         {
-            return null;
+            StringBuilder stdout;
+            StringBuilder stderr;
+
+            string outdir = Path.GetTempPath();
+            stdout = new StringBuilder();
+            stderr = new StringBuilder();
+
+            string dir = AppDomain.CurrentDomain.BaseDirectory;
+            string execpath = Path.Combine(dir, "CheesyGen.exe");
+
+            string args = string.Empty;
+            string grname;
+            string pathfile = GeneratePathFile(robot, path, out grname);
+            if (pathfile == string.Empty)
+                return null;
+
+            args += "--output " + outdir;
+            args += " --pathfile " + pathfile;
+
+            ProcessStartInfo info = new ProcessStartInfo();
+            info.CreateNoWindow = true;
+            info.RedirectStandardError = true;
+            info.RedirectStandardOutput = true;
+            info.UseShellExecute = false;
+            info.Arguments = args;
+            info.FileName = execpath;
+
+            Process proc = new Process();
+            proc.StartInfo = info;
+            proc.EnableRaisingEvents = true;
+            proc.OutputDataReceived += new DataReceivedEventHandler(delegate (object sender, DataReceivedEventArgs e)
+                {
+                    stdout.Append(e.Data);
+                }
+            );
+            proc.ErrorDataReceived += new DataReceivedEventHandler(delegate (object sender, DataReceivedEventArgs e)
+                {
+                    stderr.Append(e.Data);
+                }
+            );
+            proc.Start();
+            proc.BeginErrorReadLine();
+            proc.BeginOutputReadLine();
+            proc.WaitForExit();
+            proc.CancelErrorRead();
+            proc.CancelOutputRead();
+
+            string outfile = Path.Combine(outdir, "tmp_" + path.Name + "_path.csv");
+            string[] headers = { "time", "x", "y", "heading", "curvature", "dscurvature", "velocity", "acceleration" };
+            return ParseOutputFile(outfile, headers);
         }
+        #endregion
+
+        #region private methods
+
 
         private void GenerateSpline(WayPoint p0, WayPoint p1, out Spline xsp, out Spline  ysp)
         {
+            double p0h = p0.Heading / 180.0 * Math.PI;
+            double p1h = p1.Heading / 180.0 * Math.PI;
+
             double scale = 1.2 * p0.Distance(p1);
             double x0 = p0.X;
             double x1 = p1.X;
-            double dx0 = Math.Cos(p0.Heading) * scale;
-            double dx1 = Math.Cos(p1.Heading) * scale;
+            double dx0 = Math.Cos(p0h) * scale;
+            double dx1 = Math.Cos(p1h) * scale;
             double ddx0 = 0.0;
             double ddx1 = 0.0;
 
             double y0 = p0.Y;
             double y1 = p1.Y;
-            double dy0 = Math.Sin(p0.Heading) * scale;
-            double dy1 = Math.Sin(p1.Heading) * scale;
+            double dy0 = Math.Sin(p0h) * scale;
+            double dy1 = Math.Sin(p1h) * scale;
             double ddy0 = 0.0;
             double ddy1 = 0.0;
 
@@ -70,5 +135,6 @@ namespace CheesyPoofsGenerator
             xsp = new Spline(new double[] { fx, ex, dx, cx, bx, ax });
             ysp = new Spline(new double[] { fy, ey, dy, cy, by, ay });
         }
+        #endregion
     }
 }

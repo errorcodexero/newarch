@@ -4,12 +4,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.28606.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathViewer", "PathViewer\PathViewer.csproj", "{7A39338E-C3ED-4ACD-B2E8-BC68A92BEF61}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1835BF68-80B9-40F9-AE16-FEBA48DC8191} = {1835BF68-80B9-40F9-AE16-FEBA48DC8191}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2CB32A66-08D5-4E6D-BE21-52050128B13D}"
+	ProjectSection(SolutionItems) = preProject
+		PathViewer\TODO.txt = PathViewer\TODO.txt
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PathFinderV1", "PathFinderV1\PathFinderV1.csproj", "{52B17581-577D-4DC8-8674-C673A8C516AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheesyPoofsGenerator", "CheesyPoofsGenerator\CheesyPoofsGenerator.csproj", "{AA46E9F4-4393-497F-88CE-F9C90E1CD95E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheesyPoofsGenerator", "CheesyPoofsGenerator\CheesyPoofsGenerator.csproj", "{AA46E9F4-4393-497F-88CE-F9C90E1CD95E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CheesyGen", "CheesyGen\CheesyGen.vcxproj", "{1835BF68-80B9-40F9-AE16-FEBA48DC8191}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +65,16 @@ Global
 		{AA46E9F4-4393-497F-88CE-F9C90E1CD95E}.Release|x64.Build.0 = Release|Any CPU
 		{AA46E9F4-4393-497F-88CE-F9C90E1CD95E}.Release|x86.ActiveCfg = Release|Any CPU
 		{AA46E9F4-4393-497F-88CE-F9C90E1CD95E}.Release|x86.Build.0 = Release|Any CPU
+		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Debug|x64.ActiveCfg = Debug|x64
+		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Debug|x64.Build.0 = Debug|x64
+		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Debug|x86.ActiveCfg = Debug|Win32
+		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Debug|x86.Build.0 = Debug|Win32
+		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Release|Any CPU.ActiveCfg = Release|Win32
+		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Release|x64.ActiveCfg = Release|x64
+		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Release|x64.Build.0 = Release|x64
+		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Release|x86.ActiveCfg = Release|Win32
+		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

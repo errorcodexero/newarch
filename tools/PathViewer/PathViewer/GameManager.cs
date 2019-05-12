@@ -23,7 +23,12 @@ namespace PathViewer
         #endregion
 
         #region public properties
-        public IEnumerable<string> Games
+        public IEnumerable<Game> Games
+        {
+            get { return m_games.Values; }
+        }
+
+        public IEnumerable<string> GameNames
         {
             get { return m_games.Keys; }
         }
@@ -32,9 +37,20 @@ namespace PathViewer
         {
             get { return m_games[name]; }
         }
+
+        public int Count
+        {
+            get { return m_games.Count; }
+        }
         #endregion
 
         #region public methods
+
+        public void Clear()
+        {
+            m_games.Clear();
+        }
+
         public void ReadGames()
         {
             string dir = AppDomain.CurrentDomain.BaseDirectory;

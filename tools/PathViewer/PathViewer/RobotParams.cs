@@ -25,6 +25,18 @@ namespace PathViewer
         [JsonProperty(PropertyName = "maxjerk")]
         public double MaxJerk;
 
+        [JsonProperty(PropertyName ="drivetype")]
+        public string DriveType;
+
+        public static string SwerveDriveType = "swerve";
+        public static string TankDriveType = "tank";
+
+        public static string[] DriveTypes =
+        {
+            SwerveDriveType,
+            TankDriveType
+        };
+
         public RobotParams()
         {
             Width = 0.0;
@@ -32,15 +44,36 @@ namespace PathViewer
             MaxAcceleration = 0.0;
             MaxVelocity = 0.0;
             MaxJerk = 0.0;
+            DriveType = TankDriveType;
         }
 
-        public RobotParams(double w, double l, double v, double a, double j)
+        public RobotParams(string dtype, double w, double l, double v, double a, double j)
         {
             Width = w;
             Length = l;
             MaxVelocity = v;
             MaxAcceleration = a;
             MaxJerk = j;
+
+            if (!IsValidDriveType(dtype))
+                throw new Exception("invalid drive type '" + dtype + "'");
+
+            DriveType = dtype;
+        }
+
+        public RobotParams(RobotParams p)
+        {
+            Width = p.Width;
+            Length = p.Length;
+            MaxVelocity = p.MaxVelocity;
+            MaxAcceleration = p.MaxAcceleration;
+            MaxJerk = p.MaxJerk;
+            DriveType = p.DriveType;
+        }
+
+        static public bool IsValidDriveType(string dtype)
+        {
+            return Array.IndexOf(DriveTypes, dtype) != -1;
         }
     }
 }

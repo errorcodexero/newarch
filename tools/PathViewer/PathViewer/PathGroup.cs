@@ -28,6 +28,17 @@ namespace PathViewer
             Paths = new RobotPath[0];
         }
 
+        public PathGroup(PathGroup pg)
+        {
+            Name = pg.Name;
+            Paths = new RobotPath[pg.Paths.Length] ;
+
+            for(int i = 0; i < Paths.Length; i++)
+            {
+                Paths[i] = new RobotPath(pg.Paths[i]);
+            }
+        }
+
         public RobotPath FindPathByName(string name)
         {
             foreach(RobotPath p in Paths)
@@ -37,6 +48,32 @@ namespace PathViewer
             }
 
             return null; 
+        }
+
+        public void RemovePath(string name)
+        {
+            int index = -1;
+
+            for(int i = 0; i < Paths.Length; i++)
+            {
+                if (Paths[i].Name == name)
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index != -1)
+            {
+                RobotPath[] temp = new RobotPath[Paths.Length - 1];
+                if (index > 0)
+                    Array.Copy(Paths, 0, temp, 0, index);
+
+                if (index < Paths.Length - 1)
+                    Array.Copy(Paths, index + 1, temp, index, Paths.Length - index - 1);
+
+                Paths = temp;
+            }
         }
 
         public bool RenamePath(string oldname, string newname)
@@ -57,6 +94,12 @@ namespace PathViewer
 
             path.AddPoint(new WayPoint(0.0, 0.0, 0.0, 0.0));
             path.AddPoint(new WayPoint(100.0, 0.0, 0.0, 0.0));
+        }
+
+        public void AddPath(RobotPath path)
+        {
+            Array.Resize<RobotPath>(ref Paths, Paths.Length + 1);
+            Paths[Paths.Length - 1] = path;
         }
     }
 }

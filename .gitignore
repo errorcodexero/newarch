@@ -1,7 +1,3 @@
-xerobase/Debug
-xerobase/Release
-phoenix/Debug
-phoenix/Release
 doc/out
 build
 .gradle
@@ -30,3 +26,7 @@ makebuild
 logs
 /deploy
 .vscode/ipch
+**/x64
+**/Debug
+**/Release
+tools/PathViewer/output

@@ -16,7 +16,14 @@ namespace PathViewer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PathViewerForm());
+            try
+            {
+                Application.Run(new PathViewerForm());
+            }
+            catch
+            {
+
+            }
         }
     }
 }

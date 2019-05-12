@@ -1,21 +1,43 @@
-﻿Completed
----------
+﻿
+PathViewer Editor
+===============================================================================
+  Completed
+  ---------
+  - Change waypoint values in waypoint window, update display
+  - Editing feature: move waypoint
+  - Editing feature: rotate waypoing
+  - Editing feature: delete waypoint (delete key)
+  - Editing feature: insert waypoint (insert key)
+  - Editing feature: keyboard move waypoint (arrows)
+  - Editing feature: keyboard rotate waypoint (plus and minus key)
+  - Add path generation interface - quick
+  - Add path generator search (assemblies)
+  - Display feature: display actual path on screen
+  - Display feature: display robot size on waypoint select
+  - Undo stack
+  - Path context menus: really make it context specific
+  - Editing feature: delete path
 
-- Change waypoint values in waypoint window, update display
-- Editing feature: move waypoint
-- Editing feature: rotate waypoing
-- Editing feature: delete waypoint
+  TODO
+  ----
+  - Add path generation interface - detailed path
+  - Add copyrights to the about screen
 
-ToDo
-----
+CheesyGen
+===============================================================================
+  Completed
+  ---------
 
-- Editing feature: add new waypoint
+  TODO
+  ----
+  - Bug - When velocity profiles cannot be met, infinite loop
 
-- Add path generation interface (quick, accurate)
-- Add path generator search (assemblies)
-- Display feature: display actual path on screen
+PathFinderV1
+===============================================================================
+  Completed
+  ---------
 
-- Add max velocity, max acceleration, and max jerk to RobotPath
-  data structure, and json read/write
-
-- Background generation of actual robot paths
+  TODO
+  ----
+  - Write the program
+  - Write the interface

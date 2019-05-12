@@ -75,6 +75,23 @@ namespace xero
 
 			JSONObject root = value->AsObject();
 
+			if (root.find(L"robot") == root.end())
+			{
+				std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
+				std::cerr << "         top level object in file does not contains the entry 'robot'" << std::endl;
+				return false;
+			}
+
+			if (!root[L"robot"]->IsObject())
+			{
+				std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
+				std::cerr << "         the 'groups' entry in top level object is not an JSON object" << std::endl;
+				return false;
+			}
+
+			if (!parseRobot(root[L"robot"]))
+				return false;
+
 			if (root.find(L"groups") == root.end())
 			{
 				std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;

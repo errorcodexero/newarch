@@ -11,9 +11,19 @@ namespace PathViewer
         public readonly PathGroup Group;
         public readonly RobotPath Path;
         public readonly WayPoint Point;
+        public readonly ReasonType Reason;
 
-        public WaypointEventArgs(PathGroup g, RobotPath s, WayPoint pt)
+        public enum ReasonType
         {
+            Selected,
+            StartChange,
+            Changing,
+            EndChange
+        }
+
+        public WaypointEventArgs(ReasonType t, PathGroup g, RobotPath s, WayPoint pt)
+        {
+            Reason = t;
             Group = g;
             Path = s;
             Point = pt;

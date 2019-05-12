@@ -25,7 +25,7 @@ namespace PathFinderV1
         {
         }
 
-        public override PathSegment[] GenerateDetailedPath(RobotPath path)
+        public override PathSegment[] GenerateDetailedPath(RobotParams robot, RobotPath path)
         {
             return null;
         }

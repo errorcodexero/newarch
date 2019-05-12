@@ -23,19 +23,70 @@ namespace PathViewer
         public PathFile()
         {
             Groups = new PathGroup[0];
-            Robot = new RobotParams(24.0, 32.0, 96.0, 96.0, 96.0);
+            Robot = new RobotParams(RobotParams.TankDriveType, 24.0, 32.0, 96.0, 96.0, 96.0);
+        }
+
+        public PathFile(PathFile pf)
+        {
+            Robot = new RobotParams(pf.Robot);
+            Groups = new PathGroup[pf.Groups.Length];
+
+            for (int i = 0; i < Groups.Length; i++)
+            {
+                Groups[i] = new PathGroup(pf.Groups[i]);
+            }
+
+            IsDirty = true;
+            m_filename = pf.m_filename;
         }
 
         public bool IsDirty
         {
             get { return m_dirty; }
-            set { m_dirty = true; }
+            set { m_dirty = value; }
         }
 
         public string PathName
         {
             get { return m_filename; }
             set { m_filename = value; }
+        }
+
+        public void RemoveGroup(string group)
+        {
+            int index = -1;
+
+            for (int i = 0; i < Groups.Length; i++)
+            {
+                if (Groups[i].Name == group)
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index != -1)
+            {
+                m_dirty = true;
+                PathGroup[] temp = new PathGroup[Groups.Length - 1];
+                if (index > 0)
+                    Array.Copy(Groups, 0, temp, 0, index);
+
+                if (index < Groups.Length - 1)
+                    Array.Copy(Groups, index + 1, temp, index, Groups.Length - index - 1);
+
+                Groups = temp;
+            }
+        }
+
+        public void RemovePath(string grname, string pathname)
+        {
+            PathGroup gr = FindGroupByName(grname);
+            if (gr == null)
+                return;
+
+            gr.RemovePath(pathname);
+            m_dirty = true;
         }
 
         public PathGroup FindGroupByPath(RobotPath p)
@@ -77,6 +128,7 @@ namespace PathViewer
             PathGroup group = new PathGroup(name);
             Array.Resize<PathGroup>(ref Groups, Groups.Length + 1);
             Groups[Groups.Length - 1] = group;
+            m_dirty = true;
         }
 
         public void AddPath(string group, string path)
@@ -85,6 +137,17 @@ namespace PathViewer
             if (gr == null)
                 return;
 
+            m_dirty = true;
+            gr.AddPath(path);
+        }
+
+        public void AddPath(string group, RobotPath path)
+        {
+            PathGroup gr = FindGroupByName(group);
+            if (gr == null)
+                return;
+
+            m_dirty = true;
             gr.AddPath(path);
         }
 
@@ -117,9 +180,9 @@ namespace PathViewer
             group = null;
             path = null;
 
-            foreach(PathGroup gr in Groups)
+            foreach (PathGroup gr in Groups)
             {
-                foreach(RobotPath pa in gr.Paths)
+                foreach (RobotPath pa in gr.Paths)
                 {
                     foreach (WayPoint wy in pa.Points)
                     {
@@ -127,6 +190,33 @@ namespace PathViewer
                         {
                             group = gr;
                             path = pa;
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool FindPathByWaypoint(WayPoint pt, out PathGroup group, out RobotPath path, out int index)
+        {
+            group = null;
+            path = null;
+            index = -1;
+
+            foreach (PathGroup gr in Groups)
+            {
+                foreach (RobotPath pa in gr.Paths)
+                {
+                    for (int i = 0; i < pa.Points.Length; i++)
+                    {
+                        if (pa.Points[i] == pt)
+                        {
+                            group = gr;
+                            path = pa;
+                            index = i;
+
                             return true;
                         }
                     }
