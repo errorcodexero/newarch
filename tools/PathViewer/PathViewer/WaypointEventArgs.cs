@@ -15,6 +15,7 @@ namespace PathViewer
 
         public enum ReasonType
         {
+            Unselected,
             Selected,
             StartChange,
             Changing,
@@ -27,6 +28,14 @@ namespace PathViewer
             Group = g;
             Path = s;
             Point = pt;
+        }
+
+        public WaypointEventArgs(ReasonType t)
+        {
+            Reason = t;
+            Group = null;
+            Path = null;
+            Point = null;
         }
     }
 }

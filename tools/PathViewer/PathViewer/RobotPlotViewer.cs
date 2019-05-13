@@ -18,6 +18,7 @@ namespace PathViewer
         private RobotParams m_robot;
         private PathGenerator m_generator;
         private RobotPath m_path;
+        private double m_time;
         #endregion
 
         #region private delegates
@@ -40,6 +41,25 @@ namespace PathViewer
         {
             get { return m_generator; }
             set { m_generator = value; }
+        }
+
+        public double HighlightTime
+        {
+            get { return m_time; }
+            set
+            {
+                m_time = value;
+                m_chart.Annotations.Clear();
+                VerticalLineAnnotation ann = new VerticalLineAnnotation();
+                ann.LineColor = Color.Black;
+                ann.LineDashStyle = ChartDashStyle.Dash;
+                ann.AxisX = m_chart.ChartAreas[0].AxisX;
+                ann.IsInfinitive = true;
+                ann.ClipToChartArea = m_chart.ChartAreas[0].Name;
+                ann.LineWidth = 3;
+                ann.AnchorX = m_time;
+                m_chart.Annotations.Add(ann);
+            }
         }
 
         public RobotPath Path

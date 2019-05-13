@@ -244,7 +244,8 @@ namespace PathViewer
                 }
             }
             else
-            { 
+            {
+                OnWayPointSelected(new WaypointEventArgs(WaypointEventArgs.ReasonType.Selected));
                 InvalidateWaypoint(m_selected);
                 m_selected = null;
             }

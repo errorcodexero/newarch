@@ -270,6 +270,9 @@ namespace PathViewer
         {
             if (e.Path != null)
             {
+                if (e.Reason == WaypointEventArgs.ReasonType.Selected)
+                    HighlightTime(e.Path, e.Point);
+
                 if (e.Reason == WaypointEventArgs.ReasonType.StartChange)
                     PushUndoStack();
 
@@ -280,9 +283,15 @@ namespace PathViewer
                 {
                     GenerateSplines(e.Path);
                     GenerateSegments(e.Path);
+                    HighlightTime(e.Path, e.Point);
                 }
             }
-            UpdateWaypointPropertyWindow(e.Point);
+
+            if (e.Point != null)
+                UpdateWaypointPropertyWindow(e.Point);
+
+            if (e.Reason == WaypointEventArgs.ReasonType.Unselected)
+                m_plot.HighlightTime = Double.MaxValue;
         }
         #endregion
 
@@ -952,6 +961,39 @@ namespace PathViewer
             return true;
         }
         #endregion
+
+        private double FindTime(RobotPath path, WayPoint pt)
+        {
+            double lowdist = Double.MaxValue;
+            double time = 0.0;
+
+            for(int i = 0; i < path.Segments.Length; i++)
+            {
+                double x = path.Segments[i].GetValue("x");
+                double y = path.Segments[i].GetValue("y");
+
+                double dx = x - pt.X;
+                double dy = y - pt.Y;
+
+                double dist = dx * dx + dy * dy;
+                if (dist < lowdist)
+                {
+                    time = path.Segments[i].GetValue("time");
+                    lowdist = dist;
+                }
+            }
+
+            return time;
+        }
+
+        private void HighlightTime(RobotPath path, WayPoint pt)
+        {
+            if (!path.HasSegments)
+                return;
+
+            double time = FindTime(path, pt);
+            m_plot.HighlightTime = time;
+        }
 
         private ToolStripMenuItem FindItem(string title)
         {
