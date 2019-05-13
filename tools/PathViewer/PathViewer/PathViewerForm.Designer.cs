@@ -49,25 +49,26 @@
             this.m_plot = new PathViewer.RobotPlotViewer();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.m_right_vertical = new System.Windows.Forms.SplitContainer();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.m_flow = new System.Windows.Forms.FlowLayoutPanel();
+            this.m_right_one = new System.Windows.Forms.GroupBox();
             this.m_pathfile_tree = new System.Windows.Forms.TreeView();
-            this.m_right_bottom = new System.Windows.Forms.SplitContainer();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.m_right_two = new System.Windows.Forms.GroupBox();
             this.m_robot_view = new System.Windows.Forms.ListView();
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.m_right_three = new System.Windows.Forms.GroupBox();
+            this.m_path_view = new System.Windows.Forms.ListView();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.m_right_four = new System.Windows.Forms.GroupBox();
             this.m_waypoint_view = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.m_pos_status = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.m_bottom_bottom = new System.Windows.Forms.SplitContainer();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.m_path_view = new System.Windows.Forms.ListView();
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.generatePathsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generatePathsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.m_menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_split)).BeginInit();
             this.m_split.Panel1.SuspendLayout();
@@ -80,23 +81,12 @@
             this.m_bottom_tab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_right_vertical)).BeginInit();
-            this.m_right_vertical.Panel1.SuspendLayout();
-            this.m_right_vertical.Panel2.SuspendLayout();
-            this.m_right_vertical.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_right_bottom)).BeginInit();
-            this.m_right_bottom.Panel1.SuspendLayout();
-            this.m_right_bottom.Panel2.SuspendLayout();
-            this.m_right_bottom.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.m_flow.SuspendLayout();
+            this.m_right_one.SuspendLayout();
+            this.m_right_two.SuspendLayout();
+            this.m_right_three.SuspendLayout();
+            this.m_right_four.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_bottom_bottom)).BeginInit();
-            this.m_bottom_bottom.Panel1.SuspendLayout();
-            this.m_bottom_bottom.Panel2.SuspendLayout();
-            this.m_bottom_bottom.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_menu
@@ -119,7 +109,10 @@
             this.loadToolStripMenuItem,
             this.toolStripSeparator1,
             this.saveToolStripMenuItem,
-            this.saveAsToolStripMenuItem});
+            this.saveAsToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.generatePathsToolStripMenuItem,
+            this.generatePathsToolStripMenuItem1});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
             this.fileToolStripMenuItem.Text = "File";
@@ -127,26 +120,26 @@
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(148, 26);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.loadToolStripMenuItem.Text = "Load ...";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.LoadToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(145, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(213, 6);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(148, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(148, 26);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.saveAsToolStripMenuItem.Text = "Save As ...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
@@ -212,7 +205,7 @@
             // 
             // m_split.Panel2
             // 
-            this.m_split.Panel2.Controls.Add(this.m_right_vertical);
+            this.m_split.Panel2.Controls.Add(this.m_flow);
             this.m_split.Size = new System.Drawing.Size(1568, 876);
             this.m_split.SplitterDistance = 1213;
             this.m_split.TabIndex = 3;
@@ -277,6 +270,7 @@
             this.m_plot.AutoScroll = true;
             this.m_plot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_plot.Generator = null;
+            this.m_plot.HighlightTime = 0D;
             this.m_plot.Location = new System.Drawing.Point(3, 2);
             this.m_plot.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.m_plot.Name = "m_plot";
@@ -292,7 +286,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage2.Size = new System.Drawing.Size(1075, 275);
+            this.tabPage2.Size = new System.Drawing.Size(1205, 324);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Messages";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -304,80 +298,53 @@
             this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1069, 271);
+            this.textBox1.Size = new System.Drawing.Size(1199, 320);
             this.textBox1.TabIndex = 0;
             // 
-            // m_right_vertical
+            // m_flow
             // 
-            this.m_right_vertical.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_right_vertical.Location = new System.Drawing.Point(0, 0);
-            this.m_right_vertical.Name = "m_right_vertical";
-            this.m_right_vertical.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.m_flow.Controls.Add(this.m_right_one);
+            this.m_flow.Controls.Add(this.m_right_two);
+            this.m_flow.Controls.Add(this.m_right_three);
+            this.m_flow.Controls.Add(this.m_right_four);
+            this.m_flow.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_flow.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.m_flow.Location = new System.Drawing.Point(0, 0);
+            this.m_flow.Name = "m_flow";
+            this.m_flow.Size = new System.Drawing.Size(351, 876);
+            this.m_flow.TabIndex = 3;
             // 
-            // m_right_vertical.Panel1
+            // m_right_one
             // 
-            this.m_right_vertical.Panel1.Controls.Add(this.groupBox1);
-            // 
-            // m_right_vertical.Panel2
-            // 
-            this.m_right_vertical.Panel2.Controls.Add(this.m_right_bottom);
-            this.m_right_vertical.Size = new System.Drawing.Size(351, 876);
-            this.m_right_vertical.SplitterDistance = 180;
-            this.m_right_vertical.TabIndex = 0;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.m_pathfile_tree);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(351, 180);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Paths";
+            this.m_right_one.Controls.Add(this.m_pathfile_tree);
+            this.m_right_one.Location = new System.Drawing.Point(3, 2);
+            this.m_right_one.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.m_right_one.Name = "m_right_one";
+            this.m_right_one.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.m_right_one.Size = new System.Drawing.Size(351, 76);
+            this.m_right_one.TabIndex = 0;
+            this.m_right_one.TabStop = false;
+            this.m_right_one.Text = "Paths";
             // 
             // m_pathfile_tree
             // 
             this.m_pathfile_tree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_pathfile_tree.Location = new System.Drawing.Point(3, 17);
             this.m_pathfile_tree.Name = "m_pathfile_tree";
-            this.m_pathfile_tree.Size = new System.Drawing.Size(345, 161);
+            this.m_pathfile_tree.Size = new System.Drawing.Size(345, 57);
             this.m_pathfile_tree.TabIndex = 0;
             // 
-            // m_right_bottom
+            // m_right_two
             // 
-            this.m_right_bottom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_right_bottom.Location = new System.Drawing.Point(0, 0);
-            this.m_right_bottom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.m_right_bottom.Name = "m_right_bottom";
-            this.m_right_bottom.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // m_right_bottom.Panel1
-            // 
-            this.m_right_bottom.Panel1.Controls.Add(this.groupBox2);
-            // 
-            // m_right_bottom.Panel2
-            // 
-            this.m_right_bottom.Panel2.Controls.Add(this.m_bottom_bottom);
-            this.m_right_bottom.Size = new System.Drawing.Size(351, 692);
-            this.m_right_bottom.SplitterDistance = 287;
-            this.m_right_bottom.SplitterWidth = 3;
-            this.m_right_bottom.TabIndex = 0;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.m_robot_view);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(0, 0);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox2.Size = new System.Drawing.Size(351, 287);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Robot Parameters";
+            this.m_right_two.Controls.Add(this.m_robot_view);
+            this.m_right_two.Location = new System.Drawing.Point(3, 82);
+            this.m_right_two.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.m_right_two.Name = "m_right_two";
+            this.m_right_two.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.m_right_two.Size = new System.Drawing.Size(351, 112);
+            this.m_right_two.TabIndex = 0;
+            this.m_right_two.TabStop = false;
+            this.m_right_two.Text = "Robot Parameters";
             // 
             // m_robot_view
             // 
@@ -388,7 +355,7 @@
             this.m_robot_view.FullRowSelect = true;
             this.m_robot_view.Location = new System.Drawing.Point(3, 17);
             this.m_robot_view.Name = "m_robot_view";
-            this.m_robot_view.Size = new System.Drawing.Size(345, 268);
+            this.m_robot_view.Size = new System.Drawing.Size(345, 93);
             this.m_robot_view.TabIndex = 2;
             this.m_robot_view.UseCompatibleStateImageBehavior = false;
             this.m_robot_view.View = System.Windows.Forms.View.Details;
@@ -403,18 +370,53 @@
             this.columnHeader4.Text = "Value";
             this.columnHeader4.Width = 150;
             // 
-            // groupBox3
+            // m_right_three
             // 
-            this.groupBox3.Controls.Add(this.m_waypoint_view);
-            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox3.Location = new System.Drawing.Point(0, 0);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox3.Size = new System.Drawing.Size(351, 198);
-            this.groupBox3.TabIndex = 0;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Selected Waypoint";
+            this.m_right_three.Controls.Add(this.m_path_view);
+            this.m_right_three.Location = new System.Drawing.Point(3, 198);
+            this.m_right_three.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.m_right_three.Name = "m_right_three";
+            this.m_right_three.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.m_right_three.Size = new System.Drawing.Size(351, 93);
+            this.m_right_three.TabIndex = 1;
+            this.m_right_three.TabStop = false;
+            this.m_right_three.Text = "Selected Path";
+            // 
+            // m_path_view
+            // 
+            this.m_path_view.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader5,
+            this.columnHeader6});
+            this.m_path_view.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_path_view.FullRowSelect = true;
+            this.m_path_view.Location = new System.Drawing.Point(3, 17);
+            this.m_path_view.Name = "m_path_view";
+            this.m_path_view.Size = new System.Drawing.Size(345, 74);
+            this.m_path_view.TabIndex = 0;
+            this.m_path_view.UseCompatibleStateImageBehavior = false;
+            this.m_path_view.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Name";
+            this.columnHeader5.Width = 150;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Value";
+            this.columnHeader6.Width = 150;
+            // 
+            // m_right_four
+            // 
+            this.m_right_four.Controls.Add(this.m_waypoint_view);
+            this.m_right_four.Location = new System.Drawing.Point(3, 295);
+            this.m_right_four.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.m_right_four.Name = "m_right_four";
+            this.m_right_four.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.m_right_four.Size = new System.Drawing.Size(351, 198);
+            this.m_right_four.TabIndex = 0;
+            this.m_right_four.TabStop = false;
+            this.m_right_four.Text = "Selected Waypoint";
             // 
             // m_waypoint_view
             // 
@@ -457,60 +459,24 @@
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // m_bottom_bottom
+            // toolStripSeparator3
             // 
-            this.m_bottom_bottom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_bottom_bottom.Location = new System.Drawing.Point(0, 0);
-            this.m_bottom_bottom.Name = "m_bottom_bottom";
-            this.m_bottom_bottom.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(213, 6);
             // 
-            // m_bottom_bottom.Panel1
+            // generatePathsToolStripMenuItem
             // 
-            this.m_bottom_bottom.Panel1.Controls.Add(this.groupBox4);
+            this.generatePathsToolStripMenuItem.Name = "generatePathsToolStripMenuItem";
+            this.generatePathsToolStripMenuItem.Size = new System.Drawing.Size(219, 26);
+            this.generatePathsToolStripMenuItem.Text = "Generate Paths As  ...";
+            this.generatePathsToolStripMenuItem.Click += new System.EventHandler(this.GeneratePathsAsToolStripMenuItem_Click);
             // 
-            // m_bottom_bottom.Panel2
+            // generatePathsToolStripMenuItem1
             // 
-            this.m_bottom_bottom.Panel2.Controls.Add(this.groupBox3);
-            this.m_bottom_bottom.Size = new System.Drawing.Size(351, 402);
-            this.m_bottom_bottom.SplitterDistance = 200;
-            this.m_bottom_bottom.TabIndex = 0;
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.m_path_view);
-            this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox4.Location = new System.Drawing.Point(0, 0);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox4.Size = new System.Drawing.Size(351, 200);
-            this.groupBox4.TabIndex = 1;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Selected Path";
-            // 
-            // m_path_view
-            // 
-            this.m_path_view.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader5,
-            this.columnHeader6});
-            this.m_path_view.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_path_view.FullRowSelect = true;
-            this.m_path_view.Location = new System.Drawing.Point(3, 17);
-            this.m_path_view.Name = "m_path_view";
-            this.m_path_view.Size = new System.Drawing.Size(345, 181);
-            this.m_path_view.TabIndex = 0;
-            this.m_path_view.UseCompatibleStateImageBehavior = false;
-            this.m_path_view.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Name";
-            this.columnHeader5.Width = 150;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Value";
-            this.columnHeader6.Width = 150;
+            this.generatePathsToolStripMenuItem1.Name = "generatePathsToolStripMenuItem1";
+            this.generatePathsToolStripMenuItem1.Size = new System.Drawing.Size(219, 26);
+            this.generatePathsToolStripMenuItem1.Text = "Generate Paths";
+            this.generatePathsToolStripMenuItem1.Click += new System.EventHandler(this.GeneratePathsToolStripMenuItem_Click);
             // 
             // PathViewerForm
             // 
@@ -539,24 +505,13 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            this.m_right_vertical.Panel1.ResumeLayout(false);
-            this.m_right_vertical.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.m_right_vertical)).EndInit();
-            this.m_right_vertical.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.m_right_bottom.Panel1.ResumeLayout(false);
-            this.m_right_bottom.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.m_right_bottom)).EndInit();
-            this.m_right_bottom.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
+            this.m_flow.ResumeLayout(false);
+            this.m_right_one.ResumeLayout(false);
+            this.m_right_two.ResumeLayout(false);
+            this.m_right_three.ResumeLayout(false);
+            this.m_right_four.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.m_bottom_bottom.Panel1.ResumeLayout(false);
-            this.m_bottom_bottom.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.m_bottom_bottom)).EndInit();
-            this.m_bottom_bottom.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -579,17 +534,15 @@
         private System.Windows.Forms.ToolStripMenuItem pathsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newPathGroupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newPathToolStripMenuItem;
-        private System.Windows.Forms.SplitContainer m_right_vertical;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-        private System.Windows.Forms.SplitContainer m_right_bottom;
         private System.Windows.Forms.ListView m_robot_view;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox m_right_one;
+        private System.Windows.Forms.GroupBox m_right_two;
+        private System.Windows.Forms.GroupBox m_right_four;
         private System.Windows.Forms.ToolStripMenuItem generatorsToolStripMenuItem;
         private RobotPlotViewer m_plot;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
@@ -598,11 +551,14 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.SplitContainer m_bottom_bottom;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox m_right_three;
         private System.Windows.Forms.ListView m_path_view;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.FlowLayoutPanel m_flow;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem generatePathsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem generatePathsToolStripMenuItem1;
     }
 }
 

@@ -36,6 +36,11 @@ namespace PathViewer
         {
             return m_values[name];
         }
+
+        public bool HasValue(string name)
+        {
+            return m_values.ContainsKey(name);
+        }
         #endregion
     }
 }

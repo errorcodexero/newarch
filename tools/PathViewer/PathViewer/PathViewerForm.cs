@@ -196,19 +196,27 @@ namespace PathViewer
             if (e.KeyCode == Keys.Delete)
             {
                 if (path.RemovePoint(m_field.SelectedWaypoint))
+                {
                     gen = true;
-            }
+                    m_file.IsDirty = true;
+                }
+                }
             else if (e.KeyCode == Keys.Insert)
             {
                 if (path.InsertPoint(m_field.SelectedWaypoint, m_file.Robot.MaxVelocity))
+                {
                     gen = true;
-            }
+                    m_file.IsDirty = true;
+                }
+                }
             else if (e.KeyCode == Keys.Up)
             {
                 if (e.Shift)
                     m_field.SelectedWaypoint.Y += 0.1;
                 else
                     m_field.SelectedWaypoint.Y += 1.0;
+
+                m_file.IsDirty = true;
                 gen = true;
             }
             else if (e.KeyCode == Keys.Down)
@@ -217,6 +225,8 @@ namespace PathViewer
                     m_field.SelectedWaypoint.Y -= 0.1;
                 else
                     m_field.SelectedWaypoint.Y -= 1.0;
+
+                m_file.IsDirty = true;
                 gen = true;
             }
             else if (e.KeyCode == Keys.Left)
@@ -225,6 +235,8 @@ namespace PathViewer
                     m_field.SelectedWaypoint.X -= 0.1;
                 else
                     m_field.SelectedWaypoint.X -= 1.0;
+
+                m_file.IsDirty = true;
                 gen = true;
             }
             else if (e.KeyCode == Keys.Right)
@@ -233,6 +245,8 @@ namespace PathViewer
                     m_field.SelectedWaypoint.X += 0.1;
                 else
                     m_field.SelectedWaypoint.X += 1.0;
+
+                m_file.IsDirty = true;
                 gen = true;
             }
             else if (e.KeyCode == Keys.Add)
@@ -241,6 +255,8 @@ namespace PathViewer
                     m_field.SelectedWaypoint.Heading += 0.5;
                 else
                     m_field.SelectedWaypoint.Heading += 5.0;
+
+                m_file.IsDirty = true;
                 gen = true;
             }
             else if (e.KeyCode == Keys.Subtract)
@@ -249,6 +265,8 @@ namespace PathViewer
                     m_field.SelectedWaypoint.Heading -= 0.5;
                 else
                     m_field.SelectedWaypoint.Heading -= 5.0;
+
+                m_file.IsDirty = true;
                 gen = true;
             }
 
@@ -257,6 +275,8 @@ namespace PathViewer
                 m_field.Invalidate();
                 GenerateSplines(path);
                 GenerateSegments(path);
+                if (m_field.SelectedWaypoint != null)
+                    UpdateWaypointPropertyWindow(m_field.SelectedWaypoint);
             }
         }
 
@@ -463,13 +483,22 @@ namespace PathViewer
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
+            m_right_one.Width = m_flow.Width - m_flow.Margin.Left - m_flow.Margin.Right;
+            m_right_two.Width = m_flow.Width - m_flow.Margin.Left - m_flow.Margin.Right;
+            m_right_three.Width = m_flow.Width - m_flow.Margin.Left - m_flow.Margin.Right;
+            m_right_four.Width = m_flow.Width - m_flow.Margin.Left - m_flow.Margin.Right;
 
-            //
-            // Resize the three controls on the right side
-            //
-            m_right_vertical.SplitterDistance = m_right_vertical.Height / 4;
-            m_right_bottom.SplitterDistance = m_right_bottom.Height / 2;
-            m_bottom_bottom.SplitterDistance = m_bottom_bottom.Height / 2;
+            int height = m_flow.Height - m_flow.Margin.Top - m_flow.Margin.Bottom;
+            height -= m_right_one.Margin.Top + m_right_one.Margin.Bottom;
+            height -= m_right_two.Margin.Top + m_right_two.Margin.Bottom;
+            height -= m_right_three.Margin.Top + m_right_three.Margin.Bottom;
+            height -= m_right_four.Margin.Top + m_right_four.Margin.Bottom;
+
+            m_right_one.Height = height / 2;
+            m_right_two.Height = height / 6;
+            m_right_three.Height = height / 6;
+            m_right_four.Height = height / 6;
+
             m_vertical.SplitterDistance = m_vertical.Height * 5/ 8;
         }
 
@@ -547,6 +576,28 @@ namespace PathViewer
         #endregion
 
         #region event handlers for the menus
+
+        private void GeneratePathsAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // TODO - prompt save changes if dirty
+
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                m_file.OutputDirectory = dialog.SelectedPath;
+                GeneratePaths();
+            }
+        }
+
+        private void GeneratePathsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // TODO - prompt save changes if dirty
+
+            if (string.IsNullOrEmpty(m_file.OutputDirectory))
+                GeneratePathsAsToolStripMenuItem_Click(sender, e);
+            else
+                GeneratePaths();
+        }
 
         private void UndoToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -697,6 +748,7 @@ namespace PathViewer
             node.Nodes.Add(nnode);
             m_pathfile_tree.SelectedNode = nnode;
             m_file.AddPath(m_file.Robot, node.Text, newname);
+            PathTreeSelectionChanged(m_pathfile_tree, new TreeViewEventArgs(nnode));
         }
 
         private void RemovePathToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1323,6 +1375,76 @@ namespace PathViewer
                     GenerateSegments(path);
                 }
             }
+        }
+
+        static string[] fields = { "time", "x", "y", "position", "velocity", "acceleration", "jerk" };
+        private void WritePath(string grname, string pathname, PathSegment[] segs)
+        {
+            string filename = Path.Combine(m_file.OutputDirectory, grname + "_" + pathname + ".csv");
+            PathSegment seg = segs[0];
+            bool first = true ;
+
+            using (StreamWriter writer = new StreamWriter(filename))
+            {
+                for (int i = 0; i < fields.Length; i++)
+                {
+                    if (seg.HasValue(fields[i]))
+                    {
+                        if (!first)
+                            writer.Write(',');
+
+                        writer.Write('"');
+                        writer.Write(fields[i]);
+                        writer.Write("'");
+
+                        first = false;
+                    }
+                }
+                writer.WriteLine();
+
+                for (int j = 0; j < segs.Length; j++)
+                {
+                    first = true;
+
+                    for (int i = 0; i < fields.Length; i++)
+                    {
+                        if (segs[j].HasValue(fields[i]))
+                        {
+                            if (!first)
+                                writer.Write(',');
+
+                            writer.Write(segs[j].GetValue(fields[i]));
+                            first = false;
+                        }
+                    }
+                    writer.WriteLine();
+                }
+            }
+        }
+
+        private void GeneratePaths()
+        {
+            foreach(PathGroup gr in m_file.Groups)
+            {
+                foreach(RobotPath path in gr.Paths)
+                {
+                    path.Segments = null;
+                    m_generator.GenerateSegments(m_file.Robot, path);
+
+                    while (!path.HasSegments)
+                    {
+                        //
+                        // Wait for the background thread to generate the path
+                        //
+                        Thread.Sleep(1);
+                    }
+
+                    if (path.Segments != null && path.Segments.Length > 0)
+                        WritePath(gr.Name, path.Name, path.Segments);
+                }
+            }
+
+            MessageBox.Show("Paths written to directory '" + m_file.OutputDirectory + "'", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion
 

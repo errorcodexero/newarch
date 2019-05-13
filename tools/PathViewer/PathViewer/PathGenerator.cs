@@ -80,7 +80,6 @@ namespace PathViewer
 
             lock(m_lock)
             {
-                Debug.WriteLine("  Finished generation '" + data.Item2.Name + "' - removing from map");
                 m_paths.Remove(data.Item2);
                 data.Item2.Segments = segs;
             }

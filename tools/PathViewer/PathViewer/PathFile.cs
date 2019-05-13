@@ -19,6 +19,7 @@ namespace PathViewer
 
         private bool m_dirty;
         private string m_filename;
+        private string m_output_directory;
 
         public PathFile()
         {
@@ -50,6 +51,12 @@ namespace PathViewer
         {
             get { return m_filename; }
             set { m_filename = value; }
+        }
+
+        public string OutputDirectory
+        {
+            get { return m_output_directory; }
+            set { m_output_directory = value; }
         }
 
         public void RemoveGroup(string group)
