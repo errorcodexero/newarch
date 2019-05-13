@@ -19,6 +19,15 @@ namespace xero
 			virtual ~PathCollection() {
 			}
 
+			size_t getPathCount() const {
+				size_t ret = 0;
+
+				for (auto gr : groups_)
+					ret += gr.second->getPathCount();
+
+				return ret;
+			}
+
 			std::shared_ptr<PathGroup> findGroupByName(const std::string& group) {
 				auto it = groups_.find(group);
 				if (it == groups_.end())

@@ -44,21 +44,22 @@ namespace CheesyPoofsGenerator
         {
             StringBuilder stdout;
             StringBuilder stderr;
+            string outfile = Path.GetTempFileName();
+            string pathfile = Path.GetTempFileName();
 
-            string outdir = Path.GetTempPath();
             stdout = new StringBuilder();
             stderr = new StringBuilder();
 
             string dir = AppDomain.CurrentDomain.BaseDirectory;
             string execpath = Path.Combine(dir, "CheesyGen.exe");
 
+            GeneratePathFile(robot, path, pathfile);
+
             string args = string.Empty;
-            string grname;
-            string pathfile = GeneratePathFile(robot, path, out grname);
             if (pathfile == string.Empty)
                 return null;
 
-            args += "--output " + outdir;
+            args += "--outfile " + outfile;
             args += " --pathfile " + pathfile;
 
             ProcessStartInfo info = new ProcessStartInfo();
@@ -89,9 +90,13 @@ namespace CheesyPoofsGenerator
             proc.CancelErrorRead();
             proc.CancelOutputRead();
 
-            string outfile = Path.Combine(outdir, "tmp_" + path.Name + "_path.csv");
-            string[] headers = { "time", "x", "y", "heading", "curvature", "dscurvature", "velocity", "acceleration" };
-            return ParseOutputFile(outfile, headers);
+            string[] headers = { "time", "x", "y", "heading", "curvature", "dscurvature", "position", "velocity", "acceleration" };
+
+            PathSegment[] seg = ParseOutputFile(outfile, headers);
+            File.Delete(outfile);
+            File.Delete(pathfile);
+
+            return seg;
         }
         #endregion
 

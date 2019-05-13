@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.IO;
+using System.Diagnostics;
 using Newtonsoft.Json;
 using Csv;
 
@@ -12,6 +13,7 @@ namespace PathViewer
         #region private member variables
         private object m_lock;
         private Dictionary<RobotPath, Thread> m_paths;
+        private int m_serial;
         #endregion
 
         #region public constructor
@@ -19,6 +21,7 @@ namespace PathViewer
         {
             m_lock = new object();
             m_paths = new Dictionary<RobotPath, Thread>();
+            m_serial = 0;
         }
         #endregion
 
@@ -47,10 +50,13 @@ namespace PathViewer
                 // we don't start anything else until it is done
                 //
                 if (m_paths.ContainsKey(path))
+                {
                     return;
+                }
 
                 Thread th = new Thread(GenerateSegmentsThread);
-                m_paths[path] = th;
+
+                m_paths.Add(path, th);
                 th.Start(new Tuple<RobotParams, RobotPath>(robot, path));
             }
         }
@@ -74,33 +80,32 @@ namespace PathViewer
 
             lock(m_lock)
             {
+                Debug.WriteLine("  Finished generation '" + data.Item2.Name + "' - removing from map");
                 m_paths.Remove(data.Item2);
                 data.Item2.Segments = segs;
             }
         }
 
-        protected string GeneratePathFile(RobotParams robot, RobotPath path, out string grname)
+        protected bool GeneratePathFile(RobotParams robot, RobotPath path, string filename)
         {
-            grname = "tmp";
+            bool ret = true;
             PathFile pf = new PathFile();
             pf.Robot = robot;
-            pf.AddPathGroup(grname);
-            pf.AddPath(grname, path);
-
-            string tmpname = Path.GetTempFileName();
+            pf.AddPathGroup("tmp");
+            pf.AddPath("tmp", path);
+            m_serial++;
 
             string json = JsonConvert.SerializeObject(pf);
             try
             {
-                File.WriteAllText(tmpname, json);
+                File.WriteAllText(filename, json);
             }
             catch (Exception)
             {
-                // TODO - log message to logger
-                tmpname = string.Empty;
+                ret = false;
             }
 
-            return tmpname;
+            return ret;
         }
 
         private bool AddValue(PathSegment s, ICsvLine line, int index, string name)

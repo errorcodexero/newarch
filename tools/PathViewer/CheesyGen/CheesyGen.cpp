@@ -15,9 +15,9 @@ double maxDx = 2.0;
 double maxDy = 0.25;
 double maxDTheta = MathUtils::degreesToRadians(5.0);
 double step = 2.0;
-bool reverse = false;
 std::string pathfile;
 std::string outputdir;
+std::string outfile;
 bool distancefile;
 bool splinefile;
 xero::paths::PathCollection collection;
@@ -137,10 +137,6 @@ int main(int ac, char** av)
 			ac--;
 			av++;
 		}
-		else if (arg == "--reverse")
-		{
-			reverse = true;
-		}
 		else if (arg == "--pathfile")
 		{
 			if (ac == 0) {
@@ -158,13 +154,34 @@ int main(int ac, char** av)
 		{
 			distancefile = true;
 		}
-		else if (arg == "--output")
+		else if (arg == "--outdir")
+		{
+			if (ac == 0) {
+				std::cerr << "pathgen: expected directory name following --outdir argument" << std::endl;
+				return 1;
+			}
+
+			if (outfile.length() > 0)
+			{
+				std::cerr << "pathgen: cannot specify both --outdir and --outfile options" << std::endl;
+				return 1;
+			}
+			outputdir = *av++;
+			ac--;
+		}
+		else if (arg == "--outfile")
 		{
 			if (ac == 0) {
 				std::cerr << "pathgen: expected directory name following --output argument" << std::endl;
 				return 1;
 			}
-			outputdir = *av++;
+
+			if (outputdir.length() > 0)
+			{
+				std::cerr << "pathgen: cannot specify both --outdir and --outfile options" << std::endl;
+				return 1;
+			}
+			outfile = *av++;
 			ac--;
 		}
 		else
@@ -174,11 +191,16 @@ int main(int ac, char** av)
 		}
 	}
 
-	if (outputdir.length() == 0)
+	if (outputdir.length() == 0 && outfile.length() == 0)
 		outputdir = ".";
 
 	if (!JSONPathReader::readJSONPathFile(pathfile, collection)) {
 		std::cerr << "pathgen: error reading path file '" << pathfile << "'" << std::endl;
+		return 1;
+	}
+
+	if (outfile.length() > 0 && collection.getPathCount() != 1) {
+		std::cerr << "pathgen: --outfile option is only value for a single path" << std::endl;
 		return 1;
 	}
 
@@ -219,12 +241,10 @@ void generateForPath(PathGroup& group, const std::string& path)
 	// values.
 	//
 	PathGenerator gen(maxDx, maxDy, maxDTheta);
-	Trajectory trajectory = gen.generate(pptr->getPoints(), reverse);
-	if (splinefile)
+	Trajectory trajectory = gen.generate(pptr->getPoints());
+	if (splinefile && outputdir.length() > 0)
 	{
 		std::string name = outputdir + "/" + group.getName() + "_" + path + "_spline";
-		if (reverse)
-			name += "_rev";
 		name += ".csv";
 		std::vector<std::string> headers = { "x", "y", "heading", "curvature", "dscurvature" };
 		CSVWriter::write<std::vector<TrajectoryPoint>::const_iterator>(name, headers, trajectory.getPoints().begin(), trajectory.getPoints().end());
@@ -234,11 +254,9 @@ void generateForPath(PathGroup& group, const std::string& path)
 	// Turn the trajectory points into a set of evenly spaced points along the path.
 	//
 	DistanceView dist(trajectory);
-	if (distancefile)
+	if (distancefile && outputdir.length() > 0)
 	{
 		std::string name = outputdir + "/" + group.getName() + "_" + path + "_distance";
-		if (reverse)
-			name += "_rev";
 		name += ".csv";
 
 		std::vector<TrajectorySamplePoint> points;
@@ -248,12 +266,15 @@ void generateForPath(PathGroup& group, const std::string& path)
 		CSVWriter::write< std::vector<TrajectorySamplePoint>::const_iterator>(name, headers, points.begin(), points.end());
 	}
 
-	TimedTrajectory ttj = TimingUtil::timeParameterizeTrajectory(false, dist, pptr->getConstraints(), step,
+	TimedTrajectory ttj = TimingUtil::timeParameterizeTrajectory(dist, pptr->getConstraints(), step,
 		pptr->getStartVelocity(), pptr->getEndVelocity(), pptr->getMaxVelocity(), pptr->getMaxAccel());
-	std::string name = outputdir + "/" + group.getName() + "_" + path + "_path";
-	if (reverse)
-		name += "_rev";
-	name += ".csv";
-	std::vector<std::string> headers = { "time", "x", "y", "heading", "curvature", "dscurvature", "velocity", "acceleration" };
+	std::string name;
+	
+	if (outputdir.length())
+		name = outputdir + "/" + group.getName() + "_" + path + "_path.csv";
+	else
+		name = outfile;
+
+	std::vector<std::string> headers = { "time", "x", "y", "heading", "curvature", "dscurvature", "position", "velocity", "acceleration" };
 	CSVWriter::write< std::vector<TimedTrajectoryPoint>::const_iterator>(name, headers, ttj.getPoints().begin(), ttj.getPoints().end());
 }

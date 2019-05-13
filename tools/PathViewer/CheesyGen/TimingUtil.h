@@ -17,10 +17,10 @@ namespace xero {
 			TimingUtil() = delete;
 			~TimingUtil() = delete ;
 
-			static TimedTrajectory timeParameterizeTrajectory(bool reverse, DistanceView& distview, const ConstraintList &constraints, double step_size,
+			static TimedTrajectory timeParameterizeTrajectory(DistanceView& distview, const ConstraintList &constraints, double step_size,
 									double startvel, double endvel, double maxvel, double maxaccel);
 
-			static TimedTrajectory timeParameterizeTrajectory(bool reverse, std::vector<TrajectorySamplePoint> &states, const ConstraintList& constraints, 
+			static TimedTrajectory timeParameterizeTrajectory(std::vector<TrajectorySamplePoint> &states, const ConstraintList& constraints, 
 									double startvel, double endvel, double maxvel, double maxaccel);
 
 		private:

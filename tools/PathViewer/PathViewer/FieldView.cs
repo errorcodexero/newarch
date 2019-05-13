@@ -9,14 +9,14 @@ namespace PathViewer
     public partial class FieldView : UserControl
     {
         #region private variables
-        private double m_center_hit_dist = 8.0 ;
+        private double m_center_hit_dist = 8.0;
         private double m_tip_hit_dist = 6.0;
         private Game m_game;
         private Image m_image;
         private float m_image_scale;
         private Matrix m_world_to_window;
         private Matrix m_window_to_world;
-        private List<RobotPath> m_paths;
+        private RobotPath m_path;
         private WayPoint m_selected;
         private WayPoint m_rotating;
         private bool m_dragging;
@@ -57,7 +57,7 @@ namespace PathViewer
         #region public constructors
         public FieldView()
         {
-            m_paths = new List<RobotPath>();
+            m_path = null;
             m_world_to_window = new Matrix();
             m_window_to_world = new Matrix();
             m_selected = null;
@@ -93,9 +93,10 @@ namespace PathViewer
             }
         }
 
-        public List<RobotPath> RobotPaths
+        public RobotPath Path
         {
-            get { return m_paths; }
+            get { return m_path ; }
+            set { m_path = value; Invalidate(); }
         }
 
         public PathFile File
@@ -107,7 +108,7 @@ namespace PathViewer
 
                 m_selected = null;
                 m_file = value;
-                m_paths = new List<RobotPath>();
+                m_path = null;
             }
         }
 
@@ -267,8 +268,8 @@ namespace PathViewer
             if (m_image != null)
                 DrawField(e.Graphics);
 
-            foreach (RobotPath s in m_paths)
-                DrawPath(e.Graphics, s);
+            if (m_path != null)
+                DrawPath(e.Graphics, m_path);
         }
         #endregion
 
@@ -286,47 +287,47 @@ namespace PathViewer
             hitpt = null;
             part = WaypointRegion.None;
 
+            if (m_path == null)
+                return false;
+
             //
             // See if there is a point near the point
             //
-            foreach (RobotPath path in m_paths)
+            foreach (WayPoint pt in m_path.Points)
             {
-                foreach (WayPoint pt in path.Points)
+                PointF p = WorldToWindow(new PointF((float)pt.X, (float)pt.Y));
+
+                //
+                // Test the center of the waypoint
+                //
+                double dist = Math.Sqrt((p.X - x) * (p.X - x) + (p.Y - y) * (p.Y - y));
+                if (dist < m_center_hit_dist)
                 {
-                    PointF p = WorldToWindow(new PointF((float)pt.X, (float)pt.Y));
+                    hitpt = pt;
+                    part = WaypointRegion.Center;
+                    found = true;
+                    break;
+                }
 
-                    //
-                    // Test the center of the waypoint
-                    //
-                    double dist = Math.Sqrt((p.X - x) * (p.X - x) + (p.Y - y) * (p.Y - y));
-                    if (dist < m_center_hit_dist)
-                    {
-                        hitpt = pt;
-                        part = WaypointRegion.Center;
-                        found = true;
-                        break;
-                    }
+                //
+                // Test the tip of the waypoint
+                //
+                PointF[] tip = new PointF[] { new PointF(2.0f, 0.0f) };
 
-                    //
-                    // Test the tip of the waypoint
-                    //
-                    PointF[] tip = new PointF[] { new PointF(2.0f, 0.0f) };
+                Matrix mr = new Matrix();
+                mr.Translate(p.X, p.Y);
+                mr.Scale(12.0f, -12.0f);
+                mr.Rotate((float)pt.Heading);
+                mr.TransformPoints(tip);
+                p = tip[0];
 
-                    Matrix mr = new Matrix();
-                    mr.Translate(p.X, p.Y);
-                    mr.Scale(12.0f, -12.0f);
-                    mr.Rotate((float)pt.Heading);
-                    mr.TransformPoints(tip);
-                    p = tip[0];
-
-                    dist = Math.Sqrt((p.X - x) * (p.X - x) + (p.Y - y) * (p.Y - y));
-                    if (dist < m_tip_hit_dist)
-                    {
-                        hitpt = pt;
-                        part = WaypointRegion.Tip;
-                        found = true;
-                        break;
-                    }
+                dist = Math.Sqrt((p.X - x) * (p.X - x) + (p.Y - y) * (p.Y - y));
+                if (dist < m_tip_hit_dist)
+                {
+                    hitpt = pt;
+                    part = WaypointRegion.Tip;
+                    found = true;
+                    break;
                 }
             }
 

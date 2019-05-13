@@ -50,6 +50,10 @@ namespace xero
 				return names;
 			}
 
+			size_t getPathCount() const {
+				return paths_.size();
+			}
+
 		private:
 			std::string name_;
 			std::map<std::string, std::shared_ptr<RobotPath>> paths_;

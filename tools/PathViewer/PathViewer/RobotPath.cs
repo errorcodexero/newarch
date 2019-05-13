@@ -33,6 +33,10 @@ namespace PathViewer
         public WayPoint[] Points;
         #endregion
 
+        #region public events
+        public event EventHandler<EventArgs> SegmentsUpdated;
+        #endregion
+
         #region private variables
         /// <summary>
         /// The splines for this path.  This is a list of X and Y splines that provide the equation to generate
@@ -121,6 +125,7 @@ namespace PathViewer
                 {
                     m_segments = value;
                 }
+                OnSegmentsChanged(EventArgs.Empty);
             }
         }
         #endregion
@@ -215,13 +220,23 @@ namespace PathViewer
             lock(m_lock)
             {
                 if (m_segments == null || m_segments_dirty)
+                {
+                    needgen = true;
+                    m_segments = null;
+                    m_segments_dirty = false;
+                }
             }
-            if (m_segments == null || m_segments_dirty)
-            {
-                m_segments = null;
-                m_segments_dirty = false;
+
+            if (needgen)
                 gen.GenerateSegments(robot, this);
-            }
+        }
+        #endregion
+
+        #region protected methods
+        protected void OnSegmentsChanged(EventArgs args)
+        {
+            EventHandler<EventArgs> handler = SegmentsUpdated;
+            handler?.Invoke(this, args);
         }
         #endregion
     }

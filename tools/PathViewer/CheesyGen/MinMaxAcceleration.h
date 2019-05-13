@@ -9,7 +9,7 @@ namespace xero {
 		public:
 			MinMaxAcceleration() {
 				maxaccel_ = std::numeric_limits<double>::max();
-				minaccel_ = std::numeric_limits<double>::min();
+				minaccel_ = -std::numeric_limits<double>::max();
 			}
 
 			MinMaxAcceleration(double minacc, double maxacc)

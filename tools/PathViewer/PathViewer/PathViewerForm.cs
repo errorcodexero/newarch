@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.Threading;
 
 namespace PathViewer
 {
@@ -114,6 +114,7 @@ namespace PathViewer
 
             InitializeComponent();
 
+
             m_field.File = m_file;
             m_field.WaypointSelected += WayPointSelectedOrChanged;
             m_field.WaypointChanged += WayPointSelectedOrChanged;
@@ -122,9 +123,8 @@ namespace PathViewer
             m_field.KeyDown += FieldKeyDown;
 
             m_pathfile_tree.DoubleClick += DoPathTreeDoubleClick;
-            m_pathfile_tree.CheckBoxes = true;
-            m_pathfile_tree.AfterCheck += PathTreeCheckBoxChanged;
             m_pathfile_tree.MouseUp += PathTreeMouseUp;
+            m_pathfile_tree.AfterSelect += PathTreeSelectionChanged;
 
             m_waypoints.DoubleClick += WaypointDoubleClick;
             m_robot.DoubleClick += RobotParamDoubleClick;
@@ -137,7 +137,11 @@ namespace PathViewer
             PopulateGameMenu();
             PopulateGeneratorMenu();
             UpdateRobotWindow();
+
+            m_plot.Generator = m_generator;
+            m_plot.Robot = m_file.Robot;
         }
+
 
         #endregion
 
@@ -254,15 +258,32 @@ namespace PathViewer
             if (e.Path != null)
             {
                 if (e.Reason == WaypointEventArgs.ReasonType.StartChange)
+                {
                     PushUndoStack();
-
-                GenerateSplines(e.Path);
+                    GenerateSplines(e.Path);
+                }
             }
             UpdateWaypointPropertyWindow(e.Point);
         }
         #endregion
 
         #region event handlers for the path tree control
+
+        private void PathTreeSelectionChanged(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Parent == null)
+            {
+                // A group is selected
+                m_plot.Path = null;
+            }
+            else
+            {
+                RobotPath path = m_file.FindPathByName(e.Node.Parent.Text, e.Node.Text);
+                m_plot.Path = path;
+                m_field.Path = path;
+            }
+        }
+
         private void PathTreeMouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Right)
@@ -307,30 +328,7 @@ namespace PathViewer
         }
         private void PathTreeCheckBoxChanged(object sender, TreeViewEventArgs e)
         {
-            if (e.Node.Parent == null)
-            {
-                //
-                // A group was checked
-                //
-                foreach (TreeNode tn in e.Node.Nodes)
-                    tn.Checked = e.Node.Checked;
-            }
-            else
-            {
-                //
-                // A path was checked
-                //
-                RobotPath path = m_file.FindPathByName(e.Node.Parent.Text, e.Node.Text);
-                if (path != null)
-                {
-                    if (e.Node.Checked)
-                        m_field.RobotPaths.Add(path);
-                    else
-                        m_field.RobotPaths.Remove(path);
 
-                    m_field.Invalidate();
-                }
-            }
         }
 
         private void DoPathTreeDoubleClick(object sender, EventArgs e)
@@ -416,6 +414,7 @@ namespace PathViewer
             //
             m_right_vertical.SplitterDistance = m_right_vertical.Height / 3;
             m_right_bottom.SplitterDistance = m_right_bottom.Height / 2;
+            m_vertical.SplitterDistance = m_vertical.Height * 5/ 8;
         }
 
         private void PreviewEditorKeyProperty(object sender, PreviewKeyDownEventArgs e)
@@ -577,6 +576,7 @@ namespace PathViewer
                 m_file = JsonConvert.DeserializeObject<PathFile>(json);
                 m_file.PathName = dialog.FileName;
                 m_field.File = m_file;
+                m_plot.Robot = m_file.Robot;
                 Text = "Path Editor - " + m_file.PathName;
                 m_undo_stack = new List<UndoState>();
                 GenerateAllSplines();
@@ -642,11 +642,8 @@ namespace PathViewer
             string grname = node.Parent.Text;
             node.Parent.Nodes.Remove(node);
             RobotPath path = m_file.FindPathByName(grname, node.Text);
-            if (m_field.RobotPaths.Contains(path))
-            {
-                m_field.RobotPaths.Remove(path);
-                m_field.Invalidate();
-            }
+            if (m_field.Path == path)
+                m_field.Path = null;
 
             m_file.RemovePath(grname, node.Text);
         }
@@ -673,15 +670,11 @@ namespace PathViewer
 
             m_undo_stack.Add(st);
 
-            foreach(RobotPath path in m_field.RobotPaths)
-            {
-                PathGroup gr = m_file.FindGroupByPath(path);
-                st.AddPath(gr.Name, path.Name);
-            }
+            PathGroup gr = m_file.FindGroupByPath(m_field.Path);
+            st.AddPath(gr.Name, m_field.Path.Name);
 
             if (m_field.SelectedWaypoint != null)
             {
-                PathGroup gr;
                 RobotPath path;
                 int index;
                 m_file.FindPathByWaypoint(m_field.SelectedWaypoint, out gr, out path, out index);
@@ -704,6 +697,8 @@ namespace PathViewer
                 UpdatePathTree();
                 m_field.File = m_file;
                 m_field.Invalidate();
+                m_plot.Robot = m_file.Robot;
+                m_plot.Invalidate();
                 GenerateAllSplines();
 
                 foreach(Tuple<string, string> pathname in st.SelectedPaths)
@@ -821,6 +816,8 @@ namespace PathViewer
             RobotPath path;
             m_file.FindPathByWaypoint(m_field.SelectedWaypoint, out group, out path);
             UpdateWaypointPropertyWindow(m_field.SelectedWaypoint);
+
+            GenerateSplines(path);
 
             return true;
         }
@@ -1080,8 +1077,9 @@ namespace PathViewer
 
         private void GenerateSplines(RobotPath p)
         {
+            m_plot.Invalidate();
             p.ClearSplines();
-            p.Segments = null;
+            p.SetDirty();
             if (m_generator != null)
             {
                 try
@@ -1089,7 +1087,7 @@ namespace PathViewer
                     p.GenerateSegments(m_file.Robot, m_generator);
                     p.GenerateSplines(m_generator);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     string msg = "In path generator '";
                     msg += m_generator.Name;
@@ -1097,6 +1095,13 @@ namespace PathViewer
                     m_logger.LogMessage(Logger.MessageType.Warning, msg);
                     p.ClearSplines();
                 }
+            }
+
+            if (p == m_plot.Path)
+            {
+                while (!p.HasSegments)
+                    Thread.Sleep(1);
+                m_plot.RegenerateGraph();
             }
         }
 

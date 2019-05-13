@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -103,6 +104,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="RobotPlotViewer.resx">
+      <DependentUpon>RobotPlotViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="DeepSpace.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

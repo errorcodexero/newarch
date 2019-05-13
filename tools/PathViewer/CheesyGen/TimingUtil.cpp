@@ -8,7 +8,7 @@
 namespace xero {
 	namespace paths {
 
-		TimedTrajectory TimingUtil::timeParameterizeTrajectory(bool reverse, DistanceView& distview, const ConstraintList& constraints, double step_size,
+		TimedTrajectory TimingUtil::timeParameterizeTrajectory(DistanceView& distview, const ConstraintList& constraints, double step_size,
 			double startvel, double endvel, double maxvel, double maxaccel)
 		{
 			size_t num_states = static_cast<size_t>(std::ceil(distview.length() / step_size)) + 1 ;
@@ -21,10 +21,10 @@ namespace xero {
 				points.push_back(pt);
 			}
 
-			return timeParameterizeTrajectory(reverse, points, constraints, startvel, endvel, maxvel, maxaccel);
+			return timeParameterizeTrajectory(points, constraints, startvel, endvel, maxvel, maxaccel);
 		}
 
-		TimedTrajectory TimingUtil::timeParameterizeTrajectory(bool reverse, std::vector<TrajectorySamplePoint> &states, const ConstraintList& constraints,
+		TimedTrajectory TimingUtil::timeParameterizeTrajectory(std::vector<TrajectorySamplePoint> &states, const ConstraintList& constraints,
 			double startvel, double endvel, double maxvel, double maxaccel)
 		{
 			std::vector<ConstrainedPoint> constrained_states;
@@ -64,15 +64,15 @@ namespace xero {
 					//
 					for (auto constraint : constraints)
 					{
-						double vel = reverse ? -cs.getMaxVelocity() : cs.getMaxVelocity();
+						double vel = cs.getMaxVelocity();
 						MinMaxAcceleration acc = constraint->getMinMacAccel(cs, vel);
 						assert(acc.isValid());
 
-						double tmp = std::max(cs.getMinAccel(), reverse ? -acc.getMaxAccel() : acc.getMinAccel());
+						double tmp = std::max(cs.getMinAccel(), acc.getMinAccel());
 						cs.setMinAccel(tmp);
 
-						tmp = std::min(cs.getMaxAccel(), reverse ? -acc.getMinAccel() : acc.getMaxAccel());
-						cs.setMinAccel(tmp);
+						tmp = std::min(cs.getMaxAccel(), acc.getMaxAccel());
+						cs.setMaxAccel(tmp);
 					}
 					assert(cs.getMaxAccel() >= cs.getMinAccel());
 
@@ -126,15 +126,15 @@ namespace xero {
 					//
 					for (auto constraint : constraints)
 					{
-						double vel = reverse ? -cs.getMaxVelocity() : cs.getMaxVelocity();
+						double vel = cs.getMaxVelocity();
 						MinMaxAcceleration acc = constraint->getMinMacAccel(cs, vel);
 						assert(acc.isValid());
 
-						double tmp = std::max(cs.getMinAccel(), reverse ? -acc.getMaxAccel() : acc.getMinAccel());
+						double tmp = std::max(cs.getMinAccel(), acc.getMinAccel());
 						cs.setMinAccel(tmp);
 
-						tmp = std::min(cs.getMaxAccel(), reverse ? -acc.getMinAccel() : acc.getMaxAccel());
-						cs.setMinAccel(tmp);
+						tmp = std::min(cs.getMaxAccel(), acc.getMaxAccel());
+						cs.setMaxAccel(tmp);
 					}
 					assert(cs.getMaxAccel() >= cs.getMinAccel());
 
@@ -175,7 +175,7 @@ namespace xero {
 				double dt = 0.0;
 				if (i > 0)
 				{
-					timed[i - 1].setAcceleration(reverse ? -accel : accel);
+					timed[i - 1].setAcceleration(accel);
 					if (std::abs(accel) > kEpsilon)
 					{
 						dt = (cs.getMaxVelocity() - v) / accel;
@@ -189,7 +189,7 @@ namespace xero {
 				v = cs.getMaxVelocity();
 				s = cs.getDistance();
 
-				TimedTrajectoryPoint tpt(*cs.getState(), t, reverse ? -v : v, reverse ? -accel : accel);
+				TimedTrajectoryPoint tpt(*cs.getState(), t, s, v, accel);
 				timed.push_back(tpt);
 			}
 

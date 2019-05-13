@@ -16,7 +16,7 @@ namespace xero
 			PathGenerator(double maxx, double maxy, double maxtheta);
 			~PathGenerator();
 
-			Trajectory generate(const std::vector<Pose2d>& waypoints, bool reverse = false) const ;
+			Trajectory generate(const std::vector<Pose2d>& waypoints) const ;
 
 		private:
 			double maxDx_;
