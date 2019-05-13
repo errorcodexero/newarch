@@ -244,6 +244,7 @@ namespace PathViewer
             {
                 m_field.Invalidate();
                 GenerateSplines(path);
+                GenerateSegments(path);
             }
         }
 
@@ -258,9 +259,15 @@ namespace PathViewer
             if (e.Path != null)
             {
                 if (e.Reason == WaypointEventArgs.ReasonType.StartChange)
-                {
                     PushUndoStack();
+
+                if (e.Reason == WaypointEventArgs.ReasonType.Changing)
                     GenerateSplines(e.Path);
+
+                if (e.Reason == WaypointEventArgs.ReasonType.EndChange)
+                {
+                    GenerateSplines(e.Path);
+                    GenerateSegments(e.Path);
                 }
             }
             UpdateWaypointPropertyWindow(e.Point);
@@ -818,6 +825,7 @@ namespace PathViewer
             UpdateWaypointPropertyWindow(m_field.SelectedWaypoint);
 
             GenerateSplines(path);
+            GenerateSegments(path);
 
             return true;
         }
@@ -1075,16 +1083,35 @@ namespace PathViewer
             m_robot_param_editing = null;
         }
 
-        private void GenerateSplines(RobotPath p)
+        private void GenerateSegments(RobotPath p)
         {
-            m_plot.Invalidate();
-            p.ClearSplines();
-            p.SetDirty();
+            p.SetSegmentsInvalid();
+
             if (m_generator != null)
             {
                 try
                 {
                     p.GenerateSegments(m_file.Robot, m_generator);
+                }
+                catch(Exception ex)
+                {
+                    string msg = "In path generator '";
+                    msg += m_generator.Name;
+                    msg += "' detailed path generation failed - " + ex.Message;
+                    m_logger.LogMessage(Logger.MessageType.Warning, msg);
+                }
+            }
+        }
+
+        private void GenerateSplines(RobotPath p)
+        {
+            p.ClearSplines();
+
+            if (m_generator != null)
+            {
+                try
+                {
+
                     p.GenerateSplines(m_generator);
                 }
                 catch (Exception ex)
@@ -1096,13 +1123,6 @@ namespace PathViewer
                     p.ClearSplines();
                 }
             }
-
-            if (p == m_plot.Path)
-            {
-                while (!p.HasSegments)
-                    Thread.Sleep(1);
-                m_plot.RegenerateGraph();
-            }
         }
 
         private void GenerateAllSplines()
@@ -1112,6 +1132,7 @@ namespace PathViewer
                 foreach(RobotPath path in group.Paths)
                 {
                     GenerateSplines(path);
+                    GenerateSegments(path);
                 }
             }
         }

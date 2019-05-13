@@ -77,15 +77,17 @@ namespace PathViewer
             }
         }
 
-        private void CreateSeries(string name, PathSegment[] segs)
+        private void CreateSeries(string name, AxisType a, PathSegment[] segs)
         {
             Series s = new Series(name);
+            s.YAxisType = a ;
             s.ChartType = SeriesChartType.Line;
             for(int i = 0; i < segs.Length; i++)
             {
                 double t = segs[i].GetValue("time");
                 double v = segs[i].GetValue(name);
                 s.Points.AddXY(t, v);
+                s.BorderWidth = 5;
             }
 
             m_chart.Series.Add(s);
@@ -93,10 +95,16 @@ namespace PathViewer
 
         private void GenerateDataSeries(PathSegment[] segs)
         {
+            ChartArea area = m_chart.ChartAreas[0];
+
             m_chart.Series.Clear();
-            CreateSeries("position", segs);
-            CreateSeries("velocity", segs);
-            CreateSeries("acceleration", segs);
+            CreateSeries("position", AxisType.Primary, segs);
+            CreateSeries("velocity", AxisType.Secondary, segs);
+            CreateSeries("acceleration", AxisType.Secondary, segs);
+
+            area.AxisX.Title = "time (sec)";
+            area.AxisY.Title = "distance (inches)";
+            area.AxisY2.Title = "velocity/acceleration";
         }
     }
 }

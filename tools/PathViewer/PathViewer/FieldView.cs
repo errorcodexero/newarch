@@ -415,7 +415,7 @@ namespace PathViewer
 
             using (Brush b = new SolidBrush(Color.LightCoral))
             {
-                double step = 1.0 / 100.0;
+                double step = 1.0 / 1000.0;
                 for (double t = 0.0; t < 1.0; t += step)
                 {
                     double x, y, heading;

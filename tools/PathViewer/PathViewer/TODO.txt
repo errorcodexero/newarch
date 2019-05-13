@@ -20,8 +20,8 @@ PathViewer Editor
 
   TODO
   ----
-  - Add path generation interface - detailed path
   - Add copyrights to the about screen
+  - Add constraint that limits velocity between two waypoints
 
 CheesyGen
 ===============================================================================
@@ -30,7 +30,6 @@ CheesyGen
 
   TODO
   ----
-  - Bug - When velocity profiles cannot be met, infinite loop
 
 PathFinderV1
 ===============================================================================

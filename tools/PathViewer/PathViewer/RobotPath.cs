@@ -131,7 +131,7 @@ namespace PathViewer
         #endregion
 
         #region public methods
-        public void SetDirty()
+        public void SetSegmentsInvalid()
         {
             lock(m_lock)
             {
