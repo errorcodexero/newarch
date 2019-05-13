@@ -21,7 +21,6 @@ namespace PathViewer
         private WayPoint m_rotating;
         private bool m_dragging;
         private float m_radius = 8.0f;
-        private float m_velocity_scale = 1.0f;
         private PathFile m_file;
         private bool m_last_msg_selected;
         #endregion
@@ -457,64 +456,52 @@ namespace PathViewer
         {
             using (Pen sel = new Pen(Color.Yellow, 2.0f))
             {
-                using (Pen raypen = new Pen(Color.LightBlue, 6.0f))
-                {
                     using (Brush b = new SolidBrush(Color.Orange))
                     {
-                        using (Pen pn = new Pen(Color.Black, 3.0f))
+                    using (Pen pn = new Pen(Color.Black, 3.0f))
+                    {
+                        foreach (WayPoint pt in pts)
                         {
-                            foreach (WayPoint pt in pts)
+                            Matrix mm;
+
+                            float angle = (float)(pt.Heading / 180.0f * Math.PI);
+
+                            //
+                            // Draw the point
+                            //
+                            PointF p = WorldToWindow(new PointF((float)pt.X, (float)pt.Y));
+
+                            //
+                            // Draw the waypoint triangle
+                            //
+                            float tw = 10.0f;
+                            PointF[] triangle = new PointF[] { new PointF(tw, 0.0f), new PointF(-tw / 2.0f, tw / 2.0f), new PointF(-tw / 2.0f, -tw / 2.0f) };
+
+                            mm = new Matrix();
+                            mm.Translate((float)pt.X, (float)pt.Y);
+                            mm.Rotate((float)pt.Heading);
+                            mm.TransformPoints(triangle);
+                            m_world_to_window.TransformPoints(triangle);
+
+                            g.FillPolygon(b, triangle);
+                            g.DrawPolygon(pn, triangle);
+
+                            //
+                            // Draw the selection box
+                            //
+                            if (m_selected == pt)
                             {
-                                Matrix mm;
-
-                                float angle = (float)(pt.Heading / 180.0f * Math.PI);
-
-                                //
-                                // Draw the point
-                                //
-                                PointF p = WorldToWindow(new PointF((float)pt.X, (float)pt.Y));
-
-                                //
-                                // Draw the heading, scaled by the velocity
-                                //
-
-                                PointF hp = new PointF((float)(Math.Cos(angle) * pt.Velocity * m_velocity_scale) + p.X,
-                                                        -(float)(Math.Sin(angle) * pt.Velocity * m_velocity_scale) + p.Y);
-
-                                g.DrawLine(raypen, p, hp);
-
-                                //
-                                // Draw the waypoint triangle
-                                //
-                                float tw = 10.0f;
-                                PointF[] triangle = new PointF[] { new PointF(tw, 0.0f), new PointF(-tw / 2.0f, tw / 2.0f), new PointF(-tw /2.0f, -tw / 2.0f) };
-
-                                mm = new Matrix();
-                                mm.Translate((float)pt.X, (float)pt.Y);
-                                mm.Rotate((float)pt.Heading);
-                                mm.TransformPoints(triangle);
-                                m_world_to_window.TransformPoints(triangle);
-
-                                g.FillPolygon(b, triangle);
-                                g.DrawPolygon(pn, triangle);
-
-                                //
-                                // Draw the selection box
-                                //
-                                if (m_selected == pt)
+                                PointF[] selbox = new PointF[]
                                 {
-                                    PointF[] selbox = new PointF[]
-                                    {
                                         new PointF((float)m_file.Robot.Width / 2.0f, (float)m_file.Robot.Length / 2.0f),
                                         new PointF(-(float)m_file.Robot.Width / 2.0f, (float)m_file.Robot.Length / 2.0f),
                                         new PointF(-(float)m_file.Robot.Width / 2.0f, -(float)m_file.Robot.Length / 2.0f),
                                         new PointF((float)m_file.Robot.Width / 2.0f, -(float)m_file.Robot.Length / 2.0f),
-                                    };
+                                };
 
-                                    mm.TransformPoints(selbox);
-                                    m_world_to_window.TransformPoints(selbox);
-                                    g.DrawPolygon(sel, selbox);
-                                }
+                                mm.TransformPoints(selbox);
+                                m_world_to_window.TransformPoints(selbox);
+                                g.DrawPolygon(sel, selbox);
                             }
                         }
                     }

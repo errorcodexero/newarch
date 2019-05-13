@@ -28,6 +28,11 @@ namespace PathViewer
         private PathFile m_file;
 
         /// <summary>
+        /// The selected path
+        /// </summary>
+        private RobotPath m_selected_path;
+
+        /// <summary>
         /// The control for editing path group names and path names in place
         /// </summary>
         private TextBox m_text_editor;
@@ -46,6 +51,11 @@ namespace PathViewer
         /// The robot view item we are editing
         /// </summary>
         private ListViewItem m_robot_param_editing;
+
+        /// <summary>
+        /// The path view item we are editing
+        /// </summary>
+        private ListViewItem m_path_view_editing;
 
         /// <summary>
         /// The currently selected generator
@@ -126,8 +136,9 @@ namespace PathViewer
             m_pathfile_tree.MouseUp += PathTreeMouseUp;
             m_pathfile_tree.AfterSelect += PathTreeSelectionChanged;
 
-            m_waypoints.DoubleClick += WaypointDoubleClick;
-            m_robot.DoubleClick += RobotParamDoubleClick;
+            m_waypoint_view.DoubleClick += WaypointDoubleClick;
+            m_robot_view.DoubleClick += RobotParamDoubleClick;
+            m_path_view.DoubleClick += PathViewDoubleClick;
 
             m_ignore_lost_focus = false;
             m_undo_stack = new List<UndoState>();
@@ -141,6 +152,7 @@ namespace PathViewer
             m_plot.Generator = m_generator;
             m_plot.Robot = m_file.Robot;
         }
+
 
 
         #endregion
@@ -282,13 +294,16 @@ namespace PathViewer
             {
                 // A group is selected
                 m_plot.Path = null;
+                m_selected_path = null;
             }
             else
             {
                 RobotPath path = m_file.FindPathByName(e.Node.Parent.Text, e.Node.Text);
+                m_selected_path = path;
                 m_plot.Path = path;
                 m_field.Path = path;
             }
+            UpdatePathWindow();
         }
 
         private void PathTreeMouseUp(object sender, MouseEventArgs e)
@@ -348,13 +363,37 @@ namespace PathViewer
         }
         #endregion
 
+        #region event handlers for the path view window
+
+        private void PathViewDoubleClick(object sender, EventArgs e)
+        {
+            if (m_text_editor != null || m_path_view.SelectedItems.Count != 1)
+                return;
+
+            ListViewItem item = m_path_view.SelectedItems[0];
+
+            m_path_view_editing = item;
+            Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
+
+            m_text_editor = new TextBox();
+            m_text_editor.Text = item.SubItems[1].Text;
+            m_text_editor.Bounds = b;
+            m_text_editor.Parent = m_path_view;
+            m_text_editor.Enabled = true;
+            m_text_editor.Visible = true;
+            m_text_editor.LostFocus += FinishedEditingProperty;
+            m_text_editor.PreviewKeyDown += PreviewEditorKeyProperty;
+            m_text_editor.Focus();
+        }
+        #endregion
+
         #region event handlers for the robot params window
         private void RobotParamDoubleClick(object sender, EventArgs e)
         {
-            if (m_text_editor != null || m_robot.SelectedItems.Count != 1)
+            if (m_text_editor != null || m_robot_view.SelectedItems.Count != 1)
                 return;
 
-            ListViewItem item = m_robot.SelectedItems[0];
+            ListViewItem item = m_robot_view.SelectedItems[0];
 
             m_robot_param_editing = item;
             Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
@@ -362,7 +401,7 @@ namespace PathViewer
             m_text_editor = new TextBox();
             m_text_editor.Text = item.SubItems[1].Text;
             m_text_editor.Bounds = b;
-            m_text_editor.Parent = m_robot;
+            m_text_editor.Parent = m_robot_view;
             m_text_editor.Enabled = true;
             m_text_editor.Visible = true;
             m_text_editor.LostFocus += FinishedEditingProperty;
@@ -374,10 +413,10 @@ namespace PathViewer
         #region event handlers for the waypoints window
         private void WaypointDoubleClick(object sender, EventArgs e)
         {
-            if (m_text_editor != null || m_waypoints.SelectedItems.Count != 1 || m_field.SelectedWaypoint == null)
+            if (m_text_editor != null || m_waypoint_view.SelectedItems.Count != 1 || m_field.SelectedWaypoint == null)
                 return;
 
-            ListViewItem item = m_waypoints.SelectedItems[0];
+            ListViewItem item = m_waypoint_view.SelectedItems[0];
             if (item.Text == "Group" || item.Text == "Path")
                 return;
 
@@ -387,7 +426,7 @@ namespace PathViewer
             m_text_editor = new TextBox();
             m_text_editor.Text = item.SubItems[1].Text;
             m_text_editor.Bounds = b;
-            m_text_editor.Parent = m_waypoints;
+            m_text_editor.Parent = m_waypoint_view;
             m_text_editor.Enabled = true;
             m_text_editor.Visible = true;
             m_text_editor.LostFocus += FinishedEditingProperty;
@@ -419,8 +458,9 @@ namespace PathViewer
             //
             // Resize the three controls on the right side
             //
-            m_right_vertical.SplitterDistance = m_right_vertical.Height / 3;
+            m_right_vertical.SplitterDistance = m_right_vertical.Height / 4;
             m_right_bottom.SplitterDistance = m_right_bottom.Height / 2;
+            m_bottom_bottom.SplitterDistance = m_bottom_bottom.Height / 2;
             m_vertical.SplitterDistance = m_vertical.Height * 5/ 8;
         }
 
@@ -447,6 +487,8 @@ namespace PathViewer
                 stop = FinishedEditingRobotParam();
             else if (m_waypoint_editing != null)
                 stop = FinishedEditingWaypoint();
+            else if (m_path_view_editing != null)
+                stop = FinishedEditingPathView();
 
             if (stop)
                 StopEditing();
@@ -750,6 +792,35 @@ namespace PathViewer
         }
         #endregion
 
+        #region list view editing methods
+        private bool FinishedEditingPathView()
+        {
+            double d;
+
+            if (!double.TryParse(m_text_editor.Text, out d))
+                return false;
+
+            PushUndoStack();
+            if (m_path_view_editing.Text == "Max Velocity")
+            {
+                m_selected_path.MaxVelocity = d;
+            }
+            else if (m_path_view_editing.Text == "Max Acceleration")
+            {
+                m_selected_path.MaxAcceleration = d;
+            }
+            else if (m_path_view_editing.Text == "Max Jerk")
+            {
+                m_selected_path.MaxJerk = d;
+            }
+
+            UpdatePathWindow() ;
+            m_field.Invalidate();
+            GenerateAllSplines();
+
+            return true;
+        }
+
         private bool FinishedEditingRobotParam()
         {
             double d;
@@ -783,28 +854,63 @@ namespace PathViewer
                 if (m_robot_param_editing.Text == "Width")
                 {
                     m_file.Robot.Width = d;
+                    m_file.IsDirty = true;
                 }
                 else if (m_robot_param_editing.Text == "Length")
                 {
                     m_file.Robot.Length = d;
+                    m_file.IsDirty = true;
                 }
                 else if (m_robot_param_editing.Text == "Max Velocity")
                 {
                     m_file.Robot.MaxVelocity = d;
+                    m_file.IsDirty = true;
                 }
                 else if (m_robot_param_editing.Text == "Max Acceleration")
                 {
                     m_file.Robot.MaxAcceleration = d;
+                    m_file.IsDirty = true;
                 }
                 else if (m_robot_param_editing.Text == "Max Jerk")
                 {
                     m_file.Robot.MaxJerk = d;
+                    m_file.IsDirty = true;
                 }
             }
+
+            UpdateExistingPaths();
             UpdateRobotWindow();
             m_field.Invalidate();
             GenerateAllSplines();
+            UpdatePathWindow();
             return true;
+        }
+
+        private void UpdateExistingPaths()
+        {
+            foreach(PathGroup gr in m_file.Groups)
+            {
+                foreach(RobotPath p in gr.Paths)
+                {
+                    if (p.MaxVelocity > m_file.Robot.MaxVelocity)
+                    {
+                        m_file.IsDirty = true;
+                        p.MaxVelocity = m_file.Robot.MaxVelocity;
+                    }
+
+                    if (p.MaxAcceleration > m_file.Robot.MaxAcceleration)
+                    {
+                        m_file.IsDirty = true;
+                        p.MaxAcceleration = m_file.Robot.MaxAcceleration;
+                    }
+
+                    if (p.MaxJerk > m_file.Robot.MaxJerk)
+                    {
+                        m_file.IsDirty = true;
+                        p.MaxJerk = m_file.Robot.MaxJerk;
+                    }
+                }
+            }
         }
 
         private bool FinishedEditingWaypoint()
@@ -845,6 +951,8 @@ namespace PathViewer
 
             return true;
         }
+        #endregion
+
         private ToolStripMenuItem FindItem(string title)
         {
             ToolStripMenuItem mitem = null;
@@ -920,23 +1028,44 @@ namespace PathViewer
         {
             ListViewItem item;
 
-            m_waypoints.Items.Clear();
+            m_waypoint_view.Items.Clear();
 
             item = new ListViewItem("X");
             item.SubItems.Add(pt.X.ToString());
-            m_waypoints.Items.Add(item);
+            m_waypoint_view.Items.Add(item);
 
             item = new ListViewItem("Y");
             item.SubItems.Add(pt.Y.ToString());
-            m_waypoints.Items.Add(item);
+            m_waypoint_view.Items.Add(item);
 
             item = new ListViewItem("Heading");
             item.SubItems.Add(pt.Heading.ToString());
-            m_waypoints.Items.Add(item);
+            m_waypoint_view.Items.Add(item);
 
             item = new ListViewItem("Velocity");
             item.SubItems.Add(pt.Velocity.ToString());
-            m_waypoints.Items.Add(item);
+            m_waypoint_view.Items.Add(item);
+        }
+
+        private void UpdatePathWindow()
+        {
+            ListViewItem item;
+
+            m_path_view.Items.Clear();
+            if (m_selected_path != null)
+            {
+                item = new ListViewItem("Max Velocity");
+                item.SubItems.Add(m_selected_path.MaxVelocity.ToString());
+                m_path_view.Items.Add(item);
+
+                item = new ListViewItem("Max Acceleration");
+                item.SubItems.Add(m_selected_path.MaxAcceleration.ToString());
+                m_path_view.Items.Add(item);
+
+                item = new ListViewItem("Max Jerk");
+                item.SubItems.Add(m_selected_path.MaxJerk.ToString());
+                m_path_view.Items.Add(item);
+            }
         }
         
         private void UpdateRobotWindow()
@@ -945,31 +1074,31 @@ namespace PathViewer
             {
                 ListViewItem item;
 
-                m_robot.Items.Clear();
+                m_robot_view.Items.Clear();
 
                 item = new ListViewItem("Type");
                 item.SubItems.Add(m_file.Robot.DriveType);
-                m_robot.Items.Add(item);
+                m_robot_view.Items.Add(item);
 
                 item = new ListViewItem("Width");
                 item.SubItems.Add(m_file.Robot.Width.ToString());
-                m_robot.Items.Add(item);
+                m_robot_view.Items.Add(item);
 
                 item = new ListViewItem("Length");
                 item.SubItems.Add(m_file.Robot.Length.ToString());
-                m_robot.Items.Add(item);
+                m_robot_view.Items.Add(item);
 
                 item = new ListViewItem("Max Velocity");
                 item.SubItems.Add(m_file.Robot.MaxVelocity.ToString());
-                m_robot.Items.Add(item);
+                m_robot_view.Items.Add(item);
 
                 item = new ListViewItem("Max Acceleration");
                 item.SubItems.Add(m_file.Robot.MaxAcceleration.ToString());
-                m_robot.Items.Add(item);
+                m_robot_view.Items.Add(item);
 
                 item = new ListViewItem("Max Jerk");
                 item.SubItems.Add(m_file.Robot.MaxJerk.ToString());
-                m_robot.Items.Add(item);
+                m_robot_view.Items.Add(item);
 
             }
         }
