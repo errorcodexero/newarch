@@ -134,8 +134,9 @@ namespace PathViewer
                 lock (m_lock)
                 {
                     m_segments = value;
+                    OnSegmentsChanged(EventArgs.Empty);
                 }
-                OnSegmentsChanged(EventArgs.Empty);
+
             }
         }
         #endregion
@@ -267,7 +268,7 @@ namespace PathViewer
         #endregion
 
         #region protected methods
-        protected void OnSegmentsChanged(EventArgs args)
+        public void OnSegmentsChanged(EventArgs args)
         {
             EventHandler<EventArgs> handler = SegmentsUpdated;
             handler?.Invoke(this, args);

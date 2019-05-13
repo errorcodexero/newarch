@@ -276,7 +276,7 @@ namespace PathViewer
                 GenerateSplines(path);
                 GenerateSegments(path);
                 if (m_field.SelectedWaypoint != null)
-                    UpdateWaypointPropertyWindow(m_field.SelectedWaypoint);
+                    UpdateWaypointPropertyWindow();
             }
         }
 
@@ -308,7 +308,7 @@ namespace PathViewer
             }
 
             if (e.Point != null)
-                UpdateWaypointPropertyWindow(e.Point);
+                UpdateWaypointPropertyWindow();
 
             if (e.Reason == WaypointEventArgs.ReasonType.Unselected)
                 m_plot.HighlightTime = Double.MaxValue;
@@ -1021,7 +1021,7 @@ namespace PathViewer
             PathGroup group;
             RobotPath path;
             m_file.FindPathByWaypoint(m_field.SelectedWaypoint, out group, out path);
-            UpdateWaypointPropertyWindow(m_field.SelectedWaypoint);
+            UpdateWaypointPropertyWindow();
 
             GenerateSplines(path);
             GenerateSegments(path);
@@ -1134,28 +1134,28 @@ namespace PathViewer
             GenerateAllSplines();
         }
 
-        private void UpdateWaypointPropertyWindow(WayPoint pt)
+        private void UpdateWaypointPropertyWindow()
         {
             ListViewItem item;
 
             m_waypoint_view.Items.Clear();
 
-            if (pt != null)
+            if (m_field.SelectedWaypoint != null)
             {
                 item = new ListViewItem("X");
-                item.SubItems.Add(pt.X.ToString());
+                item.SubItems.Add(m_field.SelectedWaypoint.X.ToString());
                 m_waypoint_view.Items.Add(item);
 
                 item = new ListViewItem("Y");
-                item.SubItems.Add(pt.Y.ToString());
+                item.SubItems.Add(m_field.SelectedWaypoint.Y.ToString());
                 m_waypoint_view.Items.Add(item);
 
                 item = new ListViewItem("Heading");
-                item.SubItems.Add(pt.Heading.ToString());
+                item.SubItems.Add(m_field.SelectedWaypoint.Heading.ToString());
                 m_waypoint_view.Items.Add(item);
 
                 item = new ListViewItem("Velocity");
-                item.SubItems.Add(pt.Velocity.ToString());
+                item.SubItems.Add(m_field.SelectedWaypoint.Velocity.ToString());
                 m_waypoint_view.Items.Add(item);
             }
         }
@@ -1483,7 +1483,7 @@ namespace PathViewer
             m_plot.Path = null;
             m_selected_path = null;
             UpdateRobotWindow();
-            UpdateWaypointPropertyWindow(null);
+            UpdateWaypointPropertyWindow();
             UpdatePathWindow();
             UpdatePathTree();
         }

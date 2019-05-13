@@ -55,7 +55,8 @@ namespace PathViewer
                 }
 
                 Thread th = new Thread(GenerateSegmentsThread);
-
+                th.Name = "MySegGen";
+                th.IsBackground = true;
                 m_paths.Add(path, th);
                 th.Start(new Tuple<RobotParams, RobotPath>(robot, path));
             }
@@ -78,11 +79,12 @@ namespace PathViewer
             Tuple<RobotParams, RobotPath> data = opath as Tuple<RobotParams, RobotPath>;
             PathSegment[] segs = GenerateDetailedPath(data.Item1, data.Item2);
 
-            lock(m_lock)
+            lock (m_lock)
             {
                 m_paths.Remove(data.Item2);
-                data.Item2.Segments = segs;
             }
+
+            data.Item2.Segments = segs;
         }
 
         protected bool GeneratePathFile(RobotParams robot, RobotPath path, string filename)
