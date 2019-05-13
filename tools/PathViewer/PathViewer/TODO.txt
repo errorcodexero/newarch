@@ -22,6 +22,7 @@ PathViewer Editor
   ----
   - Add copyrights to the about screen
   - Add constraint that limits velocity between two waypoints
+  - Add path level constraints for velocity and acceleration
 
 CheesyGen
 ===============================================================================

@@ -17,6 +17,8 @@ namespace xero
 				name_ = name;
 				start_vel_ = 0.0;
 				end_vel_ = 0.0;
+				max_vel_ = 0.0;
+				max_accel_ = 0.0;
 			}
 
 			virtual ~RobotPath() {

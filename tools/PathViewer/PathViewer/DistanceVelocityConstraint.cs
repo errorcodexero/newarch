@@ -13,8 +13,11 @@ namespace PathViewer
         [JsonProperty(PropertyName = "type")]
         public string ConstraintType;
 
-        [JsonProperty(PropertyName = "distance")]
-        public double Distance;
+        [JsonProperty(PropertyName = "after")]
+        public double After;
+
+        [JsonProperty(PropertyName = "before")]
+        public double Before;
 
         [JsonProperty(PropertyName = "velocity")]
         public double Velocity;
@@ -22,15 +25,22 @@ namespace PathViewer
         public DistanceVelocityConstraint()
         {
             ConstraintType = "distance_velocity";
-            Distance = 0.0;
+            Before = 0.0;
+            After = 0.0;
             Velocity = 0.0;
         }
 
-        public DistanceVelocityConstraint(double dist ,double vel)
+        public DistanceVelocityConstraint(double after, double before ,double vel)
         {
             ConstraintType = "distance_velocity";
-            Distance = dist;
+            After = after;
+            Before = before;
             Velocity = vel;
+        }
+
+        public override TimingContraint Clone()
+        {
+            return new DistanceVelocityConstraint(After, Before, Velocity);
         }
     }
 }

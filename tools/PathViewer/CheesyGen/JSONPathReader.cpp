@@ -415,23 +415,38 @@ namespace xero
 
 					if (type == "distance_velocity")
 					{
-						double distance;
+						double before, after;
 						double velocity;
 
-						if (constr.find(L"distance") == constr.end())
+						if (constr.find(L"before") == constr.end())
 						{
 							std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
-							std::cerr << "         constraint 'distance_velocity' missing 'distance' field" << std::endl;
+							std::cerr << "         constraint 'distance_velocity' missing 'before' field" << std::endl;
 							return false;
 						}
 
-						if (!constr[L"distance"]->IsNumber())
+						if (!constr[L"before"]->IsNumber())
 						{
 							std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
-							std::cerr << "         constraint 'distance_velocity' has 'distance' field that is not a number" << std::endl;
+							std::cerr << "         constraint 'distance_velocity' has 'before' field that is not a number" << std::endl;
 							return false;
 						}
-						distance = constr[L"distance"]->AsNumber();
+						before = constr[L"before"]->AsNumber();
+
+						if (constr.find(L"after") == constr.end())
+						{
+							std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
+							std::cerr << "         constraint 'distance_velocity' missing 'after' field" << std::endl;
+							return false;
+						}
+
+						if (!constr[L"after"]->IsNumber())
+						{
+							std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
+							std::cerr << "         constraint 'distance_velocity' has 'after' field that is not a number" << std::endl;
+							return false;
+						}
+						after = constr[L"after"]->AsNumber();
 
 						if (constr.find(L"velocity") == constr.end())
 						{
@@ -447,7 +462,7 @@ namespace xero
 							return false;
 						}
 						velocity = constr[L"velocity"]->AsNumber();
-						onepath->addTimingConstraint(std::make_shared<DistanceVelocityConstraint>(distance, velocity));
+						onepath->addTimingConstraint(std::make_shared<DistanceVelocityConstraint>(after, before, velocity));
 					}
 					else if (type == "centripetal")
 					{

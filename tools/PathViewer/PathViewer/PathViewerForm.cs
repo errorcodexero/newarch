@@ -580,7 +580,15 @@ namespace PathViewer
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 string json = File.ReadAllText(dialog.FileName);
-                m_file = JsonConvert.DeserializeObject<PathFile>(json);
+                try
+                {
+                    m_file = JsonConvert.DeserializeObject<PathFile>(json);
+                }
+                catch(Newtonsoft.Json.JsonSerializationException ex)
+                {
+                    string msg = "Cannot load path file '" + dialog.FileName + "' - invalid file contents - " + ex.Message;
+                    MessageBox.Show(msg, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 m_file.PathName = dialog.FileName;
                 m_field.File = m_file;
                 m_plot.Robot = m_file.Robot;
@@ -618,6 +626,7 @@ namespace PathViewer
             string newname = GetNewPathGroupName();
             TreeNode node = new TreeNode(newname);
             m_pathfile_tree.Nodes.Add(node);
+            m_pathfile_tree.SelectedNode = node;
 
             PushUndoStack();
             m_file.AddPathGroup(newname);
@@ -635,7 +644,8 @@ namespace PathViewer
             string newname = GetNewPathName(node);
             TreeNode nnode = new TreeNode(newname);
             node.Nodes.Add(nnode);
-            m_file.AddPath(node.Text, newname);
+            m_pathfile_tree.SelectedNode = nnode;
+            m_file.AddPath(m_file.Robot, node.Text, newname);
         }
 
         private void RemovePathToolStripMenuItem_Click(object sender, EventArgs e)
@@ -677,11 +687,16 @@ namespace PathViewer
 
             m_undo_stack.Add(st);
 
-            PathGroup gr = m_file.FindGroupByPath(m_field.Path);
-            st.AddPath(gr.Name, m_field.Path.Name);
+            if (m_field.Path != null)
+            {
+                PathGroup gr = m_file.FindGroupByPath(m_field.Path);
+                if (gr != null)
+                    st.AddPath(gr.Name, m_field.Path.Name);
+            }
 
             if (m_field.SelectedWaypoint != null)
             {
+                PathGroup gr;
                 RobotPath path;
                 int index;
                 m_file.FindPathByWaypoint(m_field.SelectedWaypoint, out gr, out path, out index);
@@ -788,6 +803,7 @@ namespace PathViewer
             }
             UpdateRobotWindow();
             m_field.Invalidate();
+            GenerateAllSplines();
             return true;
         }
 
@@ -1085,6 +1101,7 @@ namespace PathViewer
 
         private void GenerateSegments(RobotPath p)
         {
+            p.GenerateVelocityConstraints();
             p.SetSegmentsInvalid();
 
             if (m_generator != null)

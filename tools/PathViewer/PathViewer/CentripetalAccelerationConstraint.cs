@@ -28,5 +28,10 @@ namespace PathViewer
             ConstraintType = "centripetal";
             MaxAccel = accel;
         }
+
+        public override TimingContraint Clone()
+        {
+            return new CentripetalAccelerationConstraint(MaxAccel);
+        }
     }
 }

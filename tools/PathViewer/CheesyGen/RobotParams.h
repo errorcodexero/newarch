@@ -7,6 +7,11 @@ namespace xero {
 		{
 		public:
 			RobotParams() {
+				length_ = 0.0;
+				width_ = 0.0;
+				max_velocity_ = 0.0;
+				max_acceleration_ = 0.0;
+				max_jerk_ = 0.0;
 			}
 
 			virtual ~RobotParams() {

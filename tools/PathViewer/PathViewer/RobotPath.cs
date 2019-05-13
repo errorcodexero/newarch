@@ -20,6 +20,9 @@ namespace PathViewer
         [JsonProperty(PropertyName = "maxacceleration")]
         public double MaxAcceleration;
 
+        [JsonProperty(PropertyName = "maxjerk")]
+        public double MaxJerk;
+
         [JsonProperty(PropertyName = "startvelocity")]
         public double StartVelocity;
 
@@ -67,6 +70,7 @@ namespace PathViewer
             m_segments = null;
             m_splines = null;
             Points = new WayPoint[0];
+            Constraints = new TimingContraint[0];
             Name = string.Empty;
             m_lock = new object();
         }
@@ -77,6 +81,7 @@ namespace PathViewer
             m_splines = null;
             Name = name;
             Points = new WayPoint[0];
+            Constraints = new TimingContraint[0];
             m_lock = new object();
         }
 
@@ -87,10 +92,15 @@ namespace PathViewer
 
             Name = path.Name;
             Points = new WayPoint[path.Points.Length];
-
             for (int i = 0; i < path.Points.Length; i++)
             {
                 Points[i] = new WayPoint(path.Points[i]);
+            }
+
+            Constraints = new TimingContraint[path.Constraints.Length];
+            for (int i = 0; i < path.Constraints.Length; i++)
+            {
+                Constraints[i] = path.Constraints[i].Clone();
             }
             m_lock = new object();
         }
@@ -230,6 +240,30 @@ namespace PathViewer
             if (needgen)
                 gen.GenerateSegments(robot, this);
         }
+
+        public void GenerateVelocityConstraints()
+        {
+            Constraints = new TimingContraint[0];
+            if (Points.Length <= 2)
+                return;
+
+            double current = CalcDistance(0);
+            for(int i = 1; i < Points.Length - 1; i++)
+            {
+                double dist = CalcDistance(i);
+                if (Points[i].Velocity < MaxVelocity)
+                {
+                    //
+                    // We need a velocity contraint for this point
+                    //
+                    DistanceVelocityConstraint d = new DistanceVelocityConstraint(current, current + dist, Points[i].Velocity);
+                    Array.Resize<TimingContraint>(ref Constraints, Constraints.Length + 1);
+                    Constraints[Constraints.Length - 1] = d;
+                }
+
+                current += dist;
+            }
+        }
         #endregion
 
         #region protected methods
@@ -237,6 +271,30 @@ namespace PathViewer
         {
             EventHandler<EventArgs> handler = SegmentsUpdated;
             handler?.Invoke(this, args);
+        }
+        #endregion
+
+        #region private methods
+        private double CalcDistance(int index)
+        {
+            double dist = 0.0;
+            double steps = 1.0 / 1000.0;
+            double x1 = m_splines[index].Item1.Evaluate(0.0);
+            double y1 = m_splines[index].Item2.Evaluate(0.0);
+            for (double t = steps; t <= 1.0; t += steps)
+            {
+                double x2 = m_splines[index].Item1.Evaluate(t);
+                double y2 = m_splines[index].Item2.Evaluate(t);
+
+                double dx = Math.Abs(x1 - x2);
+                double dy = Math.Abs(y1 - y2);
+                dist += Math.Sqrt(dx * dx + dy * dy);
+
+                x1 = x2;
+                y1 = y2;
+            }
+
+            return dist;
         }
         #endregion
     }

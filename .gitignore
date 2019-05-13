@@ -30,3 +30,5 @@ logs
 **/Debug
 **/Release
 tools/PathViewer/output
+/**/Debug
+/**/Release

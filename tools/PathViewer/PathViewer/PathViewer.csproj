@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="CentripetalAccelerationConstraint.cs" />
     <Compile Include="DistanceVelocityConstraint.cs" />
-    <Compile Include="LocationVelocityConstraint.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="RobotParams.cs" />
     <Compile Include="RobotPlotViewer.cs">
@@ -65,6 +64,7 @@
       <DependentUpon>RobotPlotViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Spline.cs" />
+    <Compile Include="TimingConstraintJsonConverter.cs" />
     <Compile Include="TimingContraint.cs" />
     <Compile Include="FieldMouseMovedArgs.cs" />
     <Compile Include="FieldView.cs">

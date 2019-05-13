@@ -86,9 +86,13 @@ namespace PathViewer
             return true;
         }
 
-        public void AddPath(string name)
+        public void AddPath(RobotParams robot, string name)
         {
             RobotPath path = new RobotPath(name);
+            path.MaxVelocity = robot.MaxVelocity;
+            path.MaxAcceleration = robot.MaxAcceleration;
+            path.MaxJerk = robot.MaxJerk;
+
             Array.Resize<RobotPath>(ref Paths, Paths.Length + 1);
             Paths[Paths.Length - 1] = path;
 

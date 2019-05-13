@@ -131,14 +131,14 @@ namespace PathViewer
             m_dirty = true;
         }
 
-        public void AddPath(string group, string path)
+        public void AddPath(RobotParams robot, string group, string path)
         {
             PathGroup gr = FindGroupByName(group);
             if (gr == null)
                 return;
 
             m_dirty = true;
-            gr.AddPath(path);
+            gr.AddPath(robot, path);
         }
 
         public void AddPath(string group, RobotPath path)

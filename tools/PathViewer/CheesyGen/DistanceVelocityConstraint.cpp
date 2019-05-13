@@ -2,9 +2,10 @@
 
 namespace xero {
 	namespace paths {
-		DistanceVelocityConstraint::DistanceVelocityConstraint(double dist, double velocity)
+		DistanceVelocityConstraint::DistanceVelocityConstraint(double after, double before, double velocity)
 		{
-			before_distance_ = dist;
+			after_distance_ = after;
+			before_distance_ = before;
 			velocity_ = velocity;
 		}
 
@@ -14,7 +15,7 @@ namespace xero {
 
 		double DistanceVelocityConstraint::getMaxVelocity(const ConstrainedPoint& state)
 		{
-			if (state.getDistance() < before_distance_)
+			if (state.getDistance() >= after_distance_ && state.getDistance() < before_distance_)
 				return velocity_;
 
 			return std::numeric_limits<double>::max();

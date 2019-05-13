@@ -51,8 +51,15 @@ namespace PathViewer
                     m_path.SegmentsUpdated -= PathSegmentsUpdated;
 
                 m_path = value;
-                m_path.SegmentsUpdated += PathSegmentsUpdated;
-                RegenerateGraph();
+                if (m_path != null)
+                {
+                    m_path.SegmentsUpdated += PathSegmentsUpdated;
+                    RegenerateGraph();
+                }
+                else
+                {
+                    m_chart.Series.Clear();
+                }
             }
         }
 
@@ -105,6 +112,8 @@ namespace PathViewer
             area.AxisX.Title = "time (sec)";
             area.AxisY.Title = "distance (inches)";
             area.AxisY2.Title = "velocity/acceleration";
+
+            m_chart.ChartAreas[0].RecalculateAxesScale();
         }
     }
 }
