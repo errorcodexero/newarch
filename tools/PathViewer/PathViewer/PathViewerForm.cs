@@ -579,7 +579,15 @@ namespace PathViewer
 
         private void GeneratePathsAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TODO - prompt save changes if dirty
+            if (m_file.IsDirty)
+            {
+                DialogResult dr = MessageBox.Show("You have unsaved changes. Do you want to save before generating the paths", "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (dr == DialogResult.Cancel)
+                    return;
+
+                if (dr == DialogResult.Yes)
+                    SaveAsToolStripMenuItem_Click(sender, e);
+            }
 
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
@@ -591,7 +599,15 @@ namespace PathViewer
 
         private void GeneratePathsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TODO - prompt save changes if dirty
+            if (m_file.IsDirty)
+            {
+                DialogResult dr = MessageBox.Show("You have unsaved changes. Do you want to save before generating the paths", "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (dr == DialogResult.Cancel)
+                    return;
+
+                if (dr == DialogResult.Yes)
+                    SaveAsToolStripMenuItem_Click(sender, e);
+            }
 
             if (string.IsNullOrEmpty(m_file.OutputDirectory))
                 GeneratePathsAsToolStripMenuItem_Click(sender, e);
@@ -1124,21 +1140,24 @@ namespace PathViewer
 
             m_waypoint_view.Items.Clear();
 
-            item = new ListViewItem("X");
-            item.SubItems.Add(pt.X.ToString());
-            m_waypoint_view.Items.Add(item);
+            if (pt != null)
+            {
+                item = new ListViewItem("X");
+                item.SubItems.Add(pt.X.ToString());
+                m_waypoint_view.Items.Add(item);
 
-            item = new ListViewItem("Y");
-            item.SubItems.Add(pt.Y.ToString());
-            m_waypoint_view.Items.Add(item);
+                item = new ListViewItem("Y");
+                item.SubItems.Add(pt.Y.ToString());
+                m_waypoint_view.Items.Add(item);
 
-            item = new ListViewItem("Heading");
-            item.SubItems.Add(pt.Heading.ToString());
-            m_waypoint_view.Items.Add(item);
+                item = new ListViewItem("Heading");
+                item.SubItems.Add(pt.Heading.ToString());
+                m_waypoint_view.Items.Add(item);
 
-            item = new ListViewItem("Velocity");
-            item.SubItems.Add(pt.Velocity.ToString());
-            m_waypoint_view.Items.Add(item);
+                item = new ListViewItem("Velocity");
+                item.SubItems.Add(pt.Velocity.ToString());
+                m_waypoint_view.Items.Add(item);
+            }
         }
 
         private void UpdatePathWindow()
@@ -1448,5 +1467,25 @@ namespace PathViewer
         }
         #endregion
 
+        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (m_file.IsDirty)
+            {
+                DialogResult dr = MessageBox.Show("You have unsaved changes. Are you sure you want to close this path file", "Really Close", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.No)
+                    return;
+            }
+
+            m_file = new PathFile();
+            m_field.File = m_file;
+            m_field.Path = null;
+            m_field.SelectedWaypoint = null;
+            m_plot.Path = null;
+            m_selected_path = null;
+            UpdateRobotWindow();
+            UpdateWaypointPropertyWindow(null);
+            UpdatePathWindow();
+            UpdatePathTree();
+        }
     }
 }

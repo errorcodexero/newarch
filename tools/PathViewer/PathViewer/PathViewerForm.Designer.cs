@@ -34,6 +34,9 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.generatePathsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generatePathsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.pathsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newPathGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,9 +69,8 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.m_pos_status = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.generatePathsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.generatePathsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.m_menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_split)).BeginInit();
             this.m_split.Panel1.SuspendLayout();
@@ -110,6 +112,8 @@
             this.toolStripSeparator1,
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.toolStripMenuItem1,
             this.toolStripSeparator3,
             this.generatePathsToolStripMenuItem,
             this.generatePathsToolStripMenuItem1});
@@ -120,28 +124,47 @@
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(219, 26);
             this.loadToolStripMenuItem.Text = "Load ...";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.LoadToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(213, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(216, 6);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(219, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(219, 26);
             this.saveAsToolStripMenuItem.Text = "Save As ...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(216, 6);
+            // 
+            // generatePathsToolStripMenuItem
+            // 
+            this.generatePathsToolStripMenuItem.Name = "generatePathsToolStripMenuItem";
+            this.generatePathsToolStripMenuItem.Size = new System.Drawing.Size(219, 26);
+            this.generatePathsToolStripMenuItem.Text = "Generate Paths As  ...";
+            this.generatePathsToolStripMenuItem.Click += new System.EventHandler(this.GeneratePathsAsToolStripMenuItem_Click);
+            // 
+            // generatePathsToolStripMenuItem1
+            // 
+            this.generatePathsToolStripMenuItem1.Name = "generatePathsToolStripMenuItem1";
+            this.generatePathsToolStripMenuItem1.Size = new System.Drawing.Size(219, 26);
+            this.generatePathsToolStripMenuItem1.Text = "Generate Paths";
+            this.generatePathsToolStripMenuItem1.Click += new System.EventHandler(this.GeneratePathsToolStripMenuItem_Click);
             // 
             // pathsToolStripMenuItem
             // 
@@ -459,24 +482,17 @@
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripSeparator3
+            // toolStripSeparator4
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(213, 6);
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(216, 6);
             // 
-            // generatePathsToolStripMenuItem
+            // toolStripMenuItem1
             // 
-            this.generatePathsToolStripMenuItem.Name = "generatePathsToolStripMenuItem";
-            this.generatePathsToolStripMenuItem.Size = new System.Drawing.Size(219, 26);
-            this.generatePathsToolStripMenuItem.Text = "Generate Paths As  ...";
-            this.generatePathsToolStripMenuItem.Click += new System.EventHandler(this.GeneratePathsAsToolStripMenuItem_Click);
-            // 
-            // generatePathsToolStripMenuItem1
-            // 
-            this.generatePathsToolStripMenuItem1.Name = "generatePathsToolStripMenuItem1";
-            this.generatePathsToolStripMenuItem1.Size = new System.Drawing.Size(219, 26);
-            this.generatePathsToolStripMenuItem1.Text = "Generate Paths";
-            this.generatePathsToolStripMenuItem1.Click += new System.EventHandler(this.GeneratePathsToolStripMenuItem_Click);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(219, 26);
+            this.toolStripMenuItem1.Text = "Close";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
             // 
             // PathViewerForm
             // 
@@ -559,6 +575,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem generatePathsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generatePathsToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
     }
 }
 
