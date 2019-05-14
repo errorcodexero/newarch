@@ -577,6 +577,27 @@ namespace PathViewer
 
         #region event handlers for the menus
 
+        private void CloseMenuItemEventHandler(object sender, EventArgs e)
+        {
+            if (m_file.IsDirty)
+            {
+                DialogResult dr = MessageBox.Show("You have unsaved changes. Are you sure you want to close this path file", "Really Close", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.No)
+                    return;
+            }
+
+            m_file = new PathFile();
+            m_field.File = m_file;
+            m_field.Path = null;
+            m_field.SelectedWaypoint = null;
+            m_plot.Path = null;
+            m_selected_path = null;
+            UpdateRobotWindow();
+            UpdateWaypointPropertyWindow();
+            UpdatePathWindow();
+            UpdatePathTree();
+        }
+
         private void GeneratePathsAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (m_file.IsDirty)
@@ -1143,19 +1164,19 @@ namespace PathViewer
             if (m_field.SelectedWaypoint != null)
             {
                 item = new ListViewItem("X");
-                item.SubItems.Add(m_field.SelectedWaypoint.X.ToString());
+                item.SubItems.Add(m_field.SelectedWaypoint.X.ToString("F1"));
                 m_waypoint_view.Items.Add(item);
 
                 item = new ListViewItem("Y");
-                item.SubItems.Add(m_field.SelectedWaypoint.Y.ToString());
+                item.SubItems.Add(m_field.SelectedWaypoint.Y.ToString("F1"));
                 m_waypoint_view.Items.Add(item);
 
                 item = new ListViewItem("Heading");
-                item.SubItems.Add(m_field.SelectedWaypoint.Heading.ToString());
+                item.SubItems.Add(m_field.SelectedWaypoint.Heading.ToString("F1"));
                 m_waypoint_view.Items.Add(item);
 
                 item = new ListViewItem("Velocity");
-                item.SubItems.Add(m_field.SelectedWaypoint.Velocity.ToString());
+                item.SubItems.Add(m_field.SelectedWaypoint.Velocity.ToString("F1"));
                 m_waypoint_view.Items.Add(item);
             }
         }
@@ -1397,11 +1418,17 @@ namespace PathViewer
         }
 
         static string[] fields = { "time", "x", "y", "position", "velocity", "acceleration", "jerk" };
-        private void WritePath(string grname, string pathname, PathSegment[] segs)
+        private void WritePath(string grname, string pathname, string suffix, PathSegment[] segs)
         {
-            string filename = Path.Combine(m_file.OutputDirectory, grname + "_" + pathname + ".csv");
+            string filename;
+
             PathSegment seg = segs[0];
             bool first = true ;
+
+            if (string.IsNullOrEmpty(suffix))
+                filename = Path.Combine(m_file.OutputDirectory, grname + "_" + pathname + ".csv");
+            else
+                filename = Path.Combine(m_file.OutputDirectory, grname + "_" + pathname + "." + suffix + ".csv");
 
             using (StreamWriter writer = new StreamWriter(filename))
             {
@@ -1459,7 +1486,26 @@ namespace PathViewer
                     }
 
                     if (path.Segments != null && path.Segments.Length > 0)
-                        WritePath(gr.Name, path.Name, path.Segments);
+                    {
+                        Dictionary<string, PathSegment[]> additional = null;
+
+                        if (m_file.Robot.DriveType == "tank")
+                        {
+                            TankModifier mod = new TankModifier();
+                            additional = mod.ModifyPath(m_file.Robot, path);
+                        }
+                        else if (m_file.Robot.DriveType == "swerve")
+                        {
+
+                        }
+                        WritePath(gr.Name, path.Name, string.Empty, path.Segments);
+
+                        if (additional != null)
+                        {
+                            foreach (var pair in additional)
+                                WritePath(gr.Name, path.Name, pair.Key, pair.Value);
+                        }
+                    }
                 }
             }
 
@@ -1467,25 +1513,6 @@ namespace PathViewer
         }
         #endregion
 
-        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            if (m_file.IsDirty)
-            {
-                DialogResult dr = MessageBox.Show("You have unsaved changes. Are you sure you want to close this path file", "Really Close", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dr == DialogResult.No)
-                    return;
-            }
 
-            m_file = new PathFile();
-            m_field.File = m_file;
-            m_field.Path = null;
-            m_field.SelectedWaypoint = null;
-            m_plot.Path = null;
-            m_selected_path = null;
-            UpdateRobotWindow();
-            UpdateWaypointPropertyWindow();
-            UpdatePathWindow();
-            UpdatePathTree();
-        }
     }
 }

@@ -492,7 +492,7 @@
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(219, 26);
             this.toolStripMenuItem1.Text = "Close";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.CloseMenuItemEventHandler);
             // 
             // PathViewerForm
             // 
