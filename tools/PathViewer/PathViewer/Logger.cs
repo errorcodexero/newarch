@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace PathViewer
 {
-    class Logger
+    public class Logger
     {
         #region private member variables
+        #endregion
+
+        #region public events
+        public event EventHandler<LoggerOutputEventArgs> OutputAvailable;
         #endregion
 
         #region public enums
@@ -34,8 +38,14 @@ namespace PathViewer
         #region public methods
         public void LogMessage(MessageType mtype, string msg)
         {
+            OnLoggerOutput(new LoggerOutputEventArgs(mtype, msg));
         }
         #endregion
 
+        virtual protected void OnLoggerOutput(LoggerOutputEventArgs args)
+        {
+            EventHandler<LoggerOutputEventArgs> handler = OutputAvailable;
+            handler?.Invoke(this, args);
+        }
     }
 }

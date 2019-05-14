@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Threading;
+using System.Reflection;
 
 namespace PathViewer
 {
@@ -156,11 +157,22 @@ namespace PathViewer
 
             m_plot.Generator = m_generator;
             m_plot.Robot = m_file.Robot;
+
+            m_logger.OutputAvailable += LoggerOutputAvailable;
+
+            OutputCopyright();
+
         }
+        #endregion
 
-
-
-
+        #region event handlers for the logger window
+        private void LoggerOutputAvailable(object sender, LoggerOutputEventArgs e)
+        {
+            if (e.MessageType != Logger.MessageType.Info)
+                m_logger_window.Text += e.MessageType.ToString() + ": " + e.MessageText + "\r\n";
+            else
+                m_logger_window.Text += e.MessageText + "\r\n";
+        }
         #endregion
 
         #region event handlers for the plot child control
@@ -1559,6 +1571,94 @@ namespace PathViewer
             }
 
             MessageBox.Show("Paths written to directory '" + m_file.OutputDirectory + "'", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private string[] MyCopyright =
+        {
+            "Copyright 2019 Jack W. (Butch) Griffin",
+            "",
+            "MIT License",
+            "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation",
+            "files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use,",
+            "copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom",
+            "the Software is furnished to do so, subject to the following conditions:",
+            "",
+            "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the",
+            "Software.",
+            "",
+            "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO",
+            "THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS",
+            "OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR",
+            "OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+        };
+
+        private string[] JSonCopyright =
+        {
+            "",
+            "",
+            "------------------------------------------------------------------------------------------",
+            "This program uses the JSON package from NewtonSoft (https://www.newtonsoft.com/json)",
+            "",
+            "MIT License",
+            "Copyright (c) _____",
+            "",
+            "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation",
+            "files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use,",
+            "copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom",
+            "the Software is furnished to do so, subject to the following conditions:",
+            "",
+            "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the",
+            "Software.",
+            "",
+            "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO",
+            "THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS",
+            "OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR",
+            "OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+        };
+
+        private string[] CSVCopyRight =
+        {
+            "",
+            "",
+            "------------------------------------------------------------------------------------------",
+            "This program uses the CSV package from Steven Hansen",
+            "",
+            "The MIT License (MIT)",
+            "",
+            "Copyright (c) 2015 Steve Hansen",
+            "",
+            "Permission is hereby granted, free of charge, to any person obtaining a copy",
+            "of this software and associated documentation files (the \"Software\"), to deal",
+            "in the Software without restriction, including without limitation the rights",
+            "to use, copy, modify, merge, publish, distribute, sublicense, and/or sell",
+            "copies of the Software, and to permit persons to whom the Software is",
+            "furnished to do so, subject to the following conditions:",
+            "",
+            "The above copyright notice and this permission notice shall be included in all",
+            "copies or substantial portions of the Software.",
+            "",
+            "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR",
+            "IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,",
+            "FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE",
+            "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER",
+            "LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,",
+            "OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE",
+            "SOFTWARE."
+        };
+
+        private void OutputCopyright()
+        {
+            m_logger.LogMessage(Logger.MessageType.Info, "PathViewer Version " + Assembly.GetEntryAssembly().GetName().Version.ToString());
+            m_logger.LogMessage(Logger.MessageType.Info, "");
+
+            foreach (string str in MyCopyright)
+                m_logger.LogMessage(Logger.MessageType.Info, str);
+
+            foreach (string str in JSonCopyright)
+                m_logger.LogMessage(Logger.MessageType.Info, str);
+
+            foreach (string str in CSVCopyRight)
+                m_logger.LogMessage(Logger.MessageType.Info, str);
         }
         #endregion
     }

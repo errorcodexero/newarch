@@ -1,6 +1,4 @@
 ﻿
-PathViewer Editor
-===============================================================================
   Completed
   ---------
   - Change waypoint values in waypoint window, update display
@@ -17,27 +15,11 @@ PathViewer Editor
   - Undo stack
   - Path context menus: really make it context specific
   - Editing feature: delete path
-
-  TODO
-  ----
   - Add copyrights to the about screen
-  - Add constraint that limits velocity between two waypoints
-  - Add path level constraints for velocity and acceleration
-
-CheesyGen
-===============================================================================
-  Completed
-  ---------
+  - Logging window and support
 
   TODO
   ----
+  - PathFinder V1
+  - Testing, Testing, Testing
 
-PathFinderV1
-===============================================================================
-  Completed
-  ---------
-
-  TODO
-  ----
-  - Write the program
-  - Write the interface

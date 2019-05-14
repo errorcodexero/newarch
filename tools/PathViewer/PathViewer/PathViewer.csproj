@@ -69,6 +69,7 @@
     <Compile Include="DistanceVelocityConstraint.cs" />
     <Compile Include="DriveModifier.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="LoggerOutputEventArgs.cs" />
     <Compile Include="RobotParams.cs" />
     <Compile Include="RobotPlotViewer.cs">
       <SubType>UserControl</SubType>

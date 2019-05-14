@@ -57,7 +57,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.m_plot = new PathViewer.RobotPlotViewer();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.m_logger_window = new System.Windows.Forms.TextBox();
             this.m_flow = new System.Windows.Forms.FlowLayoutPanel();
             this.m_right_one = new System.Windows.Forms.GroupBox();
             this.m_pathfile_tree = new System.Windows.Forms.TreeView();
@@ -303,6 +303,7 @@
             this.m_field.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_field.FieldGame = null;
             this.m_field.File = null;
+            this.m_field.HighlightPoint = null;
             this.m_field.Location = new System.Drawing.Point(3, 3);
             this.m_field.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.m_field.Name = "m_field";
@@ -371,7 +372,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.textBox1);
+            this.tabPage2.Controls.Add(this.m_logger_window);
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage2.Name = "tabPage2";
@@ -381,15 +382,16 @@
             this.tabPage2.Text = "Messages";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // m_logger_window
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(3, 2);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1350, 406);
-            this.textBox1.TabIndex = 0;
+            this.m_logger_window.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_logger_window.Location = new System.Drawing.Point(3, 2);
+            this.m_logger_window.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.m_logger_window.Multiline = true;
+            this.m_logger_window.Name = "m_logger_window";
+            this.m_logger_window.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.m_logger_window.Size = new System.Drawing.Size(1350, 406);
+            this.m_logger_window.TabIndex = 0;
             // 
             // m_flow
             // 
@@ -631,7 +633,7 @@
         private System.Windows.Forms.TabControl m_bottom_tab;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox m_logger_window;
         private System.Windows.Forms.GroupBox m_right_three;
         private System.Windows.Forms.ListView m_path_view;
         private System.Windows.Forms.ColumnHeader columnHeader5;
