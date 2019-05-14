@@ -134,9 +134,8 @@ namespace PathViewer
                 lock (m_lock)
                 {
                     m_segments = value;
-                    OnSegmentsChanged(EventArgs.Empty);
                 }
-
+                OnSegmentsChanged(EventArgs.Empty);
             }
         }
         #endregion
