@@ -302,7 +302,7 @@ namespace PathViewer
             for(int i = 0; i < Points.Length - 1; i++)
             {
                 double dist = CalcDistance(i);
-                if (Points[i].Velocity < MaxVelocity)
+                if (Points[i].Velocity < MaxVelocity && i > 0 || (Points[i].Velocity < MaxVelocity && i == 0 && Points[i].Velocity > 0))
                 {
                     //
                     // We need a velocity contraint for this point

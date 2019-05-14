@@ -17,12 +17,24 @@ namespace PathViewer
         {
             m_values = new Dictionary<string, double>();
         }
+
+        public PathSegment(PathSegment seg)
+        {
+            m_values = new Dictionary<string, double>();
+            foreach (var pair in seg.m_values)
+                AddValue(pair.Key, pair.Value);
+        }
         #endregion
 
         #region public properties
         public IEnumerable<string> ValueNames
         {
             get { return m_values.Keys; }
+        }
+
+        public int Count
+        {
+            get { return m_values.Count; }
         }
         #endregion
 

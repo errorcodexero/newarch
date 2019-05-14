@@ -158,6 +158,8 @@ namespace PathViewer
             m_plot.Generator = m_generator;
             m_plot.Robot = m_file.Robot;
 
+            m_plot.HighlightTime = Double.MaxValue;
+
             m_logger.OutputAvailable += LoggerOutputAvailable;
 
             OutputCopyright();
@@ -367,6 +369,7 @@ namespace PathViewer
                 m_field.DisplayedPath = path;
                 m_detailed.DisplayedPath = path;
             }
+            m_field.SelectedWaypoint = null;
             UpdatePathWindow();
         }
 
