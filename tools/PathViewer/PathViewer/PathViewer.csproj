@@ -79,6 +79,7 @@
     <Compile Include="Spline.cs" />
     <Compile Include="SwerveDriveModifier.cs" />
     <Compile Include="TankDriveModifier.cs" />
+    <Compile Include="TimeCursorMovedArgs.cs" />
     <Compile Include="TimingConstraintJsonConverter.cs" />
     <Compile Include="TimingContraint.cs" />
     <Compile Include="FieldMouseMovedArgs.cs" />

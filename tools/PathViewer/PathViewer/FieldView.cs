@@ -17,6 +17,7 @@ namespace PathViewer
         private float m_radius = 8.0f;
         private PathFile m_file;
         private bool m_last_msg_selected;
+        private Nullable<PointF> m_highlight;
         #endregion
 
         #region private enums
@@ -56,6 +57,12 @@ namespace PathViewer
         #endregion
 
         #region public properties
+
+        public Nullable<PointF> HighlightPoint
+        {
+            get { return m_highlight; }
+            set { m_highlight = value; Invalidate(); }
+        }
 
         public WayPoint SelectedWaypoint
         {
@@ -179,6 +186,8 @@ namespace PathViewer
             if (e.Button != MouseButtons.Left)
                 return;
 
+            m_highlight = null;
+
             WayPoint pt;
             WaypointRegion region;
 
@@ -226,6 +235,20 @@ namespace PathViewer
 
             if (DisplayedPath != null)
                 DrawPath(e.Graphics, DisplayedPath);
+
+            if (m_highlight != null)
+            {
+                float radius = 4.0f;
+                PointF wpf = WorldToWindow(m_highlight.Value);
+                RectangleF r = new RectangleF(wpf, new SizeF(0.0f, 0.0f));
+                r.Offset(-radius / 2.0f, -radius / 2.0f);
+                r.Inflate(radius, radius);
+
+                using (Brush br = new SolidBrush(Color.AntiqueWhite))
+                {
+                    e.Graphics.FillEllipse(br, r);
+                }
+            }
         }
         #endregion
 

@@ -170,7 +170,6 @@
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="JSONPathReader.cpp" />
     <ClCompile Include="JSONValue.cpp" />
-    <ClCompile Include="LocationVelocityConstraint.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="PathGenerator.cpp" />
     <ClCompile Include="Pose2d.cpp" />
@@ -196,7 +195,6 @@
     <ClInclude Include="JSON.h" />
     <ClInclude Include="JSONPathReader.h" />
     <ClInclude Include="JSONValue.h" />
-    <ClInclude Include="LocationVelocityConstraint.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="MinMaxAcceleration.h" />
     <ClInclude Include="PathCollection.h" />

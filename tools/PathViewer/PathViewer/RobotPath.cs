@@ -166,6 +166,32 @@ namespace PathViewer
         #endregion
 
         #region public methods
+        public bool GetPositionForTime(double time, out double x, out double y)
+        {
+            x = 0.0;
+            y = 0.0;
+
+            PathSegment[] segs = Segments;
+            if (segs == null)
+                return false;
+
+            double dt = Double.MaxValue;
+            for(int i = 0; i < segs.Length; i++)
+            {
+                double t = segs[i].GetValue("time");
+                if (Math.Abs(t - time) < dt)
+                {
+                    x = segs[i].GetValue("x");
+                    y = segs[i].GetValue("y");
+                }
+
+                if (t > time)
+                    break;
+            }
+
+            return true;
+        }
+
         public void SetSegmentsInvalid()
         {
             lock(m_lock)
@@ -179,11 +205,11 @@ namespace PathViewer
             Points[Points.Length - 1] = pt;
         }
 
-        public bool InsertPoint(WayPoint pt, double vel)
+        public WayPoint InsertPoint(WayPoint pt, double vel)
         {
             int index = Array.IndexOf(Points, pt);
             if (index == -1 || index == Points.Length - 1)
-                return false;
+                return null;
 
             WayPoint after = Points[index + 1];
 
@@ -191,7 +217,7 @@ namespace PathViewer
             Array.Resize(ref Points, Points.Length + 1);
             Array.Copy(Points, index, Points, index + 1, Points.Length - index - 1);
             Points[index + 1] = newone;
-            return true;
+            return newone;
         }
 
         public bool RemovePoint(WayPoint pt)
@@ -272,8 +298,8 @@ namespace PathViewer
             if (Points.Length <= 2)
                 return;
 
-            double current = CalcDistance(0);
-            for(int i = 1; i < Points.Length - 1; i++)
+            double current = 0.0;
+            for(int i = 0; i < Points.Length - 1; i++)
             {
                 double dist = CalcDistance(i);
                 if (Points[i].Velocity < MaxVelocity)

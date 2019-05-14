@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Diagnostics;
 
 namespace PathViewer
 {
@@ -19,6 +14,11 @@ namespace PathViewer
         private PathGenerator m_generator;
         private RobotPath m_path;
         private double m_time;
+        private LineAnnotation m_line;
+        #endregion
+
+        #region public events
+        public event EventHandler<TimeCursorMovedArgs> TimeCursorMoved;
         #endregion
 
         #region private delegates
@@ -50,18 +50,32 @@ namespace PathViewer
             {
                 m_time = value;
                 m_chart.Annotations.Clear();
+                m_line = null;
+
                 if (m_time < Double.MaxValue)
                 {
-                    VerticalLineAnnotation ann = new VerticalLineAnnotation();
-                    ann.LineColor = Color.Black;
-                    ann.LineDashStyle = ChartDashStyle.Dash;
-                    ann.AxisX = m_chart.ChartAreas[0].AxisX;
-                    ann.IsInfinitive = true;
-                    ann.ClipToChartArea = m_chart.ChartAreas[0].Name;
-                    ann.LineWidth = 3;
-                    ann.AnchorX = m_time;
-                    m_chart.Annotations.Add(ann);
+                    m_line = new VerticalLineAnnotation();
+                    m_line.LineColor = Color.Black;
+                    m_line.LineDashStyle = ChartDashStyle.Dash;
+                    m_line.AxisX = m_chart.ChartAreas[0].AxisX;
+                    m_line.IsInfinitive = true;
+                    m_line.ClipToChartArea = m_chart.ChartAreas[0].Name;
+                    m_line.LineWidth = 3;
+                    m_line.AnchorX = m_time;
+                    m_line.AllowMoving = true;
+                    m_chart.Annotations.Add(m_line);
+
+                    m_chart.AnnotationPositionChanging += M_chart_AnnotationPositionChanging;
                 }
+            }
+        }
+
+        private void M_chart_AnnotationPositionChanging(object sender, AnnotationPositionChangingEventArgs e)
+        {
+            if (e.Annotation == m_line)
+            {
+                EventHandler<TimeCursorMovedArgs> handler = TimeCursorMoved;
+                handler?.Invoke(this, new TimeCursorMovedArgs(e.NewLocationX));
             }
         }
 

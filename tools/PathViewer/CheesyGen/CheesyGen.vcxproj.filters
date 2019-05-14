@@ -19,9 +19,6 @@
     <ClCompile Include="JSONValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LocationVelocityConstraint.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MathUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -94,9 +91,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="JSONValue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LocationVelocityConstraint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WaypointReader.h">

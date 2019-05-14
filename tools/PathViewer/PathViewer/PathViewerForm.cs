@@ -135,6 +135,8 @@ namespace PathViewer
             m_field.PreviewKeyDown += FieldKeyPreview;
             m_field.KeyDown += FieldKeyDown;
 
+            m_plot.TimeCursorMoved += PlotWindowTimeChanged;
+
             m_pathfile_tree.DoubleClick += DoPathTreeDoubleClick;
             m_pathfile_tree.MouseUp += PathTreeMouseUp;
             m_pathfile_tree.AfterSelect += PathTreeSelectionChanged;
@@ -158,6 +160,20 @@ namespace PathViewer
 
 
 
+
+        #endregion
+
+        #region event handlers for the plot child control
+
+        private void PlotWindowTimeChanged(object sender, TimeCursorMovedArgs e)
+        {
+            Nullable<PointF> wpt = FindPointAtTime(m_selected_path, e.Time);
+            if (wpt == null)
+                return;
+
+            m_field.HighlightPoint = wpt;
+            m_field.SelectedWaypoint = null;
+        }
         #endregion
 
         #region event handlers for the field child control
@@ -203,15 +219,17 @@ namespace PathViewer
                     gen = true;
                     m_file.IsDirty = true;
                 }
-                }
+            }
             else if (e.KeyCode == Keys.Insert)
             {
-                if (path.InsertPoint(m_field.SelectedWaypoint, m_file.Robot.MaxVelocity))
+                WayPoint pt = path.InsertPoint(m_field.SelectedWaypoint, m_selected_path.MaxVelocity);
+                if (pt != null)
                 {
                     gen = true;
                     m_file.IsDirty = true;
+                    m_field.SelectedWaypoint = pt;
                 }
-                }
+            }
             else if (e.KeyCode == Keys.Up)
             {
                 if (e.Shift)
@@ -595,6 +613,7 @@ namespace PathViewer
             m_field.File = m_file;
             m_field.DisplayedPath = null;
             m_field.SelectedWaypoint = null;
+            m_field.HighlightPoint = null;
             m_detailed.DisplayedPath = null;
             m_plot.Path = null;
             m_selected_path = null;
@@ -1063,6 +1082,15 @@ namespace PathViewer
             return true;
         }
         #endregion
+
+        private Nullable<PointF> FindPointAtTime(RobotPath p, double t)
+        {
+            double x, y;
+            if (!p.GetPositionForTime(t, out x, out y))
+                return null;
+
+            return new Nullable<PointF>(new PointF((float)x, (float)y));
+        }
 
         private double FindTime(RobotPath path, WayPoint pt)
         {

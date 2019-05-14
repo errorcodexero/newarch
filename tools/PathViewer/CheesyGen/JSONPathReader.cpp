@@ -2,7 +2,6 @@
 #include "JSON.h"
 #include "JSONValue.h"
 #include "DistanceVelocityConstraint.h"
-#include "LocationVelocityConstraint.h"
 #include "CentripetalAccelerationConstraint.h"
 #include <fstream>
 #include <iostream>
@@ -485,74 +484,6 @@ namespace xero
 
 						onepath->addTimingConstraint(std::make_shared<CentripetalAccelerationConstraint>(maxaccel));
 					}
-					else if (type == "location_velocity")
-					{
-						double x, y;
-						double distance;
-						double velocity;
-
-						if (constr.find(L"x") == constr.end())
-						{
-							std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
-							std::cerr << "         constraint 'distance_velocity' missing 'distance' field" << std::endl;
-							return false;
-						}
-
-						if (!constr[L"x"]->IsNumber())
-						{
-							std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
-							std::cerr << "         constraint 'distance_velocity' has 'distance' field that is not a number" << std::endl;
-							return false;
-						}
-						x = constr[L"x"]->AsNumber();
-
-						if (constr.find(L"y") == constr.end())
-						{
-							std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
-							std::cerr << "         constraint 'distance_velocity' missing 'distance' field" << std::endl;
-							return false;
-						}
-
-						if (!constr[L"y"]->IsNumber())
-						{
-							std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
-							std::cerr << "         constraint 'distance_velocity' has 'distance' field that is not a number" << std::endl;
-							return false;
-						}
-						y = constr[L"y"]->AsNumber();
-
-						if (constr.find(L"distance") == constr.end())
-						{
-							std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
-							std::cerr << "         constraint 'distance_velocity' missing 'distance' field" << std::endl;
-							return false;
-						}
-
-						if (!constr[L"distance"]->IsNumber())
-						{
-							std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
-							std::cerr << "         constraint 'distance_velocity' has 'distance' field that is not a number" << std::endl;
-							return false;
-						}
-						distance = constr[L"distance"]->AsNumber();
-
-						if (constr.find(L"velocity") == constr.end())
-						{
-							std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
-							std::cerr << "         constraint 'distance_velocity' missing 'velocity' field" << std::endl;
-							return false;
-						}
-
-						if (!constr[L"velocity"]->IsNumber())
-						{
-							std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
-							std::cerr << "         constraint 'distance_velocity' has 'velocity' field that is not a number" << std::endl;
-							return false;
-						}
-						velocity = constr[L"velocity"]->AsNumber();
-						Translation2d loc(x, y);
-						onepath->addTimingConstraint(std::make_shared<LocationVelocityConstraint>(loc, distance, velocity));
-					}
 					else 
 					{
 						std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
@@ -651,17 +582,13 @@ namespace xero
 					return false;
 				}
 				velocity = pt[L"Velocity"]->AsNumber();
+				if (i == 0)
+					velocity = 0.0;
 
 				Rotation2d rot = Rotation2d::fromDegrees(heading);
 				Translation2d trans(x, y);
 				Pose2d pose(trans, rot);
 				onepath->addPoint(pose);
-
-				if (velocity < onepath->getMaxVelocity() && i != 0 && i != ptarr.size() - 1)
-				{
-					Translation2d loc(x, y);
-					onepath->addTimingConstraint(std::make_shared<LocationVelocityConstraint>(loc, point_velocity_location_constraint_halo, velocity));
-				}
 			}
 
 			paths.addPath(group, onepath);
