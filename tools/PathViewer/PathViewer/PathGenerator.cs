@@ -78,13 +78,25 @@ namespace PathViewer
         {
             Tuple<RobotParams, RobotPath> data = opath as Tuple<RobotParams, RobotPath>;
             PathSegment[] segs = GenerateDetailedPath(data.Item1, data.Item2);
+            DriveModifier mod = null;
+
+            if (data.Item1.DriveType == "tank")
+            {
+                mod = new TankDriveModifier();
+            }
+            else if (data.Item1.DriveType == "swerve")
+            {
+                mod = new SwerveDriveModifier();
+            }
+
+            data.Item2.Segments = segs;
+            if (mod != null)
+                data.Item2.AdditionalSegments = mod.ModifyPath(data.Item1, data.Item2);
 
             lock (m_lock)
             {
                 m_paths.Remove(data.Item2);
             }
-
-            data.Item2.Segments = segs;
         }
 
         protected bool GeneratePathFile(RobotParams robot, RobotPath path, string filename)

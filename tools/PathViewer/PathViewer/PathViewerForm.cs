@@ -94,6 +94,10 @@ namespace PathViewer
 
         #endregion
 
+        #region private delegates
+        private delegate void HighlightDelegate(RobotPath path, WayPoint pt);
+        #endregion
+
         #region public constructor
         public PathViewerForm()
         {
@@ -123,7 +127,6 @@ namespace PathViewer
             m_text_editor = null;
 
             InitializeComponent();
-
 
             m_field.File = m_file;
             m_field.WaypointSelected += WayPointSelectedOrChanged;
@@ -273,6 +276,7 @@ namespace PathViewer
             if (gen)
             {
                 m_field.Invalidate();
+                m_detailed.Invalidate();
                 GenerateSplines(path);
                 GenerateSegments(path);
                 if (m_field.SelectedWaypoint != null)
@@ -330,7 +334,8 @@ namespace PathViewer
                 RobotPath path = m_file.FindPathByName(e.Node.Parent.Text, e.Node.Text);
                 m_selected_path = path;
                 m_plot.Path = path;
-                m_field.Path = path;
+                m_field.DisplayedPath = path;
+                m_detailed.DisplayedPath = path;
             }
             UpdatePathWindow();
         }
@@ -588,8 +593,9 @@ namespace PathViewer
 
             m_file = new PathFile();
             m_field.File = m_file;
-            m_field.Path = null;
+            m_field.DisplayedPath = null;
             m_field.SelectedWaypoint = null;
+            m_detailed.DisplayedPath = null;
             m_plot.Path = null;
             m_selected_path = null;
             UpdateRobotWindow();
@@ -799,8 +805,11 @@ namespace PathViewer
             string grname = node.Parent.Text;
             node.Parent.Nodes.Remove(node);
             RobotPath path = m_file.FindPathByName(grname, node.Text);
-            if (m_field.Path == path)
-                m_field.Path = null;
+            if (m_field.DisplayedPath == path)
+                m_field.DisplayedPath = null;
+
+            if (m_detailed.DisplayedPath == path)
+                m_detailed.DisplayedPath = null;
 
             m_file.RemovePath(grname, node.Text);
         }
@@ -827,11 +836,11 @@ namespace PathViewer
 
             m_undo_stack.Add(st);
 
-            if (m_field.Path != null)
+            if (m_field.DisplayedPath != null)
             {
-                PathGroup gr = m_file.FindGroupByPath(m_field.Path);
+                PathGroup gr = m_file.FindGroupByPath(m_field.DisplayedPath);
                 if (gr != null)
-                    st.AddPath(gr.Name, m_field.Path.Name);
+                    st.AddPath(gr.Name, m_field.DisplayedPath.Name);
             }
 
             if (m_field.SelectedWaypoint != null)
@@ -859,6 +868,7 @@ namespace PathViewer
                 UpdatePathTree();
                 m_field.File = m_file;
                 m_field.Invalidate();
+                m_detailed.Invalidate();
                 m_plot.Robot = m_file.Robot;
                 m_plot.Invalidate();
                 GenerateAllSplines();
@@ -873,7 +883,7 @@ namespace PathViewer
                             {
                                 if (path.Text == pathname.Item2)
                                 {
-                                    path.Checked = true;
+                                    m_pathfile_tree.SelectedNode = path;
                                 }
                             }
                         }
@@ -914,6 +924,7 @@ namespace PathViewer
 
             UpdatePathWindow() ;
             m_field.Invalidate();
+            m_detailed.Invalidate();
             GenerateAllSplines();
 
             return true;
@@ -978,8 +989,10 @@ namespace PathViewer
 
             UpdateExistingPaths();
             UpdateRobotWindow();
-            m_field.Invalidate();
             GenerateAllSplines();
+
+            m_field.Invalidate();
+            m_detailed.Invalidate();
             UpdatePathWindow();
             return true;
         }
@@ -1075,13 +1088,32 @@ namespace PathViewer
             return time;
         }
 
+
+
         private void HighlightTime(RobotPath path, WayPoint pt)
         {
             if (!path.HasSegments)
+            {
+                m_plot.HighlightTime = Double.MaxValue;
+                path.SegmentsUpdated += Path_SegmentsUpdated;
                 return;
+            }
 
             double time = FindTime(path, pt);
             m_plot.HighlightTime = time;
+        }
+
+        private void Path_SegmentsUpdated(object sender, EventArgs e)
+        {
+            RobotPath path = sender as RobotPath;
+            if (path != null)
+            {
+                path.SegmentsUpdated -= Path_SegmentsUpdated;
+                if (InvokeRequired)
+                    Invoke(new HighlightDelegate(HighlightTime), new object[] { path, m_field.SelectedWaypoint });
+                else
+                    HighlightTime(path, m_field.SelectedWaypoint);
+            }
         }
 
         private ToolStripMenuItem FindItem(string title)
@@ -1147,6 +1179,7 @@ namespace PathViewer
         private void InitializeGame(Game g)
         {
             m_field.FieldGame = g;
+            m_detailed.FieldGame = g;
         }
 
         private void InitializeGenerator(PathGenerator g)
@@ -1487,22 +1520,10 @@ namespace PathViewer
 
                     if (path.Segments != null && path.Segments.Length > 0)
                     {
-                        Dictionary<string, PathSegment[]> additional = null;
-
-                        if (m_file.Robot.DriveType == "tank")
-                        {
-                            TankModifier mod = new TankModifier();
-                            additional = mod.ModifyPath(m_file.Robot, path);
-                        }
-                        else if (m_file.Robot.DriveType == "swerve")
-                        {
-
-                        }
                         WritePath(gr.Name, path.Name, string.Empty, path.Segments);
-
-                        if (additional != null)
+                        if (path.AdditionalSegments != null)
                         {
-                            foreach (var pair in additional)
+                            foreach (var pair in path.AdditionalSegments)
                                 WritePath(gr.Name, path.Name, pair.Key, pair.Value);
                         }
                     }
@@ -1512,7 +1533,5 @@ namespace PathViewer
             MessageBox.Show("Paths written to directory '" + m_file.OutputDirectory + "'", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion
-
-
     }
 }

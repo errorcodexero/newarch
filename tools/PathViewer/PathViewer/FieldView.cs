@@ -6,17 +6,11 @@ using System.Windows.Forms;
 
 namespace PathViewer
 {
-    public partial class FieldView : UserControl
+    public partial class FieldView : BasicFieldView
     {
         #region private variables
         private double m_center_hit_dist = 8.0;
         private double m_tip_hit_dist = 6.0;
-        private Game m_game;
-        private Image m_image;
-        private float m_image_scale;
-        private Matrix m_world_to_window;
-        private Matrix m_window_to_world;
-        private RobotPath m_path;
         private WayPoint m_selected;
         private WayPoint m_rotating;
         private bool m_dragging;
@@ -46,19 +40,11 @@ namespace PathViewer
         /// </summary>
         public event EventHandler<WaypointEventArgs> WaypointChanged;
 
-        //
-        // This event is fired when the mouse is moved in the field window
-        //
-        public event EventHandler<FieldMouseMovedArgs> FieldMouseMoved;
-
         #endregion
 
         #region public constructors
         public FieldView()
         {
-            m_path = null;
-            m_world_to_window = new Matrix();
-            m_window_to_world = new Matrix();
             m_selected = null;
             m_rotating = null;
             m_dragging = false;
@@ -77,27 +63,6 @@ namespace PathViewer
             set { m_selected = value; Invalidate(); }
         }
 
-        public Game FieldGame
-        {
-            get { return m_game; }
-            set
-            {
-                m_game = value;
-                if (m_game != null)
-                {
-                    m_image = Image.FromFile(m_game.ImagePath);
-                    CalculateScale();
-                }
-                Invalidate();
-            }
-        }
-
-        public RobotPath Path
-        {
-            get { return m_path ; }
-            set { m_path = value; Invalidate(); }
-        }
-
         public PathFile File
         {
             get { return m_file; }
@@ -107,7 +72,7 @@ namespace PathViewer
 
                 m_selected = null;
                 m_file = value;
-                m_path = null;
+                DisplayedPath = null;
             }
         }
 
@@ -130,18 +95,11 @@ namespace PathViewer
             handler?.Invoke(this, args);
         }
 
-        protected void OnFieldMouseMoved(FieldMouseMovedArgs args)
-        {
-            EventHandler<FieldMouseMovedArgs> handler = FieldMouseMoved;
-            handler?.Invoke(this, args);
-        }
-
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
 
             PointF pt = WindowToWorld(new PointF(e.X, e.Y));
-            OnFieldMouseMoved(new FieldMouseMovedArgs(pt));
 
             PathGroup gr;
             RobotPath path;
@@ -193,17 +151,23 @@ namespace PathViewer
             {
                 m_file.FindPathByWaypoint(m_selected, out gr, out path);
                 m_dragging = false;
-                m_file.FindPathByWaypoint(m_selected, out gr, out path);
-                OnWayPointChanged(new WaypointEventArgs(WaypointEventArgs.ReasonType.EndChange, gr, path, m_selected));
+                if (!m_last_msg_selected)
+                {
+                    m_file.FindPathByWaypoint(m_selected, out gr, out path);
+                    OnWayPointChanged(new WaypointEventArgs(WaypointEventArgs.ReasonType.EndChange, gr, path, m_selected));
+                }
                 Invalidate();
             }
             else if (m_rotating != null)
             {
                 m_selected = m_rotating;
                 m_rotating = null;
-                InvalidateWaypoint(m_selected);
-                m_file.FindPathByWaypoint(m_selected, out gr, out path);
-                OnWayPointChanged(new WaypointEventArgs(WaypointEventArgs.ReasonType.EndChange, gr, path, m_selected));
+
+                if (!m_last_msg_selected)
+                {
+                    m_file.FindPathByWaypoint(m_selected, out gr, out path);
+                    OnWayPointChanged(new WaypointEventArgs(WaypointEventArgs.ReasonType.EndChange, gr, path, m_selected));
+                }
                 Invalidate();
             }
         }
@@ -218,7 +182,7 @@ namespace PathViewer
             WayPoint pt;
             WaypointRegion region;
 
-            if (HitTestWaypoint(e.X, e.Y, out pt, out region))
+            if (HitTestWaypoint(e.X, e.Y, DisplayedPath, out pt, out region))
             {
                 PathGroup group;
                 RobotPath path;
@@ -245,7 +209,7 @@ namespace PathViewer
             }
             else
             {
-                OnWayPointSelected(new WaypointEventArgs(WaypointEventArgs.ReasonType.Selected));
+                OnWayPointSelected(new WaypointEventArgs(WaypointEventArgs.ReasonType.Unselected));
                 InvalidateWaypoint(m_selected);
                 m_selected = null;
             }
@@ -254,22 +218,14 @@ namespace PathViewer
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            if (m_game != null)
-                CalculateScale();
-
-            Invalidate();
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
 
-            DrawBackground(e.Graphics);
-            if (m_image != null)
-                DrawField(e.Graphics);
-
-            if (m_path != null)
-                DrawPath(e.Graphics, m_path);
+            if (DisplayedPath != null)
+                DrawPath(e.Graphics, DisplayedPath);
         }
         #endregion
 
@@ -281,19 +237,19 @@ namespace PathViewer
             return angle / Math.PI * 180.0;
         }
 
-        private bool HitTestWaypoint(int x, int y, out WayPoint hitpt, out WaypointRegion part)
+        private bool HitTestWaypoint(int x, int y, RobotPath path, out WayPoint hitpt, out WaypointRegion part)
         {
             bool found = false;
             hitpt = null;
             part = WaypointRegion.None;
 
-            if (m_path == null)
+            if (path == null)
                 return false;
 
             //
             // See if there is a point near the point
             //
-            foreach (WayPoint pt in m_path.Points)
+            foreach (WayPoint pt in path.Points)
             {
                 PointF p = WorldToWindow(new PointF((float)pt.X, (float)pt.Y));
 
@@ -346,53 +302,6 @@ namespace PathViewer
             r.Inflate(m_radius, m_radius);
 
             return r;
-        }
-
-        private void CalculateScale()
-        {
-            float sx = (float)Width / (float)m_image.Width;
-            float sy = (float)Height / (float)m_image.Height;
-
-            if (sx < sy)
-                m_image_scale = sx;
-            else
-                m_image_scale = sy;
-
-            m_world_to_window = new Matrix();
-            float px = (float)m_game.FieldCorners.TopLeft[0] * m_image_scale;
-            float py = (float)m_game.FieldCorners.BottomRight[1] * m_image_scale;
-            m_world_to_window.Translate(px, py);
-
-            //
-            // Note, this scale between the field size in pixels in the image and the field size in inches
-            // is the game for the X and Y dimensions, so we just use the one (x) in both places
-            //
-            sx = (float)m_game.FieldSize[0] / (float)(m_game.FieldCorners.BottomRight[0] - m_game.FieldCorners.TopLeft[0]);
-            m_world_to_window.Scale(m_image_scale / sx, -m_image_scale / sx);
-
-            float[] elems = m_world_to_window.Elements;
-            m_window_to_world = new Matrix(elems[0], elems[1], elems[2], elems[3], elems[4], elems[5]);
-            m_window_to_world.Invert();
-        }
-
-        private PointF WorldToWindow(PointF field)
-        {
-            PointF[] temp = new PointF[1] { new PointF(field.X, field.Y) };
-            m_world_to_window.TransformPoints(temp);
-            return temp[0];
-        }
-
-        private PointF WindowToWorld(PointF window)
-        {
-            PointF[] temp = new PointF[1] { new PointF(window.X, window.Y) };
-            m_window_to_world.TransformPoints(temp);
-            return temp[0];
-        }
-
-        private void DrawField(Graphics g)
-        {
-            RectangleF rect = new RectangleF(0.0f, 0.0f, m_image.Width * m_image_scale, m_image.Height * m_image_scale);
-            g.DrawImage(m_image, rect);
         }
 
         private void DrawPath(Graphics g, RobotPath path)
@@ -482,10 +391,13 @@ namespace PathViewer
                             mm.Translate((float)pt.X, (float)pt.Y);
                             mm.Rotate((float)pt.Heading);
                             mm.TransformPoints(triangle);
-                            m_world_to_window.TransformPoints(triangle);
+                            WorldToWindowMatrix.TransformPoints(triangle);
 
                             g.FillPolygon(b, triangle);
-                            g.DrawPolygon(pn, triangle);
+                            if (m_selected == pt)
+                                g.DrawPolygon(sel, triangle);
+                            else
+                                g.DrawPolygon(pn, triangle);
 
                             //
                             // Draw the selection box
@@ -501,20 +413,12 @@ namespace PathViewer
                                 };
 
                                 mm.TransformPoints(selbox);
-                                m_world_to_window.TransformPoints(selbox);
+                                WorldToWindowMatrix.TransformPoints(selbox);
                                 g.DrawPolygon(sel, selbox);
                             }
                         }
                     }
                 }
-            }
-        }
-
-        private void DrawBackground(Graphics g)
-        {
-            using (Brush b = new SolidBrush(BackColor))
-            {
-                g.FillRectangle(b, 0, 0, Width, Height);
             }
         }
         #endregion

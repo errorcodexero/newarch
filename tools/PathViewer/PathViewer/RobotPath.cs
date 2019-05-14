@@ -38,6 +38,7 @@ namespace PathViewer
 
         #region public events
         public event EventHandler<EventArgs> SegmentsUpdated;
+        public event EventHandler<EventArgs> AdditionalSegmentsUpdated;
         #endregion
 
         #region private variables
@@ -52,6 +53,11 @@ namespace PathViewer
         /// The path segments for the fully generated path
         /// </summary>
         private PathSegment[] m_segments;
+
+        /// <summary>
+        /// The additional segments based on drivebase type
+        /// </summary>
+        private Dictionary<string, PathSegment[]> m_add_segments;
 
         /// <summary>
         /// If true, the segments are not up to date with the path
@@ -118,6 +124,11 @@ namespace PathViewer
             get { return m_segments != null && !m_segments_dirty; }
         }
 
+        public bool HasAdditionalSegments
+        {
+            get { return m_add_segments != null && !m_segments_dirty; }
+        }
+
         public Tuple<Spline, Spline> [] Splines
         {
             get
@@ -136,6 +147,20 @@ namespace PathViewer
                     m_segments = value;
                 }
                 OnSegmentsChanged(EventArgs.Empty);
+            }
+        }
+
+        public Dictionary<string, PathSegment[]> AdditionalSegments
+        {
+            get { return m_add_segments; }
+            set
+            {
+                lock(m_lock)
+                {
+                    m_add_segments = value;
+                }
+
+                OnAdditionalSegmentsChanged(EventArgs.Empty);
             }
         }
         #endregion
@@ -267,9 +292,15 @@ namespace PathViewer
         #endregion
 
         #region protected methods
-        public void OnSegmentsChanged(EventArgs args)
+        protected void OnSegmentsChanged(EventArgs args)
         {
             EventHandler<EventArgs> handler = SegmentsUpdated;
+            handler?.Invoke(this, args);
+        }
+
+        protected void OnAdditionalSegmentsChanged(EventArgs args)
+        {
+            EventHandler<EventArgs> handler = AdditionalSegmentsUpdated;
             handler?.Invoke(this, args);
         }
         #endregion
