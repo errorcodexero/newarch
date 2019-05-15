@@ -203,6 +203,7 @@ namespace PathViewer
                 e.KeyCode != Keys.Up && e.KeyCode != Keys.Down &&
                 e.KeyCode != Keys.Left && e.KeyCode != Keys.Right &&
                 e.KeyCode != Keys.Add && e.KeyCode != Keys.Subtract &&
+                e.KeyCode != Keys.PageDown && e.KeyCode != Keys.PageUp &&
                 e.KeyCode != Keys.Z)
                 return;
 
@@ -284,7 +285,7 @@ namespace PathViewer
                 m_file.IsDirty = true;
                 gen = true;
             }
-            else if (e.KeyCode == Keys.Add)
+            else if (e.KeyCode == Keys.Add || e.KeyCode == Keys.PageUp)
             {
                 if (e.Shift)
                     m_field.SelectedWaypoint.Heading = BoundDegrees(m_field.SelectedWaypoint.Heading + 0.5);
@@ -294,7 +295,7 @@ namespace PathViewer
                 m_file.IsDirty = true;
                 gen = true;
             }
-            else if (e.KeyCode == Keys.Subtract)
+            else if (e.KeyCode == Keys.Subtract && e.KeyCode == Keys.PageDown)
             {
                 if (e.Shift)
                     m_field.SelectedWaypoint.Heading = BoundDegrees(m_field.SelectedWaypoint.Heading - 0.5);
@@ -548,10 +549,10 @@ namespace PathViewer
             height -= m_right_three.Margin.Top + m_right_three.Margin.Bottom;
             height -= m_right_four.Margin.Top + m_right_four.Margin.Bottom;
 
-            m_right_one.Height = height / 2;
-            m_right_two.Height = height / 6;
-            m_right_three.Height = height / 6;
-            m_right_four.Height = height / 6;
+            m_right_one.Height = (int)(height * 0.40);
+            m_right_two.Height = (int)(height * 0.20) ;
+            m_right_three.Height = (int)(height * 0.20);
+            m_right_four.Height = (int)(height * 0.20);
 
             m_vertical.SplitterDistance = m_vertical.Height * 5/ 8;
         }
