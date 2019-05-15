@@ -46,6 +46,10 @@
             this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generatorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_detailed_path_view_menu = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_wheels_menu_item = new System.Windows.Forms.ToolStripMenuItem();
+            this.robotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_split = new System.Windows.Forms.SplitContainer();
             this.m_vertical = new System.Windows.Forms.SplitContainer();
             this.m_field_tab = new System.Windows.Forms.TabControl();
@@ -105,11 +109,11 @@
             this.fileToolStripMenuItem,
             this.pathsToolStripMenuItem,
             this.gamesToolStripMenuItem,
-            this.generatorsToolStripMenuItem});
+            this.generatorsToolStripMenuItem,
+            this.viewToolStripMenuItem});
             this.m_menu.Location = new System.Drawing.Point(0, 0);
             this.m_menu.Name = "m_menu";
-            this.m_menu.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-            this.m_menu.Size = new System.Drawing.Size(1764, 33);
+            this.m_menu.Size = new System.Drawing.Size(1568, 28);
             this.m_menu.TabIndex = 1;
             this.m_menu.Text = "MainMenu";
             // 
@@ -126,63 +130,63 @@
             this.generatePathsToolStripMenuItem,
             this.generatePathsToolStripMenuItem1});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(50, 29);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(260, 30);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(219, 26);
             this.loadToolStripMenuItem.Text = "Load ...";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.LoadToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(257, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(216, 6);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(260, 30);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(219, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(260, 30);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(219, 26);
             this.saveAsToolStripMenuItem.Text = "Save As ...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(257, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(216, 6);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(260, 30);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(219, 26);
             this.toolStripMenuItem1.Text = "Close";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.CloseMenuItemEventHandler);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(257, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(216, 6);
             // 
             // generatePathsToolStripMenuItem
             // 
             this.generatePathsToolStripMenuItem.Name = "generatePathsToolStripMenuItem";
-            this.generatePathsToolStripMenuItem.Size = new System.Drawing.Size(260, 30);
+            this.generatePathsToolStripMenuItem.Size = new System.Drawing.Size(219, 26);
             this.generatePathsToolStripMenuItem.Text = "Generate Paths As  ...";
             this.generatePathsToolStripMenuItem.Click += new System.EventHandler(this.GeneratePathsAsToolStripMenuItem_Click);
             // 
             // generatePathsToolStripMenuItem1
             // 
             this.generatePathsToolStripMenuItem1.Name = "generatePathsToolStripMenuItem1";
-            this.generatePathsToolStripMenuItem1.Size = new System.Drawing.Size(260, 30);
+            this.generatePathsToolStripMenuItem1.Size = new System.Drawing.Size(219, 26);
             this.generatePathsToolStripMenuItem1.Text = "Generate Paths";
             this.generatePathsToolStripMenuItem1.Click += new System.EventHandler(this.GeneratePathsToolStripMenuItem_Click);
             // 
@@ -194,53 +198,83 @@
             this.toolStripSeparator2,
             this.undoToolStripMenuItem});
             this.pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            this.pathsToolStripMenuItem.Size = new System.Drawing.Size(54, 29);
+            this.pathsToolStripMenuItem.Size = new System.Drawing.Size(47, 24);
             this.pathsToolStripMenuItem.Text = "Edit";
             // 
             // newPathGroupToolStripMenuItem
             // 
             this.newPathGroupToolStripMenuItem.Name = "newPathGroupToolStripMenuItem";
-            this.newPathGroupToolStripMenuItem.Size = new System.Drawing.Size(224, 30);
+            this.newPathGroupToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
             this.newPathGroupToolStripMenuItem.Text = "Add Path Group";
             this.newPathGroupToolStripMenuItem.Click += new System.EventHandler(this.NewPathGroupToolStripMenuItem_Click);
             // 
             // newPathToolStripMenuItem
             // 
             this.newPathToolStripMenuItem.Name = "newPathToolStripMenuItem";
-            this.newPathToolStripMenuItem.Size = new System.Drawing.Size(224, 30);
+            this.newPathToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
             this.newPathToolStripMenuItem.Text = "Add Path";
             this.newPathToolStripMenuItem.Click += new System.EventHandler(this.NewPathToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(186, 6);
             // 
             // undoToolStripMenuItem
             // 
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(224, 30);
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
             this.undoToolStripMenuItem.Text = "Undo";
             this.undoToolStripMenuItem.Click += new System.EventHandler(this.UndoToolStripMenuItem_Click);
             // 
             // gamesToolStripMenuItem
             // 
             this.gamesToolStripMenuItem.Name = "gamesToolStripMenuItem";
-            this.gamesToolStripMenuItem.Size = new System.Drawing.Size(78, 29);
+            this.gamesToolStripMenuItem.Size = new System.Drawing.Size(66, 24);
             this.gamesToolStripMenuItem.Text = "Games";
             // 
             // generatorsToolStripMenuItem
             // 
             this.generatorsToolStripMenuItem.Name = "generatorsToolStripMenuItem";
-            this.generatorsToolStripMenuItem.Size = new System.Drawing.Size(110, 29);
+            this.generatorsToolStripMenuItem.Size = new System.Drawing.Size(93, 24);
             this.generatorsToolStripMenuItem.Text = "Generators";
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_detailed_path_view_menu});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // m_detailed_path_view_menu
+            // 
+            this.m_detailed_path_view_menu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_wheels_menu_item,
+            this.robotToolStripMenuItem});
+            this.m_detailed_path_view_menu.Name = "m_detailed_path_view_menu";
+            this.m_detailed_path_view_menu.Size = new System.Drawing.Size(216, 26);
+            this.m_detailed_path_view_menu.Text = "Detailed Path View";
+            // 
+            // m_wheels_menu_item
+            // 
+            this.m_wheels_menu_item.Name = "m_wheels_menu_item";
+            this.m_wheels_menu_item.Size = new System.Drawing.Size(216, 26);
+            this.m_wheels_menu_item.Text = "Wheels";
+            this.m_wheels_menu_item.Click += new System.EventHandler(this.WheelsToolStripMenuItem_Click);
+            // 
+            // robotToolStripMenuItem
+            // 
+            this.robotToolStripMenuItem.Name = "robotToolStripMenuItem";
+            this.robotToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.robotToolStripMenuItem.Text = "Robot";
+            this.robotToolStripMenuItem.Click += new System.EventHandler(this.RobotToolStripMenuItem_Click);
             // 
             // m_split
             // 
             this.m_split.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_split.Location = new System.Drawing.Point(0, 33);
-            this.m_split.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.m_split.Location = new System.Drawing.Point(0, 28);
             this.m_split.Name = "m_split";
             // 
             // m_split.Panel1
@@ -250,15 +284,14 @@
             // m_split.Panel2
             // 
             this.m_split.Panel2.Controls.Add(this.m_flow);
-            this.m_split.Size = new System.Drawing.Size(1764, 1098);
-            this.m_split.SplitterDistance = 1364;
+            this.m_split.Size = new System.Drawing.Size(1568, 876);
+            this.m_split.SplitterDistance = 1212;
             this.m_split.TabIndex = 3;
             // 
             // m_vertical
             // 
             this.m_vertical.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_vertical.Location = new System.Drawing.Point(0, 0);
-            this.m_vertical.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.m_vertical.Name = "m_vertical";
             this.m_vertical.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -270,9 +303,8 @@
             // 
             this.m_vertical.Panel2.AccessibleRole = System.Windows.Forms.AccessibleRole.MenuBar;
             this.m_vertical.Panel2.Controls.Add(this.m_bottom_tab);
-            this.m_vertical.Size = new System.Drawing.Size(1364, 1098);
-            this.m_vertical.SplitterDistance = 650;
-            this.m_vertical.SplitterWidth = 5;
+            this.m_vertical.Size = new System.Drawing.Size(1212, 876);
+            this.m_vertical.SplitterDistance = 518;
             this.m_vertical.TabIndex = 0;
             // 
             // m_field_tab
@@ -281,18 +313,20 @@
             this.m_field_tab.Controls.Add(this.tabPage4);
             this.m_field_tab.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_field_tab.Location = new System.Drawing.Point(0, 0);
+            this.m_field_tab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.m_field_tab.Name = "m_field_tab";
             this.m_field_tab.SelectedIndex = 0;
-            this.m_field_tab.Size = new System.Drawing.Size(1364, 650);
+            this.m_field_tab.Size = new System.Drawing.Size(1212, 518);
             this.m_field_tab.TabIndex = 3;
             // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.m_field);
-            this.tabPage3.Location = new System.Drawing.Point(4, 29);
+            this.tabPage3.Location = new System.Drawing.Point(4, 25);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1356, 617);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage3.Size = new System.Drawing.Size(1204, 489);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "PathEditing";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -304,20 +338,20 @@
             this.m_field.FieldGame = null;
             this.m_field.File = null;
             this.m_field.HighlightPoint = null;
-            this.m_field.Location = new System.Drawing.Point(3, 3);
-            this.m_field.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.m_field.Location = new System.Drawing.Point(3, 2);
             this.m_field.Name = "m_field";
             this.m_field.SelectedWaypoint = null;
-            this.m_field.Size = new System.Drawing.Size(1350, 611);
+            this.m_field.Size = new System.Drawing.Size(1198, 485);
             this.m_field.TabIndex = 2;
             // 
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.m_detailed);
-            this.tabPage4.Location = new System.Drawing.Point(4, 29);
+            this.tabPage4.Location = new System.Drawing.Point(4, 25);
+            this.tabPage4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1356, 617);
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage4.Size = new System.Drawing.Size(1204, 489);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Detailed Path View";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -327,10 +361,12 @@
             this.m_detailed.DisplayedPath = null;
             this.m_detailed.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_detailed.FieldGame = null;
-            this.m_detailed.Location = new System.Drawing.Point(3, 3);
+            this.m_detailed.Location = new System.Drawing.Point(3, 2);
+            this.m_detailed.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.m_detailed.Name = "m_detailed";
-            this.m_detailed.Size = new System.Drawing.Size(1350, 611);
+            this.m_detailed.Size = new System.Drawing.Size(1198, 485);
             this.m_detailed.TabIndex = 0;
+            this.m_detailed.ViewType = PathViewer.DetailedFieldView.ViewTypeValue.WheelView;
             // 
             // m_bottom_tab
             // 
@@ -341,17 +377,17 @@
             this.m_bottom_tab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.m_bottom_tab.Name = "m_bottom_tab";
             this.m_bottom_tab.SelectedIndex = 0;
-            this.m_bottom_tab.Size = new System.Drawing.Size(1364, 443);
+            this.m_bottom_tab.Size = new System.Drawing.Size(1212, 354);
             this.m_bottom_tab.TabIndex = 0;
             // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.m_plot);
-            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage1.Size = new System.Drawing.Size(1356, 410);
+            this.tabPage1.Size = new System.Drawing.Size(1204, 325);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Plots";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -367,17 +403,17 @@
             this.m_plot.Name = "m_plot";
             this.m_plot.Path = null;
             this.m_plot.Robot = null;
-            this.m_plot.Size = new System.Drawing.Size(1350, 406);
+            this.m_plot.Size = new System.Drawing.Size(1198, 321);
             this.m_plot.TabIndex = 0;
             // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.m_logger_window);
-            this.tabPage2.Location = new System.Drawing.Point(4, 29);
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage2.Size = new System.Drawing.Size(1356, 410);
+            this.tabPage2.Size = new System.Drawing.Size(1204, 325);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Messages";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -390,7 +426,7 @@
             this.m_logger_window.Multiline = true;
             this.m_logger_window.Name = "m_logger_window";
             this.m_logger_window.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.m_logger_window.Size = new System.Drawing.Size(1350, 406);
+            this.m_logger_window.Size = new System.Drawing.Size(1198, 321);
             this.m_logger_window.TabIndex = 0;
             // 
             // m_flow
@@ -402,9 +438,8 @@
             this.m_flow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_flow.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.m_flow.Location = new System.Drawing.Point(0, 0);
-            this.m_flow.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.m_flow.Name = "m_flow";
-            this.m_flow.Size = new System.Drawing.Size(396, 1098);
+            this.m_flow.Size = new System.Drawing.Size(352, 876);
             this.m_flow.TabIndex = 3;
             // 
             // m_right_one
@@ -414,7 +449,7 @@
             this.m_right_one.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.m_right_one.Name = "m_right_one";
             this.m_right_one.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.m_right_one.Size = new System.Drawing.Size(395, 95);
+            this.m_right_one.Size = new System.Drawing.Size(351, 76);
             this.m_right_one.TabIndex = 0;
             this.m_right_one.TabStop = false;
             this.m_right_one.Text = "Paths";
@@ -422,20 +457,19 @@
             // m_pathfile_tree
             // 
             this.m_pathfile_tree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_pathfile_tree.Location = new System.Drawing.Point(3, 21);
-            this.m_pathfile_tree.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.m_pathfile_tree.Location = new System.Drawing.Point(3, 17);
             this.m_pathfile_tree.Name = "m_pathfile_tree";
-            this.m_pathfile_tree.Size = new System.Drawing.Size(389, 72);
+            this.m_pathfile_tree.Size = new System.Drawing.Size(345, 57);
             this.m_pathfile_tree.TabIndex = 0;
             // 
             // m_right_two
             // 
             this.m_right_two.Controls.Add(this.m_robot_view);
-            this.m_right_two.Location = new System.Drawing.Point(3, 101);
+            this.m_right_two.Location = new System.Drawing.Point(3, 82);
             this.m_right_two.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.m_right_two.Name = "m_right_two";
             this.m_right_two.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.m_right_two.Size = new System.Drawing.Size(395, 140);
+            this.m_right_two.Size = new System.Drawing.Size(351, 112);
             this.m_right_two.TabIndex = 0;
             this.m_right_two.TabStop = false;
             this.m_right_two.Text = "Robot Parameters";
@@ -447,10 +481,9 @@
             this.columnHeader4});
             this.m_robot_view.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_robot_view.FullRowSelect = true;
-            this.m_robot_view.Location = new System.Drawing.Point(3, 21);
-            this.m_robot_view.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.m_robot_view.Location = new System.Drawing.Point(3, 17);
             this.m_robot_view.Name = "m_robot_view";
-            this.m_robot_view.Size = new System.Drawing.Size(389, 117);
+            this.m_robot_view.Size = new System.Drawing.Size(345, 93);
             this.m_robot_view.TabIndex = 2;
             this.m_robot_view.UseCompatibleStateImageBehavior = false;
             this.m_robot_view.View = System.Windows.Forms.View.Details;
@@ -468,11 +501,11 @@
             // m_right_three
             // 
             this.m_right_three.Controls.Add(this.m_path_view);
-            this.m_right_three.Location = new System.Drawing.Point(3, 245);
+            this.m_right_three.Location = new System.Drawing.Point(3, 198);
             this.m_right_three.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.m_right_three.Name = "m_right_three";
             this.m_right_three.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.m_right_three.Size = new System.Drawing.Size(395, 116);
+            this.m_right_three.Size = new System.Drawing.Size(351, 93);
             this.m_right_three.TabIndex = 1;
             this.m_right_three.TabStop = false;
             this.m_right_three.Text = "Selected Path";
@@ -484,10 +517,9 @@
             this.columnHeader6});
             this.m_path_view.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_path_view.FullRowSelect = true;
-            this.m_path_view.Location = new System.Drawing.Point(3, 21);
-            this.m_path_view.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.m_path_view.Location = new System.Drawing.Point(3, 17);
             this.m_path_view.Name = "m_path_view";
-            this.m_path_view.Size = new System.Drawing.Size(389, 93);
+            this.m_path_view.Size = new System.Drawing.Size(345, 74);
             this.m_path_view.TabIndex = 0;
             this.m_path_view.UseCompatibleStateImageBehavior = false;
             this.m_path_view.View = System.Windows.Forms.View.Details;
@@ -505,11 +537,11 @@
             // m_right_four
             // 
             this.m_right_four.Controls.Add(this.m_waypoint_view);
-            this.m_right_four.Location = new System.Drawing.Point(3, 365);
+            this.m_right_four.Location = new System.Drawing.Point(3, 295);
             this.m_right_four.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.m_right_four.Name = "m_right_four";
             this.m_right_four.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.m_right_four.Size = new System.Drawing.Size(395, 248);
+            this.m_right_four.Size = new System.Drawing.Size(351, 198);
             this.m_right_four.TabIndex = 0;
             this.m_right_four.TabStop = false;
             this.m_right_four.Text = "Selected Waypoint";
@@ -521,10 +553,9 @@
             this.columnHeader2});
             this.m_waypoint_view.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_waypoint_view.FullRowSelect = true;
-            this.m_waypoint_view.Location = new System.Drawing.Point(3, 21);
-            this.m_waypoint_view.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.m_waypoint_view.Location = new System.Drawing.Point(3, 17);
             this.m_waypoint_view.Name = "m_waypoint_view";
-            this.m_waypoint_view.Size = new System.Drawing.Size(389, 225);
+            this.m_waypoint_view.Size = new System.Drawing.Size(345, 179);
             this.m_waypoint_view.TabIndex = 0;
             this.m_waypoint_view.UseCompatibleStateImageBehavior = false;
             this.m_waypoint_view.View = System.Windows.Forms.View.Details;
@@ -542,7 +573,7 @@
             // m_pos_status
             // 
             this.m_pos_status.Name = "m_pos_status";
-            this.m_pos_status.Size = new System.Drawing.Size(113, 25);
+            this.m_pos_status.Size = new System.Drawing.Size(91, 20);
             this.m_pos_status.Text = "Position: 0, 0";
             // 
             // statusStrip1
@@ -550,23 +581,21 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_pos_status});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 1131);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 904);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1764, 30);
+            this.statusStrip1.Size = new System.Drawing.Size(1568, 25);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // PathViewerForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1764, 1161);
+            this.ClientSize = new System.Drawing.Size(1568, 929);
             this.Controls.Add(this.m_split);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.m_menu);
             this.MainMenuStrip = this.m_menu;
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "PathViewerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Path Editor";
@@ -648,6 +677,10 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
         private DetailedFieldView m_detailed;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem m_detailed_path_view_menu;
+        private System.Windows.Forms.ToolStripMenuItem m_wheels_menu_item;
+        private System.Windows.Forms.ToolStripMenuItem robotToolStripMenuItem;
     }
 }
 

@@ -8,6 +8,24 @@ namespace PathViewer
 {
     class SwerveDriveModifier : DriveModifier
     {
+        private class WheelState
+        {
+            public double x ;
+            public double y ;
+            public double velocity ;
+            public double acceleration ;
+            public double heading ;
+
+            public WheelState()
+            {
+                x = 0.0;
+                y = 0.0;
+                velocity = 0.0;
+                acceleration = 0.0;
+                heading = 0.0;
+            }
+        };
+
         public override Dictionary<string, PathSegment[]> ModifyPath(RobotParams robot, RobotPath path)
         {
             Dictionary<string, PathSegment[]> ret = null;
@@ -22,7 +40,90 @@ namespace PathViewer
 
         private Dictionary<string, PathSegment[]> ModifyPathWithRotation(RobotParams robot, RobotPath path)
         {
-            return null;
+            PathSegment seg;
+            Dictionary<string, PathSegment[]> result = new Dictionary<string, PathSegment[]>();
+            PathSegment[] segs = path.Segments;
+            if (segs == null)
+                return null;
+
+            PathSegment[] fl = new PathSegment[segs.Length];
+            PathSegment[] fr = new PathSegment[segs.Length];
+            PathSegment[] bl = new PathSegment[segs.Length];
+            PathSegment[] br = new PathSegment[segs.Length];
+
+            result["fl"] = fl;
+            result["fr"] = fr;
+            result["bl"] = bl;
+            result["br"] = br;
+
+            WheelState pfl = new WheelState();
+            WheelState pfr = new WheelState();
+            WheelState pbl = new WheelState();
+            WheelState pbr = new WheelState();
+
+            for (int i = 0; i < segs.Length; i++)
+            {
+                WheelState flst = new WheelState();
+                WheelState frst = new WheelState();
+                WheelState blst = new WheelState();
+                WheelState brst = new WheelState();
+
+                double x = segs[i].GetValue("x");
+                double y = segs[i].GetValue("y");
+                double heading = segs[i].GetValue("heading");
+
+
+                //
+                // For each wheel there are two velocity vectors acting on the wheel.  One vector is the
+                // path velocity and heading to drive from start to finish.  The second velocity
+                // vector is the one rotating the wheel.
+                //
+                if (i == 0)
+                {
+                    double accel = segs[i].GetValue("acceleration");
+
+                    flst.x = x + robot.Width / 2.0;
+                    flst.y = y + robot.Length / 2.0;
+                    flst.velocity = 0.0;
+                    flst.heading = heading;
+                    flst.acceleration = accel;
+
+                    frst.x = x + robot.Width / 2.0;
+                    frst.y = y - robot.Length / 2.0;
+                    frst.heading = heading;
+                    frst.velocity = 0.0;
+                    frst.acceleration = accel;
+
+                    blst.x = x - robot.Width / 2.0;
+                    blst.y = y + robot.Length / 2.0;
+                    blst.velocity = 0.0;
+                    blst.heading = heading;
+                    blst.acceleration = accel;
+
+                    brst.x = x - robot.Width / 2.0;
+                    brst.y = y - robot.Length / 2.0;
+                    brst.velocity = 0.0;
+                    brst.heading = heading;
+                    brst.acceleration = accel;
+                }
+                else
+                {
+                    //
+                    // Calculate the next state of the wheels
+                    //
+
+                }
+
+                //
+                // Remember the previous state
+                //
+                pfl = flst;
+                pfr = frst;
+                pbl = blst;
+                pbr = brst;
+            }
+
+            return result;
         }
 
         private Dictionary<string, PathSegment[]> ModifyPathSimple(RobotParams robot, RobotPath path)
@@ -49,22 +150,22 @@ namespace PathViewer
                 double y = segs[i].GetValue("y");
 
                 seg = new PathSegment(segs[i]);
-                seg.AddValue("x", x - robot.Width / 2.0);
+                seg.AddValue("x", x + robot.Width / 2.0);
                 seg.AddValue("y", y + robot.Length / 2.0);
                 fl[i] = seg;
 
                 seg = new PathSegment(segs[i]);
                 seg.AddValue("x", x + robot.Width / 2.0);
-                seg.AddValue("y", y + robot.Length / 2.0);
+                seg.AddValue("y", y - robot.Length / 2.0);
                 fr[i] = seg;
 
                 seg = new PathSegment(segs[i]);
                 seg.AddValue("x", x - robot.Width / 2.0);
-                seg.AddValue("y", y - robot.Length / 2.0);
+                seg.AddValue("y", y + robot.Length / 2.0);
                 bl[i] = seg;
 
                 seg = new PathSegment(segs[i]);
-                seg.AddValue("x", x + robot.Width / 2.0);
+                seg.AddValue("x", x - robot.Width / 2.0);
                 seg.AddValue("y", y - robot.Length / 2.0);
                 br[i] = seg;
             }

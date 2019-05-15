@@ -74,6 +74,7 @@ namespace PathViewer
                 left.AddValue("time", segs[i].GetValue("time"));
                 left.AddValue("x", lx);
                 left.AddValue("y", ly);
+                left.AddValue("heading", segs[i].GetValue("heading"));
                 left.AddValue("position", lpos);
                 left.AddValue("velocity", lvel);
                 left.AddValue("acceleration", lacc);
@@ -84,6 +85,7 @@ namespace PathViewer
                 right.AddValue("time", segs[i].GetValue("time"));
                 right.AddValue("x", rx);
                 right.AddValue("y", ry);
+                right.AddValue("heading", segs[i].GetValue("heading"));
                 right.AddValue("position", rpos);
                 right.AddValue("velocity", rvel);
                 right.AddValue("acceleration", racc);

@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Threading;
 using System.Reflection;
-
+using System.Diagnostics;
 namespace PathViewer
 {
     public partial class PathViewerForm : Form
@@ -157,12 +157,14 @@ namespace PathViewer
 
             m_plot.Generator = m_generator;
             m_plot.Robot = m_file.Robot;
+            m_detailed.Robot = m_file.Robot;
 
             m_plot.HighlightTime = Double.MaxValue;
 
             m_logger.OutputAvailable += LoggerOutputAvailable;
 
             OutputCopyright();
+            WheelsToolStripMenuItem_Click(m_wheels_menu_item, null);
 
         }
         #endregion
@@ -295,7 +297,7 @@ namespace PathViewer
                 m_file.IsDirty = true;
                 gen = true;
             }
-            else if (e.KeyCode == Keys.Subtract && e.KeyCode == Keys.PageDown)
+            else if (e.KeyCode == Keys.Subtract || e.KeyCode == Keys.PageDown)
             {
                 if (e.Shift)
                     m_field.SelectedWaypoint.Heading = BoundDegrees(m_field.SelectedWaypoint.Heading - 0.5);
@@ -319,17 +321,17 @@ namespace PathViewer
 
         private double BoundDegrees(double a)
         {
+            double x = a;
             if (a > 180.0)
             {
                 while (a > 180.0)
-                    a -= 180.0;
+                    a -= 360.0;
             }
             else
             {
                 while (a <= -180.0)
-                    a += 180;
+                    a += 360.0;
             }
-
             return a;
         }
 
@@ -788,6 +790,7 @@ namespace PathViewer
                 m_file.PathName = dialog.FileName;
                 m_field.File = m_file;
                 m_plot.Robot = m_file.Robot;
+                m_detailed.Robot = m_file.Robot;
                 Text = "Path Editor - " + m_file.PathName;
                 m_undo_stack = new List<UndoState>();
                 GenerateAllSplines();
@@ -841,7 +844,7 @@ namespace PathViewer
             TreeNode nnode = new TreeNode(newname);
             node.Nodes.Add(nnode);
             m_pathfile_tree.SelectedNode = nnode;
-            m_file.AddPath(m_file.Robot, node.Text, newname);
+            m_file.AddPath(node.Text, newname);
             PathTreeSelectionChanged(m_pathfile_tree, new TreeViewEventArgs(nnode));
         }
 
@@ -920,6 +923,7 @@ namespace PathViewer
                 m_field.File = m_file;
                 m_field.Invalidate();
                 m_detailed.Invalidate();
+                m_detailed.Robot = m_file.Robot;
                 m_plot.Robot = m_file.Robot;
                 m_plot.Invalidate();
                 GenerateAllSplines();
@@ -1136,9 +1140,13 @@ namespace PathViewer
         private Nullable<PointF> FindPointAtTime(RobotPath p, double t)
         {
             double x, y;
-            if (!p.GetPositionForTime(t, out x, out y))
+            double heading;
+
+            PathSegment[] segs = p.Segments;
+            if (segs == null)
                 return null;
 
+            p.GetPositionForTime(segs, t, out x, out y, out heading);
             return new Nullable<PointF>(new PointF((float)x, (float)y));
         }
 
@@ -1709,5 +1717,31 @@ namespace PathViewer
                 m_logger.LogMessage(Logger.MessageType.Info, str);
         }
         #endregion
+
+        private void ClearChecks(ToolStripMenuItem menu)
+        {
+            foreach(var item in menu.DropDownItems)
+            {
+                ToolStripMenuItem mitem = item as ToolStripMenuItem;
+                if (mitem != null)
+                    mitem.Checked = false;
+            }
+        }
+
+        private void WheelsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mitem = sender as ToolStripMenuItem;
+            ClearChecks(m_detailed_path_view_menu);
+            mitem.Checked = true;
+            m_detailed.ViewType = DetailedFieldView.ViewTypeValue.WheelView;
+        }
+
+        private void RobotToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mitem = sender as ToolStripMenuItem;
+            ClearChecks(m_detailed_path_view_menu);
+            mitem.Checked = true;
+            m_detailed.ViewType = DetailedFieldView.ViewTypeValue.RobotView;
+        }
     }
 }

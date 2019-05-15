@@ -172,14 +172,11 @@ namespace PathViewer
         #endregion
 
         #region public methods
-        public bool GetPositionForTime(double time, out double x, out double y)
+        public void GetPositionForTime(PathSegment[] segs, double time, out double x, out double y, out double heading)
         {
             x = 0.0;
             y = 0.0;
-
-            PathSegment[] segs = Segments;
-            if (segs == null)
-                return false;
+            heading = 0.0;
 
             double dt = Double.MaxValue;
             for(int i = 0; i < segs.Length; i++)
@@ -189,13 +186,12 @@ namespace PathViewer
                 {
                     x = segs[i].GetValue("x");
                     y = segs[i].GetValue("y");
+                    heading = segs[i].GetValue("heading");
                 }
 
                 if (t > time)
                     break;
             }
-
-            return true;
         }
 
         public void SetSegmentsInvalid()

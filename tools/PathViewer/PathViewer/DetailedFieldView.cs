@@ -14,16 +14,58 @@ namespace PathViewer
     public partial class DetailedFieldView : BasicFieldView
     {
         #region private variables
+        private ViewTypeValue m_view_type;
+        private double m_time;
+        private double m_time_end;
+        private Timer m_timer;
+        private RobotParams m_robot;
+
+        private const int TimeStep = 100; 
+        #endregion
+
+        #region public enumeration
+        public enum ViewTypeValue
+        {
+            WheelView,
+            RobotView,
+        };
         #endregion
 
         #region public constructors
         public DetailedFieldView()
         {
             InitializeComponent();
+
+            m_timer = new Timer();
+            m_timer.Interval = TimeStep ;
+            m_timer.Tick += TimerTickCallback;
+
+            if (Focused && m_view_type == DetailedFieldView.ViewTypeValue.RobotView)
+                m_timer.Enabled = true;
         }
+
         #endregion
 
         #region public properties
+        public ViewTypeValue ViewType
+        {
+            get { return m_view_type; }
+            set
+            {
+                m_view_type = value;
+                Initialize();
+                Invalidate();
+
+                if (m_view_type == ViewTypeValue.RobotView && Focused)
+                    m_timer.Enabled = true;
+            }
+        }
+
+        public RobotParams Robot
+        {
+            get { return m_robot; }
+            set { m_robot = value; }
+        }
         #endregion
 
         #region public methods
@@ -36,11 +78,44 @@ namespace PathViewer
             base.OnPaint(e);
 
             if (DisplayedPath != null)
-                DrawPath(e.Graphics, DisplayedPath);
+            {
+                if (m_view_type == ViewTypeValue.WheelView)
+                    DrawPathWheels(e.Graphics, DisplayedPath);
+                else
+                    DrawPathRobot(e.Graphics, DisplayedPath);
+            }
+        }
+
+        protected override void OnPathChanged(EventArgs args)
+        {
+            base.OnPathChanged(args);
+            Initialize();
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+            if (m_view_type == ViewTypeValue.RobotView)
+                m_timer.Enabled = true;
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            m_timer.Enabled = false;
         }
         #endregion
 
         #region private methods
+
+        private void TimerTickCallback(object sender, EventArgs e)
+        {
+            m_time += (double)(TimeStep / 1000.0);
+            if (m_time > m_time_end)
+                m_time = 0.0;
+
+            Invalidate();
+        }
 
         private void DrawOnePathSegment(Graphics g, Color c, PathSegment[] seg)
         {
@@ -64,7 +139,7 @@ namespace PathViewer
         }
 
         private Color[] m_colors = { Color.Red, Color.Yellow, Color.Green, Color.Pink };
-        private void DrawPath(Graphics g, RobotPath path)
+        private void DrawPathWheels(Graphics g, RobotPath path)
         {
             if (path.AdditionalSegments == null)
                 return;
@@ -73,6 +148,84 @@ namespace PathViewer
             foreach(var pair in path.AdditionalSegments)
             {
                 DrawOnePathSegment(g, m_colors[i++], pair.Value);
+            }
+        }
+
+        private void DrawPathRobot(Graphics g, RobotPath path)
+        {
+            if (path.AdditionalSegments == null)
+                return;
+
+            PointF[] pts = null;
+
+            Dictionary<string, PathSegment[]> segs = path.AdditionalSegments;
+
+            if (segs.Count == 2)
+            {
+                double lx, ly, rx, ry;
+                double heading;
+                path.GetPositionForTime(segs["left"], m_time, out lx, out ly, out heading);
+                path.GetPositionForTime(segs["right"], m_time, out rx, out ry, out heading);
+
+                double x = (lx + rx) / 2.0;
+                double y = (ly + ry) / 2.0;
+
+                pts = new PointF[]
+                {
+                    new PointF((float)Robot.Width / 2.0f, -(float)Robot.Length / 2.0f),
+                    new PointF(-(float)Robot.Width / 2.0f, -(float)Robot.Length / 2.0f),
+                    new PointF(-(float)Robot.Width / 2.0f, (float)Robot.Length / 2.0f),
+                    new PointF((float)Robot.Width / 2.0f, (float)Robot.Length / 2.0f),
+                };
+
+                Matrix mm = new Matrix();
+                mm.Translate((float)x, (float)y);
+                mm.Rotate((float)heading);
+                mm.TransformPoints(pts);
+                WorldToWindowMatrix.TransformPoints(pts);
+            }
+            else
+            {
+                double flx, fly, frx, fry;
+                double blx, bly, brx, bry;
+                double heading;
+                path.GetPositionForTime(segs["fl"], m_time, out flx, out fly, out heading);
+                path.GetPositionForTime(segs["fr"], m_time, out frx, out fry, out heading);
+                path.GetPositionForTime(segs["bl"], m_time, out blx, out bly, out heading);
+                path.GetPositionForTime(segs["br"], m_time, out brx, out bry, out heading);
+
+                pts = new PointF[4]
+                {
+                    new PointF((float)frx, (float)fry),
+                    new PointF((float)brx, (float)bry),
+                    new PointF((float)blx, (float)bly),
+                    new PointF((float)flx, (float)fly),
+                };
+
+                WorldToWindowMatrix.TransformPoints(pts);
+            }
+
+            using (Pen p = new Pen(Color.Yellow, 3.0f))
+            {
+                g.DrawLines(p, pts);
+            }
+
+            using (Pen p = new Pen(Color.Green, 3.0f))
+            {
+                g.DrawLine(p, pts[3], pts[0]);
+            }
+        }
+
+        private void Initialize()
+        {
+            if (DisplayedPath != null)
+            {
+                PathSegment[] segs = DisplayedPath.Segments;
+                if (segs != null)
+                {
+                    m_time = 0.0;
+                    m_time_end = segs[segs.Length - 1].GetValue("time");
+                }
             }
         }
         #endregion

@@ -68,13 +68,14 @@ namespace PathViewer
                     CalculateScale();
                 }
                 Invalidate();
+                OnGameChanged(EventArgs.Empty);
             }
         }
 
         public RobotPath DisplayedPath
         {
             get { return m_path; }
-            set { m_path = value; Invalidate(); }
+            set { m_path = value; Invalidate(); OnPathChanged(EventArgs.Empty); }
         }
         #endregion
 
@@ -114,6 +115,16 @@ namespace PathViewer
             DrawBackground(e.Graphics);
             if (m_image != null)
                 DrawField(e.Graphics);
+        }
+        #endregion
+
+        #region protected methods
+        protected virtual void OnGameChanged(EventArgs args)
+        {
+        }
+
+        protected virtual void OnPathChanged(EventArgs args)
+        {
         }
         #endregion
 
