@@ -120,6 +120,18 @@ namespace PathViewer
 
         #region public properties
 
+        public double TotalTime
+        {
+            get
+            {
+                PathSegment[] segs = Segments;
+                if (segs == null)
+                    throw new Exception("cannot get path total time without segment data");
+
+                return segs[segs.Length - 1].GetValue("time");
+            }
+        }
+
         public bool HasSplines
         {
             get { return m_splines != null; }

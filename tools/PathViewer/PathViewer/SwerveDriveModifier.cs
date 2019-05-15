@@ -38,13 +38,29 @@ namespace PathViewer
             return ret;
         }
 
+        private TrapezoidalProfile CreateRotationProfile(RobotParams robot, double start, double end)
+        {
+            double diff = end - start;
+            if (diff > 180.0)
+                diff -= 360.0;
+            else if (diff <= -180.0)
+                diff += 360.0;
+
+            TrapezoidalProfile tp = new TrapezoidalProfile(180.0, 360.0);
+            tp.Update(diff, 0.0, 0.0);
+            return tp;
+        }
+
         private Dictionary<string, PathSegment[]> ModifyPathWithRotation(RobotParams robot, RobotPath path)
         {
-            PathSegment seg;
             Dictionary<string, PathSegment[]> result = new Dictionary<string, PathSegment[]>();
             PathSegment[] segs = path.Segments;
             if (segs == null)
                 return null;
+
+            TrapezoidalProfile profile = CreateRotationProfile(robot, path.StartAngle, path.EndAngle);
+            if (profile.TotalTime > path.TotalTime)
+                throw new Exception("this case not handled yet, rotation cannot completed in path time");
 
             PathSegment[] fl = new PathSegment[segs.Length];
             PathSegment[] fr = new PathSegment[segs.Length];
@@ -68,10 +84,16 @@ namespace PathViewer
                 WheelState blst = new WheelState();
                 WheelState brst = new WheelState();
 
+                double time = segs[i].GetValue("time");
                 double x = segs[i].GetValue("x");
                 double y = segs[i].GetValue("y");
                 double heading = segs[i].GetValue("heading");
 
+                //
+                // Get the required rotational velocity.  For each wheel this should be
+                // orthoginal to the 
+                //
+                double rv = profile.GetVelocity(time);
 
                 //
                 // For each wheel there are two velocity vectors acting on the wheel.  One vector is the
@@ -111,8 +133,11 @@ namespace PathViewer
                     //
                     // Calculate the next state of the wheels
                     //
-
                 }
+
+                //
+                // Store the state of each wheel
+                //
 
                 //
                 // Remember the previous state
