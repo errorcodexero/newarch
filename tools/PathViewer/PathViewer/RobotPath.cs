@@ -29,6 +29,12 @@ namespace PathViewer
         [JsonProperty(PropertyName = "endvelocity")]
         public double EndVelocity;
 
+        [JsonProperty(PropertyName = "startangle")]
+        public double StartAngle;
+
+        [JsonProperty(PropertyName = "endangle")]
+        public double EndAngle;
+
         [JsonProperty(PropertyName = "constraints")]
         public TimingContraint[] Constraints;
 

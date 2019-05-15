@@ -10,6 +10,23 @@ namespace PathViewer
     {
         public override Dictionary<string, PathSegment[]> ModifyPath(RobotParams robot, RobotPath path)
         {
+            Dictionary<string, PathSegment[]> ret = null;
+
+            if (Math.Abs(path.StartAngle - path.EndAngle) < 0.1)
+                ret = ModifyPathSimple(robot, path);
+            else
+                ret = ModifyPathWithRotation(robot, path);
+
+            return ret;
+        }
+
+        private Dictionary<string, PathSegment[]> ModifyPathWithRotation(RobotParams robot, RobotPath path)
+        {
+            return null;
+        }
+
+        private Dictionary<string, PathSegment[]> ModifyPathSimple(RobotParams robot, RobotPath path)
+        {
             PathSegment seg;
             Dictionary<string, PathSegment[]> result = new Dictionary<string, PathSegment[]>();
             PathSegment[] segs = path.Segments;

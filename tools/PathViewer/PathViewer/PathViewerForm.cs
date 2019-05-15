@@ -287,9 +287,9 @@ namespace PathViewer
             else if (e.KeyCode == Keys.Add)
             {
                 if (e.Shift)
-                    m_field.SelectedWaypoint.Heading += 0.5;
+                    m_field.SelectedWaypoint.Heading = BoundDegrees(m_field.SelectedWaypoint.Heading + 0.5);
                 else
-                    m_field.SelectedWaypoint.Heading += 5.0;
+                    m_field.SelectedWaypoint.Heading = BoundDegrees(m_field.SelectedWaypoint.Heading + 5.0);
 
                 m_file.IsDirty = true;
                 gen = true;
@@ -297,9 +297,9 @@ namespace PathViewer
             else if (e.KeyCode == Keys.Subtract)
             {
                 if (e.Shift)
-                    m_field.SelectedWaypoint.Heading -= 0.5;
+                    m_field.SelectedWaypoint.Heading = BoundDegrees(m_field.SelectedWaypoint.Heading - 0.5);
                 else
-                    m_field.SelectedWaypoint.Heading -= 5.0;
+                    m_field.SelectedWaypoint.Heading = BoundDegrees(m_field.SelectedWaypoint.Heading - 5.0);
 
                 m_file.IsDirty = true;
                 gen = true;
@@ -314,6 +314,22 @@ namespace PathViewer
                 if (m_field.SelectedWaypoint != null)
                     UpdateWaypointPropertyWindow();
             }
+        }
+
+        private double BoundDegrees(double a)
+        {
+            if (a > 180.0)
+            {
+                while (a > 180.0)
+                    a -= 180.0;
+            }
+            else
+            {
+                while (a <= -180.0)
+                    a += 180;
+            }
+
+            return a;
         }
 
         private void FieldMouseMoved(object sender, FieldMouseMovedArgs e)
@@ -942,18 +958,36 @@ namespace PathViewer
             if (!double.TryParse(m_text_editor.Text, out d))
                 return false;
 
-            PushUndoStack();
             if (m_path_view_editing.Text == "Max Velocity")
             {
+                PushUndoStack();
                 m_selected_path.MaxVelocity = d;
             }
             else if (m_path_view_editing.Text == "Max Acceleration")
             {
+                PushUndoStack();
                 m_selected_path.MaxAcceleration = d;
             }
             else if (m_path_view_editing.Text == "Max Jerk")
             {
+                PushUndoStack();
                 m_selected_path.MaxJerk = d;
+            }
+            else if (m_path_view_editing.Text == "Start Angle")
+            {
+                if (d <= -180.0 && d > 180.0)
+                    return false;
+
+                PushUndoStack();
+                m_selected_path.StartAngle = d;
+            }
+            else if (m_path_view_editing.Text == "End Angle")
+            {
+                if (d <= -180.0 && d > 180.0)
+                    return false;
+
+                PushUndoStack();
+                m_selected_path.EndAngle = d;
             }
 
             UpdatePathWindow() ;
@@ -1275,6 +1309,17 @@ namespace PathViewer
                 item = new ListViewItem("Max Jerk");
                 item.SubItems.Add(m_selected_path.MaxJerk.ToString());
                 m_path_view.Items.Add(item);
+
+                if (m_file.Robot.DriveType == RobotParams.SwerveDriveType)
+                {
+                    item = new ListViewItem("Start Angle");
+                    item.SubItems.Add(m_selected_path.StartAngle.ToString());
+                    m_path_view.Items.Add(item);
+
+                    item = new ListViewItem("End Angle");
+                    item.SubItems.Add(m_selected_path.EndAngle.ToString());
+                    m_path_view.Items.Add(item);
+                }
             }
         }
         
@@ -1309,7 +1354,6 @@ namespace PathViewer
                 item = new ListViewItem("Max Jerk");
                 item.SubItems.Add(m_file.Robot.MaxJerk.ToString());
                 m_robot_view.Items.Add(item);
-
             }
         }
 

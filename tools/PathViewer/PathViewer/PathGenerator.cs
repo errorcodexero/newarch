@@ -80,11 +80,11 @@ namespace PathViewer
             PathSegment[] segs = GenerateDetailedPath(data.Item1, data.Item2);
             DriveModifier mod = null;
 
-            if (data.Item1.DriveType == "tank")
+            if (data.Item1.DriveType == RobotParams.TankDriveType)
             {
                 mod = new TankDriveModifier();
             }
-            else if (data.Item1.DriveType == "swerve")
+            else if (data.Item1.DriveType == RobotParams.SwerveDriveType)
             {
                 mod = new SwerveDriveModifier();
             }
