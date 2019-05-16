@@ -148,5 +148,11 @@
     </Content>
     <Content Include="TODO.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XeroMath\XeroMath.csproj">
+      <Project>{f62f520e-78a9-4ef1-be55-0f3852dafa9b}</Project>
+      <Name>XeroMath</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

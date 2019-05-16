@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using XeroMath;
+
 
 namespace PathViewer
 {
@@ -51,6 +50,11 @@ namespace PathViewer
             return tp;
         }
 
+        XeroPoint CalculateWheelRotationalSpeed(double wheel_angle, double robot_angle, double rv)
+        {
+            return new XeroPoint(0, 0);
+        }
+
         private Dictionary<string, PathSegment[]> ModifyPathWithRotation(RobotParams robot, RobotPath path)
         {
             Dictionary<string, PathSegment[]> result = new Dictionary<string, PathSegment[]>();
@@ -77,6 +81,12 @@ namespace PathViewer
             WheelState pbl = new WheelState();
             WheelState pbr = new WheelState();
 
+            double current = path.StartAngle;
+            double wheel_angle_fl = Math.Atan2(robot.Width / 2.0, robot.Length / 2.0);
+            double wheel_angle_fr = Math.Atan2(robot.Width / 2.0, -robot.Length / 2.0);
+            double wheel_angle_bl = Math.Atan2(-robot.Width / 2.0, robot.Length / 2.0);
+            double wheel_angle_br = Math.Atan2(-robot.Width / 2.0, -robot.Length / 2.0);
+
             for (int i = 0; i < segs.Length; i++)
             {
                 WheelState flst = new WheelState();
@@ -84,10 +94,13 @@ namespace PathViewer
                 WheelState blst = new WheelState();
                 WheelState brst = new WheelState();
 
+                WheelState pathst = new WheelState();
                 double time = segs[i].GetValue("time");
-                double x = segs[i].GetValue("x");
-                double y = segs[i].GetValue("y");
-                double heading = segs[i].GetValue("heading");
+                pathst.x = segs[i].GetValue("x");
+                pathst.y = segs[i].GetValue("y");
+                pathst.heading = segs[i].GetValue("heading") / 180.0 * Math.PI;
+                pathst.velocity = segs[i].GetValue("velocity");
+                pathst.acceleration = segs[i].GetValue("acceleration");
 
                 //
                 // Get the required rotational velocity.  For each wheel this should be
@@ -102,37 +115,45 @@ namespace PathViewer
                 //
                 if (i == 0)
                 {
-                    double accel = segs[i].GetValue("acceleration");
-
-                    flst.x = x + robot.Width / 2.0;
-                    flst.y = y + robot.Length / 2.0;
+                    flst.x = pathst.x + robot.Width / 2.0;
+                    flst.y = pathst.y + robot.Length / 2.0;
                     flst.velocity = 0.0;
-                    flst.heading = heading;
-                    flst.acceleration = accel;
+                    flst.heading = pathst.heading;
+                    flst.acceleration = pathst.acceleration;
 
-                    frst.x = x + robot.Width / 2.0;
-                    frst.y = y - robot.Length / 2.0;
-                    frst.heading = heading;
+                    frst.x = pathst.x + robot.Width / 2.0;
+                    frst.y = pathst.y - robot.Length / 2.0;
+                    frst.heading = pathst.heading;
                     frst.velocity = 0.0;
-                    frst.acceleration = accel;
+                    frst.acceleration = pathst.acceleration;
 
-                    blst.x = x - robot.Width / 2.0;
-                    blst.y = y + robot.Length / 2.0;
+                    blst.x = pathst.x - robot.Width / 2.0;
+                    blst.y = pathst.y + robot.Length / 2.0;
                     blst.velocity = 0.0;
-                    blst.heading = heading;
-                    blst.acceleration = accel;
+                    blst.heading = pathst.heading;
+                    blst.acceleration = pathst.acceleration;
 
-                    brst.x = x - robot.Width / 2.0;
-                    brst.y = y - robot.Length / 2.0;
+                    brst.x = pathst.x - robot.Width / 2.0;
+                    brst.y = pathst.y - robot.Length / 2.0;
                     brst.velocity = 0.0;
-                    brst.heading = heading;
-                    brst.acceleration = accel;
+                    brst.heading = pathst.heading;
+                    brst.acceleration = pathst.acceleration;
                 }
                 else
                 {
                     //
-                    // Calculate the next state of the wheels
+                    // One vector is the velocity vector for the translational motion
                     //
+                    XeroPoint translation = XeroPoint.FromAngleMagnitude(pathst.heading, pathst.velocity);
+
+                    //
+                    // The second vector is the rototational vector for the rotation.
+                    //
+                    XeroPoint rvector = CalculateWheelRotationalSpeed(wheel_angle_fl, current, rv);
+
+                    XeroPoint 
+
+
                 }
 
                 //
