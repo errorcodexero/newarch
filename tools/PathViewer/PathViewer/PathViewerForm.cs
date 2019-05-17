@@ -189,6 +189,8 @@ namespace PathViewer
 
             m_field.HighlightPoint = wpt;
             m_field.SelectedWaypoint = null;
+
+            m_detailed.Time = e.Time;
         }
         #endregion
 
@@ -634,6 +636,21 @@ namespace PathViewer
 
         #region event handlers for the menus
 
+        private void WheelsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mitem = sender as ToolStripMenuItem;
+            ClearChecks(m_detailed_path_view_menu);
+            mitem.Checked = true;
+            m_detailed.ViewType = DetailedFieldView.ViewTypeValue.WheelView;
+        }
+
+        private void RobotToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mitem = sender as ToolStripMenuItem;
+            ClearChecks(m_detailed_path_view_menu);
+            mitem.Checked = true;
+            m_detailed.ViewType = DetailedFieldView.ViewTypeValue.RobotView;
+        }
         private void CloseMenuItemEventHandler(object sender, EventArgs e)
         {
             if (m_file.IsDirty)
@@ -1136,6 +1153,17 @@ namespace PathViewer
             return true;
         }
         #endregion
+
+
+        private void ClearChecks(ToolStripMenuItem menu)
+        {
+            foreach (var item in menu.DropDownItems)
+            {
+                ToolStripMenuItem mitem = item as ToolStripMenuItem;
+                if (mitem != null)
+                    mitem.Checked = false;
+            }
+        }
 
         private Nullable<PointF> FindPointAtTime(RobotPath p, double t)
         {
@@ -1718,30 +1746,5 @@ namespace PathViewer
         }
         #endregion
 
-        private void ClearChecks(ToolStripMenuItem menu)
-        {
-            foreach(var item in menu.DropDownItems)
-            {
-                ToolStripMenuItem mitem = item as ToolStripMenuItem;
-                if (mitem != null)
-                    mitem.Checked = false;
-            }
-        }
-
-        private void WheelsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem mitem = sender as ToolStripMenuItem;
-            ClearChecks(m_detailed_path_view_menu);
-            mitem.Checked = true;
-            m_detailed.ViewType = DetailedFieldView.ViewTypeValue.WheelView;
-        }
-
-        private void RobotToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem mitem = sender as ToolStripMenuItem;
-            ClearChecks(m_detailed_path_view_menu);
-            mitem.Checked = true;
-            m_detailed.ViewType = DetailedFieldView.ViewTypeValue.RobotView;
-        }
     }
 }

@@ -151,9 +151,6 @@ namespace PathViewer
                     //
                     XeroPoint rvector = CalculateWheelRotationalSpeed(wheel_angle_fl, current, rv);
 
-                    XeroPoint 
-
-
                 }
 
                 //
@@ -180,6 +177,8 @@ namespace PathViewer
             if (segs == null)
                 return null;
 
+            double angle = path.StartAngle / 180.0 * Math.PI;
+
             PathSegment[] fl = new PathSegment[segs.Length];
             PathSegment[] fr = new PathSegment[segs.Length];
             PathSegment[] bl = new PathSegment[segs.Length];
@@ -190,29 +189,38 @@ namespace PathViewer
             result["bl"] = bl;
             result["br"] = br;
 
+            XeroPoint pt;
+
             for (int i = 0; i < segs.Length; i++)
             {
-                double x = segs[i].GetValue("x");
-                double y = segs[i].GetValue("y");
+                XeroPoint loc = new XeroPoint(segs[i].GetValue("x"), segs[i].GetValue("y")) ;
 
+                pt = new XeroPoint(robot.Width / 2.0, robot.Length / 2.0);
+                pt = pt.Rotate(angle) + loc;
                 seg = new PathSegment(segs[i]);
-                seg.AddValue("x", x + robot.Width / 2.0);
-                seg.AddValue("y", y + robot.Length / 2.0);
+                seg.AddValue("x", pt.X);
+                seg.AddValue("y", pt.Y);
                 fl[i] = seg;
 
+                pt = new XeroPoint(robot.Width / 2.0, -robot.Length / 2.0);
+                pt = pt.Rotate(angle) + loc;
                 seg = new PathSegment(segs[i]);
-                seg.AddValue("x", x + robot.Width / 2.0);
-                seg.AddValue("y", y - robot.Length / 2.0);
+                seg.AddValue("x", pt.X);
+                seg.AddValue("y", pt.Y);
                 fr[i] = seg;
 
+                pt = new XeroPoint(-robot.Width / 2.0, robot.Length / 2.0);
+                pt = pt.Rotate(angle) + loc;
                 seg = new PathSegment(segs[i]);
-                seg.AddValue("x", x - robot.Width / 2.0);
-                seg.AddValue("y", y + robot.Length / 2.0);
+                seg.AddValue("x", pt.X);
+                seg.AddValue("y", pt.Y);
                 bl[i] = seg;
 
+                pt = new XeroPoint(-robot.Width / 2.0, -robot.Length / 2.0);
+                pt = pt.Rotate(angle) + loc;
                 seg = new PathSegment(segs[i]);
-                seg.AddValue("x", x - robot.Width / 2.0);
-                seg.AddValue("y", y - robot.Length / 2.0);
+                seg.AddValue("x", pt.X);
+                seg.AddValue("y", pt.Y);
                 br[i] = seg;
             }
 

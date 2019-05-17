@@ -26,5 +26,17 @@ namespace XeroMath
 
             return new XeroPoint(x, y);
         }
+
+        public XeroPoint Rotate(double radians)
+        {
+            double nx = X * Math.Cos(radians) - Y * Math.Sin(radians);
+            double ny = Y * Math.Cos(radians) + X * Math.Sin(radians);
+            return new XeroPoint(nx, ny);
+        }
+
+        public static XeroPoint operator+(XeroPoint p1, XeroPoint p2)
+        {
+            return new XeroPoint(p1.X + p2.X, p1.Y + p2.Y);
+        }
     }
 }

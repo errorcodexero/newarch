@@ -16,8 +16,6 @@ namespace PathViewer
         #region private variables
         private ViewTypeValue m_view_type;
         private double m_time;
-        private double m_time_end;
-        private Timer m_timer;
         private RobotParams m_robot;
 
         private const int TimeStep = 100; 
@@ -35,13 +33,6 @@ namespace PathViewer
         public DetailedFieldView()
         {
             InitializeComponent();
-
-            m_timer = new Timer();
-            m_timer.Interval = TimeStep ;
-            m_timer.Tick += TimerTickCallback;
-
-            if (Focused && m_view_type == DetailedFieldView.ViewTypeValue.RobotView)
-                m_timer.Enabled = true;
         }
 
         #endregion
@@ -55,9 +46,6 @@ namespace PathViewer
                 m_view_type = value;
                 Initialize();
                 Invalidate();
-
-                if (m_view_type == ViewTypeValue.RobotView && Focused)
-                    m_timer.Enabled = true;
             }
         }
 
@@ -65,6 +53,12 @@ namespace PathViewer
         {
             get { return m_robot; }
             set { m_robot = value; }
+        }
+
+        public double Time
+        {
+            get { return m_time; }
+            set { m_time = value; Invalidate(); }
         }
         #endregion
 
@@ -91,31 +85,9 @@ namespace PathViewer
             base.OnPathChanged(args);
             Initialize();
         }
-
-        protected override void OnGotFocus(EventArgs e)
-        {
-            base.OnGotFocus(e);
-            if (m_view_type == ViewTypeValue.RobotView)
-                m_timer.Enabled = true;
-        }
-
-        protected override void OnLostFocus(EventArgs e)
-        {
-            base.OnLostFocus(e);
-            m_timer.Enabled = false;
-        }
         #endregion
 
         #region private methods
-
-        private void TimerTickCallback(object sender, EventArgs e)
-        {
-            m_time += (double)(TimeStep / 1000.0);
-            if (m_time > m_time_end)
-                m_time = 0.0;
-
-            Invalidate();
-        }
 
         private void DrawOnePathSegment(Graphics g, Color c, PathSegment[] seg)
         {
@@ -218,15 +190,7 @@ namespace PathViewer
 
         private void Initialize()
         {
-            if (DisplayedPath != null)
-            {
-                PathSegment[] segs = DisplayedPath.Segments;
-                if (segs != null)
-                {
-                    m_time = 0.0;
-                    m_time_end = segs[segs.Length - 1].GetValue("time");
-                }
-            }
+            m_time = 0.0;
         }
         #endregion
     }
