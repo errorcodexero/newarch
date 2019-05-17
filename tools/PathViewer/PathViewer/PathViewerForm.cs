@@ -290,9 +290,9 @@ namespace PathViewer
             else if (e.KeyCode == Keys.Add || e.KeyCode == Keys.PageUp)
             {
                 if (e.Shift)
-                    m_field.SelectedWaypoint.Heading = BoundDegrees(m_field.SelectedWaypoint.Heading + 0.5);
+                    m_field.SelectedWaypoint.Heading = MathUtils.BoundDegrees(m_field.SelectedWaypoint.Heading + 0.5);
                 else
-                    m_field.SelectedWaypoint.Heading = BoundDegrees(m_field.SelectedWaypoint.Heading + 5.0);
+                    m_field.SelectedWaypoint.Heading = MathUtils.BoundDegrees(m_field.SelectedWaypoint.Heading + 5.0);
 
                 m_file.IsDirty = true;
                 gen = true;
@@ -300,9 +300,9 @@ namespace PathViewer
             else if (e.KeyCode == Keys.Subtract || e.KeyCode == Keys.PageDown)
             {
                 if (e.Shift)
-                    m_field.SelectedWaypoint.Heading = BoundDegrees(m_field.SelectedWaypoint.Heading - 0.5);
+                    m_field.SelectedWaypoint.Heading = MathUtils.BoundDegrees(m_field.SelectedWaypoint.Heading - 0.5);
                 else
-                    m_field.SelectedWaypoint.Heading = BoundDegrees(m_field.SelectedWaypoint.Heading - 5.0);
+                    m_field.SelectedWaypoint.Heading = MathUtils.BoundDegrees(m_field.SelectedWaypoint.Heading - 5.0);
 
                 m_file.IsDirty = true;
                 gen = true;
@@ -317,22 +317,6 @@ namespace PathViewer
                 if (m_field.SelectedWaypoint != null)
                     UpdateWaypointPropertyWindow();
             }
-        }
-
-        private double BoundDegrees(double a)
-        {
-            double x = a;
-            if (a > 180.0)
-            {
-                while (a > 180.0)
-                    a -= 360.0;
-            }
-            else
-            {
-                while (a <= -180.0)
-                    a += 360.0;
-            }
-            return a;
         }
 
         private void FieldMouseMoved(object sender, FieldMouseMovedArgs e)

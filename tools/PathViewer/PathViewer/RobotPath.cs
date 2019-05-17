@@ -279,13 +279,32 @@ namespace PathViewer
 
         public void Evaluate(int index, double t, out double x, out double y, out double heading)
         {
-            x = m_splines[index].Item1.Evaluate(t);
-            y = m_splines[index].Item2.Evaluate(t);
+            if (m_splines[index].Item2 == null)
+            {
+                Spline s = m_splines[index].Item1;
+                double tx = t * s.KnotDistance;
+                double ty = s.Evaluate(t);
 
-            double dx = m_splines[index].Item1.Derivative(t);
-            double dy = m_splines[index].Item2.Derivative(t);
+                double ca = Math.Cos(MathUtils.DegreesToRadians(s.AngleOffset));
+                double sa = Math.Sin(MathUtils.DegreesToRadians(s.AngleOffset));
 
-            heading = Math.Atan2(dy, dx) / Math.PI * 180.0;
+                x = tx * ca - ty * sa + s.XOffset;
+                y = tx * sa + ty * ca + s.YOffset;
+
+                heading = MathUtils.RadiansToDegrees(MathUtils.BoundRadians(Math.Atan(s.Derivative(t)) + s.AngleOffset));
+            }
+            else
+            {
+                //
+                // For path generators that generate independent splines for the X and Y coordinate
+                //
+                x = m_splines[index].Item1.Evaluate(t);
+                y = m_splines[index].Item2.Evaluate(t);
+
+                double dx = m_splines[index].Item1.Derivative(t);
+                double dy = m_splines[index].Item2.Derivative(t);
+                heading = MathUtils.RadiansToDegrees(Math.Atan2(dy, dx));
+            }
         }
 
         public void GenerateSegments(RobotParams robot, PathGenerator gen)

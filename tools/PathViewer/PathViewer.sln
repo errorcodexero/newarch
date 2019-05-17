@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheesyPoofsGenerator", "Che
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CheesyGen", "CheesyGen\CheesyGen.vcxproj", "{1835BF68-80B9-40F9-AE16-FEBA48DC8191}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinderV1", "PathFinderV1\PathFinderV1.csproj", "{D50F9183-73D6-4053-905B-AD5F88640DB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,18 @@ Global
 		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Release|x64.Build.0 = Release|x64
 		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Release|x86.ActiveCfg = Release|Win32
 		{1835BF68-80B9-40F9-AE16-FEBA48DC8191}.Release|x86.Build.0 = Release|Win32
+		{D50F9183-73D6-4053-905B-AD5F88640DB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D50F9183-73D6-4053-905B-AD5F88640DB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D50F9183-73D6-4053-905B-AD5F88640DB3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D50F9183-73D6-4053-905B-AD5F88640DB3}.Debug|x64.Build.0 = Debug|Any CPU
+		{D50F9183-73D6-4053-905B-AD5F88640DB3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D50F9183-73D6-4053-905B-AD5F88640DB3}.Debug|x86.Build.0 = Debug|Any CPU
+		{D50F9183-73D6-4053-905B-AD5F88640DB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D50F9183-73D6-4053-905B-AD5F88640DB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D50F9183-73D6-4053-905B-AD5F88640DB3}.Release|x64.ActiveCfg = Release|Any CPU
+		{D50F9183-73D6-4053-905B-AD5F88640DB3}.Release|x64.Build.0 = Release|Any CPU
+		{D50F9183-73D6-4053-905B-AD5F88640DB3}.Release|x86.ActiveCfg = Release|Any CPU
+		{D50F9183-73D6-4053-905B-AD5F88640DB3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
