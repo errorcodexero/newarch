@@ -105,8 +105,8 @@ namespace CheesyPoofsGenerator
 
         private void GenerateSpline(WayPoint p0, WayPoint p1, out Spline xsp, out Spline  ysp)
         {
-            double p0h = p0.Heading / 180.0 * Math.PI;
-            double p1h = p1.Heading / 180.0 * Math.PI;
+            double p0h = MathUtils.DegreesToRadians(p0.Heading);
+            double p1h = MathUtils.DegreesToRadians(p1.Heading);
 
             double scale = 1.2 * p0.Distance(p1);
             double x0 = p0.X;
@@ -137,8 +137,9 @@ namespace CheesyPoofsGenerator
             double ey = dy0;
             double fy = y0;
 
-            xsp = new Spline(new double[] { fx, ex, dx, cx, bx, ax });
-            ysp = new Spline(new double[] { fy, ey, dy, cy, by, ay });
+            double dist = p0.Distance(p1);
+            xsp = new Spline(dist, new double[] { fx, ex, dx, cx, bx, ax });
+            ysp = new Spline(dist, new double[] { fy, ey, dy, cy, by, ay });
         }
         #endregion
     }

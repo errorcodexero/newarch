@@ -257,7 +257,7 @@ namespace PathViewer
         private double FindAngle(PointF first, PointF second)
         {
             double angle = Math.Atan2(second.Y - first.Y, second.X - first.X);
-            return angle / Math.PI * 180.0;
+            return MathUtils.RadiansToDegrees(angle);
         }
 
         private bool HitTestWaypoint(int x, int y, RobotPath path, out WayPoint hitpt, out WaypointRegion part)
@@ -356,7 +356,7 @@ namespace PathViewer
                     PointF pt, w;
 
                     path.Evaluate(index, t, out x, out y, out heading);
-                    heading = heading / 180.0 * Math.PI;
+                    heading = MathUtils.DegreesToRadians(heading);
                     double ca = Math.Cos(heading);
                     double sa = Math.Sin(heading);
 
@@ -397,7 +397,7 @@ namespace PathViewer
                         {
                             Matrix mm;
 
-                            float angle = (float)(pt.Heading / 180.0f * Math.PI);
+                            float angle = (float)MathUtils.DegreesToRadians(pt.Heading);
 
                             //
                             // Draw the point

@@ -30,7 +30,7 @@ namespace PathViewer
 
             for (int i = 0; i < segs.Length; i++)
             {
-                double heading = segs[i].GetValue("heading") / 180.0 * Math.PI;
+                double heading = MathUtils.DegreesToRadians(segs[i].GetValue("heading") / 180.0 * Math.PI);
                 double ca = Math.Cos(heading);
                 double sa = Math.Sin(heading);
 
