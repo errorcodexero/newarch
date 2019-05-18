@@ -55,12 +55,12 @@ namespace PathFinderV1
             double a1_delta = Math.Tan(MathUtils.BoundRadians(MathUtils.DegreesToRadians(p1.Heading) - aoffset));
 
             double[] coeffs = new double[6];
-            coeffs[0] = -(3 * (a0_delta + a1_delta)) / (dist * dist * dist * dist);
-            coeffs[1] = (8 * a0_delta + 7 * a1_delta) / (dist * dist * dist);
-            coeffs[2] = -(6 * a0_delta + 4 * a1_delta) / (dist * dist);
-            coeffs[3] = 0.0;
-            coeffs[4] = a0_delta;
-            coeffs[5] = 0.0;
+            coeffs[5] = -(3 * (a0_delta + a1_delta)) / (dist * dist * dist * dist);
+            coeffs[4] = (8 * a0_delta + 7 * a1_delta) / (dist * dist * dist);
+            coeffs[3] = -(6 * a0_delta + 4 * a1_delta) / (dist * dist);
+            coeffs[2] = 0.0;
+            coeffs[1] = a0_delta;
+            coeffs[0] = 0.0;
 
             xsp = new Spline(dist, coeffs);
             xsp.XOffset = p0.X;

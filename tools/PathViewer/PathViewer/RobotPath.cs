@@ -283,7 +283,7 @@ namespace PathViewer
             {
                 Spline s = m_splines[index].Item1;
                 double tx = t * s.KnotDistance;
-                double ty = s.Evaluate(t);
+                double ty = s.Evaluate(tx);
 
                 double ca = Math.Cos(MathUtils.DegreesToRadians(s.AngleOffset));
                 double sa = Math.Sin(MathUtils.DegreesToRadians(s.AngleOffset));
@@ -291,7 +291,7 @@ namespace PathViewer
                 x = tx * ca - ty * sa + s.XOffset;
                 y = tx * sa + ty * ca + s.YOffset;
 
-                heading = MathUtils.RadiansToDegrees(MathUtils.BoundRadians(Math.Atan(s.Derivative(t)) + s.AngleOffset));
+                heading = MathUtils.RadiansToDegrees(MathUtils.BoundRadians(Math.Atan(s.Derivative(tx)) + MathUtils.DegreesToRadians(s.AngleOffset))); ;
             }
             else
             {

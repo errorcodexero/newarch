@@ -18,35 +18,81 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ConstrainedPoint.cpp" />
+    <ClCompile Include="DistanceVelocityConstraint.cpp" />
+    <ClCompile Include="JSON.cpp" />
+    <ClCompile Include="JSONPathReader.cpp" />
+    <ClCompile Include="JSONValue.cpp" />
+    <ClCompile Include="MathUtils.cpp" />
+    <ClCompile Include="Pose2d.cpp" />
+    <ClCompile Include="Pose2dWithCurvature.cpp" />
+    <ClCompile Include="Rotation2d.cpp" />
+    <ClCompile Include="TimedTrajectory.cpp" />
+    <ClCompile Include="TimedTrajectoryPoint.cpp" />
+    <ClCompile Include="TrajectorySamplePoint.cpp" />
+    <ClCompile Include="Translation2d.cpp" />
+    <ClCompile Include="Twist2d.cpp" />
+    <ClCompile Include="WaypointReader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CentripetalAccelerationConstraint.h" />
+    <ClInclude Include="ConstrainedPoint.h" />
+    <ClInclude Include="CSVWriter.h" />
+    <ClInclude Include="DistanceVelocityConstraint.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="ICsv.h" />
+    <ClInclude Include="JSON.h" />
+    <ClInclude Include="JSONPathReader.h" />
+    <ClInclude Include="JSONValue.h" />
+    <ClInclude Include="MathUtils.h" />
+    <ClInclude Include="MinMaxAcceleration.h" />
+    <ClInclude Include="PathCollection.h" />
+    <ClInclude Include="PathGroup.h" />
+    <ClInclude Include="Pose2d.h" />
+    <ClInclude Include="Pose2dWithCurvature.h" />
+    <ClInclude Include="RobotParams.h" />
+    <ClInclude Include="RobotPath.h" />
+    <ClInclude Include="Rotation2d.h" />
+    <ClInclude Include="TimedTrajectory.h" />
+    <ClInclude Include="TimedTrajectoryPoint.h" />
+    <ClInclude Include="TimingConstraint.h" />
+    <ClInclude Include="Trajectory.h" />
+    <ClInclude Include="TrajectoryPoint.h" />
+    <ClInclude Include="TrajectorySamplePoint.h" />
+    <ClInclude Include="Translation2d.h" />
+    <ClInclude Include="Twist2d.h" />
+    <ClInclude Include="WaypointReader.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{1835BF68-80B9-40F9-AE16-FEBA48DC8191}</ProjectGuid>
+    <ProjectGuid>{B4BAEF8D-0066-4126-B0E0-9380750E5276}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>CheesyGen</RootNamespace>
+    <RootNamespace>PathGenCommon</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -92,19 +138,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)PathGenCommon</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>PathGenCommon.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>copy $(SolutionDir)$(Platform)\$(ConfigurationName)\$(TargetFileName) $(SolutionDir)\PathViewer\bin\$(ConfigurationName)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -112,19 +153,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)PathGenCommon</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>PathGenCommon.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>copy $(SolutionDir)$(Platform)\$(ConfigurationName)\$(TargetFileName) $(SolutionDir)\PathViewer\bin\$(ConfigurationName)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -134,21 +170,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)PathGenCommon</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>PathGenCommon.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>copy $(SolutionDir)$(Platform)\$(ConfigurationName)\$(TargetFileName) $(SolutionDir)\PathViewer\bin\$(ConfigurationName)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -158,37 +189,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)PathGenCommon</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>PathGenCommon.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>copy $(SolutionDir)$(Platform)\$(ConfigurationName)\$(TargetFileName) $(SolutionDir)\PathViewer\bin\$(ConfigurationName)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="CheesyGen.cpp" />
-    <ClCompile Include="DistanceView.cpp" />
-    <ClCompile Include="PathGenerator.cpp" />
-    <ClCompile Include="QuinticHermiteSpline.cpp" />
-    <ClCompile Include="SplineGenerator.cpp" />
-    <ClCompile Include="TimingUtil.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="DistanceView.h" />
-    <ClInclude Include="PathGenerator.h" />
-    <ClInclude Include="QuinticHermiteSpline.h" />
-    <ClInclude Include="SplineGenerator.h" />
-    <ClInclude Include="TimingUtil.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

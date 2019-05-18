@@ -16,10 +16,20 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheesyPoofsGenerator", "CheesyPoofsGenerator\CheesyPoofsGenerator.csproj", "{AA46E9F4-4393-497F-88CE-F9C90E1CD95E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CheesyGen", "CheesyGen\CheesyGen.vcxproj", "{1835BF68-80B9-40F9-AE16-FEBA48DC8191}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B4BAEF8D-0066-4126-B0E0-9380750E5276} = {B4BAEF8D-0066-4126-B0E0-9380750E5276}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XeroMath", "XeroMath\XeroMath.csproj", "{F62F520E-78A9-4EF1-BE55-0F3852DAFA9B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PathFinderV1", "PathFinderV1\PathFinderV1.csproj", "{0DD85581-2B98-4E50-B4A2-C18F934C0526}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PathFinderV1Gen", "PathFinderV1Gen\PathFinderV1Gen.vcxproj", "{E71BF34A-10BC-4E81-9B45-B1AEEBB0BBBF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B4BAEF8D-0066-4126-B0E0-9380750E5276} = {B4BAEF8D-0066-4126-B0E0-9380750E5276}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PathGenCommon", "PathGenCommon\PathGenCommon.vcxproj", "{B4BAEF8D-0066-4126-B0E0-9380750E5276}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +99,26 @@ Global
 		{0DD85581-2B98-4E50-B4A2-C18F934C0526}.Release|x64.Build.0 = Release|Any CPU
 		{0DD85581-2B98-4E50-B4A2-C18F934C0526}.Release|x86.ActiveCfg = Release|Any CPU
 		{0DD85581-2B98-4E50-B4A2-C18F934C0526}.Release|x86.Build.0 = Release|Any CPU
+		{E71BF34A-10BC-4E81-9B45-B1AEEBB0BBBF}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{E71BF34A-10BC-4E81-9B45-B1AEEBB0BBBF}.Debug|x64.ActiveCfg = Debug|x64
+		{E71BF34A-10BC-4E81-9B45-B1AEEBB0BBBF}.Debug|x64.Build.0 = Debug|x64
+		{E71BF34A-10BC-4E81-9B45-B1AEEBB0BBBF}.Debug|x86.ActiveCfg = Debug|Win32
+		{E71BF34A-10BC-4E81-9B45-B1AEEBB0BBBF}.Debug|x86.Build.0 = Debug|Win32
+		{E71BF34A-10BC-4E81-9B45-B1AEEBB0BBBF}.Release|Any CPU.ActiveCfg = Release|Win32
+		{E71BF34A-10BC-4E81-9B45-B1AEEBB0BBBF}.Release|x64.ActiveCfg = Release|x64
+		{E71BF34A-10BC-4E81-9B45-B1AEEBB0BBBF}.Release|x64.Build.0 = Release|x64
+		{E71BF34A-10BC-4E81-9B45-B1AEEBB0BBBF}.Release|x86.ActiveCfg = Release|Win32
+		{E71BF34A-10BC-4E81-9B45-B1AEEBB0BBBF}.Release|x86.Build.0 = Release|Win32
+		{B4BAEF8D-0066-4126-B0E0-9380750E5276}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{B4BAEF8D-0066-4126-B0E0-9380750E5276}.Debug|x64.ActiveCfg = Debug|x64
+		{B4BAEF8D-0066-4126-B0E0-9380750E5276}.Debug|x64.Build.0 = Debug|x64
+		{B4BAEF8D-0066-4126-B0E0-9380750E5276}.Debug|x86.ActiveCfg = Debug|Win32
+		{B4BAEF8D-0066-4126-B0E0-9380750E5276}.Debug|x86.Build.0 = Debug|Win32
+		{B4BAEF8D-0066-4126-B0E0-9380750E5276}.Release|Any CPU.ActiveCfg = Release|Win32
+		{B4BAEF8D-0066-4126-B0E0-9380750E5276}.Release|x64.ActiveCfg = Release|x64
+		{B4BAEF8D-0066-4126-B0E0-9380750E5276}.Release|x64.Build.0 = Release|x64
+		{B4BAEF8D-0066-4126-B0E0-9380750E5276}.Release|x86.ActiveCfg = Release|Win32
+		{B4BAEF8D-0066-4126-B0E0-9380750E5276}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
