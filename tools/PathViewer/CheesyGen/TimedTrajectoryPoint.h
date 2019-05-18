@@ -8,6 +8,7 @@ namespace xero {
 		{
 		public:
 			TimedTrajectoryPoint(const TrajectorySamplePoint& pt, double t, double p, double v, double a);
+			TimedTrajectoryPoint(const Pose2dWithCurvature& pt, double t, double p, double v, double a);
 			virtual ~TimedTrajectoryPoint();
 
 			double getTime() const {
@@ -34,6 +35,14 @@ namespace xero {
 				acceleration_ = a;
 			}
 
+			double getPosition() const {
+				return position_;
+			}
+
+			void setPosition(double v) {
+				position_ = v;
+			}
+
 			virtual std::string toCSV() const {
 				std::string ret;
 				ret += std::to_string(time_);
@@ -44,6 +53,8 @@ namespace xero {
 
 				return ret;
 			}
+
+			TimedTrajectoryPoint interpolateByTime(const TimedTrajectoryPoint& other, double time) const;
 
 		private:
 			double time_;

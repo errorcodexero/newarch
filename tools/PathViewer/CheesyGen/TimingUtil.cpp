@@ -8,6 +8,42 @@
 namespace xero {
 	namespace paths {
 
+		TimedTrajectory TimingUtil::createConstantTimeTrajectory(const TimedTrajectory& traj, double timestep)
+		{
+			const std::vector<TimedTrajectoryPoint>& pts = traj.getPoints();
+			double endtime = pts[pts.size() - 1].getTime();
+			std::vector<TimedTrajectoryPoint> newpts;
+			size_t previndex = 0;
+
+			for (double t = 0.0; t <= endtime; t += timestep)
+			{
+				if (t < pts[0].getTime())
+				{
+					newpts.push_back(pts[0]);
+				}
+				else if (t > endtime)
+				{
+					newpts.push_back(pts[pts.size() - 1]);
+				}
+				else
+				{
+					while (previndex < pts.size() - 1)
+					{
+						if (t >= pts[previndex].getTime() && t < pts[previndex + 1].getTime())
+							break;
+
+						previndex++;
+					}
+
+					assert(previndex != pts.size());
+					newpts.push_back(pts[previndex].interpolateByTime(pts[previndex + 1], t));
+				}
+			}
+
+			return TimedTrajectory(newpts);
+		}
+
+
 		TimedTrajectory TimingUtil::timeParameterizeTrajectory(DistanceView& distview, const ConstraintList& constraints, double step_size,
 			double startvel, double endvel, double maxvel, double maxaccel)
 		{

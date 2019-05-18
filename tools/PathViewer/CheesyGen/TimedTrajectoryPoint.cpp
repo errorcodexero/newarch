@@ -1,4 +1,5 @@
 #include "TimedTrajectoryPoint.h"
+#include <cassert>
 
 namespace xero
 {
@@ -14,6 +15,21 @@ namespace xero
 
 		TimedTrajectoryPoint::~TimedTrajectoryPoint()
 		{
+		}
+
+		TimedTrajectoryPoint TimedTrajectoryPoint::interpolateByTime(const TimedTrajectoryPoint& other, double time) const
+		{
+			double percent = (time - getTime()) / (other.getTime() - getTime());
+			assert(percent >= 0.0 && percent <= 1.0);
+
+			Pose2dWithCurvature p2d = interpolate(other, percent);
+			TrajectorySamplePoint spt(p2d, 0, 0);
+
+			double p = getPosition() + (other.getPosition() - getPosition()) * percent;
+			double v = getVelocity() + (other.getVelocity() - getVelocity()) * percent;
+			double a = getAcceleration() + (other.getAcceleration() - getAcceleration()) * percent;
+			TimedTrajectoryPoint result(spt, time, p, v, a);
+			return result;
 		}
 	}
 }

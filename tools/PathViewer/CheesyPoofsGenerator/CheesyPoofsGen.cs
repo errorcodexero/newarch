@@ -61,6 +61,7 @@ namespace CheesyPoofsGenerator
 
             args += "--outfile " + outfile;
             args += " --pathfile " + pathfile;
+            args += " --timestep " + robot.TimeStep.ToString();
 
             ProcessStartInfo info = new ProcessStartInfo();
             info.CreateNoWindow = true;
@@ -101,7 +102,6 @@ namespace CheesyPoofsGenerator
         #endregion
 
         #region private methods
-
 
         private void GenerateSpline(WayPoint p0, WayPoint p1, out Spline xsp, out Spline  ysp)
         {

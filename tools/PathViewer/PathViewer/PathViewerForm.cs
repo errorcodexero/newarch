@@ -164,7 +164,7 @@ namespace PathViewer
             m_logger.OutputAvailable += LoggerOutputAvailable;
 
             OutputCopyright();
-            WheelsToolStripMenuItem_Click(m_wheels_menu_item, null);
+            WheeledDetailViewMenuItem(m_wheels_menu_item, null);
 
         }
         #endregion
@@ -620,7 +620,7 @@ namespace PathViewer
 
         #region event handlers for the menus
 
-        private void WheelsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void WheeledDetailViewMenuItem(object sender, EventArgs e)
         {
             ToolStripMenuItem mitem = sender as ToolStripMenuItem;
             ClearChecks(m_detailed_path_view_menu);
@@ -628,13 +628,19 @@ namespace PathViewer
             m_detailed.ViewType = DetailedFieldView.ViewTypeValue.WheelView;
         }
 
-        private void RobotToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RobotDetailViewMenuItem(object sender, EventArgs e)
         {
             ToolStripMenuItem mitem = sender as ToolStripMenuItem;
             ClearChecks(m_detailed_path_view_menu);
             mitem.Checked = true;
             m_detailed.ViewType = DetailedFieldView.ViewTypeValue.RobotView;
         }
+
+        private void NewMenuItemEventHandler(object sender, EventArgs e)
+        {
+            CloseMenuItemEventHandler(sender, e);
+        }
+
         private void CloseMenuItemEventHandler(object sender, EventArgs e)
         {
             if (m_file.IsDirty)
@@ -658,7 +664,7 @@ namespace PathViewer
             UpdatePathTree();
         }
 
-        private void GeneratePathsAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void GeneratePathAsMenuItem(object sender, EventArgs e)
         {
             if (m_file.IsDirty)
             {
@@ -671,6 +677,9 @@ namespace PathViewer
             }
 
             FolderBrowserDialog dialog = new FolderBrowserDialog();
+            if (!String.IsNullOrEmpty(m_file.PathName))
+                dialog.SelectedPath = Path.GetDirectoryName(m_file.PathName);
+
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 m_file.OutputDirectory = dialog.SelectedPath;
@@ -678,7 +687,7 @@ namespace PathViewer
             }
         }
 
-        private void GeneratePathsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void GeneratePathMenuItem(object sender, EventArgs e)
         {
             if (m_file.IsDirty)
             {
@@ -691,12 +700,12 @@ namespace PathViewer
             }
 
             if (string.IsNullOrEmpty(m_file.OutputDirectory))
-                GeneratePathsAsToolStripMenuItem_Click(sender, e);
+                GeneratePathAsMenuItem(sender, e);
             else
                 GeneratePaths();
         }
 
-        private void UndoToolStripMenuItem_Click(object sender, EventArgs e)
+        private void UndoMenuItem(object sender, EventArgs e)
         {
             PopUndoStack();
         }
@@ -847,6 +856,7 @@ namespace PathViewer
             m_pathfile_tree.SelectedNode = nnode;
             m_file.AddPath(node.Text, newname);
             PathTreeSelectionChanged(m_pathfile_tree, new TreeViewEventArgs(nnode));
+            GenerateAllSplines();
         }
 
         private void RemovePathToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1057,6 +1067,11 @@ namespace PathViewer
                 else if (m_robot_param_editing.Text == "Max Jerk")
                 {
                     m_file.Robot.MaxJerk = d;
+                    m_file.IsDirty = true;
+                }
+                else if (m_robot_param_editing.Text == "Timestep")
+                {
+                    m_file.Robot.TimeStep = d;
                     m_file.IsDirty = true;
                 }
             }
@@ -1356,6 +1371,10 @@ namespace PathViewer
                 item.SubItems.Add(m_file.Robot.DriveType);
                 m_robot_view.Items.Add(item);
 
+                item = new ListViewItem("Timestep");
+                item.SubItems.Add(m_file.Robot.TimeStep.ToString());
+                m_robot_view.Items.Add(item);
+
                 item = new ListViewItem("Width");
                 item.SubItems.Add(m_file.Robot.Width.ToString());
                 m_robot_view.Items.Add(item);
@@ -1558,7 +1577,7 @@ namespace PathViewer
             }
         }
 
-        static string[] fields = { "time", "x", "y", "position", "velocity", "acceleration", "jerk" };
+        static string[] fields = { "time", "x", "y", "heading", "position", "velocity", "acceleration", "jerk" };
         private void WritePath(string grname, string pathname, string suffix, PathSegment[] segs)
         {
             string filename;

@@ -14,7 +14,7 @@ namespace xero
 			TimedTrajectory(std::vector<TimedTrajectoryPoint>& points);
 			virtual ~TimedTrajectory();
 
-			const std::vector<TimedTrajectoryPoint> &getPoints() {
+			const std::vector<TimedTrajectoryPoint> &getPoints() const {
 				return points_;
 			}
 

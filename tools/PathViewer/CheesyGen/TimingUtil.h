@@ -23,6 +23,8 @@ namespace xero {
 			static TimedTrajectory timeParameterizeTrajectory(std::vector<TrajectorySamplePoint> &states, const ConstraintList& constraints, 
 									double startvel, double endvel, double maxvel, double maxaccel);
 
+			static TimedTrajectory createConstantTimeTrajectory(const TimedTrajectory& traj, double timestep);
+
 		private:
 			static double constexpr kEpsilon = 1e-6;
 		};

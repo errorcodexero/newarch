@@ -24,7 +24,7 @@ namespace PathViewer
         public PathFile()
         {
             Groups = new PathGroup[0];
-            Robot = new RobotParams(RobotParams.TankDriveType, 24.0, 32.0, 96.0, 96.0, 96.0);
+            Robot = new RobotParams(RobotParams.TankDriveType, 0.02, 24.0, 32.0, 96.0, 96.0, 96.0);
         }
 
         public PathFile(PathFile pf)

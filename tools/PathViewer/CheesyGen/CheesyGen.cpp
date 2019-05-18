@@ -15,6 +15,7 @@ double maxDx = 2.0;
 double maxDy = 0.25;
 double maxDTheta = MathUtils::degreesToRadians(5.0);
 double step = 2.0;
+double timestep = 0.02;
 std::string pathfile;
 std::string outputdir;
 std::string outfile;
@@ -47,8 +48,9 @@ int main(int ac, char** av)
 				return 1;
 			}
 
+			arg = *av;
 			try {
-				maxDx = std::stod(*av, &index);
+				maxDx = std::stod(arg, &index);
 			}
 			catch (...)
 			{
@@ -71,8 +73,9 @@ int main(int ac, char** av)
 				return 1;
 			}
 
+			arg = *av;
 			try {
-				maxDy = std::stod(*av, &index);
+				maxDy = std::stod(arg, &index);
 			}
 			catch (...)
 			{
@@ -95,8 +98,9 @@ int main(int ac, char** av)
 				return 1;
 			}
 
+			arg = *av;
 			try {
-				maxDTheta = std::stod(*av, &index);
+				maxDTheta = std::stod(arg, &index);
 				maxDTheta = MathUtils::degreesToRadians(maxDTheta);
 			}
 			catch (...)
@@ -120,8 +124,9 @@ int main(int ac, char** av)
 				return 1;
 			}
 
+			arg = *av;
 			try {
-				step = std::stod(*av, &index);
+				step = std::stod(arg, &index);
 			}
 			catch (...)
 			{
@@ -132,6 +137,31 @@ int main(int ac, char** av)
 			if (index != arg.length())
 			{
 				std::cerr << "pathgen: expected floating point nubmer following --step argument" << std::endl;
+				return 1;
+			}
+			ac--;
+			av++;
+		}
+		else if (arg == "--timestep")
+		{
+			if (ac == 0) {
+				std::cerr << "pathgen: expected floating point nubmer following --timestep argument" << std::endl;
+				return 1;
+			}
+
+			arg = *av;
+			try {
+				timestep = std::stod(arg, &index);
+			}
+			catch (...)
+			{
+				std::cerr << "pathgen: expected floating point nubmer following --timestep argument" << std::endl;
+				return 1;
+			}
+
+			if (index != arg.length())
+			{
+				std::cerr << "pathgen: expected floating point nubmer following --timestep argument" << std::endl;
 				return 1;
 			}
 			ac--;
@@ -275,6 +305,8 @@ void generateForPath(PathGroup& group, const std::string& path)
 	else
 		name = outfile;
 
+	TimedTrajectory timed_ttj = TimingUtil::createConstantTimeTrajectory(ttj, timestep);
+
 	std::vector<std::string> headers = { "time", "x", "y", "heading", "curvature", "dscurvature", "position", "velocity", "acceleration" };
-	CSVWriter::write< std::vector<TimedTrajectoryPoint>::const_iterator>(name, headers, ttj.getPoints().begin(), ttj.getPoints().end());
+	CSVWriter::write< std::vector<TimedTrajectoryPoint>::const_iterator>(name, headers, timed_ttj.getPoints().begin(), timed_ttj.getPoints().end());
 }
