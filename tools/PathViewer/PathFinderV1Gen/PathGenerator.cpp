@@ -14,5 +14,12 @@ namespace xero
 		PathGenerator::~PathGenerator()
 		{
 		}
+
+		TimedTrajectory PathGenerator::generate(const std::vector<Pose2d>& points)
+		{
+			TimedTrajectory ret;
+
+			return ret;
+		}
 	}
 }
