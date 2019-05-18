@@ -212,6 +212,8 @@ namespace PathViewer
             {
                 m_segments_dirty = true;
             }
+            OnSegmentsChanged(EventArgs.Empty);
+            OnAdditionalSegmentsChanged(EventArgs.Empty);
         }
         public void AddPoint(WayPoint pt)
         {

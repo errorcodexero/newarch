@@ -6,6 +6,7 @@
 #include "CSVWriter.h"
 #include "Trajectory.h"
 #include "PathGenerator.h"
+#include "pathfinder.h"
 #include <iostream>
 
 using namespace xero::paths;
@@ -13,8 +14,8 @@ using namespace xero::paths;
 std::string pathfile;
 std::string outputdir;
 std::string outfile;
-int step;
-double timestep;
+int step = PATHFINDER_SAMPLES_LOW;
+double timestep = 0.02;
 xero::paths::PathCollection collection;
 
 extern void generateForGroup(const std::string& group);
@@ -181,7 +182,7 @@ void generateForPath(PathGroup & group, const std::string & path)
 	// values.
 	//
 	PathGenerator gen(step, timestep);
-	TimedTrajectory trajectory = gen.generate(pptr->getPoints());
+	TimedTrajectory trajectory = gen.generate(pptr->getPoints(), pptr->getMaxVelocity(), pptr->getMaxVelocity(), pptr->getMaxJerk());
 
 	std::string name;
 	if (outputdir.length())

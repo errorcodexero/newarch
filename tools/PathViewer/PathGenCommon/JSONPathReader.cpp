@@ -374,6 +374,30 @@ namespace xero
 			}
 			onepath->setMaxAccel(v);
 
+
+			if (path.find(L"maxjerk") == path.end())
+			{
+				std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
+				std::cerr << "         path is missing 'maxjerk' field" << std::endl;
+				return false;
+			}
+
+			if (!path[L"maxjerk"]->IsNumber())
+			{
+				std::cerr << "pathgen: file '" << filename << "' is not a valid path file" << std::endl;
+				std::cerr << "         path has 'maxjerk' field that is not a number" << std::endl;
+				return false;
+			}
+			v = path[L"maxjerk"]->AsNumber();
+			if (std::fabs(v) < 0.001)
+			{
+				//
+				// Zero max velocity was supplied, get it from the robot
+				//
+				v = paths.getRobot().getMaxJerk();
+			}
+			onepath->setMaxJerk(v);
+
 			if (path.find(L"constraints") != path.end() && !path[L"constraints"]->IsNull())
 			{
 				if (!path[L"constraints"]->IsArray())

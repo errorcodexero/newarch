@@ -1522,6 +1522,8 @@ namespace PathViewer
             m_robot_param_editing = null;
         }
 
+        int concurrent = 0;
+
         private void GenerateSegments(RobotPath p)
         {
             p.GenerateVelocityConstraints();
@@ -1531,7 +1533,10 @@ namespace PathViewer
             {
                 try
                 {
+                    concurrent++;
+                    p.SegmentsUpdated += SegmentUpdateComplete;
                     p.GenerateSegments(m_file.Robot, m_generator);
+                    Debug.WriteLine("Starting path: concurrent count " + concurrent.ToString());
                 }
                 catch(Exception ex)
                 {
@@ -1541,6 +1546,15 @@ namespace PathViewer
                     m_logger.LogMessage(Logger.MessageType.Warning, msg);
                 }
             }
+        }
+
+        private void SegmentUpdateComplete(object sender, EventArgs e)
+        {
+            RobotPath p = sender as RobotPath;
+            Debug.Assert(p != null);
+            p.SegmentsUpdated -= SegmentUpdateComplete;
+            concurrent--;
+            Debug.WriteLine("Finishing path: concurrent count " + concurrent.ToString());
         }
 
         private void GenerateSplines(RobotPath p)

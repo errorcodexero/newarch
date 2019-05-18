@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using System.IO;
+using System.Diagnostics;
 using PathViewer;
 
 namespace PathFinderV1
@@ -39,7 +42,62 @@ namespace PathFinderV1
 
         public override PathSegment[] GenerateDetailedPath(RobotParams robot, RobotPath path)
         {
-            return null;
+            StringBuilder stdout;
+            StringBuilder stderr;
+            string outfile = Path.GetTempFileName();
+            string pathfile = Path.GetTempFileName();
+
+            stdout = new StringBuilder();
+            stderr = new StringBuilder();
+
+            string dir = AppDomain.CurrentDomain.BaseDirectory;
+            string execpath = Path.Combine(dir, "PathFinderV1Gen.exe");
+
+            GeneratePathFile(robot, path, pathfile);
+
+            string args = string.Empty;
+            if (pathfile == string.Empty)
+                return null;
+
+            args += "--outfile " + outfile;
+            args += " --pathfile " + pathfile;
+            args += " --timestep " + robot.TimeStep.ToString();
+
+            ProcessStartInfo info = new ProcessStartInfo();
+            info.CreateNoWindow = true;
+            info.RedirectStandardError = true;
+            info.RedirectStandardOutput = true;
+            info.UseShellExecute = false;
+            info.Arguments = args;
+            info.FileName = execpath;
+
+            Process proc = new Process();
+            proc.StartInfo = info;
+            proc.EnableRaisingEvents = true;
+            proc.OutputDataReceived += new DataReceivedEventHandler(delegate (object sender, DataReceivedEventArgs e)
+            {
+                stdout.Append(e.Data);
+            }
+            );
+            proc.ErrorDataReceived += new DataReceivedEventHandler(delegate (object sender, DataReceivedEventArgs e)
+            {
+                stderr.Append(e.Data);
+            }
+            );
+            proc.Start();
+            proc.BeginErrorReadLine();
+            proc.BeginOutputReadLine();
+            proc.WaitForExit();
+            proc.CancelErrorRead();
+            proc.CancelOutputRead();
+
+            string[] headers = { "time", "x", "y", "heading", "curvature", "dscurvature", "position", "velocity", "acceleration" };
+
+            PathSegment[] seg = ParseOutputFile(outfile, headers);
+            File.Delete(outfile);
+            File.Delete(pathfile);
+
+            return seg;
         }
         #endregion
 

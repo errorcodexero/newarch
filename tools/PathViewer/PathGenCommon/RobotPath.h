@@ -84,6 +84,14 @@ namespace xero
 				max_accel_ = a;
 			}
 
+			double getMaxJerk() const {
+				return max_jerk_;
+			}
+
+			void setMaxJerk(double j) {
+				max_jerk_ = j;
+			}
+
 		private:
 			std::string name_;
 			std::vector<Pose2d> points_;
@@ -92,6 +100,7 @@ namespace xero
 			double end_vel_;
 			double max_vel_;
 			double max_accel_;
+			double max_jerk_;
 		};
 	}
 }

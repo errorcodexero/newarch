@@ -8,7 +8,6 @@ namespace xero {
 		{
 		public:
 			TimedTrajectoryPoint(const TrajectorySamplePoint& pt, double t, double p, double v, double a);
-			TimedTrajectoryPoint(const Pose2dWithCurvature& pt, double t, double p, double v, double a);
 			virtual ~TimedTrajectoryPoint();
 
 			double getTime() const {

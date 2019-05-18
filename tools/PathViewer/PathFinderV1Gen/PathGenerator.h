@@ -12,7 +12,7 @@ namespace xero
 			PathGenerator(int steps, double timestep);
 			~PathGenerator();
 
-			TimedTrajectory generate(const std::vector<Pose2d>& points);
+			TimedTrajectory generate(const std::vector<Pose2d>& points, double maxvel, double maxaccel, double maxjerk);
 
 		private:
 			int steps_;
