@@ -13,7 +13,7 @@ using namespace xero::paths;
 
 double maxDx = 2.0;
 double maxDy = 0.25;
-double maxDTheta = MathUtils::degreesToRadians(5.0);
+double maxDTheta = MathUtils::degreesToRadians(0.1);
 double step = 2.0;
 double timestep = 0.02;
 std::string pathfile;

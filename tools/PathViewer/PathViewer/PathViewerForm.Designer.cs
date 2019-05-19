@@ -551,7 +551,7 @@
             this.newPathToolStripMenuItem.Name = "newPathToolStripMenuItem";
             this.newPathToolStripMenuItem.Size = new System.Drawing.Size(224, 30);
             this.newPathToolStripMenuItem.Text = "Add Path";
-            this.newPathToolStripMenuItem.Click += new System.EventHandler(this.NewPathToolStripMenuItem_Click);
+            this.newPathToolStripMenuItem.Click += new System.EventHandler(this.NewPathToolStripMenuItemHandler);
             // 
             // toolStripSeparator2
             // 

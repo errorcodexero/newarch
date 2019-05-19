@@ -18,10 +18,10 @@
   - Add copyrights to the about screen
   - Logging window and support
   - Units
+  - Copy path
+  - Move path between path groups
 
   TODO
   ----
-  - Copy path
-  - Move path between path groups
   - Testing, Testing, Testing
   - Documentation

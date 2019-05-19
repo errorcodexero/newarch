@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PathViewer
 {
-    class UnitConverter
+    public class UnitConverter
     {
         private struct Units
         {

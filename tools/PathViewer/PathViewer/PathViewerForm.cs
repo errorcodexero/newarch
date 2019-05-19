@@ -153,6 +153,10 @@ namespace PathViewer
             m_pathfile_tree.DoubleClick += DoPathTreeDoubleClick;
             m_pathfile_tree.MouseUp += PathTreeMouseUp;
             m_pathfile_tree.AfterSelect += PathTreeSelectionChanged;
+            m_pathfile_tree.ItemDrag += PathTreePathDrag;
+            m_pathfile_tree.DragEnter += PathTreeDragEnter;
+            m_pathfile_tree.DragDrop += PathTreeDragDrop;
+            m_pathfile_tree.AllowDrop = true;
 
             m_waypoint_view.DoubleClick += WaypointDoubleClick;
             m_robot_view.DoubleClick += RobotParamDoubleClick;
@@ -177,6 +181,7 @@ namespace PathViewer
 
             OutputCopyright();
         }
+
 
         void SetUnits()
         {
@@ -406,6 +411,58 @@ namespace PathViewer
 
         #region event handlers for the path tree control
 
+        private void PathTreeDragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("System.Windows.Forms.TreeNode", false))
+            {
+                Point pt = m_pathfile_tree.PointToClient(new Point(e.X, e.Y));
+                TreeNode drag = e.Data.GetData("System.Windows.Forms.TreeNode") as TreeNode;
+                TreeNode dest = m_pathfile_tree.GetNodeAt(pt);
+                if (dest.Parent != null)
+                    dest = dest.Parent;
+
+                //
+                // Need to move the paths between the path groups
+                //
+                PathGroup destgroup = m_file.FindGroupByName(dest.Text);
+                PathGroup srcgroup = m_file.FindGroupByName(drag.Parent.Text);
+                RobotPath path = srcgroup.FindPathByName(drag.Text);
+
+                //
+                // Remove from the source group
+                //
+                srcgroup.RemovePath(drag.Text);
+
+                //
+                // Add to the destination group
+                //
+                if (destgroup.FindPathByName(path.Name) != null)
+                {
+                    string newname = GetCopyPathName(destgroup, path);
+                    path.Name = newname;
+                    drag.Text = newname;
+                }
+                destgroup.AddPath(path);
+
+                //
+                // Need to move the nodes in the tree
+                //
+                drag.Parent.Nodes.Remove(drag);
+                dest.Nodes.Add(drag);
+                m_file.IsDirty = true;
+            }
+        }
+
+        private void PathTreeDragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void PathTreePathDrag(object sender, ItemDragEventArgs e)
+        {
+            DoDragDrop(e.Item, DragDropEffects.Move);
+        }
+
         private void PathTreeSelectionChanged(object sender, TreeViewEventArgs e)
         {
             if (e.Node.Parent == null)
@@ -454,11 +511,14 @@ namespace PathViewer
                 menu.MenuItems.Add(mi);
             }
 
-            mi = new MenuItem("Add Path", NewPathToolStripMenuItem_Click);
+            mi = new MenuItem("Add Path", NewPathToolStripMenuItemHandler);
             menu.MenuItems.Add(mi);
 
             if (tn.Parent != null)
             {
+                mi = new MenuItem("Copy Path", CopyPathToolStripMenuItemHandler);
+                menu.MenuItems.Add(mi);
+
                 mi = new MenuItem("Delete Path", RemovePathToolStripMenuItem_Click);
                 menu.MenuItems.Add(mi);
             }
@@ -860,7 +920,7 @@ namespace PathViewer
             m_file.AddPathGroup(newname);
         }
 
-        private void NewPathToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NewPathToolStripMenuItemHandler(object sender, EventArgs e)
         {
             TreeNode node = m_pathfile_tree.SelectedNode;
             if (node == null)
@@ -876,6 +936,49 @@ namespace PathViewer
             m_file.AddPath(node.Text, newname);
             PathTreeSelectionChanged(m_pathfile_tree, new TreeViewEventArgs(nnode));
             GenerateAllSplines();
+        }
+
+        private string GetCopyPathName(PathGroup parent, RobotPath tocopy)
+        {
+            string name = tocopy.Name + "-Copy";
+            int i = 0;
+
+            do
+            {
+                if (parent.FindPathByName(name) == null)
+                    break;
+
+                i++;
+                name = tocopy.Name + "-Copy-" + i.ToString();
+
+            } while (true);
+
+            return name;
+        }
+
+        private void CopyPathToolStripMenuItemHandler(object sender, EventArgs e)
+        {
+            TreeNode node = m_pathfile_tree.SelectedNode;
+            if (node == null)
+                return;
+
+            PushUndoStack();
+
+            string grname = node.Parent.Text;
+            PathGroup parent = m_file.FindGroupByName(grname);
+            if (parent == null)
+                return;
+
+            RobotPath tocopy = parent.FindPathByName(node.Text);
+            RobotPath path = new RobotPath(tocopy);
+            path.Name = GetCopyPathName(parent, tocopy);
+            parent.AddPath(path);
+
+            TreeNode newnode = new TreeNode(path.Name);
+            node.Parent.Nodes.Add(newnode);
+
+            GenerateSplines(path);
+            GenerateSegments(path);
         }
 
         private void RemovePathToolStripMenuItem_Click(object sender, EventArgs e)
