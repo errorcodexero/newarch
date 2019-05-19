@@ -12,6 +12,11 @@ namespace PathViewer
     [JsonObject(MemberSerialization.OptIn)]
     public class Game
     {
+        #region events
+        public event EventHandler<EventArgs> UnitsChanged;
+
+        #endregion
+
         public class Corners
         {
             [JsonProperty(PropertyName = "top-left")]
@@ -40,10 +45,11 @@ namespace PathViewer
         public readonly Corners FieldCorners;
 
         [JsonProperty(PropertyName = "field-unit")]
-        public readonly string FieldUnits;
+        public string FieldUnits;
 
         public Game()
         {
+            FieldUnits = "foot";
             FieldSize = new double[2];
             FieldCorners = new Corners();
         }
@@ -51,6 +57,7 @@ namespace PathViewer
         public Game(string n, string i, SizeF s, Rectangle c)
         {
             Name = n;
+            FieldUnits = "foot";
             FieldSize = new double[2];
             FieldCorners = new Corners();
             FieldSize[0] = s.Width;
@@ -65,6 +72,18 @@ namespace PathViewer
             get
             {
                 return (float)(FieldCorners.BottomRight[0] - FieldCorners.TopLeft[0]) / (float)(FieldSize[0]);
+            }
+        }
+
+        public string Units
+        {
+            get { return FieldUnits; }
+            set
+            {
+                FieldSize[0] = UnitConverter.Convert(FieldSize[0], FieldUnits, value);
+                FieldSize[1] = UnitConverter.Convert(FieldSize[1], FieldUnits, value);
+                FieldUnits = value;
+                OnUnitsChanged(EventArgs.Empty);
             }
         }
 
@@ -91,6 +110,12 @@ namespace PathViewer
             {
                 return System.IO.Path.Combine(m_path, FieldImage);
             }
+        }
+
+        protected virtual void OnUnitsChanged(EventArgs args)
+        {
+            EventHandler<EventArgs> handler = UnitsChanged;
+            handler?.Invoke(this, args);
         }
 
         private string m_path;

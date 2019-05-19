@@ -25,6 +25,11 @@ namespace PathFinderV1
         {
             get { return new Version(1, 0); }
         }
+
+        public override bool TimingConstraintsSupported
+        {
+            get { return false ; }
+        }
         #endregion
 
         #region public methods

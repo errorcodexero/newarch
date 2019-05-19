@@ -17,9 +17,11 @@
   - Editing feature: delete path
   - Add copyrights to the about screen
   - Logging window and support
+  - Units
 
   TODO
   ----
-  - PathFinder V1
+  - Copy path
+  - Move path between path groups
   - Testing, Testing, Testing
-
+  - Documentation

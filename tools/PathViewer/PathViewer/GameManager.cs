@@ -65,19 +65,6 @@ namespace PathViewer
         {
             string json = File.ReadAllText(filename);
             Game g = JsonConvert.DeserializeObject<Game>(json);
-            if (g.FieldUnits == "foot")
-            {
-                // Convert to inches
-                g.FieldSize[0] *= 12.0;
-                g.FieldSize[1] *= 12.0;
-            }
-            else if (g.FieldUnits == "inch")
-            {
-            }
-            else
-            {
-                throw new Exception("unknown units '" + g.FieldUnits + "' in game JSON file");
-            }
             g.Path = Path.GetDirectoryName(filename);
             m_games[g.Name] = g;
         }

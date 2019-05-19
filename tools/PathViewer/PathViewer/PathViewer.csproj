@@ -71,6 +71,7 @@
     <Compile Include="Logger.cs" />
     <Compile Include="LoggerOutputEventArgs.cs" />
     <Compile Include="MathUtils.cs" />
+    <Compile Include="PathGenerationStateChangeEvent.cs" />
     <Compile Include="RobotParams.cs" />
     <Compile Include="RobotPlotViewer.cs">
       <SubType>UserControl</SubType>
@@ -109,6 +110,7 @@
     <Compile Include="RobotPath.cs" />
     <Compile Include="TrapezoidalProfile.cs" />
     <Compile Include="UndoState.cs" />
+    <Compile Include="UnitConverter.cs" />
     <Compile Include="WayPoint.cs" />
     <Compile Include="WaypointEventArgs.cs" />
     <EmbeddedResource Include="PathViewerForm.resx">

@@ -31,7 +31,7 @@ namespace xero
 			}
 
 			TrajectoryCandidate candidate;
-			pathfinder_prepare(points, pts.size(), FIT_HERMITE_QUINTIC, steps_, timestep_, maxvel, maxaccel, maxjerk, &candidate);
+			pathfinder_prepare(points, static_cast<int>(pts.size()), FIT_HERMITE_QUINTIC, steps_, timestep_, maxvel, maxaccel, maxjerk, &candidate);
 			free(points);
 
 			int length = candidate.length;
@@ -44,8 +44,9 @@ namespace xero
 
 			for (size_t i = 0; i < static_cast<size_t>(length); i++)
 			{
-				Pose2dWithCurvature p2d;
-				TrajectorySamplePoint sp(p2d, 0, 0);
+				Pose2d p2d(trajectory[i].x, trajectory[i].y, Rotation2d::fromRadians(trajectory[i].heading));
+				Pose2dWithCurvature p2dwc(p2d, 0.0, 0.0);
+				TrajectorySamplePoint sp(p2dwc, 0, 0);
 				TimedTrajectoryPoint pt(sp, time, trajectory[i].position, trajectory[i].velocity, trajectory[i].acceleration);
 				ptarr.push_back(pt);
 				time += trajectory[i].dt;

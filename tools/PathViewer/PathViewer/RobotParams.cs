@@ -28,6 +28,9 @@ namespace PathViewer
         [JsonProperty(PropertyName ="drivetype")]
         public string DriveType;
 
+        [JsonProperty(PropertyName = "units")]
+        public string Units;
+
         [JsonProperty(PropertyName = "timestep")]
         public double TimeStep;
 
@@ -49,9 +52,10 @@ namespace PathViewer
             MaxJerk = 0.0;
             TimeStep = 0.02;
             DriveType = TankDriveType;
+            Units = "inches";
         }
 
-        public RobotParams(string dtype, double timestep, double w, double l, double v, double a, double j)
+        public RobotParams(string dtype, string units, double timestep, double w, double l, double v, double a, double j)
         {
             Width = w;
             Length = l;
@@ -59,6 +63,7 @@ namespace PathViewer
             MaxAcceleration = a;
             MaxJerk = j;
             TimeStep = timestep;
+            Units = units;
 
             if (!IsValidDriveType(dtype))
                 throw new Exception("invalid drive type '" + dtype + "'");
@@ -74,7 +79,17 @@ namespace PathViewer
             MaxAcceleration = p.MaxAcceleration;
             MaxJerk = p.MaxJerk;
             DriveType = p.DriveType;
+            Units = p.Units;
             TimeStep = p.TimeStep;
+        }
+
+        public void ConvertUnits(string oldunits, string newunits)
+        {
+            Length = UnitConverter.Convert(Length, oldunits, newunits);
+            Width = UnitConverter.Convert(Width, oldunits, newunits);
+            MaxVelocity = UnitConverter.Convert(MaxVelocity, oldunits, newunits);
+            MaxAcceleration = UnitConverter.Convert(MaxAcceleration, oldunits, newunits);
+            MaxJerk = UnitConverter.Convert(MaxJerk, oldunits, newunits);
         }
 
         static public bool IsValidDriveType(string dtype)

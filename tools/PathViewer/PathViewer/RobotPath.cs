@@ -43,8 +43,10 @@ namespace PathViewer
         #endregion
 
         #region public events
+        /// <summary>
+        /// This event is fired if the segments for the path are updated
+        /// </summary>
         public event EventHandler<EventArgs> SegmentsUpdated;
-        public event EventHandler<EventArgs> AdditionalSegmentsUpdated;
         #endregion
 
         #region private variables
@@ -158,32 +160,40 @@ namespace PathViewer
         public PathSegment[] Segments
         {
             get { return m_segments; }
-            set
-            {
-                lock (m_lock)
-                {
-                    m_segments = value;
-                }
-                OnSegmentsChanged(EventArgs.Empty);
-            }
         }
 
         public Dictionary<string, PathSegment[]> AdditionalSegments
         {
             get { return m_add_segments; }
-            set
-            {
-                lock(m_lock)
-                {
-                    m_add_segments = value;
-                }
-
-                OnAdditionalSegmentsChanged(EventArgs.Empty);
-            }
         }
         #endregion
 
         #region public methods
+
+        public void ConvertUnits(string oldunits, string newunits)
+        {
+            MaxVelocity = UnitConverter.Convert(MaxVelocity, oldunits, newunits);
+            MaxAcceleration = UnitConverter.Convert(MaxAcceleration, oldunits, newunits);
+            MaxJerk = UnitConverter.Convert(MaxJerk, oldunits, newunits);
+
+            for(int i = 0; i < Points.Length; i++)
+            {
+                double x = UnitConverter.Convert(Points[i].X, oldunits, newunits);
+                double y = UnitConverter.Convert(Points[i].Y, oldunits, newunits);
+                double h = Points[i].Heading;
+                double v = UnitConverter.Convert(Points[i].Velocity, oldunits, newunits);
+                Points[i] = new WayPoint(x, y, h, v);
+            }
+            SetSegments(null, null);
+        }
+
+        public void SetSegments(PathSegment[] segs, Dictionary<string, PathSegment[]> additional)
+        {
+            m_segments = segs;
+            m_add_segments = additional;
+            OnSegmentsChanged(EventArgs.Empty);
+        }
+        
         public void GetPositionForTime(PathSegment[] segs, double time, out double x, out double y, out double heading)
         {
             x = 0.0;
@@ -213,7 +223,6 @@ namespace PathViewer
                 m_segments_dirty = true;
             }
             OnSegmentsChanged(EventArgs.Empty);
-            OnAdditionalSegmentsChanged(EventArgs.Empty);
         }
         public void AddPoint(WayPoint pt)
         {
@@ -356,12 +365,6 @@ namespace PathViewer
         protected void OnSegmentsChanged(EventArgs args)
         {
             EventHandler<EventArgs> handler = SegmentsUpdated;
-            handler?.Invoke(this, args);
-        }
-
-        protected void OnAdditionalSegmentsChanged(EventArgs args)
-        {
-            EventHandler<EventArgs> handler = AdditionalSegmentsUpdated;
             handler?.Invoke(this, args);
         }
         #endregion

@@ -11,21 +11,61 @@ namespace PathViewer
     public abstract class PathGenerator
     {
         #region private member variables
+        /// <summary>
+        /// Locks the queue for making changes
+        /// </summary>
         private object m_lock;
-        private Dictionary<RobotPath, Thread> m_paths;
-        private int m_serial;
+
+        /// <summary>
+        /// The queue of segment jobs to run
+        /// </summary>
+        private List<Tuple<RobotParams, RobotPath>> m_queue;
+
+        /// <summary>
+        /// The thread running the segment jobs
+        /// </summary>
+        private Thread m_segment_thread;
+
+        /// <summary>
+        /// If true, there is a job currently active
+        /// </summary>
+        private bool m_active;
+
+        /// <summary>
+        /// If true, the last event fired as zero running, zero queued
+        /// </summary>
+        private bool m_last_event_idle;
+
+        /// <summary>
+        /// If true, the background segment thread should be running
+        /// </summary>
+        private bool m_running;
+        #endregion
+
+        #region public events
+        /// <summary>
+        /// When the state of background segment generation jobs changes, this event is fired
+        /// </summary>
+        public event EventHandler<PathGenerationStateChangeEvent> StateChanged;
         #endregion
 
         #region public constructor
         public PathGenerator()
         {
             m_lock = new object();
-            m_paths = new Dictionary<RobotPath, Thread>();
-            m_serial = 0;
+            m_queue = new List<Tuple<RobotParams, RobotPath>>();
+            m_running = true;
+            m_active = false;
+            m_last_event_idle = false;
+            m_segment_thread = null;
         }
         #endregion
 
         #region public properties
+
+        #endregion
+
+        #region abstract methods and properties (must be implemented by derived class)
         public abstract string Name
         {
             get;
@@ -35,68 +75,57 @@ namespace PathViewer
         {
             get;
         }
-        #endregion
+
+        public abstract bool TimingConstraintsSupported
+        {
+            get;
+        }
 
         public abstract void GenerateSplines(RobotPath path, List<Spline> xsplines, List<Spline> ysplines);
 
         public abstract PathSegment[] GenerateDetailedPath(RobotParams robot, RobotPath path);
 
+        #endregion
+
+        #region public methods
+
+        public void Start()
+        {
+            m_running = true;
+            m_segment_thread = new Thread(GenerateSegmentsThread);
+            m_segment_thread.Name = Name;
+            m_segment_thread.Start();
+        }
+        public void Stop()
+        {
+            if (m_running && m_segment_thread != null)
+            {
+                m_running = false;
+                m_segment_thread.Join();
+            }
+        }
+
         public void GenerateSegments(RobotParams robot, RobotPath path)
         {
+            PathGenerationStateChangeEvent args = null;
+            Tuple<RobotParams, RobotPath> entry = new Tuple<RobotParams, RobotPath>(robot, path);
             lock (m_lock)
             {
-                //
-                // See if we are already generating the detailed in the background.  If so,
-                // we don't start anything else until it is done
-                //
-                if (m_paths.ContainsKey(path))
-                {
-                    return;
-                }
-
-                Thread th = new Thread(GenerateSegmentsThread);
-                th.Name = "MySegGen";
-                th.IsBackground = true;
-                m_paths.Add(path, th);
-                th.Start(new Tuple<RobotParams, RobotPath>(robot, path));
+                m_queue.Add(entry);
+                int running = m_active ? 1 : 0;
+                int queued = m_queue.Count;
+                args = new PathGenerationStateChangeEvent(running, queued);
             }
+            OnJobStateChanged(args);
         }
 
-        public bool IsGenerating(RobotPath path)
+        #endregion
+
+        #region protected methods
+        protected void OnJobStateChanged(PathGenerationStateChangeEvent args)
         {
-            bool ret = false;
-
-            lock(m_lock)
-            {
-                ret = m_paths.ContainsKey(path);
-            }
-
-            return ret;
-        }
-
-        private void GenerateSegmentsThread(object opath)
-        {
-            Tuple<RobotParams, RobotPath> data = opath as Tuple<RobotParams, RobotPath>;
-            PathSegment[] segs = GenerateDetailedPath(data.Item1, data.Item2);
-            DriveModifier mod = null;
-
-            if (data.Item1.DriveType == RobotParams.TankDriveType)
-            {
-                mod = new TankDriveModifier();
-            }
-            else if (data.Item1.DriveType == RobotParams.SwerveDriveType)
-            {
-                mod = new SwerveDriveModifier();
-            }
-
-            data.Item2.Segments = segs;
-            if (mod != null)
-                data.Item2.AdditionalSegments = mod.ModifyPath(data.Item1, data.Item2);
-
-            lock (m_lock)
-            {
-                m_paths.Remove(data.Item2);
-            }
+            EventHandler<PathGenerationStateChangeEvent> handler = StateChanged;
+            handler?.Invoke(this, args);
         }
 
         protected bool GeneratePathFile(RobotParams robot, RobotPath path, string filename)
@@ -106,7 +135,6 @@ namespace PathViewer
             pf.Robot = robot;
             pf.AddPathGroup("tmp");
             pf.AddPath("tmp", path);
-            m_serial++;
 
             string json = JsonConvert.SerializeObject(pf);
             try
@@ -121,24 +149,12 @@ namespace PathViewer
             return ret;
         }
 
-        private bool AddValue(PathSegment s, ICsvLine line, int index, string name)
-        {
-            double v;
-
-            if (!Double.TryParse(line[index], out v))
-                return false;
-
-            s.AddValue(name, v);
-
-            return true;
-        }
-
-        protected PathSegment[] ParseOutputFile(string filename, string [] headers)
+        protected PathSegment[] ParseOutputFile(string filename, string[] headers)
         {
             PathSegment[] ret = new PathSegment[0];
 
             string text = File.ReadAllText(filename);
-            foreach(var line in CsvReader.ReadFromText(text))
+            foreach (var line in CsvReader.ReadFromText(text))
             {
                 PathSegment ps = new PathSegment();
                 if (line.ColumnCount != headers.Length)
@@ -153,5 +169,92 @@ namespace PathViewer
 
             return ret;
         }
+        #endregion
+
+        #region private methods
+
+        private void GenerateSegmentsThread()
+        {
+            PathGenerationStateChangeEvent args = null;
+            while (m_running)
+            {
+                Tuple<RobotParams, RobotPath> entry = null;
+
+                lock (m_lock)
+                {
+                    if (m_queue.Count > 0)
+                    {
+                        entry = m_queue[0];
+                        m_queue.RemoveAt(0);
+                        m_active = true;
+                    }
+                    else
+                    {
+                        entry = null;
+                        m_active = false;
+                    }
+
+                    args = null;
+                    int running = m_active ? 1 : 0;
+                    int queued = m_queue.Count;
+                    if (running > 0 || queued > 0 || !m_last_event_idle)
+                    {
+                        args = new PathGenerationStateChangeEvent(running, queued);
+                        if (running == 0 && queued == 0)
+                            m_last_event_idle = true;
+                        else
+                            m_last_event_idle = false;
+                    }
+                }
+
+                if (args != null)
+                    OnJobStateChanged(args);
+
+                if (entry != null)
+                {
+                    GenerateSegmentsForPath(entry.Item1, entry.Item2);
+                }
+                else
+                {
+                    Thread.Sleep(20);
+                }
+            }
+        }
+
+        private void GenerateSegmentsForPath(RobotParams robot, RobotPath path)
+        {
+            PathSegment[] segs = GenerateDetailedPath(robot, path);
+            DriveModifier mod = null;
+
+            if (robot.DriveType == RobotParams.TankDriveType)
+            {
+                mod = new TankDriveModifier();
+            }
+            else if (robot.DriveType == RobotParams.SwerveDriveType)
+            {
+                mod = new SwerveDriveModifier();
+            }
+
+            Dictionary<string, PathSegment[]> add = null;
+            if (mod != null)
+                add = mod.ModifyPath(robot, path, segs);
+
+            path.SetSegments(segs, add);
+        }
+
+        private bool AddValue(PathSegment s, ICsvLine line, int index, string name)
+        {
+            double v;
+
+            if (!Double.TryParse(line[index], out v))
+                return false;
+
+            s.AddValue(name, v);
+
+            return true;
+        }
+        #endregion
+
+
     }
 }

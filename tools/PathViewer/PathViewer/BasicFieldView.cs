@@ -61,15 +61,26 @@ namespace PathViewer
             get { return m_game; }
             set
             {
+                if (m_game != null)
+                    m_game.UnitsChanged -= GameUnitsChanged;
+
                 m_game = value;
                 if (m_game != null)
                 {
+                    m_game.UnitsChanged += GameUnitsChanged;
                     m_image = Image.FromFile(m_game.ImagePath);
                     CalculateScale();
                 }
                 Invalidate();
                 OnGameChanged(EventArgs.Empty);
             }
+        }
+
+        private void GameUnitsChanged(object sender, EventArgs e)
+        {
+            CalculateScale();
+            Invalidate();
+            OnGameChanged(EventArgs.Empty);
         }
 
         public RobotPath DisplayedPath

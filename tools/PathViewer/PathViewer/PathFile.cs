@@ -24,7 +24,7 @@ namespace PathViewer
         public PathFile()
         {
             Groups = new PathGroup[0];
-            Robot = new RobotParams(RobotParams.TankDriveType, 0.02, 24.0, 32.0, 96.0, 96.0, 96.0);
+            Robot = new RobotParams(RobotParams.TankDriveType, "inches", 0.02, 24.0, 32.0, 96.0, 96.0, 96.0);
         }
 
         public PathFile(PathFile pf)
@@ -57,6 +57,18 @@ namespace PathViewer
         {
             get { return m_output_directory; }
             set { m_output_directory = value; }
+        }
+
+        public void ConvertUnits(string oldunits, string newunits)
+        {
+            Robot.ConvertUnits(oldunits, newunits);
+            foreach(PathGroup gr in Groups)
+            {
+                foreach(RobotPath path in gr.Paths)
+                {
+                    path.ConvertUnits(oldunits, newunits);
+                }
+            }
         }
 
         public void RemoveGroup(string group)

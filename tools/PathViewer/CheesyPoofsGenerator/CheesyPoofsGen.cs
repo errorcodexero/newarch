@@ -25,6 +25,11 @@ namespace CheesyPoofsGenerator
         {
             get { return new Version(1, 0); }
         }
+
+        public override bool TimingConstraintsSupported
+        {
+            get { return true; }
+        }
         #endregion
 
         #region public methods

@@ -190,6 +190,6 @@ void generateForPath(PathGroup & group, const std::string & path)
 	else
 		name = outfile;
 
-	std::vector<std::string> headers = { "time", "x", "y", "heading", "position", "velocity", "acceleration" };
+	std::vector<std::string> headers = { "time", "x", "y", "heading", "curvature", "dscurvature", "position", "velocity", "acceleration" };
 	CSVWriter::write< std::vector<TimedTrajectoryPoint>::const_iterator>(name, headers, trajectory.getPoints().begin(), trajectory.getPoints().end());
 }

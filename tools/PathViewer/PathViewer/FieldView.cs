@@ -18,6 +18,8 @@ namespace PathViewer
         private PathFile m_file;
         private bool m_last_msg_selected;
         private Nullable<PointF> m_highlight;
+        private float m_tw;
+        private string m_units;
         #endregion
 
         #region private enums
@@ -52,11 +54,24 @@ namespace PathViewer
             m_last_msg_selected = false;
             DoubleBuffered = true;
 
+            m_tw = 10.0f;
+            m_units = "inches";
+
             InitializeComponent();
         }
         #endregion
 
         #region public properties
+
+        public string Units
+        {
+            get { return m_units; }
+            set
+            {
+                m_tw = (float)UnitConverter.Convert(m_tw, m_units, value);
+                m_units = value;
+            }
+        }
 
         public Nullable<PointF> HighlightPoint
         {
@@ -407,8 +422,7 @@ namespace PathViewer
                             //
                             // Draw the waypoint triangle
                             //
-                            float tw = 10.0f;
-                            PointF[] triangle = new PointF[] { new PointF(tw, 0.0f), new PointF(-tw / 2.0f, tw / 2.0f), new PointF(-tw / 2.0f, -tw / 2.0f) };
+                            PointF[] triangle = new PointF[] { new PointF(m_tw, 0.0f), new PointF(-m_tw / 2.0f, m_tw / 2.0f), new PointF(-m_tw / 2.0f, -m_tw / 2.0f) };
 
                             mm = new Matrix();
                             mm.Translate((float)pt.X, (float)pt.Y);

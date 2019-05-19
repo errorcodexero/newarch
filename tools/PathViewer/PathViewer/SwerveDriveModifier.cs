@@ -25,14 +25,14 @@ namespace PathViewer
             }
         };
 
-        public override Dictionary<string, PathSegment[]> ModifyPath(RobotParams robot, RobotPath path)
+        public override Dictionary<string, PathSegment[]> ModifyPath(RobotParams robot, RobotPath path, PathSegment[] segs)
         {
             Dictionary<string, PathSegment[]> ret = null;
 
             if (Math.Abs(path.StartAngle - path.EndAngle) < 0.1)
-                ret = ModifyPathSimple(robot, path);
+                ret = ModifyPathSimple(robot, path, segs);
             else
-                ret = ModifyPathWithRotation(robot, path);
+                ret = ModifyPathWithRotation(robot, path, segs);
 
             return ret;
         }
@@ -55,10 +55,9 @@ namespace PathViewer
             return new XeroPoint(0, 0);
         }
 
-        private Dictionary<string, PathSegment[]> ModifyPathWithRotation(RobotParams robot, RobotPath path)
+        private Dictionary<string, PathSegment[]> ModifyPathWithRotation(RobotParams robot, RobotPath path, PathSegment[] segs)
         {
             Dictionary<string, PathSegment[]> result = new Dictionary<string, PathSegment[]>();
-            PathSegment[] segs = path.Segments;
             if (segs == null)
                 return null;
 
@@ -169,11 +168,10 @@ namespace PathViewer
             return result;
         }
 
-        private Dictionary<string, PathSegment[]> ModifyPathSimple(RobotParams robot, RobotPath path)
+        private Dictionary<string, PathSegment[]> ModifyPathSimple(RobotParams robot, RobotPath path, PathSegment[] segs)
         {
             PathSegment seg;
             Dictionary<string, PathSegment[]> result = new Dictionary<string, PathSegment[]>();
-            PathSegment[] segs = path.Segments;
             if (segs == null)
                 return null;
 

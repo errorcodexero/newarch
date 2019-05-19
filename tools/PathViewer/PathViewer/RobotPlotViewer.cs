@@ -15,6 +15,7 @@ namespace PathViewer
         private RobotPath m_path;
         private double m_time;
         private LineAnnotation m_line;
+        private string m_units;
         #endregion
 
         #region public events
@@ -29,6 +30,12 @@ namespace PathViewer
         {
             InitializeComponent();
             DoubleBuffered = true;
+        }
+
+        public string Units
+        {
+            get { return m_units; }
+            set { m_units = value; Invalidate(); }
         }
 
         public RobotParams Robot
@@ -110,6 +117,7 @@ namespace PathViewer
 
         public void RegenerateGraph()
         {
+            m_chart.Series.Clear();
             if (m_path != null)
             {
                 PathSegment[] segs = m_path.Segments;
@@ -147,7 +155,7 @@ namespace PathViewer
             CreateSeries("acceleration", AxisType.Secondary, segs);
 
             area.AxisX.Title = "time (sec)";
-            area.AxisY.Title = "distance (inches)";
+            area.AxisY.Title = "distance (" + m_units + ")";
             area.AxisY2.Title = "velocity/acceleration";
 
             m_chart.ChartAreas[0].RecalculateAxesScale();

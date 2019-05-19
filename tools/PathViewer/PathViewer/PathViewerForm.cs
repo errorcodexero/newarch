@@ -13,10 +13,16 @@ namespace PathViewer
     public partial class PathViewerForm : Form
     {
         #region private member variables
+
         /// <summary>
         /// The set of games that are available
         /// </summary>
         private GameManager m_games;
+
+        /// <summary>
+        /// The current game
+        /// </summary>
+        private Game m_current_game;
 
         /// <summary>
         /// THe set of path generators that are available
@@ -97,6 +103,7 @@ namespace PathViewer
 
         #region private delegates
         private delegate void HighlightDelegate(RobotPath path, WayPoint pt);
+        private delegate void UpdateJobStatusDelegate(PathGenerationStateChangeEvent state);
         #endregion
 
         #region public constructor
@@ -129,14 +136,19 @@ namespace PathViewer
 
             InitializeComponent();
 
+            m_split.Layout += M_split_Layout;
+            m_vertical.Layout += M_vertical_Layout;
+            m_flow.Layout += M_flow_Layout;
+
             m_field.File = m_file;
             m_field.WaypointSelected += WayPointSelectedOrChanged;
             m_field.WaypointChanged += WayPointSelectedOrChanged;
             m_field.FieldMouseMoved += FieldMouseMoved;
             m_field.PreviewKeyDown += FieldKeyPreview;
-            m_field.KeyDown += FieldKeyDown;
+            m_field.KeyDown += FieldKeyDown;            
 
             m_plot.TimeCursorMoved += PlotWindowTimeChanged;
+            m_plot.HighlightTime = 0.0;
 
             m_pathfile_tree.DoubleClick += DoPathTreeDoubleClick;
             m_pathfile_tree.MouseUp += PathTreeMouseUp;
@@ -145,6 +157,7 @@ namespace PathViewer
             m_waypoint_view.DoubleClick += WaypointDoubleClick;
             m_robot_view.DoubleClick += RobotParamDoubleClick;
             m_path_view.DoubleClick += PathViewDoubleClick;
+            m_detailed.ViewType = DetailedFieldView.ViewTypeValue.RobotView;
 
             m_ignore_lost_focus = false;
             m_undo_stack = new List<UndoState>();
@@ -153,18 +166,53 @@ namespace PathViewer
 
             PopulateGameMenu();
             PopulateGeneratorMenu();
+            SetUnits();
             UpdateRobotWindow();
 
             m_plot.Generator = m_generator;
             m_plot.Robot = m_file.Robot;
             m_detailed.Robot = m_file.Robot;
 
-            m_plot.HighlightTime = Double.MaxValue;
-
             m_logger.OutputAvailable += LoggerOutputAvailable;
 
             OutputCopyright();
-            WheeledDetailViewMenuItem(m_wheels_menu_item, null);
+        }
+
+        void SetUnits()
+        {
+            m_plot.Units = m_file.Robot.Units;
+            m_current_game.Units = m_file.Robot.Units;
+            m_field.Units = m_file.Robot.Units;
+        }
+
+        private void M_flow_Layout(object sender, LayoutEventArgs e)
+        {
+            m_right_one.Width = m_flow.Width - m_flow.Margin.Left - m_flow.Margin.Right;
+            m_right_two.Width = m_flow.Width - m_flow.Margin.Left - m_flow.Margin.Right;
+            m_right_three.Width = m_flow.Width - m_flow.Margin.Left - m_flow.Margin.Right;
+            m_right_four.Width = m_flow.Width - m_flow.Margin.Left - m_flow.Margin.Right;
+
+            int height = m_flow.Height - m_flow.Margin.Top - m_flow.Margin.Bottom;
+            height -= m_right_one.Margin.Top + m_right_one.Margin.Bottom;
+            height -= m_right_two.Margin.Top + m_right_two.Margin.Bottom;
+            height -= m_right_three.Margin.Top + m_right_three.Margin.Bottom;
+            height -= m_right_four.Margin.Top + m_right_four.Margin.Bottom;
+
+            m_right_one.Height = (int)(height * 0.40);
+            m_right_two.Height = (int)(height * 0.20);
+            m_right_three.Height = (int)(height * 0.20);
+            m_right_four.Height = (int)(height * 0.20);
+        }
+
+        private void M_vertical_Layout(object sender, LayoutEventArgs e)
+        {
+            m_vertical.SplitterDistance = m_vertical.Height * 5 / 8;
+        }
+
+        private void M_split_Layout(object sender, LayoutEventArgs e)
+        {
+            Debug.WriteLine("M_split_Layout, Width = " + Width.ToString() + ", Height = " + Height.ToString());
+            Debug.WriteLine("    m_split, Width = " + m_split.Width.ToString() + ", Height = " + m_split.Height.ToString());
 
         }
         #endregion
@@ -352,7 +400,7 @@ namespace PathViewer
                 UpdateWaypointPropertyWindow();
 
             if (e.Reason == WaypointEventArgs.ReasonType.Unselected)
-                m_plot.HighlightTime = Double.MaxValue;
+                m_plot.HighlightTime = 0.0;
         }
         #endregion
 
@@ -521,28 +569,14 @@ namespace PathViewer
                     e.Cancel = true;
                 }
             }
+
+            if (!e.Cancel && m_generator != null)
+                m_generator.Stop();
         }
 
-        protected override void OnSizeChanged(EventArgs e)
+        protected override void OnLayout(LayoutEventArgs levent)
         {
-            base.OnSizeChanged(e);
-            m_right_one.Width = m_flow.Width - m_flow.Margin.Left - m_flow.Margin.Right;
-            m_right_two.Width = m_flow.Width - m_flow.Margin.Left - m_flow.Margin.Right;
-            m_right_three.Width = m_flow.Width - m_flow.Margin.Left - m_flow.Margin.Right;
-            m_right_four.Width = m_flow.Width - m_flow.Margin.Left - m_flow.Margin.Right;
-
-            int height = m_flow.Height - m_flow.Margin.Top - m_flow.Margin.Bottom;
-            height -= m_right_one.Margin.Top + m_right_one.Margin.Bottom;
-            height -= m_right_two.Margin.Top + m_right_two.Margin.Bottom;
-            height -= m_right_three.Margin.Top + m_right_three.Margin.Bottom;
-            height -= m_right_four.Margin.Top + m_right_four.Margin.Bottom;
-
-            m_right_one.Height = (int)(height * 0.40);
-            m_right_two.Height = (int)(height * 0.20) ;
-            m_right_three.Height = (int)(height * 0.20);
-            m_right_four.Height = (int)(height * 0.20);
-
-            m_vertical.SplitterDistance = m_vertical.Height * 5/ 8;
+            base.OnLayout(levent);
         }
 
         private void PreviewEditorKeyProperty(object sender, PreviewKeyDownEventArgs e)
@@ -619,22 +653,6 @@ namespace PathViewer
         #endregion
 
         #region event handlers for the menus
-
-        private void WheeledDetailViewMenuItem(object sender, EventArgs e)
-        {
-            ToolStripMenuItem mitem = sender as ToolStripMenuItem;
-            ClearChecks(m_detailed_path_view_menu);
-            mitem.Checked = true;
-            m_detailed.ViewType = DetailedFieldView.ViewTypeValue.WheelView;
-        }
-
-        private void RobotDetailViewMenuItem(object sender, EventArgs e)
-        {
-            ToolStripMenuItem mitem = sender as ToolStripMenuItem;
-            ClearChecks(m_detailed_path_view_menu);
-            mitem.Checked = true;
-            m_detailed.ViewType = DetailedFieldView.ViewTypeValue.RobotView;
-        }
 
         private void NewMenuItemEventHandler(object sender, EventArgs e)
         {
@@ -791,6 +809,7 @@ namespace PathViewer
                 try
                 {
                     m_file = JsonConvert.DeserializeObject<PathFile>(json);
+                    SetUnits();
                 }
                 catch(Newtonsoft.Json.JsonSerializationException ex)
                 {
@@ -914,7 +933,8 @@ namespace PathViewer
                 RobotPath path;
                 int index;
                 m_file.FindPathByWaypoint(m_field.SelectedWaypoint, out gr, out path, out index);
-                st.AddSelectedWaypoint(gr.Name, path.Name, index);
+                if (gr != null && path != null)
+                    st.AddSelectedWaypoint(gr.Name, path.Name, index);
             }
 
             while (m_undo_stack.Count > m_undo_length)
@@ -1038,6 +1058,26 @@ namespace PathViewer
                 PushUndoStack();
                 m_file.Robot.DriveType = m_text_editor.Text;
             }
+            else if (m_robot_param_editing.Text == "Units")
+            {
+                try
+                {
+                    UnitConverter.Convert(1.0, m_text_editor.Text, m_text_editor.Text);
+                }
+                catch
+                {
+                    string msg = "Units '" + m_text_editor.Text + "' are not understood";
+                    m_ignore_lost_focus = true;
+                    MessageBox.Show(msg, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
+                PushUndoStack();
+                string oldunits = m_current_game.Units;
+                m_file.Robot.Units = m_text_editor.Text;
+                SetUnits();
+                m_file.ConvertUnits(oldunits, m_file.Robot.Units);
+            }
             else
             {
                 if (!double.TryParse(m_text_editor.Text, out d))
@@ -1153,7 +1193,6 @@ namespace PathViewer
         }
         #endregion
 
-
         private void ClearChecks(ToolStripMenuItem menu)
         {
             foreach (var item in menu.DropDownItems)
@@ -1201,13 +1240,30 @@ namespace PathViewer
             return time;
         }
 
+        private void UpdateJobsState(PathGenerationStateChangeEvent state)
+        {
+            if (state.TotalJobs == 0)
+                m_running_status.Text = "PathGeneration: Idle";
+            else
+                m_running_status.Text = "Path Generation: " + state.TotalJobs.ToString() + " jobs";
+        }
 
+        private void PathGeneratorJobStateChanged(object sender, PathGenerationStateChangeEvent e)
+        {
+            if (IsDisposed)
+                return;
+
+            if (InvokeRequired)
+                Invoke(new UpdateJobStatusDelegate(UpdateJobsState), new object[] { e });
+            else
+                UpdateJobsState(e);
+        }
 
         private void HighlightTime(RobotPath path, WayPoint pt)
         {
             if (!path.HasSegments)
             {
-                m_plot.HighlightTime = Double.MaxValue;
+                m_plot.HighlightTime = 0.0;
                 path.SegmentsUpdated += Path_SegmentsUpdated;
                 return;
             }
@@ -1253,6 +1309,7 @@ namespace PathViewer
             ToolStripMenuItem item = FindItem("Games");
             if (item != null)
             {
+                item.DropDownItems.Clear();
                 foreach (Game g in m_games.Games)
                 {
                     ToolStripMenuItem mitem = new ToolStripMenuItem(g.Name, null, GameSelected);
@@ -1293,11 +1350,20 @@ namespace PathViewer
         {
             m_field.FieldGame = g;
             m_detailed.FieldGame = g;
+            m_current_game = g;
         }
 
         private void InitializeGenerator(PathGenerator g)
         {
+            if (m_generator != null)
+            {
+                m_generator.Stop();
+                m_generator.StateChanged -= PathGeneratorJobStateChanged;
+            }
+
             m_generator = g;
+            m_generator.StateChanged += PathGeneratorJobStateChanged;
+            m_generator.Start();
             GenerateAllSplines();
         }
 
@@ -1366,6 +1432,10 @@ namespace PathViewer
                 ListViewItem item;
 
                 m_robot_view.Items.Clear();
+
+                item = new ListViewItem("Units");
+                item.SubItems.Add(m_file.Robot.Units);
+                m_robot_view.Items.Add(item);
 
                 item = new ListViewItem("Type");
                 item.SubItems.Add(m_file.Robot.DriveType);
@@ -1526,7 +1596,8 @@ namespace PathViewer
 
         private void GenerateSegments(RobotPath p)
         {
-            p.GenerateVelocityConstraints();
+            if (m_generator.TimingConstraintsSupported)
+                p.GenerateVelocityConstraints();
             p.SetSegmentsInvalid();
 
             if (m_generator != null)
@@ -1648,7 +1719,7 @@ namespace PathViewer
             {
                 foreach(RobotPath path in gr.Paths)
                 {
-                    path.Segments = null;
+                    path.SetSegmentsInvalid();
                     m_generator.GenerateSegments(m_file.Robot, path);
 
                     while (!path.HasSegments)
@@ -1762,6 +1833,5 @@ namespace PathViewer
                 m_logger.LogMessage(Logger.MessageType.Info, str);
         }
         #endregion
-
     }
 }
