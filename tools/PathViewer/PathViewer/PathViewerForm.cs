@@ -216,9 +216,6 @@ namespace PathViewer
 
         private void M_split_Layout(object sender, LayoutEventArgs e)
         {
-            Debug.WriteLine("M_split_Layout, Width = " + Width.ToString() + ", Height = " + Height.ToString());
-            Debug.WriteLine("    m_split, Width = " + m_split.Width.ToString() + ", Height = " + m_split.Height.ToString());
-
         }
         #endregion
 
@@ -305,9 +302,9 @@ namespace PathViewer
             else if (e.KeyCode == Keys.Up)
             {
                 if (e.Shift)
-                    m_field.SelectedWaypoint.Y += 0.1;
+                    m_field.SelectedWaypoint.Y += UnitConverter.Convert(0.1, "inches", m_file.Robot.Units);
                 else
-                    m_field.SelectedWaypoint.Y += 1.0;
+                    m_field.SelectedWaypoint.Y += UnitConverter.Convert(1.0, "inches", m_file.Robot.Units);
 
                 m_file.IsDirty = true;
                 gen = true;
@@ -315,9 +312,9 @@ namespace PathViewer
             else if (e.KeyCode == Keys.Down)
             {
                 if (e.Shift)
-                    m_field.SelectedWaypoint.Y -= 0.1;
+                    m_field.SelectedWaypoint.Y -= UnitConverter.Convert(0.1, "inches", m_file.Robot.Units);
                 else
-                    m_field.SelectedWaypoint.Y -= 1.0;
+                    m_field.SelectedWaypoint.Y -= UnitConverter.Convert(1.0, "inches", m_file.Robot.Units);
 
                 m_file.IsDirty = true;
                 gen = true;
@@ -325,9 +322,9 @@ namespace PathViewer
             else if (e.KeyCode == Keys.Left)
             {
                 if (e.Shift)
-                    m_field.SelectedWaypoint.X -= 0.1;
+                    m_field.SelectedWaypoint.X -= UnitConverter.Convert(0.1, "inches", m_file.Robot.Units);
                 else
-                    m_field.SelectedWaypoint.X -= 1.0;
+                    m_field.SelectedWaypoint.X -= UnitConverter.Convert(1.0, "inches", m_file.Robot.Units);
 
                 m_file.IsDirty = true;
                 gen = true;
@@ -335,9 +332,9 @@ namespace PathViewer
             else if (e.KeyCode == Keys.Right)
             {
                 if (e.Shift)
-                    m_field.SelectedWaypoint.X += 0.1;
+                    m_field.SelectedWaypoint.X += UnitConverter.Convert(0.1, "inches", m_file.Robot.Units);
                 else
-                    m_field.SelectedWaypoint.X += 1.0;
+                    m_field.SelectedWaypoint.X += UnitConverter.Convert(1.0, "inches", m_file.Robot.Units);
 
                 m_file.IsDirty = true;
                 gen = true;
@@ -551,6 +548,9 @@ namespace PathViewer
                 return;
 
             ListViewItem item = m_path_view.SelectedItems[0];
+
+            if (item.Text == "Total Time")
+                return;
 
             m_path_view_editing = item;
             Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
@@ -1373,6 +1373,7 @@ namespace PathViewer
 
             double time = FindTime(path, pt);
             m_plot.HighlightTime = time;
+            UpdatePathWindow();
         }
 
         private void Path_SegmentsUpdated(object sender, EventArgs e)
@@ -1503,6 +1504,19 @@ namespace PathViewer
             m_path_view.Items.Clear();
             if (m_selected_path != null)
             {
+                item = new ListViewItem("Total Time");
+                string timestr;
+                try
+                {
+                    timestr = m_selected_path.TotalTime.ToString();
+                }
+                catch
+                {
+                    timestr = "<Calculating>";
+                }
+                item.SubItems.Add(timestr);
+                m_path_view.Items.Add(item);
+
                 item = new ListViewItem("Max Velocity");
                 item.SubItems.Add(m_selected_path.MaxVelocity.ToString());
                 m_path_view.Items.Add(item);
@@ -1710,7 +1724,6 @@ namespace PathViewer
                     concurrent++;
                     p.SegmentsUpdated += SegmentUpdateComplete;
                     p.GenerateSegments(m_file.Robot, m_generator);
-                    Debug.WriteLine("Starting path: concurrent count " + concurrent.ToString());
                 }
                 catch(Exception ex)
                 {
@@ -1728,7 +1741,6 @@ namespace PathViewer
             Debug.Assert(p != null);
             p.SegmentsUpdated -= SegmentUpdateComplete;
             concurrent--;
-            Debug.WriteLine("Finishing path: concurrent count " + concurrent.ToString());
         }
 
         private void GenerateSplines(RobotPath p)

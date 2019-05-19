@@ -23,5 +23,6 @@
 
   TODO
   ----
+  - Swerve rotational model
   - Testing, Testing, Testing
   - Documentation

@@ -61,8 +61,9 @@ namespace PathViewer
             if (segs == null)
                 return null;
 
+            double total = segs[segs.Length - 1].GetValue("time");
             TrapezoidalProfile profile = CreateRotationProfile(robot, path.StartAngle, path.EndAngle);
-            if (profile.TotalTime > path.TotalTime)
+            if (profile.TotalTime > total)
                 throw new Exception("this case not handled yet, rotation cannot completed in path time");
 
             PathSegment[] fl = new PathSegment[segs.Length];

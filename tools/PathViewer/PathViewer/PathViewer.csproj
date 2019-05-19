@@ -149,7 +149,6 @@
     <Content Include="2019-field.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TODO.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XeroMath\XeroMath.csproj">
