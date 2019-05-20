@@ -20,6 +20,7 @@
   - Units
   - Copy path
   - Move path between path groups
+  - Combo boxes for units and drive type
 
   TODO
   ----

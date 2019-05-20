@@ -19,11 +19,24 @@ namespace PathViewer
 
         private static Units[] UnitsEntries =
         {
-            new Units(new List<string>(){"inch", "in", "inches"}, 1.0),
+            new Units(new List<string>(){"inches", "in", "inch"}, 1.0),
             new Units(new List<string>(){"feet", "foot", "ft"}, 12.0),
             new Units(new List<string>(){"cm"}, 0.393701),
-            new Units(new List<string>(){"m", "meter", "meters"}, 39.3701),
+            new Units(new List<string>(){"meters", "meter", "m"}, 39.3701),
         };
+
+        public static List<string> SupportedUnits
+        {
+            get
+            {
+                List<string> ret = new List<string>();
+                for (int i = 0; i < UnitsEntries.Length; i++)
+                {
+                    ret.Add(UnitsEntries[i].UnitNames[0]);
+                }
+                return ret;
+            }
+        }
 
 
         public static double Convert(double inval, string from, string to)

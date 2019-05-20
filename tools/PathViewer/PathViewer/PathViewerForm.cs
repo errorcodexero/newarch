@@ -47,6 +47,11 @@ namespace PathViewer
         private TextBox m_text_editor;
 
         /// <summary>
+        /// The control for editing robot params related selectable items
+        /// </summary>
+        private ComboBox m_combo_editor;
+
+        /// <summary>
         /// The node we are currently editing in the path group and path tree control
         /// </summary>
         private TreeNode m_editing_pathtree;
@@ -106,6 +111,7 @@ namespace PathViewer
         #region private delegates
         private delegate void HighlightDelegate(RobotPath path, WayPoint pt);
         private delegate void UpdateJobStatusDelegate(PathGenerationStateChangeEvent state);
+        private delegate void UpdatePathWindowDelegate();
         #endregion
 
         #region public constructor
@@ -405,7 +411,10 @@ namespace PathViewer
                 UpdateWaypointPropertyWindow();
 
             if (e.Reason == WaypointEventArgs.ReasonType.Unselected)
+            {
                 m_plot.HighlightTime = 0.0;
+                m_waypoint_view.Items.Clear();
+            }
         }
         #endregion
 
@@ -570,26 +579,85 @@ namespace PathViewer
         }
         #endregion
 
+
+
         #region event handlers for the robot params window
+
+        private void SetComboInitialValue(string value)
+        {
+            for(int i = 0; i < m_combo_editor.Items.Count; i++)
+            {
+                string str = m_combo_editor.Items[i] as string;
+                if (str != null && str == value)
+                {
+                    m_combo_editor.SelectedIndex = i;
+                    break;
+                }
+            }
+        }
         private void RobotParamDoubleClick(object sender, EventArgs e)
         {
-            if (m_text_editor != null || m_robot_view.SelectedItems.Count != 1)
+            if (m_text_editor != null || m_robot_view.SelectedItems.Count != 1 || m_combo_editor != null)
                 return;
 
             ListViewItem item = m_robot_view.SelectedItems[0];
-
             m_robot_param_editing = item;
-            Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
 
-            m_text_editor = new TextBox();
-            m_text_editor.Text = item.SubItems[1].Text;
-            m_text_editor.Bounds = b;
-            m_text_editor.Parent = m_robot_view;
-            m_text_editor.Enabled = true;
-            m_text_editor.Visible = true;
-            m_text_editor.LostFocus += FinishedEditingProperty;
-            m_text_editor.PreviewKeyDown += PreviewEditorKeyProperty;
-            m_text_editor.Focus();
+            if (item.Text == "Type")
+            {
+                string[] supported = new string[] { "tank", "swerve"};
+
+                Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
+                m_combo_editor = new ComboBox();
+                foreach (string sitem in supported)
+                    m_combo_editor.Items.Add(sitem);
+                SetComboInitialValue(m_file.Robot.DriveType);
+                m_combo_editor.DropDownStyle = ComboBoxStyle.DropDownList;
+                m_combo_editor.Enabled = true;
+                m_combo_editor.Visible = true;
+                m_combo_editor.Bounds = b;
+                m_combo_editor.Parent = m_robot_view;
+                m_combo_editor.LostFocus += FinishedEditingProperty;
+                m_combo_editor.SelectedIndexChanged += SelectedComboItemChanged;
+                m_combo_editor.Focus();
+            }
+            else if (item.Text == "Units")
+            {
+                List<string> supported = UnitConverter.SupportedUnits;
+
+                Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
+                m_combo_editor = new ComboBox();
+                foreach (string sitem in supported)
+                    m_combo_editor.Items.Add(sitem);
+                SetComboInitialValue(m_file.Robot.Units);
+                m_combo_editor.DropDownStyle = ComboBoxStyle.DropDownList;
+                m_combo_editor.Enabled = true;
+                m_combo_editor.Visible = true;
+                m_combo_editor.Bounds = b;
+                m_combo_editor.Parent = m_robot_view;
+                m_combo_editor.LostFocus += FinishedEditingProperty;
+                m_combo_editor.SelectedIndexChanged += SelectedComboItemChanged;
+                m_combo_editor.Focus();
+            }
+            else
+            {
+
+                Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
+
+                m_text_editor = new TextBox();
+                m_text_editor.Text = item.SubItems[1].Text;
+                m_text_editor.Bounds = b;
+                m_text_editor.Parent = m_robot_view;
+                m_text_editor.Enabled = true;
+                m_text_editor.Visible = true;
+                m_text_editor.LostFocus += FinishedEditingProperty;
+                m_text_editor.PreviewKeyDown += PreviewEditorKeyProperty;
+                m_text_editor.Focus();
+            }
+        }
+
+        private void SelectedComboItemChanged(object sender, EventArgs e)
+        {
         }
         #endregion
 
@@ -1146,43 +1214,25 @@ namespace PathViewer
 
             if (m_robot_param_editing.Text == "Type")
             {
-                if (!RobotParams.IsValidDriveType(m_text_editor.Text))
+                string mytype = (string)m_combo_editor.SelectedItem;
+                if (mytype != m_file.Robot.DriveType)
                 {
-                    string list = string.Empty;
-                    foreach (string dtype in RobotParams.DriveTypes)
-                    {
-                        if (!String.IsNullOrEmpty(list))
-                            list += ", ";
-                        list += "'" + dtype + "'";
-                    }
-                    string msg = "invalid drive type '" + m_text_editor.Text + "', must be one of ";
-                    msg += list;
-                    m_ignore_lost_focus = true;
-                    MessageBox.Show(msg, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
+                    PushUndoStack();
+                    m_file.Robot.DriveType = mytype;
                 }
-                PushUndoStack();
-                m_file.Robot.DriveType = m_text_editor.Text;
             }
             else if (m_robot_param_editing.Text == "Units")
             {
-                try
-                {
-                    UnitConverter.Convert(1.0, m_text_editor.Text, m_text_editor.Text);
-                }
-                catch
-                {
-                    string msg = "Units '" + m_text_editor.Text + "' are not understood";
-                    m_ignore_lost_focus = true;
-                    MessageBox.Show(msg, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
-                }
+                string myunits = m_combo_editor.SelectedItem as string;
 
-                PushUndoStack();
-                string oldunits = m_current_game.Units;
-                m_file.Robot.Units = m_text_editor.Text;
-                SetUnits();
-                m_file.ConvertUnits(oldunits, m_file.Robot.Units);
+                if (myunits != m_file.Robot.Units)
+                {
+                    PushUndoStack();
+                    string oldunits = m_current_game.Units;
+                    m_file.Robot.Units = myunits;
+                    SetUnits();
+                    m_file.ConvertUnits(oldunits, m_file.Robot.Units);
+                }
             }
             else
             {
@@ -1702,14 +1752,20 @@ namespace PathViewer
 
         private void StopEditing()
         {
-            m_text_editor.Dispose();
-            m_text_editor = null;
+            if (m_combo_editor != null)
+            {
+                m_combo_editor.Dispose();
+                m_combo_editor = null;
+            }
+            else
+            {
+                m_text_editor.Dispose();
+                m_text_editor = null;
+            }
             m_editing_pathtree = null;
             m_waypoint_editing = null;
             m_robot_param_editing = null;
         }
-
-        int concurrent = 0;
 
         private void GenerateSegments(RobotPath p)
         {
@@ -1721,7 +1777,6 @@ namespace PathViewer
             {
                 try
                 {
-                    concurrent++;
                     p.SegmentsUpdated += SegmentUpdateComplete;
                     p.GenerateSegments(m_file.Robot, m_generator);
                 }
@@ -1740,7 +1795,11 @@ namespace PathViewer
             RobotPath p = sender as RobotPath;
             Debug.Assert(p != null);
             p.SegmentsUpdated -= SegmentUpdateComplete;
-            concurrent--;
+
+            if (InvokeRequired)
+                Invoke(new UpdatePathWindowDelegate(UpdatePathWindow));
+            else
+                UpdatePathWindow();
         }
 
         private void GenerateSplines(RobotPath p)
