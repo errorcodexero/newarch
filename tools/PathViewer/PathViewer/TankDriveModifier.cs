@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using XeroMath;
 
 namespace PathViewer
 {
@@ -29,7 +27,7 @@ namespace PathViewer
 
             for (int i = 0; i < segs.Length; i++)
             {
-                double heading = MathUtils.DegreesToRadians(segs[i].GetValue("heading") / 180.0 * Math.PI);
+                double heading = XeroUtils.DegreesToRadians(segs[i].GetValue("heading") / 180.0 * Math.PI);
                 double ca = Math.Cos(heading);
                 double sa = Math.Sin(heading);
 

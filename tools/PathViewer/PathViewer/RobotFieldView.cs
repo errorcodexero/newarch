@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using XeroMath;
+
 
 namespace PathViewer
 {
-    public partial class DetailedFieldView : BasicFieldView
+    public partial class RobotFieldView : BasicFieldView
     {
         #region private variables
         private ViewTypeValue m_view_type;
@@ -30,7 +27,7 @@ namespace PathViewer
         #endregion
 
         #region public constructors
-        public DetailedFieldView()
+        public RobotFieldView()
         {
             InitializeComponent();
         }
@@ -134,13 +131,11 @@ namespace PathViewer
 
             if (segs.Count == 2)
             {
-                double lx, ly, rx, ry;
-                double heading;
-                path.GetPositionForTime(segs["left"], m_time, out lx, out ly, out heading);
-                path.GetPositionForTime(segs["right"], m_time, out rx, out ry, out heading);
+                XeroPose left, right;
+                left = path.GetPositionForTime(segs["left"], m_time);
+                right = path.GetPositionForTime(segs["right"], m_time);
 
-                double x = (lx + rx) / 2.0;
-                double y = (ly + ry) / 2.0;
+                XeroPose center = left.Interpolate(right, 0.5);
 
                 pts = new PointF[]
                 {
@@ -151,27 +146,25 @@ namespace PathViewer
                 };
 
                 Matrix mm = new Matrix();
-                mm.Translate((float)x, (float)y);
-                mm.Rotate((float)heading);
+                mm.Translate((float)center.X, (float)center.Y);
+                mm.Rotate((float)center.HeadingDegrees);
                 mm.TransformPoints(pts);
                 WorldToWindowMatrix.TransformPoints(pts);
             }
             else
             {
-                double flx, fly, frx, fry;
-                double blx, bly, brx, bry;
-                double heading;
-                path.GetPositionForTime(segs["fl"], m_time, out flx, out fly, out heading);
-                path.GetPositionForTime(segs["fr"], m_time, out frx, out fry, out heading);
-                path.GetPositionForTime(segs["bl"], m_time, out blx, out bly, out heading);
-                path.GetPositionForTime(segs["br"], m_time, out brx, out bry, out heading);
+                XeroPose fl, fr, bl, br;
+                fl = path.GetPositionForTime(segs["fl"], m_time);
+                fr = path.GetPositionForTime(segs["fr"], m_time);
+                bl = path.GetPositionForTime(segs["bl"], m_time);
+                br = path.GetPositionForTime(segs["br"], m_time);
 
                 pts = new PointF[4]
                 {
-                    new PointF((float)frx, (float)fry),
-                    new PointF((float)brx, (float)bry),
-                    new PointF((float)blx, (float)bly),
-                    new PointF((float)flx, (float)fly),
+                    new PointF((float)fr.X, (float)fr.Y),
+                    new PointF((float)br.X, (float)br.Y),
+                    new PointF((float)bl.X, (float)bl.Y),
+                    new PointF((float)fl.X, (float)fl.Y),
                 };
 
                 WorldToWindowMatrix.TransformPoints(pts);

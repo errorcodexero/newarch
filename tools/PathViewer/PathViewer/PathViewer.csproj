@@ -60,17 +60,16 @@
       <DependentUpon>BasicFieldView.cs</DependentUpon>
     </Compile>
     <Compile Include="CentripetalAccelerationConstraint.cs" />
-    <Compile Include="DetailedFieldView.cs">
+    <Compile Include="RobotFieldView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DetailedFieldView.Designer.cs">
-      <DependentUpon>DetailedFieldView.cs</DependentUpon>
+    <Compile Include="RobotFieldView.Designer.cs">
+      <DependentUpon>RobotFieldView.cs</DependentUpon>
     </Compile>
     <Compile Include="DistanceVelocityConstraint.cs" />
     <Compile Include="DriveModifier.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LoggerOutputEventArgs.cs" />
-    <Compile Include="MathUtils.cs" />
     <Compile Include="PathGenerationStateChangeEvent.cs" />
     <Compile Include="RobotParams.cs" />
     <Compile Include="RobotPlotViewer.cs">
@@ -86,11 +85,11 @@
     <Compile Include="TimingConstraintJsonConverter.cs" />
     <Compile Include="TimingContraint.cs" />
     <Compile Include="FieldMouseMovedArgs.cs" />
-    <Compile Include="FieldView.cs">
+    <Compile Include="PathFieldView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FieldView.Designer.cs">
-      <DependentUpon>FieldView.cs</DependentUpon>
+    <Compile Include="PathFieldView.Designer.cs">
+      <DependentUpon>PathFieldView.cs</DependentUpon>
     </Compile>
     <Compile Include="Game.cs" />
     <Compile Include="GameManager.cs" />

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.IO;
-using System.Diagnostics;
 using Newtonsoft.Json;
 using Csv;
 
@@ -223,6 +222,11 @@ namespace PathViewer
 
         private void GenerateSegmentsForPath(RobotParams robot, RobotPath path)
         {
+            //
+            // TODO - for the swerve drive, we need to look at the velocity and determine
+            //        how much is allocated to rotation and how much is allocated to
+            //        translation.
+            //
             PathSegment[] segs = GenerateDetailedPath(robot, path);
             DriveModifier mod = null;
 

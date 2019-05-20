@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace PathViewer
+namespace XeroMath
 {
-    public class MathUtils
+    public class XeroUtils
     {
         static public double BoundRadians(double r)
         {

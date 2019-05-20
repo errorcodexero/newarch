@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
+using XeroMath;
 
 namespace PathViewer
 {
@@ -30,10 +28,10 @@ namespace PathViewer
         public double EndVelocity;
 
         [JsonProperty(PropertyName = "startangle")]
-        public double StartAngle;
+        public double StartFacingAngle;
 
         [JsonProperty(PropertyName = "endangle")]
-        public double EndAngle;
+        public double EndFacingAngle;
 
         [JsonProperty(PropertyName = "constraints")]
         public TimingContraint[] Constraints;
@@ -166,6 +164,7 @@ namespace PathViewer
         {
             get { return m_add_segments; }
         }
+
         #endregion
 
         #region public methods
@@ -194,11 +193,11 @@ namespace PathViewer
             OnSegmentsChanged(EventArgs.Empty);
         }
         
-        public void GetPositionForTime(PathSegment[] segs, double time, out double x, out double y, out double heading)
+        public XeroPose GetPositionForTime(PathSegment[] segs, double time)
         {
-            x = 0.0;
-            y = 0.0;
-            heading = 0.0;
+            double x = 0.0;
+            double y = 0.0;
+            double heading = 0.0;
 
             double dt = Double.MaxValue;
             for(int i = 0; i < segs.Length; i++)
@@ -214,6 +213,8 @@ namespace PathViewer
                 if (t > time)
                     break;
             }
+
+            return new XeroPose(x, y, heading);
         }
 
         public void SetSegmentsInvalid()
@@ -296,13 +297,13 @@ namespace PathViewer
                 double tx = t * s.KnotDistance;
                 double ty = s.Evaluate(tx);
 
-                double ca = Math.Cos(MathUtils.DegreesToRadians(s.AngleOffset));
-                double sa = Math.Sin(MathUtils.DegreesToRadians(s.AngleOffset));
+                double ca = Math.Cos(XeroUtils.DegreesToRadians(s.AngleOffset));
+                double sa = Math.Sin(XeroUtils.DegreesToRadians(s.AngleOffset));
 
                 x = tx * ca - ty * sa + s.XOffset;
                 y = tx * sa + ty * ca + s.YOffset;
 
-                heading = MathUtils.RadiansToDegrees(MathUtils.BoundRadians(Math.Atan(s.Derivative(tx)) + MathUtils.DegreesToRadians(s.AngleOffset))); ;
+                heading = XeroUtils.RadiansToDegrees(XeroUtils.BoundRadians(Math.Atan(s.Derivative(tx)) + XeroUtils.DegreesToRadians(s.AngleOffset))); ;
             }
             else
             {
@@ -314,7 +315,7 @@ namespace PathViewer
 
                 double dx = m_splines[index].Item1.Derivative(t);
                 double dy = m_splines[index].Item2.Derivative(t);
-                heading = MathUtils.RadiansToDegrees(Math.Atan2(dy, dx));
+                heading = XeroUtils.RadiansToDegrees(Math.Atan2(dy, dx));
             }
         }
 

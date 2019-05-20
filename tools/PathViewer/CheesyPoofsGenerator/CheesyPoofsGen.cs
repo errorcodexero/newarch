@@ -4,6 +4,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Text;
 using PathViewer;
+using XeroMath;
 
 namespace CheesyPoofsGenerator
 {
@@ -113,8 +114,8 @@ namespace CheesyPoofsGenerator
 
         private void GenerateSpline(WayPoint p0, WayPoint p1, out Spline xsp, out Spline  ysp)
         {
-            double p0h = MathUtils.DegreesToRadians(p0.Heading);
-            double p1h = MathUtils.DegreesToRadians(p1.Heading);
+            double p0h = XeroUtils.DegreesToRadians(p0.Heading);
+            double p1h = XeroUtils.DegreesToRadians(p1.Heading);
 
             double scale = 1.2 * p0.Distance(p1);
             double x0 = p0.X;

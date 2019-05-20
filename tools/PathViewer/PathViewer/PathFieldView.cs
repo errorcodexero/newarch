@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using XeroMath;
 
 namespace PathViewer
 {
-    public partial class FieldView : BasicFieldView
+    public partial class PathFieldView : BasicFieldView
     {
         #region private variables
         private double m_center_hit_dist = 8.0;
@@ -46,7 +46,7 @@ namespace PathViewer
         #endregion
 
         #region public constructors
-        public FieldView()
+        public PathFieldView()
         {
             m_selected = null;
             m_rotating = null;
@@ -272,7 +272,7 @@ namespace PathViewer
         private double FindAngle(PointF first, PointF second)
         {
             double angle = Math.Atan2(second.Y - first.Y, second.X - first.X);
-            return MathUtils.RadiansToDegrees(angle);
+            return XeroUtils.RadiansToDegrees(angle);
         }
 
         private bool HitTestWaypoint(int x, int y, RobotPath path, out WayPoint hitpt, out WaypointRegion part)
@@ -371,7 +371,7 @@ namespace PathViewer
                     PointF pt, w;
 
                     path.Evaluate(index, t, out x, out y, out heading);
-                    heading = MathUtils.DegreesToRadians(heading);
+                    heading = XeroUtils.DegreesToRadians(heading);
                     double ca = Math.Cos(heading);
                     double sa = Math.Sin(heading);
 
@@ -412,7 +412,7 @@ namespace PathViewer
                         {
                             Matrix mm;
 
-                            float angle = (float)MathUtils.DegreesToRadians(pt.Heading);
+                            float angle = (float)XeroUtils.DegreesToRadians(pt.Heading);
 
                             //
                             // Draw the point

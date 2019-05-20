@@ -32,9 +32,9 @@
             this.m_vertical = new System.Windows.Forms.SplitContainer();
             this.m_field_tab = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.m_field = new PathViewer.FieldView();
+            this.m_field = new PathViewer.PathFieldView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.m_detailed = new PathViewer.DetailedFieldView();
+            this.m_detailed = new PathViewer.RobotFieldView();
             this.m_bottom_tab = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.m_plot = new PathViewer.RobotPlotViewer();
@@ -202,7 +202,7 @@
             this.m_detailed.Size = new System.Drawing.Size(1348, 548);
             this.m_detailed.TabIndex = 0;
             this.m_detailed.Time = 0D;
-            this.m_detailed.ViewType = PathViewer.DetailedFieldView.ViewTypeValue.WheelView;
+            this.m_detailed.ViewType = PathViewer.RobotFieldView.ViewTypeValue.WheelView;
             // 
             // m_bottom_tab
             // 
@@ -636,7 +636,7 @@
         }
 
         #endregion
-        private FieldView m_field;
+        private PathFieldView m_field;
         private System.Windows.Forms.SplitContainer m_split;
         private System.Windows.Forms.SplitContainer m_vertical;
         private System.Windows.Forms.ListView m_waypoint_view;
@@ -664,7 +664,7 @@
         private System.Windows.Forms.TabControl m_field_tab;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
-        private DetailedFieldView m_detailed;
+        private RobotFieldView m_detailed;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel m_running_status;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;

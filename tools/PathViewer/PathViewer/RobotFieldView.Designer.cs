@@ -1,6 +1,6 @@
 ﻿namespace PathViewer
 {
-    partial class FieldView
+    partial class RobotFieldView
     {
         /// <summary> 
         /// Required designer variable.

@@ -8,6 +8,8 @@ using System.ComponentModel;
 using System.Threading;
 using System.Reflection;
 using System.Diagnostics;
+using XeroMath;
+
 namespace PathViewer
 {
     public partial class PathViewerForm : Form
@@ -161,7 +163,7 @@ namespace PathViewer
             m_waypoint_view.DoubleClick += WaypointDoubleClick;
             m_robot_view.DoubleClick += RobotParamDoubleClick;
             m_path_view.DoubleClick += PathViewDoubleClick;
-            m_detailed.ViewType = DetailedFieldView.ViewTypeValue.RobotView;
+            m_detailed.ViewType = RobotFieldView.ViewTypeValue.RobotView;
 
             m_ignore_lost_focus = false;
             m_undo_stack = new List<UndoState>();
@@ -176,6 +178,7 @@ namespace PathViewer
             m_plot.Generator = m_generator;
             m_plot.Robot = m_file.Robot;
             m_detailed.Robot = m_file.Robot;
+            m_detailed.FieldMouseMoved += FieldMouseMoved;
 
             m_logger.OutputAvailable += LoggerOutputAvailable;
 
@@ -342,9 +345,9 @@ namespace PathViewer
             else if (e.KeyCode == Keys.Add || e.KeyCode == Keys.PageUp)
             {
                 if (e.Shift)
-                    m_field.SelectedWaypoint.Heading = MathUtils.BoundDegrees(m_field.SelectedWaypoint.Heading + 0.5);
+                    m_field.SelectedWaypoint.Heading = XeroUtils.BoundDegrees(m_field.SelectedWaypoint.Heading + 0.5);
                 else
-                    m_field.SelectedWaypoint.Heading = MathUtils.BoundDegrees(m_field.SelectedWaypoint.Heading + 5.0);
+                    m_field.SelectedWaypoint.Heading = XeroUtils.BoundDegrees(m_field.SelectedWaypoint.Heading + 5.0);
 
                 m_file.IsDirty = true;
                 gen = true;
@@ -352,9 +355,9 @@ namespace PathViewer
             else if (e.KeyCode == Keys.Subtract || e.KeyCode == Keys.PageDown)
             {
                 if (e.Shift)
-                    m_field.SelectedWaypoint.Heading = MathUtils.BoundDegrees(m_field.SelectedWaypoint.Heading - 0.5);
+                    m_field.SelectedWaypoint.Heading = XeroUtils.BoundDegrees(m_field.SelectedWaypoint.Heading - 0.5);
                 else
-                    m_field.SelectedWaypoint.Heading = MathUtils.BoundDegrees(m_field.SelectedWaypoint.Heading - 5.0);
+                    m_field.SelectedWaypoint.Heading = XeroUtils.BoundDegrees(m_field.SelectedWaypoint.Heading - 5.0);
 
                 m_file.IsDirty = true;
                 gen = true;
@@ -1118,7 +1121,7 @@ namespace PathViewer
                     return false;
 
                 PushUndoStack();
-                m_selected_path.StartAngle = d;
+                m_selected_path.StartFacingAngle = d;
             }
             else if (m_path_view_editing.Text == "End Angle")
             {
@@ -1126,7 +1129,7 @@ namespace PathViewer
                     return false;
 
                 PushUndoStack();
-                m_selected_path.EndAngle = d;
+                m_selected_path.EndFacingAngle = d;
             }
 
             UpdatePathWindow() ;
@@ -1308,15 +1311,12 @@ namespace PathViewer
 
         private Nullable<PointF> FindPointAtTime(RobotPath p, double t)
         {
-            double x, y;
-            double heading;
-
             PathSegment[] segs = p.Segments;
             if (segs == null)
                 return null;
 
-            p.GetPositionForTime(segs, t, out x, out y, out heading);
-            return new Nullable<PointF>(new PointF((float)x, (float)y));
+            XeroPose pose = p.GetPositionForTime(segs, t);
+            return new Nullable<PointF>(new PointF((float)pose.X, (float)pose.Y));
         }
 
         private double FindTime(RobotPath path, WayPoint pt)
@@ -1532,11 +1532,11 @@ namespace PathViewer
                 if (m_file.Robot.DriveType == RobotParams.SwerveDriveType)
                 {
                     item = new ListViewItem("Start Angle");
-                    item.SubItems.Add(m_selected_path.StartAngle.ToString());
+                    item.SubItems.Add(m_selected_path.StartFacingAngle.ToString());
                     m_path_view.Items.Add(item);
 
                     item = new ListViewItem("End Angle");
-                    item.SubItems.Add(m_selected_path.EndAngle.ToString());
+                    item.SubItems.Add(m_selected_path.EndFacingAngle.ToString());
                     m_path_view.Items.Add(item);
                 }
             }

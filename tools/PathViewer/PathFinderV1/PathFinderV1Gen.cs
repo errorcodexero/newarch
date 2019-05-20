@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using PathViewer;
+using XeroMath;
 
 namespace PathFinderV1
 {
@@ -114,8 +115,8 @@ namespace PathFinderV1
             double dist = p0.Distance(p1);
             double aoffset = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
 
-            double a0_delta = Math.Tan(MathUtils.BoundRadians(MathUtils.DegreesToRadians(p0.Heading) - aoffset));
-            double a1_delta = Math.Tan(MathUtils.BoundRadians(MathUtils.DegreesToRadians(p1.Heading) - aoffset));
+            double a0_delta = Math.Tan(XeroUtils.BoundRadians(XeroUtils.DegreesToRadians(p0.Heading) - aoffset));
+            double a1_delta = Math.Tan(XeroUtils.BoundRadians(XeroUtils.DegreesToRadians(p1.Heading) - aoffset));
 
             double[] coeffs = new double[6];
             coeffs[5] = -(3 * (a0_delta + a1_delta)) / (dist * dist * dist * dist);
@@ -128,7 +129,7 @@ namespace PathFinderV1
             xsp = new Spline(dist, coeffs);
             xsp.XOffset = p0.X;
             xsp.YOffset = p0.Y;
-            xsp.AngleOffset = MathUtils.RadiansToDegrees(aoffset);
+            xsp.AngleOffset = XeroUtils.RadiansToDegrees(aoffset);
             ysp = null;
         }
         #endregion

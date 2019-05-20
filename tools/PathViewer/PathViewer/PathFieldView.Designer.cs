@@ -1,6 +1,6 @@
 ﻿namespace PathViewer
 {
-    partial class DetailedFieldView
+    partial class PathFieldView
     {
         /// <summary> 
         /// Required designer variable.
