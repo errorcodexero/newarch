@@ -49,7 +49,7 @@ namespace PathViewer
             set { m_generator = value; }
         }
 
-        public double HighlightTime
+        public double Time
         {
             get { return m_time; }
             set
@@ -73,6 +73,8 @@ namespace PathViewer
 
                     m_chart.AnnotationPositionChanging += M_chart_AnnotationPositionChanging;
                 }
+
+                Invalidate();
             }
         }
 

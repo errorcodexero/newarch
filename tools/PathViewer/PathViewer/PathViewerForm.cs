@@ -106,6 +106,11 @@ namespace PathViewer
         /// </summary>
         private int m_undo_serial;
 
+        /// <summary>
+        /// The timer for automatically showing the robot path
+        /// </summary>
+        private System.Windows.Forms.Timer m_timer;
+
         #endregion
 
         #region private delegates
@@ -156,7 +161,7 @@ namespace PathViewer
             m_field.KeyDown += FieldKeyDown;            
 
             m_plot.TimeCursorMoved += PlotWindowTimeChanged;
-            m_plot.HighlightTime = 0.0;
+            m_plot.Time = 0.0;
 
             m_pathfile_tree.DoubleClick += DoPathTreeDoubleClick;
             m_pathfile_tree.MouseUp += PathTreeMouseUp;
@@ -170,6 +175,7 @@ namespace PathViewer
             m_robot_view.DoubleClick += RobotParamDoubleClick;
             m_path_view.DoubleClick += PathViewDoubleClick;
             m_detailed.ViewType = RobotFieldView.ViewTypeValue.RobotView;
+            m_detailed.KeyPress += RobotFieldViewKeyPress;
 
             m_ignore_lost_focus = false;
             m_undo_stack = new List<UndoState>();
@@ -189,8 +195,70 @@ namespace PathViewer
             m_logger.OutputAvailable += LoggerOutputAvailable;
 
             OutputCopyright();
+
+            m_timer = null;
         }
 
+        private void RobotFieldViewKeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (m_timer == null && m_selected_path != null)
+            {
+                m_timer = new System.Windows.Forms.Timer();
+                m_timer.Interval = 100;
+                m_timer.Tick += RobotFieldTimerTick;
+                m_timer.Enabled = true;
+                SetTime(0.0);
+            }
+            else
+            {
+                StopTimer();
+            }
+        }
+
+        private void StopTimer()
+        {
+            if (m_timer != null)
+            {
+                m_timer.Tick -= RobotFieldTimerTick;
+                m_timer.Enabled = false;
+                m_timer = null;
+                SetTime(0.0);
+            }
+            
+        }
+
+        private void RobotFieldTimerTick(object sender, EventArgs e)
+        {
+            if (m_selected_path == null)
+            {
+                StopTimer();
+            }
+            else
+            {
+                double t = m_plot.Time;
+                t += 0.100;
+                if (t > m_selected_path.TotalTime)
+                    t = 0.0;
+
+                SetTime(t);
+            }
+        }
+
+        void SetTime(double time)
+        {
+            m_detailed.Time = time;
+            m_plot.Time = time;
+        }
+
+        void SetPath(RobotPath path)
+        {
+            m_field.HighlightPoint = null;
+            m_selected_path = path;
+            m_plot.Path = path;
+            m_field.DisplayedPath = path;
+            m_detailed.DisplayedPath = path;
+            SetTime(0.0);
+        }
 
         void SetUnits()
         {
@@ -249,7 +317,7 @@ namespace PathViewer
             m_field.HighlightPoint = wpt;
             m_field.SelectedWaypoint = null;
 
-            m_detailed.Time = e.Time;
+            SetTime(e.Time);
         }
         #endregion
 
@@ -412,7 +480,7 @@ namespace PathViewer
 
             if (e.Reason == WaypointEventArgs.ReasonType.Unselected)
             {
-                m_plot.HighlightTime = 0.0;
+                m_plot.Time = 0.0;
                 m_waypoint_view.Items.Clear();
             }
         }
@@ -477,16 +545,12 @@ namespace PathViewer
             if (e.Node.Parent == null)
             {
                 // A group is selected
-                m_plot.Path = null;
-                m_selected_path = null;
+                SetPath(null);
             }
             else
             {
                 RobotPath path = m_file.FindPathByName(e.Node.Parent.Text, e.Node.Text);
-                m_selected_path = path;
-                m_plot.Path = path;
-                m_field.DisplayedPath = path;
-                m_detailed.DisplayedPath = path;
+                SetPath(path);
             }
             m_field.SelectedWaypoint = null;
             UpdatePathWindow();
@@ -578,8 +642,6 @@ namespace PathViewer
             m_text_editor.Focus();
         }
         #endregion
-
-
 
         #region event handlers for the robot params window
 
@@ -801,12 +863,9 @@ namespace PathViewer
 
             m_file = new PathFile();
             m_field.File = m_file;
-            m_field.DisplayedPath = null;
             m_field.SelectedWaypoint = null;
-            m_field.HighlightPoint = null;
-            m_detailed.DisplayedPath = null;
-            m_plot.Path = null;
-            m_selected_path = null;
+
+            SetPath(null);
             UpdateRobotWindow();
             UpdateWaypointPropertyWindow();
             UpdatePathWindow();
@@ -1199,6 +1258,11 @@ namespace PathViewer
                 PushUndoStack();
                 m_selected_path.EndFacingAngle = d;
             }
+            else if (m_path_view_editing.Text == "Rotation Delay")
+            {
+                PushUndoStack();
+                m_selected_path.FacingAngleRotationDelay = d;
+            }
 
             UpdatePathWindow() ;
             m_field.Invalidate();
@@ -1416,13 +1480,13 @@ namespace PathViewer
         {
             if (!path.HasSegments)
             {
-                m_plot.HighlightTime = 0.0;
+                m_plot.Time = 0.0;
                 path.SegmentsUpdated += Path_SegmentsUpdated;
                 return;
             }
 
             double time = FindTime(path, pt);
-            m_plot.HighlightTime = time;
+            m_plot.Time = time;
             UpdatePathWindow();
         }
 
@@ -1587,6 +1651,10 @@ namespace PathViewer
 
                     item = new ListViewItem("End Angle");
                     item.SubItems.Add(m_selected_path.EndFacingAngle.ToString());
+                    m_path_view.Items.Add(item);
+
+                    item = new ListViewItem("Rotation Delay");
+                    item.SubItems.Add(m_selected_path.FacingAngleRotationDelay.ToString());
                     m_path_view.Items.Add(item);
                 }
             }
@@ -2007,5 +2075,6 @@ namespace PathViewer
                 m_logger.LogMessage(Logger.MessageType.Info, str);
         }
         #endregion
+
     }
 }

@@ -68,25 +68,25 @@ namespace PathViewer
                 }
 
                 PathSegment left = new PathSegment();
-                left.AddValue("time", segs[i].GetValue("time"));
-                left.AddValue("x", lx);
-                left.AddValue("y", ly);
-                left.AddValue("heading", segs[i].GetValue("heading"));
-                left.AddValue("position", lpos);
-                left.AddValue("velocity", lvel);
-                left.AddValue("acceleration", lacc);
-                left.AddValue("jerk", ljerk);
+                left.SetValue("time", segs[i].GetValue("time"));
+                left.SetValue("x", lx);
+                left.SetValue("y", ly);
+                left.SetValue("heading", segs[i].GetValue("heading"));
+                left.SetValue("position", lpos);
+                left.SetValue("velocity", lvel);
+                left.SetValue("acceleration", lacc);
+                left.SetValue("jerk", ljerk);
                 lsegs[i] = left;
 
                 PathSegment right = new PathSegment();
-                right.AddValue("time", segs[i].GetValue("time"));
-                right.AddValue("x", rx);
-                right.AddValue("y", ry);
-                right.AddValue("heading", segs[i].GetValue("heading"));
-                right.AddValue("position", rpos);
-                right.AddValue("velocity", rvel);
-                right.AddValue("acceleration", racc);
-                right.AddValue("jerk", rjerk);
+                right.SetValue("time", segs[i].GetValue("time"));
+                right.SetValue("x", rx);
+                right.SetValue("y", ry);
+                right.SetValue("heading", segs[i].GetValue("heading"));
+                right.SetValue("position", rpos);
+                right.SetValue("velocity", rvel);
+                right.SetValue("acceleration", racc);
+                right.SetValue("jerk", rjerk);
                 rsegs[i] = right;
 
                 plx = lx;

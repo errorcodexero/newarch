@@ -161,7 +161,7 @@
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage3.Size = new System.Drawing.Size(1354, 552);
             this.tabPage3.TabIndex = 0;
-            this.tabPage3.Text = "PathEditing";
+            this.tabPage3.Text = "Editor";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // m_field
@@ -177,6 +177,7 @@
             this.m_field.SelectedWaypoint = null;
             this.m_field.Size = new System.Drawing.Size(1348, 548);
             this.m_field.TabIndex = 2;
+            this.m_field.Units = "inches";
             // 
             // tabPage4
             // 
@@ -233,7 +234,7 @@
             this.m_plot.AutoScroll = true;
             this.m_plot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_plot.Generator = null;
-            this.m_plot.HighlightTime = 0D;
+            this.m_plot.Time = 0D;
             this.m_plot.Location = new System.Drawing.Point(3, 2);
             this.m_plot.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.m_plot.Name = "m_plot";
@@ -475,7 +476,7 @@
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
             this.loadToolStripMenuItem.Size = new System.Drawing.Size(260, 30);
-            this.loadToolStripMenuItem.Text = "Load ...";
+            this.loadToolStripMenuItem.Text = "Open ...";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.LoadToolStripMenuItem_Click);
             // 
             // toolStripSeparator1

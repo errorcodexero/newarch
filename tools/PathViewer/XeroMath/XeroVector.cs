@@ -35,6 +35,26 @@ namespace XeroMath
 
         #region public methods
 
+        public double Magnitude()
+        {
+            return Math.Sqrt(X * X + Y * Y);
+        }
+
+        public double AngleRadians()
+        {
+            return Math.Atan2(Y, X);
+        }
+
+        public double AngleDegrees()
+        {
+            return XeroUtils.RadiansToDegrees(AngleRadians());
+        }
+
+        public XeroVector Translate(double x, double y )
+        {
+            return new XeroVector(X + x, Y + y);
+        }
+
         public XeroVector RotateRadians(double radians)
         {
             double nx = X * Math.Cos(radians) - Y * Math.Sin(radians);

@@ -253,7 +253,7 @@ namespace PathViewer
             if (!Double.TryParse(line[index], out v))
                 return false;
 
-            s.AddValue(name, v);
+            s.SetValue(name, v);
 
             return true;
         }

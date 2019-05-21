@@ -18,7 +18,7 @@ namespace PathViewer
         {
             m_values = new Dictionary<string, double>();
             foreach (var pair in seg.m_values)
-                AddValue(pair.Key, pair.Value);
+                SetValue(pair.Key, pair.Value);
         }
         #endregion
 
@@ -35,7 +35,7 @@ namespace PathViewer
         #endregion
 
         #region public methods
-        public void AddValue(string name, double v)
+        public void SetValue(string name, double v)
         {
             m_values[name] = v;
         }

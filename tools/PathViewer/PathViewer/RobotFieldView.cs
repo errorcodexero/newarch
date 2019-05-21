@@ -14,8 +14,6 @@ namespace PathViewer
         private ViewTypeValue m_view_type;
         private double m_time;
         private RobotParams m_robot;
-
-        private const int TimeStep = 100; 
         #endregion
 
         #region public enumeration
@@ -63,7 +61,6 @@ namespace PathViewer
         #endregion
 
         #region overriden usercontrol methods
-
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);

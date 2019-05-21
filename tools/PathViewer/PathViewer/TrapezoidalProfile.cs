@@ -71,7 +71,7 @@ namespace PathViewer
                     // Can't get to max velocity but can accelerate some
                     // before decelerating
                     //
-                    m_max_velocity = Math.Sqrt(num);
+                    m_actual_max_velocity = Math.Sqrt(num);
                     m_ta = (m_actual_max_velocity - m_start_velocity) / m_accel;
                     m_td = (m_end_velocity - m_actual_max_velocity) / -m_accel;
                     m_tc = 0;
