@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Diagnostics;
 
 namespace PathViewer
 {
@@ -14,6 +15,7 @@ namespace PathViewer
         private RobotPath m_path;
         private double m_time;
         private LineAnnotation m_line;
+        private RectangleAnnotation m_rect;
         private string m_units;
         #endregion
 
@@ -55,10 +57,7 @@ namespace PathViewer
             set
             {
                 m_time = value;
-                m_chart.Annotations.Clear();
-                m_line = null;
-
-                if (m_time < Double.MaxValue)
+                if (m_line == null)
                 {
                     m_line = new VerticalLineAnnotation();
                     m_line.LineColor = Color.Black;
@@ -70,11 +69,26 @@ namespace PathViewer
                     m_line.AnchorX = m_time;
                     m_line.AllowMoving = true;
                     m_chart.Annotations.Add(m_line);
-
                     m_chart.AnnotationPositionChanging += M_chart_AnnotationPositionChanging;
+
+                    m_rect = new RectangleAnnotation();
+                    m_rect.ForeColor = Color.White;
+                    m_rect.BackColor = Color.Blue;
+                    m_rect.Width = 10;
+                    m_rect.Height = 4;
+                    m_rect.Width = 2.5;
+                    m_rect.Text = "Hello";
+                    m_rect.AnchorY = 0.0;
+                    m_rect.AnchorX = 0.0;
+                    m_rect.AxisY = m_chart.ChartAreas[0].AxisY;
+                    m_rect.AxisX = m_chart.ChartAreas[0].AxisX;
+                    m_rect.ClipToChartArea = null;
+                    m_chart.Annotations.Add(m_rect);
                 }
 
-                Invalidate();
+                m_rect.Text = m_time.ToString("F2");
+                m_rect.AnchorX = m_time;
+                m_line.AnchorX = m_time;
             }
         }
 
@@ -82,9 +96,12 @@ namespace PathViewer
         {
             if (e.Annotation == m_line)
             {
+                m_rect.AnchorX = e.NewLocationX;
                 EventHandler<TimeCursorMovedArgs> handler = TimeCursorMoved;
                 handler?.Invoke(this, new TimeCursorMovedArgs(e.NewLocationX));
             }
+
+
         }
 
         public RobotPath Path
@@ -99,7 +116,8 @@ namespace PathViewer
                 if (m_path != null)
                 {
                     m_path.SegmentsUpdated += PathSegmentsUpdated;
-                    RegenerateGraph();
+                    PathSegmentsUpdated(null, null);
+                    Time = 0.0;
                 }
                 else
                 {
@@ -118,6 +136,8 @@ namespace PathViewer
 
         public void RegenerateGraph()
         {
+            if (InvokeRequired)
+
             m_chart.Series.Clear();
             if (m_path != null)
             {

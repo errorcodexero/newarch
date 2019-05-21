@@ -129,7 +129,7 @@ namespace PathViewer
             {
                 PathSegment[] segs = Segments;
                 if (segs == null)
-                    throw new Exception("cannot get path total time without segment data");
+                    throw new NoSegmentsException(this);
 
                 return segs[segs.Length - 1].GetValue("time");
             }

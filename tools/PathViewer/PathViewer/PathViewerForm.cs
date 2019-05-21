@@ -117,6 +117,7 @@ namespace PathViewer
         private delegate void HighlightDelegate(RobotPath path, WayPoint pt);
         private delegate void UpdateJobStatusDelegate(PathGenerationStateChangeEvent state);
         private delegate void UpdatePathWindowDelegate();
+        private delegate void SetTimeDelegate(double t);
         #endregion
 
         #region public constructor
@@ -201,17 +202,20 @@ namespace PathViewer
 
         private void RobotFieldViewKeyPress(object sender, KeyPressEventArgs e)
         {
-            if (m_timer == null && m_selected_path != null)
+            if (e.KeyChar == 'a' || e.KeyChar == 'A')
             {
-                m_timer = new System.Windows.Forms.Timer();
-                m_timer.Interval = 100;
-                m_timer.Tick += RobotFieldTimerTick;
-                m_timer.Enabled = true;
-                SetTime(0.0);
-            }
-            else
-            {
-                StopTimer();
+                if (m_timer == null && m_selected_path != null)
+                {
+                    m_timer = new System.Windows.Forms.Timer();
+                    m_timer.Interval = 100;
+                    m_timer.Tick += RobotFieldTimerTick;
+                    m_timer.Enabled = true;
+                    SetTime(0.0);
+                }
+                else
+                {
+                    StopTimer();
+                }
             }
         }
 
@@ -235,19 +239,32 @@ namespace PathViewer
             }
             else
             {
-                double t = m_plot.Time;
-                t += 0.100;
-                if (t > m_selected_path.TotalTime)
-                    t = 0.0;
+                try
+                {
+                    double t = m_plot.Time;
+                    t += 0.100;
+                    if (t > m_selected_path.TotalTime)
+                        t = 0.0;
 
-                SetTime(t);
+                    SetTime(t);
+                }
+                catch(NoSegmentsException)
+                {
+                    //
+                    // An Exception gets thr
+                }
             }
         }
 
         void SetTime(double time)
         {
-            m_detailed.Time = time;
-            m_plot.Time = time;
+            if (InvokeRequired)
+                Invoke(new SetTimeDelegate(SetTime), new object[] { time });
+            else
+            {
+                m_detailed.Time = time;
+                m_plot.Time = time;
+            }
         }
 
         void SetPath(RobotPath path)
@@ -310,14 +327,14 @@ namespace PathViewer
 
         private void PlotWindowTimeChanged(object sender, TimeCursorMovedArgs e)
         {
+            SetTime(e.Time);
+
             Nullable<PointF> wpt = FindPointAtTime(m_selected_path, e.Time);
             if (wpt == null)
                 return;
 
             m_field.HighlightPoint = wpt;
             m_field.SelectedWaypoint = null;
-
-            SetTime(e.Time);
         }
         #endregion
 
@@ -623,6 +640,9 @@ namespace PathViewer
             if (m_text_editor != null || m_path_view.SelectedItems.Count != 1)
                 return;
 
+            if (m_timer != null)
+                m_timer.Enabled = false;
+
             ListViewItem item = m_path_view.SelectedItems[0];
 
             if (item.Text == "Total Time")
@@ -661,6 +681,9 @@ namespace PathViewer
         {
             if (m_text_editor != null || m_robot_view.SelectedItems.Count != 1 || m_combo_editor != null)
                 return;
+
+            if (m_timer != null)
+                m_timer.Enabled = false;
 
             ListViewItem item = m_robot_view.SelectedItems[0];
             m_robot_param_editing = item;
@@ -732,6 +755,9 @@ namespace PathViewer
             ListViewItem item = m_waypoint_view.SelectedItems[0];
             if (item.Text == "Group" || item.Text == "Path")
                 return;
+
+            if (m_timer != null)
+                m_timer.Enabled = false;
 
             m_waypoint_editing = item;
             Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
@@ -1274,7 +1300,8 @@ namespace PathViewer
             UpdatePathWindow() ;
             m_field.Invalidate();
             m_detailed.Invalidate();
-            GenerateAllSplines();
+            GenerateSplines(m_selected_path);
+            GenerateSegments(m_selected_path);
 
             return true;
         }
@@ -1840,6 +1867,9 @@ namespace PathViewer
             m_editing_pathtree = null;
             m_waypoint_editing = null;
             m_robot_param_editing = null;
+
+            if (m_timer != null)
+                m_timer.Enabled = true;
         }
 
         private void GenerateSegments(RobotPath p)
