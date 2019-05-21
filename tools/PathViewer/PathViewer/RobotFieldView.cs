@@ -11,17 +11,8 @@ namespace PathViewer
     public partial class RobotFieldView : BasicFieldView
     {
         #region private variables
-        private ViewTypeValue m_view_type;
         private double m_time;
         private RobotParams m_robot;
-        #endregion
-
-        #region public enumeration
-        public enum ViewTypeValue
-        {
-            WheelView,
-            RobotView,
-        };
         #endregion
 
         #region public constructors
@@ -33,16 +24,6 @@ namespace PathViewer
         #endregion
 
         #region public properties
-        public ViewTypeValue ViewType
-        {
-            get { return m_view_type; }
-            set
-            {
-                m_view_type = value;
-                Initialize();
-                Invalidate();
-            }
-        }
 
         public RobotParams Robot
         {
@@ -67,10 +48,7 @@ namespace PathViewer
 
             if (DisplayedPath != null)
             {
-                if (m_view_type == ViewTypeValue.WheelView)
-                    DrawPathWheels(e.Graphics, DisplayedPath);
-                else
-                    DrawPathRobot(e.Graphics, DisplayedPath);
+                DrawPathRobot(e.Graphics, DisplayedPath);
             }
         }
 
@@ -83,47 +61,12 @@ namespace PathViewer
 
         #region private methods
 
-        private void DrawOnePathSegment(Graphics g, Color c, PathSegment[] seg)
-        {
-            float radius = 2.0f;
-            using (Brush b = new SolidBrush(c))
-            {
-                for (int i = 0; i < seg.Length; i++)
-                {
-                    double x = seg[i].GetValue("x");
-                    double y = seg[i].GetValue("y");
-
-                    PointF wpt = new PointF((float)x, (float)y);
-                    PointF spt = WorldToWindow(wpt);
-
-                    RectangleF r = new RectangleF(spt, new SizeF(0.0f, 0.0f));
-                    r.Offset(-radius / 2.0f, -radius / 2.0f);
-                    r.Inflate(radius, radius);
-                    g.FillEllipse(b, r);
-                }
-            }
-        }
-
-        private Color[] m_colors = { Color.Red, Color.Yellow, Color.Green, Color.Pink };
-        private void DrawPathWheels(Graphics g, RobotPath path)
-        {
-            if (path.AdditionalSegments == null)
-                return;
-
-            int i = 0;
-            foreach(var pair in path.AdditionalSegments)
-            {
-                DrawOnePathSegment(g, m_colors[i++], pair.Value);
-            }
-        }
-
         private void DrawPathRobot(Graphics g, RobotPath path)
         {
             if (path.AdditionalSegments == null)
                 return;
 
             PointF[] pts = null;
-
             Dictionary<string, PathSegment[]> segs = path.AdditionalSegments;
 
             if (segs.Count == 2)

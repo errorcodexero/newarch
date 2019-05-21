@@ -42,6 +42,11 @@ namespace PathViewer
         private RobotPath m_selected_path;
 
         /// <summary>
+        /// The selected path group, used for demoing  a complete path
+        /// </summary>
+        private PathGroup m_selected_group;
+
+        /// <summary>
         /// The control for editing path group names and path names in place
         /// </summary>
         private TextBox m_text_editor;
@@ -175,7 +180,6 @@ namespace PathViewer
             m_waypoint_view.DoubleClick += WaypointDoubleClick;
             m_robot_view.DoubleClick += RobotParamDoubleClick;
             m_path_view.DoubleClick += PathViewDoubleClick;
-            m_detailed.ViewType = RobotFieldView.ViewTypeValue.RobotView;
             m_detailed.KeyPress += RobotFieldViewKeyPress;
 
             m_ignore_lost_focus = false;
@@ -204,7 +208,7 @@ namespace PathViewer
         {
             if (e.KeyChar == 'a' || e.KeyChar == 'A')
             {
-                if (m_timer == null && m_selected_path != null)
+                if (m_timer == null && (m_selected_path != null || m_selected_group != null))
                 {
                     m_timer = new System.Windows.Forms.Timer();
                     m_timer.Interval = 100;
@@ -233,7 +237,7 @@ namespace PathViewer
 
         private void RobotFieldTimerTick(object sender, EventArgs e)
         {
-            if (m_selected_path == null)
+            if (m_selected_path == null && m_selected_group == null)
             {
                 StopTimer();
             }
@@ -241,17 +245,51 @@ namespace PathViewer
             {
                 try
                 {
-                    double t = m_plot.Time;
-                    t += 0.100;
-                    if (t > m_selected_path.TotalTime)
-                        t = 0.0;
+                    if (m_selected_path == null)
+                    {
+                        if (m_selected_group.Paths.Length == 0)
+                            StopTimer();
+                        else
+                        {
+                            m_selected_path = m_selected_group.Paths[0];
+                            SetPath(m_selected_path);
+                            SetTime(0.0);
+                        }
+                    }
+                    else
+                    {
+                        double t = m_plot.Time;
 
-                    SetTime(t);
+                        t += 0.100;
+                        if (t > m_selected_path.TotalTime)
+                        {
+                            t = 0.0;
+
+                            if (m_selected_group != null)
+                            {
+                                //
+                                // Switch to the next path
+                                //
+                                int i = Array.IndexOf(m_selected_group.Paths, m_selected_path);
+                                if (i == -1)
+                                    i = 0;
+                                else
+                                {
+                                    i++;
+                                    if (i == m_selected_group.Paths.Length)
+                                        i = 0;
+                                }
+                                SetPath(m_selected_group.Paths[i]);
+                            }
+                        }
+                        SetTime(t);
+                    }
                 }
                 catch(NoSegmentsException)
                 {
                     //
-                    // An Exception gets thr
+                    // An exception gets thrown is something changes the path
+                    //
                 }
             }
         }
@@ -563,11 +601,13 @@ namespace PathViewer
             {
                 // A group is selected
                 SetPath(null);
+                m_selected_group = m_file.FindGroupByName(e.Node.Text);
             }
             else
             {
                 RobotPath path = m_file.FindPathByName(e.Node.Parent.Text, e.Node.Text);
                 SetPath(path);
+                m_selected_group = null;
             }
             m_field.SelectedWaypoint = null;
             UpdatePathWindow();

@@ -36,6 +36,7 @@
     <ClCompile Include="WaypointReader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AccelerationConstraint.h" />
     <ClInclude Include="CentripetalAccelerationConstraint.h" />
     <ClInclude Include="ConstrainedPoint.h" />
     <ClInclude Include="CSVWriter.h" />

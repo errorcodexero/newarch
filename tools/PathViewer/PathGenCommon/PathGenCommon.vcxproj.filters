@@ -143,5 +143,8 @@
     <ClInclude Include="TimedTrajectory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AccelerationConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

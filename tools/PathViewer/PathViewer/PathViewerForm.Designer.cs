@@ -203,7 +203,6 @@
             this.m_detailed.Size = new System.Drawing.Size(1348, 548);
             this.m_detailed.TabIndex = 0;
             this.m_detailed.Time = 0D;
-            this.m_detailed.ViewType = PathViewer.RobotFieldView.ViewTypeValue.WheelView;
             // 
             // m_bottom_tab
             // 
