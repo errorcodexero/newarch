@@ -60,6 +60,7 @@
       <DependentUpon>BasicFieldView.cs</DependentUpon>
     </Compile>
     <Compile Include="CentripetalAccelerationConstraint.cs" />
+    <Compile Include="PathFileDiff.cs" />
     <Compile Include="RobotFieldView.cs">
       <SubType>UserControl</SubType>
     </Compile>

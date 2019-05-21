@@ -1059,6 +1059,7 @@ namespace PathViewer
             if (node.Parent != null)
                 node = node.Parent;
 
+            PushUndoStack();
             string newname = GetNewPathName(node);
             TreeNode nnode = new TreeNode(newname);
             node.Nodes.Add(nnode);
@@ -1172,6 +1173,12 @@ namespace PathViewer
 
             while (m_undo_stack.Count > m_undo_length)
                 m_undo_stack.RemoveAt(m_undo_stack.Count - 1);
+
+            if (m_undo_stack.Count > 1)
+            {
+                // int i = m_undo_stack.Count - 1;
+                // PathFileDiff.Diff(m_undo_stack[i].File, m_undo_stack[i - 1].File);
+            }
         }
 
         private void PopUndoStack()
