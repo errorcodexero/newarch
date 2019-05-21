@@ -19,7 +19,12 @@ namespace xero
 
 		TimedTrajectoryPoint TimedTrajectoryPoint::interpolateByTime(const TimedTrajectoryPoint& other, double time) const
 		{
-			double percent = (time - getTime()) / (other.getTime() - getTime());
+			double percent;
+			
+			if (other.getTime() - getTime() == 0.0)
+				percent = 0.0;
+			else
+				percent = (time - getTime()) / (other.getTime() - getTime());
 			assert(percent >= 0.0 && percent <= 1.0);
 
 			Pose2dWithCurvature p2d = interpolate(other, percent);

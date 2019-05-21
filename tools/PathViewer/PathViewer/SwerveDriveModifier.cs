@@ -17,14 +17,7 @@ namespace PathViewer
 
         public override Dictionary<string, PathSegment[]> ModifyPath(RobotParams robot, RobotPath path, PathSegment[] segs)
         {
-            Dictionary<string, PathSegment[]> ret = null;
-
-            if (Math.Abs(path.StartFacingAngle - path.EndFacingAngle) < 0.1)
-                ret = ModifyPathSimple(robot, path, segs);
-            else
-                ret = ModifyPathWithRotation(robot, path, segs);
-
-            return ret;
+            return ModifyPathWithRotation(robot, path, segs);
         }
 
         private TrapezoidalProfile CreateRotationProfile(RobotParams robot, double start, double end)
@@ -60,23 +53,23 @@ namespace PathViewer
             switch (w)
             {
                 case Wheel.FL:
-                    dx = robot.Width / 2.0;
-                    dy = robot.Length / 2.0;
+                    dx = robot.Length / 2.0;
+                    dy = robot.Width / 2.0;
                     break;
 
                 case Wheel.FR:
-                    dx = robot.Width / 2.0;
-                    dy = -robot.Length / 2.0;
+                    dx = robot.Length / 2.0;
+                    dy = -robot.Width / 2.0;
                     break;
 
                 case Wheel.BL:
-                    dx = -robot.Width / 2.0;
-                    dy = robot.Length / 2.0;
+                    dx = -robot.Length / 2.0;
+                    dy = robot.Width / 2.0;
                     break;
 
                 case Wheel.BR:
-                    dx = -robot.Width / 2.0;
-                    dy = -robot.Length / 2.0;
+                    dx = -robot.Length / 2.0;
+                    dy = -robot.Width / 2.0;
                     break;
             }
 
@@ -166,10 +159,10 @@ namespace PathViewer
                 // Now calculate the wheel positions based on the path position and the
                 // facing angle
                 //
-                XeroVector flpos = new XeroVector(robot.Width / 2.0, robot.Length / 2.0).RotateDegrees(current).Translate(segs[i].GetValue("x"), segs[i].GetValue("y"));
-                XeroVector frpos = new XeroVector(robot.Width / 2.0, -robot.Length / 2.0).RotateDegrees(current).Translate(segs[i].GetValue("x"), segs[i].GetValue("y"));
-                XeroVector blpos = new XeroVector(-robot.Width / 2.0, robot.Length / 2.0).RotateDegrees(current).Translate(segs[i].GetValue("x"), segs[i].GetValue("y"));
-                XeroVector brpos = new XeroVector(-robot.Width / 2.0, -robot.Length / 2.0).RotateDegrees(current).Translate(segs[i].GetValue("x"), segs[i].GetValue("y"));
+                XeroVector flpos = new XeroVector(robot.Length / 2.0, robot.Width / 2.0).RotateDegrees(current).Translate(segs[i].GetValue("x"), segs[i].GetValue("y"));
+                XeroVector frpos = new XeroVector(robot.Length / 2.0, -robot.Width / 2.0).RotateDegrees(current).Translate(segs[i].GetValue("x"), segs[i].GetValue("y"));
+                XeroVector blpos = new XeroVector(-robot.Length / 2.0, robot.Width / 2.0).RotateDegrees(current).Translate(segs[i].GetValue("x"), segs[i].GetValue("y"));
+                XeroVector brpos = new XeroVector(-robot.Length / 2.0, -robot.Width / 2.0).RotateDegrees(current).Translate(segs[i].GetValue("x"), segs[i].GetValue("y"));
 
                 PathSegment newseg = new PathSegment(segs[i]);
                 newseg.SetValue("x", flpos.X);
@@ -202,61 +195,6 @@ namespace PathViewer
                 newseg.SetValue("heading", brv.AngleDegrees());
                 newseg.SetValue("acceleration", bra.Magnitude());
                 br[i] = newseg;
-            }
-
-            return result;
-        }
-
-        private Dictionary<string, PathSegment[]> ModifyPathSimple(RobotParams robot, RobotPath path, PathSegment[] segs)
-        {
-            PathSegment seg;
-            Dictionary<string, PathSegment[]> result = new Dictionary<string, PathSegment[]>();
-            if (segs == null)
-                return null;
-
-            PathSegment[] fl = new PathSegment[segs.Length];
-            PathSegment[] fr = new PathSegment[segs.Length];
-            PathSegment[] bl = new PathSegment[segs.Length];
-            PathSegment[] br = new PathSegment[segs.Length];
-
-            result["fl"] = fl;
-            result["fr"] = fr;
-            result["bl"] = bl;
-            result["br"] = br;
-
-            XeroPose pt;
-
-            for (int i = 0; i < segs.Length; i++)
-            {
-                XeroVector loc = new XeroVector(segs[i].GetValue("x"), segs[i].GetValue("y")) ;
-
-                pt = new XeroPose(robot.Width / 2.0, robot.Length / 2.0, 0.0);
-                pt = pt.RotateDegrees(path.StartFacingAngle).Translate(loc);
-                seg = new PathSegment(segs[i]);
-                seg.SetValue("x", pt.X);
-                seg.SetValue("y", pt.Y);
-                fl[i] = seg;
-
-                pt = new XeroPose(robot.Width / 2.0, -robot.Length / 2.0);
-                pt = pt.RotateDegrees(path.StartFacingAngle).Translate(loc);
-                seg = new PathSegment(segs[i]);
-                seg.SetValue("x", pt.X);
-                seg.SetValue("y", pt.Y);
-                fr[i] = seg;
-
-                pt = new XeroPose(-robot.Width / 2.0, robot.Length / 2.0);
-                pt = pt.RotateDegrees(path.StartFacingAngle).Translate(loc);
-                seg = new PathSegment(segs[i]);
-                seg.SetValue("x", pt.X);
-                seg.SetValue("y", pt.Y);
-                bl[i] = seg;
-
-                pt = new XeroPose(-robot.Width / 2.0, -robot.Length / 2.0);
-                pt = pt.RotateDegrees(path.StartFacingAngle).Translate(loc);
-                seg = new PathSegment(segs[i]);
-                seg.SetValue("x", pt.X);
-                seg.SetValue("y", pt.Y);
-                br[i] = seg;
             }
 
             return result;

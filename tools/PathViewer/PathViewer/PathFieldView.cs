@@ -443,10 +443,10 @@ namespace PathViewer
                             {
                                 PointF[] selbox = new PointF[]
                                 {
-                                        new PointF((float)m_file.Robot.Width / 2.0f, (float)m_file.Robot.Length / 2.0f),
-                                        new PointF(-(float)m_file.Robot.Width / 2.0f, (float)m_file.Robot.Length / 2.0f),
-                                        new PointF(-(float)m_file.Robot.Width / 2.0f, -(float)m_file.Robot.Length / 2.0f),
-                                        new PointF((float)m_file.Robot.Width / 2.0f, -(float)m_file.Robot.Length / 2.0f),
+                                        new PointF((float)m_file.Robot.Length / 2.0f, (float)m_file.Robot.Width / 2.0f),
+                                        new PointF(-(float)m_file.Robot.Length / 2.0f, (float)m_file.Robot.Width / 2.0f),
+                                        new PointF(-(float)m_file.Robot.Length / 2.0f, -(float)m_file.Robot.Width / 2.0f),
+                                        new PointF((float)m_file.Robot.Length / 2.0f, -(float)m_file.Robot.Width / 2.0f),
                                 };
 
                                 mm.TransformPoints(selbox);

@@ -21,9 +21,10 @@
   - Copy path
   - Move path between path groups
   - Combo boxes for units and drive type
+  - Swerve rotational model
 
   TODO
   ----
-  - Swerve rotational model
+  - Undo stack bugs
   - Testing, Testing, Testing
   - Documentation

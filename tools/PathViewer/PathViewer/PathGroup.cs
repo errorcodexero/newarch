@@ -35,6 +35,11 @@ namespace PathViewer
             }
         }
 
+        public bool Contains(RobotPath path)
+        {
+            return Array.IndexOf(Paths, path) != -1;
+        }
+
         public RobotPath FindPathByName(string name)
         {
             foreach(RobotPath p in Paths)

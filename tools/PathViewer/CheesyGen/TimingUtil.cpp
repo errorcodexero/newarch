@@ -15,28 +15,36 @@ namespace xero {
 			std::vector<TimedTrajectoryPoint> newpts;
 			size_t previndex = 0;
 
-			for (double t = 0.0; t <= endtime; t += timestep)
+			if (traj.getPoints().size() == 1)
 			{
-				if (t < pts[0].getTime())
+				TimedTrajectoryPoint pt = pts[0].interpolateByTime(pts[0], 0.0);
+				newpts.push_back(pt);
+			}
+			else
+			{
+				for (double t = 0.0; t <= endtime; t += timestep)
 				{
-					newpts.push_back(pts[0]);
-				}
-				else if (t > endtime)
-				{
-					newpts.push_back(pts[pts.size() - 1]);
-				}
-				else
-				{
-					while (previndex < pts.size() - 1)
+					if (t < pts[0].getTime())
 					{
-						if (t >= pts[previndex].getTime() && t < pts[previndex + 1].getTime())
-							break;
-
-						previndex++;
+						newpts.push_back(pts[0]);
 					}
+					else if (t > endtime)
+					{
+						newpts.push_back(pts[pts.size() - 1]);
+					}
+					else
+					{
+						while (previndex < pts.size() - 1)
+						{
+							if (t >= pts[previndex].getTime() && t < pts[previndex + 1].getTime())
+								break;
 
-					assert(previndex != pts.size());
-					newpts.push_back(pts[previndex].interpolateByTime(pts[previndex + 1], t));
+							previndex++;
+						}
+
+						assert(previndex != pts.size());
+						newpts.push_back(pts[previndex].interpolateByTime(pts[previndex + 1], t));
+					}
 				}
 			}
 

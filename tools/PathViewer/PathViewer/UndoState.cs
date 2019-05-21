@@ -7,22 +7,15 @@ namespace PathViewer
     {
         private int m_serial;
         private PathFile m_file;
-        private List<Tuple<string, string>> m_selected_paths;
+        private Tuple<string, string> m_selected_path = null;
         private int m_selected_index;
-        private string m_selected_group;
-        private string m_selected_path;
+        private string m_selected_group = null;
 
         public UndoState(int serial, PathFile pf)
         {
             m_file = new PathFile(pf);
             m_serial = serial;
-            m_selected_paths = new List<Tuple<string, string>>();
             m_selected_index = -1;
-        }
-
-        public bool HasSelectedWaypoint
-        {
-            get { return m_selected_index != -1; }
         }
 
         public PathFile File
@@ -30,37 +23,41 @@ namespace PathViewer
             get { return m_file; }
         }
 
-        public List<Tuple<string, string>> SelectedPaths
+        public bool HasSelectedWaypoint
         {
-            get { return m_selected_paths; }
-        }
-
-        public string SelectedGroup
-        {
-            get { return m_selected_group; }
-        }
-
-        public string SelectedPath
-        {
-            get { return m_selected_path; }
+            get { return m_selected_index != -1; }
         }
 
         public int SelectedIndex
         {
             get { return m_selected_index; }
+            set { m_selected_index = value; }
         }
 
-        public void AddPath(string group, string path)
+        public bool HasSelectedPath
         {
-            Tuple<string, string> t = new Tuple<string, string>(group, path);
-            m_selected_paths.Add(t);
+            get { return m_selected_path != null; }
         }
 
-        public void AddSelectedWaypoint(string group, string path, int index)
+        public Tuple<string, string> SelectedPath
         {
-            m_selected_group = group;
-            m_selected_path = path;
-            m_selected_index = index;
+            get { return m_selected_path; }
+        }
+
+        public void SetSelectedPath(PathGroup group, RobotPath path)
+        {
+            m_selected_path = new Tuple<string, string>(group.Name, path.Name);
+        }
+
+        public bool HasSelectedGroup
+        {
+            get { return m_selected_group != null; }
+        }
+
+        public string SelectedGroup
+        {
+            get { return m_selected_group; }
+            set { m_selected_group = value; }
         }
     }
 }

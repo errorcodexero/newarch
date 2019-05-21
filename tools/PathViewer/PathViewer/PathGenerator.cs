@@ -100,7 +100,8 @@ namespace PathViewer
             if (m_running && m_segment_thread != null)
             {
                 m_running = false;
-                m_segment_thread.Join();
+                if (!m_segment_thread.Join(2000))
+                    m_segment_thread.Abort();
             }
         }
 
@@ -251,7 +252,7 @@ namespace PathViewer
             double v;
 
             if (!Double.TryParse(line[index], out v))
-                return false;
+                v = Double.NaN;
 
             s.SetValue(name, v);
 

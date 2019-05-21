@@ -79,10 +79,10 @@ namespace PathViewer
 
                 pts = new PointF[]
                 {
-                    new PointF((float)Robot.Width / 2.0f, -(float)Robot.Length / 2.0f),
-                    new PointF(-(float)Robot.Width / 2.0f, -(float)Robot.Length / 2.0f),
-                    new PointF(-(float)Robot.Width / 2.0f, (float)Robot.Length / 2.0f),
-                    new PointF((float)Robot.Width / 2.0f, (float)Robot.Length / 2.0f),
+                    new PointF((float)Robot.Length / 2.0f, -(float)Robot.Width / 2.0f),
+                    new PointF(-(float)Robot.Length / 2.0f, -(float)Robot.Width / 2.0f),
+                    new PointF(-(float)Robot.Length / 2.0f, (float)Robot.Width / 2.0f),
+                    new PointF((float)Robot.Length / 2.0f, (float)Robot.Width / 2.0f),
                 };
 
                 Matrix mm = new Matrix();

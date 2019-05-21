@@ -668,6 +668,7 @@ namespace PathViewer
             TreeNode tn = m_pathfile_tree.SelectedNode;
             if (tn != null)
             {
+                m_ignore_lost_focus = false;
                 EditGroupOrPathName(tn);
             }
         }
@@ -688,6 +689,7 @@ namespace PathViewer
             if (item.Text == "Total Time")
                 return;
 
+            m_ignore_lost_focus = false;
             m_path_view_editing = item;
             Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
 
@@ -733,6 +735,7 @@ namespace PathViewer
                 string[] supported = new string[] { "tank", "swerve"};
 
                 Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
+                m_ignore_lost_focus = false;
                 m_combo_editor = new ComboBox();
                 foreach (string sitem in supported)
                     m_combo_editor.Items.Add(sitem);
@@ -751,6 +754,7 @@ namespace PathViewer
                 List<string> supported = UnitConverter.SupportedUnits;
 
                 Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
+                m_ignore_lost_focus = false;
                 m_combo_editor = new ComboBox();
                 foreach (string sitem in supported)
                     m_combo_editor.Items.Add(sitem);
@@ -768,7 +772,7 @@ namespace PathViewer
             {
 
                 Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
-
+                m_ignore_lost_focus = false;
                 m_text_editor = new TextBox();
                 m_text_editor.Text = item.SubItems[1].Text;
                 m_text_editor.Bounds = b;
@@ -801,7 +805,7 @@ namespace PathViewer
 
             m_waypoint_editing = item;
             Rectangle b = new Rectangle(item.SubItems[1].Bounds.Left, item.SubItems[1].Bounds.Top, item.SubItems[1].Bounds.Width, item.SubItems[1].Bounds.Height);
-
+            m_ignore_lost_focus = false;
             m_text_editor = new TextBox();
             m_text_editor.Text = item.SubItems[1].Text;
             m_text_editor.Bounds = b;
@@ -865,7 +869,10 @@ namespace PathViewer
                 stop = FinishedEditingPathView();
 
             if (stop)
+            {
+                m_ignore_lost_focus = true;
                 StopEditing();
+            }
             else
             {
                 m_ignore_lost_focus = false;
@@ -1218,13 +1225,13 @@ namespace PathViewer
             PathFile pf = new PathFile(m_file);
             UndoState st = new UndoState(m_undo_serial++, pf);
 
-            m_undo_stack.Add(st);
+            if (m_selected_group != null)
+                st.SelectedGroup = m_selected_group.Name;
 
-            if (m_field.DisplayedPath != null)
+            if (m_selected_path != null)
             {
-                PathGroup gr = m_file.FindGroupByPath(m_field.DisplayedPath);
-                if (gr != null)
-                    st.AddPath(gr.Name, m_field.DisplayedPath.Name);
+                PathGroup group = m_file.FindGroupByName(m_pathfile_tree.SelectedNode.Parent.Text);
+                st.SetSelectedPath(group, m_selected_path);
             }
 
             if (m_field.SelectedWaypoint != null)
@@ -1234,17 +1241,16 @@ namespace PathViewer
                 int index;
                 m_file.FindPathByWaypoint(m_field.SelectedWaypoint, out gr, out path, out index);
                 if (gr != null && path != null)
-                    st.AddSelectedWaypoint(gr.Name, path.Name, index);
+                    st.SelectedIndex = index;
             }
 
+            m_undo_stack.Add(st);
+
+            //
+            // Make sure the undo stack does not grow too large
+            //
             while (m_undo_stack.Count > m_undo_length)
                 m_undo_stack.RemoveAt(m_undo_stack.Count - 1);
-
-            if (m_undo_stack.Count > 1)
-            {
-                // int i = m_undo_stack.Count - 1;
-                // PathFileDiff.Diff(m_undo_stack[i].File, m_undo_stack[i - 1].File);
-            }
         }
 
         private void PopUndoStack()
@@ -1255,27 +1261,36 @@ namespace PathViewer
                 m_file = st.File;
                 m_undo_stack.RemoveAt(m_undo_stack.Count - 1);
 
-                UpdateRobotWindow();
-                UpdatePathTree();
                 m_field.File = m_file;
-                m_field.Invalidate();
-                m_detailed.Invalidate();
-                m_detailed.Robot = m_file.Robot;
-                m_plot.Robot = m_file.Robot;
-                m_plot.Invalidate();
+
                 GenerateAllSplines();
 
-                foreach(Tuple<string, string> pathname in st.SelectedPaths)
+                SetPath(null);
+                m_selected_group = null;
+                m_field.SelectedWaypoint = null;
+
+                if (st.HasSelectedGroup)
+                {
+                    PathGroup group = m_file.FindGroupByName(st.SelectedGroup);
+                    if (group != null)
+                        m_selected_group = group;
+                }
+
+                if (st.HasSelectedPath)
                 {
                     foreach(TreeNode group in m_pathfile_tree.Nodes)
                     {
-                        if (group.Text == pathname.Item1)
+                        if (group.Text == st.SelectedPath.Item1)
                         {
                             foreach(TreeNode path in group.Nodes)
                             {
-                                if (path.Text == pathname.Item2)
+                                if (path.Text == st.SelectedPath.Item2)
                                 {
                                     m_pathfile_tree.SelectedNode = path;
+                                    RobotPath rpath = m_file.FindPathByName(group.Text, path.Text);
+                                    if (rpath != null)
+                                        SetPath(rpath);
+                                    break;
                                 }
                             }
                         }
@@ -1284,10 +1299,23 @@ namespace PathViewer
 
                 if (st.HasSelectedWaypoint)
                 {
-                    RobotPath path = m_file.FindPathByName(st.SelectedGroup, st.SelectedPath);
-                    if (path != null && st.SelectedIndex < path.Points.Length)
-                        m_field.SelectedWaypoint = path.Points[st.SelectedIndex];
+                    if (m_selected_path != null && st.SelectedIndex < m_selected_path.Points.Length)
+                        m_field.SelectedWaypoint = m_selected_path.Points[st.SelectedIndex];
+                    else
+                        m_field.SelectedWaypoint = null;
                 }
+
+                m_detailed.Robot = m_file.Robot;
+                m_plot.Robot = m_file.Robot;
+
+                m_field.Invalidate();
+                m_detailed.Invalidate();
+                m_plot.Invalidate();
+
+                UpdateWaypointPropertyWindow();
+                UpdateRobotWindow();
+                UpdatePathTree();
+                UpdatePathWindow();
             }
         }
         #endregion
@@ -1412,6 +1440,7 @@ namespace PathViewer
 
             UpdateExistingPaths();
             UpdateRobotWindow();
+            UpdateWaypointPropertyWindow();
             GenerateAllSplines();
 
             m_field.Invalidate();
@@ -1454,6 +1483,7 @@ namespace PathViewer
             if (!double.TryParse(m_text_editor.Text, out d))
                 return false;
 
+            PushUndoStack();
             if (m_waypoint_editing.Text == "X")
             {
                 m_field.SelectedWaypoint.X = d;
@@ -1916,8 +1946,8 @@ namespace PathViewer
         {
             if (m_generator.TimingConstraintsSupported)
                 p.GenerateVelocityConstraints();
-            p.SetSegmentsInvalid();
 
+            p.SetSegmentsInvalid();
             if (m_generator != null)
             {
                 try
@@ -1944,7 +1974,11 @@ namespace PathViewer
             if (InvokeRequired)
                 Invoke(new UpdatePathWindowDelegate(UpdatePathWindow));
             else
+            {
                 UpdatePathWindow();
+                m_field.Invalidate();
+                m_detailed.Invalidate();
+            }
         }
 
         private void GenerateSplines(RobotPath p)
@@ -2152,6 +2186,5 @@ namespace PathViewer
                 m_logger.LogMessage(Logger.MessageType.Info, str);
         }
         #endregion
-
     }
 }

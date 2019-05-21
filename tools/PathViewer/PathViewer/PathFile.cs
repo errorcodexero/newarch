@@ -55,14 +55,34 @@ namespace PathViewer
             set { m_output_directory = value; }
         }
 
+        public bool Contains(PathGroup group)
+        {
+            return Array.IndexOf(Groups, group) != -1;
+        }
+
+        public bool Contains(RobotPath path)
+        {
+            foreach(PathGroup group in Groups)
+            {
+                if (group.Contains(path))
+                    return true;
+            }
+
+            return false;
+        }
+
         public void ConvertUnits(string oldunits, string newunits)
         {
-            Robot.ConvertUnits(oldunits, newunits);
-            foreach(PathGroup gr in Groups)
+            if (newunits != oldunits)
             {
-                foreach(RobotPath path in gr.Paths)
+                m_dirty = true;
+                Robot.ConvertUnits(oldunits, newunits);
+                foreach (PathGroup gr in Groups)
                 {
-                    path.ConvertUnits(oldunits, newunits);
+                    foreach (RobotPath path in gr.Paths)
+                    {
+                        path.ConvertUnits(oldunits, newunits);
+                    }
                 }
             }
         }

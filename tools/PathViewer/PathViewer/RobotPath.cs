@@ -184,7 +184,7 @@ namespace PathViewer
                 double y = UnitConverter.Convert(Points[i].Y, oldunits, newunits);
                 double h = Points[i].Heading;
                 double v = UnitConverter.Convert(Points[i].Velocity, oldunits, newunits);
-                Points[i] = new WayPoint(x, y, h, v);
+                Points[i].Update(x, y, h, v);
             }
             SetSegments(null, null);
         }

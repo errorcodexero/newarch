@@ -51,5 +51,13 @@ namespace PathViewer
 
             return Math.Sqrt(dx * dx + dy * dy);
         }
+
+        public void Update(double x, double y, double h, double v)
+        {
+            X = x;
+            Y = y;
+            Heading = h;
+            Velocity = v;
+        }
     }
 }
