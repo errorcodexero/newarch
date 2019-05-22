@@ -106,7 +106,7 @@ cleanlibs:
 
 ifeq ($(PLATFORM),GOPIGO)
 ifeq ($(GOPIGOIP),)
-$(error GOPIGO make variable not defined)
+$(error GOPIGOIP make variable not defined)
 endif
 CYGTARGETFILE=$(shell cygpath -a -u $(TARGETFILE))
 deploy:
