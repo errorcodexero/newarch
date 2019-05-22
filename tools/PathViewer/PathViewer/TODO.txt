@@ -25,6 +25,5 @@
 
   TODO
   ----
-  - Undo stack bugs
   - Testing, Testing, Testing
   - Documentation
