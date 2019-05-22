@@ -233,7 +233,6 @@
             this.m_plot.AutoScroll = true;
             this.m_plot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_plot.Generator = null;
-            this.m_plot.Time = 0D;
             this.m_plot.Location = new System.Drawing.Point(3, 2);
             this.m_plot.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.m_plot.Name = "m_plot";
@@ -241,6 +240,7 @@
             this.m_plot.Robot = null;
             this.m_plot.Size = new System.Drawing.Size(1348, 365);
             this.m_plot.TabIndex = 0;
+            this.m_plot.Time = 0D;
             this.m_plot.Units = null;
             // 
             // tabPage2
@@ -295,6 +295,8 @@
             // m_pathfile_tree
             // 
             this.m_pathfile_tree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pathfile_tree.FullRowSelect = true;
+            this.m_pathfile_tree.HideSelection = false;
             this.m_pathfile_tree.Location = new System.Drawing.Point(3, 21);
             this.m_pathfile_tree.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.m_pathfile_tree.Name = "m_pathfile_tree";

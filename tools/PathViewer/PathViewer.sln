@@ -11,6 +11,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2CB32A66-08D5-4E6D-BE21-52050128B13D}"
 	ProjectSection(SolutionItems) = preProject
 		PathViewer\TODO.txt = PathViewer\TODO.txt
+		docs\XeroPathDocumentation.docx = docs\XeroPathDocumentation.docx
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheesyPoofsGenerator", "CheesyPoofsGenerator\CheesyPoofsGenerator.csproj", "{AA46E9F4-4393-497F-88CE-F9C90E1CD95E}"

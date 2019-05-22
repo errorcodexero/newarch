@@ -1228,7 +1228,7 @@ namespace PathViewer
             if (m_selected_group != null)
                 st.SelectedGroup = m_selected_group.Name;
 
-            if (m_selected_path != null)
+            if (m_selected_path != null && m_pathfile_tree.SelectedNode.Parent != null)
             {
                 PathGroup group = m_file.FindGroupByName(m_pathfile_tree.SelectedNode.Parent.Text);
                 st.SetSelectedPath(group, m_selected_path);
