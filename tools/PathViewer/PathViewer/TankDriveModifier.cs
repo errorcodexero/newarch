@@ -6,7 +6,7 @@ namespace PathViewer
 {
     public class TankDriveModifier : DriveModifier
     {
-        public override Dictionary<string, PathSegment[]> ModifyPath(RobotParams robot, RobotPath path, PathSegment[] segs)
+        public override Dictionary<string, PathSegment[]> ModifyPath(RobotParams robot, RobotPath path, PathSegment[] segs, double rotvel)
         {
             Dictionary<string, PathSegment[]> result = new Dictionary<string, PathSegment[]>();
             if (segs == null)

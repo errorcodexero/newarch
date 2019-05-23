@@ -33,8 +33,11 @@ namespace PathViewer
         [JsonProperty(PropertyName = "endangle")]
         public double EndFacingAngle;
 
-        [JsonProperty(PropertyName = "angledelay")]
-        public double FacingAngleRotationDelay;
+        [JsonProperty(PropertyName = "anglestartdelay")]
+        public double FacingAngleStartDelay;
+
+        [JsonProperty(PropertyName = "angleenddelay")]
+        public double FacingAngleEndDelay;
 
         [JsonProperty(PropertyName = "constraints")]
         public TimingContraint[] Constraints;

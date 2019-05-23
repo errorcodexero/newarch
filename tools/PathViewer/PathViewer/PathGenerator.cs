@@ -223,13 +223,10 @@ namespace PathViewer
 
         private void GenerateSegmentsForPath(RobotParams robot, RobotPath path)
         {
-            //
-            // TODO - for the swerve drive, we need to look at the velocity and determine
-            //        how much is allocated to rotation and how much is allocated to
-            //        translation.
-            //
-            PathSegment[] segs = GenerateDetailedPath(robot, path);
-            DriveModifier mod = null;
+            PathSegment[] segs = null;
+            Dictionary<string, PathSegment[]> add = null; DriveModifier mod = null;
+            double rotpercent = 0.0;
+            bool running = true;
 
             if (robot.DriveType == RobotParams.TankDriveType)
             {
@@ -240,10 +237,22 @@ namespace PathViewer
                 mod = new SwerveDriveModifier();
             }
 
-            Dictionary<string, PathSegment[]> add = null;
-            if (mod != null)
-                add = mod.ModifyPath(robot, path, segs);
+            while (running)
+            {
+                RobotParams nrobot = new RobotParams(robot);
+                nrobot.MaxVelocity = (1 - rotpercent) * robot.MaxVelocity;
 
+                segs = GenerateDetailedPath(nrobot, path);
+                try
+                {
+                    add = mod.ModifyPath(robot, path, segs, rotpercent * robot.MaxVelocity);
+                    running = false;
+                }
+                catch(DriveModifier.VelocitySplitException)
+                {
+                    rotpercent += 0.05;
+                }
+            }
             path.SetSegments(segs, add);
         }
 

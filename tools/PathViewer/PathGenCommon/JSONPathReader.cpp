@@ -342,7 +342,7 @@ namespace xero
 				return false;
 			}
 			double v = path[L"maxvelocity"]->AsNumber();
-			if (std::fabs(v) < 0.001)
+			if (std::fabs(v) < 0.001 || v > paths.getRobot().getMaxVelocity())
 			{
 				//
 				// Zero max velocity was supplied, get it from the robot
@@ -365,7 +365,7 @@ namespace xero
 				return false;
 			}
 			v = path[L"maxacceleration"]->AsNumber();
-			if (std::fabs(v) < 0.001)
+			if (std::fabs(v) < 0.001 || v > paths.getRobot().getMaxAcceleration()) 
 			{
 				//
 				// Zero max velocity was supplied, get it from the robot

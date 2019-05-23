@@ -1359,10 +1359,15 @@ namespace PathViewer
                 PushUndoStack();
                 m_selected_path.EndFacingAngle = d;
             }
-            else if (m_path_view_editing.Text == "Rotation Delay")
+            else if (m_path_view_editing.Text == "Rotation Start Delay")
             {
                 PushUndoStack();
-                m_selected_path.FacingAngleRotationDelay = d;
+                m_selected_path.FacingAngleStartDelay = d;
+            }
+            else if (m_path_view_editing.Text == "Rotation End Delay")
+            {
+                PushUndoStack();
+                m_selected_path.FacingAngleEndDelay = d;
             }
 
             UpdatePathWindow() ;
@@ -1757,8 +1762,12 @@ namespace PathViewer
                     item.SubItems.Add(m_selected_path.EndFacingAngle.ToString());
                     m_path_view.Items.Add(item);
 
-                    item = new ListViewItem("Rotation Delay");
-                    item.SubItems.Add(m_selected_path.FacingAngleRotationDelay.ToString());
+                    item = new ListViewItem("Rotation Start Delay");
+                    item.SubItems.Add(m_selected_path.FacingAngleStartDelay.ToString());
+                    m_path_view.Items.Add(item);
+
+                    item = new ListViewItem("Rotation End Delay");
+                    item.SubItems.Add(m_selected_path.FacingAngleEndDelay.ToString());
                     m_path_view.Items.Add(item);
                 }
             }

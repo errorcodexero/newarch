@@ -134,8 +134,12 @@ namespace PathViewer
             if (Math.Abs(p1.EndFacingAngle - p2.EndFacingAngle) > kEpsilon)
                 diff.Add("EndFacingAngle: p1 = " + "PathGroup '" + pgr1.Name + "', Path '" + p1.Name + "'" + p1.EndFacingAngle.ToString() + ", p2 = " + p2.EndFacingAngle.ToString());
 
-            if (Math.Abs(p1.FacingAngleRotationDelay - p2.FacingAngleRotationDelay) > kEpsilon)
-                diff.Add("FacingAngleRotationDelay: p1 = " + "PathGroup '" + pgr1.Name + "', Path '" + p1.Name + "'" + p1.FacingAngleRotationDelay.ToString() + ", p2 = " + p2.FacingAngleRotationDelay.ToString());
+            if (Math.Abs(p1.FacingAngleStartDelay - p2.FacingAngleStartDelay) > kEpsilon)
+                diff.Add("FacingAngleStartDelay: p1 = " + "PathGroup '" + pgr1.Name + "', Path '" + p1.Name + "'" + p1.FacingAngleStartDelay.ToString() + ", p2 = " + p2.FacingAngleStartDelay.ToString());
+
+            if (Math.Abs(p1.FacingAngleEndDelay - p2.FacingAngleEndDelay) > kEpsilon)
+                diff.Add("FacingAngleEndDelay: p1 = " + "PathGroup '" + pgr1.Name + "', Path '" + p1.Name + "'" + p1.FacingAngleEndDelay.ToString() + ", p2 = " + p2.FacingAngleEndDelay.ToString());
+
 
             // Constraints
 

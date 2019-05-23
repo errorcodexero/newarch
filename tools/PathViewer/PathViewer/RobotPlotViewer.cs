@@ -70,14 +70,16 @@ namespace PathViewer
                     m_line.AllowMoving = true;
                     m_chart.Annotations.Add(m_line);
                     m_chart.AnnotationPositionChanging += M_chart_AnnotationPositionChanging;
+                }
 
+                if (m_rect == null)
+                {
                     m_rect = new RectangleAnnotation();
                     m_rect.ForeColor = Color.White;
                     m_rect.BackColor = Color.Blue;
                     m_rect.Width = 10;
                     m_rect.Height = 4;
                     m_rect.Width = 2.5;
-                    m_rect.Text = "Hello";
                     m_rect.AnchorY = 0.0;
                     m_rect.AnchorX = 0.0;
                     m_rect.AxisY = m_chart.ChartAreas[0].AxisY;
@@ -100,8 +102,6 @@ namespace PathViewer
                 EventHandler<TimeCursorMovedArgs> handler = TimeCursorMoved;
                 handler?.Invoke(this, new TimeCursorMovedArgs(e.NewLocationX));
             }
-
-
         }
 
         public RobotPath Path
@@ -162,7 +162,7 @@ namespace PathViewer
                 s.Points.AddXY(t, v);
                 s.BorderWidth = 5;
             }
-
+            s.ToolTip = "#VALX, #VALY";
             m_chart.Series.Add(s);
         }
 

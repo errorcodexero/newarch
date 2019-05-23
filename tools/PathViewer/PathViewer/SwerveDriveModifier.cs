@@ -7,87 +7,17 @@ namespace PathViewer
 {
     class SwerveDriveModifier : DriveModifier
     {
-        private enum Wheel
-        {
-            FL,
-            FR,
-            BL, 
-            BR
-        };
-
-        public override Dictionary<string, PathSegment[]> ModifyPath(RobotParams robot, RobotPath path, PathSegment[] segs)
-        {
-            return ModifyPathWithRotation(robot, path, segs);
-        }
-
-        private TrapezoidalProfile CreateRotationProfile(RobotParams robot, double start, double end)
-        {
-            double diff = end - start;
-            if (diff > 180.0)
-                diff -= 360.0;
-            else if (diff <= -180.0)
-                diff += 360.0;
-
-            TrapezoidalProfile tp = new TrapezoidalProfile(180.0, 360.0);
-            tp.Update(diff, 0.0, 0.0);
-            return tp;
-        }
-
-        /// <summary>
-        /// Return the velocity of the wheel on the ground to do the rotation, based on the angular velocity required
-        /// </summary>
-        /// <param name="robot">robot parameters, notably width and length</param>
-        /// <param name="rv">the angular velocity in degrees per second</param>
-        /// <returns></returns>
-        private double RotationalToGround(RobotParams robot, double rv)
-        {
-            double diameter = Math.Sqrt(robot.Width * robot.Width + robot.Length * robot.Length);
-            double circum = diameter * Math.PI;
-            return rv / 360.0 * circum;
-        }
-
-        private XeroVector GetWheelPerpendicularVector(RobotParams robot, Wheel w, double magnitude)
-        {
-            double dx = 0.0, dy = 0.0;
-
-            switch (w)
-            {
-                case Wheel.FL:
-                    dx = robot.Length / 2.0;
-                    dy = robot.Width / 2.0;
-                    break;
-
-                case Wheel.FR:
-                    dx = robot.Length / 2.0;
-                    dy = -robot.Width / 2.0;
-                    break;
-
-                case Wheel.BL:
-                    dx = -robot.Length / 2.0;
-                    dy = robot.Width / 2.0;
-                    break;
-
-                case Wheel.BR:
-                    dx = -robot.Length / 2.0;
-                    dy = -robot.Width / 2.0;
-                    break;
-            }
-
-            return new XeroVector(dx, dy).Normalize().Perpendicular().Scale(magnitude);
-        }
-
-        private Dictionary<string, PathSegment[]> ModifyPathWithRotation(RobotParams robot, RobotPath path, PathSegment[] segs)
+        public override Dictionary<string, PathSegment[]> ModifyPath(RobotParams robot, RobotPath path, PathSegment[] segs, double rotvel)
         {
             Dictionary<string, PathSegment[]> result = new Dictionary<string, PathSegment[]>();
             if (segs == null)
                 return null;
 
             double total = segs[segs.Length - 1].GetValue("time");
-            TrapezoidalProfile profile = CreateRotationProfile(robot, path.StartFacingAngle, path.EndFacingAngle);
-            if (profile.TotalTime + path.FacingAngleRotationDelay > total)
-            {
-                throw new Exception("this case not handled yet, rotation cannot completed in path time");
-            }
+            double rtime = total - path.FacingAngleStartDelay - path.FacingAngleEndDelay;
+            TrapezoidalProfile profile = CreateRotationProfile(robot, path.StartFacingAngle, path.EndFacingAngle, rtime, rotvel);
+            if (profile == null)
+                throw new DriveModifier.VelocitySplitException();
 
             PathSegment[] fl = new PathSegment[segs.Length];
             PathSegment[] fr = new PathSegment[segs.Length];
@@ -106,11 +36,10 @@ namespace PathViewer
                 //
                 double time = segs[i].GetValue("time");
 
-
                 //
                 // The current facing angle based on the rotational trapezoidal profile
                 //
-                double current = XeroUtils.BoundDegrees(path.StartFacingAngle + profile.GetDistance(time - path.FacingAngleRotationDelay));
+                double current = XeroUtils.BoundDegrees(path.StartFacingAngle + profile.GetDistance(time - path.FacingAngleStartDelay));
 
                 //
                 // Get the required velocity to perform the rotation.  This is the
@@ -118,8 +47,8 @@ namespace PathViewer
                 // each wheel in direction perpendicular to the vector from the center of
                 // the robot to the center of the wheel.
                 //
-                double rv = RotationalToGround(robot, profile.GetVelocity(time - path.FacingAngleRotationDelay));
-                double ra = RotationalToGround(robot, profile.GetAcceleration(time - path.FacingAngleRotationDelay));
+                double rv = RotationalToGround(robot, profile.GetVelocity(time - path.FacingAngleStartDelay));
+                double ra = RotationalToGround(robot, profile.GetAcceleration(time - path.FacingAngleStartDelay));
 
                 //
                 // Get the velocity vector and acceleration vector relative to each of the 
@@ -199,5 +128,102 @@ namespace PathViewer
 
             return result;
         }
+
+        private enum Wheel
+        {
+            FL,
+            FR,
+            BL, 
+            BR
+        };
+
+        /// <summary>
+        /// Returns the rotational speed profile to rotate the robot
+        /// </summary>
+        /// <param name="robot"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        private TrapezoidalProfile CreateRotationProfile(RobotParams robot, double start, double end, double time, double vel)
+        {
+            double accel = GroundToRotational(robot, robot.MaxAcceleration);
+            double maxvel = GroundToRotational(robot, vel);
+
+            double diff = end - start;
+            if (diff > 180.0)
+                diff -= 360.0;
+            else if (diff <= -180.0)
+                diff += 360.0;
+
+            TrapezoidalProfile tp;
+
+            tp = new TrapezoidalProfile(accel, maxvel);
+            tp.Update(diff, 0.0, 0.0);
+
+            if (tp.TotalTime > time)
+                throw new SwerveDriveModifier.VelocitySplitException();
+
+            return tp;
+        }
+
+        /// <summary>
+        /// Return the velocity of the wheel on the ground to do the rotation, based on the angular velocity required
+        /// </summary>
+        /// <param name="robot">robot parameters, notably width and length</param>
+        /// <param name="rv">the angular velocity in degrees per second</param>
+        /// <returns></returns>
+        private double RotationalToGround(RobotParams robot, double rv)
+        {
+            double diameter = Math.Sqrt(robot.Width * robot.Width + robot.Length * robot.Length);
+            double circum = diameter * Math.PI;
+            return rv * circum / 360.0;
+        }
+
+        private double GroundToRotational(RobotParams robot, double gr)
+        {
+            double diameter = Math.Sqrt(robot.Width * robot.Width + robot.Length * robot.Length);
+            double circum = diameter * Math.PI;
+            return gr * 360.0 / circum;
+        }
+
+        /// <summary>
+        /// Return a vector, perpendicular to the requested wheel (e.g. a rotational vector) with the
+        /// magnitude given.
+        /// </summary>
+        /// <param name="robot">robot parameters, provides the width and length of the robot</param>
+        /// <param name="w">the wheel of interest</param>
+        /// <param name="magnitude">the magintude of the vector</param>
+        /// <returns>vector perpendicular to the requested wheel</returns>
+        private XeroVector GetWheelPerpendicularVector(RobotParams robot, Wheel w, double magnitude)
+        {
+            double dx = 0.0, dy = 0.0;
+
+            switch (w)
+            {
+                case Wheel.FL:
+                    dx = robot.Length / 2.0;
+                    dy = robot.Width / 2.0;
+                    break;
+
+                case Wheel.FR:
+                    dx = robot.Length / 2.0;
+                    dy = -robot.Width / 2.0;
+                    break;
+
+                case Wheel.BL:
+                    dx = -robot.Length / 2.0;
+                    dy = robot.Width / 2.0;
+                    break;
+
+                case Wheel.BR:
+                    dx = -robot.Length / 2.0;
+                    dy = -robot.Width / 2.0;
+                    break;
+            }
+
+            return new XeroVector(dx, dy).Normalize().Perpendicular().Scale(magnitude);
+        }
+
+ 
     }
 }
