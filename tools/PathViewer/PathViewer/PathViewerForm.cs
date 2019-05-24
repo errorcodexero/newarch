@@ -17,6 +17,11 @@ namespace PathViewer
         #region private member variables
 
         /// <summary>
+        /// Demo all paths
+        /// </summary>
+        private bool m_demo_mode;
+
+        /// <summary>
         /// The set of games that are available
         /// </summary>
         private GameManager m_games;
@@ -208,19 +213,37 @@ namespace PathViewer
         {
             if (e.KeyChar == 'a' || e.KeyChar == 'A')
             {
-                if (m_timer == null && (m_selected_path != null || m_selected_group != null))
+                if (m_timer == null && (m_selected_path != null || m_selected_group != null) && !m_demo_mode)
                 {
-                    m_timer = new System.Windows.Forms.Timer();
-                    m_timer.Interval = 100;
-                    m_timer.Tick += RobotFieldTimerTick;
-                    m_timer.Enabled = true;
-                    SetTime(0.0);
+                    StartTimer();
                 }
                 else
                 {
                     StopTimer();
                 }
             }
+            else if (e.KeyChar == 'd' || e.KeyChar == 'D')
+            {
+                if (m_timer == null)
+                {
+                    m_demo_mode = true;
+                    StartTimer();
+                }
+                else if (m_demo_mode)
+                {
+                    m_demo_mode = false;
+                    StopTimer();
+                }
+            }
+        }
+
+        private void StartTimer()
+        {
+            m_timer = new System.Windows.Forms.Timer();
+            m_timer.Interval = 100;
+            m_timer.Tick += RobotFieldTimerTick;
+            m_timer.Enabled = true;
+            SetTime(0.0);
         }
 
         private void StopTimer()
@@ -235,63 +258,119 @@ namespace PathViewer
             
         }
 
-        private void RobotFieldTimerTick(object sender, EventArgs e)
+        private bool StepPathDemo()
         {
-            if (m_selected_path == null && m_selected_group == null)
+            double time = m_detailed.Time + 0.1;
+            if (time > m_selected_path.TotalTime)
+                return true;
+
+            SetTime(time);
+            return false;
+        }
+
+        private void DoAllDemoMode()
+        {
+            if (m_selected_group == null)
+                NextGroupInFile();
+            else if (m_selected_path == null)
+                NextPathInGroup();
+            else
             {
-                StopTimer();
+                if (StepPathDemo())
+                {
+                    int index = Array.IndexOf(m_selected_group.Paths, m_selected_path);
+                    if (index == m_selected_group.Paths.Length - 1)
+                        NextGroupInFile();
+                    else
+                        NextPathInGroup();
+                }
+            }
+        }
+
+        private void NextGroupInFile()
+        {
+            int index;
+
+            if (m_selected_group == null)
+                index = 0;
+            else
+            {
+                index = Array.IndexOf(m_file.Groups, m_selected_group);
+                if (index == m_file.Groups.Length - 1)
+                    index = 0;
+                else
+                    index++;
+            }
+
+            m_selected_path = null;
+            m_selected_group = m_file.Groups[index];
+            NextPathInGroup();
+        }
+
+        private void NextPathInGroup()
+        {
+            int index;
+
+            if (m_selected_path == null)
+                index = 0;
+            else
+            {
+                index = Array.IndexOf(m_selected_group.Paths, m_selected_path);
+                if (index == m_selected_group.Paths.Length - 1)
+                    index = 0;
+                else
+                    index++;
+            }
+
+            SetPath(m_selected_group.Paths[index]);
+            SetTime(0.0);
+        }
+
+        private void DoGroupDemoMode()
+        {
+            if (m_selected_path == null)
+            {
+                if (m_selected_group.Paths.Length == 0)
+                    StopTimer();
+                else
+                {
+                    NextPathInGroup();
+                }
             }
             else
             {
-                try
+                if (StepPathDemo())
                 {
-                    if (m_selected_path == null)
-                    {
-                        if (m_selected_group.Paths.Length == 0)
-                            StopTimer();
-                        else
-                        {
-                            m_selected_path = m_selected_group.Paths[0];
-                            SetPath(m_selected_path);
-                            SetTime(0.0);
-                        }
-                    }
-                    else
-                    {
-                        double t = m_plot.Time;
-
-                        t += 0.100;
-                        if (t > m_selected_path.TotalTime)
-                        {
-                            t = 0.0;
-
-                            if (m_selected_group != null)
-                            {
-                                //
-                                // Switch to the next path
-                                //
-                                int i = Array.IndexOf(m_selected_group.Paths, m_selected_path);
-                                if (i == -1)
-                                    i = 0;
-                                else
-                                {
-                                    i++;
-                                    if (i == m_selected_group.Paths.Length)
-                                        i = 0;
-                                }
-                                SetPath(m_selected_group.Paths[i]);
-                            }
-                        }
-                        SetTime(t);
-                    }
-                }
-                catch(NoSegmentsException)
-                {
-                    //
-                    // An exception gets thrown is something changes the path
-                    //
+                    NextPathInGroup();
                 }
             }
+        }
+
+        private void DoPathDemoMode()
+        {
+            if (m_selected_path == null)
+                StopTimer();
+            else
+            {
+                if (StepPathDemo())
+                    SetTime(0.0);
+            }
+        }
+
+        private void RobotFieldTimerTick(object sender, EventArgs e)
+        {
+            if (m_selected_path == null && m_selected_group == null && !m_demo_mode)
+            {
+                StopTimer();
+                return;
+            }
+
+            if (m_demo_mode)
+                DoAllDemoMode();
+            else if (m_selected_group != null)
+                DoGroupDemoMode();
+            else
+                DoPathDemoMode();
         }
 
         void SetTime(double time)
@@ -1225,23 +1304,26 @@ namespace PathViewer
             PathFile pf = new PathFile(m_file);
             UndoState st = new UndoState(m_undo_serial++, pf);
 
-            if (m_selected_group != null)
-                st.SelectedGroup = m_selected_group.Name;
-
-            if (m_selected_path != null && m_pathfile_tree.SelectedNode.Parent != null)
+            if (!m_demo_mode)
             {
-                PathGroup group = m_file.FindGroupByName(m_pathfile_tree.SelectedNode.Parent.Text);
-                st.SetSelectedPath(group, m_selected_path);
-            }
+                if (m_selected_group != null)
+                    st.SelectedGroup = m_selected_group.Name;
 
-            if (m_field.SelectedWaypoint != null)
-            {
-                PathGroup gr;
-                RobotPath path;
-                int index;
-                m_file.FindPathByWaypoint(m_field.SelectedWaypoint, out gr, out path, out index);
-                if (gr != null && path != null)
-                    st.SelectedIndex = index;
+                if (m_selected_path != null && m_pathfile_tree.SelectedNode.Parent != null)
+                {
+                    PathGroup group = m_file.FindGroupByName(m_pathfile_tree.SelectedNode.Parent.Text);
+                    st.SetSelectedPath(group, m_selected_path);
+                }
+
+                if (m_field.SelectedWaypoint != null)
+                {
+                    PathGroup gr;
+                    RobotPath path;
+                    int index;
+                    m_file.FindPathByWaypoint(m_field.SelectedWaypoint, out gr, out path, out index);
+                    if (gr != null && path != null)
+                        st.SelectedIndex = index;
+                }
             }
 
             m_undo_stack.Add(st);
