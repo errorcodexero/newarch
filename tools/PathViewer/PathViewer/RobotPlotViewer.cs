@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
+using System.Threading;
 
 namespace PathViewer
 {
@@ -30,6 +31,7 @@ namespace PathViewer
 
         public RobotPlotViewer()
         {
+            Debug.WriteLine("RobotPlotViewer created in thread " + Thread.CurrentThread.Name);
             InitializeComponent();
             DoubleBuffered = true;
         }
@@ -140,13 +142,14 @@ namespace PathViewer
             if (InvokeRequired)
                 Invoke(new RegenDelegate(RegenerateGraph));
             else
+            {
+                Debug.WriteLine("Expected InvokeRequired, got false, thread = " + Thread.CurrentThread.Name);
                 RegenerateGraph();
+            }
         }
 
         public void RegenerateGraph()
         {
-            if (InvokeRequired)
-
             m_chart.Series.Clear();
             if (m_path != null)
             {

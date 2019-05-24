@@ -302,8 +302,8 @@ namespace PathViewer
                     index++;
             }
 
-            m_selected_path = null;
-            m_selected_group = m_file.Groups[index];
+            SetPath(null);
+            SetGroup(m_file.Groups[index]);
             NextPathInGroup();
         }
 
@@ -386,12 +386,37 @@ namespace PathViewer
 
         void SetPath(RobotPath path)
         {
-            m_field.HighlightPoint = null;
-            m_selected_path = path;
-            m_plot.Path = path;
-            m_field.DisplayedPath = path;
-            m_detailed.DisplayedPath = path;
-            SetTime(0.0);
+            if (path != m_selected_path)
+            {
+                m_selected_path = path;
+                m_field.HighlightPoint = null;
+                m_plot.Path = path;
+                m_field.DisplayedPath = path;
+                m_detailed.DisplayedPath = path;
+                SetTime(0.0);
+
+                if (path == null)
+                {
+                    m_misc_status.Text = "Selected Group: None, Selected Path: None";
+                }
+                else
+                {
+                    PathGroup group = m_file.FindGroupByPath(path);
+                    m_misc_status.Text = "Selected Group: " + group.Name + ", Selected Path: " + path.Name;
+                }
+            }
+        }
+
+        void SetGroup(PathGroup gr)
+        {
+            if (m_selected_group != gr)
+            {
+                m_selected_group = gr;
+                if (gr == null)
+                    m_misc_status.Text = "Selected Group: None, Selected Path: None";
+                else
+                    m_misc_status.Text = "Selected Group: " + gr.Name;
+            }
         }
 
         void SetUnits()
@@ -680,13 +705,13 @@ namespace PathViewer
             {
                 // A group is selected
                 SetPath(null);
-                m_selected_group = m_file.FindGroupByName(e.Node.Text);
+                SetGroup(m_file.FindGroupByName(e.Node.Text));
             }
             else
             {
                 RobotPath path = m_file.FindPathByName(e.Node.Parent.Text, e.Node.Text);
+                SetGroup(null);
                 SetPath(path);
-                m_selected_group = null;
             }
             m_field.SelectedWaypoint = null;
             UpdatePathWindow();
@@ -1348,14 +1373,14 @@ namespace PathViewer
                 GenerateAllSplines();
 
                 SetPath(null);
-                m_selected_group = null;
+                SetGroup(null);
                 m_field.SelectedWaypoint = null;
 
                 if (st.HasSelectedGroup)
                 {
                     PathGroup group = m_file.FindGroupByName(st.SelectedGroup);
                     if (group != null)
-                        m_selected_group = group;
+                        SetGroup(group);
                 }
 
                 if (st.HasSelectedPath)
@@ -1370,8 +1395,7 @@ namespace PathViewer
                                 {
                                     m_pathfile_tree.SelectedNode = path;
                                     RobotPath rpath = m_file.FindPathByName(group.Text, path.Text);
-                                    if (rpath != null)
-                                        SetPath(rpath);
+                                    SetPath(rpath);
                                     break;
                                 }
                             }
