@@ -25,5 +25,7 @@
 
   TODO
   ----
+  - Binary search for swerve path + rotate solution
+  - Demo mode for all path groups
   - Testing, Testing, Testing
   - Documentation
