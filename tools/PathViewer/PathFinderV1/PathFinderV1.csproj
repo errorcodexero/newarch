@@ -4,12 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PathViewer\PathViewer.csproj" />
-  </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy $(TargetPath) $(SolutionDir)PathViewer\bin\$(ConfigurationName)&#xD;&#xA;" />
   </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PathViewer\XeroPath.csproj" />
+  </ItemGroup>
 
 </Project>
