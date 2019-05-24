@@ -139,11 +139,15 @@ namespace PathViewer
 
         private void PathSegmentsUpdated(object sender, EventArgs e)
         {
+            if (!Created)
+                return;
+
             if (InvokeRequired)
                 Invoke(new RegenDelegate(RegenerateGraph));
             else
             {
-                Debug.WriteLine("Expected InvokeRequired, got false, thread = " + Thread.CurrentThread.Name);
+                if (Thread.CurrentThread.Name != "MainThread")
+                    Debug.WriteLine("Expected InvokeRequired, got false, thread = " + Thread.CurrentThread.Name);
                 RegenerateGraph();
             }
         }

@@ -169,8 +169,9 @@ namespace PathViewer
             m_field.WaypointChanged += WayPointSelectedOrChanged;
             m_field.FieldMouseMoved += FieldMouseMoved;
             m_field.PreviewKeyDown += FieldKeyPreview;
-            m_field.KeyDown += FieldKeyDown;            
+            m_field.KeyDown += FieldKeyDown;
 
+            m_plot.Name = "VelocityProfileWindow";
             m_plot.TimeCursorMoved += PlotWindowTimeChanged;
             m_plot.Time = 0.0;
 
@@ -261,8 +262,15 @@ namespace PathViewer
         private bool StepPathDemo()
         {
             double time = m_detailed.Time + 0.1;
-            if (time > m_selected_path.TotalTime)
-                return true;
+            try
+            {
+                if (time > m_selected_path.TotalTime)
+                    return true;
+            }
+            catch(NoSegmentsException)
+            {
+                return false;
+            }
 
             SetTime(time);
             return false;
