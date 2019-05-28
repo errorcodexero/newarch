@@ -8,34 +8,42 @@ namespace xero {
         // PathWeaver is reversing these when writing out the paths (or their nomemclature
         // is backward and I don't understand it).
         //
-        constexpr const char* rightSuffix  = ".right.pf1.csv";
-        constexpr const char* leftSuffix = ".left.pf1.csv";
+        constexpr const char* rightSuffix  = ".right.csv";
+        constexpr const char* leftSuffix = ".left.csv";
 
         XeroPathManager::XeroPathManager(const std::string &basedir) : basedir_(basedir) {
         }
 
         bool XeroPathManager::loadPath(const std::string & pathName) {
+            std::cout << "XeroPathManager: loading path '" << pathName << "'" << std::endl ;
             std::string filename = basedir_ + "/" + pathName + leftSuffix ;
             auto leftData = CSVData(filename);
             if (!leftData.isLoaded()) {
+                std::cerr <<"XeroPathManager: failed loading file '" << filename << "'" << std::endl ;                
                 return false;
             }
 
             filename = basedir_ + "/" + pathName + rightSuffix ;
             auto rightData = CSVData(filename);
             if (!rightData.isLoaded()) {
+                std::cerr <<"XeroPathManager: failed loading file '" << filename << "'" << std::endl ;
                 return false;
             }
 
             if(rightData.size() != leftData.size()) {
+                std::cerr <<"XeroPathManager: failed loading file '" << filename << "' data size mismatch" << std::endl ;                
                 return false;
             }
 
             if (leftData.size() == 0)
+            {
+                std::cerr <<"XeroPathManager: failed loading file '" << filename << "' file is empty" << std::endl ;                
                 return false ;
+            }
 
             // Path weaver has the data wrong, swap the left and right data
             paths_[pathName] = std::make_shared<XeroPath>(pathName, rightData, leftData);
+            std::cout << "XeroPathManager: loaded path '" << pathName << "'" << std::endl;
 
             return true;
         }

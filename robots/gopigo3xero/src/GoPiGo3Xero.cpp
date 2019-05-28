@@ -40,9 +40,9 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_TANKDRIVE);            
         }
 
-        void GoPiGo3Xero::LoadPaths() {
+        void GoPiGo3Xero::loadPaths() {
             auto pathmgr = getPathManager() ;
-            if (!pathmgr->loadPath("TestPathOne"))
+            if (!pathmgr->loadPath("TestPaths_RightTurn"))
                 std::cout << "CANNOT LOAD PATH" << std::endl ;
         }
 

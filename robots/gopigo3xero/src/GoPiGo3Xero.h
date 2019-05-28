@@ -31,7 +31,7 @@ namespace xero {
             /// \brief return the robot subsystem for the robot
             std::shared_ptr<GoPiGo3Subsystem> getGoPiGoSubsystem() ;
 
-            virtual void LoadPaths() ;
+            virtual void loadPaths() ;
 
             virtual bool isCompBot() {
                 return true ;

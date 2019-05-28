@@ -1,6 +1,8 @@
 #include "GoPiGo3AutoModeController.h"
 #include "LedAutoMode.h"
 #include <tankdrive/FollowPathAutomode.h>
+#include <tankdrive/TankDriveScrubMode.h>
+#include <tankdrive/StraightCharAutoMode.h>
 
 using namespace xero::base ;
 
@@ -33,11 +35,13 @@ namespace xero {
             case 6:
                 break;
             case 7:
+                ptr = std::make_shared<TankDriveScrubMode>(getRobot(), 1.0, 5.0) ;            
                 break ;
             case 8:
+                ptr = std::make_shared<StraightCharAutoMode>(getRobot(), 0.5, 5.0) ;            
                 break ;
             case 9:
-                ptr = std::make_shared<FollowPathAutomode>(getRobot(), "PathA") ;
+                ptr = std::make_shared<FollowPathAutomode>(getRobot(), "TestPaths_RightTurn") ;
                 break ;
             }
             setAction(ptr) ;
