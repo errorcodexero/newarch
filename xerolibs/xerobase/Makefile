@@ -1,5 +1,11 @@
 TOPDIR=../..
 
+
+#
+# Note, the lifter, single motor subsystem, and camera tracker are excluded as 
+# they are not compatible with the GoPiGo3 robot.
+#
+
 SOURCES = \
 	ActionSequence.cpp\
 	AutoMode.cpp\
@@ -22,6 +28,7 @@ SOURCES = \
 	oi/OISubsystem.cpp\
 	MessageListener/MessageListener.cpp\
 	tankdrive/TankDrive.cpp\
+	tankdrive/FollowPathAutomode.cpp\
 	tankdrive/TankDriveDistanceAction.cpp\
 	tankdrive/TankDriveVelocityAction.cpp\
 	tankdrive/TankDriveCharAction.cpp\
@@ -30,18 +37,8 @@ SOURCES = \
 	tankdrive/TankDrivePowerAction.cpp\
 	tankdrive/TankDriveTimedPowerAction.cpp\
 	tankdrive/TankDriveFollowPathAction.cpp\
-	tankdrive/TankDriveScrubCharAction.cpp\
-	tankdrive/LineDetectAction.cpp\
-	tankdrive/LineFollowAction.cpp\
-	lifter/Lifter.cpp\
-	lifter/LifterCalibrateAction.cpp\
-	lifter/LifterGoToHeightAction.cpp\
-	lifter/LifterPowerAction.cpp\
-	singlemotorsubsystem/SingleMotorPowerAction.cpp\
-	singlemotorsubsystem/SingleMotorSubsystem.cpp\
-	lightsensor/LightSensorSubsystem.cpp\
-	cameratracker/CameraTracker.cpp\
-	cameratracker/CameraChangeAction.cpp
+	tankdrive/TankDriveScrubCharAction.cpp
+
 
 TARGET=xerobase
 

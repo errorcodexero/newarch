@@ -1,8 +1,8 @@
 
 #include "GoPiGo3Xero.h"
 #include "gopigo3groups.h"
-#include "GoPiGo3AutoModeController.h"
-#include "GoPiGo3Subsystem.h"
+#include "automodes/GoPiGo3AutoModeController.h"
+#include "gopigo3sub/GoPiGo3Subsystem.h"
 #include <ActionSequence.h>
 #include <basegroups.h>
 #include <DelayAction.h>
@@ -20,7 +20,7 @@ using namespace xero::misc ;
 using namespace xero::base ;
 
 namespace xero {
-    namespace gopigo {
+    namespace gopigo3 {
 
         GoPiGo3Xero::GoPiGo3Xero() : xero::base::Robot("gopigo3", 0.02) {
         }
@@ -74,4 +74,4 @@ namespace xero {
 // This macro call is defined by the WPI library.  It is the call that connects
 // the class xero::GoPiGo3Xero::Phoenix to physical robot
 //
-START_ROBOT_CLASS(xero::gopigo::GoPiGo3Xero) ;
+START_ROBOT_CLASS(xero::gopigo3::GoPiGo3Xero) ;

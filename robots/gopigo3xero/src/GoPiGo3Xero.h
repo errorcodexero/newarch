@@ -3,7 +3,7 @@
 #include <Robot.h>
 
 namespace xero {
-    namespace gopigo {
+    namespace gopigo3 {
 
         class GoPiGo3Subsystem ;
 
@@ -32,6 +32,10 @@ namespace xero {
             std::shared_ptr<GoPiGo3Subsystem> getGoPiGoSubsystem() ;
 
             virtual void LoadPaths() ;
+
+            virtual bool isCompBot() {
+                return true ;
+            }
 
         private:
         } ;

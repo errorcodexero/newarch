@@ -35,6 +35,10 @@ driver:power:nudge_straight                                     	0.2
 driver:power:nudge_rotate                                       	0.2
 driver:nudge_time                                               	0.1
 
+driver:turn:default                                                 0.1
+driver:turn:max                                                     0.1
+driver:zerolevel                                                    0.1
+
 #
 # Drivebase rotation
 #

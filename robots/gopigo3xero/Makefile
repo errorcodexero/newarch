@@ -1,16 +1,23 @@
 TOPDIR=../..
 
+AUTOMODES = \
+	src/automodes/GoPiGo3AutoModeController.cpp\
+	src/automodes/LedAutoMode.cpp
+
+SUBSYSTEMS = \
+	src/servosubsystem/ServoGoToAngle.cpp\
+	src/servosubsystem/ServoSubsystem.cpp\
+	src/gopigo3sub/GoPiGo3Subsystem.cpp\
+	src/oi/GoPiGo3OIDevice.cpp\
+	src/oi/GoPiGo3OISubsystem.cpp\
+	src/ledsubsystem/LEDSubsystem.cpp\
+	src/ledsubsystem/LEDSubsystemOnOffAction.cpp\
+	src/ledsubsystem/LEDSubsystemBlinkAction.cpp
+
 SOURCES = \
 	src/GoPiGo3Xero.cpp\
-	src/ServoGoToAngle.cpp\
-	src/ServoSubsystem.cpp\
-	src/GoPiGo3Subsystem.cpp\
-	src/GoPiGo3AutoModeController.cpp\
-	src/GoPiGo3OISubsystem.cpp\
-	src/GoPiGo3OIDevice.cpp\
-	src/LEDSubsystem.cpp\
-	src/LEDSubsystemOnOffAction.cpp\
-	src/LEDSubsystemBlinkAction.cpp
+	$(SUBSYSTEMS)\
+	$(AUTOMODES)
 
 
 TARGET = gopigo3xero

@@ -8,7 +8,7 @@
 #include <UdpSender.h>
 #include <XeroPathManager.h>
 #include <frc/SampleRobot.h>
-#include <frc/PowerDistributionPanel.h>
+// #include <frc/PowerDistributionPanel.h>
 #include <memory>
 #include <list>
 #include <string>
