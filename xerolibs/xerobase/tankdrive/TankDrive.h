@@ -39,6 +39,12 @@ namespace xero {
             /// \brief destroy a tank drive object
             virtual ~TankDrive() ;
 
+            /// \brief return the width of the robot
+            /// \returns the width of the robot
+            double getWidth() const {
+                return kin_->getWidth() ;
+            }
+
             /// \brief returns true if the drivebase has a shifter
             /// \returns true if the drivebase has a gear shifter
             bool hasGearShifter() const {

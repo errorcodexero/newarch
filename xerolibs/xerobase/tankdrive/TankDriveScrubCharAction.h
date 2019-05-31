@@ -15,10 +15,9 @@ namespace xero {
         public:
             /// \brief create the action
             /// \param db the drivebase for the action
-            /// \param duration the duraction to apply the power
             /// \param power the power to apply to the drive base.  This is applied to the right and left side.
             /// \param highgear if true shift to high gear if possible
-            TankDriveScrubCharAction(TankDrive &db, double duration, double lpower, double rpower, bool highgear = true) ;
+            TankDriveScrubCharAction(TankDrive &db, double power, bool highgear = true) ;
 
             /// \brief destroy the action
             virtual ~TankDriveScrubCharAction() ;
@@ -43,17 +42,12 @@ namespace xero {
         private:
             double start_time_ ;
             double start_angle_ ;
-            double duration_ ;
             bool is_done_ ;
-            double lvoltage_;
-            double rvoltage_;
+            double power_;
             double start_right_ ;
             double start_left_ ;
             bool high_gear_ ;
             size_t index_ ;
-            
-            int plotid_ ;
-            static std::list<std::string> plot_columns_ ;          
         } ;
     }
 }

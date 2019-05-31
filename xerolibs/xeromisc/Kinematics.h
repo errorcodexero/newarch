@@ -20,6 +20,18 @@ namespace xero {
             /// \brief destroy the kinematic object
             virtual ~Kinematics() ;
 
+            /// \brief return the width of the robot
+            /// \returns the scrub for the robot
+            double getWidth() const {
+                return width_ ;
+            }
+
+            /// \brief return the scrube for the robot
+            /// \returns the scrub for the robot
+            double getScrub() const {
+                return scrub_ ;
+            }
+
             /// \brief get the current X position of the robot
             /// \returns the X position of the robot
             double getX() const {
