@@ -127,14 +127,12 @@ namespace frc
     {
 #ifdef DEBUG_PRINT_THREAD_ID
         int pid = syscall(SYS_gettid);
-        std::cout << "Driver station  thread id " << pid << std::endl;
+        std::cout << "Driver station thread id " << pid << std::endl;
 #endif
 
         DriverStation &st = DriverStation::GetInstance();
         setRobotMode(RobotBase::RobotMode::Operator);
         setEnabled(false);
-
-
 
         m_driver_station_run = true;
 
@@ -218,9 +216,11 @@ namespace frc
                 std::cout << "SampleRobot: invalid command line argument '";
                 std::cout << args[index] << "' - robot aborting" << std::endl;
                 std::cout << "Valid Arguments" << std::endl;
-                std::cout << "  --start NUMBER" << std::endl;
-                std::cout << "  --auto NUMBER" << std::endl;
-                std::cout << "  --oper NUMBER" << std::endl;
+                std::cout << "  --start NUMBER - NUMBER is start delay" << std::endl;
+                std::cout << "  --auto NUMBER - NUMBER is length of auto period in seconds" << std::endl;
+                std::cout << "  --oper NUMBER - NUBMER is length of teleop period in seconds" << std::endl;
+                std::cout << "   or   " << std::endl ;
+                std::cout << "  -- station" << std::endl ;
                 ret = false;
                 break;
             }
