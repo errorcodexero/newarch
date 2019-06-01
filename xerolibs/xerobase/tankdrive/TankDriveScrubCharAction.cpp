@@ -31,8 +31,6 @@ namespace xero {
         }
 
         void TankDriveScrubCharAction::run() {
-            Robot &rb = getTankDrive().getRobot() ;            
-
             if (!is_done_) {
                 double angle = getTankDrive().getTotalAngle() - start_angle_ ;
                 double distl = getTankDrive().getLeftDistance() - start_left_ ;

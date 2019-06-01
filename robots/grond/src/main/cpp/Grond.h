@@ -39,6 +39,10 @@ namespace xero {
 
             /// \brief enable specific message for logging
             virtual void enableSpecificMessages() ; 
+
+            virtual bool isCompBot() {
+                return true ;
+            }
         } ;
     }
 }

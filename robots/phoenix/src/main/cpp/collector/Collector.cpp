@@ -43,7 +43,8 @@ namespace xero {
         void Collector::computeState() {
             Subsystem::computeState() ;
 
-            has_cube_ = deb_sensor_->getState(sensor_->Get(), getRobot().getTime()) ;
+            deb_sensor_->update(sensor_->Get(), getRobot().getTime()) ;
+            has_cube_ = deb_sensor_->get() ;
             if (!has_cube_)
                 collected_cube_ = false ;
         }
