@@ -1,18 +1,19 @@
 TOPDIR=../..
 
 SOURCES = \
-	AHRS.cpp\
-	ContinuousAngleTracker.cpp\
-	InertialDataIntegrator.cpp\
-	OffsetTracker.cpp\
-	RegisterIO.cpp\
-	RegisterIOI2C.cpp\
-	RegisterIOSPI.cpp\
-	SerialIO.cpp
+	src/AHRS.cpp\
+	src/ContinuousAngleTracker.cpp\
+	src/InertialDataIntegrator.cpp\
+	src/OffsetTracker.cpp\
+	src/RegisterIO.cpp\
+	src/RegisterIOI2C.cpp\
+	src/RegisterIOSPI.cpp\
+	src/SerialIO.cpp
+
 
 TARGET=navx
 
-LOCAL_CFLAGS=-I.
+LOCAL_CFLAGS=-Iinclude
 
 NEED_WPILIB=true
 NEED_WPIUTIL=true

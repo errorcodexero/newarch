@@ -8,8 +8,9 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
 
-        TankDriveScrubCharAction::TankDriveScrubCharAction(TankDrive &drive, double power, bool highgear) : TankDriveAction(drive) {
+        TankDriveScrubCharAction::TankDriveScrubCharAction(TankDrive &drive, double power, double total, bool highgear) : TankDriveAction(drive) {
             power_ = power ;
+            total_ = total ;
             high_gear_ = highgear ;
         }
 
@@ -36,19 +37,19 @@ namespace xero {
                 double distl = getTankDrive().getLeftDistance() - start_left_ ;
                 double distr = getTankDrive().getRightDistance() - start_right_ ;
 
-                if (angle > 3600.0)
+                if (angle > total_)
                 {
                     is_done_ = true ;
                     setMotorsToPercents(0.0, 0.0) ;
 
-                    double avgc = (distl + distr) / 2.0 ;
+                    double avgc = (distl - distr) / 2.0 ;
                     double revs = angle / 360.0 ;
                     double effr = avgc / (xero::math::PI * revs) ;
 
                     std::cout << "Total Angle (NaVX) " << angle << std::endl ;
                     std::cout << "Left " << distl << std::endl ;
                     std::cout << "Right " << distr<< std::endl ;                        
-                    std::cout << "Effective Width " << effr* 2.0 << std::endl ;
+                    std::cout << "Effective Width " << effr * 2.0 << std::endl ;
                 }
                 else
                 {

@@ -1,104 +1,100 @@
 #pragma once
 
+#include <stdio.h>
+#include <sys/ioctl.h>
+#include <stdlib.h>
+#include <string>
+#include <cstring>
 #include <unistd.h>
 #include <termios.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/ioctl.h>
 #include <fcntl.h>
-#include <vector>
-#include <cstdint>
-#include <string.h>
+#include <errno.h>
 #include <iostream>
+#include <stdexcept>
+#include <thread>
+#include <chrono>
 
-namespace frc
-{
-    class SerialPort
-    {
-    public:
-        enum class Port
-        {
-            Port_0 = 0,
-            Port_1 = 1,
-            kMXP,
-            kOnboard,
-            kUSB
-        };
+namespace frc {
+    class SerialPort {
+        public:
+            enum Port { 
+                kOnboard = 0, 
+                kMXP = 1, 
+                kUSB = 2, 
+                kUSB1 = 2, 
+                kUSB2 = 3 
+             } ;
 
-    public:
-        SerialPort(Port port);
-        SerialPort(int baud, Port port);
-
-        virtual ~SerialPort()
-        {
-            if (m_handle != -1)
-                ::close(m_handle);
-        }
-
-        void Flush()
-        {
-        }
-
-        int GetBytesReceived();
-
-        int Read(char *buffer, int count);
-        int Write(char *buffer, int count);
-
-        void SetReadBufferSize(int size)
-        {
-            m_buffer.resize(size);
-            m_used = 0;
-        }
-
-        void SetTimeout(double timeout)
-        {
-            m_timeout = timeout;
-        }
-
-        void EnableTermination(char terminator = '\n')
-        {
-            m_term_mode = true;
-            m_term = terminator;
-        }
-
-        void Reset();
-
-    private:
-        void GetData();
-
-    private:
-
-        const char *PortToName(Port p)
-        {
-            const char *name_p = nullptr;
-
-            switch (m_port)
-            {
-            case Port::Port_0:
-                name_p = "/dev/ttyACM0";
-                break;
-
-            default:
-                name_p = nullptr;
-                break;
+        public:
+            SerialPort(int baudRate, Port id) {
+                Init(baudRate, id) ;
             }
 
-            return name_p;
-        }
+            virtual ~SerialPort() {            
+            }
 
-        void open();
+            void SetReadBufferSize(int size) {
+                this->ReadBufferSize = size;
+            }
+
+            void SetTimeout(int timeout) {
+                this->timeout = timeout;
+                tty.c_cc[VTIME] = timeout*10;
+                cfmakeraw(&tty);
+                if(tcsetattr(this->fd,TCSANOW,&tty) != 0) std::cout << "Failed to initialize serial in SetTimeout." << std::endl;;
+            }
 
 
+            void EnableTermination(char c) {
+                this->termination = true;
+                this->terminationChar = c;
+            }
 
-    private:
-        Port m_port;
-        int m_baud;
-        int m_handle;
-        bool m_term_mode;
-        char m_term;
-        size_t m_used;
-        double m_timeout;
-        std::vector<uint8_t> m_buffer;
+            void Flush() {
+                tcflush(this->fd, TCOFLUSH);
+            }        
+
+            int Write(char *data, int length) {
+                int n_written = 0, spot = 0;
+                do {
+                    n_written = write( this->fd, &data[spot], length );
+                    if (n_written > 0)
+                        spot += n_written;
+                } while (data[spot-1] != terminationChar); 
+
+                return n_written ;
+            }        
+
+            int GetBytesReceived() {
+                int bytes_avail;
+                ioctl(this->fd, FIONREAD, &bytes_avail);
+                return bytes_avail;
+            }        
+
+            int Read(char *data, int size)  ;
+                
+            void Reset() {
+                tcflush(this->fd, TCIOFLUSH);
+            }
+
+            void Close() {
+                close(this->fd);
+            }
+
+        private:
+            void Init(int baudRate, Port id) ;
+            void WaitForData() ;
+
+        private:
+            int ReadBufferSize;
+            int timeout;
+            char terminationChar;
+            bool termination;
+            Port id;
+            int baudRate;
+            int fd;
+            struct termios tty;
+            int err;
     };
 }
 

@@ -129,7 +129,7 @@ ifeq ($(NEED_NAVX),true)
 
 # GOPIGO3
 ifeq ($(PLATFORM),GOPIGO)
-CXXFLAGS += -I$(TOPDIR)/gopigo3/navx
+CXXFLAGS += -I$(TOPDIR)/gopigo3/navx/include
 LIBLIST += $(TOPDIR)/gopigo3/navx
 endif
 

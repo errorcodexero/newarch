@@ -5,7 +5,7 @@ namespace xero {
         class TankDriveScrubMode : public AutoMode
         {
         public:
-            TankDriveScrubMode(xero::base::Robot &robot, double power, bool highgear = true) ;
+            TankDriveScrubMode(xero::base::Robot &robot, double power, double total, bool highgear = true) ;
             virtual ~TankDriveScrubMode() ;
         } ;
     }

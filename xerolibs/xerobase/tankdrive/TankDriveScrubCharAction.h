@@ -16,8 +16,9 @@ namespace xero {
             /// \brief create the action
             /// \param db the drivebase for the action
             /// \param power the power to apply to the drive base.  This is applied to the right and left side.
+            /// \param total the total angle to traverse
             /// \param highgear if true shift to high gear if possible
-            TankDriveScrubCharAction(TankDrive &db, double power, bool highgear = true) ;
+            TankDriveScrubCharAction(TankDrive &db, double power, double total, bool highgear = true) ;
 
             /// \brief destroy the action
             virtual ~TankDriveScrubCharAction() ;
@@ -44,6 +45,7 @@ namespace xero {
             double start_angle_ ;
             bool is_done_ ;
             double power_;
+            double total_ ;
             double start_right_ ;
             double start_left_ ;
             bool high_gear_ ;

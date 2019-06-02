@@ -20,7 +20,7 @@ SerialIO::SerialIO( SerialPort::Port port_id,
                     IBoardCapabilities *board_capabilities ) {
     this->serial_port_id = port_id;
     is_usb = ((port_id != SerialPort::Port::kMXP) &&
-              (port_id != SerialPort::Port::kOnboard));
+    		  (port_id != SerialPort::Port::kOnboard));
     ypr_update_data = {};
     gyro_update_data = {};
     ahrs_update_data = {};
@@ -44,11 +44,20 @@ SerialIO::SerialIO( SerialPort::Port port_id,
     byte_count = 0;
     update_count = 0;
     last_valid_packet_time = 0;
+    connect_reported = 
+        disconnect_reported = false;
+    debug = false;
 }
 
 SerialPort *SerialIO::ResetSerialPort()
 {
     if (serial_port != 0) {
+        if (connect_reported && !disconnect_reported && !IsConnected()) {
+            notify_sink->DisconnectDetected();
+            connect_reported = false;
+            disconnect_reported = true;
+        }
+   		printf("Closing %s serial port to communicate with navX-MXP/Micro.\n", (is_usb ? "USB " : "TTL UART "));
         try {
             delete serial_port;
         } catch (std::exception& ex) {
@@ -64,6 +73,7 @@ SerialPort *SerialIO::GetMaybeCreateSerialPort()
 {
     if (serial_port == 0) {
         try {
+        	printf("Opening %s serial port to communicate with navX-MXP/Micro.\n", (is_usb ? "USB " : "TTL UART "));            
             serial_port = new SerialPort(57600, serial_port_id);
             serial_port->SetReadBufferSize(256);
             serial_port->SetTimeout(1.0);
@@ -86,27 +96,37 @@ void SerialIO::EnqueueIntegrationControlMessage(uint8_t action)
 void SerialIO::DispatchStreamResponse(IMUProtocol::StreamResponse& response) {
     board_state.cal_status = (uint8_t) (response.flags & NAV6_FLAG_MASK_CALIBRATION_STATE);
     board_state.capability_flags = (int16_t) (response.flags & ~NAV6_FLAG_MASK_CALIBRATION_STATE);
-    board_state.op_status = 0x04; /* TODO:  Create a symbol for this */
-    board_state.selftest_status = 0x07; /* TODO:  Create a symbol for this */
+
+    /* Derive reasonable operational/self-test status from the available stream response data. */
+    if (board_state.cal_status == NAVX_CAL_STATUS_IMU_CAL_COMPLETE) {
+        board_state.op_status = NAVX_OP_STATUS_NORMAL;
+    } else {
+        board_state.op_status = NAVX_OP_STATUS_IMU_AUTOCAL_IN_PROGRESS;
+    }
+    board_state.selftest_status = ( NAVX_SELFTEST_STATUS_COMPLETE |
+                                    NAVX_SELFTEST_RESULT_GYRO_PASSED |
+                                    NAVX_SELFTEST_RESULT_ACCEL_PASSED |
+                                    NAVX_SELFTEST_RESULT_BARO_PASSED );
+    
     board_state.accel_fsr_g = response.accel_fsr_g;
     board_state.gyro_fsr_dps = response.gyro_fsr_dps;
     board_state.update_rate_hz = (uint8_t) response.update_rate_hz;
-    notify_sink->SetBoardState(board_state);
+    notify_sink->SetBoardState(board_state, true);
     /* If AHRSPOS_TS is update type is requested, but board doesn't support it, */
     /* retransmit the stream config, falling back to AHRSPos update mode, if    */
     /* the board supports it, otherwise fall all the way back to AHRS Update mode. */
     if ( response.stream_type != this->update_type ) {
         if ( this->update_type == MSGID_AHRSPOS_TS_UPDATE ) {
-            if ( board_capabilities->IsAHRSPosTimestampSupported() ) {
-                this->update_type = MSGID_AHRSPOS_TS_UPDATE;
-            }
-            else if ( board_capabilities->IsDisplacementSupported() ) {
+        	if ( board_capabilities->IsAHRSPosTimestampSupported() ) {
+        		this->update_type = MSGID_AHRSPOS_TS_UPDATE;
+        	}
+        	else if ( board_capabilities->IsDisplacementSupported() ) {
                 this->update_type = MSGID_AHRSPOS_UPDATE;
             }
-            else {
-                this->update_type = MSGID_AHRS_UPDATE;
-            }
-            signal_retransmit_stream_config = true;
+        	else {
+        		this->update_type = MSGID_AHRS_UPDATE;
+        	}
+    		signal_retransmit_stream_config = true;
         }
     }
 }
@@ -188,11 +208,12 @@ void SerialIO::Run() {
     while (!stop) {
         try {
 
-            if( serial_port == NULL) {
+        	if( serial_port == NULL) {
                 delayMillis(1000/update_rate_hz);
-                ResetSerialPort();
-                continue;
-            }
+                if (debug) printf("Initiating reset of serial port, as serial_port reference is null.\n");
+        		ResetSerialPort();
+        		continue;
+        	}
 
             // Wait, with delays to conserve CPU resources, until
             // bytes have arrived.
@@ -204,16 +225,22 @@ void SerialIO::Run() {
                 next_integration_control_action = 0;
                 cmd_packet_length = AHRSProtocol::encodeIntegrationControlCmd( integration_control_command, integration_control );
                 try {
-                    /* Ugly Hack.  This is a workaround for ARTF5478:           */
-                    /* (USB Serial Port Write hang if receive buffer not empty. */
-                    if (is_usb) {
-                        serial_port->Reset();
-                    }
+                	/* Ugly Hack.  This is a workaround for ARTF5478:           */
+                	/* (USB Serial Port Write hang if receive buffer not empty. */
+                	if (is_usb) {
+                        try {
+                		    serial_port->Reset();
+                        }  catch (std::exception& ex) {
+                            /* Sometimes an unclean status exception occurs during reset(). */
+                            ResetSerialPort();
+                            if (debug) printf("Exception during invocation of SerialPort::Reset:  %s\n", ex.what());
+                        }
+                	}
                     int num_written = serial_port->Write( integration_control_command, cmd_packet_length );
                     if ( num_written != cmd_packet_length ) {
-                        printf("Error writing integration control command.  Only %d of %d bytes were sent.\n", num_written, cmd_packet_length);
+                    	printf("Error writing integration control command.  Only %d of %d bytes were sent.\n", num_written, cmd_packet_length);
                     } else {
-                        printf("Checksum:  %X %X\n", integration_control_command[9], integration_control_command[10]);
+                    	printf("Checksum:  %X %X\n", integration_control_command[9], integration_control_command[10]);
                     }
                     serial_port->Flush();
                 } catch (std::exception ex) {
@@ -294,6 +321,11 @@ void SerialIO::Run() {
                     if (packet_length > 0) {
                         packets_received++;
                         update_count++;
+                        if (!connect_reported) {
+                            notify_sink->ConnectDetected();
+                            connect_reported = true;
+                            disconnect_reported = false;
+                        }
                         last_valid_packet_time = Timer::GetFPGATimestamp();
                         updates_in_last_second++;
                         if ((last_valid_packet_time - last_second_start_time ) > 1.0 ) {
@@ -310,6 +342,11 @@ void SerialIO::Run() {
                         packet_length = IMUProtocol::decodeStreamResponse(received_data + i, bytes_remaining, response);
                         if (packet_length > 0) {
                             packets_received++;
+                            if (!connect_reported) {
+                                notify_sink->ConnectDetected();
+                                connect_reported = true;
+                                disconnect_reported = false;
+                            }                            
                             DispatchStreamResponse(response);
                             stream_response_received = true;
                             i += packet_length;
@@ -329,7 +366,7 @@ void SerialIO::Run() {
                                 #endif
                                 i += packet_length;
                                 if ((integration_control.action & NAVX_INTEGRATION_CTL_RESET_YAW)!=0) {
-                                    notify_sink->YawResetComplete();
+                                	notify_sink->YawResetComplete();
                                 }
                             } else {
                                 /* Even though a start-of-packet indicator was found, the  */
@@ -469,17 +506,23 @@ void SerialIO::Run() {
                         (!stream_response_received && ((Timer::GetFPGATimestamp() - last_stream_command_sent_timestamp ) > 3.0 ) ) ) {
                     cmd_packet_length = IMUProtocol::encodeStreamCommand( stream_command, update_type, update_rate_hz );
                     try {
-                        ResetSerialPort();
-                        last_stream_command_sent_timestamp = Timer::GetFPGATimestamp();
-                        /* Ugly Hack.  This is a workaround for ARTF5478:           */
-                        /* (USB Serial Port Write hang if receive buffer not empty. */
-                        if (is_usb) {
-                            serial_port->Reset();
-                        }
+                        printf("Retransmitting stream configuration command to navX-MXP/Micro.\n");                        
+                    	/* Ugly Hack.  This is a workaround for ARTF5478:           */
+                    	/* (USB Serial Port Write hang if receive buffer not empty. */
+                    	if (is_usb) {
+                            try {
+                                serial_port->Reset();
+                            }  catch (std::exception& ex) {
+                                /* Sometimes an unclean status exception occurs during reset(). */
+                                ResetSerialPort();
+                                if (debug) printf("Exception during invocation of SerialPort::Reset:  %s\n", ex.what());                            
+                            }
+                    	}
                         serial_port->Write( stream_command, cmd_packet_length );
                         cmd_packet_length = AHRSProtocol::encodeDataGetRequest( stream_command,  AHRS_DATA_TYPE::BOARD_IDENTITY, AHRS_TUNING_VAR_ID::UNSPECIFIED );
                         serial_port->Write( stream_command, cmd_packet_length );
                         serial_port->Flush();
+                        last_stream_command_sent_timestamp = Timer::GetFPGATimestamp();                        
                     } catch (std::exception ex2) {
                         printf("SerialPort Run() Re-transmit Encode Stream Command Exception:  %s\n", ex2.what());
                     }
@@ -503,6 +546,7 @@ void SerialIO::Run() {
             } else {
                 /* No data received this time around */
                 if ( Timer::GetFPGATimestamp() - last_data_received_timestamp  > 1.0 ) {
+                    if (debug) printf("Initiating Serial Port Reset since no data was received in the last second.\n");
                     ResetSerialPort();
                 }
             }
@@ -514,6 +558,7 @@ void SerialIO::Run() {
                 SmartDashboard::PutNumber("navX Serial Port Timeout / Buffer Overrun", (double)timeout_count);
                 SmartDashboard::PutString("navX Last Exception", ex.what());
             #endif
+            if (debug) printf("Initiating Serial Port Reset due to exception during Run() loop.\n");
             ResetSerialPort();
         }
     }
@@ -551,4 +596,5 @@ void SerialIO::Stop() {
 }
 
 void SerialIO::EnableLogging(bool enable) {
+    debug = enable;
 }

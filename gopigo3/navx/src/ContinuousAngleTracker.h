@@ -22,16 +22,15 @@ private:
     double angleAdjust;
     std::mutex tracker_mutex;
 
-    void Init();
-
 public:
     ContinuousAngleTracker();
+    void Init();
     void Reset();
     void NextAngle( float newAngle );
     double GetAngle();
     double GetRate();
-    void SetAngleAdjustment(double adjustment);
-    double GetAngleAdjustment();
+	void SetAngleAdjustment(double adjustment);
+	double GetAngleAdjustment();
 };
 
 #endif /* SRC_CONTINUOUSANGLETRACKER_H_ */

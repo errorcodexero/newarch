@@ -11,11 +11,14 @@
 
 using namespace wpi;
 
+#define NUM_IGNORED_SUCCESSIVE_ERRORS 50
+
 static wpi::mutex imu_mutex;
 RegisterIO_SPI::RegisterIO_SPI(SPI *port, uint32_t bitrate) {
     this->port = port;
     this->bitrate = bitrate;
     this->trace = false;
+    this->successive_error_count = 0;
 }
 
 bool RegisterIO_SPI::Init() {
@@ -29,7 +32,7 @@ bool RegisterIO_SPI::Init() {
 }
 
 bool RegisterIO_SPI::Write(uint8_t address, uint8_t value ) {
-    std::unique_lock<wpi::mutex> sync(imu_mutex);
+	std::unique_lock<wpi::mutex> sync(imu_mutex);
     uint8_t cmd[3];
     cmd[0] = address | 0x80;
     cmd[1] = value;
@@ -42,7 +45,7 @@ bool RegisterIO_SPI::Write(uint8_t address, uint8_t value ) {
 }
 
 bool RegisterIO_SPI::Read(uint8_t first_address, uint8_t* buffer, uint8_t buffer_len) {
-    std::unique_lock<wpi::mutex> sync(imu_mutex);
+	std::unique_lock<wpi::mutex> sync(imu_mutex);
     uint8_t cmd[3];
     cmd[0] = first_address;
     cmd[1] = buffer_len;
@@ -58,10 +61,17 @@ bool RegisterIO_SPI::Read(uint8_t first_address, uint8_t* buffer, uint8_t buffer
     }
     uint8_t crc = IMURegisters::getCRC(rx_buffer, buffer_len);
     if ( crc != rx_buffer[buffer_len] ) {
-        if (trace) printf("navX-MXP SPI CRC err.  Length:  %d, Got:  %d; Calculated:  %d\n", buffer_len, rx_buffer[buffer_len], crc);
+        successive_error_count++;
+        if (successive_error_count % NUM_IGNORED_SUCCESSIVE_ERRORS == 1) {
+            if (trace) {
+                printf("navX-MXP SPI CRC err.  Length:  %d, Got:  %d; Calculated:  %d %s\n", buffer_len, rx_buffer[buffer_len], crc,
+                ((successive_error_count < NUM_IGNORED_SUCCESSIVE_ERRORS) ? "" : " (Repeated errors omitted)"));
+            }
+        }
         return false; // CRC ERROR
     } else {
         memcpy(buffer, rx_buffer, buffer_len);
+        successive_error_count = 0;
     }
     return true;
 }
@@ -71,5 +81,5 @@ bool RegisterIO_SPI::Shutdown() {
 }
 
 void RegisterIO_SPI::EnableLogging(bool enable) {
-    trace = enable;
+	trace = enable;
 }
