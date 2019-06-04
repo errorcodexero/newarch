@@ -69,7 +69,7 @@ tankdrive:follower:right:kv                                         0.117924528
 tankdrive:follower:right:ka                                         0.002358491
 
 tankdrive:follower:turn_correction                                  0.0
-tankdrive:follower:angle_correction                                 0.06
+tankdrive:follower:angle_correction                                 0.03
 
 #
 # Setup the data plotter

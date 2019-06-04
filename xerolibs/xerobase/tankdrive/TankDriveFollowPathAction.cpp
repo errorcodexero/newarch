@@ -12,7 +12,7 @@ namespace xero {
             "time", 
             "ltpos", "lapos", "ltvel", "lavel", "ltaccel", "lout","lticks",
             "rtpos", "rapos", "rtvel", "ravel", "rtaccel", "rout","rticks",
-            "thead", "ahead"
+            "thead", "ahead", "angcorr"
         } ;
 
         TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name, bool reverse) : TankDriveAction(db)  {
@@ -167,6 +167,7 @@ namespace xero {
                 // Angle data
                 rb.addPlotData(plotid_, index_, 15, thead) ;
                 rb.addPlotData(plotid_, index_, 16, ahead) ;
+                rb.addPlotData(plotid_, index_, 17, turn) ;                
             }
             index_++ ;     
             if (index_ == path_->size())
