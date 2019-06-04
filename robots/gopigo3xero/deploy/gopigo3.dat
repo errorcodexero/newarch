@@ -58,18 +58,18 @@ tankdrive:angle_action:profile_outdated_error_long					10
 tankdrive:angle_action:profile_outdated_error_short					5
 tankdrive:angle_action:profile_outdated_error_angle					20
 
-tankdrive:follower:left:kp                                          0.0
+tankdrive:follower:left:kp                                          0.1
 tankdrive:follower:left:kd                                          0.0
 tankdrive:follower:left:kv                                          0.117924528
-tankdrive:follower:left:ka                                          0.0
+tankdrive:follower:left:ka                                          0.002358491
 
-tankdrive:follower:right:kp                                         0.0
+tankdrive:follower:right:kp                                         0.1
 tankdrive:follower:right:kd                                         0.0
 tankdrive:follower:right:kv                                         0.117924528
-tankdrive:follower:right:ka                                         0.0
+tankdrive:follower:right:ka                                         0.002358491
 
 tankdrive:follower:turn_correction                                  0.0
-tankdrive:follower:angle_correction                                 0.0
+tankdrive:follower:angle_correction                                 0.06
 
 #
 # Setup the data plotter

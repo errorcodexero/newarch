@@ -37,7 +37,7 @@ namespace xero {
             // Decide what message groups (incl. subsystems) you want to see
             //
             // logger.enableSubsystem(MSG_GROUP_ALL) ;          
-            logger.enableSubsystem(MSG_GROUP_TANKDRIVE_VERBOSE);            
+            logger.enableSubsystem(MSG_GROUP_TANKDRIVE);            
         }
 
         void GoPiGo3Xero::loadPaths() {

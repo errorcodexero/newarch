@@ -11,16 +11,26 @@ namespace xero {
         public:
             XeroSegment(double x, double y, double linPos,
                         double vel, double accel, double jerk, double heading) 
-                        : x_(x), y_(y), linPos_(linPos), vel_(vel), accel_(accel),
-                        jerk_(jerk) {
-                heading_ = xero::math::normalizeAngleDegrees(heading / xero::math::PI * 180.0) ;
+            {
+                x_ = x ;
+                y_ = y ;
+                linPos_ = linPos ;
+                vel_ = vel ;
+                accel_ = accel ;
+                jerk_ = jerk ;
+                heading_ = heading ;
             }
 
             XeroSegment(std::array<double, HEADER_COUNT> data) 
-                : x_(data[0]), y_(data[1]), linPos_(data[2]), vel_(data[3]), accel_(data[4]),
-                    jerk_(data[5]) {   
-                heading_ = xero::math::normalizeAngleDegrees(data[6] / xero::math::PI * 180.0) ;                        
-            }   
+            {
+                x_ = data[0] ;
+                y_ = data[1]  ;
+                linPos_ = data[2] ;
+                vel_ = data[3] ;
+                accel_ = data[4] ;
+                jerk_ = data[5] ;
+                heading_ = data[6] ;
+            }
 
             double getX() const {
                 return x_ ;
