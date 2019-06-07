@@ -43,6 +43,9 @@ class SerialIO : public IIOProvider {
     IBoardCapabilities *board_capabilities;
     double last_valid_packet_time;
     bool is_usb;
+    bool connect_reported;
+    bool disconnect_reported;
+    bool debug;
 
 public:
     SerialIO( SerialPort::Port port_id,

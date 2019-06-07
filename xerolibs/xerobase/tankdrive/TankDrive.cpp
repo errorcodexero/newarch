@@ -34,7 +34,7 @@ namespace xero {
             last_dist_r_ = 0.0 ;
 
 #ifdef GOPIGO
-            navx_ = std::make_shared<AHRS>(frc::SerialPort::Port::Port_0) ;
+            navx_ = std::make_shared<AHRS>(frc::SerialPort::Port::kUSB) ;
 #else
             navx_ = std::make_shared<AHRS>(frc::SPI::Port::kMXP) ;        
 #endif

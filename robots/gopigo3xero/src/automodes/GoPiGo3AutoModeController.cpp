@@ -35,7 +35,7 @@ namespace xero {
             case 6:
                 break;
             case 7:
-                ptr = std::make_shared<TankDriveScrubMode>(getRobot(), 1.0, 5.0) ;            
+                ptr = std::make_shared<TankDriveScrubMode>(getRobot(), 0.5, 4 * 360.0) ;            
                 break ;
             case 8:
                 ptr = std::make_shared<StraightCharAutoMode>(getRobot(), 0.5, 5.0) ;            

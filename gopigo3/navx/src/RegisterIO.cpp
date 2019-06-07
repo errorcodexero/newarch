@@ -20,10 +20,12 @@ RegisterIO::RegisterIO( IRegisterIO *io_provider,
     this->board_capabilities    = board_capabilities;
     this->notify_sink           = notify_sink;
     this->last_sensor_timestamp = 0;
-    this->update_count          = 0;
-    this->byte_count            = 0;
+    this->update_count 			= 0;
+    this->byte_count			= 0;
     this->last_update_time      = 0;
     this->stop                  = false;
+    this->disconnect_reported   = false;
+    this->connect_reported      = true;
 
     raw_data_update = {};
     ahrs_update     = {};
@@ -69,25 +71,15 @@ void RegisterIO::ZeroDisplacement() {
 }
 
 void RegisterIO::Run() {
-    bool b ;
-    std::cout << "Entering Register IO::Run" << std::endl ;
     io_provider->Init();
-
-    std::cout << "    After Init()" << std::endl ;
 
     /* Initial Device Configuration */
     SetUpdateRateHz(this->update_rate_hz);
-    std::cout << "    After SetUpdateRateHz()" << std::endl ;
-
-    b = GetConfiguration();
-    if (b)
-        std::cout << "    After GetConfiguration()" << std::endl ;
-    else
-        std::cout << "    Could not retreive configuration" << std::endl ;
+    GetConfiguration();
 
     double update_rate_ms = 1.0/(double)this->update_rate_hz;
     if ( update_rate_ms > DELAY_OVERHEAD_MILLISECONDS) {
-        update_rate_ms -= DELAY_OVERHEAD_MILLISECONDS;
+    	update_rate_ms -= DELAY_OVERHEAD_MILLISECONDS;
     }
 
     /* IO Loop */
@@ -105,7 +97,7 @@ void RegisterIO::Stop() {
 }
 
 void RegisterIO::EnableLogging(bool enable) {
-    io_provider->EnableLogging(enable);
+	io_provider->EnableLogging(enable);
 }
 
 bool RegisterIO::GetConfiguration() {
@@ -128,7 +120,8 @@ bool RegisterIO::GetConfiguration() {
             board_state.accel_fsr_g         = (int16_t)config[NAVX_REG_ACCEL_FSR_G];
             board_state.update_rate_hz      = config[NAVX_REG_UPDATE_RATE_HZ];
             board_state.capability_flags    = IMURegisters::decodeProtocolUint16(config + NAVX_REG_CAPABILITY_FLAGS_L);
-            notify_sink->SetBoardState(board_state);
+            bool update_board_status = true;
+            notify_sink->SetBoardState(board_state, update_board_status);
             success = true;
         } else {
             success = false;
@@ -152,14 +145,19 @@ void RegisterIO::GetCurrentData() {
         buffer_len = NAVX_REG_QUAT_OFFSET_Z_H + 1 - first_address;
     }
     if ( io_provider->Read(first_address,(uint8_t *)curr_data, buffer_len) ) {
-        long sensor_timestamp = IMURegisters::decodeProtocolUint32(curr_data + NAVX_REG_TIMESTAMP_L_L-first_address);
+    	long sensor_timestamp = IMURegisters::decodeProtocolUint32(curr_data + NAVX_REG_TIMESTAMP_L_L-first_address);
+        if (!connect_reported) {
+            notify_sink->ConnectDetected();
+            connect_reported = true;
+            disconnect_reported = false;            
+        }          
         if ( sensor_timestamp == last_sensor_timestamp ) {
-            return;
-        }
+        	return;
+        }      
         last_sensor_timestamp = sensor_timestamp;
         ahrspos_update.op_status       = curr_data[NAVX_REG_OP_STATUS - first_address];
         ahrspos_update.selftest_status = curr_data[NAVX_REG_SELFTEST_STATUS - first_address];
-        ahrspos_update.cal_status      = curr_data[NAVX_REG_CAL_STATUS];
+        ahrspos_update.cal_status      = curr_data[NAVX_REG_CAL_STATUS - first_address];
         ahrspos_update.sensor_status   = curr_data[NAVX_REG_SENSOR_STATUS_L - first_address];
         ahrspos_update.yaw             = IMURegisters::decodeProtocolSignedHundredthsFloat(curr_data + NAVX_REG_YAW_L-first_address);
         ahrspos_update.pitch           = IMURegisters::decodeProtocolSignedHundredthsFloat(curr_data + NAVX_REG_PITCH_L-first_address);
@@ -203,15 +201,12 @@ void RegisterIO::GetCurrentData() {
             notify_sink->SetAHRSData( ahrs_update, sensor_timestamp );
         }
 
-        board_state.cal_status      = curr_data[NAVX_REG_CAL_STATUS-first_address];
-        board_state.op_status       = curr_data[NAVX_REG_OP_STATUS-first_address];
-        board_state.selftest_status = curr_data[NAVX_REG_SELFTEST_STATUS-first_address];
-        board_state.sensor_status   = IMURegisters::decodeProtocolUint16(curr_data + NAVX_REG_SENSOR_STATUS_L-first_address);
         board_state.update_rate_hz  = curr_data[NAVX_REG_UPDATE_RATE_HZ-first_address];
         board_state.gyro_fsr_dps    = IMURegisters::decodeProtocolUint16(curr_data + NAVX_REG_GYRO_FSR_DPS_L-first_address);
         board_state.accel_fsr_g     = (int16_t)curr_data[NAVX_REG_ACCEL_FSR_G-first_address];
         board_state.capability_flags= IMURegisters::decodeProtocolUint16(curr_data + NAVX_REG_CAPABILITY_FLAGS_L-first_address);
-        notify_sink->SetBoardState(board_state);
+        bool update_board_status = false;
+        notify_sink->SetBoardState(board_state, update_board_status);  // Board status already updated previously above
 
         raw_data_update.gyro_x      = IMURegisters::decodeProtocolInt16(curr_data +  NAVX_REG_GYRO_X_L-first_address);
         raw_data_update.gyro_y      = IMURegisters::decodeProtocolInt16(curr_data +  NAVX_REG_GYRO_Y_L-first_address);
@@ -226,6 +221,11 @@ void RegisterIO::GetCurrentData() {
         this->last_update_time = Timer::GetFPGATimestamp();
         byte_count += buffer_len;
         update_count++;
+    }
+    if (connect_reported && !disconnect_reported && !this->IsConnected()) {
+        notify_sink->DisconnectDetected();
+        disconnect_reported = true;
+        connect_reported = false;
     }
 }
 

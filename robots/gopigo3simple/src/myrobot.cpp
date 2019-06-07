@@ -30,7 +30,11 @@ void MyRobot::Disabled()
 
 void MyRobot::Autonomous()
 {
+<<<<<<< HEAD
     double duration = 9.5 ;
+=======
+    double duration = 15.0 ;
+>>>>>>> 2f50f54a30f4e90260fb59109f0cca73db2d55a3
     double start = frc::Timer::GetFPGATimestamp() ;
     std::cout << "Auto Start time: " << start << std::endl ;
     std::cout << "Start Encoders: " << left_enc_p->Get() << ", " << right_enc_p->Get() << std::endl ;
@@ -38,7 +42,19 @@ void MyRobot::Autonomous()
     left_p->Set(ControlMode::PercentOutput, 1) ; 
     right_p->Set(ControlMode::PercentOutput, 1) ;
 
-    while (IsAutonomous() && frc::Timer::GetFPGATimestamp() - start < duration) ;
+    std::chrono::milliseconds ms20(20) ;
+   
+    while (IsAutonomous() && frc::Timer::GetFPGATimestamp() - start < duration)
+    {
+        double initial_time = frc::Timer::GetFPGATimestamp(); 
+        frc::Wait(0.02) ;
+
+        double delta = frc::Timer::GetFPGATimestamp() - initial_time ;
+        if (delta > 0.025)
+        {
+            std::cout << "Robot loop too long, " << delta << " seconds" << std::endl ;
+        }
+    }
     std::cout << "End time " << frc::Timer::GetFPGATimestamp() << std::endl ;
     std::cout << "End Encoders: " << left_enc_p->Get() << ", " << right_enc_p->Get() << std::endl ;
 

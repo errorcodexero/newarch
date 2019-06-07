@@ -78,10 +78,10 @@ private:
     volatile bool       altitude_valid;
     volatile bool       is_magnetometer_calibrated;
     volatile bool       magnetic_disturbance;
-    volatile float      quaternionW;
-    volatile float      quaternionX;
-    volatile float      quaternionY;
-    volatile float      quaternionZ;
+    volatile float    	quaternionW;
+    volatile float    	quaternionX;
+    volatile float    	quaternionY;
+    volatile float    	quaternionZ;
 
     /* Integrated Data */
     float velocity[3];
@@ -128,6 +128,13 @@ private:
 #define MAX_NUM_CALLBACKS 3
     ITimestampedDataSubscriber *callbacks[MAX_NUM_CALLBACKS];
     void *callback_contexts[MAX_NUM_CALLBACKS];
+	
+	bool enable_boardlevel_yawreset;
+    double last_yawreset_request_timestamp;
+    double last_yawreset_while_calibrating_request_timestamp;
+    uint32_t successive_suppressed_yawreset_request_count;
+    bool disconnect_startupcalibration_recovery_pending;
+    bool logging_enabled;
 
 public:
     AHRS(SPI::Port spi_port_id);
@@ -201,6 +208,8 @@ public:
     int GetRequestedUpdateRate();
 
     void EnableLogging(bool enable);
+	void EnableBoardlevelYawReset(bool enable);
+	bool IsBoardlevelYawResetEnabled();
 
     int16_t GetGyroFullScaleRangeDPS();
     int16_t GetAccelFullScaleRangeG();

@@ -15,7 +15,6 @@ namespace xero {
         }
 
         bool XeroPathManager::loadPath(const std::string & pathName) {
-            std::cout << "XeroPathManager: loading path '" << pathName << "'" << std::endl ;
             std::string filename = basedir_ + "/" + pathName + leftSuffix ;
             auto leftData = CSVData(filename);
             if (!leftData.isLoaded()) {
@@ -42,9 +41,7 @@ namespace xero {
             }
 
             // Path weaver has the data wrong, swap the left and right data
-            paths_[pathName] = std::make_shared<XeroPath>(pathName, rightData, leftData);
-            std::cout << "XeroPathManager: loaded path '" << pathName << "'" << std::endl;
-
+            paths_[pathName] = std::make_shared<XeroPath>(pathName, leftData, rightData);
             return true;
         }
 

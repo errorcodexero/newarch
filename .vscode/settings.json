@@ -82,7 +82,11 @@
     "xstddef": "cpp",
     "xstring": "cpp",
     "xtr1common": "cpp",
-    "xtree": "cpp"
+    "xtree": "cpp",
+    "csignal": "cpp",
+    "queue": "cpp",
+    "xlocmon": "cpp",
+    "xloctime": "cpp"
   },
   "C_Cpp.configurationWarnings": "Disabled"
 }

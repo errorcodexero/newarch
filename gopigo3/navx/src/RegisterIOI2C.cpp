@@ -11,10 +11,13 @@
 
 using namespace wpi;
 
+#define NUM_IGNORED_SUCCESSIVE_ERRORS 50
+
 static wpi::mutex imu_mutex;
 RegisterIO_I2C::RegisterIO_I2C(I2C* port) {
     this->port = port;
-    this->trace = true;
+    this->trace = false;
+    successive_error_count = 0;
 }
 
 bool RegisterIO_I2C::Init() {
@@ -22,7 +25,7 @@ bool RegisterIO_I2C::Init() {
 }
 
 bool RegisterIO_I2C::Write(uint8_t address, uint8_t value ) {
-    std::unique_lock<wpi::mutex> sync(imu_mutex);
+	std::unique_lock<wpi::mutex> sync(imu_mutex);
     bool aborted = port->Write(address | 0x80, value);
     if (aborted && trace) printf("navX-MXP I2C Write error\n");
     return !aborted;
@@ -31,7 +34,7 @@ bool RegisterIO_I2C::Write(uint8_t address, uint8_t value ) {
 static const int MAX_WPILIB_I2C_READ_BYTES = 127;
 
 bool RegisterIO_I2C::Read(uint8_t first_address, uint8_t* buffer, uint8_t buffer_len) {
-    std::unique_lock<wpi::mutex> sync(imu_mutex);
+	std::unique_lock<wpi::mutex> sync(imu_mutex);
     int len = buffer_len;
     int buffer_offset = 0;
     uint8_t read_buffer[MAX_WPILIB_I2C_READ_BYTES];
@@ -42,9 +45,17 @@ bool RegisterIO_I2C::Read(uint8_t first_address, uint8_t* buffer, uint8_t buffer
             memcpy(buffer + buffer_offset, read_buffer, read_len);
             buffer_offset += read_len;
             len -= read_len;
+            successive_error_count = 0;
         } else {
-            if (trace) printf("navX-MXP I2C Read error\n");
-            break;
+            successive_error_count++;
+            if (successive_error_count % NUM_IGNORED_SUCCESSIVE_ERRORS == 1) {
+        	    if (trace) {
+                    printf("navX-MXP I2C Read error %s.\n",
+                        ((successive_error_count < NUM_IGNORED_SUCCESSIVE_ERRORS) ? "" : " (Repeated errors omitted)"));
+                }
+                break;
+            }
+            return false;
         }
     }
     return (len == 0);
@@ -55,6 +66,6 @@ bool RegisterIO_I2C::Shutdown() {
 }
 
 void RegisterIO_I2C::EnableLogging(bool enable) {
-    trace = enable;
+	trace = enable;
 }
 
