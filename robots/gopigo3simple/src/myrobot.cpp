@@ -8,19 +8,19 @@ using namespace ctre::phoenix::motorcontrol::can ;
 
 void MyRobot::RobotInit()
 {
-    left_enc_p = new Encoder(0, 1) ;
-    right_enc_p = new Encoder(2, 3) ;
+    left_enc_p = new Encoder(2, 3) ;
+    right_enc_p = new Encoder(0, 1) ;
 
     left_enc_p->Reset() ;
     right_enc_p->Reset() ;
 
-    left_enc_p->SetReverseDirection(true) ;
+    left_enc_p->SetReverseDirection(false) ;
     right_enc_p->SetReverseDirection(true) ;
 
-    left_p = new TalonSRX(1) ;
-    right_p = new TalonSRX(2) ;
+    left_p = new TalonSRX(2) ;
+    right_p = new TalonSRX(1) ;
 
-    left_p->SetInverted(true) ;
+    right_p->SetInverted(true) ;
 }
 
 void MyRobot::Disabled()
@@ -30,11 +30,7 @@ void MyRobot::Disabled()
 
 void MyRobot::Autonomous()
 {
-<<<<<<< HEAD
     double duration = 9.5 ;
-=======
-    double duration = 15.0 ;
->>>>>>> 2f50f54a30f4e90260fb59109f0cca73db2d55a3
     double start = frc::Timer::GetFPGATimestamp() ;
     std::cout << "Auto Start time: " << start << std::endl ;
     std::cout << "Start Encoders: " << left_enc_p->Get() << ", " << right_enc_p->Get() << std::endl ;
