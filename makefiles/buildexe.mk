@@ -114,6 +114,9 @@ deploy:
 	if [ -d "deploy" ]; then \
 		scp -r deploy pi@$(GOPIGOIP):/home/pi; \
 	fi
+
+run:
+	ssh pi@$(GOPIGOIP) /home/pi/$(TARGET)$(EXEEXT)
 endif
 
 ifeq ($(PLATFORM),SIMULATOR)
@@ -124,6 +127,6 @@ deploy:
 	fi
 endif
 
-.PHONY: deploy
+.PHONY: deploy run
 
 $(foreach srcfile,$(SOURCES),$(eval $(call BUILD_C_FILE,$(srcfile),$(BUILDTARGETDIR)/$(srcfile:%.cpp=%.o))))
