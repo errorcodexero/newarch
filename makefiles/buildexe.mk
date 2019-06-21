@@ -111,13 +111,17 @@ endif
 CYGTARGETFILE=$(shell cygpath -a -u $(TARGETFILE))
 deploy:
 	scp $(CYGTARGETFILE) pi@$(GOPIGOIP):/home/pi
-	scp -r deploy pi@$(GOPIGOIP):/home/pi
+	if [ -d "deploy" ]; then \
+		scp -r deploy pi@$(GOPIGOIP):/home/pi; \
+	fi
 endif
 
 ifeq ($(PLATFORM),SIMULATOR)
 deploy:
 	mkdir -p $(TOPDIR)/deploy/$(TARGET)
-	cp -r src/main/deploy $(TOPDIR)/deploy/$(TARGET)
+	if [ -d "src/main/deploy" ]; then \
+		cp -r src/main/deploy $(TOPDIR)/deploy/$(TARGET) \
+	fi
 endif
 
 .PHONY: deploy
