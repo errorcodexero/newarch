@@ -117,6 +117,11 @@ deploy:
 
 run:
 	ssh pi@$(GOPIGOIP) /home/pi/$(TARGET)$(EXEEXT)
+
+kill:
+	ssh pi@$(GOPIGOIP) pkill $(TARGET)$(EXEEXT)
+
+allrun:	buildexe deploy run
 endif
 
 ifeq ($(PLATFORM),SIMULATOR)
@@ -127,6 +132,6 @@ deploy:
 	fi
 endif
 
-.PHONY: deploy run
+.PHONY: deploy run allrun
 
 $(foreach srcfile,$(SOURCES),$(eval $(call BUILD_C_FILE,$(srcfile),$(BUILDTARGETDIR)/$(srcfile:%.cpp=%.o))))
