@@ -8,6 +8,7 @@ namespace frc
     Encoder::Encoder(uint32_t aChannel, uint32_t bChannel, bool reverseDirection, EncodingType encodingType)
     {
         m_type = encodingType;
+        inverted_ = false ;
 
         if (aChannel == 0 && bChannel == 1)
             m_hw_channel = gopigo3::GoPiGo3Robot::MOTOR_LEFT;
@@ -27,7 +28,12 @@ namespace frc
     int32_t Encoder::Get() const
     {
         gopigo3::GoPiGo3Robot &hw = RobotBase::getRobotHardware();
-        return hw.getEncoder(m_hw_channel);
+        int32_t value = hw.getEncoder(m_hw_channel);
+
+        if (inverted_)
+            value = -value ;
+
+        return value ;
     }
 
     int32_t Encoder::GetEncodingScale() const

@@ -11,6 +11,9 @@ public:
     virtual void Autonomous();
     virtual void OperatorControl();
     virtual void Test();
+
+private:
+    void runMotors(int phase, double left, double right, double duration) ;
     
 private:
     ctre::phoenix::motorcontrol::can::TalonSRX *left_p ;

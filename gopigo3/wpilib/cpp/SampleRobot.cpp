@@ -35,8 +35,6 @@ namespace frc
         m_start_delay = 1.0;
         m_auto_period = 15.0;
         m_teleop_period = 0.0;
-
-        // nt::NetworkTableInstance::GetDefault().StartServer();
     }
 
     SampleRobot::~SampleRobot() {
@@ -103,7 +101,7 @@ namespace frc
         }
 
         setEnabled(false);
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(250));
         setRobotMode(RobotBase::RobotMode::Operator);
         setEnabled(true);
 
@@ -257,8 +255,6 @@ namespace frc
         else
             m_controller = std::thread(&SampleRobot::InternalControl, this);
 
-
-
         //
         // If the main loop was not taken over, supply a main loop where
         // we ask the robot to handle specific modes
@@ -268,7 +264,7 @@ namespace frc
             while (m_running) {
                 if (IsDisabled()) {
                     Disabled();
-                    while (IsDisabled());
+                    while (IsDisabled() && getRobotMode() != RobotBase::RobotMode::Finished) ;
                 }
                 else if (IsAutonomous()) {
                     Autonomous();
