@@ -1,15 +1,7 @@
 #include "automodes/PhaserAutoModeController.h"
-<<<<<<< HEAD
-#include <tankdrive/StraightCharAutoMode.h>
 #include "automodes/CenterHabTwoHatch.h"
 #include "automodes/LeftRocketTwoHatch.h"
 #include "automodes/RightRocketTwoHatch.h"
-#include <tankdrive/TankDriveScrubMode.h>
-=======
-#include "automodes/CenterHabTwoHatch.h"
-#include "automodes/LeftRocketTwoHatch.h"
-#include "automodes/RightRocketTwoHatch.h"
->>>>>>> 2f50f54a30f4e90260fb59109f0cca73db2d55a3
 #include "automodes/LifterHeightMode.h"
 #include <tankdrive/StraightCharAutoMode.h>
 #include <tankdrive/TankDriveScrubMode.h>

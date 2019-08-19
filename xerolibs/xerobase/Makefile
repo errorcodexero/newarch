@@ -29,6 +29,7 @@ SOURCES = \
 	MessageListener/MessageListener.cpp\
 	tankdrive/TankDrive.cpp\
 	tankdrive/FollowPathAutomode.cpp\
+	tankdrive/LineFollowAction.cpp\
 	tankdrive/TankDriveScrubMode.cpp\
 	tankdrive/StraightCharAutoMode.cpp\
 	tankdrive/TankDriveDistanceAction.cpp\
@@ -39,7 +40,16 @@ SOURCES = \
 	tankdrive/TankDrivePowerAction.cpp\
 	tankdrive/TankDriveTimedPowerAction.cpp\
 	tankdrive/TankDriveFollowPathAction.cpp\
-	tankdrive/TankDriveScrubCharAction.cpp
+	tankdrive/TankDriveScrubCharAction.cpp\
+	lifter/Lifter.cpp\
+	lifter/LifterCalibrateAction.cpp\
+	lifter/LifterGoToHeightAction.cpp\
+	lifter/LifterPowerAction.cpp\
+	singlemotorsubsystem/SingleMotorSubsystem.cpp\
+	singlemotorsubsystem/SingleMotorPowerAction.cpp\
+	cameratracker/CameraTracker.cpp\
+	cameratracker/CameraChangeAction.cpp\
+	lightsensor/LightSensorSubsystem.cpp
 
 
 TARGET=xerobase
