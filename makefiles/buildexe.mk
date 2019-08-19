@@ -111,15 +111,27 @@ endif
 CYGTARGETFILE=$(shell cygpath -a -u $(TARGETFILE))
 deploy:
 	scp $(CYGTARGETFILE) pi@$(GOPIGOIP):/home/pi
-	scp -r deploy pi@$(GOPIGOIP):/home/pi
+	if [ -d "deploy" ]; then \
+		scp -r deploy pi@$(GOPIGOIP):/home/pi; \
+	fi
+
+run:
+	ssh pi@$(GOPIGOIP) /home/pi/$(TARGET)$(EXEEXT)
+
+kill:
+	ssh pi@$(GOPIGOIP) pkill -x $(TARGET)$(EXEEXT) || true
+
+allrun:	buildexe kill deploy run
 endif
 
 ifeq ($(PLATFORM),SIMULATOR)
 deploy:
 	mkdir -p $(TOPDIR)/deploy/$(TARGET)
-	cp -r src/main/deploy $(TOPDIR)/deploy/$(TARGET)
+	if [ -d "src/main/deploy" ]; then \
+		cp -r src/main/deploy $(TOPDIR)/deploy/$(TARGET) \
+	fi
 endif
 
-.PHONY: deploy
+.PHONY: deploy run kill allrun
 
 $(foreach srcfile,$(SOURCES),$(eval $(call BUILD_C_FILE,$(srcfile),$(BUILDTARGETDIR)/$(srcfile:%.cpp=%.o))))

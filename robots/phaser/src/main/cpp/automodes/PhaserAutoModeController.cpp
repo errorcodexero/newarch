@@ -16,8 +16,6 @@
 using namespace xero::base ;
 using namespace xero::misc ;
 
-std::vector<std::string> paths = { "CenterHab2CargoFrontLeft", "CargoFrontLeftLSLeft"} ;
-std::vector<bool> reverses = { false, true } ;
 
 namespace xero {
     namespace phaser {
@@ -32,42 +30,33 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true, false, "CenterHabSingleCargoLeft", "Start in center hab, score one on right front of cargo ship") ;
                 break ;
 
             case 1:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true, true, "CenterHabTwoCargoLeftLS", "Start in center hab, score two on front of cargo ship, collect second from left side") ;
                 break ;
 
             case 2:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, false, "CenterHabSingleCargoRight", "Start in center hab, score one on left front of cargo ship") ;
                 break ;
 
             case 3:
-                mode = std::make_shared<CenterHabTwoHatch>(getRobot(), false, true, "CenterHabTwoCargoRightLS", "Start in center hab, score two on front of cargo ship, collect second from right side") ;
                 break ;
 
             case 4:
-                mode = std::make_shared<LeftRocketTwoHatch>(getRobot(), true) ;
                 break ;
 
             case 5:
-                mode = std::make_shared<LeftRocketTwoHatch>(getRobot(), false) ;            
                 break ;
 
             case 6:
-                mode = std::make_shared<RightRocketTwoHatch>(getRobot(), true) ;            
                 break ;
 
             case 7:
-                mode = std::make_shared<RightRocketTwoHatch>(getRobot(), false) ;             
                 break ;
 
             case 8:
                 break ;
 
             case 9:
-                mode = std::make_shared<LifterHeightMode>(getRobot()) ;
                 break ;
             }
             setAction(mode) ;

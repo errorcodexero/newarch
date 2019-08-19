@@ -4,3 +4,17 @@ but does not rely on the Error Code Xero software architecture at all.
 This robot only builds for the GOPIGO platform by typing ...
 
 make PLATFORM=GOPIGO CONFIG=Debug (or Release)
+
+Some notes on the behavior of the robot.
+------------------------------------------------------------------------
+The front of the robot is the side with the servo (camera, ultra-sonic, etc.)
+The side with the metal canister is the back of the robot.
+
+With no reversals applied ...
+
+A positive power to the right side of the robot makes the right 
+wheel go backward.
+
+A positive power to the left side of the robot makes the left
+wheel go forward.
+

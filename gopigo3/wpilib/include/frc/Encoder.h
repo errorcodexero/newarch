@@ -15,6 +15,7 @@ namespace frc
         int32_t GetEncodingScale() const;
         void Reset();
         void SetReverseDirection(bool v) {
+            inverted_ = v ;
         }
 
     private:
@@ -22,6 +23,8 @@ namespace frc
         uint32_t m_b;
         uint32_t m_index;
         EncodingType m_type;
+
+        bool inverted_ ;
 
         uint8_t m_hw_channel;
     };

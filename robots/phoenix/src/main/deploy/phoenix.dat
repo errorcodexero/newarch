@@ -14,6 +14,7 @@ hw:tankdrive:leftencoder2           1
 hw:tankdrive:rightencoder1          2
 hw:tankdrive:rightencoder2          3
 hw:tankdrive:shifter                0
+hw:tankdrive:invertleft             true
 
 hw:lifter:motor1                    0
 hw:lifter:motor2                    1
@@ -130,6 +131,8 @@ collector:eject:slow				-0.2
 #
 # TankDrive subsystem constants
 #
+tankdrive:width                                                 28
+tankdrive:scrub                                                 1.0
 tankdrive:inches_per_tick                                       0.010471976
 tankdrive:distance_action:maxa                                  90
 tankdrive:distance_action:maxd                                  -90.0
@@ -215,13 +218,16 @@ messagelistener:port               5808
 #
 # DriverStation subsystem constants
 #
-driver:power:max                    1.0
-driver:power:default                0.6
-driver:power:slowby                 0.5
-driver:power:tolerance              0.05
-driver:power:nudge_straight         0.2
-driver:power:nudge_rotate           0.2
-driver:nudge_time                   0.1
+driver:power:max                                                1.0
+driver:power:default                                            0.6
+driver:turn:max                                                 0.8
+driver:turn:default                                             0.4
+driver:power:slowby                                             0.5
+driver:power:tolerance                                          0.05
+driver:power:nudge_straight                                     0.2
+driver:power:nudge_rotate                                       0.2
+driver:nudge_time                                               0.1
+driver:zerolevel                                                0.1
 
 #
 # Auto mode constants

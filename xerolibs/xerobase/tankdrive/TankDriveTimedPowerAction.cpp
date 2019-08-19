@@ -23,6 +23,7 @@ namespace xero {
         }
 
         void TankDriveTimedPowerAction::start() {
+            std::cout << "Powered " << left_ << " " << right_ << std::endl ;
             isdone_ = false ;
             start_ = getTankDrive().getRobot().getTime() ;
             if (getTankDrive().hasGearShifter()) {

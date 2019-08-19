@@ -5,7 +5,7 @@
 
 ifeq ($(PLATFORM),GOPIGO)
 CXXFLAGS += -DGOPIGO
-PLATFORMLIBS=-lwiringPI -lpthread
+PLATFORMLIBS=-lwiringPI -lpthread -latomic
 endif
 
 ifeq ($(PLATFORM),SIMULATOR)

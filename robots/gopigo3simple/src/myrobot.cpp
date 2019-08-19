@@ -8,19 +8,16 @@ using namespace ctre::phoenix::motorcontrol::can ;
 
 void MyRobot::RobotInit()
 {
-    left_enc_p = new Encoder(0, 1) ;
+    left_enc_p = new Encoder(0, 1) ;    
     right_enc_p = new Encoder(2, 3) ;
 
     left_enc_p->Reset() ;
     right_enc_p->Reset() ;
 
-    left_enc_p->SetReverseDirection(true) ;
-    right_enc_p->SetReverseDirection(true) ;
-
     left_p = new TalonSRX(1) ;
     right_p = new TalonSRX(2) ;
 
-    left_p->SetInverted(true) ;
+    right_p->SetInverted(true) ;
 }
 
 void MyRobot::Disabled()
@@ -28,38 +25,75 @@ void MyRobot::Disabled()
     std::cout << "Robot Disabled" << std::endl ;
 }
 
-void MyRobot::Autonomous()
+void MyRobot::runMotors(int phase, double left, double right, double duration)
 {
-<<<<<<< HEAD
-    double duration = 9.5 ;
-=======
-    double duration = 15.0 ;
->>>>>>> 2f50f54a30f4e90260fb59109f0cca73db2d55a3
-    double start = frc::Timer::GetFPGATimestamp() ;
-    std::cout << "Auto Start time: " << start << std::endl ;
-    std::cout << "Start Encoders: " << left_enc_p->Get() << ", " << right_enc_p->Get() << std::endl ;
-
-    left_p->Set(ControlMode::PercentOutput, 1) ; 
-    right_p->Set(ControlMode::PercentOutput, 1) ;
-
+    double start ; 
     std::chrono::milliseconds ms20(20) ;
-   
+
+    start = frc::Timer::GetFPGATimestamp() ;
+    std::cout << "Phase " << phase << ": start time: " << start << std::endl ;
+    std::cout << "Phase " << phase << ": start encoders: " << left_enc_p->Get() ;
+    std::cout << ", " << right_enc_p->Get() << std::endl ;
+    std::cout << "Phase " << phase << ": left = " << left << " right = " << right << std::endl ;
+
+    //
+    // Phase one - run the right motor for 3 seconds, positive direction
+    //
+    left_p->Set(ControlMode::PercentOutput, left) ; 
+    right_p->Set(ControlMode::PercentOutput, right) ;
+
+    start = frc::Timer::GetFPGATimestamp() ;
     while (IsAutonomous() && frc::Timer::GetFPGATimestamp() - start < duration)
     {
-        double initial_time = frc::Timer::GetFPGATimestamp(); 
-        frc::Wait(0.02) ;
-
-        double delta = frc::Timer::GetFPGATimestamp() - initial_time ;
-        if (delta > 0.025)
-        {
-            std::cout << "Robot loop too long, " << delta << " seconds" << std::endl ;
-        }
+        //
+        // Sleeping for 20ms in this loop basically gives pthreads the ability
+        // to go and run another this while we sleep.  This ensures the control thread
+        // that moves the robot between states gets its fair share of time to run.
+        //
+        std::this_thread::sleep_for(ms20) ;
     }
-    std::cout << "End time " << frc::Timer::GetFPGATimestamp() << std::endl ;
-    std::cout << "End Encoders: " << left_enc_p->Get() << ", " << right_enc_p->Get() << std::endl ;
+    std::cout << "Phase " << phase << ": end time " << frc::Timer::GetFPGATimestamp() << std::endl ;
+    std::cout << "Phase " << phase << ": end encoders: " << left_enc_p->Get()  ;
+    std::cout << ", " << right_enc_p->Get() << std::endl ;
+}
 
-    left_p->Set(ControlMode::PercentOutput, 0) ;
-    right_p->Set(ControlMode::PercentOutput, 0) ; 
+void MyRobot::Autonomous()
+{
+
+
+    runMotors(1, 0.0, 1.0, 2.0) ;
+    runMotors(2, 0.0, 1.0, 2.0) ;
+    runMotors(99, 0.0, 0.0, 2.0) ;
+
+    std::cout << "Reset Encoders" << std::endl ;
+    left_enc_p->Reset() ;
+    right_enc_p->Reset() ;
+
+    runMotors(3, 0.0, -1.0, 2.0) ;
+    runMotors(4, 0.0, -1.0, 2.0) ;
+    runMotors(99, 0.0, 0.0, 2.0) ;
+
+    std::cout << "Reset Encoders" << std::endl ;
+    left_enc_p->Reset() ;
+    right_enc_p->Reset() ;
+
+    runMotors(5, 1.0, 0.0, 2.0) ;
+    runMotors(6, 1.0, 0.0, 2.0) ;
+    runMotors(99, 0.0, 0.0, 2.0) ;
+
+    std::cout << "Reset Encoders" << std::endl ;
+    left_enc_p->Reset() ;
+    right_enc_p->Reset() ;
+
+    runMotors(7, -1.0, 0.0, 2.0) ;
+    runMotors(8, -1.0, 0.0, 2.0) ;
+    runMotors(99, 0.0, 0.0, 2.0) ;    
+
+    std::cout << "Reset Encoders" << std::endl ;
+    left_enc_p->Reset() ;
+    right_enc_p->Reset() ;  
+
+    runMotors(9, 0.0, 0.0, 1.0) ;    
 
     while (IsAutonomous()) ;
     std::cout << "Autonomous mode ending " << frc::Timer::GetFPGATimestamp() << std::endl ;
