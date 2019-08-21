@@ -1,16 +1,30 @@
 #include "CSVData.h"
+#include <sstream>
 
 namespace xero {
     namespace misc {
-        CSVData::CSVData(const std::string & fileName) : fileName_(fileName) {
-            file_ = std::ifstream(fileName, std::ios::binary);
-            didLoad_ = !file_.fail();
+        CSVData::CSVData(const std::string & fileName) : fileName_(fileName) 
+        {
+            std::ifstream file(fileName, std::ios::binary);
+            didLoad_ = !file.fail();
             if (didLoad_)
-                loadData() ;
-            file_.close() ;
+                loadData(file) ;
+            file.close() ;
         }
 
-        void CSVData::loadData() {            
+        CSVData::CSVData(std::istream &strm)
+        {
+            loadData(strm) ;
+        }
+
+        CSVData::CSVData(const std::string &str)
+        {
+            std::stringstream strm(str) ;
+            loadData(strm) ;
+        }
+
+        void CSVData::loadData(std::istream &strm) 
+        {
             if (!didLoad_) return;
             std::array<double, HEADER_COUNT> newdata ;
 
@@ -18,7 +32,7 @@ namespace xero {
             std::string line, word ;
 
             size_t dataIdx ;
-            while (std::getline(file_, line)) {
+            while (std::getline(strm, line)) {
                 ++lineno ;
                 dataIdx = 0 ;
 

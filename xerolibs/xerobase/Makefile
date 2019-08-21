@@ -15,6 +15,7 @@ SOURCES = \
 	TerminateAction.cpp\
 	DispatchAction.cpp\
 	ParallelAction.cpp\
+	NTPathDataWatcher.cpp\
 	Robot.cpp\
 	RobotSubsystem.cpp\
 	Subsystem.cpp\

@@ -4,11 +4,11 @@
 #include "MessageLogger.h"
 #include "SettingsParser.h"
 #include "LoopType.h"
+#include "NTPathDataWatcher.h"
 #include "basegroups.h"
 #include <UdpSender.h>
 #include <XeroPathManager.h>
 #include <frc/SampleRobot.h>
-// #include <frc/PowerDistributionPanel.h>
 #include <memory>
 #include <list>
 #include <string>
@@ -290,6 +290,9 @@ namespace xero {
 
             // The path follower paths for the robot
             std::shared_ptr<xero::misc::XeroPathManager> paths_ ;
+
+            // The watcher for new paths via network tables
+            std::shared_ptr<xero::base::NTPathDataWatcher> watcher_ ;
 
             // The deploy directory for the robot
             std::string deploy_dir_ ;

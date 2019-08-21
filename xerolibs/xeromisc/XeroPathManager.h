@@ -3,6 +3,7 @@
 #include "XeroPath.h"
 #include <string>
 #include <map>
+#include <list>
 #include <memory>
 
 namespace xero {
@@ -14,6 +15,9 @@ namespace xero {
             bool loadPath(const std::string & pathName) ;
             bool hasPath(const std::string & pathName) ;
             std::shared_ptr<XeroPath> getPath(const std::string &pathName) ;
+            std::list<std::string> getNames() ;
+
+            bool replaceData(const std::string &pathName, const std::string &left, const std::string &right) ;
 
         private:
             std::string basedir_;

@@ -16,8 +16,10 @@ namespace xero {
         class CSVData {
         public:
             CSVData(const std::string & fileName) ;
+            CSVData(std::istream &strm) ;
+            CSVData(const std::string &str) ;
 
-            void loadData() ;
+            void loadData(std::istream &strm) ;
 
             const double getData(size_t row, size_t column) {
                 assert(didLoad_) ;

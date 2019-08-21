@@ -210,7 +210,7 @@ namespace xero {
 
             iterations_[index]++ ;
 
-            double elapsed_time = frc::Timer::GetFPGATimestamp() - initial_time > target_loop_time_;
+            double elapsed_time = frc::Timer::GetFPGATimestamp() - initial_time ;
             if (elapsed_time < target_loop_time_) {
                 sleep_time_[index] += target_loop_time_ - elapsed_time ;
                 frc::Wait(target_loop_time_ - elapsed_time);
@@ -273,6 +273,7 @@ namespace xero {
             message_logger_ << ".... loading path files" ;
             message_logger_.endMessage() ;     
             paths_ = std::make_shared<XeroPathManager>(deploy_dir_ + "/output") ;
+            watcher_ = std::make_shared<NTPathDataWatcher>(*paths_) ;
             loadPaths() ;
 
             //
@@ -297,11 +298,24 @@ namespace xero {
             // operations for autonomous.
             //
             auto_controller_ = std::dynamic_pointer_cast<AutoController>(createAutoController()) ;
-            assert(auto_controller_ != nullptr) ;
+            if (auto_controller_ == nullptr)
+            {
+                message_logger_.startMessage(MessageLogger::MessageType::error) ;
+                message_logger_ << "Derived robot did not create an auto mode controller - fatal error." ;
+                message_logger_.endMessage() ;    
+                assert(auto_controller_ != nullptr) ;                               
+            }
 
             teleop_controller_ = createTeleopController() ;
             if (teleop_controller_ == nullptr)
+            {
+                //
+                // If the robot does not create a specific teleop controller, this means that the
+                // default teleop controller is good enough.  The robot will still have to create
+                // and manage the OI subsystem.
+                //
                 teleop_controller_ = std::make_shared<TeleopController>(*this) ;            
+            }
 
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
             message_logger_ << "Robot Initialization complete." ;

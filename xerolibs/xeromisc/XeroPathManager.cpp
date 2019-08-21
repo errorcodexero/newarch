@@ -14,16 +14,25 @@ namespace xero {
         XeroPathManager::XeroPathManager(const std::string &basedir) : basedir_(basedir) {
         }
 
-        bool XeroPathManager::loadPath(const std::string & pathName) {
-            std::string filename = basedir_ + "/" + pathName + leftSuffix ;
-            auto leftData = CSVData(filename);
+        std::list<std::string> XeroPathManager::getNames()
+        {
+            std::list<std::string> names ;
+            for(const auto &pair : paths_)
+                names.push_back(pair.first) ;
+
+            return names ;
+        }
+
+        bool XeroPathManager::replaceData(const std::string &pathName, const std::string &left, const std::string &right)
+        {
+            CSVData leftData(left) ;
+            CSVData rightData(right) ;
+
             if (!leftData.isLoaded()) {
                 std::cerr <<"XeroPathManager: failed loading file '" << filename << "'" << std::endl ;                
                 return false;
             }
 
-            filename = basedir_ + "/" + pathName + rightSuffix ;
-            auto rightData = CSVData(filename);
             if (!rightData.isLoaded()) {
                 std::cerr <<"XeroPathManager: failed loading file '" << filename << "'" << std::endl ;
                 return false;
@@ -40,7 +49,36 @@ namespace xero {
                 return false ;
             }
 
-            // Path weaver has the data wrong, swap the left and right data
+            paths_[pathName] = std::make_shared<XeroPath>(pathName, leftData, rightData);
+            return true ;
+        }
+
+        bool XeroPathManager::loadPath(const std::string & pathName) {
+            std::string filename = basedir_ + "/" + pathName + leftSuffix ;
+            CSVData leftData(filename);
+            if (!leftData.isLoaded()) {
+                std::cerr <<"XeroPathManager: failed loading file '" << filename << "'" << std::endl ;                
+                return false;
+            }
+
+            filename = basedir_ + "/" + pathName + rightSuffix ;
+            CSVData rightData(filename);
+            if (!rightData.isLoaded()) {
+                std::cerr <<"XeroPathManager: failed loading file '" << filename << "'" << std::endl ;
+                return false;
+            }
+
+            if(rightData.size() != leftData.size()) {
+                std::cerr <<"XeroPathManager: failed loading file '" << filename << "' data size mismatch" << std::endl ;                
+                return false;
+            }
+
+            if (leftData.size() == 0)
+            {
+                std::cerr <<"XeroPathManager: failed loading file '" << filename << "' file is empty" << std::endl ;                
+                return false ;
+            }
+
             paths_[pathName] = std::make_shared<XeroPath>(pathName, leftData, rightData);
             return true;
         }
