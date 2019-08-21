@@ -18,7 +18,11 @@ namespace xero {
         TankDriveFollowPathAction::TankDriveFollowPathAction(TankDrive &db, const std::string &name, bool reverse) : TankDriveAction(db)  {
             reverse_ = reverse;
             path_ = db.getRobot().getPathManager()->getPath(name) ;
-            assert(path_ != nullptr) ;
+            if (path_ == nullptr)
+            {
+                std::cerr << "cannot find path '" << name << "'" << std::endl ;
+                assert(path_ != nullptr) ;
+            }
 
             std::string pname = "tankdrive:follower:";
             

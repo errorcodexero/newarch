@@ -126,9 +126,9 @@ endif
 
 ifeq ($(PLATFORM),SIMULATOR)
 deploy:
-	mkdir -p $(TOPDIR)/deploy/$(TARGET)
 	if [ -d "src/main/deploy" ]; then \
-		cp -r src/main/deploy $(TOPDIR)/deploy/$(TARGET) \
+		mkdir -p $(TOPDIR)/deploy/$(TARGET) ;\
+		cp -r src/main/deploy $(TOPDIR)/deploy/$(TARGET) ; \
 	fi
 endif
 
