@@ -52,5 +52,7 @@
 
 #define MSG_GROUP_LINE_FOLLOWER_VERBOSE     (1ull << 15)
 
+#define MSG_GROUP_PATHWATCHER               (1ull << 16)
+
 /// \brief ID to get all messages
 #define MSG_GROUP_ALL                   (0xffffffffffffffffull)

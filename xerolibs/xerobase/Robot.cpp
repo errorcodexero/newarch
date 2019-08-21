@@ -273,7 +273,7 @@ namespace xero {
             message_logger_ << ".... loading path files" ;
             message_logger_.endMessage() ;     
             paths_ = std::make_shared<XeroPathManager>(deploy_dir_ + "/output") ;
-            watcher_ = std::make_shared<NTPathDataWatcher>(*paths_) ;
+            watcher_ = std::make_shared<NTPathDataWatcher>(message_logger_, *paths_) ;
             loadPaths() ;
 
             //
@@ -541,6 +541,7 @@ namespace xero {
             while (IsDisabled()) {
                 updateAutoMode() ;
                 robot_subsystem_->computeState() ;
+                watcher_->update() ;
                 frc::Wait(target_loop_time_) ;              
             }
             

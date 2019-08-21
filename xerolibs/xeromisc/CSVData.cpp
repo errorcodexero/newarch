@@ -3,26 +3,28 @@
 
 namespace xero {
     namespace misc {
-        CSVData::CSVData(const std::string & fileName) : fileName_(fileName) 
+        CSVData::CSVData(const std::string & fileOrData, bool data)
         {
-            std::ifstream file(fileName, std::ios::binary);
-            didLoad_ = !file.fail();
-            if (didLoad_)
-                loadData(file) ;
-            file.close() ;
+            if (!data)
+            {
+                std::ifstream file(fileOrData, std::ios::binary);
+                didLoad_ = !file.fail();
+                if (didLoad_)
+                    loadData(file) ;
+                file.close() ;
+            }
+            else
+            {
+                std::stringstream strm(fileOrData) ;
+                loadData(strm) ;                
+            }
         }
 
         CSVData::CSVData(std::istream &strm)
         {
             loadData(strm) ;
         }
-
-        CSVData::CSVData(const std::string &str)
-        {
-            std::stringstream strm(str) ;
-            loadData(strm) ;
-        }
-
+        
         void CSVData::loadData(std::istream &strm) 
         {
             if (!didLoad_) return;

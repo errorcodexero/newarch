@@ -86,7 +86,13 @@
     "csignal": "cpp",
     "queue": "cpp",
     "xlocmon": "cpp",
-    "xloctime": "cpp"
+    "xloctime": "cpp",
+    "locale": "cpp",
+    "optional": "cpp",
+    "random": "cpp",
+    "stack": "cpp",
+    "xlocbuf": "cpp",
+    "xlocmes": "cpp"
   },
   "C_Cpp.configurationWarnings": "Disabled"
 }

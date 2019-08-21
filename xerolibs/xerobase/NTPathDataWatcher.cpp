@@ -1,4 +1,5 @@
 #include "NTPathDataWatcher.h"
+#include "basegroups.h"
 #include <networktables/NetworkTableInstance.h>
 
 using namespace xero::misc ;
@@ -7,7 +8,7 @@ namespace xero
 {
     namespace base
     {
-        NTPathDataWatcher::NTPathDataWatcher(XeroPathManager &mgr) : mgr_(mgr)
+        NTPathDataWatcher::NTPathDataWatcher(MessageLogger &logger, XeroPathManager &mgr) : mgr_(mgr), logger_(logger)
         {
         }
 
@@ -27,6 +28,10 @@ namespace xero
                 std::string right = table->GetString(name + "_right", "") ;
                 if (left.length() > 0 && right.length() > 0)
                 {
+                    logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PATHWATCHER) ;
+                    logger_ << "updated path '" << name ;
+                    logger_.endMessage() ;   
+
                     mgr_.replaceData(name, left, right) ;
                 }
             }

@@ -25,27 +25,27 @@ namespace xero {
 
         bool XeroPathManager::replaceData(const std::string &pathName, const std::string &left, const std::string &right)
         {
-            CSVData leftData(left) ;
-            CSVData rightData(right) ;
+            CSVData leftData(left, true) ;
+            CSVData rightData(right, true) ;
 
             if (!leftData.isLoaded()) {
-                std::cerr <<"XeroPathManager: failed loading file '" << filename << "'" << std::endl ;                
+                std::cerr <<"XeroPathManager: failed loading path '" << pathName << "' from network table, data is invalid" << std::endl ;                
                 return false;
             }
 
             if (!rightData.isLoaded()) {
-                std::cerr <<"XeroPathManager: failed loading file '" << filename << "'" << std::endl ;
+                std::cerr <<"XeroPathManager: failed loading path '" << pathName << "' from network table, data is invalid" << std::endl ;
                 return false;
             }
 
             if(rightData.size() != leftData.size()) {
-                std::cerr <<"XeroPathManager: failed loading file '" << filename << "' data size mismatch" << std::endl ;                
+                std::cerr <<"XeroPathManager: failed loading path '" << pathName << "' from network table, data size mismatch" << std::endl ;                
                 return false;
             }
 
             if (leftData.size() == 0)
             {
-                std::cerr <<"XeroPathManager: failed loading file '" << filename << "' file is empty" << std::endl ;                
+                std::cerr <<"XeroPathManager: failed loading path '" << pathName << "' from network table, file is empty" << std::endl ;                
                 return false ;
             }
 
@@ -55,14 +55,14 @@ namespace xero {
 
         bool XeroPathManager::loadPath(const std::string & pathName) {
             std::string filename = basedir_ + "/" + pathName + leftSuffix ;
-            CSVData leftData(filename);
+            CSVData leftData(filename, false);
             if (!leftData.isLoaded()) {
                 std::cerr <<"XeroPathManager: failed loading file '" << filename << "'" << std::endl ;                
                 return false;
             }
 
             filename = basedir_ + "/" + pathName + rightSuffix ;
-            CSVData rightData(filename);
+            CSVData rightData(filename, false);
             if (!rightData.isLoaded()) {
                 std::cerr <<"XeroPathManager: failed loading file '" << filename << "'" << std::endl ;
                 return false;
