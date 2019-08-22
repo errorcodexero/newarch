@@ -3,26 +3,20 @@
 
 namespace xero {
     namespace misc {
-        //
-        // Note, this reversal of left and right is intentional.  I am pretty sure that the
-        // PathWeaver is reversing these when writing out the paths (or their nomemclature
-        // is backward and I don't understand it).
-        //
-        constexpr const char* rightSuffix  = ".right.csv";
-        constexpr const char* leftSuffix = ".left.csv";
-
         XeroPathManager::XeroPathManager(const std::string &basedir) : basedir_(basedir) {
+            leftext_ = ".left.pf1.csv" ;
+            rightext_ = ".right.pf1.csv";
         }
 
         bool XeroPathManager::loadPath(const std::string & pathName) {
-            std::string filename = basedir_ + "/" + pathName + leftSuffix ;
+            std::string filename = basedir_ + "/" + pathName + leftext_ ;
             auto leftData = CSVData(filename);
             if (!leftData.isLoaded()) {
                 std::cerr <<"XeroPathManager: failed loading file '" << filename << "'" << std::endl ;                
                 return false;
             }
 
-            filename = basedir_ + "/" + pathName + rightSuffix ;
+            filename = basedir_ + "/" + pathName + rightext_ ;
             auto rightData = CSVData(filename);
             if (!rightData.isLoaded()) {
                 std::cerr <<"XeroPathManager: failed loading file '" << filename << "'" << std::endl ;

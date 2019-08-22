@@ -31,10 +31,17 @@ namespace xero {
             const char *height = "lifter:height:hatch:place:north:1" ;
             std::string path ;
 
+#ifdef OLD_PATH_NAMES
             if (left)
                 path = "CenterHab2CargoFrontLeft" ;
             else            
                 path = "CenterHab2CargoFrontRight" ;
+#else
+            if (left)
+                path = "CenterTwoLeftLS_CenterHab_LeftCargoShip" ;
+            else            
+                path = "CenterTwoRightLS_CenterHab_RightCargoShip" ;
+#endif
 
             insertAutoModeLeg(height, angle, path, false, false, 0.0, 0.2, 60.0) ;
 
@@ -46,10 +53,17 @@ namespace xero {
                 angle = "turntable:angle:hatch:collect:south" ;
                 height = "lifter:height:hatch:collect:south" ;
 
+#ifdef OLD_PATH_NAMES
                 if (left)
                     path = "CargoFrontLeftLSLeft" ;
                 else
                     path = "CargoFrontRightLSRight" ;
+#else
+                if (left)
+                    path = "CenterTwoLeftLS_LeftCargoShip_LeftLS" ;
+                else
+                    path = "CenterTwoRightLS_RightCargoShip_RightLS" ;
+#endif                    
 
                 insertAutoModeLeg(height, angle, path, true, true, 2.0, 0.2, 60.0) ;
 
@@ -60,10 +74,17 @@ namespace xero {
                 const char *height = "lifter:height:hatch:place:north:1" ;
                 std::string path ;
 
+#ifdef OLD_PATH_NAMES
                 if (left)
                     path = "LSLeftCargoFrontRight" ;
                 else
                     path = "LSRightCargoFrontLeft" ;
+#else
+                if (left)
+                    path = "CenterTwoLeftLS_LeftLS_RightCargoShip" ;
+                else
+                    path = "CenterTwoRightLS_RightLS_LeftCargoShip" ;
+#endif
 
                 insertAutoModeLeg(height, angle, path, false, false, 2.0, 0.2, 24.0) ;
 
