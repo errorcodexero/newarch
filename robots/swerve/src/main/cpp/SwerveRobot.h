@@ -1,22 +1,22 @@
 #pragma once
 
-#include <phaserrobotsubsystem/PhaserRobotSubsystem.h>
-#include <tankdrive/TankDrive.h>
+#include "swerverobotsubsystem/SwerveRobotSubsystem.h"
 #include <Robot.h>
-#include <frc/Compressor.h>
+
 
 namespace xero {
-    namespace phaser {
+    namespace swerve {
 
         /// \brief the concrete class that represents the robot Phoenix
-        class Phaser : public xero::base::Robot {
+        class SwerveRobot : public xero::base::Robot {
         public:
-            Phaser() ;
+            SwerveRobot() ;
+            virtual ~SwerveRobot() ;
 
             /// \brief return the robot subsystem cast to the phoenix specific type
             /// \returns the robot subsystem cast to the phoenix specific type
-            std::shared_ptr<PhaserRobotSubsystem> getPhaserRobotSubsystem() {
-                return std::dynamic_pointer_cast<PhaserRobotSubsystem>(getRobotSubsystem()) ;
+            std::shared_ptr<SwerveRobotSubsystem> getSwerveRobotSubsystem() {
+                return std::dynamic_pointer_cast<SwerveRobotSubsystem>(getRobotSubsystem()) ;
             }
 
             virtual void loadPaths() ;
@@ -44,9 +44,6 @@ namespace xero {
             virtual bool isCompBot() ;
 
         private:
-            std::shared_ptr<frc::Compressor> compressor_ ;
-            bool comp_bot_flag_set_ ;
-            bool comp_bot_ ;
         } ;
     }
 }

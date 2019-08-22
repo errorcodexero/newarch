@@ -1,5 +1,6 @@
 #include "SwerveRobot.h"
-#include "swerverobotsubsystem.h"
+#include "swerverobotsubsystem/SwerveRobotSubsystem.h"
+#include "automodes/SwerveAutoModeController.h"
 #include "swerveids.h"
 #include <ActionSequence.h>
 #include <DelayAction.h>
@@ -20,15 +21,18 @@ using namespace xero::base ;
 namespace xero {
     namespace swerve {
 
-        Swerve::Swerve() : xero::base::Robot("phaser", 0.02) {   
-            comp_bot_flag_set_ = false ;
+        SwerveRobot::SwerveRobot() : xero::base::Robot("swerve", 0.02) {   
         }
 
-        bool Swerve::isCompBot() {
+        SwerveRobot::~SwerveRobot()
+        {
+        }
+
+        bool SwerveRobot::isCompBot() {
             return true ;
         }
 
-        void Swerve::enableSpecificMessages() {
+        void SwerveRobot::enableSpecificMessages() {
             MessageLogger& logger = getMessageLogger();
                         
             //
@@ -46,27 +50,27 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_SIMULATOR) ;
         }
         
-        void Swerve::loadPaths() {
+        void SwerveRobot::loadPaths() {
         }
         
-        void Swerve::RobotHardwareInit() {
+        void SwerveRobot::RobotHardwareInit() {
             auto sub_p = std::make_shared<SwerveRobotSubsystem>(*this) ;
-            setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getSwerveDriveBase()) ;
+            setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getSwerveDrive()) ;
         }
 
-        std::shared_ptr<ControllerBase> Swerve::createAutoController() {
+        std::shared_ptr<ControllerBase> SwerveRobot::createAutoController() {
             auto ctrl = std::make_shared<SwerveAutoModeController>(*this) ;
             return ctrl ;
         }
         
-        std::shared_ptr<ControllerBase> Swerve::createTeleopController() {
+        std::shared_ptr<ControllerBase> SwerveRobot::createTeleopController() {
             //
             // The base teleop controller is sufficient
             //
             return std::make_shared<xero::base::TeleopController>(*this) ;
         }
          
-        std::shared_ptr<ControllerBase> Swerve::createTestController() {
+        std::shared_ptr<ControllerBase> SwerveRobot::createTestController() {
             //
             // This is where the test controller is created
             //

@@ -1,16 +1,11 @@
 #pragma once
 
 #include "swerveoi/SwerveOISubsystem.h"
-#include "swervesubsystem/SwerveDriveBase.h"
-#include "lightsensor/LightSensorSubsystem.h"
-#include "phasercameratracker/PhaserCameraTracker.h"
-#include "gamepiecemanipulator/GamePieceManipulator.h"
-#include "climber/Climber.h"
-#include <tankdrive/TankDrive.h>
+#include "swervedrive/SwerveDriveBase.h"
 #include <RobotSubsystem.h>
 
 namespace xero {
-    namespace phaser {
+    namespace swerve {
 
         //
         // Add gamemanipulator
@@ -21,8 +16,8 @@ namespace xero {
             SwerveRobotSubsystem(xero::base::Robot &robot) ;
             virtual ~SwerveRobotSubsystem() ;
 
-            std::shared_ptr<xero::swerve::SwerveDriveBase> getTankDrive() {
-                return std::dynamic_pointer_cast<xero::base::TankDrive>(getDriveBase()) ;
+            std::shared_ptr<xero::base::SwerveDriveBase> getTankDrive() {
+                return db_ ;
             }
           
             std::shared_ptr<SwerveOISubsystem> getOI() {
@@ -30,10 +25,14 @@ namespace xero {
             }    
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
+
+            std::shared_ptr<xero::base::SwerveDriveBase> getSwerveDrive() {
+                return db_ ;
+            }
             
         private:
             std::shared_ptr<SwerveOISubsystem> oi_ ;
-            std::shared_ptr<SwerveDriveBase> db_ ;
+            std::shared_ptr<xero::base::SwerveDriveBase> db_ ;
         } ;
     }
 }

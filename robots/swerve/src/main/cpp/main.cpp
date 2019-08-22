@@ -1,18 +1,17 @@
 #include <iostream>
-#include "Phaser.h"
+#include "SwerveRobot.h"
 
 #ifdef SIMULATOR
-#include <PhaserSimulator.h>
-xero::sim::phaser::PhaserSimulator sim("robotsims/phasersim/sim.dat") ;
+#include <SwerveSimulator.h>
+xero::sim::swerve::SwerveSimulator sim("robotsims/swervesim/sim.dat") ;
 #endif
 
 int main(int ac, char **av)
 {
-
 #ifdef SIMULATOR
-    frc::StartRobot<xero::phaser::Phaser>(ac, av) ;
+    frc::StartRobot<xero::swerve::SwerveRobot>(ac, av) ;
 #else
-    frc::StartRobot<xero::phaser::Phaser>() ;
+    frc::StartRobot<xero::swerve::SwerveRobot>() ;
 #endif
     return 0 ;
 }
