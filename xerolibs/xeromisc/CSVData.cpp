@@ -15,6 +15,7 @@ namespace xero {
             }
             else
             {
+                didLoad_ = true ;
                 std::stringstream strm(fileOrData) ;
                 loadData(strm) ;                
             }
