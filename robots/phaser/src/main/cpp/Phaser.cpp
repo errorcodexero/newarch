@@ -83,6 +83,7 @@ namespace xero {
         void Phaser::loadPaths() {
             auto paths = getPathManager() ;
 
+#ifdef OLD_PATH_NAMES
             // Center two hatch automode left ls
             paths->loadPath("CenterHab2CargoFrontLeft") ;              // CenterHab2CargoFrontRight.pf1.csv
             paths->loadPath("CargoFrontLeftLSLeft") ;                  // CargoFrontRightLSLeft.pf1.csv
@@ -103,7 +104,25 @@ namespace xero {
             paths->loadPath("RightRocketLSRight") ;                     // RightRocketLSRight.pf1.csv
             paths->loadPath("LSRightRocketRight") ;                     // LSRightRocketRight.pf1.csv
 
-            paths->loadPath("Tune") ;
+#else
+            paths->setExtensions("_left.csv", "_right.csv") ;
+
+            paths->loadPath("CenterTwoLeftLS_CenterHab_LeftCargoShip") ;
+            paths->loadPath("CenterTwoLeftLS_LeftCargoShip_LeftLS") ;
+            paths->loadPath("CenterTwoLeftLS_LeftLS_RightCargoShip") ;
+
+            paths->loadPath("CenterTwoRightLS_CenterHab_RightCargoShip") ;
+            paths->loadPath("CenterTwoRightLS_RightCargoShip_RightLS") ;
+            paths->loadPath("CenterTwoRightLS_RightLS_LeftCargoShip") ;
+
+            paths->loadPath("LeftHabLeftRocketTwo_LeftHab_LeftRocketFront") ;
+            paths->loadPath("LeftHabLeftRocketTwo_LeftLS_LeftRocketFront") ;
+            paths->loadPath("LeftHabLeftRocketTwo_LeftRocketFront_LeftLS") ;
+
+            paths->loadPath("RightHabRightRocketTwo_RightHab_RightRocketFront") ;
+            paths->loadPath("RightHabRightRocketTwo_RightLS_RightRocketFront") ;
+            paths->loadPath("RightHabRightRocketTwo_RightRocketFront_RightLS") ;
+#endif
         }
         
         void Phaser::RobotHardwareInit() {

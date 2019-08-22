@@ -30,7 +30,11 @@ namespace xero {
             const char *height = "lifter:height:hatch:place:north:1" ;
             std::string path ;
 
+#ifdef OLD_PATH_NAMES
             path = "RightHABRightRocket" ;
+#else
+            path = "RightHabRightRocketTwo_RightHab_RightRocketFront" ;
+#endif
 
             insertAutoModeLeg(height, angle, path, false, true, 0.0, 0.0, 36.0) ;
             if (second) {
@@ -41,7 +45,11 @@ namespace xero {
                 angle = "turntable:angle:hatch:collect:south" ;
                 height = "lifter:height:hatch:collect:south" ;
 
+#ifdef OLD_PATH_NAMES
                 path = "RightRocketLSRight" ;
+#else
+                path = "RightHabRightRocketTwo_RightRocketFront_RightLS" ;
+#endif
 
                 insertAutoModeLeg(height, angle, path, true, false, 2.0, 0.2, 36.0) ;
 
@@ -51,8 +59,12 @@ namespace xero {
                 const char *angle = "turntable:angle:hatch:place:north" ;
                 const char *height = "lifter:height:hatch:place:north:2" ;
                 std::string path ;
-
+                
+#ifdef OLD_PATH_NAMES
                 path = "LSRightRocketRight" ;
+#else
+                path = "RightHabRightRocketTwo_RightLS_RightRocketFront" ;
+#endif
 
                 insertAutoModeLeg(height, angle, path, false, true, 2.0, 0.2, 18.0) ;
             }
