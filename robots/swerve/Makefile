@@ -1,14 +1,20 @@
 TOPDIR=../..
 
 AUTOMODES = \
+	./src/main/cpp/automodes/SwerveAutoModeController.cpp\
+	./src/main/cpp/automodes/TestSwerveDriveModuleAutomode.cpp
 
 SUBSYSTEMS = \
-	src/main/cpp/swervesubsystem/SwerveDriveBase.cpp\
-	src/main/cpp/swervesubsystem/SwerveTestAction.cpp
+	./src/main/cpp/swervedrive/SwerveDriveBase.cpp\
+	./src/main/cpp/swervedrive/SwerveDriveModuleTestAction.cpp\
+	./src/main/cpp/swervedrive/SwerveModule.cpp\
+	./src/main/cpp/swerveoi/SwerveOIDevice.cpp\
+	./src/main/cpp/swerveoi/SwerveOISubsystem.cpp\
+	./src/main/cpp/swerverobotsubsystem/SwerveRobotSubsystem.cpp
 
 SOURCES = \
-	src/main/cpp/main.cpp\
-	src/main/cpp/SwerveRobot.cpp\
+	./src/main/cpp/main.cpp\
+	./src/main/cpp/SwerveRobot.cpp\
 	$(SUBSYSTEMS)\
 	$(AUTOMODES)
 
@@ -17,7 +23,7 @@ TARGET = swerve
 NEED_WPILIB=true
 NEED_WPIUTIL=true
 NEED_CTRE=true
-NEED_SPARKMAX=true
+NEED_SPARK=true
 NEED_NAVX=true
 NEED_NETWORKTABLES=true
 NEED_XEROMISC=true

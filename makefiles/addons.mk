@@ -146,7 +146,7 @@ endif
 #
 
 #
-# There are for the CTRE libraries
+# These are for the CTRE libraries
 #
 ifeq ($(NEED_CTRE),true)
 
@@ -160,6 +160,29 @@ endif
 ifeq ($(PLATFORM),SIMULATOR)
 CXXFLAGS += -I$(TOPDIR)/simulator/ctresim
 LIBLIST += $(TOPDIR)/simulator/ctresim
+endif
+
+endif
+
+#
+###########################################################################################
+#
+
+#
+# These are for the SPARK MAX libraries
+#
+ifeq ($(NEED_SPARK),true)
+
+# GOPIGO3
+ifeq ($(PLATFORM),GOPIGO)
+CXXFLAGS += -I$(TOPDIR)/gopigo3/spark
+LIBLIST += $(TOPDIR)/gopigo3/spark
+endif
+
+# CYGWIN SIMULATOR
+ifeq ($(PLATFORM),SIMULATOR)
+CXXFLAGS += -I$(TOPDIR)/simulator/spark
+LIBLIST += $(TOPDIR)/simulator/spark
 endif
 
 endif
