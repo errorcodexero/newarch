@@ -1,4 +1,5 @@
 #include "SwerveDriveBase.h"
+#include <iostream>
 
 namespace xero
 {
@@ -6,6 +7,7 @@ namespace xero
     {
         SwerveDriveBase::SwerveDriveBase(Robot &robot, int flr, int fld, int frr, int frd, int blr, int bld, int brr, int brd) : DriveBase(robot, "Swerve")
         {
+            std::cout << "SwerveDriveBase::SwerveDriveBase - creating drive base " << std::endl ;
             fl_ = std::make_shared<SwerveModule>(flr, fld) ;
 
 #ifdef NOTYET

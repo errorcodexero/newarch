@@ -38,9 +38,9 @@ namespace xero {
             //
             // Decide what message groups (incl. subsystems) you want to see
             //       
-            // logger.enableSubsystem(MSG_GROUP_ACTIONS);
-            // logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);               
-            // logger.enableSubsystem(MSG_GROUP_PARSER) ;
+            logger.enableSubsystem(MSG_GROUP_ACTIONS);
+            logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);               
+            logger.enableSubsystem(MSG_GROUP_PARSER) ;
 
             //
             // This should stay on.  It will have no effect on the real robot
@@ -56,6 +56,8 @@ namespace xero {
         void SwerveRobot::RobotHardwareInit() {
             auto sub_p = std::make_shared<SwerveRobotSubsystem>(*this) ;
             setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getSwerveDrive()) ;
+
+            std::cout << "In RobotHardwareInit" << std::endl ;
         }
 
         std::shared_ptr<ControllerBase> SwerveRobot::createAutoController() {

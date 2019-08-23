@@ -4,6 +4,7 @@
 #include "SwerveModule.h"
 #include <DriveBase.h>
 #include <list>
+#include <iostream>
 
 namespace xero
 {
@@ -25,6 +26,11 @@ namespace xero
 
             virtual double getDist() const {
                 return 0.0 ;
+            }
+
+            virtual bool canAcceptAction(ActionPtr action) {
+                std::cout << "Accepting action" << std::endl ;
+                return true ;
             }
 
             SwerveModule &getFL() { return *fl_ ; }

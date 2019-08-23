@@ -13,6 +13,7 @@ namespace xero {
             //
             // Add the drivebase to the robot
             //
+            std::cout << "Creating swerve drive base in subsystem" << std::endl ;
             db_ = std::make_shared<SwerveDriveBase>(robot, 0, 1, 2, 3, 4, 5, 6, 7) ;
             addChild(db_) ;
 

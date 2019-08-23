@@ -14,15 +14,15 @@ namespace xero {
             auto swerverobot = swerve.getSwerveRobotSubsystem() ;
             auto db = swerverobot->getSwerveDrive() ;
 
-            pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 5.0, 0.2, 0.2)) ;
-            pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 5.0, 0.2, -0.2)) ;
-            pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 5.0, -0.2, 0.2)) ;
-            pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 5.0, -0.2, -0.2)) ;
+            pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 5, 0.5, 0.5)) ;
+            //pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 5.0, 0.2, -0.2)) ;
+            //pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 5.0, -0.2, 0.2)) ;
+            //pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 5.0, -0.2, -0.2)) ;
 
-            pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 60.0, 1.0, 1.0)) ;
-            pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 60.0, 1.0, -1.0)) ;
-            pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 60.0, -1.0, 1.0)) ;
-            pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 60.0, -1.0, -1.0)) ;
+            //pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 60.0, 1.0, 1.0)) ;
+            //pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 60.0, 1.0, -1.0)) ;
+            //pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 60.0, -1.0, 1.0)) ;
+            //pushSubActionPair(db, std::make_shared<SwerveDriveModuleTestAction>(*db, 60.0, -1.0, -1.0)) ;
         }
 
         TestSwerveDriveModuleAutomode::~TestSwerveDriveModuleAutomode()

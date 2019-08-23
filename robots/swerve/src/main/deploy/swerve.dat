@@ -1,0 +1,8 @@
+#
+# Basic SWERVE robot params file
+#
+
+hw:driverstation:hid:driver             0
+hw:driverstation:hid:oi                 2
+
+
