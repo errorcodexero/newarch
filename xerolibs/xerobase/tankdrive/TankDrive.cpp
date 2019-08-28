@@ -33,13 +33,13 @@ namespace xero {
             last_dist_l_ = 0.0 ;
             last_dist_r_ = 0.0 ;
 
-#ifdef GOPIGO
-            navx_ = std::make_shared<AHRS>(frc::SerialPort::Port::kUSB) ;
+#ifdef USE_NAVX
+#ifdef GOPIGO       
+            navx_ = std::make_shared<AHRS>(frc::SerialPort::Port::kUSB) ;  
 #else
-            navx_ = std::make_shared<AHRS>(frc::SPI::Port::kMXP) ;        
+            navx_ = std::make_shared<AHRS>(frc::SPI::Port::kMXP) ; 
 #endif
-
-            if (!navx_->IsConnected()) {
+            if (!navx_->IsConnected()) {  
                 auto &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::error) ;
                 logger << "NavX is not connected - cannot perform tankdrive auto functions" ;
@@ -48,7 +48,8 @@ namespace xero {
             }
             else {
                 navx_->Reset() ;
-            }
+            }   
+#endif
 
             double width = settings.getDouble("tankdrive:width") ;
             double scrub = settings.getDouble("tankdrive:scrub") ;
@@ -204,12 +205,13 @@ namespace xero {
                 dist_r_ = ticks_right_ * right_inches_per_tick_ ;
             }
 
+#ifdef USE_NAVX
             if (navx_ != nullptr) {
                 angle = navx_->GetYaw() ;
                 angular_.update(getRobot().getDeltaTime(), angle) ;
                 total_angle_ = navx_->GetAngle() ;
             }
-
+#endif
             left_linear_.update(getRobot().getDeltaTime(), getLeftDistance()) ;
             right_linear_.update(getRobot().getDeltaTime(), getRightDistance()) ;
 
@@ -231,16 +233,19 @@ namespace xero {
             last_dist_l_ = dist_l_ ;
             last_dist_r_ = dist_r_ ;
 
-
+#ifdef USE_NAVX
             if (navx_ != nullptr) {
                 double vx = navx_->GetVelocityX() ;
                 double vy = navx_->GetVelocityY() ;
                 double vz = navx_->GetVelocityZ() ;
-                xyz_velocity_ = std::sqrt(vx * vx + vy * vy + vz * vz) * 39.3701 ;
+                xyz_velocity_ = std::sqrt(vx * vx + vy * vy + vz * vz) * 39.3701 ; 
             }
             else {
                 xyz_velocity_ = 0.0 ;
             }
+#else
+            xyz_velocity_ = 0.0 ;
+#endif
         }
 
         void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
