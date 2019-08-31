@@ -101,7 +101,7 @@ buildlibs:
 cleanlibs:
 	$(QUIET)for libdir in $(ALLLIBLIST) ; do \
 		cd $$libdir ; \
-		make --no-print-directory clean ;\
+		CONFIG=$(CONFIG) PLATFORM=$(PLATFORM) make --no-print-directory clean ;\
 	done
 
 ifeq ($(PLATFORM),GOPIGO)
