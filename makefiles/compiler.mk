@@ -6,6 +6,7 @@ COMPILERSETUP=
 
 ifeq ($(MYCOMPILER),PI)
 CXX = arm-linux-gnueabihf-g++
+AR = arm-linux-gnueabihf-ar
 CXXFLAGS=$(LOCAL_CFLAGS) -Wno-psabi
 COMPILERSETUP=true
 EXEEXT=
