@@ -3,13 +3,14 @@
 #include "automodes/CenterHabTwoHatch.h"
 #include "automodes/LeftRocketTwoHatch.h"
 #include "automodes/RightRocketTwoHatch.h"
-#include "automodes/TankDriveScrubMode.h"
+
 #include "automodes/LifterHeightMode.h"
 #include "Phaser.h"
 
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveScrubCharAction.h>
 #include <tankdrive/FollowPathAutomode.h>
+#include <tankdrive/TankDriveScrubMode.h>
 #include <MessageLogger.h>
 
 #include <frc/DriverStation.h>
