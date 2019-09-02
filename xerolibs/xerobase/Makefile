@@ -6,6 +6,19 @@ TOPDIR=../..
 # they are not compatible with the GoPiGo3 robot.
 #
 
+ifeq ($(PLATFORM),SIMULATOR)
+SIMSOURCES = \
+	lifter/Lifter.cpp\
+	lifter/LifterCalibrateAction.cpp\
+	lifter/LifterGoToHeightAction.cpp\
+	lifter/LifterPowerAction.cpp\
+	singlemotorsubsystem/SingleMotorSubsystem.cpp\
+	singlemotorsubsystem/SingleMotorPowerAction.cpp\
+	cameratracker/CameraTracker.cpp\
+	cameratracker/CameraChangeAction.cpp\
+	lightsensor/LightSensorSubsystem.cpp
+endif
+
 SOURCES = \
 	ActionSequence.cpp\
 	AutoMode.cpp\
@@ -42,15 +55,7 @@ SOURCES = \
 	tankdrive/TankDriveTimedPowerAction.cpp\
 	tankdrive/TankDriveFollowPathAction.cpp\
 	tankdrive/TankDriveScrubCharAction.cpp\
-	lifter/Lifter.cpp\
-	lifter/LifterCalibrateAction.cpp\
-	lifter/LifterGoToHeightAction.cpp\
-	lifter/LifterPowerAction.cpp\
-	singlemotorsubsystem/SingleMotorSubsystem.cpp\
-	singlemotorsubsystem/SingleMotorPowerAction.cpp\
-	cameratracker/CameraTracker.cpp\
-	cameratracker/CameraChangeAction.cpp\
-	lightsensor/LightSensorSubsystem.cpp
+	$(SIMSOURCES)
 
 
 TARGET=xerobase
