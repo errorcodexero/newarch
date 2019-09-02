@@ -141,8 +141,9 @@ namespace xero {
             }          
 
             void startPlotSubsystem() ;
-            int startPlot(const std::string &name, const std::list<std::string> &cols) ;
-            void addPlotData(int id, size_t row, size_t col, double value) ;
+            int initPlot(const std::string &name) ;
+            void startPlot(int id, const std::vector<std::string> &cols) ;
+            void addPlotData(int id, const std::vector<double> &values) ;
             void endPlot(int id) ;
 
             /// \brief return the current controller
@@ -236,6 +237,15 @@ namespace xero {
             void updateAutoMode() ;
             void setupPaths() ;
 
+            std::string getKeyForPlot(int id) ;
+
+            struct plotinfo
+            {
+                std::string name_ ;
+                int cols_ ;
+                size_t index_ ;
+            } ;
+
         private:
             // The time per robot loop in seconds
             double target_loop_time_;
@@ -300,14 +310,19 @@ namespace xero {
             // The log directory for the robot
             std::string log_dir_ ;
 
-            // The UDP sender for plot data
-            std::shared_ptr<xero::misc::UdpSender> sender_ ;    
-
             // The total number of columns for plot data
             int columns_ ;        
 
             // If true, switch from automode to teleop
             bool switch_to_teleop_ ;
+
+            // The name of the plot network table
+            std::string plot_table_ ;
+
+            // The map of plot IDs to active plots
+            std::map<int, plotinfo> active_plots_ ;
+
+            int next_plot_id_ ;
         } ;
     }
 }

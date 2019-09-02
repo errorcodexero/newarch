@@ -3,6 +3,7 @@
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/TankDriveAction.h>
 #include "PhaserCameraTracker.h"
+#include <vector>
 
 namespace xero {
     namespace phaser {
@@ -53,9 +54,7 @@ namespace xero {
             int lost_count_ ;
 
             double start_ ;
-            size_t index_ ;
-            int plotid_ ;
-            static std::list<std::string> plot_columns_ ;             
+            static std::vector<std::string> plot_columns_ ;             
         } ;
     }
 }

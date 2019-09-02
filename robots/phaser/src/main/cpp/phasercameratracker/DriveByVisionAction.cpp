@@ -7,7 +7,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phaser {
-        std::list<std::string> DriveByVisionAction::plot_columns_ = {
+        std::vector<std::string> DriveByVisionAction::plot_columns_ = {
             "time", 
             "tyaw", "ayaw", "error", "adj", "left", "right"
         } ;
@@ -47,15 +47,15 @@ namespace xero {
             state_ = State::DriveYaw ;
             lost_count_ = 0 ;
 
-            plotid_ = getTankDrive().getRobot().startPlot("DriveByVision", plot_columns_) ;            
+            getTankDrive().getRobot().startPlot("DriveByVision", plot_columns_) ;            
             start_ = getTankDrive().getRobot().getTime() ;
-            index_ = 0 ;
         }
 
         void DriveByVisionAction::driveTracking() {
         }
 
         void DriveByVisionAction::driveByYaw() {
+            std::vector<double> data ;
             MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
             double elapsed = getTankDrive().getRobot().getTime() - start_ ;
 
@@ -72,7 +72,7 @@ namespace xero {
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision: action done due to too many lost targets conditions" ;
                     logger.endMessage() ; 
-                    getTankDrive().getRobot().endPlot(plotid_) ;                                            
+                    getTankDrive().getRobot().endPlot() ;                                            
                 }
             }
             else {
@@ -84,7 +84,7 @@ namespace xero {
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision: action done due to being too close" ;
                     logger.endMessage() ;     
-                    getTankDrive().getRobot().endPlot(plotid_) ;                                        
+                    getTankDrive().getRobot().endPlot() ;                                        
                 }
                 else {
 
@@ -102,15 +102,13 @@ namespace xero {
                     double right = yaw_base_power_ - yawadj ;
                     setMotorsToPercents(left, right) ;
 
-                    getTankDrive().getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
-                    getTankDrive().getRobot().addPlotData(plotid_, index_, 1, desired_yaw) ;
-                    getTankDrive().getRobot().addPlotData(plotid_, index_, 2, yaw) ;
-                    getTankDrive().getRobot().addPlotData(plotid_, index_, 3, yawerror) ;
-                    getTankDrive().getRobot().addPlotData(plotid_, index_, 4, yawadj) ;
-                    getTankDrive().getRobot().addPlotData(plotid_, index_, 5, left) ;                    
-                    getTankDrive().getRobot().addPlotData(plotid_, index_, 6, right) ;  
-
-                    index_++ ;    
+                    data.push_back(elapsed) ;
+                    data.push_back(desired_yaw) ;
+                    data.push_back(yaw) ;
+                    data.push_back(yawerror) ;
+                    data.push_back(yawadj) ;
+                    data.push_back(left) ;                    
+                    data.push_back(right) ;  
 
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision:" ;
@@ -150,7 +148,7 @@ namespace xero {
             MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
 
             state_ = State::Done ;
-            getTankDrive().getRobot().endPlot(plotid_) ;
+            getTankDrive().getRobot().endPlot() ;
 
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
             logger << "DriveByVision: action canceled" ;

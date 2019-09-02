@@ -8,7 +8,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        std::list<std::string> TankDriveFollowPathAction::plot_columns_ = {
+        std::vector<std::string> TankDriveFollowPathAction::plot_columns_ = {
             "time", 
             "ltpos", "lapos", "ltvel", "lavel", "ltaccel", "lout","lticks",
             "rtpos", "rapos", "rtvel", "ravel", "rtaccel", "rout","rticks",
@@ -69,10 +69,11 @@ namespace xero {
             logger << ",angerr" ;
             logger << ",turn" ;
             logger.endMessage() ;
-            plotid_ = getTankDrive().getRobot().startPlot(toString(), plot_columns_) ;
+            getTankDrive().getRobot().startPlot(path_->getName(), plot_columns_) ;
         }
 
         void TankDriveFollowPathAction::run() {
+            std::vector<double> data ;
             auto &td = getTankDrive() ;
             auto &rb = td.getRobot() ;
 
@@ -149,34 +150,35 @@ namespace xero {
                 logger << "," << turn ;
                 logger.endMessage() ;
 
-                rb.addPlotData(plotid_, index_, 0, rb.getTime() - start_time_) ;
+                data.clear() ;
+                data.push_back(rb.getTime() - start_time_) ;
 
                 // Left side
-                rb.addPlotData(plotid_, index_, 1, lpos) ;
-                rb.addPlotData(plotid_, index_, 2, td.getLeftDistance() - left_start_) ;
-                rb.addPlotData(plotid_, index_, 3, lvel) ;
-                rb.addPlotData(plotid_, index_, 4, td.getLeftVelocity()) ;
-                rb.addPlotData(plotid_, index_, 5, laccel) ;
-                rb.addPlotData(plotid_, index_, 6, lout) ;
-                rb.addPlotData(plotid_, index_, 7, td.getLeftTickCount()) ;
+                data.push_back(lpos) ;
+                data.push_back(td.getLeftDistance() - left_start_) ;
+                data.push_back(lvel) ;
+                data.push_back(td.getLeftVelocity()) ;
+                data.push_back(laccel) ;
+                data.push_back(lout) ;
+                data.push_back(td.getLeftTickCount()) ;
 
                 // Right side
-                rb.addPlotData(plotid_, index_, 8, rpos) ;
-                rb.addPlotData(plotid_, index_, 9, td.getRightDistance()- right_start_) ;
-                rb.addPlotData(plotid_, index_, 10, rvel) ;
-                rb.addPlotData(plotid_, index_, 11, td.getRightVelocity()) ;
-                rb.addPlotData(plotid_, index_, 12, raccel) ;
-                rb.addPlotData(plotid_, index_, 13, rout) ;
-                rb.addPlotData(plotid_, index_, 14, td.getRightTickCount()) ;
+                data.push_back(rpos) ;
+                data.push_back(td.getRightDistance()- right_start_) ;
+                data.push_back(rvel) ;
+                data.push_back(td.getRightVelocity()) ;
+                data.push_back(raccel) ;
+                data.push_back(rout) ;
+                data.push_back(td.getRightTickCount()) ;
 
                 // Angle data
-                rb.addPlotData(plotid_, index_, 15, thead) ;
-                rb.addPlotData(plotid_, index_, 16, ahead) ;
-                rb.addPlotData(plotid_, index_, 17, turn) ;                
+                data.push_back(thead) ;
+                data.push_back(ahead) ;
+                data.push_back(turn) ;                
             }
             index_++ ;     
             if (index_ == path_->size())
-                rb.endPlot(plotid_) ;                   
+                rb.endPlot() ;                   
         }
 
         bool TankDriveFollowPathAction::isDone() {
@@ -185,7 +187,7 @@ namespace xero {
 
         void TankDriveFollowPathAction::cancel()  {
             index_ = path_->size() ;
-            getTankDrive().getRobot().endPlot(plotid_) ;            
+            getTankDrive().getRobot().endPlot() ;            
         }
 
         std::string TankDriveFollowPathAction::toString() {

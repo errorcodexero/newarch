@@ -3,6 +3,7 @@
 #include "TankDriveAction.h"
 #include "PIDACtrl.h"
 #include <XeroPath.h>
+
 /// \file
 
 
@@ -50,8 +51,7 @@ namespace xero {
             double start_angle_ ;
             double target_start_angle_ ;
 
-            int plotid_ ;
-            static std::list<std::string> plot_columns_ ;            
+            static std::vector<std::string> plot_columns_ ;            
         } ;
     }
 }

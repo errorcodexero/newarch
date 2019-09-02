@@ -5,6 +5,7 @@
 #include <PIDACtrl.h>
 #include <PIDCtrl.h>
 #include <TrapezoidalProfile.h>
+#include <vector>
 
 namespace xero {
     namespace phaser {
@@ -43,10 +44,8 @@ namespace xero {
             xero::misc::PIDCtrl pidctrl_ ;            
             std::shared_ptr<xero::misc::TrapezoidalProfile> profile_ ;
             double start_angle_ ;
-            size_t index_ ;
 
-            int plotid_ ;
-            static std::list<std::string> plot_columns_ ;  
+            static std::vector<std::string> plot_columns_ ;  
         } ;
     }
 }

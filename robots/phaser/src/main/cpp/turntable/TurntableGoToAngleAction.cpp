@@ -10,7 +10,7 @@ using namespace xero::base ;
 
 namespace xero {
     namespace phaser {
-        std::list<std::string> TurntableGoToAngleAction::plot_columns_ = {
+        std::vector<std::string> TurntableGoToAngleAction::plot_columns_ = {
             "time", 
             "tangle", "aangle", "tvel", "avel", "out", "error"
         } ;
@@ -114,8 +114,7 @@ namespace xero {
                     logger << "TurntableGoToAngle: Velocity Profile: " << profile_->toString() ;
                     logger.endMessage() ;                    
 
-                    plotid_ = getTurntable().getRobot().startPlot("TurntableGoToAngle", plot_columns_) ;
-                    index_ = 0 ;
+                    getTurntable().getRobot().startPlot("TurntableGoToAngle", plot_columns_) ;
                 }
             }
         }
@@ -125,6 +124,7 @@ namespace xero {
             MessageLogger &logger = turntable.getRobot().getMessageLogger() ;              
             double dt = turntable.getRobot().getDeltaTime() ;               
             double angle = turntable.getAngleValue() ;
+            std::vector<double> data ;
                         
             if (is_done_) {
                 if (!lost_encoders_) {
@@ -149,7 +149,7 @@ namespace xero {
 
                     is_done_ = true ;
                     turntable.setMotorPower(0.0) ;
-                    turntable.getRobot().endPlot(plotid_) ;
+                    turntable.getRobot().endPlot() ;
 
                     logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
                     logger << "TurntableGoToAngle: action completed sucessfully" ;
@@ -180,15 +180,15 @@ namespace xero {
                         double out = ctrl_->getOutput(tacc, tvel, tdist, traveled, dt) ;
                         turntable.setMotorPower(out) ;
 
-                        turntable.getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
-                        turntable.getRobot().addPlotData(plotid_, index_, 1, tdist + start_angle_) ;
-                        turntable.getRobot().addPlotData(plotid_, index_, 2, traveled + start_angle_) ;
-                        turntable.getRobot().addPlotData(plotid_, index_, 3, tvel) ;
-                        turntable.getRobot().addPlotData(plotid_, index_, 4, speed) ;
-                        turntable.getRobot().addPlotData(plotid_, index_, 5, out) ;
-                        turntable.getRobot().addPlotData(plotid_, index_, 6, error) ;
 
-                        index_++ ;
+                        data.push_back(elapsed) ;
+                        data.push_back(tdist + start_angle_) ;
+                        data.push_back(traveled + start_angle_) ;
+                        data.push_back(tvel) ;
+                        data.push_back(speed) ;
+                        data.push_back(out) ;
+                        data.push_back(error) ;
+                        turntable.getRobot().addPlotData(data) ;
                     }
                 }
             }

@@ -8,7 +8,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        std::list<std::string> LifterGoToHeightAction::plot_columns_ = {
+        std::vector<std::string> LifterGoToHeightAction::plot_columns_ = {
             "time", 
             "tpos", "apos", "tvel", "avel", "out"
         } ;
@@ -85,7 +85,7 @@ namespace xero {
                     start_time_ = getLifter().getRobot().getTime() ;
                     start_height_ = getLifter().getHeight() ;
                     std::string targetstr = std::to_string(target_) ;
-                    plotid_ = getLifter().getRobot().startPlot("LifterGoToHeight-" + targetstr, plot_columns_) ;
+                    getLifter().getRobot().startPlot("LifterGoToHeight-" + targetstr, plot_columns_) ;
                     index_ = 0 ;
 
                     MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
@@ -128,7 +128,7 @@ namespace xero {
 
                     if (std::fabs(delta) < threshold_) {
                         is_done_ = true ;
-                        lifter.getRobot().endPlot(plotid_) ;
+                        lifter.getRobot().endPlot() ;
                         lifter.setMotorPower(0.0) ;
 
                         MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
@@ -137,7 +137,7 @@ namespace xero {
                         logger.endMessage() ;
                         
                     } else {
-                        lifter.getRobot().endPlot(plotid_) ;                    
+                        lifter.getRobot().endPlot() ;                    
                         is_done_ = true ;
                         return ;
 
@@ -160,6 +160,7 @@ namespace xero {
 
                 if (!is_done_)
                 {
+                    std::vector<double> data ;
                     double tdist = profile_->getDistance(elapsed) ;
                     double tvel = profile_->getVelocity(elapsed) ;
                     double tacc = profile_->getAccel(elapsed) ;
@@ -167,12 +168,13 @@ namespace xero {
                     double out = ctrl_->getOutput(tacc, tvel, tdist, traveled, dt) ;
                     lifter.setMotorPower(out) ;
 
-                    lifter.getRobot().addPlotData(plotid_, index_, 0, elapsed) ;
-                    lifter.getRobot().addPlotData(plotid_, index_, 1, tdist + start_height_) ;
-                    lifter.getRobot().addPlotData(plotid_, index_, 2, traveled + start_height_) ;
-                    lifter.getRobot().addPlotData(plotid_, index_, 3, tvel) ;
-                    lifter.getRobot().addPlotData(plotid_, index_, 4, speed) ;
-                    lifter.getRobot().addPlotData(plotid_, index_, 5, out) ;
+                    data.push_back(elapsed) ;
+                    data.push_back(tdist + start_height_) ;
+                    data.push_back(traveled + start_height_) ;
+                    data.push_back(tvel) ;
+                    data.push_back(speed) ;
+                    data.push_back(out) ;
+                    lifter.getRobot().addPlotData(data) ;
 
                     index_++ ;
                 }

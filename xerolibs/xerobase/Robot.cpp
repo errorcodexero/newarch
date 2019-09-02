@@ -50,11 +50,13 @@ namespace xero {
             setupPaths() ;
             srand(time(NULL)) ;
 
-            sender_ = nullptr ;
-
             message_logger_.setTimeFunction(getTimeFunc) ;
 
             switch_to_teleop_ = false ;
+
+            plot_table_ = "XeroPlot" ;
+
+            next_plot_id_ = 1 ;
         }
 #pragma GCC diagnostic pop
 
@@ -550,65 +552,73 @@ namespace xero {
             message_logger_.endMessage() ;
         }
 
-        void Robot::startPlotSubsystem() {
-            static const char *propname = "plotter:port" ;
-            if (getSettingsParser().isDefined(propname)) {
-                int port = getSettingsParser().getInteger(propname) ;
-                sender_ = std::make_shared<UdpSender>() ;
-                if (!sender_->open(port))
-                    sender_ = nullptr ;
-            }
+        std::string Robot::getKeyForPlot(int id)
+        {
+            auto it = active_plots_.find(id) ;
+            assert(it != active_plots_.end()) ;
+
+            return plot_table_ + "/" + active_plots_[id].name_  + "/" ;
         }
 
-        int Robot::startPlot(const std::string &name, const std::list<std::string> &cols) {
-            int id = rand() ;            
-            if (sender_ != nullptr) {
-                columns_ = cols.size() ;
-                std::string data("$start,") ;
-                data += name ;
-                data += "," ;
-                data += std::to_string(id) ;
-                for(const std::string &col: cols)
-                {
-                    data +="," ;
-                    data += col ;
-                }
-                data += "$" ;
-                for(int i = 0 ; i < 2 ; i++)
-                    sender_->send(data) ;
+        int Robot::initPlot(const std::string &name)
+        {
+            for(auto &pair : active_plots_)
+            {
+                if (pair.second.name_ == name)
+                    return -1 ;
             }
-            return id ;
+
+            int id = next_plot_id_++ ;
+            plotinfo info ;
+            info.name_ = name ;
+            active_plots_[id] = info ;
+
+            //
+            // This signals software to watch for data at this location, but that the
+            // data has not been initialized yet
+            //
+            nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
+            auto plottable = inst.GetTable(getKeyForPlot(id)) ;
+            plottable->PutBoolean("inited", false) ;
         }
 
-        void Robot::addPlotData(int id, size_t row, size_t col, double value) {
-            if (sender_ != nullptr) {
-                std::vector<uint8_t> data ;
-                data.push_back(0xFF) ;
-                data.push_back(static_cast<uint8_t>(id >> 24)) ;
-                data.push_back(static_cast<uint8_t>(id >> 16)) ;                
-                data.push_back(static_cast<uint8_t>(id >> 8)) ;                
-                data.push_back(static_cast<uint8_t>(id)) ;
-                data.push_back(static_cast<uint8_t>(row>> 24)) ;
-                data.push_back(static_cast<uint8_t>(row >> 16)) ;                
-                data.push_back(static_cast<uint8_t>(row >> 8)) ;                
-                data.push_back(static_cast<uint8_t>(row)) ;                
-                data.push_back(static_cast<uint8_t>(col)) ;
-                size_t current = data.size() ;
-                data.resize(current + sizeof(double)) ;
-                memcpy(&data[current], reinterpret_cast<void *>(&value), sizeof(value)) ;
-                data.push_back(0xFE) ;
-                sender_->send(data) ;
+        void Robot::startPlot(int id, const std::vector<std::string> &cols) {
+            auto &info = active_plots_[id] ;
+            info.cols_ = cols.size() ;
+            info.index_ = 0 ;
+
+            nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
+            auto plottable = inst.GetTable(getKeyForPlot(id)) ;
+
+            plottable->PutStringArray("columns", cols) ;
+            plottable->PutBoolean("active", true) ;
+            plottable->PutBoolean("inited", true) ;
+        }
+
+        void Robot::addPlotData(int id, const std::vector<double> &values)
+        {
+            auto &info = active_plots_[id] ;
+
+
+            if (values.size() == info.cols_)
+            {
+                std::vector<double> data ;
+                data.push_back(info.index_) ;
+                data.insert(data.end(), values.begin(), valued.end()) ;
+
+                nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
+                auto plottable = inst.GetTable(getKeyForPlot(id)) ;
+                plottable->PutNumberArray("data", data) ;
+
+                info_.index_++ ;
             }
         }        
 
-        void Robot::endPlot(int id) {
-            if (sender_ != nullptr) {
-                std::string data("$end,") ;
-                data += std::to_string(id) ;                
-                data += "$" ;
-                for(int i = 0 ; i < 2 ; i++)
-                    sender_->send(data) ;
-            }
+        void Robot::endPlot(int id)
+        {
+            nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
+            auto plottable = inst.GetTable(getKeyForPlot(id)) ;
+            plottable->PutBoolean("active", false) ;
         }
     }
 }

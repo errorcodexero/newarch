@@ -33,8 +33,7 @@ namespace xero {
             double start_height_ ;
             size_t index_ ;
 
-            int plotid_ ;
-            static std::list<std::string> plot_columns_ ; 
+            static std::vector<std::string> plot_columns_ ; 
             bool relative_ ;               
         } ;
     }

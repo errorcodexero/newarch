@@ -130,9 +130,9 @@ model {
         //     wpi.deps.vendor.cpp(it)
         // }         
 
-        // //
-        // // 2019 Deep Space, Endurance, New Architecture
-        // //
+        //
+        // 2019 Deep Space, Endurance, New Architecture
+        //
         frcUserProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
 			binaries.all {

@@ -2,6 +2,7 @@
 
 #include "TankDriveAction.h"
 #include "TankDrive.h"
+#include <vector>
 
 /// \file
 
@@ -54,9 +55,8 @@ namespace xero {
             double voltage_;
             bool high_gear_ ;
             size_t index_ ;
-            int plotid_ ;
 
-            static std::list<std::string> plot_columns_ ;
+            static std::vector<std::string> plot_columns_ ;
         } ;
     }
 }

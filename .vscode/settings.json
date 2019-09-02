@@ -92,7 +92,8 @@
     "random": "cpp",
     "stack": "cpp",
     "xlocbuf": "cpp",
-    "xlocmes": "cpp"
+    "xlocmes": "cpp",
+    "typeindex": "cpp"
   },
   "C_Cpp.configurationWarnings": "Disabled"
 }

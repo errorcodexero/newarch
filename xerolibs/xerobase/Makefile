@@ -6,6 +6,7 @@ TOPDIR=../..
 # they are not compatible with the GoPiGo3 robot.
 #
 
+
 ifeq ($(PLATFORM),SIMULATOR)
 SIMSOURCES = \
 	lifter/Lifter.cpp\
@@ -56,7 +57,6 @@ SOURCES = \
 	tankdrive/TankDriveFollowPathAction.cpp\
 	tankdrive/TankDriveScrubCharAction.cpp\
 	$(SIMSOURCES)
-
 
 TARGET=xerobase
 
