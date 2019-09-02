@@ -86,9 +86,9 @@ model {
         //     wpi.deps.vendor.cpp(it)
         // }   
 
-        // //
-        // // 2018 Power Up, Phoenix, Old Architecture
-        // //
+        //
+        // 2018 Power Up, Phoenix, Old Architecture
+        //
         // frcUserProgramPhoenixOld(NativeExecutableSpec) {
         //     targetPlatform wpi.platforms.roborio
 		// 	binaries.all {
@@ -190,38 +190,7 @@ model {
         //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
         //     useLibrary(it, "wpilib")
         //     wpi.deps.vendor.cpp(it)
-        // }         
-
-        //
-        // 2016 Stronghold, Grond, New Architecture
-        //
-        // frcUserProgramGrond(NativeExecutableSpec) {
-        //     targetPlatform wpi.platforms.roborio
-		// 	binaries.all {
-		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-		// 		lib library: "xerobase", linkage: "static"
-		// 		lib library: "xeromisc", linkage: "static"                
-		// 	}            
-        //     if (includeDesktopSupport) {
-        //         targetPlatform wpi.platforms.desktop
-        //     }
-
-        //     sources.cpp {
-        //         source {
-        //             srcDir 'robots/grond/src/main/cpp'
-        //             include '**/*.cpp'
-        //         }
-        //         exportedHeaders {
-        //             srcDir 'robots/grond/src/main/cpp'
-        //             include '**/*.h'
-        //         }
-                                
-        //     }
-
-        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-        //     useLibrary(it, "wpilib")
-        //     wpi.deps.vendor.cpp(it)
-        // }       
+        // }            
 
 		xeromisc(NativeLibrarySpec) {
             targetPlatform wpi.platforms.roborio
