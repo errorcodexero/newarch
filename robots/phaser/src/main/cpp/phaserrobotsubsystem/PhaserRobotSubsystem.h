@@ -28,11 +28,11 @@ namespace xero {
                 return oi_ ;
             }    
 
-            std::shared_ptr<xero::base::LightSensorSubsystem> getFrontLineSensor() {
+            std::shared_ptr<LightSensorSubsystem> getFrontLineSensor() {
                 return front_line_sensor_ ;
             }
 
-            std::shared_ptr<xero::base::LightSensorSubsystem> getBackLineSensor() {
+            std::shared_ptr<LightSensorSubsystem> getBackLineSensor() {
                 return back_line_sensor_ ;
             }            
 
@@ -52,8 +52,8 @@ namespace xero {
             
         private:
             std::shared_ptr<PhaserOISubsystem> oi_ ;
-            std::shared_ptr<xero::base::LightSensorSubsystem> front_line_sensor_ ;
-            std::shared_ptr<xero::base::LightSensorSubsystem> back_line_sensor_ ;            
+            std::shared_ptr<LightSensorSubsystem> front_line_sensor_ ;
+            std::shared_ptr<LightSensorSubsystem> back_line_sensor_ ;            
             std::shared_ptr<PhaserCameraTracker> tracker_ ;
             std::shared_ptr<GamePieceManipulator> game_piece_man_ ;
             std::shared_ptr<Climber> climber_ ;

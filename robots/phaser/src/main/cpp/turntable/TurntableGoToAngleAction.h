@@ -44,8 +44,10 @@ namespace xero {
             xero::misc::PIDCtrl pidctrl_ ;            
             std::shared_ptr<xero::misc::TrapezoidalProfile> profile_ ;
             double start_angle_ ;
+            int plot_id_ ;
 
             static std::vector<std::string> plot_columns_ ;  
+
         } ;
     }
 }

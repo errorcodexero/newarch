@@ -4,11 +4,11 @@
 #include "bunnyoi/BunnyOISubsystem.h"
 #include <shooter/ShooterEjectAutoBallAction.h>
 #include <tankdrive/TankDrive.h>
-#include <tankdrive/TankDriveDistanceAction.h>
-#include <tankdrive/TankDriveCharAction.h>
-#include <tankdrive/TankDriveAngleCharAction.h>
-#include <tankdrive/TankDriveAngleAction.h>
-#include <tankdrive/TankDriveTimedPowerAction.h>
+#include <tankdrive/actions/TankDriveDistanceAction.h>
+#include <tankdrive/modes/StraightCharAutoMode.h>
+#include <tankdrive/actions/TankDriveAngleCharAction.h>
+#include <tankdrive/actions/TankDriveAngleAction.h>
+#include <tankdrive/actions/TankDriveTimedPowerAction.h>
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <DelayAction.h>
 #include <ParallelAction.h>
@@ -41,10 +41,6 @@ namespace xero {
                         mode = createDriveStraightChar() ;
                         break ;
 
-                    case 12:
-                        mode = createDriveStraightTest() ;
-                        break ;
-
                     case 13:
                         mode = createShooterTestMode() ;
                         break ;             
@@ -60,20 +56,8 @@ namespace xero {
 
         AutoModePtr BunnyAutoMode::createDriveStraightChar() {
             auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
-            auto seq = std::make_shared<AutoMode>(getRobot().getMessageLogger(), "TankDriveStraightChar") ;
-            auto act = std::make_shared<TankDriveCharAction>(*tankdrive, 2.0, 0.9) ;
-            seq->pushSubActionPair(tankdrive, act) ;
-            return seq ;
-        }
-
-        AutoModePtr BunnyAutoMode::createDriveStraightTest() {
-            auto tankdrive = std::dynamic_pointer_cast<TankDrive>(getRobot().getDriveBase()) ;
-
-            auto seq = std::make_shared<AutoMode>(getRobot().getMessageLogger(), "TankDriveStraight") ;
-            auto act = std::make_shared<TankDriveDistanceAction>(*tankdrive, 276.0) ;           
-            seq->pushSubActionPair(tankdrive, act) ;
-
-            return seq ;
+            auto mode = std::make_shared<StraightCharAutoMode>(*tankdrive, 2.0, 0.9) ;
+            return mode ;
         }
 
         AutoModePtr BunnyAutoMode::createShooterTestMode() {

@@ -2,7 +2,7 @@
 #include "Phaser.h"
 #include <phasercameratracker/PhaserCameraTracker.h>
 #include <cameratracker/CameraChangeAction.h>
-#include <tankdrive/TankDriveTimedPowerAction.h>
+#include <tankdrive/actions/TankDriveTimedPowerAction.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;

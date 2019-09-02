@@ -1,7 +1,7 @@
 #pragma once
 
 #include <tankdrive/TankDrive.h>
-#include <tankdrive/TankDriveAction.h>
+#include <tankdrive/actions/TankDriveAction.h>
 #include "PhaserCameraTracker.h"
 #include <vector>
 
@@ -54,6 +54,7 @@ namespace xero {
             int lost_count_ ;
 
             double start_ ;
+            int plot_id_ ;
             static std::vector<std::string> plot_columns_ ;             
         } ;
     }

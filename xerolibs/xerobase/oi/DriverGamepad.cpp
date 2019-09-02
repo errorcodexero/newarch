@@ -4,8 +4,8 @@
 #include "ActionSequence.h"
 #include "basegroups.h"
 #include "tankdrive/TankDrive.h"
-#include "tankdrive/TankDrivePowerAction.h"
-#include "tankdrive/TankDriveTimedPowerAction.h"
+#include "tankdrive/actions/TankDrivePowerAction.h"
+#include "tankdrive/actions/TankDriveTimedPowerAction.h"
 #include <MessageLogger.h>
 #include <frc/DriverStation.h>
 #include <frc/GenericHID.h>

@@ -18,7 +18,7 @@
 #include "phasercameratracker/DriveByVisionAction.h"
 #include "lifter/LifterPowerAction.h"
 #include "lifter/LifterGoToHeightAction.h"
-#include "tankdrive/LineFollowAction.h"
+#include "lightsensor/LineFollowAction.h"
 #include "phaserrobotsubsystem/PhaserRobotSubsystem.h"
 #include "phaserrobotsubsystem/ClimbAction.h"
 #include "phaserrobotsubsystem/StrafeAction.h"

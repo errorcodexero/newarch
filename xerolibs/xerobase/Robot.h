@@ -140,7 +140,6 @@ namespace xero {
                 return paths_ ;
             }          
 
-            void startPlotSubsystem() ;
             int initPlot(const std::string &name) ;
             void startPlot(int id, const std::vector<std::string> &cols) ;
             void addPlotData(int id, const std::vector<double> &values) ;

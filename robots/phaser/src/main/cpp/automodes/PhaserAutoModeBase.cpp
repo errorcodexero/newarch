@@ -4,8 +4,8 @@
 #include "carloshatch/CarlosHatchImpactAction.h"
 #include <gamepiecemanipulator/WaitForHatch.h>
 #include <tankdrive/TankDrive.h>
-#include <tankdrive/TankDriveFollowPathAction.h>
-#include <tankdrive/LineFollowAction.h>
+#include <tankdrive/actions/TankDriveFollowPathAction.h>
+#include <lightsensor/LineFollowAction.h>
 #include <gamepiecemanipulator/GamePieceManipulator.h>
 #include <gamepiecemanipulator/ReadyAction.h>
 #include <lightsensor/LightSensorSubsystem.h>
@@ -36,7 +36,7 @@ namespace xero {
             auto game = phaser.getPhaserRobotSubsystem()->getGameManipulator() ;           
             auto vision = phaser.getPhaserRobotSubsystem()->getCameraTracker() ;
             auto hatchholder = phaser.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
-            std::shared_ptr<xero::base::LightSensorSubsystem> lines ;
+            std::shared_ptr<LightSensorSubsystem> lines ;
 
             ActionPtr act ;
             std::shared_ptr<ParallelAction> parallel ;

@@ -261,14 +261,6 @@ namespace xero {
             readParamsFile() ;
 
             //
-            // Setup the data plotting
-            //
-            message_logger_.startMessage(MessageLogger::MessageType::info) ;
-            message_logger_ << ".... starting plotting system" ;
-            message_logger_.endMessage() ;               
-            startPlotSubsystem() ;
-
-            //
             // Reading required paths
             //
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
@@ -557,7 +549,9 @@ namespace xero {
             auto it = active_plots_.find(id) ;
             assert(it != active_plots_.end()) ;
 
-            return plot_table_ + "/" + active_plots_[id].name_  + "/" ;
+            auto &info = active_plots_[id] ;
+            std::string key = plot_table_ + "/" + info.name_  + "/" ;
+            return key ;
         }
 
         int Robot::initPlot(const std::string &name)
@@ -580,6 +574,8 @@ namespace xero {
             nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
             auto plottable = inst.GetTable(getKeyForPlot(id)) ;
             plottable->PutBoolean("inited", false) ;
+
+            return id ;
         }
 
         void Robot::startPlot(int id, const std::vector<std::string> &cols) {
@@ -603,14 +599,14 @@ namespace xero {
             if (values.size() == info.cols_)
             {
                 std::vector<double> data ;
-                data.push_back(info.index_) ;
-                data.insert(data.end(), values.begin(), valued.end()) ;
+                data.push_back(static_cast<double>(info.index_)) ;
+                data.insert(data.end(), values.begin(), values.end()) ;
 
                 nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
                 auto plottable = inst.GetTable(getKeyForPlot(id)) ;
                 plottable->PutNumberArray("data", data) ;
 
-                info_.index_++ ;
+                info.index_++ ;
             }
         }        
 

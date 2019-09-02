@@ -1,7 +1,5 @@
 #include "automodes/LifterHeightMode.h"
 #include "Phaser.h"
-#include <tankdrive/TankDrive.h>
-#include <tankdrive/TankDriveScrubCharAction.h>
 #include <lifter/LifterGoToHeightAction.h>
 #include <lifter/LifterPowerAction.h>
 #include <DelayAction.h>

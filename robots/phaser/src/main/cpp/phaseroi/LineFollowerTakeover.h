@@ -11,7 +11,7 @@ namespace xero
         class LineFollowerTakeover : public xero::base::DetectAutoSequence
         {
         public:
-            LineFollowerTakeover(std::shared_ptr<xero::base::TeleopController> teleop, xero::base::ActionPtr seq, xero::base::LightSensorSubsystem &lights) 
+            LineFollowerTakeover(std::shared_ptr<xero::base::TeleopController> teleop, xero::base::ActionPtr seq, LightSensorSubsystem &lights) 
                         : DetectAutoSequence("linefollower", teleop, seq), lights_(lights) {
             }
 
@@ -23,7 +23,7 @@ namespace xero
             }
 
         private:
-            xero::base::LightSensorSubsystem &lights_ ;
+            LightSensorSubsystem &lights_ ;
         };
     }
 }

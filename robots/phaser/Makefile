@@ -33,7 +33,9 @@ SUBSYSTEMS = \
 	src/main/cpp/gamepiecemanipulator/ScoreCargo.cpp\
 	src/main/cpp/gamepiecemanipulator/ReadyAction.cpp\
 	src/main/cpp/gamepiecemanipulator/ResetIntakesAction.cpp\
-	src/main/cpp/gamepiecemanipulator/CalibrateManip.cpp
+	src/main/cpp/gamepiecemanipulator/CalibrateManip.cpp\
+	src/main/cpp/lightsensor/LineFollowAction.cpp\
+	src/main/cpp/lightsensor/LightSensorSubsystem.cpp
 	
 SOURCES = \
 	src/main/cpp/main.cpp\
@@ -53,16 +55,30 @@ NEED_NETWORKTABLES=true
 NEED_XEROMISC=true
 NEED_XEROBASE=true
 NEED_MODELS=true
+DEFAULT_CONFIG=Debug
+DEFAULT_PLATFORM=SIMULATOR
 
 LOCAL_CFLAGS = -Isrc/main/cpp
+
+
+
+SUPPORTED_PLATFORMS=ROBORIO SIMULATOR
+
+ifeq ($(CONFIG),)
+$(info CONFIG is unspecified.  Setting it to default value (${DEFAULT_CONFIG}).)
+CONFIG := $(DEFAULT_CONFIG)
+endif
+
+ifeq ($(PLATFORM),)
+$(info PLATFORM is unspecified.  Setting it to default value (${DEFAULT_PLATFORM}).)
+PLATFORM := $(DEFAULT_PLATFORM)
+endif
 
 ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/phasersim
 	LOCAL_LIBS = $(TOPDIR)/robotsims/phasersim
 	LOCAL_EXTERNAL_LIBS=$(TOPDIR)/external/dinput/dinput8.lib $(TOPDIR)/external/dinput/dxguid.lib -lcurses
 endif
-
-SUPPORTED_PLATFORMS=ROBORIO SIMULATOR
 
 ifeq ($(PLATFORM),GOPIGO)
 $(error This robot is not supported by the GOPIGO platform)

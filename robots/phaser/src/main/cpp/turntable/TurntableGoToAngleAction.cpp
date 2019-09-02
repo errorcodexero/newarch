@@ -26,7 +26,11 @@ namespace xero {
             double maxd = getTurntable().getRobot().getSettingsParser().getDouble("turntable:maxd")  ;                        
             profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
 
-            pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:hold", true) ;       
+            pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:hold", true) ;
+
+            std::string name = "turntable-goto-angle-" ;
+            name += std::to_string(target) ;
+            plot_id_ = getTurntable().getRobot().initPlot(name) ;
         }
 
         TurntableGoToAngleAction::TurntableGoToAngleAction(Turntable &turntable, const std::string &name) : TurntableAction(turntable) {
@@ -41,6 +45,9 @@ namespace xero {
             profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;   
 
             pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:hold", true) ;              
+
+
+            plot_id_ = getTurntable().getRobot().initPlot("turntable-goto-angle-" + name) ;
         }
 
         TurntableGoToAngleAction::~TurntableGoToAngleAction() {
@@ -114,7 +121,7 @@ namespace xero {
                     logger << "TurntableGoToAngle: Velocity Profile: " << profile_->toString() ;
                     logger.endMessage() ;                    
 
-                    getTurntable().getRobot().startPlot("TurntableGoToAngle", plot_columns_) ;
+                    getTurntable().getRobot().startPlot(plot_id_, plot_columns_) ;
                 }
             }
         }
@@ -149,13 +156,15 @@ namespace xero {
 
                     is_done_ = true ;
                     turntable.setMotorPower(0.0) ;
-                    turntable.getRobot().endPlot() ;
+                    turntable.getRobot().endPlot(plot_id_) ;
 
                     logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
                     logger << "TurntableGoToAngle: action completed sucessfully" ;
                     logger.endMessage() ;       
 
+                    getTurntable().getRobot().endPlot(plot_id_) ;
                 }
+                
                 if (!is_done_)
                 {
                     double tdist = profile_->getDistance(elapsed) ;
@@ -188,7 +197,7 @@ namespace xero {
                         data.push_back(speed) ;
                         data.push_back(out) ;
                         data.push_back(error) ;
-                        turntable.getRobot().addPlotData(data) ;
+                        turntable.getRobot().addPlotData(plot_id_, data) ;
                     }
                 }
             }

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+mkdir -p output
+
+pushd phaser
+#make clean
+#make > ../output/phaser.log 2>&1
+popd
+
+pushd gopigo3frc
+make clean
+make > ../output/gopigo3frc.log 2>&1
+popd
+
+pushd gopigo3xerobasic
+make clean
+make > ../output/gopigo3xerobasic.log 2>&1
+popd
+
+pushd gopigo3xerofull
+make clean
+make > ../output/gopigo3xerofull.log  2>&1
+popd
+

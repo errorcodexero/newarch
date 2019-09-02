@@ -16,8 +16,7 @@ SIMSOURCES = \
 	singlemotorsubsystem/SingleMotorSubsystem.cpp\
 	singlemotorsubsystem/SingleMotorPowerAction.cpp\
 	cameratracker/CameraTracker.cpp\
-	cameratracker/CameraChangeAction.cpp\
-	lightsensor/LightSensorSubsystem.cpp
+	cameratracker/CameraChangeAction.cpp
 endif
 
 SOURCES = \
@@ -43,19 +42,18 @@ SOURCES = \
 	oi/OISubsystem.cpp\
 	MessageListener/MessageListener.cpp\
 	tankdrive/TankDrive.cpp\
-	tankdrive/FollowPathAutomode.cpp\
-	tankdrive/LineFollowAction.cpp\
-	tankdrive/TankDriveScrubMode.cpp\
-	tankdrive/StraightCharAutoMode.cpp\
-	tankdrive/TankDriveDistanceAction.cpp\
-	tankdrive/TankDriveVelocityAction.cpp\
-	tankdrive/TankDriveCharAction.cpp\
-	tankdrive/TankDriveAngleAction.cpp\
-	tankdrive/TankDriveAngleCharAction.cpp\
-	tankdrive/TankDrivePowerAction.cpp\
-	tankdrive/TankDriveTimedPowerAction.cpp\
-	tankdrive/TankDriveFollowPathAction.cpp\
-	tankdrive/TankDriveScrubCharAction.cpp\
+	tankdrive/modes/FollowPathAutomode.cpp\
+	tankdrive/modes/TankDriveScrubMode.cpp\
+	tankdrive/modes/StraightCharAutoMode.cpp\
+	tankdrive/actions/TankDriveDistanceAction.cpp\
+	tankdrive/actions/TankDriveVelocityAction.cpp\
+	tankdrive/actions/TankDriveCharAction.cpp\
+	tankdrive/actions/TankDriveAngleAction.cpp\
+	tankdrive/actions/TankDriveAngleCharAction.cpp\
+	tankdrive/actions/TankDrivePowerAction.cpp\
+	tankdrive/actions/TankDriveTimedPowerAction.cpp\
+	tankdrive/actions/TankDriveFollowPathAction.cpp\
+	tankdrive/actions/TankDriveScrubCharAction.cpp\
 	$(SIMSOURCES)
 
 TARGET=xerobase
@@ -67,7 +65,7 @@ NEED_CTRE=true
 NEED_NETWORKTABLES=true
 NEED_XEROMISC=true
 
-LOCAL_CFLAGS = -I.
+LOCAL_CFLAGS = -I. -Itankdrive -Itankdrive/modes -Itankdrive/actions
 
 
 include $(TOPDIR)/makefiles/buildlib.mk

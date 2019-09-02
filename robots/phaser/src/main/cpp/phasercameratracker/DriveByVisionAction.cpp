@@ -21,6 +21,8 @@ namespace xero {
             if (reverse) {
                 yaw_base_power_ = -yaw_base_power_ ;
             }
+
+            plot_id_ = tank_drive.getRobot().initPlot(toString()) ;
         }
 
         std::string DriveByVisionAction::toString(DriveByVisionAction::State st) {
@@ -47,7 +49,7 @@ namespace xero {
             state_ = State::DriveYaw ;
             lost_count_ = 0 ;
 
-            getTankDrive().getRobot().startPlot("DriveByVision", plot_columns_) ;            
+            getTankDrive().getRobot().startPlot(plot_id_, plot_columns_) ;            
             start_ = getTankDrive().getRobot().getTime() ;
         }
 
@@ -72,7 +74,7 @@ namespace xero {
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision: action done due to too many lost targets conditions" ;
                     logger.endMessage() ; 
-                    getTankDrive().getRobot().endPlot() ;                                            
+                    getTankDrive().getRobot().endPlot(plot_id_) ;                                            
                 }
             }
             else {
@@ -84,18 +86,21 @@ namespace xero {
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision: action done due to being too close" ;
                     logger.endMessage() ;     
-                    getTankDrive().getRobot().endPlot() ;                                        
+                    getTankDrive().getRobot().endPlot(plot_id_) ;
                 }
                 else {
 
                     lost_count_ = 0 ;
 
+                    //
+                    // This question is determined by gather data empirically and curve fitting
+                    // to the data to get this equestion.
+                    //
+
                     //double desired_yaw = 0.0031 * dist * dist - 0.3855 * dist + 14.938 ;
                     //double desired_yaw = 0.0039 * dist *dist - 0.4214 * dist + 12.346 ;
                     double desired_yaw = 0.0034 * dist * dist - 0.366 * dist + 11.065 ;
                     double yawerror = yaw - desired_yaw ;
-
-
 
                     double yawadj = yawerror * yaw_p_ ;
                     double left = yaw_base_power_ + yawadj ;
@@ -109,6 +114,7 @@ namespace xero {
                     data.push_back(yawadj) ;
                     data.push_back(left) ;                    
                     data.push_back(right) ;  
+                    getTankDrive().getRobot().addPlotData(plot_id_, data) ;
 
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision:" ;
@@ -148,7 +154,7 @@ namespace xero {
             MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
 
             state_ = State::Done ;
-            getTankDrive().getRobot().endPlot() ;
+            getTankDrive().getRobot().endPlot(plot_id_) ;
 
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
             logger << "DriveByVision: action canceled" ;

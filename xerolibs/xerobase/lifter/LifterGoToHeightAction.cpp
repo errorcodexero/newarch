@@ -25,7 +25,9 @@ namespace xero {
             double maxd = getLifter().getRobot().getSettingsParser().getDouble("lifter:maxd") ;                        
             profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;
 
-            pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold") ;             
+            pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold") ;    
+
+            plot_id_ = getLifter().getRobot().initPlot(toString()) ;         
         }
 
         LifterGoToHeightAction::LifterGoToHeightAction(Lifter &lifter, const std::string &name, bool relative) : LifterAction(lifter) {
@@ -41,7 +43,9 @@ namespace xero {
             double maxd = getLifter().getRobot().getSettingsParser().getDouble("lifter:maxd") ;                        
             profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv) ;     
 
-            pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold") ;                                             
+            pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold") ;
+
+            plot_id_ = getLifter().getRobot().initPlot(toString()) ;
         }
 
         LifterGoToHeightAction::~LifterGoToHeightAction() {
@@ -85,8 +89,7 @@ namespace xero {
                     start_time_ = getLifter().getRobot().getTime() ;
                     start_height_ = getLifter().getHeight() ;
                     std::string targetstr = std::to_string(target_) ;
-                    getLifter().getRobot().startPlot("LifterGoToHeight-" + targetstr, plot_columns_) ;
-                    index_ = 0 ;
+                    getLifter().getRobot().startPlot(plot_id_, plot_columns_) ;
 
                     MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
                     logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
@@ -126,36 +129,9 @@ namespace xero {
                     logger << ", delta = " << delta ;
                     logger.endMessage() ;
 
-                    if (std::fabs(delta) < threshold_) {
-                        is_done_ = true ;
-                        lifter.getRobot().endPlot() ;
-                        lifter.setMotorPower(0.0) ;
-
-                        MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
-                        logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
-                        logger << "LifterGoToHeightAction: action completed sucessfully" ;
-                        logger.endMessage() ;
-                        
-                    } else {
-                        lifter.getRobot().endPlot() ;                    
-                        is_done_ = true ;
-                        return ;
-
-                        //
-                        // We reached the end of the profile, but are not where we
-                        // want to be.  Create a new profile to get us there.
-                        //
-                        profile_->update(delta, speed, 0.0) ;
-                        start_height_ = getLifter().getHeight() ;
-                        start_time_ = getLifter().getRobot().getTime() ;
-                        elapsed = 0 ;
-                        traveled = 0 ;
-
-                        MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
-                        logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
-                        logger << "Did not reach destination, new Lifter Velocity Profile: " << profile_->toString() ;
-                        logger.endMessage() ;                      
-                    }
+                    is_done_ = true ;
+                    lifter.getRobot().endPlot(plot_id_) ;
+                    lifter.setMotorPower(0.0) ;
                 }
 
                 if (!is_done_)
@@ -174,9 +150,7 @@ namespace xero {
                     data.push_back(tvel) ;
                     data.push_back(speed) ;
                     data.push_back(out) ;
-                    lifter.getRobot().addPlotData(data) ;
-
-                    index_++ ;
+                    lifter.getRobot().addPlotData(plot_id_, data) ;
                 }
             }
         }

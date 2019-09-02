@@ -1,7 +1,7 @@
 #include "ClimbAction.h"
 #include <tankdrive/TankDrive.h>
-#include <tankdrive/TankDriveDistanceAction.h>
-#include <tankdrive/TankDriveTimedPowerAction.h>
+#include <tankdrive/actions/TankDriveDistanceAction.h>
+#include <tankdrive/actions/TankDriveTimedPowerAction.h>
 #include "cargointake/CargoIntake.h"
 #include "cargointake/CargoIntakeAction.h"
 #include "climber/Climber.h"
@@ -53,7 +53,6 @@ namespace xero {
 
             switch(state_) {
             case State::ReleaseGrasshopper:
-                std::cout << "ReleaseGrasshopper" << std::endl ;
                 if (deploy_grasshopper_->isDone()) {
                     start_ = subsystem_.getRobot().getTime() ;
                     state_ = State::WaitForDeploy ;
@@ -61,7 +60,6 @@ namespace xero {
                 break ;
 
             case State::WaitForDeploy:
-                std::cout << "WaitForDeploy" << std::endl ;            
                 if (subsystem_.getRobot().getTime() - start_ > deploy_delay_) {
                     auto cargo = subsystem_.getGameManipulator()->getCargoIntake() ;
                     cargo->setAction(extend_cargo_intake_) ;
@@ -74,11 +72,9 @@ namespace xero {
                 break ;
 
             case State::DeployCargoCollector:
-                std::cout << "DeployCargoCollector" << std::endl ;           
                 break ;               
 
             case State::StartWheels:
-                std::cout << "StartWheels" << std::endl ;    
                 if (drivebase_power_->isDone()) {
                     start_ = subsystem_.getRobot().getTime() ;
                     state_ = State::WaitForStopped ;
@@ -86,30 +82,10 @@ namespace xero {
                 break ;
 
             case State::WaitForStopped:
-                std::cout << "WaitForStopped" << std::endl ;               
-#ifdef USE_NAVX
-                velocities_.push_back(db->getXYZVelocity()) ;
-                if (velocities_.size() > velocity_sample_count_)
-                    velocities_.pop_back() ;
-
-                if (velocities_.size() == velocity_sample_count_) {
-                    double maxv = 0.0 ;
-                    for(double d : velocities_) {
-                        if (std::fabs(d) > maxv)
-                            maxv = std::fabs(d) ;
-                    }
-
-                    if (maxv < velocity_still_threshold_) {
-                        state_ = State::Backup ;
-                        db->setAction(drive_back_) ;
-                    }
-                }
-#else
                 if (subsystem_.getRobot().getTime() - start_ > backup_delay_) {
                     db->setAction(drive_back_) ;                    
                     state_ = State::Backup ;
                 }
-#endif
                 break ;
 
             case State::Backup:

@@ -31,10 +31,12 @@ namespace xero {
             xero::misc::PIDCtrl pid_ctrl_ ;            
             double start_time_ ;
             double start_height_ ;
-            size_t index_ ;
+            bool relative_ ;  
+
+            int plot_id_ ;
 
             static std::vector<std::string> plot_columns_ ; 
-            bool relative_ ;               
+             
         } ;
     }
 }

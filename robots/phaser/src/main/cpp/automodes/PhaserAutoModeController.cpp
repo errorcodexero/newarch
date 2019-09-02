@@ -6,11 +6,9 @@
 #include "automodes/LifterHeightMode.h"
 #include "Phaser.h"
 
-#include <tankdrive/TankDriveCharAction.h>
-#include <tankdrive/TankDriveScrubCharAction.h>
-#include <tankdrive/FollowPathAutomode.h>
-#include <tankdrive/TankDriveScrubMode.h>
-#include <tankdrive/StraightCharAutoMode.h>
+#include <tankdrive/modes/FollowPathAutomode.h>
+#include <tankdrive/modes/TankDriveScrubMode.h>
+#include <tankdrive/modes/StraightCharAutoMode.h>
 #include <MessageLogger.h>
 
 #include <frc/DriverStation.h>
