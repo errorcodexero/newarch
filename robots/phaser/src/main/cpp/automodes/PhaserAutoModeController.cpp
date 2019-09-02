@@ -1,15 +1,16 @@
 #include "automodes/PhaserAutoModeController.h"
-#include "automodes/StraightCharAutoMode.h"
 #include "automodes/CenterHabTwoHatch.h"
 #include "automodes/LeftRocketTwoHatch.h"
 #include "automodes/RightRocketTwoHatch.h"
-#include "automodes/TankDriveScrubMode.h"
+
 #include "automodes/LifterHeightMode.h"
 #include "Phaser.h"
 
 #include <tankdrive/TankDriveCharAction.h>
 #include <tankdrive/TankDriveScrubCharAction.h>
 #include <tankdrive/FollowPathAutomode.h>
+#include <tankdrive/TankDriveScrubMode.h>
+#include <tankdrive/StraightCharAutoMode.h>
 #include <MessageLogger.h>
 
 #include <frc/DriverStation.h>
@@ -30,6 +31,8 @@ namespace xero {
 
         void PhaserAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             AutoModePtr mode = nullptr ;
+
+            sel = 8 ;
 
             switch(sel) {
             case 0:
@@ -65,7 +68,7 @@ namespace xero {
                 break ;
 
             case 8:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "Tune_Tune") ;
+                mode = std::make_shared<StraightCharAutoMode>(getRobot(), 0.5, 10.0) ;
                 break ;
 
             case 9:

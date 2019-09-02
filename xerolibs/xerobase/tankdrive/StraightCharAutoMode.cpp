@@ -7,12 +7,12 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        StraightCharAutoMode::StraightCharAutoMode(Robot &robot, double power, double time) : AutoMode(robot, "Characterize the drivebase", "Characterize the drivebase")
+        StraightCharAutoMode::StraightCharAutoMode(Robot &robot, double power, double time, bool highgear) : AutoMode(robot, "Characterize the drivebase", "Characterize the drivebase")
         {            
             auto db = robot.getDriveBase() ;
             auto tank = std::dynamic_pointer_cast<TankDrive>(db) ;
 
-            pushSubActionPair(tank, std::make_shared<TankDriveTimedPowerAction>(*tank, power, power, time, true)) ;
+            pushSubActionPair(tank, std::make_shared<TankDriveCharAction>(*tank, time, power, highgear)) ;
         }
 
         StraightCharAutoMode::~StraightCharAutoMode()
