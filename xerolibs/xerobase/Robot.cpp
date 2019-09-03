@@ -596,7 +596,7 @@ namespace xero {
             auto &info = active_plots_[id] ;
 
 
-            if (values.size() == info.cols_)
+            if (values.size() == static_cast<size_t>(info.cols_))
             {
                 std::vector<double> data ;
                 data.push_back(static_cast<double>(info.index_)) ;

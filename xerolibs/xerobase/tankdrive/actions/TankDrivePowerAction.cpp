@@ -1,5 +1,5 @@
 #include "TankDrivePowerAction.h"
-#include "TankDrive.h"
+#include <tankdrive/TankDrive.h>
 #include "Robot.h"
 
 namespace xero {
