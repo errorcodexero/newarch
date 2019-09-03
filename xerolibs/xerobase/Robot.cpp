@@ -550,7 +550,7 @@ namespace xero {
             assert(it != active_plots_.end()) ;
 
             auto &info = active_plots_[id] ;
-            std::string key = plot_table_ + "/" + info.name_  + "/" ;
+            std::string key = plot_table_ + "/" + info.name_  ;
             return key ;
         }
 
@@ -595,17 +595,12 @@ namespace xero {
         {
             auto &info = active_plots_[id] ;
 
-
             if (values.size() == info.cols_)
             {
-                std::vector<double> data ;
-                data.push_back(static_cast<double>(info.index_)) ;
-                data.insert(data.end(), values.begin(), values.end()) ;
-
                 nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
                 auto plottable = inst.GetTable(getKeyForPlot(id)) ;
-                plottable->PutNumberArray("data", data) ;
-
+                std::string name = "data/" + std::to_string(info.index_) ;
+                plottable->PutNumberArray(name, values) ;
                 info.index_++ ;
             }
         }        

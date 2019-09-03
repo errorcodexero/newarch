@@ -165,15 +165,10 @@ namespace xero {
         }
 
         void TankDriveModel::run(double dt) {
-            double average = (left_power_ + right_power_) / 2.0 ;
-
-            if (std::fabs(left_power_) > 0.01 || std::fabs(right_power_) > 0.01)
-                average += 1.0 ;
-
             //
             // Calculate the new desired revolutions per second (RPS)
             //
-            double desired_left_rps = left_power_ * left_rps_per_power_per_time_ ;
+            double desired_left_rps = -left_power_ * left_rps_per_power_per_time_ ;
             double desired_right_rps = right_power_ * right_rps_per_power_per_time_ ;
 
             //
