@@ -595,7 +595,7 @@ namespace xero {
         {
             auto &info = active_plots_[id] ;
 
-            if (values.size() == info.cols_)
+            if (values.size() == static_cast<size_t>(info.cols_))
             {
                 nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
                 auto plottable = inst.GetTable(getKeyForPlot(id)) ;
