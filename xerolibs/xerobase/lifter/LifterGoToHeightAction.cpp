@@ -27,7 +27,7 @@ namespace xero {
 
             pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold") ;    
 
-            plot_id_ = getLifter().getRobot().initPlot(toString()) ;         
+            plot_id_ = getLifter().initPlot(toString()) ;         
         }
 
         LifterGoToHeightAction::LifterGoToHeightAction(Lifter &lifter, const std::string &name, bool relative) : LifterAction(lifter) {
@@ -45,7 +45,7 @@ namespace xero {
 
             pid_ctrl_.initFromSettingsExtended(lifter.getRobot().getSettingsParser(), "lifter:hold") ;
 
-            plot_id_ = getLifter().getRobot().initPlot(toString()) ;
+            plot_id_ = getLifter().initPlot(toString()) ;
         }
 
         LifterGoToHeightAction::~LifterGoToHeightAction() {
@@ -89,7 +89,7 @@ namespace xero {
                     start_time_ = getLifter().getRobot().getTime() ;
                     start_height_ = getLifter().getHeight() ;
                     std::string targetstr = std::to_string(target_) ;
-                    getLifter().getRobot().startPlot(plot_id_, plot_columns_) ;
+                    getLifter().startPlot(plot_id_, plot_columns_) ;
 
                     MessageLogger &logger = lifter.getRobot().getMessageLogger() ;
                     logger.startMessage(MessageLogger::MessageType::debug, getLifter().getMsgID()) ;
@@ -130,7 +130,7 @@ namespace xero {
                     logger.endMessage() ;
 
                     is_done_ = true ;
-                    lifter.getRobot().endPlot(plot_id_) ;
+                    lifter.endPlot(plot_id_) ;
                     lifter.setMotorPower(0.0) ;
                 }
 
@@ -150,7 +150,7 @@ namespace xero {
                     data.push_back(tvel) ;
                     data.push_back(speed) ;
                     data.push_back(out) ;
-                    lifter.getRobot().addPlotData(plot_id_, data) ;
+                    lifter.addPlotData(plot_id_, data) ;
                 }
             }
         }

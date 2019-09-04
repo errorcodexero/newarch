@@ -6,7 +6,7 @@
 #include "LoopType.h"
 #include "NTPathDataWatcher.h"
 #include "basegroups.h"
-#include <UdpSender.h>
+#include "PlotManager.h"
 #include <XeroPathManager.h>
 #include <frc/SampleRobot.h>
 #include <memory>
@@ -23,7 +23,6 @@ namespace xero {
         //
         // Forward reference to the Subsystem class
         //
-        class Subsystem ;
         class ControllerBase ;
         class AutoController ;
         class DriveBase ;
@@ -93,6 +92,11 @@ namespace xero {
                 return message_logger_ ;
             }
 
+            /// \brief Return a reference to the plot manager
+            PlotManager &getPlotManager() {
+                return plot_mgr_ ;
+            }
+
             /// \brief Return the target loop time for the robot
             /// \returns the target loop time for the robot
             double getTargetLoopTime() {
@@ -140,10 +144,6 @@ namespace xero {
                 return paths_ ;
             }          
 
-            int initPlot(const std::string &name) ;
-            void startPlot(int id, const std::vector<std::string> &cols) ;
-            void addPlotData(int id, const std::vector<double> &values) ;
-            void endPlot(int id) ;
 
             /// \brief return the current controller
             std::shared_ptr<ControllerBase> getCurrentController() {
@@ -173,7 +173,7 @@ namespace xero {
             /// \param sub the subsystem to add to the robot
             /// \param oi the subsystem for the OI
             /// \param db the subsystem for the drive base
-            void setRobotSubsystem(SubsystemPtr sub, std::shared_ptr<OISubsystem> oi, std::shared_ptr<DriveBase> db) {
+            void setRobotSubsystem(std::shared_ptr<Subsystem> sub, std::shared_ptr<OISubsystem> oi, std::shared_ptr<DriveBase> db) {
                 robot_subsystem_ = sub ;
                 drivebase_subsystem_ = db ;
                 oi_subsystem_ = oi ;
@@ -235,15 +235,6 @@ namespace xero {
             void displayAutoModeState() ;
             void updateAutoMode() ;
             void setupPaths() ;
-
-            std::string getKeyForPlot(int id) ;
-
-            struct plotinfo
-            {
-                std::string name_ ;
-                int cols_ ;
-                size_t index_ ;
-            } ;
 
         private:
             // The time per robot loop in seconds
@@ -315,13 +306,8 @@ namespace xero {
             // If true, switch from automode to teleop
             bool switch_to_teleop_ ;
 
-            // The name of the plot network table
-            std::string plot_table_ ;
-
-            // The map of plot IDs to active plots
-            std::map<int, plotinfo> active_plots_ ;
-
-            int next_plot_id_ ;
+            // The plot manager
+            PlotManager plot_mgr_ ;
         } ;
     }
 }

@@ -6,6 +6,7 @@
 #include <map>
 #include <list>
 #include <string>
+#include <vector>
 
 /// \file
 
@@ -16,11 +17,7 @@ namespace xero {
         // Forward declaration of the robot class.
         //
         class Robot ;
-        class Subsystem ;
 
-        /// \brief convience definition
-        typedef std::shared_ptr<Subsystem> SubsystemPtr ;
-        
         /// \brief The base class for any subsystem in the system.
         class Subsystem {
         public: 
@@ -40,7 +37,7 @@ namespace xero {
 
             /// \brief add a subsystem as a child of the current subsystem
             /// \param child the subsystem to add as a child to the current subsystem
-            void addChild(SubsystemPtr child) {
+            void addChild(std::shared_ptr<Subsystem> child) {
                 children_.push_back(child) ;
             }
 
@@ -109,6 +106,14 @@ namespace xero {
                 for(auto child : children_)
                     child->postHWInit() ;
             }
+            
+            int initPlot(const std::string &name)  ;
+
+            void startPlot(int id, const std::vector<std::string> &cols) ;
+
+            void addPlotData(int id, const std::vector<double> &values) ;
+
+            void endPlot(int id) ;
 
         protected:
             /// \brief check that a Action is valid for a subsystem
@@ -134,12 +139,15 @@ namespace xero {
             //
             ActionPtr action_;
 
+            //
+            // A pending action, waiting on the current action to finish
+            //
             ActionPtr pending_ ;
 
             //
             // The set of child subsystems
             //
-            std::list<SubsystemPtr> children_ ;
+            std::list<std::shared_ptr<Subsystem>> children_ ;
         } ;
 
         typedef std::shared_ptr<Subsystem> SubsystemPtr ;

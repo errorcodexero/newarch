@@ -35,7 +35,7 @@ namespace xero {
             turn_correction_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:turn_correction") ;
             angle_correction_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:angle_correction") ;
 
-            plot_id_ = db.getRobot().initPlot(toString()) ;
+            plot_id_ = db.initPlot(toString()) ;
         }
 
         TankDriveFollowPathAction::~TankDriveFollowPathAction() {                
@@ -71,7 +71,7 @@ namespace xero {
             logger << ",angerr" ;
             logger << ",turn" ;
             logger.endMessage() ;
-            getTankDrive().getRobot().startPlot(plot_id_, plot_columns_) ;
+            getTankDrive().startPlot(plot_id_, plot_columns_) ;
         }
 
         void TankDriveFollowPathAction::run() {
@@ -182,11 +182,11 @@ namespace xero {
                 data.push_back(ahead) ;
                 data.push_back(turn) ;
 
-                getTankDrive().getRobot().addPlotData(plot_id_, data) ;
+                getTankDrive().addPlotData(plot_id_, data) ;
             }
             index_++ ;     
             if (index_ == path_->size())
-                rb.endPlot(plot_id_) ;
+                getTankDrive().endPlot(plot_id_) ;
         }
 
         bool TankDriveFollowPathAction::isDone() {
@@ -195,7 +195,7 @@ namespace xero {
 
         void TankDriveFollowPathAction::cancel()  {
             index_ = path_->size() ;
-            getTankDrive().getRobot().endPlot(plot_id_) ;
+            getTankDrive().endPlot(plot_id_) ;
         }
 
         std::string TankDriveFollowPathAction::toString() {

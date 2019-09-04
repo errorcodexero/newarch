@@ -30,6 +30,7 @@ SOURCES = \
 	ParallelAction.cpp\
 	NTPathDataWatcher.cpp\
 	Robot.cpp\
+	PlotManager.cpp\
 	RobotSubsystem.cpp\
 	Subsystem.cpp\
 	TCS34725ColorSensor.cpp\

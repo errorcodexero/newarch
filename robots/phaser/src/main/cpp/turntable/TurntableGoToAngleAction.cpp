@@ -30,7 +30,7 @@ namespace xero {
 
             std::string name = "turntable-goto-angle-" ;
             name += std::to_string(target) ;
-            plot_id_ = getTurntable().getRobot().initPlot(name) ;
+            plot_id_ = getTurntable().initPlot(name) ;
         }
 
         TurntableGoToAngleAction::TurntableGoToAngleAction(Turntable &turntable, const std::string &name) : TurntableAction(turntable) {
@@ -47,7 +47,7 @@ namespace xero {
             pidctrl_.initFromSettingsExtended(getTurntable().getRobot().getSettingsParser(), "turntable:hold", true) ;              
 
 
-            plot_id_ = getTurntable().getRobot().initPlot("turntable-goto-angle-" + name) ;
+            plot_id_ = getTurntable().initPlot("turntable-goto-angle-" + name) ;
         }
 
         TurntableGoToAngleAction::~TurntableGoToAngleAction() {
@@ -121,7 +121,7 @@ namespace xero {
                     logger << "TurntableGoToAngle: Velocity Profile: " << profile_->toString() ;
                     logger.endMessage() ;                    
 
-                    getTurntable().getRobot().startPlot(plot_id_, plot_columns_) ;
+                    getTurntable().startPlot(plot_id_, plot_columns_) ;
                 }
             }
         }
@@ -156,13 +156,13 @@ namespace xero {
 
                     is_done_ = true ;
                     turntable.setMotorPower(0.0) ;
-                    turntable.getRobot().endPlot(plot_id_) ;
+                    turntable.endPlot(plot_id_) ;
 
                     logger.startMessage(MessageLogger::MessageType::debug, turntable.getMsgID()) ;
                     logger << "TurntableGoToAngle: action completed sucessfully" ;
                     logger.endMessage() ;       
 
-                    getTurntable().getRobot().endPlot(plot_id_) ;
+                    getTurntable().endPlot(plot_id_) ;
                 }
                 
                 if (!is_done_)
@@ -197,7 +197,7 @@ namespace xero {
                         data.push_back(speed) ;
                         data.push_back(out) ;
                         data.push_back(error) ;
-                        turntable.getRobot().addPlotData(plot_id_, data) ;
+                        turntable.addPlotData(plot_id_, data) ;
                     }
                 }
             }

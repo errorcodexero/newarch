@@ -17,6 +17,22 @@ namespace xero {
         Subsystem::~Subsystem() {
         }
 
+        int Subsystem::initPlot(const std::string &name) {
+            return getRobot().getPlotManager().initPlot(name) ;
+        }
+
+        void Subsystem::startPlot(int id, const std::vector<std::string> &cols) {
+            getRobot().getPlotManager().startPlot(id, cols) ;
+        }
+
+        void Subsystem::addPlotData(int id, const std::vector<double> &values) {
+            getRobot().getPlotManager().addPlotData(id, values) ;
+        }
+
+        void Subsystem::endPlot(int id) {
+            getRobot().getPlotManager().endPlot(id) ;
+        }
+
         void Subsystem::run() {
             for(auto sub: children_) {
                 sub->run() ;

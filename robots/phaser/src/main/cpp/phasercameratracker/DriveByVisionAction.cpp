@@ -22,7 +22,7 @@ namespace xero {
                 yaw_base_power_ = -yaw_base_power_ ;
             }
 
-            plot_id_ = tank_drive.getRobot().initPlot(toString()) ;
+            plot_id_ = tank_drive.initPlot(toString()) ;
         }
 
         std::string DriveByVisionAction::toString(DriveByVisionAction::State st) {
@@ -49,7 +49,7 @@ namespace xero {
             state_ = State::DriveYaw ;
             lost_count_ = 0 ;
 
-            getTankDrive().getRobot().startPlot(plot_id_, plot_columns_) ;            
+            getTankDrive().startPlot(plot_id_, plot_columns_) ;            
             start_ = getTankDrive().getRobot().getTime() ;
         }
 
@@ -74,7 +74,7 @@ namespace xero {
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision: action done due to too many lost targets conditions" ;
                     logger.endMessage() ; 
-                    getTankDrive().getRobot().endPlot(plot_id_) ;                                            
+                    getTankDrive().endPlot(plot_id_) ;                                            
                 }
             }
             else {
@@ -86,7 +86,7 @@ namespace xero {
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision: action done due to being too close" ;
                     logger.endMessage() ;     
-                    getTankDrive().getRobot().endPlot(plot_id_) ;
+                    getTankDrive().getRobot().getPlotManager().endPlot(plot_id_) ;
                 }
                 else {
 
@@ -114,7 +114,7 @@ namespace xero {
                     data.push_back(yawadj) ;
                     data.push_back(left) ;                    
                     data.push_back(right) ;  
-                    getTankDrive().getRobot().addPlotData(plot_id_, data) ;
+                    getTankDrive().addPlotData(plot_id_, data) ;
 
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision:" ;
@@ -154,7 +154,7 @@ namespace xero {
             MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
 
             state_ = State::Done ;
-            getTankDrive().getRobot().endPlot(plot_id_) ;
+            getTankDrive().endPlot(plot_id_) ;
 
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
             logger << "DriveByVision: action canceled" ;

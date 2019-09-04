@@ -14,7 +14,7 @@ namespace xero {
             voltage_ = voltage ;
             high_gear_ = highgear ;
 
-            plot_id_ = getTankDrive().getRobot().initPlot(toString()) ;
+            plot_id_ = getTankDrive().initPlot(toString()) ;
         }
 
         TankDriveCharAction::TankDriveCharAction(TankDrive &drive, const std::string &name, const std::string &voltage, bool highgear) : TankDriveAction(drive) {
@@ -22,7 +22,7 @@ namespace xero {
             voltage_ = getTankDrive().getRobot().getSettingsParser().getDouble(voltage) ;
             high_gear_ = highgear ;
 
-            plot_id_ = getTankDrive().getRobot().initPlot(toString()) ;
+            plot_id_ = getTankDrive().initPlot(toString()) ;
         }       
         
         TankDriveCharAction::~TankDriveCharAction() {           
@@ -45,19 +45,18 @@ namespace xero {
             logger.endMessage() ;
 
             index_ = 0 ;
-            getTankDrive().getRobot().startPlot(plot_id_, plot_columns_) ;           
+            getTankDrive().startPlot(plot_id_, plot_columns_) ;           
         }
 
         void TankDriveCharAction::run() {
             std::vector<double> data ;
-            Robot &rb = getTankDrive().getRobot() ;            
 
             if (!is_done_) {
                 double now = frc::Timer::GetFPGATimestamp() ;
                 if (now - start_time_ >= duration_) {
                     is_done_ = true ;
                     setMotorsToPercents(0.0, 0.0) ;
-                    rb.endPlot(plot_id_) ;
+                    getTankDrive().endPlot(plot_id_) ;
                 } else {
                     auto &logger = getTankDrive().getRobot().getMessageLogger() ;
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
@@ -77,7 +76,7 @@ namespace xero {
                     data.push_back(getTankDrive().getLeftTickCount()) ;
                     data.push_back(getTankDrive().getRightTickCount()) ;
                     data.push_back(voltage_) ;
-                    getTankDrive().getRobot().addPlotData(plot_id_, data) ;
+                    getTankDrive().addPlotData(plot_id_, data) ;
 
                     index_++ ;
 
