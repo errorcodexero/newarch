@@ -30,7 +30,7 @@
 #
 # Start up conditions
 #
-0.1,oi,automode,30                                    # Automode switch set to zero
+0.1,oi,automode,70                                    # Automode switch set to zero
 
 0.1,tankdrive,xpos,6500                                 # Start center hab platform
 0.1,tankdrive,ypos,16300                                # Start center hab platform

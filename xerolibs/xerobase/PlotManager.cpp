@@ -7,7 +7,7 @@ namespace xero {
     namespace base {
         PlotManager::PlotManager()
         {
-            plot_table_ = "XeroPlot" ;
+            plot_table_ = "/XeroPlot" ;
             next_plot_id_ = 1 ;
         }
 
@@ -22,6 +22,7 @@ namespace xero {
 
             auto &info = active_plots_[id] ;
             std::string key = plot_table_ + "/" + info.name_  ;
+
             return key ;
         }
 
@@ -30,20 +31,24 @@ namespace xero {
             for(auto &pair : active_plots_)
             {
                 if (pair.second.name_ == name)
-                    return -1 ;
+                {
+                    return pair.first ;
+                }
             }
 
             int id = next_plot_id_++ ;
             plotinfo info ;
             info.name_ = name ;
+            info.index_ = id ;
             active_plots_[id] = info ;
 
             //
             // This signals software to watch for data at this location, but that the
             // data has not been initialized yet
             //
+            std::string tbname = getKeyForPlot(id) ;
             nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
-            auto plottable = inst.GetTable(getKeyForPlot(id)) ;
+            auto plottable = inst.GetTable(tbname) ;
             plottable->PutBoolean("inited", false) ;
 
             return id ;
@@ -55,7 +60,8 @@ namespace xero {
             info.index_ = 0 ;
 
             nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
-            auto plottable = inst.GetTable(getKeyForPlot(id)) ;
+            std::string tbname = getKeyForPlot(id) ;
+            auto plottable = inst.GetTable(tbname) ;
 
             plottable->PutStringArray("columns", cols) ;
             plottable->PutBoolean("active", true) ;
@@ -69,17 +75,19 @@ namespace xero {
             if (values.size() == static_cast<size_t>(info.cols_))
             {
                 nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
-                auto plottable = inst.GetTable(getKeyForPlot(id)) ;
+                std::string tbname = getKeyForPlot(id) ;
+                auto plottable = inst.GetTable(tbname) ;
                 std::string name = "data/" + std::to_string(info.index_) ;
                 plottable->PutNumberArray(name, values) ;
                 info.index_++ ;
             }
-        }        
+        }
 
         void PlotManager::endPlot(int id)
         {
             nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
-            auto plottable = inst.GetTable(getKeyForPlot(id)) ;
+            std::string tbname = getKeyForPlot(id) ;
+            auto plottable = inst.GetTable(tbname) ;
             plottable->PutBoolean("active", false) ;
         }
     }

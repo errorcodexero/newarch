@@ -74,6 +74,7 @@ namespace xero {
             }
 
             paths_[pathName] = std::make_shared<XeroPath>(pathName, leftData, rightData);
+            std::cout << "Loaded path '" << pathName << "'" << std::endl ;
             return true;
         }
 
