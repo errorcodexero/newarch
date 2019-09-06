@@ -31,25 +31,13 @@ namespace xero {
             for(auto &pair : active_plots_)
             {
                 if (pair.second.name_ == name)
-                {
                     return pair.first ;
-                }
             }
 
             int id = next_plot_id_++ ;
             plotinfo info ;
             info.name_ = name ;
-            info.index_ = id ;
             active_plots_[id] = info ;
-
-            //
-            // This signals software to watch for data at this location, but that the
-            // data has not been initialized yet
-            //
-            std::string tbname = getKeyForPlot(id) ;
-            nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
-            auto plottable = inst.GetTable(tbname) ;
-            plottable->PutBoolean("inited", false) ;
 
             return id ;
         }
@@ -64,8 +52,7 @@ namespace xero {
             auto plottable = inst.GetTable(tbname) ;
 
             plottable->PutStringArray("columns", cols) ;
-            plottable->PutBoolean("active", true) ;
-            plottable->PutBoolean("inited", true) ;
+            plottable->PutNumber("points", 0) ;
         }
 
         void PlotManager::addPlotData(int id, const std::vector<double> &values)
@@ -80,15 +67,17 @@ namespace xero {
                 std::string name = "data/" + std::to_string(info.index_) ;
                 plottable->PutNumberArray(name, values) ;
                 info.index_++ ;
+                plottable->PutNumber("points", info.index_) ;
             }
         }
 
         void PlotManager::endPlot(int id)
         {
+            auto &info = active_plots_[id] ;
             nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
             std::string tbname = getKeyForPlot(id) ;
             auto plottable = inst.GetTable(tbname) ;
-            plottable->PutBoolean("active", false) ;
+            plottable->PutNumber("points", info.index_) ;
         }
     }
 }
