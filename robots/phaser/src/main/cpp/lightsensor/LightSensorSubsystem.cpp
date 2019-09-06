@@ -1,7 +1,7 @@
 #include "LightSensorSubsystem.h"
 #include "Robot.h"
 #include <cassert>
-#include <String>
+#include <string>
 #include <iostream>
 #include <iomanip>
 
