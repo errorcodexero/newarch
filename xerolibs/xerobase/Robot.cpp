@@ -230,7 +230,7 @@ namespace xero {
                 double avg = sleep_time_[index] / iterations_[index] ;
                 message_logger_.startMessage(MessageLogger::MessageType::info) ;
                 message_logger_ << "RobotLoop:" ;
-                message_logger_ << " iterations " << iterations_[index] ;
+                message_logger_ << " iterations " << static_cast<int>(iterations_[index]) ;
                 message_logger_ << ", average sleep time " << avg ;
                 message_logger_.endMessage() ;
             }
