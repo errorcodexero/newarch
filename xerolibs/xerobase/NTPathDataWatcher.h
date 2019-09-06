@@ -16,6 +16,8 @@ namespace xero
 
             void update() ;
 
+            uint32_t calcHash(const char *str, uint32_t orig) ;
+
         private:
             void keyUpdate(const wpi::StringRef &key) ;
             static void listener(nt::NetworkTable *table, wpi::StringRef name, nt::NetworkTableEntry entry, std::shared_ptr<nt::Value> value, int flags) ;
@@ -26,8 +28,7 @@ namespace xero
             xero::misc::MessageLogger &logger_ ;
             std::mutex keylock_ ;
             std::list<std::string> keys_ ;
-
-            static NTPathDataWatcher *theOne ;
+            std::map<std::string, uint32_t> hashes_ ;
         } ;
     }
 }

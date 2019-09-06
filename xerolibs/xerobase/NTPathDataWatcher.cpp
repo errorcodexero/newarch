@@ -9,68 +9,56 @@ namespace xero
 {
     namespace base
     {
-        NTPathDataWatcher *NTPathDataWatcher::theOne = nullptr ;
-
-        void NTPathDataWatcher::listener(nt::NetworkTable *table, wpi::StringRef name, nt::NetworkTableEntry entry, std::shared_ptr<nt::Value> value, int flags)
-        {
-            theOne->keyUpdate(name) ;
-        }
-
         NTPathDataWatcher::NTPathDataWatcher(MessageLogger &logger, XeroPathManager &mgr) : mgr_(mgr), logger_(logger)
         {
-            assert(theOne == nullptr) ;
-
-            theOne = this ;
-            nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
-            auto table = inst.GetTable("XeroPaths") ;
-
-            table->AddEntryListener(listener, NT_NOTIFY_IMMEDIATE | NT_NOTIFY_NEW | NT_NOTIFY_UPDATE) ;
         }
 
         NTPathDataWatcher::~NTPathDataWatcher()
         {
-            assert(theOne == this) ;
-            theOne = nullptr ;
         }
 
         void NTPathDataWatcher::keyUpdate(const wpi::StringRef &key)
         {
-            std::string name = key ;
-            if (name.length() > 5 && name.substr(name.length() - 5, 5) == "_main")
-            {
-                name = name.substr(0, name.length() - 5) ;
-                keylock_.lock() ;
-                keys_.push_back(name) ;
-                keylock_.unlock() ;
-            }
+        }
+
+        uint32_t NTPathDataWatcher::calcHash(const char *str, uint32_t orig)
+        {
+            if (orig == 0)
+                orig = 5381 ;
+
+            while (char c = *str++)
+                orig = ((orig << 5) + orig) + c; /* hash * 33 + c */
+
+            return orig ;
         }
 
         void NTPathDataWatcher::update()
         {
-            keylock_.lock() ;
-            if (keys_.size() > 0)
+            nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
+            auto table = inst.GetTable("/XeroPaths") ;
+
+            std::list<std::string> names = mgr_.getNames() ;
+            for(auto name : names)
             {
-                nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
-                auto table = inst.GetTable("XeroPaths") ;
+                std::string left = table->GetString(name + "_left", "") ;
+                std::string right = table->GetString(name + "_right", "") ;
 
-                while (keys_.size() > 0)
+                if (left.length() > 0 && right.length() > 0)
                 {
-                    std::string name = keys_.front() ;
-                    keys_.pop_front() ;
+                    uint32_t hash = calcHash(left.c_str(), 0) ;
+                    hash = calcHash(right.c_str(), hash) ;
 
-                    std::string left = table->GetString(name + "_left", "") ;
-                    std::string right = table->GetString(name + "_right", "") ;
-
-                    if (left.length() > 0 && right.length() > 0)
+                    auto it = hashes_.find(name) ;
+                    if (it == hashes_.end() || it->second != hash)
                     {
                         mgr_.replaceData(name, left, right) ;
                         logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_PATHWATCHER) ;
                         logger_ << "updated path '" << name ;
                         logger_.endMessage() ;
+                        hashes_[name] = hash ;
                     }
                 }
             }
-            keylock_.unlock() ;
         }
     }
 }
