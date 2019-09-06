@@ -33,7 +33,7 @@ void ActionSequence::startNextAction()
     {
         assert(group_ != 0) ;
         logger_.startMessage(MessageLogger::MessageType::debug, group_) ;
-        logger_ << "Actions: starting " << index_ << " of " << actionSequence_.size() - 1 ;
+        logger_ << "Actions: starting " << index_ << " of " << static_cast<int>(actionSequence_.size() - 1) ;
         logger_ << " '" << actionSequence_[index_]->toString() << "'" ;
         logger_.endMessage() ;
         actionSequence_[index_]->start();
