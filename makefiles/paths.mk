@@ -15,7 +15,7 @@ endif
 ifeq ($(MYOS),Linux)
 REALBUILDDIR=$(abspath $(BUILDDIR))
 endif
-ifeq ($(MYOS),CYGWIN_NT-10.0)
+ifeq ($(MYOS),Windows)
 REALBUILDDIR=$(shell cygpath -m -a $(BUILDDIR))
 endif
 
