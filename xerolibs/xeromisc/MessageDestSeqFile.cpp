@@ -108,10 +108,10 @@ void MessageDestSeqFile::displayMessage(const MessageLogger::MessageType &type, 
 
     std::string prefix;
     if (type == MessageLogger::MessageType::warning)
-        prefix == "WARNING: ";
+        prefix = "WARNING: ";
 
     if (type == MessageLogger::MessageType::error)
-        prefix == "ERROR: ";
+        prefix = "ERROR: ";
 
     std::string appended_msg = prefix + msg;
     if (strm_p_ != nullptr)
