@@ -19,13 +19,14 @@ endif
 
 ifeq ($(MYCOMPILER),GCC)
 CXX = g++
-CXXFLAGS = $(LOCAL_CFLAGS) -std=c++17
+CXXFLAGS = $(LOCAL_CFLAGS)
 COMPILERSETUP=true
 
 ifeq ($(MYOS),Windows)
 EXEEXT=.exe
 CXXFLAGS += -DCYGWIN
 else
+CXXFLAGS += -std=c++17
 EXEECT=
 endif
 
