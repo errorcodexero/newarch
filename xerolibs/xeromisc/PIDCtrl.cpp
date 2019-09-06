@@ -9,7 +9,7 @@
 namespace xero {
 namespace misc {
 
-PIDCtrl::PIDCtrl(bool is_angle):PIDCtrl(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, is_angle_)
+PIDCtrl::PIDCtrl(bool is_angle):PIDCtrl(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, is_angle)
 {
 }
 
