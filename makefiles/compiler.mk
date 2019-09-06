@@ -24,6 +24,7 @@ COMPILERSETUP=true
 
 ifeq ($(MYOS),Windows)
 EXEEXT=.exe
+CXXFLAGS += -DCYGWIN
 else
 EXEECT=
 endif
