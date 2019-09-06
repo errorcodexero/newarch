@@ -58,7 +58,8 @@ namespace xero {
             virtual void addDevice(frc::Relay *relay) {                
             }
 
-            virtual bool processEvent(const std::string &name, int value) {                
+            virtual bool processEvent(const std::string &name, int value) {          
+                return false ;      
             }
 
             std::mutex &getLockMutex() ;
