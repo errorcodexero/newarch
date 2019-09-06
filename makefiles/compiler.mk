@@ -17,14 +17,19 @@ endif
 
 endif
 
-ifeq ($(MYCOMPILER),CYGWIN)
+ifeq ($(MYCOMPILER),GCC)
 CXX = g++
-CXXFLAGS = $(LOCAL_CFLAGS) -DCYGWIN
+CXXFLAGS = $(LOCAL_CFLAGS) -std=c++17
 COMPILERSETUP=true
+
+ifeq ($(MYOS),Windows)
 EXEEXT=.exe
+else
+EXEECT=
+endif
 
 ifdef MAKEDEBUG
-$(info Setting compiler for base CYGWIN configuration)
+$(info Setting compiler for base GCC configuration)
 endif
 
 endif

@@ -86,7 +86,7 @@ post:
 
 $(TARGETFILE): $(OBJECTS) $(LINKLIBS)
 	@echo Linking ...
-	$(QUIET)$(CXX) -o $@ $(OBJECTS) -Wl,--start-group $(ALLLIBS) -Wl,--end-group
+	$(QUIET)$(CXX) -o $@ $(OBJECTS) $(ALLLIBS)
 
 clean: cleanlibs
 	@echo Cleaning executable target $(TARGET)$(EXEEXT)
@@ -104,11 +104,21 @@ cleanlibs:
 		CONFIG=$(CONFIG) PLATFORM=$(PLATFORM) make --no-print-directory clean ;\
 	done
 
+UNAME := $(shell uname)
+ifeq ($(MYOS),Darwin)
+CYGTARGETFILE=$(realpath $(TARGETFILE))
+endif
+ifeq ($(MYOS),Linux)
+CYGTARGETFILE=$(realpath $(TARGETFILE))
+endif
+ifeq ($(MYOS),Windows)
+CYGTARGETFILE=$(shell cygpath -a -u $(TARGETFILE))
+endif
+
 ifeq ($(PLATFORM),GOPIGO)
 ifeq ($(GOPIGOIP),)
 $(error GOPIGOIP make variable not defined)
 endif
-CYGTARGETFILE=$(shell cygpath -a -u $(TARGETFILE))
 deploy:
 	scp $(CYGTARGETFILE) pi@$(GOPIGOIP):/home/pi
 	if [ -d "deploy" ]; then \

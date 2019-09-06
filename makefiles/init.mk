@@ -27,11 +27,26 @@ endif
 
 ifeq ($(PLATFORM),SIMULATOR)
 PLATFORMVALID=true
-MYCOMPILER=CYGWIN
+MYCOMPILER=GCC
 endif
 
 ifneq ($(PLATFORMVALID),true)
 $(error PLATFORM must be set to 'PI' or 'GOPIGO' or 'SIMULATOR')
+endif
+
+UNAME := $(shell uname)
+ifeq ($(UNAME),Darwin)
+MYOS=Darwin
+endif
+ifeq ($(UNAME),Linux)
+MYOS=Linux
+endif
+ifeq ($(UNAME),CYGWIN_NT-10.0)
+MYOS=Windows
+endif
+
+ifeq ($(MYOS),)
+$(error Could not detect operating system)
 endif
 
 

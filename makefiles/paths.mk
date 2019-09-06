@@ -9,8 +9,18 @@ endif
 #
 # Get the real full path
 #
+ifeq ($(MYOS),Darwin)
+REALBUILDDIR=$(abspath $(BUILDDIR))
+endif
+ifeq ($(MYOS),Linux)
+REALBUILDDIR=$(abspath $(BUILDDIR))
+endif
+ifeq ($(MYOS),CYGWIN_NT-10.0)
 REALBUILDDIR=$(shell cygpath -m -a $(BUILDDIR))
+endif
 
+$(info BUILDDIR $(BUILDDIR))
+$(info REALBUILDDIR $(REALBUILDDIR))
 #
 # This is the home directory for the build tree
 #
