@@ -9,6 +9,8 @@ CXX = arm-linux-gnueabihf-g++
 AR = arm-linux-gnueabihf-ar
 CXXFLAGS=$(LOCAL_CFLAGS) -Wno-psabi
 COMPILERSETUP=true
+LINKPREFIX=-Wl,--start-group
+LINKPOSTFIX=-Wl,--end-group
 EXEEXT=
 
 ifdef MAKEDEBUG
@@ -25,9 +27,14 @@ COMPILERSETUP=true
 ifeq ($(MYOS),Windows)
 EXEEXT=.exe
 CXXFLAGS += -DCYGWIN
-else
+LINKPREFIX=-Wl,--start-group
+LINKPOSTFIX=-Wl,--end-group
+endif
+ifeq ($(MYOS),Darwin)
 CXXFLAGS += -std=c++17
 EXEECT=
+LINKPREFIX=
+LINKPOSTFIX=
 endif
 
 ifdef MAKEDEBUG

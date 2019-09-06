@@ -86,7 +86,7 @@ post:
 
 $(TARGETFILE): $(OBJECTS) $(LINKLIBS)
 	@echo Linking ...
-	$(QUIET)$(CXX) -o $@ $(OBJECTS) $(ALLLIBS)
+	$(QUIET)$(CXX) -o $@ $(OBJECTS) $(LINKPREFIX) $(ALLLIBS) $(LINKPOSTFIX)
 
 clean: cleanlibs
 	@echo Cleaning executable target $(TARGET)$(EXEEXT)
