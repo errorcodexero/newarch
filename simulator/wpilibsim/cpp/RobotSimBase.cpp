@@ -2,7 +2,6 @@
 #include <frc/SubsystemModel.h>
 #include <frc/PrintVisualizer.h>
 #include "JoystickManager.h"
-#include "DIJoystickManager.h"
 #include <MessageLogger.h>
 #include <Robot.h>
 #include <basegroups.h>
@@ -25,11 +24,6 @@ namespace xero {
 
         RobotSimBase::RobotSimBase(const std::string &paramfile) {
             joysticks_ = nullptr ;
-
-#ifdef __CYGWIN__
-            joysticks_ = new DIJoystickManager() ;
-#endif          
-
             assert(xero::sim::RobotSimBase::theOne == nullptr) ;
             xero::sim::RobotSimBase::theOne = this ;
             

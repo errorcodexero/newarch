@@ -2,7 +2,6 @@ TOPDIR=../..
 
 SOURCES = \
 	cpp/DigitalInput.cpp\
-	cpp/DIJoystickManager.cpp\
 	cpp/DriverStation.cpp\
 	cpp/Encoder.cpp\
 	cpp/livewindow/LiveWindow.cpp\

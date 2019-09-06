@@ -60,8 +60,6 @@ DEFAULT_PLATFORM=SIMULATOR
 
 LOCAL_CFLAGS = -Isrc/main/cpp
 
-
-
 SUPPORTED_PLATFORMS=ROBORIO SIMULATOR
 
 ifeq ($(CONFIG),)
@@ -77,7 +75,7 @@ endif
 ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/phasersim
 	LOCAL_LIBS = $(TOPDIR)/robotsims/phasersim
-	LOCAL_EXTERNAL_LIBS=$(TOPDIR)/external/dinput/dinput8.lib $(TOPDIR)/external/dinput/dxguid.lib -lcurses
+	LOCAL_EXTERNAL_LIBS=-lcurses
 endif
 
 ifeq ($(PLATFORM),GOPIGO)
