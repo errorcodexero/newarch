@@ -149,6 +149,7 @@ MessageLogger &MessageLogger::operator<<(uint64_t value)
     return *this;
 }
 
+
 MessageLogger &MessageLogger::operator<<(double value)
 {
     if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))

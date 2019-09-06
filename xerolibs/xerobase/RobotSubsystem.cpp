@@ -49,8 +49,8 @@ namespace xero {
             if (left.size() != right.size()) {
                 logger.startMessage(MessageLogger::MessageType::error) ;
                 logger << "different motor count for drive base on left and right sides" ;
-                logger << ", left " << left.size() ;
-                logger << ", right " << right.size() ;
+                logger << ", left " << static_cast<int>(left.size()) ;
+                logger << ", right " << static_cast<int>(right.size()) ;
                 logger.endMessage() ;
             }
             
