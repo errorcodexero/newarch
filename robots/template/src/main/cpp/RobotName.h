@@ -1,6 +1,6 @@
 #pragma once
 
-#include <$$robotname$$robotsubsystem/$$RobotName$$RobotSubsystem.h>
+#include <$$robotname$$subsystem/$$RobotName$$Subsystem.h>
 #include <tankdrive/TankDrive.h>
 #include <Robot.h>
 #include <frc/Compressor.h>
@@ -15,8 +15,8 @@ namespace xero {
 
             /// \brief return the robot subsystem cast to the phoenix specific type
             /// \returns the robot subsystem cast to the phoenix specific type
-            std::shared_ptr<$$RobotName$$RobotSubsystem> get$$RobotName$$RobotSubsystem() {
-                return std::dynamic_pointer_cast<$$RobotName$$RobotSubsystem>(getRobotSubsystem()) ;
+            std::shared_ptr<$$RobotName$$Subsystem> get$$RobotName$$Subsystem() {
+                return std::dynamic_pointer_cast<$$RobotName$$Subsystem>(getRobotSubsystem()) ;
             }
 
             virtual void loadPaths() ;

@@ -11,10 +11,10 @@ namespace xero {
         // Add gamemanipulator
         // Add climber
         //
-        class $$RobotName$$RobotSubsystem : public xero::base::RobotSubsystem {
+        class $$RobotName$$Subsystem : public xero::base::RobotSubsystem {
         public:
-            $$RobotName$$RobotSubsystem(xero::base::Robot &robot) ;
-            virtual ~$$RobotName$$RobotSubsystem() ;
+            $$RobotName$$Subsystem(xero::base::Robot &robot) ;
+            virtual ~$$RobotName$$Subsystem() ;
 
             std::shared_ptr<xero::base::TankDrive> getTankDrive() {
                 return std::dynamic_pointer_cast<xero::base::TankDrive>(getDriveBase()) ;

@@ -1,0 +1,42 @@
+#
+# This file does a floor collect cargo
+#
+
+#
+# Automode values
+#
+#  Value        Setting
+#    0          -100
+#    1          -80
+#    2          -60
+#    3          -40
+#    4          -20
+#    5           10
+#    6           30
+#    7           50
+#    8           70
+#    9           90
+#
+
+#
+# Tracking Viewing Nothing switch
+#
+#  Value         Mode
+#  100           manual
+#  0             semi-auto
+#  -100          auto
+#
+
+#
+# Start up conditions
+#
+0.1,oi,automode,90                                      # Automode switch set to nine
+
+0.1,tankdrive,xpos,6500                                 # Start center hab platform
+0.1,tankdrive,ypos,16300                                # Start center hab platform
+0.1,tankdrive,angle,0                                   # Start center hab platform    
+
+#
+# Put cargo in the cargo holder
+#
+0.1,hatchholder,hatch,1

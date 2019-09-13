@@ -1,6 +1,5 @@
 #include "$$RobotName$$AutoModeBase.h"
 #include "$$RobotName$$.h"
-#include "$$robotname$$cameratracker/SetThresholdAction.h"
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/actions/TankDriveFollowPathAction.h>
 

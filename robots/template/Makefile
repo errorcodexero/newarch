@@ -5,7 +5,7 @@ AUTOMODES = \
 	src/main/cpp/automodes/$$RobotName$$AutoModeBase.cpp
 
 SUBSYSTEMS = \
-	src/main/cpp/$$robotname$$robotsubsystem/$$RobotName$$RobotSubsystem.cpp\
+	src/main/cpp/$$robotname$$subsystem/$$RobotName$$Subsystem.cpp\
 
 SOURCES = \
 	src/main/cpp/main.cpp\

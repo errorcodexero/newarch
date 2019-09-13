@@ -1,6 +1,7 @@
 #include "$$RobotName$$.h"
 #include "$$robotname$$ids.h"
 #include "automodes/$$RobotName$$AutoModeController.h"
+#include <TeleopController.h>
 #include <basegroups.h>
 #include <MessageDestDS.h>
 #include <MessageLogger.h>
@@ -71,7 +72,7 @@ namespace xero {
         }
         
         void $$RobotName$$::RobotHardwareInit() {
-            auto sub_p = std::make_shared<$$RobotName$$RobotSubsystem>(*this) ;
+            auto sub_p = std::make_shared<$$RobotName$$Subsystem>(*this) ;
             setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getTankDrive()) ;
         }
 

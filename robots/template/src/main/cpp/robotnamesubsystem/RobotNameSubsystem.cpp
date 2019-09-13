@@ -1,4 +1,4 @@
-#include "$$RobotName$$RobotSubsystem.h"
+#include "$$RobotName$$Subsystem.h"
 #include "$$robotname$$ids.h"
 #include <Robot.h>
 #include <list>
@@ -8,7 +8,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace $$robotname$$ {
-        $$RobotName$$RobotSubsystem::$$RobotName$$RobotSubsystem(Robot &robot) : RobotSubsystem(robot, "$$robotname$$") {
+        $$RobotName$$Subsystem::$$RobotName$$Subsystem(Robot &robot) : RobotSubsystem(robot, "$$robotname$$") {
             //
             // Add the tank drive.  This is handled by the base class RobotSubsystem since all robots have a drivebase
             // and for now they are all tank drives
@@ -22,10 +22,10 @@ namespace xero {
             addChild(oi_) ;
         }
 
-        $$RobotName$$RobotSubsystem::~$$RobotName$$RobotSubsystem() {
+        $$RobotName$$Subsystem::~$$RobotName$$Subsystem() {
         }
 
-        bool $$RobotName$$RobotSubsystem::canAcceptAction(ActionPtr act) {
+        bool $$RobotName$$Subsystem::canAcceptAction(ActionPtr act) {
             return false ;
         }
     }
