@@ -42,8 +42,6 @@ namespace xero {
 
         void GoPiGo3Xero::loadPaths() {
             auto pathmgr = getPathManager() ;
-            if (!pathmgr->loadPath("TestPaths_RightTurn"))
-                std::cout << "CANNOT LOAD PATH" << std::endl ;
         }
 
         void GoPiGo3Xero::RobotHardwareInit() {

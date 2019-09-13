@@ -17,6 +17,8 @@ namespace xero {
 
         void GoPiGo3AutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             AutoModePtr ptr = nullptr ;
+            sel = 8 ;
+            
             switch(sel)
             {
             case 0:

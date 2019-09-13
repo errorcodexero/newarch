@@ -126,7 +126,7 @@ deploy:
 	fi
 
 run:
-	ssh pi@$(GOPIGOIP) /home/pi/$(TARGET)$(EXEEXT)
+	ssh pi@$(GOPIGOIP) /home/pi/$(TARGET)$(EXEEXT) --auto 30 --oper 0 --start 0
 
 kill:
 	ssh pi@$(GOPIGOIP) pkill -x $(TARGET)$(EXEEXT) || true

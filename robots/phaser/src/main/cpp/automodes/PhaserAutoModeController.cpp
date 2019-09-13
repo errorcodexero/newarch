@@ -30,8 +30,6 @@ namespace xero {
         void PhaserAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             AutoModePtr mode = nullptr ;
 
-            sel = 8 ;
-
             switch(sel) {
             case 0:
                 mode = std::make_shared<CenterHabTwoHatch>(getRobot(), true, false, "CenterHabSingleCargoLeft", "Start in center hab, score one on right front of cargo ship") ;
@@ -70,7 +68,7 @@ namespace xero {
                 break ;
 
             case 9:
-                mode = std::make_shared<LifterHeightMode>(getRobot()) ;
+                mode = std::make_shared<StraightCharAutoMode>(getRobot(), 0.4, 10.0) ;
                 break ;
             }
             setAction(mode) ;
