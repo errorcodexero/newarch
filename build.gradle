@@ -133,34 +133,6 @@ model {
         //
         // 2019 Deep Space, Endurance, New Architecture
         //
-        // frcUserProgram(NativeExecutableSpec) {
-        //     targetPlatform wpi.platforms.roborio
-		// 	binaries.all {
-		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-		// 		lib library: "xerobase", linkage: "static"
-		// 		lib library: "xeromisc", linkage: "static"                
-		// 	}            
-        //     if (includeDesktopSupport) {
-        //         targetPlatform wpi.platforms.desktop
-        //     }
-
-        //     sources.cpp {
-        //         source {
-        //             srcDir 'robots/phaser/src/main/cpp'
-        //             include '**/*.cpp'
-        //         }
-        //         exportedHeaders {
-        //             srcDir 'robots/phaser/src/main/cpp'
-        //             include '**/*.h'
-        //         }
-                                
-        //     }
-
-        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-        //     useLibrary(it, "wpilib")
-        //     wpi.deps.vendor.cpp(it)
-        // }     
-
         frcUserProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
 			binaries.all {
@@ -174,11 +146,11 @@ model {
 
             sources.cpp {
                 source {
-                    srcDir 'robots/griffing/src/main/cpp'
+                    srcDir 'robots/phaser/src/main/cpp'
                     include '**/*.cpp'
                 }
                 exportedHeaders {
-                    srcDir 'robots/griffin/src/main/cpp'
+                    srcDir 'robots/phaser/src/main/cpp'
                     include '**/*.h'
                 }
                                 
@@ -187,7 +159,7 @@ model {
             // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
             useLibrary(it, "wpilib")
             wpi.deps.vendor.cpp(it)
-        } 
+        }     
 
         //
         // 2018 Power Up, Phoenix, New Architecture
