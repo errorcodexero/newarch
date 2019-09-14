@@ -194,7 +194,7 @@ turntable:calibrate:encbase                                     238
 endif
 
 if COMPETITION
-turntable:calibrate:encbase                                     252
+turntable:calibrate:encbase                                     272
 endif
 
 turntable:calibrate:power                                       0.2             
@@ -264,7 +264,7 @@ lifter:inches_per_tick                                          0.058691309
 
 lifter:calibrate:up:power                                       0.4                         
 lifter:calibrate:hold:power                                     0.25                         
-lifter:calibrate:up:time                                        1.0                         
+lifter:calibrate:up:time                                        0.5
 lifter:calibrate:threshold                                      2                           
 lifter:calibrate:encbase                                        0                         
 lifter:calibrate:power                                          -0.4                        
