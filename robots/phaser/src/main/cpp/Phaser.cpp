@@ -124,7 +124,10 @@ namespace xero {
             paths->loadPath("RightHabRightRocketTwo_RightLS_RightRocketFront") ;
             paths->loadPath("RightHabRightRocketTwo_RightRocketFront_RightLS") ;
             
-            paths->loadPath("Tune_Tune") ;
+            paths->loadPath("StraightPaths_Straight120") ;
+            paths->loadPath("StraightPaths_Straight240") ;
+            paths->loadPath("CurvedPaths_Curve90") ;
+            paths->loadPath("CurvedPaths_Curve180") ;
 #endif
         }
         
