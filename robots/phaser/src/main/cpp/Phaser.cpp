@@ -1,7 +1,7 @@
 #include "Phaser.h"
 #include "phaserids.h"
 #include "automodes/PhaserAutoModeController.h"
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 #include <DelayAction.h>
 #include <TeleopController.h>
 #include <basegroups.h>

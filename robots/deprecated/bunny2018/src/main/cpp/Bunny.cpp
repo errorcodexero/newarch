@@ -4,7 +4,7 @@
 #include "bunnyoi/BunnyOISubsystem.h"
 #include "automodes/BunnyAutoMode.h"
 #include "bunnyids.h"
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 #include <basegroups.h>
 #include <DelayAction.h>
 #include <MessageLogger.h>

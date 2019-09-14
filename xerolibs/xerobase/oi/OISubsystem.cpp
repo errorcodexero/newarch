@@ -1,6 +1,6 @@
 #include "oi/OISubsystem.h"
 #include "Robot.h"
-#include "ActionSequence.h"
+#include "SequenceAction.h"
 #include "tankdrive/TankDrive.h"
 #include "basegroups.h"
 #include "DriverGamepadRumbleAction.h"
@@ -54,7 +54,7 @@ namespace xero {
                 dev->computeState() ;
         }
 
-        void OISubsystem::generateActions(ActionSequencePtr seq) {
+        void OISubsystem::generateActions(SequenceActionPtr seq) {
             for(auto dev: hiddevices_)
             {
                 if (dev->isEnabled())

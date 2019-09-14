@@ -18,11 +18,11 @@ namespace xero {
         /// the sequence moves to the next action.  This continues until all actions
         /// in the sequence are complete.  Once all actions in the sequence are 
         /// complete, this object will return isDone() true.
-        class ActionSequence : public Action {
+        class SequenceAction : public Action {
         public:
             /// \brief create an empty action sequence 
             /// \param logger the message logger action
-            ActionSequence(xero::misc::MessageLogger &logger) ;
+            SequenceAction(xero::misc::MessageLogger &logger) ;
 
             /// \brief start this sequence of actions
             void start();
@@ -64,13 +64,13 @@ namespace xero {
             
             /// \brief clear the list of actions
             void clear() {
-                actionSequence_.clear() ;
+                actions_.clear() ;
             }
 
             /// \brief return the number of actions in the sequence
             /// \returns the count of the actions in the sequence
             size_t size() {
-                return actionSequence_.size() ;
+                return actions_.size() ;
             }           
 
         private:
@@ -80,8 +80,11 @@ namespace xero {
             // state of the sequence, true when all contained actions are complete or cancel is called
             bool isDone_;
 
+            // trying to cancel
+            bool isCancel_ ;
+
             // the seqeuence of actions
-            std::vector<ActionPtr> actionSequence_;
+            std::vector<ActionPtr> actions_;
 
             // the index of the current action
             int index_;
@@ -94,6 +97,6 @@ namespace xero {
         };
 
         /// \brief convience definition for a shared pointer to an action sequence
-        typedef std::shared_ptr<ActionSequence> ActionSequencePtr ;
+        typedef std::shared_ptr<SequenceAction> SequenceActionPtr ;
     }
 }

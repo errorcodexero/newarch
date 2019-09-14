@@ -202,7 +202,7 @@ namespace xero {
         // Get the cargo/hatch mode based on any game piece that is in the robot as well
         // as the cargo/hatch switch
         //
-        void PhaserOIDevice::getCargoHatchMode(ActionSequence &seq) {
+        void PhaserOIDevice::getCargoHatchMode(SequenceAction &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto camera = ph.getPhaserRobotSubsystem()->getCameraTracker() ;
@@ -567,7 +567,7 @@ namespace xero {
         // desired angle based on the action to be performed, and then sets the lift at a
         // level one height to ready for the operation.
         //
-        void PhaserOIDevice::generateDirectionActions(ActionSequence &seq) {
+        void PhaserOIDevice::generateDirectionActions(SequenceAction &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             ActionPtr act, finish ;
@@ -598,7 +598,7 @@ namespace xero {
             gotoHeightAngle(seq, height, angle) ;
         }
 
-        void PhaserOIDevice::gotoHeightAngle(ActionSequence &seq, const std::string &height, const std::string &angle, bool leave) {
+        void PhaserOIDevice::gotoHeightAngle(SequenceAction &seq, const std::string &height, const std::string &angle, bool leave) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             ActionPtr act ;
@@ -696,7 +696,7 @@ namespace xero {
             angle = last_angle_requested_ ;
         }
 
-        void PhaserOIDevice::generateHeightActions(ActionSequence &seq) {
+        void PhaserOIDevice::generateHeightActions(SequenceAction &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             std::string height, angle ;
@@ -727,7 +727,7 @@ namespace xero {
 
         }
 
-        void PhaserOIDevice::generateArmActionsHatchVisionLine(ActionSequence &seq)
+        void PhaserOIDevice::generateArmActionsHatchVisionLine(SequenceAction &seq)
         {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto hatchholder = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
@@ -764,7 +764,7 @@ namespace xero {
             }
         }
 
-        void PhaserOIDevice::generateArmActionsHatchLine(ActionSequence &seq)
+        void PhaserOIDevice::generateArmActionsHatchLine(SequenceAction &seq)
         {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto hatchholder = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
@@ -801,7 +801,7 @@ namespace xero {
             }
         }
 
-        void PhaserOIDevice::generateArmActionsHatchManual(ActionSequence &seq)
+        void PhaserOIDevice::generateArmActionsHatchManual(SequenceAction &seq)
         {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto hatchholder = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
@@ -812,7 +812,7 @@ namespace xero {
             seq.pushSubActionPair(hatchholder, act) ;
         }
 
-        void PhaserOIDevice::generateArmActionsCargoVisionLine(ActionSequence &seq)
+        void PhaserOIDevice::generateArmActionsCargoVisionLine(SequenceAction &seq)
         {
             if (dir_ == Direction::East || dir_ == Direction::West)
                 setupStrafe(seq) ;
@@ -821,7 +821,7 @@ namespace xero {
             }
         }
 
-        void PhaserOIDevice::generateArmActionsCargoLine(ActionSequence &seq)
+        void PhaserOIDevice::generateArmActionsCargoLine(SequenceAction &seq)
         {
             if (dir_ == Direction::East || dir_ == Direction::West)
                 setupStrafe(seq) ;
@@ -830,12 +830,12 @@ namespace xero {
             }
         }
 
-        void PhaserOIDevice::generateArmActionsCargoManual(ActionSequence &seq)
+        void PhaserOIDevice::generateArmActionsCargoManual(SequenceAction &seq)
         {
             // NOP
         }
 
-        void PhaserOIDevice::generateArmActions(ActionSequence &seq)
+        void PhaserOIDevice::generateArmActions(SequenceAction &seq)
         {
             if (piece_ == GamePieceType::Hatch && mode_ == OperationMode::Auto)
                 generateArmActionsHatchVisionLine(seq) ;
@@ -851,7 +851,7 @@ namespace xero {
                 generateArmActionsCargoManual(seq) ;
         }
 
-        void PhaserOIDevice::setupStrafe(ActionSequence &seq)
+        void PhaserOIDevice::setupStrafe(SequenceAction &seq)
         {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             ph.getPhaserRobotSubsystem()->setAction(nullptr) ;
@@ -931,7 +931,7 @@ namespace xero {
                 lineaction = std::make_shared<LineFollowAction>(*linefollower, *db, "linefollower:back:power", "linefollower:back:distance", "linefollower:back:adjust") ;
             }
 
-            ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
+            SequenceActionPtr seq = std::make_shared<SequenceAction>(log) ;
 
             //
             // Push the rumble to indicate we took over
@@ -977,7 +977,7 @@ namespace xero {
             auto ctrl = ph.getCurrentController() ;
             std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;
             MessageLogger &log = ph.getMessageLogger() ;
-            ActionSequencePtr seq = std::make_shared<ActionSequence>(log) ;
+            SequenceActionPtr seq = std::make_shared<SequenceAction>(log) ;
             std::shared_ptr<LightSensorSubsystem> line ;
             std::shared_ptr<LineFollowAction> drive ;
 
@@ -1009,7 +1009,7 @@ namespace xero {
         //
         // Called when a height button is pressed
         //
-        void PhaserOIDevice::generateHeightButtonActions(ActionSequence &seq) {
+        void PhaserOIDevice::generateHeightButtonActions(SequenceAction &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto hh = ph.getPhaserRobotSubsystem()->getGameManipulator()->getHatchHolder() ;
 
@@ -1059,7 +1059,7 @@ namespace xero {
         // Manually finish an action if a detector has not taken over and
         // finished the action.
         //
-        void PhaserOIDevice::manuallyFinish(ActionSequence &seq) {
+        void PhaserOIDevice::manuallyFinish(SequenceAction &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto ctrl = ph.getCurrentController() ;
@@ -1090,7 +1090,7 @@ namespace xero {
             return rdyact != nullptr ;
         }
 
-        void PhaserOIDevice::generateActions(ActionSequence &seq) {
+        void PhaserOIDevice::generateActions(SequenceAction &seq) {
             Phaser &ph = dynamic_cast<Phaser &>(getSubsystem().getRobot()) ;
             auto game = ph.getPhaserRobotSubsystem()->getGameManipulator() ;
             auto hatch_holder = game->getHatchHolder() ;

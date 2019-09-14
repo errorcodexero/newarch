@@ -4,7 +4,7 @@
 #include "GrabberHoldCubeAction.h"
 #include "phoenixgroups.h"
 #include <Robot.h>
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 #include <MessageLogger.h>
 
 using namespace xero::base ;

@@ -4,7 +4,7 @@
 #include "bunnysubsystem/BunnySubsystem.h"
 #include "shooter/ShooterEjectOneBallAction.h"
 #include "shooter/ShooterStageBallAction.h"
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 #include <singlemotorsubsystem/SingleMotorSubsystem.h>
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 
@@ -70,7 +70,7 @@ namespace xero {
             intake_off_action_ = std::make_shared<SingleMotorPowerAction>(*intake, 0.0) ;           
         }
 
-        void BunnyOIDevice::generateActions(ActionSequence &seq) {
+        void BunnyOIDevice::generateActions(SequenceAction &seq) {
             if (collector_fwd_action_ == nullptr)
                 createActions() ;
 

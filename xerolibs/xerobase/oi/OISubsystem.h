@@ -2,7 +2,7 @@
 
 #include "Subsystem.h"
 #include "oi/DriverGamepad.h"
-#include "ActionSequence.h"
+#include "SequenceAction.h"
 
 /// \file
 
@@ -32,7 +32,7 @@ namespace xero {
 
             /// \brief generate actions from the OI
             /// \param seq the action sequenced used to store the generated actions
-            virtual void generateActions(ActionSequencePtr seq) ;
+            virtual void generateActions(SequenceActionPtr seq) ;
 
             /// \brief run the action generated in the computeState above
             virtual void run() ;

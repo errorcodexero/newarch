@@ -1,7 +1,7 @@
 #include "Phoenix.h"
 #include "phoenixgroups.h"
 #include "automodes/PhoenixAutoController.h"
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 #include <DelayAction.h>
 #include <TeleopController.h>
 #include <basegroups.h>

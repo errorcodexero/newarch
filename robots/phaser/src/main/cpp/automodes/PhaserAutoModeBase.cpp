@@ -41,7 +41,7 @@ namespace xero {
             ActionPtr act ;
             std::shared_ptr<ParallelAction> parallel ;
             std::shared_ptr<TerminateAction> term ;
-            ActionSequencePtr seq ;
+            SequenceActionPtr seq ;
 
             const char *power ;
             const char *dist ;
@@ -82,7 +82,7 @@ namespace xero {
             //
             // The second entry in the parallel entry is a sequence
             //
-            seq = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;
+            seq = std::make_shared<SequenceAction>(phaser.getMessageLogger()) ;
 
             //
             // Add a delay to ensure the robot has moved away from the previous
@@ -112,7 +112,7 @@ namespace xero {
             //
             // The third entry in the parallel entry is a sequence as well
             //
-            seq = std::make_shared<ActionSequence>(phaser.getMessageLogger()) ;            
+            seq = std::make_shared<SequenceAction>(phaser.getMessageLogger()) ;            
             
             //
             // Create the sequence that follows the path, switches to vision, switches

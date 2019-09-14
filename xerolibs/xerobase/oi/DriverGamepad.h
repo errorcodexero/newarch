@@ -64,7 +64,7 @@ namespace xero {
 
             /// \brief genreation actions based on the HID device
             /// \param seq the action sequence for storing created actions
-            virtual void generateActions(ActionSequence &seq) ;
+            virtual void generateActions(SequenceAction &seq) ;
 
             /// \brief associate the driver gamepad with a drive base
             /// \param db the drivebase to control

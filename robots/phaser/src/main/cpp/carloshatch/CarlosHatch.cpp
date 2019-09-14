@@ -2,7 +2,7 @@
 #include "CarlosHatchAction.h"
 #include "phaserids.h"
 #include <Robot.h>
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 #include <MessageLogger.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 

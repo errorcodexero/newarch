@@ -40,7 +40,7 @@ namespace xero {
 
         }
 
-        void $$RobotName$$OIDevice::generateActions(xero::base::ActionSequence &seq)
+        void $$RobotName$$OIDevice::generateActions(xero::base::SequenceAction &seq)
         {
             //
             // TODO - generate the list of actions based on the buttons pushed and the

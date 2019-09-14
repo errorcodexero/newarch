@@ -3,7 +3,7 @@
 #include "gopigo3groups.h"
 #include "automodes/GoPiGo3AutoModeController.h"
 #include "gopigo3sub/GoPiGo3Subsystem.h"
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 #include <basegroups.h>
 #include <DelayAction.h>
 #include <MessageDestDS.h>

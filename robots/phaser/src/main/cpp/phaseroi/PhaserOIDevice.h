@@ -5,7 +5,7 @@
 #include "gamepiecemanipulator/FloorCollectCargoAction.h"
 #include <oi/OIDevice.h> 
 #include <Action.h>
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 
 namespace xero {
     namespace phaser {
@@ -58,14 +58,14 @@ namespace xero {
                 return getValue(automode_) ;
             }
 
-            virtual void generateActions(xero::base::ActionSequence &seq) ;
+            virtual void generateActions(xero::base::SequenceAction &seq) ;
 
             virtual void init() ;
 
         private:
             void bindOI() ;
             void getTrackingMode() ;
-            void getCargoHatchMode(xero::base::ActionSequence &seq) ;
+            void getCargoHatchMode(xero::base::SequenceAction &seq) ;
             bool getDirection() ;
             bool getHeightButton() ;
             void getShipRocketMode() ;
@@ -73,37 +73,37 @@ namespace xero {
             Direction getRobotDirection() ;
             Direction compassToFieldRelative(Direction dir) ;
 
-            void gotoHeightAngle(xero::base::ActionSequence &seq, const std::string &height, const std::string &angle, bool leave = false) ;
+            void gotoHeightAngle(xero::base::SequenceAction &seq, const std::string &height, const std::string &angle, bool leave = false) ;
 
             void updateMode(OperationMode mode) ;
 
-            void generateDirectionActions(xero::base::ActionSequence &seq) ;
+            void generateDirectionActions(xero::base::SequenceAction &seq) ;
             void generateDirectionActionsCollectHatch(std::string &height, std::string &angle) ;
             void generateDirectionActionsCollectCargo(std::string &height, std::string &angle) ;
             void generateDirectionActionsPlaceHatch(std::string &height, std::string &angle) ;
             void generateDirectionActionsPlaceCargo(std::string &height, std::string &angle) ;
 
-            void generateHeightActions(xero::base::ActionSequence &seq) ;
+            void generateHeightActions(xero::base::SequenceAction &seq) ;
             void generateHeightActionsCollectCargo(std::string &height, std::string &angle) ;
             void generateHeightActionsCollectHatch(std::string &height, std::string &angle) ;
             void generateHeightActionsPlaceCargo(std::string &height, std::string &angle) ;
             void generateHeightActionsPlaceHatch(std::string &height, std::string &angle) ;
 
-            void generateArmActions(xero::base::ActionSequence &seq) ;            
-            void generateArmActionsHatchVisionLine(xero::base::ActionSequence &seq) ;     
-            void generateArmActionsHatchLine(xero::base::ActionSequence &seq) ;  
-            void generateArmActionsHatchManual(xero::base::ActionSequence &seq) ;  
-            void generateArmActionsCargoVisionLine(xero::base::ActionSequence &seq) ;
-            void generateArmActionsCargoLine(xero::base::ActionSequence &seq) ;
-            void generateArmActionsCargoManual(xero::base::ActionSequence &seq) ;   
+            void generateArmActions(xero::base::SequenceAction &seq) ;            
+            void generateArmActionsHatchVisionLine(xero::base::SequenceAction &seq) ;     
+            void generateArmActionsHatchLine(xero::base::SequenceAction &seq) ;  
+            void generateArmActionsHatchManual(xero::base::SequenceAction &seq) ;  
+            void generateArmActionsCargoVisionLine(xero::base::SequenceAction &seq) ;
+            void generateArmActionsCargoLine(xero::base::SequenceAction &seq) ;
+            void generateArmActionsCargoManual(xero::base::SequenceAction &seq) ;   
 
-            void generateHeightButtonActions(xero::base::ActionSequence &seq) ;
+            void generateHeightButtonActions(xero::base::SequenceAction &seq) ;
 
-            void setupStrafe(xero::base::ActionSequence &seq) ;
+            void setupStrafe(xero::base::SequenceAction &seq) ;
             void setupVisionDetectors() ;
             void setupLineFollowingDetectors() ;
 
-            void manuallyFinish(xero::base::ActionSequence &seq) ;
+            void manuallyFinish(xero::base::SequenceAction &seq) ;
 
             xero::base::ActionPtr getFinishAction() ;
 

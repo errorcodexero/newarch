@@ -20,7 +20,7 @@ SIMSOURCES = \
 endif
 
 SOURCES = \
-	ActionSequence.cpp\
+	SequenceAction.cpp\
 	AutoMode.cpp\
 	AutoController.cpp\
 	ControllerBase.cpp\

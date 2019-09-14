@@ -5,7 +5,7 @@
 
 namespace xero {
     namespace base {
-        class ActionSequence ;
+        class SequenceAction ;
         class OISubsystem ;
 
         /// \brief A basic HID device that may be part of the OISubsystem
@@ -40,7 +40,7 @@ namespace xero {
 
             /// \brief generation the actions for the HID device
             /// \param seq the action sequence for generated actions
-            virtual void generateActions(ActionSequence &seq) = 0 ;
+            virtual void generateActions(SequenceAction &seq) = 0 ;
 
             /// \brief return the value of the automode selector
             /// \returns the value of the auto mode selector

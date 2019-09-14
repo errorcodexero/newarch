@@ -3,7 +3,7 @@
 
 namespace xero {
     namespace base {
-        ParallelAction::ParallelAction() {            
+        ParallelAction::ParallelAction() {
         }
 
         ParallelAction::~ParallelAction() {            

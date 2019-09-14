@@ -14,7 +14,7 @@ namespace xero {
 
             virtual int getAutoModeSelector() ;
 
-            virtual void generateActions(xero::base::ActionSequence &seq) ;
+            virtual void generateActions(xero::base::SequenceAction &seq) ;
 
         private:
             void createActions() ;

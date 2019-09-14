@@ -16,7 +16,7 @@ class GoPiGo3OIDevice : public xero::base::OIDevice
     virtual ~GoPiGo3OIDevice();
 
     virtual int getAutoModeSelector();
-    virtual void generateActions(xero::base::ActionSequence &seq);
+    virtual void generateActions(xero::base::SequenceAction &seq);
 
   private:
     void initialize();

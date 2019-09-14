@@ -1,7 +1,7 @@
 #include "oi/DriverGamepad.h"
 #include "oi/OISubsystem.h"
 #include "Robot.h"
-#include "ActionSequence.h"
+#include "SequenceAction.h"
 #include "basegroups.h"
 #include "tankdrive/TankDrive.h"
 #include "tankdrive/actions/TankDrivePowerAction.h"
@@ -142,7 +142,7 @@ namespace xero {
             return ds.GetStickButton(getIndex(), ButtonNumber::A) ;
         }
 
-        void DriverGamepad::generateActions(ActionSequence &seq) {
+        void DriverGamepad::generateActions(SequenceAction &seq) {
             int pov ;
 
             if (db_ == nullptr) {

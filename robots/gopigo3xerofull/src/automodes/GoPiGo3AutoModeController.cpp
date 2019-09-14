@@ -56,7 +56,7 @@ namespace xero {
             ActionPtr action;
             GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot());
             auto sub = xerorobot.getGoPiGoSubsystem();
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "LED");
+            auto seq = std::make_shared<SequenceAction>(getRobot().getMessageLogger(), "LED");
             auto servo = sub->getLEDSubsystem();
 
             action = std::make_shared<LEDSubsystemBlinkAction>(*servo, LEDSubsystem::LED::LeftEye, 0.5, 0.5, 0.0, 1.0, 1.0);
@@ -75,7 +75,7 @@ namespace xero {
             ActionPtr action;
             GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot());
             auto sub = xerorobot.getGoPiGoSubsystem();
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "Servo");
+            auto seq = std::make_shared<SequenceAction>(getRobot().getMessageLogger(), "Servo");
             auto servo = sub->getServoSubsystem();
 
             action = std::make_shared<ServoGoToAngle>(*servo, 0);
@@ -88,7 +88,7 @@ namespace xero {
             ActionPtr action ;
             GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot()) ;
             auto sub = xerorobot.getGoPiGoSubsystem() ;
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "RotateNeg90") ;
+            auto seq = std::make_shared<SequenceAction>(getRobot().getMessageLogger(), "RotateNeg90") ;
             auto db = sub->getTankDrive() ;
 
             action = std::make_shared<TankDriveAngleAction>(*db, -90.0) ;
@@ -101,7 +101,7 @@ namespace xero {
             ActionPtr action ;
             GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot()) ;
             auto sub = xerorobot.getGoPiGoSubsystem() ;
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "RotatePos90") ;
+            auto seq = std::make_shared<SequenceAction>(getRobot().getMessageLogger(), "RotatePos90") ;
             auto db = sub->getTankDrive() ;
 
             action = std::make_shared<TankDriveAngleAction>(*db, 90.0) ;
@@ -114,7 +114,7 @@ namespace xero {
             ActionPtr action ;
             GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot()) ;
             auto sub = xerorobot.getGoPiGoSubsystem() ;
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "RotatePos45") ;
+            auto seq = std::make_shared<SequenceAction>(getRobot().getMessageLogger(), "RotatePos45") ;
             auto db = sub->getTankDrive() ;
 
             action = std::make_shared<TankDriveAngleAction>(*db, 45.0) ;            
@@ -127,7 +127,7 @@ namespace xero {
             ActionPtr action ;
             GoPiGo3Xero &xerorobot = dynamic_cast<GoPiGo3Xero &>(getRobot()) ;
             auto sub = xerorobot.getGoPiGoSubsystem() ;
-            auto seq = std::make_shared<ActionSequence>(getRobot().getMessageLogger(), "RotatePos135") ;
+            auto seq = std::make_shared<SequenceAction>(getRobot().getMessageLogger(), "RotatePos135") ;
             auto db = sub->getTankDrive() ;
 
             action = std::make_shared<TankDriveAngleAction>(*db, 135.0) ;

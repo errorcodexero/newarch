@@ -1,0 +1,33 @@
+
+-------------------------- Actions --------------------------------
+
+Action
+The base class for all actions.  All work in a subsystem is done
+via a subsystem defined action.
+
+SequenceAction
+Executes a series of actions in order.  Can be canceled and will
+complete cancel when the current action is canceled, or if it cannot
+cancel when the current action completes.
+
+ParallelAction
+Runs a set of actions all in parallel.  This action is done when all
+of the parallel actions are done.
+
+DispatchAction
+Assigns a single action to a subsystem.  May completed immediately
+or may wait for the subsystem action to be done.  Can be canceled
+if it is a blocking action.
+
+DelayAction
+Delays a fixed amount of time
+
+TerminateAction
+Contains a child action and a set of terminators.  Runs the child action 
+until it is complete, or until a terminator asks the action to be terminated.  This
+is useful in those cases where you want to run an action until a sensor detects
+some specific and then have a new action take over when the sensors detect
+something.  For example in 2019, we ran a path following algorithm until our
+vision system detected a target, then the path following was canceled and the
+next action took over.  The next action was a drive by vision action.
+

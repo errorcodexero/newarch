@@ -4,7 +4,7 @@
 #include "collector/Collector.h"
 #include "collector/CollectCubeAction.h"
 #include "LiftingCollectCubeAction.h"
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 #include <Robot.h>
 
 using namespace xero::base ;

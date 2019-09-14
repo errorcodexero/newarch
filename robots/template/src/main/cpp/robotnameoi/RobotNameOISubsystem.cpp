@@ -5,7 +5,7 @@
 #include <Robot.h>
 #include <SettingsParser.h>
 #include <oi/DriverGamepad.h>
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 #include <frc/DriverStation.h>
 #include <iostream>
 #include <cmath>

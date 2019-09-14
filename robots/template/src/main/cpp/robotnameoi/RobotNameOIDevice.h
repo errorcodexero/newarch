@@ -2,7 +2,7 @@
 
 #include <oi/OIDevice.h> 
 #include <Action.h>
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 
 namespace xero {
     namespace $$robotname$$ {
@@ -17,7 +17,7 @@ namespace xero {
                 return getValue(automode_) ;
             }
 
-            virtual void generateActions(xero::base::ActionSequence &seq) ;
+            virtual void generateActions(xero::base::SequenceAction &seq) ;
 
             virtual void init() ;
 

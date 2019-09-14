@@ -16,7 +16,7 @@ namespace xero {
                 return getValue(automode_) ;
             }
 
-            virtual void generateActions(xero::base::ActionSequence &seq) ;
+            virtual void generateActions(xero::base::SequenceAction &seq) ;
 
         private:
             void createActions() ;

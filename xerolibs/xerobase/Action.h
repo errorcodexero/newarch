@@ -17,7 +17,7 @@ namespace xero {
         /// one of the actions for the TankDrive subsystem is to drive straight a fixed distance.
         /// \sa ParallelAction
         /// \sa DelayAction
-        /// \sa ActionSequence
+        /// \sa SequenceAction
         class Action {
         public:
             /// \brief Start the action; called once per action when it starts

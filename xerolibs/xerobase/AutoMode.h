@@ -1,12 +1,12 @@
 #pragma once
 
-#include "ActionSequence.h"
+#include "SequenceAction.h"
 #include "Robot.h"
 
 
 namespace xero {
     namespace base {
-        class AutoMode : public ActionSequence {
+        class AutoMode : public SequenceAction {
 
         public:
             /// \brief create an empty action sequence 

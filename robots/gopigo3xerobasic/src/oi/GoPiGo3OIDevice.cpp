@@ -35,7 +35,7 @@ int GoPiGo3OIDevice::getAutoModeSelector()
     return res;
 }
 
-void GoPiGo3OIDevice::generateActions(xero::base::ActionSequence &seq) {
+void GoPiGo3OIDevice::generateActions(xero::base::SequenceAction &seq) {
 
     frc::DriverStation &ds = frc::DriverStation::GetInstance();
     double axisv = ds.GetStickAxis(getIndex(), 0);

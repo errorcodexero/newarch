@@ -38,9 +38,28 @@ namespace xero {
             bool isDenied() { return denied_ ;}
             
         private:
+            //
+            // The subsystem to assign the action to
+            //
             std::shared_ptr<Subsystem> subsystem_;
+
+            //
+            // The action to assign to a subsystem, must be compatible with the
+            // subsystem.
+            //
             std::shared_ptr<Action> action_;
+
+            //
+            // This is set true in the constructor when you want
+            // the subsystem action to complete before this action
+            // completes.
+            //
             bool block_;
+
+            //
+            // This is set to true when the subsystem does not
+            // accept the action.
+            //
             bool denied_;
         };
     }

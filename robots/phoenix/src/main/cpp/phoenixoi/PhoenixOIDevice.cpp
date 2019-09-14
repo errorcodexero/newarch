@@ -21,7 +21,7 @@
 #include "phoenixsubsystem/PhoenixRobotSubsystem.h"
 
 // Action related classes
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 
 
 using namespace xero::base ;
@@ -101,7 +101,7 @@ namespace xero {
             lifter_zero_ = std::make_shared<LifterPowerAction>(*lifter, 0.0) ;
         }
 
-        void PhoenixOIDevice::generateActions(ActionSequence &seq) {
+        void PhoenixOIDevice::generateActions(SequenceAction &seq) {
             if (to_floor_ == nullptr)
                 createActions() ;
 

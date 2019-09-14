@@ -2,7 +2,7 @@
 #include "CollectorAction.h"
 #include "intake/Intake.h"
 #include "grabber/Grabber.h"
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 #include <Robot.h>
 #include <frc/DigitalInput.h>
 
