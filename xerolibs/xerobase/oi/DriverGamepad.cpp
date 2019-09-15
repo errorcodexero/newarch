@@ -40,6 +40,8 @@ namespace xero {
             reverse_ = false ;
             high_gear_ = true ;
             rumbling_ = false ;
+            left_ = std::numeric_limits<double>::max() ;
+            right_ = std::numeric_limits<double>::max() ;
 
             auto &parser = oi.getRobot().getSettingsParser() ;
             if (parser.isDefined("driver:spin:reverse")) {
@@ -144,9 +146,9 @@ namespace xero {
 
         void DriverGamepad::generateActions(SequenceAction &seq) {
             int pov ;
+            auto &logger = getSubsystem().getRobot().getMessageLogger() ;
 
             if (db_ == nullptr) {
-                auto &logger = getSubsystem().getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::warning) ;
                 logger << "DriverGamepad: generateActions called with no attached drivebase" ;
                 logger.endMessage() ;

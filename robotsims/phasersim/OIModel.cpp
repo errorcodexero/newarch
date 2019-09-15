@@ -35,6 +35,37 @@ namespace xero {
                     }                        
                 }
 
+                if (event == "left_axis_x") {
+                    double v = static_cast<double>(value) / 100.0 ;
+                    setAxis(0, 0, v) ;
+                    ret = true ;
+                }
+                else if (event == "left_axis_y") {
+                    double v = static_cast<double>(value) / 100.0 ;                    
+                    setAxis(0, 1, v) ;
+                    ret = true ;                    
+                }
+                else if (event == "left_trigger") {
+                    double v = static_cast<double>(value) / 100.0 ;
+                    setAxis(0, 2, v) ;
+                    ret = true ;                    
+                }
+                else if (event == "right_trigger") {
+                    double v = static_cast<double>(value) / 100.0 ;                    
+                    setAxis(0, 3, v) ;
+                    ret = true ;                    
+                }
+                else if (event == "right_axis_x") {
+                    double v = static_cast<double>(value) / 100.0 ;
+                    setAxis(0, 4, v) ;
+                    ret = true ;                    
+                }
+                else if (event == "right_axis_y") {
+                    double v = static_cast<double>(value) / 100.0 ;                    
+                    setAxis(0, 5, v) ;
+                    ret = true ;                    
+                }
+
                 return ret ;
             }
 

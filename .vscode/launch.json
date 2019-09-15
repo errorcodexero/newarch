@@ -28,7 +28,7 @@
             "--start", "0.0",
             "--auto", "0.0",
             "--oper","15.0",
-            "--events","robots/phaser/sims/south.sti"
+            "--events","robots/phaser/sims/drive.sti"
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",

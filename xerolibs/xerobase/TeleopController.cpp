@@ -97,16 +97,18 @@ namespace xero {
                     //
                     seq_->clear() ;
                     oi->generateActions(seq_) ;
-                    seq_->start() ;
-                    seq_->run() ;
-                    if (!seq_->isDone()) {
-                        logger.startMessage(MessageLogger::MessageType::error) ;
-                        logger << "telop sequence did not complete in one cycle" ;
-                        logger.endMessage() ;
-                        logger.startMessage(MessageLogger::MessageType::error) ;
-                        logger << "Sequence: " << seq_->toString() ;
-                        logger.endMessage() ;
-                    }           
+                    if (seq_->size() > 0) {
+                        seq_->start() ;
+                        seq_->run() ;
+                        if (!seq_->isDone()) {
+                            logger.startMessage(MessageLogger::MessageType::error) ;
+                            logger << "telop sequence did not complete in one cycle" ;
+                            logger.endMessage() ;
+                            logger.startMessage(MessageLogger::MessageType::error) ;
+                            logger << "Sequence: " << seq_->toString() ;
+                            logger.endMessage() ;
+                        }           
+                    }
                 }
             }
         }

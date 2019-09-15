@@ -65,6 +65,8 @@ namespace xero {
             /// \brief clear the list of actions
             void clear() {
                 actions_.clear() ;
+                isDone_ = false ;
+                isCancel_ = false ;
             }
 
             /// \brief return the number of actions in the sequence
