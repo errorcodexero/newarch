@@ -26,8 +26,13 @@ namespace xero{
                 current_error = xero::math::normalizeAngleDegrees(dtarget - dactual) ;
             else
                 current_error = dtarget - dactual ;
-                
-            double output = v * kv_ + a * ka_ + current_error * kp_ + ((current_error - last_error_) / dt -v) * kd_ ;
+
+            vpart_ = v * kv_ ;
+            apart_ = a * ka_ ;
+            ppart_ = current_error * kp_ ;
+            dpart_ = ((current_error - last_error_) / dt -v) * kd_ ;
+
+            double output = vpart_ + apart_ + ppart_ + dpart_ ;
             last_error_ = current_error ;
             return output ;
         }

@@ -275,6 +275,16 @@ namespace xero {
             message_logger_.endMessage() ;              
             RobotHardwareInit() ;
 
+            if (parser_->isDefined("plotting:enabled"))
+            {
+                //
+                // Turn on plotting if the key is in the settings file
+                //
+                Setting &s = parser_->get("plotting:enabled") ;
+                if (s.isBoolean() && s.getBoolean())
+                    plot_mgr_.enable(true) ;
+            }
+
             //
             // Perform post hardware subsystem initialization.  This is initialization
             // that needs to happen after all of the hierarchal subsystem in the robot

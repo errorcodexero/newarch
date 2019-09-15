@@ -18,6 +18,9 @@ namespace xero
             void startPlot(int id, const std::vector<std::string> &cols) ;
             void addPlotData(int id, const std::vector<double> &values) ;
             void endPlot(int id) ;
+            void enable(bool b) {
+                enabled_ = b ;
+            }
 
         private:
         
@@ -40,6 +43,9 @@ namespace xero
 
             // The map of plot IDs to active plots
             std::map<int, plotinfo> active_plots_ ;
+
+            // If true, plotting is enabled
+            bool enabled_ ;
         } ;
     }
 }

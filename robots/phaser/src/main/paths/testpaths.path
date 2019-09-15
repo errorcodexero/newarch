@@ -10,9 +10,9 @@
                     "endangle": 0,
                     "endangledelay": 0,
                     "endvelocity": 0,
-                    "maxacceleration": 180,
-                    "maxjerk": 1800,
-                    "maxvelocity": 180,
+                    "maxacceleration": 120,
+                    "maxjerk": 1200,
+                    "maxvelocity": 120,
                     "name": "Straight120",
                     "points": [
                         {
@@ -36,9 +36,9 @@
                     "endangle": 0,
                     "endangledelay": 0,
                     "endvelocity": 0,
-                    "maxacceleration": 180,
-                    "maxjerk": 1800,
-                    "maxvelocity": 180,
+                    "maxacceleration": 120,
+                    "maxjerk": 1200,
+                    "maxvelocity": 120,
                     "name": "Straight240",
                     "points": [
                         {
@@ -67,9 +67,9 @@
                     "endangle": 0,
                     "endangledelay": 0,
                     "endvelocity": 0,
-                    "maxacceleration": 180,
-                    "maxjerk": 1800,
-                    "maxvelocity": 180,
+                    "maxacceleration": 120,
+                    "maxjerk": 1200,
+                    "maxvelocity": 120,
                     "name": "Curve90",
                     "points": [
                         {
@@ -93,9 +93,9 @@
                     "endangle": 0,
                     "endangledelay": 0,
                     "endvelocity": 0,
-                    "maxacceleration": 180,
-                    "maxjerk": 1800,
-                    "maxvelocity": 180,
+                    "maxacceleration": 120,
+                    "maxjerk": 1200,
+                    "maxvelocity": 120,
                     "name": "Curve180",
                     "points": [
                         {

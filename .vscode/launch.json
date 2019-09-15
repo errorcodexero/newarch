@@ -22,13 +22,11 @@
         "request": "launch",
         "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/phaser/phaser.exe",
         "args": [
-            "--simfile", "logs/SIM",
-            "--robotfile", "logs/ROBOT",
             "--test","0.0",
             "--start", "0.0",
-            "--auto", "0.0",
-            "--oper","15.0",
-            "--events","robots/phaser/sims/drive.sti"
+            "--auto", "15.0",
+            "--oper","0.0",
+            "--events","robots/phaser/sims/automode_8.sti"
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",

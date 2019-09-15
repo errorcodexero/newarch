@@ -25,6 +25,11 @@ namespace ctre
                     value_ = -v;
                 else
                     value_ = v ;
+
+                if (value_ > 1.0)
+                    value_ = 1.0 ;
+                else if (value_ < -1.0)
+                    value_ = -1.0 ;
                     
                 changed() ;
             }

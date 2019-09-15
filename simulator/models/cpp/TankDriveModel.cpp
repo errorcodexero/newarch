@@ -168,8 +168,14 @@ namespace xero {
             //
             // Calculate the new desired revolutions per second (RPS)
             //
-            double desired_left_rps = -left_power_ * left_rps_per_power_per_time_ ;
+            double desired_left_rps = left_power_ * left_rps_per_power_per_time_ ;
             double desired_right_rps = right_power_ * right_rps_per_power_per_time_ ;
+            
+#ifdef TANKDRIVE_PRINT_STUFF
+            std::cout << "--------------------------------------------------------" << std::endl ;
+            std::cout << "Power " << left_power_ << " " << right_power_ << std::endl ;
+            std::cout << "Desired RPS " << desired_left_rps << " " << desired_right_rps << std::endl ;
+#endif
 
             //
             // Now, see how much our RPS can actually changes
@@ -177,11 +183,19 @@ namespace xero {
             current_left_rps_ = capValue(current_left_rps_, desired_left_rps, current_max_change_) ;
             current_right_rps_ = capValue(current_right_rps_, desired_right_rps, current_max_change_) ;
 
+#ifdef TANKDRIVE_PRINT_STUFF
+            std::cout << "Current RPS " << current_left_rps_ << " " << current_right_rps_ << std::endl ;
+#endif
+
             //
             // Now, calculate distance each wheel moved based on the actual RPS
             //
             double dleft = current_left_rps_* dt * diameter_ * PI;
             double dright = current_right_rps_ * dt * diameter_ * PI;
+
+#ifdef TANKDRIVE_PRINT_STUFF
+            std::cout << "Current Distance " << dleft << " " << dright << std::endl ;
+#endif
 
             //
             // And add to the total distance so far
@@ -206,7 +220,7 @@ namespace xero {
             right_enc_value_ = static_cast<int32_t>(rrevs * ticks_per_rev_) ;
 
             if (left_enc_ != nullptr)
-                left_enc_->SimulatorSetValue(-left_enc_value_) ;
+                left_enc_->SimulatorSetValue(left_enc_value_) ;
 
             if (right_enc_ != nullptr)
                 right_enc_->SimulatorSetValue(right_enc_value_) ;

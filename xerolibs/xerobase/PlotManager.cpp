@@ -9,6 +9,7 @@ namespace xero {
         {
             plot_table_ = "/XeroPlot" ;
             next_plot_id_ = 1 ;
+            enabled_ = false ;
         }
 
         PlotManager::~PlotManager()
@@ -42,42 +43,52 @@ namespace xero {
             return id ;
         }
 
-        void PlotManager::startPlot(int id, const std::vector<std::string> &cols) {
-            auto &info = active_plots_[id] ;
-            info.cols_ = cols.size() ;
-            info.index_ = 0 ;
+        void PlotManager::startPlot(int id, const std::vector<std::string> &cols) 
+        {
+            if (enabled_)
+            {
+                auto &info = active_plots_[id] ;
+                info.cols_ = cols.size() ;
+                info.index_ = 0 ;
 
-            nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
-            std::string tbname = getKeyForPlot(id) ;
-            auto plottable = inst.GetTable(tbname) ;
+                nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
+                std::string tbname = getKeyForPlot(id) ;
+                auto plottable = inst.GetTable(tbname) ;
 
-            plottable->PutStringArray("columns", cols) ;
-            plottable->PutNumber("points", 0) ;
+                plottable->PutStringArray("columns", cols) ;
+                plottable->PutNumber("points", 0) ;
+            }
         }
 
         void PlotManager::addPlotData(int id, const std::vector<double> &values)
         {
-            auto &info = active_plots_[id] ;
-
-            if (values.size() == static_cast<size_t>(info.cols_))
+            if (enabled_)
             {
-                nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
-                std::string tbname = getKeyForPlot(id) ;
-                auto plottable = inst.GetTable(tbname) ;
-                std::string name = "data/" + std::to_string(info.index_) ;
-                plottable->PutNumberArray(name, values) ;
-                info.index_++ ;
-                plottable->PutNumber("points", info.index_) ;
+                auto &info = active_plots_[id] ;
+
+                if (values.size() == static_cast<size_t>(info.cols_))
+                {
+                    nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
+                    std::string tbname = getKeyForPlot(id) ;
+                    auto plottable = inst.GetTable(tbname) ;
+                    std::string name = "data/" + std::to_string(info.index_) ;
+                    plottable->PutNumberArray(name, values) ;
+                    info.index_++ ;
+                    plottable->PutNumber("points", info.index_) ;
+                }
             }
         }
 
         void PlotManager::endPlot(int id)
         {
-            auto &info = active_plots_[id] ;
-            nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
-            std::string tbname = getKeyForPlot(id) ;
-            auto plottable = inst.GetTable(tbname) ;
-            plottable->PutNumber("points", info.index_) ;
+            if (enabled_)
+            {
+                auto &info = active_plots_[id] ;
+                nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
+                std::string tbname = getKeyForPlot(id) ;
+                auto plottable = inst.GetTable(tbname) ;
+                plottable->PutNumber("points", info.index_) ;
+            }
         }
     }
 }

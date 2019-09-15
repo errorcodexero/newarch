@@ -35,6 +35,22 @@ namespace xero {
             /// \param dt the delta time since the last time this was called
             double getOutput(double a, double v, double dtarget, double dactual, double dt);
 
+            double getVPart() {
+                return vpart_ ;
+            }
+
+            double getAPart() {
+                return apart_ ;
+            }
+
+            double getPPart() {
+                return ppart_ ;
+            }
+
+            double getDPart() {
+                return dpart_ ;
+            }
+
         private:
             double kv_;
             double ka_;
@@ -42,6 +58,11 @@ namespace xero {
             double kd_;
             double last_error_;
             double angle_ ;
+
+            double vpart_ ;
+            double apart_ ;
+            double ppart_ ;
+            double dpart_ ;
         };
     }
 }
