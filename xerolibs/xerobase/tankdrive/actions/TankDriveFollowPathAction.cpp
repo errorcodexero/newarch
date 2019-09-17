@@ -10,8 +10,8 @@ namespace xero {
     namespace base {
         std::vector<std::string> TankDriveFollowPathAction::plot_columns_ = {
             "time", 
-            "ltpos", "lapos", "ltvel", "lavel", "ltaccel", "lout","lticks","lvout","laout","lpout","ldout",
-            "rtpos", "rapos", "rtvel", "ravel", "rtaccel", "rout","rticks","rvout","raout","rpout","rdout",
+            "ltpos", "lapos", "ltvel", "lavel", "ltaccel", "lout","lticks","lvout","laout","lpout","ldout","lerr",
+            "rtpos", "rapos", "rtvel", "ravel", "rtaccel", "rout","rticks","rvout","raout","rpout","rdout","rerr",
             "thead", "ahead", "angcorr"
         } ;
 
@@ -171,6 +171,7 @@ namespace xero {
                 data.push_back(left_follower_->getAPart()) ;
                 data.push_back(left_follower_->getPPart()) ;
                 data.push_back(left_follower_->getDPart()) ;                
+                data.push_back(left_follower_->getLastError()) ;
 
                 // Right side
                 data.push_back(rpos) ;
@@ -184,6 +185,7 @@ namespace xero {
                 data.push_back(right_follower_->getAPart()) ;
                 data.push_back(right_follower_->getPPart()) ;
                 data.push_back(right_follower_->getDPart()) ; 
+                data.push_back(right_follower_->getLastError()) ;
 
                 // Angle data
                 data.push_back(thead) ;

@@ -59,6 +59,10 @@ namespace xero {
                 return dpart_ ;
             }
 
+            double getLastError() {
+                return last_error_ ;
+            }
+
         private:
             double kv_;
             double kv1_ ;
