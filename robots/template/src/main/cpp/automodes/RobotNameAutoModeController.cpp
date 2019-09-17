@@ -1,7 +1,7 @@
 #include "automodes/$$RobotName$$AutoModeController.h"
 #include "$$RobotName$$.h"
 #include <tankdrive/modes/FollowPathAutomode.h>
-#include <tankdrive/modes/TankDriveScrubMode.h>
+#include <tankdrive/modes/ScrubCharMode.h>
 #include <tankdrive/modes/StraightCharAutoMode.h>
 #include <MessageLogger.h>
 #include <frc/DriverStation.h>
@@ -47,7 +47,7 @@ namespace xero {
                 break ;
 
             case 8:
-                mode = std::make_shared<TankDriveScrubMode>(getRobot(), 0.4, 360.0 * 4.0) ;
+                mode = std::make_shared<ScrubCharMode>(getRobot(), 0.4, 360.0 * 4.0) ;
                 break ;
 
             case 9:

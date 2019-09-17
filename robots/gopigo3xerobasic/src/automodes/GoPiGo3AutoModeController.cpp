@@ -1,6 +1,6 @@
 #include "GoPiGo3AutoModeController.h"
 #include <tankdrive/modes/FollowPathAutomode.h>
-#include <tankdrive/modes/TankDriveScrubMode.h>
+#include <tankdrive/modes/ScrubCharMode.h>
 #include <tankdrive/modes/StraightCharAutoMode.h>
 
 using namespace xero::base ;

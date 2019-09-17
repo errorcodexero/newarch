@@ -44,7 +44,7 @@ SOURCES = \
 	MessageListener/MessageListener.cpp\
 	tankdrive/TankDrive.cpp\
 	tankdrive/modes/FollowPathAutomode.cpp\
-	tankdrive/modes/TankDriveScrubMode.cpp\
+	tankdrive/modes/ScrubCharMode.cpp\
 	tankdrive/modes/StraightCharAutoMode.cpp\
 	tankdrive/actions/TankDriveDistanceAction.cpp\
 	tankdrive/actions/TankDriveVelocityAction.cpp\

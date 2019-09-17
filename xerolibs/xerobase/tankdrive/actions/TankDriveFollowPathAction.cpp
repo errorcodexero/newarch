@@ -27,9 +27,9 @@ namespace xero {
 
             std::string pname = "tankdrive:follower:";
             
-            left_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), pname + "left:kv", 
+            left_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), pname + "left:kv1", pname + "left:kv2",
                                 pname + "left:ka", pname + "left:kp", pname + "left:kd") ;
-            right_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), pname + "right:kv", 
+            right_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), pname + "right:kv1", pname + "left:kv2",
                                 pname + "right:ka", pname + "right:kp", pname + "right:kd") ;
 
             turn_correction_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:turn_correction") ;

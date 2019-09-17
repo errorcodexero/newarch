@@ -7,7 +7,7 @@
 #include "Phaser.h"
 
 #include <tankdrive/modes/FollowPathAutomode.h>
-#include <tankdrive/modes/TankDriveScrubMode.h>
+#include <tankdrive/modes/ScrubCharMode.h>
 #include <tankdrive/modes/StraightCharAutoMode.h>
 #include <MessageLogger.h>
 

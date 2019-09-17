@@ -20,6 +20,14 @@ namespace xero {
             /// \param kd the name of the kd constant in the settings file
             PIDACtrl(SettingsParser &parser, const std::string &kv, const std::string &ka, const std::string &kp, const std::string &kd, bool angle = false);
 
+                        /// \brief Create the follower with constants from the settings file
+            /// \param parser the settings parser
+            /// \param kv the name of the kv constant in the settings file
+            /// \param ka the name of the ka constant in the settings file
+            /// \param kp the name of the kp constant in the settings file
+            /// \param kd the name of the kd constant in the settings file
+            PIDACtrl(SettingsParser &parser, const std::string &kv1, const std::string &kv2, const std::string &ka, const std::string &kp, const std::string &kd, bool angle = false);
+
             /// \brief Create the follower with constants provided
             /// \param kv the kv constant
             /// \param ka the ka constant
@@ -53,11 +61,15 @@ namespace xero {
 
         private:
             double kv_;
+            double kv1_ ;
+            double kv2_ ;
             double ka_;
             double kp_;
             double kd_;
             double last_error_;
             double angle_ ;
+
+            bool equ_ ;
 
             double vpart_ ;
             double apart_ ;
