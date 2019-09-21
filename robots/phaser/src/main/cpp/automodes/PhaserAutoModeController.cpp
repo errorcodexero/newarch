@@ -64,7 +64,7 @@ namespace xero {
                 break ;
 
             case 8:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "StraightPaths_Straight120") ;
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), "LSRightRocketRight") ;
                 break ;
 
             case 9:
