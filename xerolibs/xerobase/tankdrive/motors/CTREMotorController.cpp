@@ -7,8 +7,12 @@ namespace xero {
                 std::transform(ids.begin(), ids.end(), std::back_inserter(motors_), [type](int id) -> MotorPtr {
                     MotorPtr motor;
                     switch (type) {
-                        case Type::TalonSRX: motor = std::make_shared<ctre::phoenix::motorcontrol::can::TalonSRX>(id);
-                        case Type::VictorSPX: motor = std::make_shared<ctre::phoenix::motorcontrol::can::VictorSPX>(id);
+                    case Type::TalonSRX:
+                        motor = std::make_shared<ctre::phoenix::motorcontrol::can::TalonSRX>(id);
+                        break;
+                    case Type::VictorSPX:
+                        motor = std::make_shared<ctre::phoenix::motorcontrol::can::VictorSPX>(id);
+                        break;
                     } 
 
                     motor->ConfigVoltageCompSaturation(12.0, 10) ;
