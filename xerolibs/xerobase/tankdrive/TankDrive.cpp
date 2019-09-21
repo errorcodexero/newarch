@@ -5,11 +5,22 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <cassert>
 #include <cmath>
+#include "motors/CTREMotorController.h"
+#include "motors/SparkMaxMotorController.h"
 
 using namespace xero::misc ;
 
 namespace xero {
     namespace base {
+        
+        // Logs an invalid motor type message and crashes.
+        static void handleInvalidMotorType(MessageLogger &logger, const std::string msg) {
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << msg;
+                logger << " (must be one of 'talon_srx', 'victor_spx', 'sparkmax_brushed', 'sparkmax_brushless')";
+                logger.endMessage();
+                assert(0);
+        }
 
         TankDrive::TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids) : 
                         DriveBase(robot, "tankdrive"), angular_(2, true), left_linear_(2), right_linear_(2) {
@@ -17,15 +28,27 @@ namespace xero {
             assert((left_motor_ids.size() == right_motor_ids.size()) && (left_motor_ids.size() > 0));
 
             SettingsParser &settings = robot.getSettingsParser() ;
-            if (settings.isDefined("hw:tankdrive:motortype") && settings.getString("hw:tankdrive:motortype") == "victor")
-            {
-                initVictorList(left_motor_ids, left_victor_motors_) ;
-                initVictorList(right_motor_ids, right_victor_motors_) ;
-            }
-            else
-            {
-                initTalonList(left_motor_ids, left_talon_motors_);
-                initTalonList(right_motor_ids, right_talon_motors_);
+            
+            if (settings.isDefined("hw:tankdrive:motortype")) {
+                std::string typeID = settings.getString("hw:tankdrive:motortype");
+                if (typeID == "talon_srx") {
+                    left_motors_ = std::make_shared<CTREMotorController>(left_motor_ids, CTREMotorController::Type::TalonSRX);
+                    right_motors_ = std::make_shared<CTREMotorController>(right_motor_ids, CTREMotorController::Type::TalonSRX);
+                } else if (typeID == "victor_spx") {
+                    left_motors_ = std::make_shared<CTREMotorController>(left_motor_ids, CTREMotorController::Type::VictorSPX);
+                    right_motors_ = std::make_shared<CTREMotorController>(right_motor_ids, CTREMotorController::Type::VictorSPX);
+                } else if (typeID == "sparkmax_brushed") {
+                    left_motors_ = std::make_shared<SparkMaxMotorController>(left_motor_ids, false);
+                    right_motors_ = std::make_shared<SparkMaxMotorController>(right_motor_ids, false);
+                } else if (typeID == "sparkmax_brushless") {
+                    left_motors_ = std::make_shared<SparkMaxMotorController>(left_motor_ids, true);
+                    right_motors_ = std::make_shared<SparkMaxMotorController>(right_motor_ids, true);
+                } else {
+                    handleInvalidMotorType(getRobot().getMessageLogger(),
+                                           "invalid hw:tankdrive:motortype '" + typeID + "'");
+                }
+            } else {
+                handleInvalidMotorType(getRobot().getMessageLogger(), "hw:tankdrive:motortype is undefined");
             }
 
             dist_l_ = 0.0 ;
@@ -63,30 +86,16 @@ namespace xero {
         void TankDrive::reset() {
             Subsystem::reset() ;
 
-            if (left_talon_motors_.size()) {
-                for(auto &talon : left_talon_motors_) {
-                    talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast) ;
-                }
-
-                for(auto &talon : right_talon_motors_) {
-                    talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast) ;
-                }           
-            }
+            left_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
+            right_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
             setMotorsToPercents(0, 0);   // Turn motors off
         }
 
         void TankDrive::init(LoopType ltype) {
             Subsystem::init(ltype) ;
 
-            if (left_talon_motors_.size()) {
-                for(auto &talon : left_talon_motors_) {
-                    talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
-                }
-
-                for(auto &talon : right_talon_motors_) {
-                    talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
-                }           
-            }
+            left_motors_->setNeutralMode(MotorController::NeutralMode::Brake);
+            right_motors_->setNeutralMode(MotorController::NeutralMode::Brake);
         }
         
         void TankDrive::lowGear() {
@@ -151,45 +160,12 @@ namespace xero {
             highGear() ;
         }
 
-        void TankDrive::initTalonList(const std::list<int>& ids, std::list<TalonPtr>& talons) {
-            //Assuming first id will be master
-            for(int id : ids) {
-                auto talon = std::make_shared<ctre::phoenix::motorcontrol::can::TalonSRX>(id) ;
-                talon->ConfigVoltageCompSaturation(12.0, 10) ;
-                talon->EnableVoltageCompensation(true) ;
-                talons.push_back(talon);
-                if(talons.size() > 1)
-                    talons.back()->Follow(*talons.front());
-            }
-        }       
-
-        void TankDrive::initVictorList(const std::list<int> &ids, std::list<VictorPtr> &victors) {
-            for(int id : ids) {
-                auto victor = std::make_shared<frc::VictorSP>(id) ;
-                victors.push_back(victor) ;
-            }
-        }
-
         void TankDrive::invertLeftMotors() {
-            if (left_talon_motors_.size() > 0) {
-                for(TalonPtr talon : left_talon_motors_)
-                    talon->SetInverted(true);
-            }
-            else {
-                for(VictorPtr victor : left_victor_motors_)
-                    victor->SetInverted(true) ;
-            }
+            left_motors_->setInverted(true);
         }
 
         void TankDrive::invertRightMotors() {
-            if (right_talon_motors_.size() > 0) {
-                for(TalonPtr talon : right_talon_motors_) 
-                    talon->SetInverted(true);
-            }
-            else {
-                for(VictorPtr victor : right_victor_motors_)
-                    victor->SetInverted(true) ;
-            }
+            right_motors_->setInverted(true);
         }       
 
         void TankDrive::computeState() {
@@ -249,19 +225,8 @@ namespace xero {
         }
 
         void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
-            if (left_talon_motors_.size() > 0) {
-                left_talon_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent);
-                right_talon_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
-            }
-            else {
-                for(VictorPtr victor : left_victor_motors_) {
-                    victor->Set(left_percent) ;
-                }
-
-                for(VictorPtr victor : right_victor_motors_) {
-                    victor->Set(right_percent) ;
-                }
-            }
+            left_motors_->set(left_percent);
+            right_motors_->set(left_percent);
         }
     }
 }
