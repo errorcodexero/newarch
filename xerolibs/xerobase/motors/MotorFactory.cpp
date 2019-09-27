@@ -14,16 +14,16 @@ namespace xero {
                  std::function<MotorFactory::MotorPtr(int)>
                 > MotorFactory::motorConstructors_ = {
             { "talon_srx", [](int canID) {
-                return CTREMotorController(canID, CTREMotorController::Type::TalonSRX);
+                return std::make_shared<CTREMotorController>(canID, CTREMotorController::Type::TalonSRX);
             }},
             { "victor_spx", [](int canID) {
-                return CTREMotorController(canID, CTREMotorController::Type::VictorSPX);
+                return std::make_shared<CTREMotorController>(canID, CTREMotorController::Type::VictorSPX);
             }},
             { "sparkmax_brushless", [](int canID) {
-                return SparkMaxMotorController(canID, true);
+                return std::make_shared<SparkMaxMotorController>(canID, true);
             }},
             { "sparkmax_brushed", [](int canID) {
-                return SparkMaxMotorController(canID, false);
+                return std::make_shared<SparkMaxMotorController>(canID, false);
             }}
         };
 
@@ -39,7 +39,7 @@ namespace xero {
             assert(0);
         }
 
-        MotorPtr MotorFactory::createSingleMotor(std::string configID) {
+        MotorFactory::MotorPtr MotorFactory::createSingleMotor(std::string configID) {
             bool hasCanID = settingsParser_.isDefined(configID + ":canid");
             bool hasType = settingsParser_.isDefined(configID + ":type");
 
@@ -48,7 +48,7 @@ namespace xero {
                 else return nullptr;
             }
 
-            int canID = settingsParser_.getInt(configID + ":canid");
+            int canID = settingsParser_.getInteger(configID + ":canid");
             std::string type = settingsParser_.getString(configID + ":type");
             
             auto constructor = motorConstructors_.find(type);
@@ -63,35 +63,36 @@ namespace xero {
 
             // Ensure CAN ID does not already exist.
             if (idsUsed_.find(canID) != idsUsed_.end()) {
-                handleError("duplicate CAN ID " + canID);
+                handleError(configID, "duplicate CAN ID " + std::to_string(canID));
             }
 
             // Create the motor.
             return constructor->second(canID);
         }
 
-        MotorPtr MotorFactory::createMotor(std::string configID) {
+        MotorFactory::MotorPtr MotorFactory::createMotor(std::string configID) {
             // Try to create & return a single motor.
             if (auto motor = createSingleMotor(configID)) return motor;
 
             // Could not parse as a single motor declaration.
             // Try to create a motor group instead.
-            std::vector motors;
+            std::vector<MotorPtr> motors;
             while (true) {
                 // Try to create the next motor.
-                if (auto motor = createSingleMotor(configID + ":" + (motors.size() + 1))) {
+                if (auto motor = createSingleMotor(configID + ":" + std::to_string(motors.size() + 1))) {
                     motors.push_back(motor);
                 } else {
                     // Could not create another motor.
                     if (motors.empty()) {
                         // No motors were declared.
-                        handleError("invalid motor declaration");
+                        handleError(configID, "invalid motor declaration");
                     } else {
                         // We've reached the end of the motor list.
                         break;
                     }
                 }
             }
+            return std::make_shared<MotorGroupController>(motors);
         }
     }
 }
