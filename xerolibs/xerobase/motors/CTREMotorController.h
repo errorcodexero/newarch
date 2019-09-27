@@ -14,22 +14,21 @@ namespace xero {
             enum class Type { TalonSRX, VictorSPX };
         
             /// \brief Creates a new CTRE motor object
-            /// \param ids The motor IDs.
+            /// \param canID The motor ID.
             /// \param type The motor type.
-            CTREMotorController(const std::list<int> &ids, Type type);
+            CTREMotorController(int canID, Type type);
 
-            ~CTREMotorController() { set(0); }
+            virtual ~CTREMotorController() { set(0); }
 
-            /// \brief Returns whether these motors are Talon or Victor motors.
+            /// \brief Returns whether this motor is a Talon or Victor motor.
             Type getType() { return type_; }
 
             virtual void set(double percent);
-
             virtual void setInverted(bool inverted);
-
             virtual void setNeutralMode(NeutralMode neutralMode);
+            virtual void follow(std::shared_ptr<MotorController> motor);
         private:
-            std::list<MotorPtr> motors_;
+            MotorPtr motor_;
             Type type_;
         };
     }

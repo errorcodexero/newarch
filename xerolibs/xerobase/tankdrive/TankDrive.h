@@ -25,11 +25,10 @@ namespace xero {
         public:
             /// \brief Create a new tank drive object
             /// \param robot The robot that contains this tank drive subsystem
-            /// \param left_motor_ids A list of TalonSRX ids for the left side of the drivebase, the first
-            /// being the master and the rest being followers
-            /// \param right_motor_ids A list of TalonSRX ids for the right side of the drivebase, the first
-            /// being the master and the rest being followers
-            TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids);
+            /// \param motorConfigBase The configuration ID for the motors.
+            /// If motorConfigBase is "hw:tankdrive", TankDrive will look for
+            /// motor groups named "hw:tankdrive:left" and "hw:tankdrive:right".
+            TankDrive(Robot& robot, const std::string motorConfigBase);
 
             /// \brief destroy a tank drive object
             virtual ~TankDrive() ;

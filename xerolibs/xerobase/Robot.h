@@ -7,6 +7,7 @@
 #include "NTPathDataWatcher.h"
 #include "basegroups.h"
 #include "PlotManager.h"
+#include "motors/MotorFactory.h"
 #include <XeroPathManager.h>
 #include <frc/SampleRobot.h>
 #include <memory>
@@ -142,7 +143,13 @@ namespace xero {
             /// \brief return the path manager
             std::shared_ptr<xero::misc::XeroPathManager> getPathManager() {
                 return paths_ ;
-            }          
+            }
+
+            /// \brief Returns the motor factory
+            /// \return the motor factory
+            std::shared_ptr<MotorFactory> getMotorFactory() {
+                return motor_factory_;
+            }
 
 
             /// \brief return the current controller
@@ -256,6 +263,9 @@ namespace xero {
 
             // Message logger instance
             xero::misc::MessageLogger message_logger_;
+
+            /// The motor factory
+            std::shared_ptr<MotorFactory> motor_factory_;
 
             // The time the last time through the robot loop
             double last_time_ ;

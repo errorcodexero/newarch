@@ -40,6 +40,7 @@ namespace xero {
             parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;
             output_stream_ = nullptr ;
 
+            motor_factory_ = std::make_shared<MotorFactory>(this);
 
             sleep_time_.resize(static_cast<int>(LoopType::MaxValue)) ;
             std::fill(sleep_time_.begin(), sleep_time_.end(), 0.0) ;

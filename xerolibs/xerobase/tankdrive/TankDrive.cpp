@@ -7,49 +7,19 @@
 #include <cmath>
 #include "motors/CTREMotorController.h"
 #include "motors/SparkMaxMotorController.h"
+#include "motors/MotorFactory.h"
 
 using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        
-        // Logs an invalid motor type message and crashes.
-        static void handleInvalidMotorType(MessageLogger &logger, const std::string msg) {
-                logger.startMessage(MessageLogger::MessageType::error) ;
-                logger << msg;
-                logger << " (must be one of 'talon_srx', 'victor_spx', 'sparkmax_brushed', 'sparkmax_brushless')";
-                logger.endMessage();
-                assert(0);
-        }
 
-        TankDrive::TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids) : 
+        TankDrive::TankDrive(Robot& robot, const std::string motorConfigBase) : 
                         DriveBase(robot, "tankdrive"), angular_(2, true), left_linear_(2), right_linear_(2) {
-            //The two sides should always have the same number of motors and at least one motor each
-            assert((left_motor_ids.size() == right_motor_ids.size()) && (left_motor_ids.size() > 0));
-
-            SettingsParser &settings = robot.getSettingsParser() ;
             
-            if (settings.isDefined("hw:tankdrive:motortype")) {
-                std::string typeID = settings.getString("hw:tankdrive:motortype");
-                if (typeID == "talon_srx") {
-                    left_motors_ = std::make_shared<CTREMotorController>(left_motor_ids, CTREMotorController::Type::TalonSRX);
-                    right_motors_ = std::make_shared<CTREMotorController>(right_motor_ids, CTREMotorController::Type::TalonSRX);
-                } else if (typeID == "victor_spx") {
-                    left_motors_ = std::make_shared<CTREMotorController>(left_motor_ids, CTREMotorController::Type::VictorSPX);
-                    right_motors_ = std::make_shared<CTREMotorController>(right_motor_ids, CTREMotorController::Type::VictorSPX);
-                } else if (typeID == "sparkmax_brushed") {
-                    left_motors_ = std::make_shared<SparkMaxMotorController>(left_motor_ids, false);
-                    right_motors_ = std::make_shared<SparkMaxMotorController>(right_motor_ids, false);
-                } else if (typeID == "sparkmax_brushless") {
-                    left_motors_ = std::make_shared<SparkMaxMotorController>(left_motor_ids, true);
-                    right_motors_ = std::make_shared<SparkMaxMotorController>(right_motor_ids, true);
-                } else {
-                    handleInvalidMotorType(getRobot().getMessageLogger(),
-                                           "invalid hw:tankdrive:motortype '" + typeID + "'");
-                }
-            } else {
-                handleInvalidMotorType(getRobot().getMessageLogger(), "hw:tankdrive:motortype is undefined");
-            }
+            auto motorFactory = robot.getMotorFactory();
+            left_motors_ = motorFactory->createMotor(motorConfigBase + ":left");
+            right_motors_ = motorFactory->createMotor(motorConfigBase + ":right");
 
             dist_l_ = 0.0 ;
             dist_r_ = 0.0 ;
@@ -73,7 +43,7 @@ namespace xero {
                 navx_->Reset() ;
             }   
 #endif
-
+            SettingsParser &settings = robot.getSettingsParser();
             double width = settings.getDouble("tankdrive:width") ;
             double scrub = settings.getDouble("tankdrive:scrub") ;
             kin_ = std::make_shared<xero::misc::Kinematics>(width, scrub) ;
