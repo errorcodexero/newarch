@@ -125,11 +125,13 @@ hw:climber:solenoid                                             2               
 ###################################################################################################
 
 #
-# Enable plotting.  Plot data is stored in the network tables and display
-# programs read the data from the network tables
+# Setup the data plotter.  If the value plotter:plot is set, many of the subsystem send data out
+# in UDP packets that the DataPlotter can plot.  Very useful for tuning PID and follower control
+# We generally keep this on with the practice bot and off for the competition bot
 #
-plotting:enabled                                               true
-
+if PRACTICE
+plotter:port                                                    5555
+endif
 
 ###################################################################################################
 # tankdrive
@@ -139,19 +141,17 @@ plotting:enabled                                               true
 # Variables for the tankdrive subsystem code.
 #
 tankdrive:inches_per_tick                                       0.010385891
-tankdrive:width                                                 221425
+tankdrive:width                                                 22
 tankdrive:scrub                                                 0.95177665
 
-tankdrive:follower:left:kv1                                     180.45
-tankdrive:follower:left:kv2                                     -19.35
-tankdrive:follower:left:ka                                      0.0001
-tankdrive:follower:left:kp                                      0.0003             # Recommended 0.02032 - 0.03048
+tankdrive:follower:left:ka                                      0.0025
+tankdrive:follower:left:kv                                      0.006112469         # 0.005
+tankdrive:follower:left:kp                                      0.03248             # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kd                                      0.0
 
-tankdrive:follower:right:kv1                                    180.45
-tankdrive:follower:right:kv2                                    -19.35
-tankdrive:follower:right:ka                                     0.0001
-tankdrive:follower:right:kp                                     0.0003             # Recommended 0.02032 - 0.03048
+tankdrive:follower:right:ka                                     0.0025
+tankdrive:follower:right:kv                                     0.006112469         # 0.005
+tankdrive:follower:right:kp                                     0.03248             # Recommended 0.02032 - 0.03048
 tankdrive:follower:right:kd                                     0.0
 
 tankdrive:follower:turn_correction                              0
@@ -194,7 +194,7 @@ turntable:calibrate:encbase                                     238
 endif
 
 if COMPETITION
-turntable:calibrate:encbase                                     252
+turntable:calibrate:encbase                                     2
 endif
 
 turntable:calibrate:power                                       0.2             

@@ -26,7 +26,7 @@ deploy {
         // Built in artifact to deploy arbitrary files to the roboRIO.
         fileTreeArtifact('frcStaticFileDeploy') {
             // The directory below is the local directory to deploy
-            files = fileTree(dir: 'robots/griffin/src/main/deploy')
+            files = fileTree(dir: 'robots/swerve/src/main/deploy')
             // Deploy to RoboRIO target, into /home/lvuser/deploy
             targets << "roborio"
             directory = '/home/lvuser/deploy'
@@ -133,6 +133,34 @@ model {
         //
         // 2019 Deep Space, Endurance, New Architecture
         //
+        // frcUserProgram(NativeExecutableSpec) {
+        //     targetPlatform wpi.platforms.roborio
+		// 	binaries.all {
+		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+		// 		lib library: "xerobase", linkage: "static"
+		// 		lib library: "xeromisc", linkage: "static"                
+		// 	}            
+        //     if (includeDesktopSupport) {
+        //         targetPlatform wpi.platforms.desktop
+        //     }
+        //     sources.cpp {
+        //         source {
+        //             srcDir 'robots/phaser/src/main/cpp'
+        //             include '**/*.cpp'
+        //         }
+        //         exportedHeaders {
+        //             srcDir 'robots/phaser/src/main/cpp'
+        //             include '**/*.h'
+        //         }           
+        //     }cies. In this case, WPILibs (+ friends), and vendor libraries.
+        //     useLibrary(it, "wpilib")
+        //     wpi.
+        //     // Defining my dependendeps.vendor.cpp(it)
+        // }     
+        
+        //
+        // 2019 Deep Space, Endurance, New Architecture
+        //
         frcUserProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
 			binaries.all {
@@ -143,23 +171,20 @@ model {
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
             }
-
             sources.cpp {
                 source {
-                    srcDir 'robots/phaser/src/main/cpp'
+                    srcDir 'robots/swerve/src/main/cpp'
                     include '**/*.cpp'
                 }
                 exportedHeaders {
-                    srcDir 'robots/phaser/src/main/cpp'
+                    srcDir 'robots/swerve/src/main/cpp'
                     include '**/*.h'
-                }
-                                
+                }           
             }
-
             // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
             useLibrary(it, "wpilib")
             wpi.deps.vendor.cpp(it)
-        }     
+        }          
 
         //
         // 2018 Power Up, Phoenix, New Architecture
