@@ -13,7 +13,6 @@
 #
 # Drivebase
 #
-if PRACTICE
 hw:tankdrive:leftmotor:1                                        4               # TALON SRX
 hw:tankdrive:leftmotor:2                                        5               # TALON SRX
 hw:tankdrive:rightmotor:2                                       2               # TALON SRX
@@ -350,30 +349,30 @@ lifter:height:cargo:place:west:c                              40
 # Hatches
 #
 
-lifter:height:hatch:collect:north                             11.5              
-lifter:height:hatch:collect:south                             11.5                 
-lifter:height:hatch:collect:east                              11.5
-lifter:height:hatch:collect:west                              11.5                 
+lifter:height:hatch:collect:north                             14              
+lifter:height:hatch:collect:south                             14                 
+lifter:height:hatch:collect:east                              14
+lifter:height:hatch:collect:west                              14                 
 
-lifter:height:hatch:place:north:1                             11.5      
-lifter:height:hatch:place:south:1                             11.5       
-lifter:height:hatch:place:east:1                              11.5               
-lifter:height:hatch:place:west:1                              11.5   
+lifter:height:hatch:place:north:1                             14      
+lifter:height:hatch:place:south:1                             14       
+lifter:height:hatch:place:east:1                              14               
+lifter:height:hatch:place:west:1                              14   
 
-lifter:height:hatch:place:north:2                             41           
-lifter:height:hatch:place:south:2                             41              
-lifter:height:hatch:place:east:2                              41                 
-lifter:height:hatch:place:west:2                              41
+lifter:height:hatch:place:north:2                             43.5           
+lifter:height:hatch:place:south:2                             43.5            
+lifter:height:hatch:place:east:2                              43.5                 
+lifter:height:hatch:place:west:2                              43.5
                
-lifter:height:hatch:place:north:3                             69
-lifter:height:hatch:place:south:3                             69                
-lifter:height:hatch:place:east:3                              69                 
-lifter:height:hatch:place:west:3                              69
+lifter:height:hatch:place:north:3                             71.5
+lifter:height:hatch:place:south:3                             71.5                
+lifter:height:hatch:place:east:3                              71.5                 
+lifter:height:hatch:place:west:3                              71.5
 
-lifter:height:hatch:place:north:c                             11.5
-lifter:height:hatch:place:south:c                             11.5
-lifter:height:hatch:place:east:c                              11.5        
-lifter:height:hatch:place:west:c                              11.5            
+lifter:height:hatch:place:north:c                             14
+lifter:height:hatch:place:south:c                             14
+lifter:height:hatch:place:east:c                              14        
+lifter:height:hatch:place:west:c                              14            
 
 lifter:height:offset:hatch_hook_center                        8.6
 lifter:height:cargo:undock_height                             22.00

@@ -906,6 +906,7 @@ namespace xero {
             std::shared_ptr<TeleopController> teleop = std::dynamic_pointer_cast<TeleopController>(ctrl) ;
             std::shared_ptr<ParallelAction> parallel = std::make_shared<ParallelAction>() ;
 
+            std::cout << "setupVisionDetectors called" << std::endl ;
             //
             // Setup the threshold for vision
             //
