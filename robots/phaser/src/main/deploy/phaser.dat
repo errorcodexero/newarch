@@ -84,7 +84,8 @@ hw:lifter:encoder2                                              9               
 #
 hw:turntable:encoder1                                           4               # Digital IO
 hw:turntable:encoder2                                           5               # Ditigal IO
-hw:turntable:motor:1                                            8               # TALON SRX
+hw:turntable:motors:1:canid                                     8
+hw:turntable:motors:1:type                                      talon_srx
 
 #
 # Front line sensors
