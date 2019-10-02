@@ -2,11 +2,12 @@
 			RoboRio			Simulator		GoPiGo3
 -------------------------------------------------------------------------------
 GoPiGo3Xero		No			No			Yes
-GoPiGo3Simple		No			No			Yes
+GoPiGo3Simple	No			No			Yes
 Bunny2018		Yes			Yes			No
 Grond			Yes			No			Yes
 Phoenix			Yes			Yes			No
 Phaser			Yes			Yes			No
+Ranseur			No			No			No
 -------------------------------------------------------------------------------
 
 Note, the Grond implementation in the new architecture is only for the drivebase.

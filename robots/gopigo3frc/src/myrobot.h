@@ -14,6 +14,7 @@ public:
 
 private:
     void runMotors(int phase, double left, double right, double duration) ;
+    void runMotorsStraight(int phase_s, double left_s, double right_s, double duration) ;
     
 private:
     ctre::phoenix::motorcontrol::can::TalonSRX *left_p ;

@@ -1,0 +1,22 @@
+#include "RanseurAutoModeBase.h"
+#include "Ranseur.h"
+#include <TerminateAction.h>
+#include <ParallelAction.h>
+#include <DelayAction.h>
+
+using namespace xero::base ;
+using namespace xero::misc ;
+
+namespace xero {
+    namespace ranseur {
+        RanseurAutoModeBase::RanseurAutoModeBase(Robot &robot, const std::string &name, const std::string &desc) : AutoMode(robot, name, desc)
+        {            
+        }
+
+        RanseurAutoModeBase::~RanseurAutoModeBase() 
+        {            
+        }
+
+
+    }
+}

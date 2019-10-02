@@ -2,9 +2,9 @@
 
 mkdir -p output
 
-pushd phaser
+pushd ranseur
 #make clean
-#make > ../output/phaser.log 2>&1
+#make > ../output/ranseur.log 2>&1
 popd
 
 pushd gopigo3frc
