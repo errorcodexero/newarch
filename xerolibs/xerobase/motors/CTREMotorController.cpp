@@ -17,6 +17,12 @@ namespace xero {
                 motor_->EnableVoltageCompensation(true) ;
             }
 
+            void CTREMotorController::follow(std::shared_ptr<MotorController> motor) {
+                if (auto m = std::dynamic_pointer_cast<CTREMotorController>(motor)) {
+                    motor_->Follow(*m->motor_);
+                } else assert(0 == "CTRE motors can only follow other CTRE motors");
+            }
+
             void CTREMotorController::set(double percent) {
                 motor_->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, percent);
             }

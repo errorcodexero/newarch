@@ -14,6 +14,12 @@ namespace xero {
                 motor_->EnableVoltageCompensation(12.0) ;
             }
 
+            void SparkMaxMotorController::follow(std::shared_ptr<MotorController> motor) {
+                if (auto m = std::dynamic_pointer_cast<SparkMaxMotorController>(motor)) {
+                    motor_->Follow(*m->motor_);
+                } else assert(0 == "SparkMax motors can only follow other SparkMax motors");
+            }
+
             void SparkMaxMotorController::set(double percent) {
                 motor_->Set(percent);
             }
