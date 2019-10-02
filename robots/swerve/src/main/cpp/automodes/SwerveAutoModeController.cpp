@@ -25,6 +25,7 @@ namespace xero {
             auto motor1 = robotsub->getMotor1() ;
             auto motor2 = robotsub->getMotor2() ;
         
+            sel = 1 ;
 
             switch(sel) {
             case 0:
@@ -32,6 +33,7 @@ namespace xero {
                 break ;
 
             case 1:
+                mode = std::make_shared<SinglePowerAutoMode>(getRobot(), motor2, "mode1", "desc1")  ;
                 break ;
 
             case 2:
