@@ -27,7 +27,7 @@ namespace xero {
         RanseurOIDevice::~RanseurOIDevice() {
         }
 
-        void RanseurOIDevice::generateActions(ActionSequence &seq){
+        void RanseurOIDevice::generateActions(SequenceAction &seq){
 
             //get tracking mode (auro, semiauto, or manual)
             getTrackingMode() ;

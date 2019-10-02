@@ -1,7 +1,7 @@
 #pragma once
 
 #include <oi/OIDevice.h> 
-#include <ActionSequence.h>
+#include <SequenceAction.h>
 
 namespace xero {
     namespace ranseur {
@@ -34,7 +34,7 @@ namespace xero {
             }
 
             virtual void init() ;
-            virtual void generateActions(xero::base::ActionSequence &seq) ;
+            virtual void generateActions(xero::base::SequenceAction &seq) ;
 
         private:
             void bindOI() ;
@@ -42,7 +42,7 @@ namespace xero {
             
             void setupVisionDetectors() ;
 
-            void manuallyFinish(xero::base::ActionSequence &seq) ;
+            void manuallyFinish(xero::base::SequenceAction &seq) ;
 
             std::string toString(OperationMode mode) ;
 
