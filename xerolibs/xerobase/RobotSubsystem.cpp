@@ -26,35 +26,8 @@ namespace xero {
         void RobotSubsystem::addTankDrive() {
             auto &settings = getRobot().getSettingsParser() ;
             auto &logger = getRobot().getMessageLogger() ;
-            size_t index = 1 ;
-            std::list<int> left ;
-            std::list<int> right ;
-
-            //
-            // Search the params file for all of the motors on the left and right sides
-            //
-            while (true) {
-                std::string motstr = "hw:tankdrive:leftmotor:" + std::to_string(index) ;
-                if (!settings.isDefined(motstr))
-                    break ;
-                left.push_back(settings.getInteger(motstr)) ;
-
-                motstr = "hw:tankdrive:rightmotor:" + std::to_string(index) ;
-                if (!settings.isDefined(motstr))
-                    break ;
-                right.push_back(settings.getInteger(motstr)) ;
-                index++;
-            }
-
-            if (left.size() != right.size()) {
-                logger.startMessage(MessageLogger::MessageType::error) ;
-                logger << "different motor count for drive base on left and right sides" ;
-                logger << ", left " << static_cast<int>(left.size()) ;
-                logger << ", right " << static_cast<int>(right.size()) ;
-                logger.endMessage() ;
-            }
             
-            auto tank = std::make_shared<TankDrive>(getRobot(), left, right) ;
+            auto tank = std::make_shared<TankDrive>(getRobot(), "hw:tankdrive:motors") ;
 
             if (settings.isDefined("hw:tankdrive:leftencoder:1") && settings.isDefined("hw:tankdrive:leftencoder:2") &&
                 settings.isDefined("hw:tankdrive:rightencoder:1") && settings.isDefined("hw:tankdrive:rightencoder:2")) {

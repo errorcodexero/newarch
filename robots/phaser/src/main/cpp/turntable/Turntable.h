@@ -2,13 +2,13 @@
 
 #include <Subsystem.h>
 #include <lifter/Lifter.h>
-#include <ctre/Phoenix.h>
 #include <frc/Encoder.h>
 #include <frc/DigitalInput.h>
-typedef ctre::phoenix::motorcontrol::can::TalonSRX TalonSRX;
+#include <motors/MotorController.h>
 
 namespace xero {
     namespace phaser{
+
         class Turntable: public xero::base::Subsystem {
 
             friend class TurntableCalibrateAction ;
@@ -71,7 +71,7 @@ namespace xero {
             void getMotors(xero::base::Robot &robot) ;
 
         private:
-            std::list<std::shared_ptr<TalonSRX>> motors_ ;
+            std::shared_ptr<xero::base::MotorController> motors_ ;
             std::shared_ptr<frc::Encoder> encoder_ ;
 
             int encoder_base_ ;

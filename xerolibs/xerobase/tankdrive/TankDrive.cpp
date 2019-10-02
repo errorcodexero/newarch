@@ -5,28 +5,21 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <cassert>
 #include <cmath>
+#include "motors/CTREMotorController.h"
+#include "motors/SparkMaxMotorController.h"
+#include "motors/MotorFactory.h"
 
 using namespace xero::misc ;
 
 namespace xero {
     namespace base {
 
-        TankDrive::TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids) : 
+        TankDrive::TankDrive(Robot& robot, const std::string motorConfigBase) : 
                         DriveBase(robot, "tankdrive"), angular_(2, true), left_linear_(2), right_linear_(2) {
-            //The two sides should always have the same number of motors and at least one motor each
-            assert((left_motor_ids.size() == right_motor_ids.size()) && (left_motor_ids.size() > 0));
-
-            SettingsParser &settings = robot.getSettingsParser() ;
-            if (settings.isDefined("hw:tankdrive:motortype") && settings.getString("hw:tankdrive:motortype") == "victor")
-            {
-                initVictorList(left_motor_ids, left_victor_motors_) ;
-                initVictorList(right_motor_ids, right_victor_motors_) ;
-            }
-            else
-            {
-                initTalonList(left_motor_ids, left_talon_motors_);
-                initTalonList(right_motor_ids, right_talon_motors_);
-            }
+            
+            auto motorFactory = robot.getMotorFactory();
+            left_motors_ = motorFactory->createMotor(motorConfigBase + ":left");
+            right_motors_ = motorFactory->createMotor(motorConfigBase + ":right");
 
             dist_l_ = 0.0 ;
             dist_r_ = 0.0 ;
@@ -50,7 +43,7 @@ namespace xero {
                 navx_->Reset() ;
             }   
 #endif
-
+            SettingsParser &settings = robot.getSettingsParser();
             double width = settings.getDouble("tankdrive:width") ;
             double scrub = settings.getDouble("tankdrive:scrub") ;
             kin_ = std::make_shared<xero::misc::Kinematics>(width, scrub) ;
@@ -63,30 +56,16 @@ namespace xero {
         void TankDrive::reset() {
             Subsystem::reset() ;
 
-            if (left_talon_motors_.size()) {
-                for(auto &talon : left_talon_motors_) {
-                    talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast) ;
-                }
-
-                for(auto &talon : right_talon_motors_) {
-                    talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast) ;
-                }           
-            }
+            left_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
+            right_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
             setMotorsToPercents(0, 0);   // Turn motors off
         }
 
         void TankDrive::init(LoopType ltype) {
             Subsystem::init(ltype) ;
 
-            if (left_talon_motors_.size()) {
-                for(auto &talon : left_talon_motors_) {
-                    talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
-                }
-
-                for(auto &talon : right_talon_motors_) {
-                    talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
-                }           
-            }
+            left_motors_->setNeutralMode(MotorController::NeutralMode::Brake);
+            right_motors_->setNeutralMode(MotorController::NeutralMode::Brake);
         }
         
         void TankDrive::lowGear() {
@@ -151,45 +130,12 @@ namespace xero {
             highGear() ;
         }
 
-        void TankDrive::initTalonList(const std::list<int>& ids, std::list<TalonPtr>& talons) {
-            //Assuming first id will be master
-            for(int id : ids) {
-                auto talon = std::make_shared<ctre::phoenix::motorcontrol::can::TalonSRX>(id) ;
-                talon->ConfigVoltageCompSaturation(12.0, 10) ;
-                talon->EnableVoltageCompensation(true) ;
-                talons.push_back(talon);
-                if(talons.size() > 1)
-                    talons.back()->Follow(*talons.front());
-            }
-        }       
-
-        void TankDrive::initVictorList(const std::list<int> &ids, std::list<VictorPtr> &victors) {
-            for(int id : ids) {
-                auto victor = std::make_shared<frc::VictorSP>(id) ;
-                victors.push_back(victor) ;
-            }
-        }
-
         void TankDrive::invertLeftMotors() {
-            if (left_talon_motors_.size() > 0) {
-                for(TalonPtr talon : left_talon_motors_)
-                    talon->SetInverted(true);
-            }
-            else {
-                for(VictorPtr victor : left_victor_motors_)
-                    victor->SetInverted(true) ;
-            }
+            left_motors_->setInverted(true);
         }
 
         void TankDrive::invertRightMotors() {
-            if (right_talon_motors_.size() > 0) {
-                for(TalonPtr talon : right_talon_motors_) 
-                    talon->SetInverted(true);
-            }
-            else {
-                for(VictorPtr victor : right_victor_motors_)
-                    victor->SetInverted(true) ;
-            }
+            right_motors_->setInverted(true);
         }       
 
         void TankDrive::computeState() {
@@ -249,19 +195,8 @@ namespace xero {
         }
 
         void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
-            if (left_talon_motors_.size() > 0) {
-                left_talon_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left_percent);
-                right_talon_motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right_percent);
-            }
-            else {
-                for(VictorPtr victor : left_victor_motors_) {
-                    victor->Set(left_percent) ;
-                }
-
-                for(VictorPtr victor : right_victor_motors_) {
-                    victor->Set(right_percent) ;
-                }
-            }
+            left_motors_->set(left_percent);
+            right_motors_->set(left_percent);
         }
     }
 }

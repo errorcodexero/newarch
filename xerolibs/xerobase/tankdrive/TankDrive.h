@@ -1,13 +1,11 @@
 #pragma once
 
+#include "motors/MotorController.h"
 #include <Kinematics.h>
 #include <DriveBase.h>
 #include <Speedometer.h>
-#include <ctre/Phoenix.h>
 #include <frc/Solenoid.h>
 #include <frc/Encoder.h>
-#include <frc/VictorSP.h>
-#include <ctre/Phoenix.h>
 #include <list>
 
 #ifdef USE_NAVX
@@ -19,12 +17,6 @@
 
 namespace xero {
     namespace base {
-        /// \brief a convience type for a shared pointer to a TalonSRX object
-        typedef std::shared_ptr<ctre::phoenix::motorcontrol::can::TalonSRX> TalonPtr;
-        
-        /// \brief a convience type for a shared pointer to a Victor SP object        
-        typedef std::shared_ptr<frc::VictorSP> VictorPtr ;
-
         /// \brief a tank-style drivebase
         class TankDrive : public DriveBase {
             /// \brief class for tank drive actions
@@ -33,11 +25,10 @@ namespace xero {
         public:
             /// \brief Create a new tank drive object
             /// \param robot The robot that contains this tank drive subsystem
-            /// \param left_motor_ids A list of TalonSRX ids for the left side of the drivebase, the first
-            /// being the master and the rest being followers
-            /// \param right_motor_ids A list of TalonSRX ids for the right side of the drivebase, the first
-            /// being the master and the rest being followers
-            TankDrive(Robot& robot, const std::list<int> &left_motor_ids, const std::list<int> &right_motor_ids);
+            /// \param motorConfigBase The configuration ID for the motors.
+            /// If motorConfigBase is "hw:tankdrive", TankDrive will look for
+            /// motor groups named "hw:tankdrive:left" and "hw:tankdrive:right".
+            TankDrive(Robot& robot, const std::string motorConfigBase);
 
             /// \brief destroy a tank drive object
             virtual ~TankDrive() ;
@@ -207,12 +198,9 @@ namespace xero {
             /// \param right_percent the percent output for the right motors
             void setMotorsToPercents(double left_percent, double right_percent);
 
-            static void initTalonList(const std::list<int>& ids, std::list<TalonPtr>& talons) ;
-            static void initVictorList(const std::list<int> &ids, std::list<VictorPtr> &victors) ;
-
         private:
-            std::list<TalonPtr> left_talon_motors_, right_talon_motors_;
-            std::list<VictorPtr> left_victor_motors_, right_victor_motors_ ;
+            std::shared_ptr<MotorController> left_motors_;
+            std::shared_ptr<MotorController> right_motors_;
 
             std::vector<double> left_power_ ;
             std::vector<double> right_power_ ;

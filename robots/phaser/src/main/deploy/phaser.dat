@@ -14,10 +14,15 @@
 # Drivebase
 #
 if PRACTICE
-hw:tankdrive:leftmotor:1                                        4               # TALON SRX
-hw:tankdrive:leftmotor:2                                        5               # TALON SRX
-hw:tankdrive:rightmotor:2                                       2               # TALON SRX
-hw:tankdrive:rightmotor:3                                       3               # TALON SRX
+hw:tankdrive:motors:left:1:canid                                4
+hw:tankdrive:motors:left:2:canid                                5
+hw:tankdrive:motors:right:2:canid                               2
+hw:tankdrive:motors:right:3:canid                               3
+hw:tankdrive:motors:left:1:type                                 talon_srx
+hw:tankdrive:motors:left:2:type                                 talon_srx
+hw:tankdrive:motors:right:2:type                                talon_srx
+hw:tankdrive:motors:right:3:type                                talon_srx
+
 hw:tankdrive:leftencoder:1                                      1               # Digital IO
 hw:tankdrive:leftencoder:2                                      0               # Digital IO
 hw:tankdrive:rightencoder:1                                     2               # Digital IO
@@ -27,12 +32,18 @@ hw:tankdrive:shifter                                            0               
 endif
 
 if COMPETITION
-hw:tankdrive:leftmotor:1                                        1               # TALON SRX
-hw:tankdrive:leftmotor:2                                        2               # TALON SRX
-hw:tankdrive:leftmotor:3                                        3               # TALON SRX
-hw:tankdrive:rightmotor:1                                       4               # TALON SRX
-hw:tankdrive:rightmotor:2                                       5               # TALON SRX
-hw:tankdrive:rightmotor:3                                       6               # TALON SRX
+hw:tankdrive:motors:left:1:canid                                1
+hw:tankdrive:motors:left:2:canid                                2
+hw:tankdrive:motors:left:3:canid                                3
+hw:tankdrive:motors:right:1:canid                               4
+hw:tankdrive:motors:right:2:canid                               5
+hw:tankdrive:motors:right:3:canid                               6
+hw:tankdrive:motors:left:1:type                                 talon_srx
+hw:tankdrive:motors:left:2:type                                 talon_srx
+hw:tankdrive:motors:left:3:type                                 talon_srx
+hw:tankdrive:motors:right:1:type                                talon_srx
+hw:tankdrive:motors:right:2:type                                talon_srx
+hw:tankdrive:motors:right:3:type                                talon_srx
 hw:tankdrive:leftencoder:1                                      2               # Digital IO
 hw:tankdrive:leftencoder:2                                      3               # Digital IO
 hw:tankdrive:rightencoder:1                                     1               # Digital IO
@@ -73,7 +84,8 @@ hw:lifter:encoder2                                              9               
 #
 hw:turntable:encoder1                                           4               # Digital IO
 hw:turntable:encoder2                                           5               # Ditigal IO
-hw:turntable:motor:1                                            8               # TALON SRX
+hw:turntable:motors:1:canid                                     8
+hw:turntable:motors:1:type                                      talon_srx
 
 #
 # Front line sensors
@@ -99,12 +111,14 @@ hw:driverstation:hid:oi                                         2               
 # cargoholder
 #
 hw:cargoholder:sensor                                           20              # Digital IO
-hw:cargoholder:motor                                            7               # Victor SPX
+hw:cargoholder:motor:canid                                      7
+hw:cargoholder:motor:type                                       victor_spx
 
 #
 # cargo intake
 #
-hw:cargointake:motor                                            9               # Victor SPX
+hw:cargointake:motor:canid                                      9
+hw:cargointake:motor:type                                       victor_spx
 hw:cargointake:solenoid                                         1               # Solenoid
 hw:cargointake:sensor                                           22              # Sensor
 

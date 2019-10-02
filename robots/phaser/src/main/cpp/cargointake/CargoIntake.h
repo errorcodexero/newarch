@@ -12,7 +12,7 @@ namespace xero {
 
             friend class CargoIntakeAction ;
         public:
-            CargoIntake(xero::base::Robot &robot,  uint64_t id, bool victor=true) ;
+            CargoIntake(xero::base::Robot &robot,  uint64_t id) ;
             ~CargoIntake();
             void deployCollector();
             void retractCollector();

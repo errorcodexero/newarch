@@ -4,6 +4,8 @@
 #include "TurntableGoToAngleAction.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <Robot.h>
+#include <motors/MotorFactory.h>
+#include <motors/MotorController.h>
 #include <MessageLogger.h>
 #include <xeromath.h>
 #include <cmath>
@@ -20,7 +22,6 @@ namespace xero{
             msg_verbose_id_ = verboseid ;
             
             getMotors(robot) ;
-            assert(motors_.size() > 0) ;
 
             int enc1 = robot.getSettingsParser().getInteger("hw:turntable:encoder1") ;
             int enc2 = robot.getSettingsParser().getInteger("hw:turntable:encoder2") ;           
@@ -55,7 +56,6 @@ namespace xero{
         }
 
         void Turntable::getMotors(Robot &robot) {
-            int i = 1 ;
             bool reverse = false ;
 
             std::string revname = "hw:turntable:reversemotors" ;
@@ -68,25 +68,9 @@ namespace xero{
                 }
             }
 
-            while (true) {
-                std::string motorname = "hw:turntable:motor:" + std::to_string(i) ;
-                if (!robot.getSettingsParser().isDefined(motorname))
-                    break ;
-
-                int motor = robot.getSettingsParser().getInteger(motorname) ;
-                auto talon = std::make_shared<TalonSRX>(motor) ;
-                talon->SetInverted(reverse) ;
-                talon->ConfigVoltageCompSaturation(12.0, 10) ;
-                talon->EnableVoltageCompensation(true) ;                
-                talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
-
-                if (motors_.size() > 0)
-                    talon->Follow(*motors_.front()) ;
-
-                motors_.push_back(talon) ;
-
-                i++ ;
-            }
+            motors_ = robot.getMotorFactory()->createMotor("hw:turntable:motors");
+            motors_->setInverted(reverse);
+            motors_->setNeutralMode(MotorController::NeutralMode::Brake);
         }
 
         void Turntable::setMotorPower(double v) {
@@ -98,8 +82,7 @@ namespace xero{
                     v = 0 ;
             }
             
-            if (motors_.size() > 0)
-                motors_.front()->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, v);
+            motors_->set(v);
         }
 
         bool Turntable::canAcceptAction(ActionPtr action) {

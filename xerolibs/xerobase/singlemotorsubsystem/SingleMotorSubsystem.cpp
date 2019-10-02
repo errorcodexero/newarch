@@ -1,43 +1,30 @@
 #include "SingleMotorSubsystem.h"
 #include "Robot.h"
+#include "motors/MotorController.h"
+#include "motors/MotorFactory.h"
 
 using namespace xero::misc;
 
 namespace xero {
     namespace base {
-        SingleMotorSubsystem::SingleMotorSubsystem(Robot & robot, const std::string &name, const std::string &motor, uint64_t mid, bool victor) : Subsystem(robot,name) {
-            int m = robot.getSettingsParser().getInteger(motor) ;
-
-            index_ = m ;
+        SingleMotorSubsystem::SingleMotorSubsystem(Robot & robot, const std::string &name, const std::string &motor, uint64_t mid) : Subsystem(robot,name) {
             msg_id_ = mid ;
-
-            if (victor)
-            {
-                motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::VictorSPX>(m) ;
-            }
-            else
-                motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::TalonSRX>(m);
-
-            motor_->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
+            motor_ = robot.getMotorFactory()->createMotor(motor);
+            motor_->setNeutralMode(MotorController::NeutralMode::Brake) ;
             current_power_ = 0.0 ;
         }
 
-        SingleMotorSubsystem::SingleMotorSubsystem(Robot & robot, const std::string &name, int m, uint64_t mid, bool victor) : Subsystem(robot,name) {
-
-            index_ = m ;
+        SingleMotorSubsystem::SingleMotorSubsystem(Robot & robot, const std::string &name, std::shared_ptr<MotorController> motor, uint64_t mid) : Subsystem(robot,name) {
             msg_id_ = mid ;
-            
-            if (victor)
-                motor_ = std::make_shared<VictorSPX>(m) ;
-            else
-                motor_ = std::make_shared<TalonSRX>(m);
-
-            motor_->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake) ;
-            motor_->ConfigVoltageCompSaturation(12.0, 10) ;
-            motor_->EnableVoltageCompensation(true) ;
-
+            motor_ = motor_;
+            motor_->setNeutralMode(MotorController::NeutralMode::Brake);
             current_power_ = 0.0 ;
-        }        
+        } 
+
+        void SingleMotorSubsystem::setMotor(double power)  {
+                motor_->set(power) ;
+                current_power_ = power ;
+            }       
 
         SingleMotorSubsystem::~SingleMotorSubsystem(){
         }
