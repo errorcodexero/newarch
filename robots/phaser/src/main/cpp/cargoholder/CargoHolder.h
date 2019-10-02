@@ -15,7 +15,7 @@ namespace xero {
     namespace phaser {
         class CargoHolder : public xero::base::SingleMotorSubsystem {
         public:
-            CargoHolder(xero::base::Robot &robot, uint64_t id, bool victor=true) ;
+            CargoHolder(xero::base::Robot &robot, uint64_t id) ;
             virtual ~CargoHolder() ;
             
             virtual void computeState() ;
