@@ -6,6 +6,7 @@
 #include <singlemotorsubsystem/SingleMotorPowerAutoMode.h>
 #include <MessageLogger.h>
 #include <frc/DriverStation.h>
+#include <memory>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -29,11 +30,11 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = std::make_shared<SinglePowerAutoMode>(getRobot(), motor1, "mode1", "desc1") ;
+                // mode = std::make_shared<SinglePowerAutoMode>(getRobot(), motor1, "mode1", "desc1", 0.25) ;
                 break ;
 
             case 1:
-                mode = std::make_shared<SinglePowerAutoMode>(getRobot(), motor2, "mode1", "desc1")  ;
+                //mode = std::make_shared<SinglePowerAutoMode>(getRobot(), motor2, "mode1", "desc1", 0.25, 2.0) ;
                 break ;
 
             case 2:
