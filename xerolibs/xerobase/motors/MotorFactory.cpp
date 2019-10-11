@@ -41,7 +41,7 @@ namespace xero {
 
         bool MotorFactory::isInverted(std::string configID) {
             std::string invertID = configID + ":invert";
-            bool invert = settingsParser_.isDefined(invertID) && settingsParser_.getBoolean(invertID);
+            return settingsParser_.isDefined(invertID) && settingsParser_.getBoolean(invertID);
         }
 
         MotorFactory::MotorPtr MotorFactory::createSingleMotor(std::string configID) {
@@ -74,6 +74,8 @@ namespace xero {
             // Create the motor.
             MotorPtr motor = constructor->second(canID);
             motor->setInverted(isInverted(configID));
+
+            return motor;
         }
 
         MotorFactory::MotorPtr MotorFactory::createMotor(std::string configID) {
@@ -86,8 +88,8 @@ namespace xero {
             int currentIndex = 0;
             while (true) {
                 // Try to create the next motor.
-                std::string motorConfigID = configID + ":" + std::to_string(currentIndex + 1));
-                if (auto motor = createSingleMotor(motorConfigID) {
+                std::string motorConfigID = configID + ":" + std::to_string(currentIndex + 1);
+                if (auto motor = createSingleMotor(motorConfigID)) {
                     // we need to catch the invert flag and pass it into follow
                     motors.add(motor, isInverted(motorConfigID));
                     currentIndex += 1;
