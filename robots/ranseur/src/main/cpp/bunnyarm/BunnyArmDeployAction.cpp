@@ -1,7 +1,7 @@
 #include "BunnyArmDeployAction.h"
 
 namespace xero {
-    namespace phaser {
+    namespace ranseur {
         const std::string BunnyArmDeployAction::action_name("DeployBunnyArm") ;
     }
 }

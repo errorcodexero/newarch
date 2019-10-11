@@ -4,10 +4,10 @@
 #include "BunnyArm.h"
 
 namespace xero {
-    namespace phaser {
+    namespace ranseur {
         class BunnyArmDeployAction : public BunnyArmAction {
         public:
-            BunnyArmDeployAction(BunnyArm &bunnyArm) : BunnyArmDeployAction(bunnyArm) { 
+            BunnyArmDeployAction(BunnyArm &bunnyArm) : BunnyArmAction(bunnyArm) { 
                 is_done_ = false;               
             }
             
@@ -20,7 +20,7 @@ namespace xero {
 
             virtual void run() {
                 if (!is_done_) {
-                    BunnyArmDeployAction &bunnyArm = getBunnyArm() ;
+                    BunnyArm &bunnyArm = getBunnyArm() ;
                     bunnyArm.solenoid_->Set(true);
                     is_done_ = true ;
                 }

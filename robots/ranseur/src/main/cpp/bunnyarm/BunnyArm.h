@@ -5,7 +5,7 @@
 #include <frc/Solenoid.h>
 
 namespace xero {
-    namespace phaser {
+    namespace ranseur {
 
         class BunnyArm : public xero::base::Subsystem {
             friend class BunnyArmDeployAction ;

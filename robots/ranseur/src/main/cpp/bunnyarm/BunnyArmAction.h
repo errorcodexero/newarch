@@ -3,7 +3,7 @@
 #include <Action.h>
 
 namespace xero {
-    namespace phaser {
+    namespace ranseur {
         class BunnyArm ;
 
         class BunnyArmAction : public xero::base::Action {
