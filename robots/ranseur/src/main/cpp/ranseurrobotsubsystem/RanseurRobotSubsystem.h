@@ -2,6 +2,7 @@
 
 #include "ranseuroi/RanseurOISubsystem.h"
 #include "ranseurcameratracker/RanseurCameraTracker.h"
+#include "bunnyarm/BunnyArm.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
 
@@ -29,12 +30,16 @@ namespace xero {
                 return tracker_ ;
             }            
 
+            std::shared_ptr<BunnyArm> getBunnyArm() {
+                return bunnyArm_;
+            }
+
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             
         private:
             std::shared_ptr<RanseurOISubsystem> oi_ ;
             std::shared_ptr<RanseurCameraTracker> tracker_ ;
-
+            std::shared_ptr<BunnyArm> bunnyArm_;
         } ;
     }
 }

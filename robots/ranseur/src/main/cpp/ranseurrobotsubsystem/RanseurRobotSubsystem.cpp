@@ -25,6 +25,9 @@ namespace xero {
             tracker_->setCameraMode(CameraTracker::CameraMode::DriverViewing) ;               
             tracker_->setCameraIndex(0) ;
             addChild(tracker_) ;
+
+            bunnyArm_ = std::make_shared<BunnyArm>(robot);
+            addChild(bunnyArm_);
         }
 
         RanseurRobotSubsystem::~RanseurRobotSubsystem() {
