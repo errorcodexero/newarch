@@ -86,7 +86,7 @@ namespace xero {
             int currentIndex = 0;
             while (true) {
                 // Try to create the next motor.
-                std::string motorConfigID = configID + ":" + std::to_string(currentIndex + 1))
+                std::string motorConfigID = configID + ":" + std::to_string(currentIndex + 1));
                 if (auto motor = createSingleMotor(motorConfigID) {
                     // we need to catch the invert flag and pass it into follow
                     motors.add(motor, isInverted(motorConfigID));
@@ -102,7 +102,7 @@ namespace xero {
                     }
                 }
             }
-            
+
             return std::make_shared<MotorGroupController>(motors);
         }
     }
