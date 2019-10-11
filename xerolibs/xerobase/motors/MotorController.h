@@ -21,6 +21,7 @@ namespace xero {
 
             /// \brief Sets whether the motor is inverted.
             /// \param inverted Whether the motor should be inverted.
+            /// \warning If called after \c follow, the behavior is unspecified.
             virtual void setInverted(bool inverted) = 0;
 
             /// \brief Sets whether the motor will brake or coast.
@@ -29,7 +30,8 @@ namespace xero {
 
             /// \brief Sets this motor to follow another.
             /// \param motor The motor to follow. Should assert if `motor` cannot be followed.
-            virtual void follow(std::shared_ptr<MotorController> motor) = 0;
+            /// \param invert Whether to invert the output of the leader.
+            virtual void follow(std::shared_ptr<MotorController> motor, bool invert = false) = 0;
         };
 }
 }

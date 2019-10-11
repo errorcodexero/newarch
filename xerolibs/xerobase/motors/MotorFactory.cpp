@@ -39,6 +39,11 @@ namespace xero {
             assert(0);
         }
 
+        bool MotorFactory::isInverted(std::string configID) {
+            std::string invertID = configID + ":invert";
+            bool invert = settingsParser_.isDefined(invertID) && settingsParser_.getBoolean(invertID);
+        }
+
         MotorFactory::MotorPtr MotorFactory::createSingleMotor(std::string configID) {
             bool hasCanID = settingsParser_.isDefined(configID + ":canid");
             bool hasType = settingsParser_.isDefined(configID + ":type");
@@ -67,7 +72,8 @@ namespace xero {
             }
 
             // Create the motor.
-            return constructor->second(canID);
+            MotorPtr motor = constructor->second(canID);
+            motor->setInverted(isInverted(configID));
         }
 
         MotorFactory::MotorPtr MotorFactory::createMotor(std::string configID) {
@@ -76,14 +82,18 @@ namespace xero {
 
             // Could not parse as a single motor declaration.
             // Try to create a motor group instead.
-            std::vector<MotorPtr> motors;
+            MotorGroupController motors;
+            int currentIndex = 0;
             while (true) {
                 // Try to create the next motor.
-                if (auto motor = createSingleMotor(configID + ":" + std::to_string(motors.size() + 1))) {
-                    motors.push_back(motor);
+                std::string motorConfigID = configID + ":" + std::to_string(currentIndex + 1))
+                if (auto motor = createSingleMotor(motorConfigID) {
+                    // we need to catch the invert flag and pass it into follow
+                    motors.add(motor, isInverted(motorConfigID));
+                    currentIndex += 1;
                 } else {
                     // Could not create another motor.
-                    if (motors.empty()) {
+                    if (!currentIndex) {
                         // No motors were declared.
                         handleError(configID, "invalid motor declaration");
                     } else {
@@ -92,6 +102,7 @@ namespace xero {
                     }
                 }
             }
+            
             return std::make_shared<MotorGroupController>(motors);
         }
     }

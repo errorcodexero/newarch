@@ -14,9 +14,9 @@ namespace xero {
                 motor_->EnableVoltageCompensation(12.0) ;
             }
 
-            void SparkMaxMotorController::follow(std::shared_ptr<MotorController> motor) {
+            void SparkMaxMotorController::follow(std::shared_ptr<MotorController> motor, bool invert) {
                 if (auto m = std::dynamic_pointer_cast<SparkMaxMotorController>(motor)) {
-                    motor_->Follow(*m->motor_);
+                    motor_->Follow(*m->motor_, invert);
                 } else assert(0 == "SparkMax motors can only follow other SparkMax motors");
             }
 
@@ -25,7 +25,7 @@ namespace xero {
             }
 
             void SparkMaxMotorController::setInverted(bool inverted) {
-                motor_->SetInverted(true);
+                motor_->SetInverted(inverted);
             }
 
             void SparkMaxMotorController::setNeutralMode(NeutralMode neutralMode) {

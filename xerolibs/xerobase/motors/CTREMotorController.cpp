@@ -17,9 +17,11 @@ namespace xero {
                 motor_->EnableVoltageCompensation(true) ;
             }
 
-            void CTREMotorController::follow(std::shared_ptr<MotorController> motor) {
+            void CTREMotorController::follow(std::shared_ptr<MotorController> motor, bool invert) {
                 if (auto m = std::dynamic_pointer_cast<CTREMotorController>(motor)) {
                     motor_->Follow(*m->motor_);
+                    if (invert) motor_->SetInverted(ctre::phoenix::motorcontrol::InvertType::OpposeMaster);
+                    else motor_->SetInverted(ctre::phoenix::motorcontrol::InvertType::FollowMaster);
                 } else assert(0 == "CTRE motors can only follow other CTRE motors");
             }
 
@@ -28,7 +30,7 @@ namespace xero {
             }
 
             void CTREMotorController::setInverted(bool inverted) {
-                motor_->SetInverted(true);
+                motor_->SetInverted(inverted);
             }
 
             void CTREMotorController::setNeutralMode(NeutralMode neutralMode) {

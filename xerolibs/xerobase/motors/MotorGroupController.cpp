@@ -2,6 +2,8 @@
 
 namespace xero {
     namespace base {
+            MotorGroupController::MotorGroupController() {}
+
             MotorGroupController::MotorGroupController(std::vector<MotorPtr> motors) {
                 motors_ = motors;
 
@@ -13,12 +15,17 @@ namespace xero {
                 }
             }
 
+            void MotorGroupController::add(MotorPtr motor, bool invert) {
+                motors_.push_back(motor);
+                if (motors_.size() > 1) motor->follow(motors_.front(), invert);
+            }
+
             void MotorGroupController::set(double percent) {
                 motors_.front()->set(percent);
             }
 
             void MotorGroupController::setInverted(bool inverted) {
-                for (MotorPtr motor : motors_) motor->setInverted(true);
+                motor.front()->setInverted(inverted);
             }
 
             void MotorGroupController::setNeutralMode(NeutralMode neutralMode) {

@@ -46,6 +46,8 @@ namespace xero {
                            > motorConstructors_;
 
             MotorPtr createSingleMotor(std::string configID);
+            
+            bool isInverted(std::string configID);
         };
     }
 }
