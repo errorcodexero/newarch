@@ -5,6 +5,7 @@
 #include <ctre/phoenix/MotorControl/ControlMode.h>
 #include <ctre/phoenix/MotorControl/NeutralMode.h>
 #include <ctre/phoenix/MotorControl/IMotorController.h>
+#include <ctre/phoenix/MotorControl/InvertType.h>
 
 namespace ctre {
     namespace phoenix {

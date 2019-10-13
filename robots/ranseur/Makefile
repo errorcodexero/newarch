@@ -20,11 +20,12 @@ SOURCES = \
 	$(SUBSYSTEMS)\
 	$(AUTOMODES)
 
-TARGET = phaser
+TARGET = ranseur
 
 NEED_WPILIB=true
 NEED_WPIUTIL=true
 NEED_CTRE=true
+NEED_REV=true
 NEED_NAVX=true
 NEED_NETWORKTABLES=true
 NEED_XEROMISC=true
@@ -48,8 +49,8 @@ PLATFORM := $(DEFAULT_PLATFORM)
 endif
 
 ifeq ($(PLATFORM),SIMULATOR)
-	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/phasersim
-	LOCAL_LIBS = $(TOPDIR)/robotsims/phasersim
+	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/ranseursim
+	LOCAL_LIBS = $(TOPDIR)/robotsims/ranseursim
 	LOCAL_EXTERNAL_LIBS=-lcurses
 endif
 

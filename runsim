@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ $# != 2 ]; then
+    echo Expected two arguments, the name of the robot and the mode
+    echo The mode should be 'auto', 'teleop'
+   exit 1
+fi
+
+legal=NO
+if [ $2 == 'auto' ]; then
+    legal=YES
+    echo Running auto mode
+    makebuild/SIMULATOR/Debug/ranseur/$1.exe --auto 15 --oper 0 --start 0 --test 0
+fi
+
+if [ $2 == 'teleop' ]; then
+    legal=YES
+    echo Running teleop mode
+    makebuild/SIMULATOR/Debug/ranseur/$1.exe --auto 0 --oper 30 --start 0 --test 0
+fi
+
+if [ legal == 'NO' ]; then
+    echo "Invalid mode, must be 'auto' or 'teleop'"
+    exit 1
+fi

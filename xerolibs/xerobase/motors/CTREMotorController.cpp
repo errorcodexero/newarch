@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <cassert>
+
 #include "CTREMotorController.h"
 
 namespace xero {

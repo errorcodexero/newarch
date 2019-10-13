@@ -20,13 +20,12 @@
         "name": "Simulator Launch",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/phaser/phaser.exe",
+        "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/ranseur/ranseur.exe",
         "args": [
             "--test","0.0",
             "--start", "0.0",
             "--auto", "15.0",
-            "--oper","0.0",
-            "--events","robots/phaser/sims/automode_8.sti"
+            "--oper","0.0"
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
