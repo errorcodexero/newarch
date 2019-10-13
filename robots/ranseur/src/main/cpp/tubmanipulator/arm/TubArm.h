@@ -1,16 +1,14 @@
 #pragma once
 
+#include <Subsystem.h>
+#include <PIDCtrl.h>
+#include <motors/MotorController.h>
+
+#include <frc/Encoder.h>
+
 #include <memory>
 #include <limits>
 #include <vector>
-
-#include <Subsystem.h>
-#include <PIDCtrl.h>
-#include <frc/Encoder.h>
-#include <motors/MotorController.h>
-
-
-typedef ctre::phoenix::motorcontrol::can::VictorSPX VictorSPX;
 
 namespace xero {
     namespace ranseur {
