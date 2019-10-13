@@ -151,7 +151,7 @@ bool SettingsParser::readFile(const std::string &filename) {
                 else if(is_string && parseString(value, string_output))
                     set(key, string_output);
                 else {
-                    logger_.startMessage(MessageLogger::MessageType::warning, msggroup_);
+                    logger_.startMessage(MessageLogger::MessageType::error);
                     logger_ << filename << ": " << line_num << ": Unable to parse value '" << value << "'";
                     logger_.endMessage();
                 }
