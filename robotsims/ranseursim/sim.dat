@@ -1,0 +1,66 @@
+#####################################################################################
+#
+# This section describes the hardware for the simulated subsystems, robot ranseur
+#
+#####################################################################################
+
+# Drivebase
+hw:tankdrive:leftmotor:1             1                                  # TalonSRX 1
+hw:tankdrive:leftmotor:2             2                                  # TalonSRX 2
+hw:tankdrive:leftmotor:3             3                                  # TalonSRX 3
+hw:tankdrive:rightmotor:1            4                                  # TalonSRX 4
+hw:tankdrive:rightmotor:2            5                                  # TalonSRX 5
+hw:tankdrive:rightmotor:3            6                                  # TalonSRX 6
+hw:tankdrive:leftencoder:1           3                                  # DIO 0
+hw:tankdrive:leftencoder:2           2                                  # DIO 1
+hw:tankdrive:rightencoder:1          0                                  # DIO 2
+hw:tankdrive:rightencoder:2          1                                  # DIO 3
+hw:tankdrive:shifter                 0                                  # Solenoid 0
+
+######################################################################################
+#
+# Tankdrive software model description
+#
+######################################################################################
+
+#
+# These are the real world characteristics of the drivebase
+#
+tankdrive:high:maxvelocity                              160             # in / sec
+tankdrive:high:maxacceleration                          80              # in / sec / sec
+tankdrive:low:maxvelocity                               36              # in / sec
+tankdrive:low:maxacceleration                           18              # in / sec
+
+#
+# The maximum random error applied to the left and right
+# side motors on the drivebase.  If this is .05, there can
+# be up to 5% delta applied per side randomly to the
+# actual velocity of a side for a given voltage
+#
+tankdrive:sim:error_per_side                            0.0
+
+#
+# The number of ticks per revolution of the wheel for the 
+# encoders
+#
+tankdrive:sim:ticks_per_rev                             2570
+
+#
+# The diameter of the robot wheel
+#
+tankdrive:sim:diameter                                  8.5
+
+#
+# The percent of the angle that is applied to the robot based on the
+# distance the wheels travel vs an ideal case were the wheels are
+# frictionless
+#
+tankdrive:sim:scrub                                     0.95177665
+
+#
+# The width of the drivebase for the robot
+#
+tankdrive:sim:width                                     22.5
+
+
+oi:axis:automode                                        6                   # Axis
