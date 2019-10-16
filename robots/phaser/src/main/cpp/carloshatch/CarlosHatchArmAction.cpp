@@ -8,7 +8,8 @@ using namespace xero::misc ;
 namespace xero {
     namespace phaser {
         void CarlosHatchArmAction::start() {
-            is_done_ = true ;
+            is_done_ = false ;
+            start_ = getSubsystem().getRobot().getTime() ;
             switch(operation_) {
                 case Operation::EXTEND:
                     getSubsystem().extendArm() ;
@@ -35,6 +36,8 @@ namespace xero {
         }
 
         void CarlosHatchArmAction::run() {
+            if (getSubsystem().getRobot().getTime() - start_ > delay_)
+                is_done_ = true ;
         }
 
         bool CarlosHatchArmAction::isDone() {

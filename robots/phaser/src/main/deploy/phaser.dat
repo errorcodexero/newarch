@@ -209,9 +209,9 @@ if COMPETITION
 turntable:degrees_per_tick                                      0.55387105877777777777777777777778
 endif
 
-turntable:maxa                                                  420
-turntable:maxd                                                  -420
-turntable:maxv                                                  300
+turntable:maxa                                                  180
+turntable:maxd                                                  -180
+turntable:maxv                                                  200
 
 turntable:base                                                  0.0
 turntable:threshold                                             1.0

@@ -28,6 +28,7 @@ namespace xero {
             /// \param subsystem SingleMotor subsystem
             CarlosHatchArmAction(CarlosHatch &subsystem, Operation operation) : CarlosHatchAction(subsystem), operation_(operation) {
                 is_done_ = false ;
+                delay_ = 0.1 ;
             }
 
             virtual ~CarlosHatchArmAction(){
@@ -46,6 +47,8 @@ namespace xero {
         private:
             Operation operation_;
             bool is_done_;
+            double start_ ;
+            double delay_ ;
         };
     }
 }

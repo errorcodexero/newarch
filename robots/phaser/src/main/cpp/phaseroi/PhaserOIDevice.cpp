@@ -1090,8 +1090,12 @@ namespace xero {
             if (game->isDone())
                 return true ;
 
+            return false ;
+
+#ifdef NOTYET
             auto rdyact = std::dynamic_pointer_cast<ReadyAction>(game->getAction()) ;
             return rdyact != nullptr ;
+#endif
         }
 
         void PhaserOIDevice::generateActions(ActionSequence &seq) {
