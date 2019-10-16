@@ -13,7 +13,22 @@
 namespace xero {
     namespace ranseur {
         class TubArm : public xero::base::Subsystem {
+        //public:
+        //private:
+        };
+        /*
+        class TubArm : public xero::base::Subsystem {
         public:
+            enum class ArmPosition {
+                LOWERED,
+                OFF_GROUND,
+                RAISED
+            };
+            enum class WristPosition {
+                LOWERED,
+                RAISED
+            };
+
             TubArm(xero::base::Robot &robot, std::string configID);
             virtual ~TubArm();
             
@@ -28,6 +43,15 @@ namespace xero {
 
             std::shared_ptr<frc::Encoder> armEncoder_;
             std::shared_ptr<frc::Encoder> wristEncoder_;
+
+            // Encoder values for arm & wrist positions
+            int armPositionLowered_;
+            int armPositionOffGround_;
+            int armPositionRaised_;
+
+            int wristPositionLowered_;
+            int wristPositionRaised_;
         };
+        */
     }
 }

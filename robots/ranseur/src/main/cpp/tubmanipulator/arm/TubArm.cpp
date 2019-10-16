@@ -23,6 +23,13 @@ namespace xero {
                 settings.getInteger(arm + "wrist:encoder:1"),
                  settings.getInteger(arm + "wrist:encoder:2")
             );
+
+            armPositionLowered_ = settings.getInteger(arm + ":arm:lowered");
+            armPositionOffGround_ = settings.getInteger(arm + ":arm:off_ground");
+            armPositionRaised_ = settings.getInteger(arm + ":arm:raised");
+
+            wristPositionLowered_ = settings.getInteger(arm + ":wrist:lowered");
+            wristPositionRaised_ = settings.getInteger(arm + ":wrist:raised");
         }
 
         TubArm::~TubArm() {            
