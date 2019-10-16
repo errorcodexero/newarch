@@ -34,25 +34,28 @@ namespace xero {
 
             return ret ;
         }
-/*
-            getCollector().getIntake()->setAction(intake_dir_p) ;
+
+            void CollectorTubAction::start() {
             auto intake_dir_p = std::make_shared<IntakeDutyCycleAction>(*getCollector().getIntake(), "intake:speed:collect") ;
+            getCollector().getIntake()->setAction(intake_dir_p) ;
 
             state_ = State::waiting ;
-*/
+        }
+
         void CollectorTubAction::run() {
             switch(state_) {
             case State::reset:
                 state_ = State::waiting ;
                 break ;
-
+            case State::waiting:
+                break ;
             case State::cancel:
                 break ;
             }
 
             if (state_ != prev_state_) {
                 MessageLogger &logger = getCollector().getRobot().getMessageLogger() ;
-                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_COLLECTOR) ;
+                logger.startMessage(MessageLogger::MessageType::debug) ;            /// , MSG_GROUP_COLLECTOR
                 logger << "Collected: changed states '" ;
                 logger << toString(prev_state_) ;
                 logger << "' -> '" ;
@@ -61,6 +64,10 @@ namespace xero {
             }
 
             prev_state_ = state_ ;
+        }
+
+        bool CollectorTubAction::isDone() {
+            return state_ == State::cancel ;
         }
 
         void CollectorTubAction::cancel() {
