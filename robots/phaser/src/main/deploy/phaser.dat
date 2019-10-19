@@ -193,7 +193,7 @@ turntable:calibrate:encbase                                     238
 endif
 
 if COMPETITION
-turntable:calibrate:encbase                                     240
+turntable:calibrate:encbase                                     265
 endif
 
 turntable:calibrate:power                                       0.2             
@@ -209,9 +209,9 @@ if COMPETITION
 turntable:degrees_per_tick                                      0.55387105877777777777777777777778
 endif
 
-turntable:maxa                                                  180
-turntable:maxd                                                  -180
-turntable:maxv                                                  200
+turntable:maxa                                                  360
+turntable:maxd                                                  -360
+turntable:maxv                                                  360
 
 turntable:base                                                  0.0
 turntable:threshold                                             1.0
