@@ -202,6 +202,11 @@ namespace xero {
 
                 dist_l_ = ticks_left_ * left_inches_per_tick_ ;
                 dist_r_ = ticks_right_ * right_inches_per_tick_ ;
+
+                frc::SmartDashboard::PutNumber("LeftTankTicks", ticks_left_) ;
+                frc::SmartDashboard::PutNumber("LeftTankDistance", dist_l_) ;
+                frc::SmartDashboard::PutNumber("RightTankTicks", ticks_right_) ;                
+                frc::SmartDashboard::PutNumber("RightTankDistance", dist_r_) ;
             }
 
             if (navx_ != nullptr) {
