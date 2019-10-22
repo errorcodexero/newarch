@@ -17,10 +17,10 @@ namespace xero {
             oi_ = std::make_shared<GoPiGo3OISubsystem>(robot) ;
             addChild(oi_) ;
 
-            std::list<int> left_motors ;
-            std::list<int> right_motors ;
-            left_motors.push_back(robot.getSettingsParser().getInteger("hw:tankdrive:leftmotor")) ;
-            right_motors.push_back(robot.getSettingsParser().getInteger("hw:tankdrive:rightmotor")) ;
+#ifdef NOTYET
+            //
+            // Update for new motor factory
+            //
             tankdrive_ = std::make_shared<TankDrive>(robot, left_motors, right_motors) ;
             tankdrive_->invertRightMotors() ;
 
@@ -32,6 +32,7 @@ namespace xero {
             tankdrive_->setEncoders(l1, l2, r1, r2) ;
 
             addChild(tankdrive_) ;
+#endif
         }
 
         GoPiGo3Subsystem::~GoPiGo3Subsystem() {         
