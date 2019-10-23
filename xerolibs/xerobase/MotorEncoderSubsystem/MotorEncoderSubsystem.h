@@ -1,0 +1,44 @@
+#pragma once
+
+#include <frc/Encoder.h>
+
+#include "SingleMotorSubsystem/SingleMotorSubsystem.h" 
+
+namespace xero {
+    namespace base {
+        class MotorEncoderSubsystem : public SingleMotorSubsystem {
+            friend class MotorEncoderGoToAction;
+        public:
+            /// \brief Create a new subsystem object
+            /// \param robot a reference to the robot for this subsystem
+            /// \param name the name of this subsystem, must be unique across all subsystems
+            /// \param motor the name of the parameter file entry that contains the subsystem definition
+            /// \param id the message logger id to use for messages from this class            
+            /// \sa xero::base::MotorFactory
+            /// \sa xero::misc::SettingsParser
+            MotorEncoderSubsystem(Robot &robot, const std::string &name, const std::string config, uint64_t id);
+
+            virtual bool canAcceptAction(xero::base::ActionPtr action);
+            virtual void computeState();
+
+            double getPosition() { return position_; }
+
+        private:
+            std::shared_ptr<frc::Encoder> encoder_;
+
+            double ticksToUnits(int ticks);
+            
+            // The number of units per encoder tick.
+            double unitsPerTick_;
+
+            // The encoder value corresponding to zero units.
+            int zeroTicks_;
+
+            int encoderValue_;
+            double position_;
+
+            const std::string configName_;
+            unit64_t msg_id_;
+        }
+    }
+}
