@@ -46,11 +46,33 @@ namespace xero {
             /// computes a state that is meaningful to users of the subsystem.
             virtual void computeState() ;
 
+
+            enum class SetActionResult {
+                // The action was accepted.
+                Accepted,
+
+                // The action was accepted, but replaced a previous action.
+                PreviousCanceled,
+
+                // The action was rejected because canAcceptAction returned false.
+                Rejected,  
+
+                // The action was rejected because the parent subsystem is busy.
+                ParentBusy
+            };
+
+            static inline bool isAccepted(SetActionResult r) { 
+                return r == SetActionResult::Accepted || r == SetActionResult::PreviousCanceled;
+            }
+
             /// \brief set the current Action for the subsystem
             /// \param action the new Action for the subsystem
-            /// \param force if true abort the current action and force this action immediately
             /// \return true if the Action is accepted, false if not
-            virtual bool setAction(ActionPtr action, bool force = false);
+            virtual SetActionResult setAction(ActionPtr action);
+
+            /// \brief Returns this subsystem's default action
+            /// The default action runs whenever no other actions are running.
+            virtual ActionPtr getDefaultAction() { return nullptr; }
 
             /// \brief return a constant pointer to the current Action
             /// \returns  a constant pointer to the current Action
@@ -124,6 +146,8 @@ namespace xero {
             }
 
         private:
+            bool _canAcceptAction(ActionPtr action);
+            
             //
             // A reference to the robot object that contains this subsystem
             //
@@ -139,10 +163,11 @@ namespace xero {
             //
             ActionPtr action_;
 
-            //
-            // A pending action, waiting on the current action to finish
-            //
-            ActionPtr pending_ ;
+            // Whether the default action should be started on the next tick
+            bool initDefaultAction_;
+
+            // Whether the currently active action is the default
+            bool isRunningDefaultAction_;
 
             //
             // The set of child subsystems
