@@ -7,7 +7,7 @@
 
 namespace xero{
     namespace base {
-        class TerminateAction : public Action {
+        class TerminateAction : public CompositeAction {
         public:
             TerminateAction(ActionPtr a, Robot &robot, double delay = 0.0) ;
             TerminateAction(std::shared_ptr<Subsystem> sub, ActionPtr , Robot &robot, double delay = 0.0) ;
@@ -25,6 +25,8 @@ namespace xero{
             void addTerminator(std::shared_ptr<ITerminator> term) {
                 terminators_.push_back(term) ;
             }
+
+            virtual std::vector<ActionPtr> getChildren() { return { action_ }; }
 
         private: 
             ActionPtr action_ ;

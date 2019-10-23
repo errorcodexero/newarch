@@ -2,7 +2,7 @@
 
 #include "Subsystem.h"
 #include "oi/DriverGamepad.h"
-#include "SequenceAction.h"
+#include "actions/SequenceAction.h"
 
 /// \file
 

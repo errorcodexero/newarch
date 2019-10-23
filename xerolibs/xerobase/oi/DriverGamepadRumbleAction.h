@@ -1,5 +1,5 @@
 #pragma once
-#include "Action.h"
+#include "actions/Action.h"
 #include "oi/OISubsystem.h"
 
 /// \file

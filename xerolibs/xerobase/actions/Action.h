@@ -54,5 +54,16 @@ namespace xero {
 
         /// \brief a shared pointer to an action
         typedef std::shared_ptr<Action> ActionPtr ;
+
+
+        /// A \c CompositeAction is an action composed of one or more child actions.
+        class CompositeAction: public Action {
+        public:
+            /// \returns All of this action's children.
+            virtual std::vector<ActionPtr> getChildren() = 0;
+        };
+
+        /// An action that can be applied to any subsystem.
+        class GenericAction: public Action {};
     }
 }

@@ -1,4 +1,4 @@
-#include "SequenceAction.h"
+#include "actions/SequenceAction.h"
 #include "basegroups.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <cassert>

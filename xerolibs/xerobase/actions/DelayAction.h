@@ -1,5 +1,5 @@
 #pragma once
-#include "Action.h"
+#include "actions/Action.h"
 #include <frc/Timer.h>
 
 /// \file
@@ -10,7 +10,7 @@ namespace xero {
         /// \brief an action that delays for a fixed amount of time.  This step
         /// is guaranteed to delay at least for the delay given but may delay
         /// more based on the specific scenario.
-        class DelayAction : public Action {
+        class DelayAction : public GenericAction {
         public:
             /// \brief create a delay object with the delay given
             /// \param delayTime the delay in seconds

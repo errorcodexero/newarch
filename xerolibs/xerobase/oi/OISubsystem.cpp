@@ -1,6 +1,6 @@
 #include "oi/OISubsystem.h"
 #include "Robot.h"
-#include "SequenceAction.h"
+#include "actions/SequenceAction.h"
 #include "tankdrive/TankDrive.h"
 #include "basegroups.h"
 #include "DriverGamepadRumbleAction.h"

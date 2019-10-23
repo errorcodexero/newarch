@@ -97,7 +97,7 @@ namespace xero {
                     //
                     seq_->clear() ;
                     oi->generateActions(seq_) ;
-                    if (seq_->size() > 0) {
+                    if (seq_->getChildren().size() > 0) {
                         seq_->start() ;
                         seq_->run() ;
                         if (!seq_->isDone()) {

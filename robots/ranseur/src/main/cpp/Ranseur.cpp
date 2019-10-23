@@ -1,7 +1,7 @@
 #include "Ranseur.h"
 #include "ranseurids.h"
 #include "automodes/RanseurAutoModeController.h"
-#include <DelayAction.h>
+#include <actions/DelayAction.h>
 #include <TeleopController.h>
 #include <basegroups.h>
 #include <MessageDestDS.h>

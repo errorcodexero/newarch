@@ -7,8 +7,8 @@
 #include <Robot.h>
 #include <TeleopController.h>
 #include <SettingsParser.h>
-#include <TerminateAction.h>
-#include <DelayAction.h>
+#include <actions/TerminateAction.h>
+#include <actions/DelayAction.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::base ;
