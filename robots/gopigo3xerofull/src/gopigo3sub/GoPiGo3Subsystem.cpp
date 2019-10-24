@@ -13,7 +13,7 @@ using namespace xero::base ;
 
 namespace xero {
     namespace gopigo3 {
-        GoPiGo3Subsystem::GoPiGo3Subsystem(Robot &robot) : RobotSubsystem(robot, "gopigo") { 
+        GoPiGo3Subsystem::GoPiGo3Subsystem(Robot &robot) : Robot(robot, "gopigo") { 
             servo_ = std::make_shared<ServoSubsystem>(robot) ;
             addChild(servo_) ;
 

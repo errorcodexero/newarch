@@ -19,6 +19,7 @@ namespace xero {
             switch(sel)
             {
             case 0:
+                ptr = std::make_shared<StraightCharAutoMode>(getRobot(), 0.5, 4.0) ;
                 break ;
             case 1:
                 break ;
