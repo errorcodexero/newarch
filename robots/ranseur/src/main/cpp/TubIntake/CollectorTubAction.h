@@ -11,7 +11,7 @@ namespace xero {
 
             virtual void start() ;
             virtual void run() ;
-            virtual bool isDone()  ;
+            virtual bool isDone() ;
             virtual void cancel() ;
             virtual std::string toString() {
                 return action_name ;
@@ -20,11 +20,9 @@ namespace xero {
         private:
             enum class State 
             { 
-                reset,              // Base state when not collecting a Tub
-                waiting,            // Waiting for a Tub
-//                grabbing,           // Running the intake to ensure we complete have the Tub
-//                clamp,              // Clamping the grabber down on the Tub and stopping the intake
-                cancel
+            motors_on,                    //motors on and ready for intake
+            closed_hand,                   //close the hand with solenoid
+            done,                         //done collecting tub (just turn motors on barely to hold tubs?)
             } ;         
 
         private:
@@ -33,12 +31,12 @@ namespace xero {
         private:
             static std::string action_name ;
 
-
         private:
-//            double grab_time_ ;
+            double grab_time_ ;
             double start_ ;
             State state_ ;
-            State prev_state_ ;
+            double speed_ ;
+            double delay_ ;
         } ;
     }
 }

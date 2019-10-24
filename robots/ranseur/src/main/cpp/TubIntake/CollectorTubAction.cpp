@@ -1,7 +1,6 @@
 #include "CollectorTubAction.h"
 #include "Collector.h"
-#include "Intake.h"
-#include "IntakeDutyCycleAction.h"
+#include "CollectorDutyCycleAction.h"
 #include <MessageLogger.h>
 #include <Robot.h>
 
@@ -13,68 +12,43 @@ namespace xero {
         std::string CollectorTubAction::action_name("CollectorTubAction");
 
         CollectorTubAction::CollectorTubAction(Collector &col) : CollectorAction(col){
+            speed_ = col.getRobot().getSettingsParser().getDouble("tubcollect:collectspeed") ;
+            delay_ = col.getRobot().getSettingsParser().getDouble("tubcollect:collectdelay") ;
         }
         CollectorTubAction::~CollectorTubAction() {            
         }
         
-        std::string CollectorTubAction::toString(State st) {
-            std::string ret ;
 
-            switch (st) {
-            case State::reset:
-                ret = "reset" ;
-                break ;         
-            case State::waiting:
-                ret = "waiting" ;
-                break ;         
-            case State::cancel:
-                ret = "cancel" ;
-                break ;
-            }
-
-            return ret ;
-        }
-
-            void CollectorTubAction::start() {
-            auto intake_dir_p = std::make_shared<IntakeDutyCycleAction>(*getCollector().getIntake(), "intake:speed:collect") ;
-            getCollector().getIntake()->setAction(intake_dir_p) ;
-
-            state_ = State::waiting ;
+        void CollectorTubAction::start() {
+            getCollector().openHand() ;
+            state_ = State::motors_on ;
+            getCollector().getIntake()->set(speed_) ;
         }
 
         void CollectorTubAction::run() {
-            switch(state_) {
-            case State::reset:
-                state_ = State::waiting ;
-                break ;
-            case State::waiting:
-                break ;
-            case State::cancel:
-                break ;
+            if(state_ == State::motors_on) {
+                if(getCollector().hasTub()) {
+                    getCollector().closeHand() ;
+                    state_ = State::closed_hand ;
+                    start_ = getCollector().getRobot().getTime() ;
+                }
             }
-
-            if (state_ != prev_state_) {
-                MessageLogger &logger = getCollector().getRobot().getMessageLogger() ;
-                logger.startMessage(MessageLogger::MessageType::debug) ;            /// , MSG_GROUP_COLLECTOR
-                logger << "Collected: changed states '" ;
-                logger << toString(prev_state_) ;
-                logger << "' -> '" ;
-                logger << toString(state_) ;
-                logger.endMessage() ;
+            else if(state_ == State::closed_hand) {
+                if(getCollector().getRobot().getTime() - start_ > delay_) {
+                    getCollector().getIntake()->set(0.0) ;
+                    state_ = State::done ;
+                }
             }
-
-            prev_state_ = state_ ;
         }
 
         bool CollectorTubAction::isDone() {
-            return state_ == State::cancel ;
+            return state_ == State::done ;
         }
 
         void CollectorTubAction::cancel() {
-            auto action = getCollector().getIntake()->getAction() ;
-            if (action != nullptr)
-                action->cancel() ;
-
+            getCollector().getIntake()->set(0.0) ;
+            getCollector().closeHand() ;
+            state_ = State::done ;
         }
     }
 }

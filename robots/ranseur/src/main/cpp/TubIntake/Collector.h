@@ -3,6 +3,10 @@
 #include "Subsystem.h"
 #include "DebounceBoolean.h"
 #include <frc/DigitalInput.h>
+#include <frc/Solenoid.h>
+#include <frc/VictorSP.h>
+#include <memory>
+#include <motors/MotorController.h>
 
 namespace xero {
     namespace ranseur {
@@ -17,7 +21,7 @@ namespace xero {
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             virtual void computeState() ;
 
-            std::shared_ptr<Intake> getIntake() {
+            std::shared_ptr<xero::base::MotorController> getIntake() {
                 return intake_ ;
             }
 
@@ -29,10 +33,17 @@ namespace xero {
                 return collected_tub_ ;
             }
 
+            void openHand() {
+                clamp_->Set(true) ;              ///true and false of the Hand subject to change/switch
+            }
+            void closeHand() {
+                clamp_->Set(false) ;
+            }
+
             void createNamedSequences() {
             }
 
-        private:
+     //   private:
             void setCollectedTubState(bool st) {
                 collected_tub_ = st ;
             }
@@ -47,9 +58,10 @@ namespace xero {
             // This means we have collected a tub
             //
             bool collected_tub_ ;
-            std::shared_ptr<Intake> intake_ ;
             std::shared_ptr<frc::DigitalInput> sensor_ ;
             std::shared_ptr<xero::misc::DebounceBoolean> deb_sensor_ ;
+            std::shared_ptr<xero::base::MotorController> intake_ ;
+            std::shared_ptr<frc::Solenoid> clamp_ ;
         } ;
     }
 }

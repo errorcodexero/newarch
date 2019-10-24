@@ -89,6 +89,7 @@ namespace xero {
                     getCollector().getIntake()->setAction(intake_dir_p) ;
                     getCollector().setCollectedCubeState(true) ;
                     state_ = State::clamp ;
+                    
                 }
 
             case State::clamp:
