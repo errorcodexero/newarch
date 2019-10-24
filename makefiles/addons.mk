@@ -167,6 +167,28 @@ endif
 #
 ###########################################################################################
 #
+#
+# There are for the REV Spark Max libraries
+#
+ifeq ($(NEED_REV),true)
+
+# GOPIGO3
+ifeq ($(PLATFORM),GOPIGO)
+CXXFLAGS += -I$(TOPDIR)/gopigo3/rev
+LIBLIST += $(TOPDIR)/gopigo3/rev
+endif
+
+# CYGWIN SIMULATOR
+ifeq ($(PLATFORM),SIMULATOR)
+CXXFLAGS += -I$(TOPDIR)/simulator/revsim
+LIBLIST += $(TOPDIR)/simulator/revsim
+endif
+
+endif
+
+#
+###########################################################################################
+#
 
 #
 # These are for the XeroMisc

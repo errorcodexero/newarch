@@ -1,8 +1,10 @@
 TOPDIR=../..
 
 SOURCES = \
+	rev/CANSparkMax.cpp\
+	rev/CANSparkMaxLowLevel.cpp
 
-TARGET=ctre
+TARGET=rev
 
 LOCAL_CFLAGS=
 

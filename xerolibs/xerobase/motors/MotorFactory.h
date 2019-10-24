@@ -4,6 +4,7 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include <functional>
 
 #include "MessageLogger.h"
 #include "SettingsParser.h"

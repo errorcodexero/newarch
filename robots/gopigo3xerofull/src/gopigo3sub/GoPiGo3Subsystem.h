@@ -3,12 +3,12 @@
 #include "servosubsystem/ServoSubsystem.h"
 #include "ledsubsystem/LEDSubsystem.h"
 #include "oi/GoPiGo3OISubsystem.h"
-#include <subsystem.h>
+#include <RobotSubsystem.h>
 #include <tankdrive/TankDrive.h>
 
 namespace xero {
     namespace gopigo3 {
-        class GoPiGo3Subsystem : public xero::base::Subsystem {
+        class GoPiGo3Subsystem : public xero::base::RobotSubsystem {
         public:
             GoPiGo3Subsystem(xero::base::Robot &robot) ;
             virtual ~GoPiGo3Subsystem() ;

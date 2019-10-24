@@ -1,5 +1,6 @@
-#include <algorithm>
 #include "SparkMaxMotorController.h"
+#include <algorithm>
+#include <cassert>
 
 namespace xero {
     namespace base {

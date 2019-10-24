@@ -12,17 +12,18 @@ namespace ctre {
         namespace motorcontrol {
             namespace can {
 
-                class TalonSRX : public IMotorController {
+                class VictorSPX : public IMotorController {
                 public:
-                    TalonSRX(int id) : IMotorController(id) {
+                    VictorSPX(int id) : IMotorController(id) {
                     }
 
-                    virtual ~TalonSRX() {        
+                    virtual ~VictorSPX() {        
                     }
 
                     ctre::phoenix::motorcontrol::SensorCollection &GetSensorCollection() {
                         return sensors_ ;
                     }
+
 
                 private:
                     ctre::phoenix::motorcontrol::SensorCollection sensors_ ;

@@ -4,6 +4,7 @@
 #include <ctre/phoenix/MotorControl/ControlMode.h>
 #include <ctre/phoenix/MotorControl/NeutralMode.h>
 #include <ctre/phoenix/MotorControl/LimitSwitchType.h>
+#include <ctre/phoenix/MotorControl/InvertType.h>
 #include <frc/SimulatedObject.h>
 
 namespace ctre {
@@ -27,6 +28,9 @@ namespace ctre {
 
                 void SetInverted(bool inverted) {
                     inverted_ = inverted ;
+                }
+
+                void SetInverted(InvertType type) {
                 }
 
                 ctre::phoenix::motorcontrol::SensorCollection& GetSensorCollection() ;

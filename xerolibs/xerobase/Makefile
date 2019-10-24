@@ -55,6 +55,10 @@ SOURCES = \
 	tankdrive/actions/TankDriveTimedPowerAction.cpp\
 	tankdrive/actions/TankDriveFollowPathAction.cpp\
 	tankdrive/actions/TankDriveScrubCharAction.cpp\
+	motors/CTREMotorController.cpp\
+	motors/MotorFactory.cpp\
+	motors/MotorGroupController.cpp\
+	motors/SparkMaxMotorController.cpp\
 	$(SIMSOURCES)
 
 TARGET=xerobase
@@ -63,6 +67,7 @@ NEED_WPIUTIL=true
 NEED_WPILIB=true
 NEED_NAVX=true
 NEED_CTRE=true
+NEED_REV=true
 NEED_NETWORKTABLES=true
 NEED_XEROMISC=true
 
