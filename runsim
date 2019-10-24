@@ -2,23 +2,29 @@
 
 rootdir=$(git rev-parse --show-toplevel)
 
-if [ $# != 2 ]; then
-    echo Expected two arguments, the name of the robot and the mode
+if [ $# -lt 2 ]; then
+    echo Expected at least two arguments, the name of the robot and the mode
+    echo An optional third argument can be the simulator event file
     echo The mode should be 'auto', 'teleop'
    exit 1
+fi
+
+FLAGS=""
+if [ $# -eq 3 ]; then
+    FLAGS="-events robots/$1/sims/$3"
 fi
 
 legal=NO
 if [ $2 == 'auto' ]; then
     legal=YES
     echo Running auto mode
-    $rootdir/makebuild/SIMULATOR/Debug/ranseur/$1 --auto 15 --oper 0 --start 0 --test 0
+    $rootdir/makebuild/SIMULATOR/Debug/ranseur/$1 --auto 15 --oper 0 --start 0 --test 0 $FLAGS
 fi
 
 if [ $2 == 'teleop' ]; then
     legal=YES
     echo Running teleop mode
-    $rootdir/makebuild/SIMULATOR/Debug/ranseur/$1 --auto 0 --oper 30 --start 0 --test 0
+    $rootdir/makebuild/SIMULATOR/Debug/ranseur/$1 --auto 0 --oper 30 --start 0 --test 0 $FLAGS
 fi
 
 if [ legal == 'NO' ]; then
