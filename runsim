@@ -11,7 +11,7 @@ fi
 
 FLAGS=""
 if [ $# -eq 3 ]; then
-    FLAGS="-events robots/$1/sims/$3"
+    FLAGS="--events robots/$1/sims/$3"
 fi
 
 legal=NO
