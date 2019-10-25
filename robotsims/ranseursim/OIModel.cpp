@@ -25,15 +25,32 @@ namespace xero {
                     setButton(2, button, (value ? true : false)) ;
                     ret = true ;
                 }
-                else {
-                    name = "oi:axis:" + event ;
-                    if (settings.isDefined(name)) {
-                        int axis = settings.getInteger(name) ;
-                        double v = static_cast<double>(value) / 100.0 ;
-                        setAxis(2, axis, v) ;
-                        ret = true ;
-                    }                        
+
+                name = "oi:axis:" + event ;
+                if (!ret && settings.isDefined(name))
+                {
+                    int axis = settings.getInteger(name) ;
+                    double v = static_cast<double>(value) / 100.0 ;
+                    setAxis(2, axis, v) ;
+                    ret = true ;
                 }
+
+                name = "gamepad:axis:" + event ;
+                if (!ret && settings.isDefined(name))
+                {
+                    int axis = settings.getInteger(name) ;
+                    double v = static_cast<double>(value) / 100.0 ;
+                    setAxis(0, axis, v) ;
+                    ret = true ;
+                }
+
+                name = "gamepad:button:" + event ;
+                if (!ret && settings.isDefined(name))
+                {
+                    int button = settings.getInteger(name) ;
+                    setButton(0, button, (value ? true : false)) ;
+                    ret = true ;
+                }                
 
                 return ret ;
             }

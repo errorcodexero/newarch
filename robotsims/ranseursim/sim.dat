@@ -64,3 +64,5 @@ tankdrive:sim:width                                     22.5
 
 
 oi:axis:automode                                        6                   # Axis
+gamepad:axis:left_axis_y                                1
+gamepad:axis:right_axis_x                               4
