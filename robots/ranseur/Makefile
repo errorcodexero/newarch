@@ -12,8 +12,12 @@ SUBSYSTEMS = \
 	src/main/cpp/ranseuroi/RanseurOIDevice.cpp\
 	src/main/cpp/ranseuroi/RanseurOISubsystem.cpp\
 	src/main/cpp/ranseurrobotsubsystem/RanseurRobotSubsystem.cpp\
-	src/main/cpp/tubmanipulator/arm/TubArm.cpp
-	
+	src/main/cpp/tubmanipulator/arm/TubArm.cpp\
+	src/main/cpp/tubmanipulator/tubcollector/Collector.cpp\
+	src/main/cpp/tubmanipulator/tubcollector/CollectorDutyCycleAction.cpp\
+	src/main/cpp/tubmanipulator/tubcollector/CollectorEjectTubAction.cpp\
+	src/main/cpp/tubmanipulator/tubcollector/CollectorTubAction.cpp		
+
 SOURCES = \
 	src/main/cpp/main.cpp\
 	src/main/cpp/Ranseur.cpp\
@@ -59,4 +63,3 @@ $(error This robot is not supported by the GOPIGO platform)
 endif
 
 include $(TOPDIR)/makefiles/buildexe.mk
-
