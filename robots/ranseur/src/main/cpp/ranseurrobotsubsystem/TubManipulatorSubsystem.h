@@ -4,7 +4,7 @@
 #include "ranseurcameratracker/RanseurCameraTracker.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
-#include <TubIntake/Collector.h>          // because we need to access the name of the collector
+#include <tubmanipulator/tubcollector/Collector.h>
 #include "Action.h"
 
 namespace xero {

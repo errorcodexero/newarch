@@ -2,7 +2,7 @@
 #include "TubManipulatorSubsystem.h"
 #include <Robot.h>
 #include <list>
-#include <TubIntake/Collector.h>
+#include <tubmanipulator/tubcollector/Collector.h>
 #include "TubManipulatorSubsystem.h"
 #include "Action.h"
 
