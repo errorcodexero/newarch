@@ -14,7 +14,7 @@ namespace xero {
     namespace ranseur {
         class TubArm : public xero::base::Subsystem {
         public:
-            TubArm(xero::base::Robot &robot, std::string configID);
+            TubArm(xero::base::Subsystem *parent, std::string configID);
             virtual ~TubArm();
             
             virtual void computeState();

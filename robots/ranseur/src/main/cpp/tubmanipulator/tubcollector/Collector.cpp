@@ -1,6 +1,6 @@
 #include "Collector.h"
 #include "CollectorAction.h"
-#include <SequenceAction.h>
+#include <actions/SequenceAction.h>
 #include <Robot.h>
 #include <frc/DigitalInput.h>
 
@@ -9,7 +9,9 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace ranseur {
-        Collector::Collector(Robot &robot) : Subsystem(robot, "collector") {
+        Collector::Collector(Subsystem *parent) : Subsystem(parent, "collector") {
+            Robot &robot = getRobot();
+            
             int sensor = robot.getSettingsParser().getInteger("hw:collector:tubsensor") ;
             sensor_ = std::make_shared<frc::DigitalInput>(sensor) ;
 

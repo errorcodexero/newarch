@@ -6,10 +6,11 @@ using namespace xero::base;
 
 namespace xero {
     namespace ranseur {
-        TubArm::TubArm(Robot &robot, std::string configID): Subsystem(robot, "tubarm") {
+        TubArm::TubArm(Subsystem *parent, std::string configID): Subsystem(parent, "tubarm") {
             std::string arm = configID + ":arm";
             std::string wrist = configID + ":wrist";
-
+            
+            auto &robot = getRobot();
             auto &settings = robot.getSettingsParser();
 
             armMotor_ = robot.getMotorFactory()->createMotor(arm + ":motor");

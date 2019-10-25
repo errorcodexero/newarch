@@ -18,15 +18,15 @@ namespace xero {
             //
             // Add the OI to the robot.  The OI is specific to this robot.
             //
-            oi_ = std::make_shared<RanseurOISubsystem>(robot) ;
+            oi_ = std::make_shared<RanseurOISubsystem>(this) ;
             addChild(oi_) ;                    
 
-            tracker_ = std::make_shared<RanseurCameraTracker>(robot) ;
+            tracker_ = std::make_shared<RanseurCameraTracker>(this) ;
             tracker_->setCameraMode(CameraTracker::CameraMode::DriverViewing) ;               
             tracker_->setCameraIndex(0) ;
             addChild(tracker_) ;
 
-            bunnyArm_ = std::make_shared<BunnyArm>(robot);
+            bunnyArm_ = std::make_shared<BunnyArm>(this);
             addChild(bunnyArm_);
         }
 

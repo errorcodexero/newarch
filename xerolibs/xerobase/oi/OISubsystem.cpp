@@ -10,8 +10,8 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        OISubsystem::OISubsystem(Robot &robot, const std::string &name, bool adddriver) 
-                                : Subsystem(robot, name) {
+        OISubsystem::OISubsystem(SubsytemPtr parent, const std::string &name, bool adddriver) 
+                                : Subsystem(parent, name) {
             inited_ = false ;
             if (adddriver) {
                 int driver = robot.getSettingsParser().getInteger("hw:driverstation:hid:driver") ;                

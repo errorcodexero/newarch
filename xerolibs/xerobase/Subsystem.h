@@ -17,14 +17,19 @@ namespace xero {
         // Forward declaration of the robot class.
         //
         class Robot ;
+        
+        class Subsystem;
+        typedef std::shared_ptr<Subsystem> SubsystemPtr ;
 
         /// \brief The base class for any subsystem in the system.
         class Subsystem {
+             // RobotSubsystem doesn't have a parent, and therefore needs to use a private constructor
+            friend class RobotSubsystem;
         public: 
             /// \brief create a new subsystem
             /// \param robot the robot
             /// \param name the name of the subsystem
-            Subsystem(Robot &robot, const std::string &name) ;
+            Subsystem(Subsystem *parent, const std::string &name) ;
 
             /// \brief destroy a new subsystem
             virtual ~Subsystem() ;
@@ -86,6 +91,11 @@ namespace xero {
                 return action_ ;
             }
 
+            /// \returns A pointer to the parent subsystem
+            Subsystem *getParent() { 
+                return parent_;
+            }
+
             /// \brief cancel the current action for this subsystem
             /// It also cancels the actions for any children subsystems
             /// \returns true if the action was canceled, false if it could not be
@@ -137,6 +147,15 @@ namespace xero {
 
             void endPlot(int id) ;
 
+            /// \return true if the subsystem is currently executing an action
+            bool isBusy();
+
+            /// \return true if the subsystem or one if its ancestors is currently executing an action
+            bool isBusyOrParentBusy();
+
+            /// \return true if the subsystem or one if its children is currently executing an action
+            bool isBusyOrChildBusy();
+
         protected:
             /// \brief check that a Action is valid for a subsystem
             /// \param Action the Action to check for a subsystem
@@ -146,6 +165,8 @@ namespace xero {
             }
 
         private:
+            Subsystem(Robot &robot, const std::string &name);
+
             bool _canAcceptAction(ActionPtr action);
             
             //
@@ -163,18 +184,16 @@ namespace xero {
             //
             ActionPtr action_;
 
-            // Whether the default action should be started on the next tick
-            bool initDefaultAction_;
-
-            // Whether the currently active action is the default
+            // Whether the currently active action is the default action.
             bool isRunningDefaultAction_;
+
+            // The parent subsystem
+            Subsystem *parent_;
 
             //
             // The set of child subsystems
             //
             std::list<std::shared_ptr<Subsystem>> children_ ;
         } ;
-
-        typedef std::shared_ptr<Subsystem> SubsystemPtr ;
     }
 }

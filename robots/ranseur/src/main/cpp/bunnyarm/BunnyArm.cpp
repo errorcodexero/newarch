@@ -6,7 +6,9 @@ using namespace xero::base ;
 
 namespace xero {
     namespace ranseur {
-        BunnyArm::BunnyArm(xero::base::Robot &robot) : xero::base::Subsystem(robot, "bunnyarm") {
+        BunnyArm::BunnyArm(Subsystem *parent) : xero::base::Subsystem(parent, "bunnyarm") {
+            auto &robot = getRobot();
+
             int sol = robot.getSettingsParser().getInteger("hw:bunnyarm:solenoid") ;
             // added "hw:bunnyarm:solenoid" to phaser.dat as 6
 

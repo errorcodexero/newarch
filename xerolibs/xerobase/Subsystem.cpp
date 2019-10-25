@@ -1,5 +1,6 @@
 #include "Subsystem.h"
 #include "actions/Action.h"
+#include "actions/DispatchAction.h"
 #include "Robot.h"
 #include "basegroups.h"
 #include <MessageLogger.h>
@@ -10,7 +11,12 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
 
-        Subsystem::Subsystem(Robot &robot, const std::string &name) : robot_(robot) , name_(name) {
+        Subsystem::Subsystem(Subsystem *parent, const std::string &name): Subsystem(parent->getRobot(), name) {
+            parent_ = parent;
+        }
+
+        Subsystem::Subsystem(Robot &robot, const std::string &name) : 
+        robot_(robot), name_(name) {
             action_ = nullptr ;
         }
 
@@ -38,19 +44,11 @@ namespace xero {
                 sub->run() ;
             }
             
-            if (action_ != nullptr){
-                action_->run() ;
-                if (pending_ != nullptr && action_->isDone()) {
-                    MessageLogger &logger = getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
-                    logger << "Actions: subsystem '" << getName() << "' pending action '" << pending_->toString() ;
-                    logger << "' was started" ;
-                    logger.endMessage() ;
-
-                    action_ = pending_ ;
-                    pending_ = nullptr ;
-                    action_->start() ;
-                }
+            if (action_ != nullptr && !action_->isDone()) {
+                action_->run();
+            } else if (!isRunningDefaultAction_) {
+                // set the default action
+                setAction(nullptr);
             }
         }
         
@@ -64,7 +62,29 @@ namespace xero {
                 action_->cancel() ;
         }
 
-        SetActionResult Subsystem::setAction(ActionPtr action) {
+        bool Subsystem::_canAcceptAction(ActionPtr action) {
+            if (auto composite = dynamic_cast<CompositeAction*>(action.get())) {
+                for (auto child : composite->getChildren()) {
+                    if (!_canAcceptAction(child)) return false;
+                }
+                return true;
+            } else if (auto dispatch = dynamic_cast<DispatchAction*>(action.get())) {
+                SubsystemPtr sub = dispatch->getSubsystem();
+                
+                // ensure the subsystem is one of our children
+                Subsystem *current = sub.get();
+                while (current != this) {
+                    current = current->getParent();
+                    if (current == nullptr) return false;
+                }
+
+                return sub->_canAcceptAction(dispatch->getAction());
+            } else {
+                return canAcceptAction(action);
+            }
+        }
+
+        Subsystem::SetActionResult Subsystem::setAction(ActionPtr action) {
             //
             // Check that the action is valid for this subsystem.  If not, print and error
             // and do nothing else.  Any existing action remains attached to the subsystem and
@@ -77,7 +97,10 @@ namespace xero {
                 isRunningDefaultAction_ = false;
             }
 
-            if (action != nullptr && !canAcceptAction(action)) {
+            // No use replacing a null action with another null
+            if (action_ == nullptr && action == nullptr) return SetActionResult::Accepted;
+
+            if (action != nullptr && !_canAcceptAction(action)) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
                 logger << "Actions: subsystem '" << getName() << "' rejected action '" << action->toString() << "'" ;
@@ -94,8 +117,10 @@ namespace xero {
                 logger << "Actions: subsystem '" << getName() << "' was assigned NULL action" ;
             else
                 logger << "Actions: subsystem '" << getName() << "' was assigned action '" << action->toString() << "'" ;    
-            if (isRunningDefaultAction_) logger << " (default action)";
-            logger.endMessage() ;            
+            if (isRunningDefaultAction_) logger << " (default)";
+            logger.endMessage() ;
+
+            SetActionResult result = SetActionResult::Accepted;
 
             if (action_ != nullptr && !action_->isDone()) {
                 //
@@ -104,12 +129,13 @@ namespace xero {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
                 logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString() << "' was canceled" ;
-                logger.endMessage() ; 
+                logger.endMessage() ;
 
                 //
                 // Cancel the action and start the new action.
                 //
                 cancelAction();
+                result = SetActionResult::PreviousCanceled;
 
                 if(!action_->isDone()) {
                     //
@@ -120,7 +146,7 @@ namespace xero {
                     logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
                     logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString();
                     logger << "' did not cancel immediately; proceeding anyway." ;
-                    logger.endMessage() ;                    
+                    logger.endMessage() ;
                 }
             }
             // And now start the Action
@@ -129,7 +155,24 @@ namespace xero {
             if (action_ != nullptr) {
                 action_->start() ;
             }
-            return true ;
+            return result;
+        }
+
+        bool Subsystem::isBusy() {
+            return action_ && !action_->isDone();
+        }
+
+        bool Subsystem::isBusyOrParentBusy() {
+            auto parent = getParent();
+            return isBusy() || (parent && parent->isBusy());
+        }
+
+        bool Subsystem::isBusyOrChildBusy() {
+            if (isBusy()) return true;
+            for (auto child : children_) {
+                if (child->isBusy()) return true;
+            }
+            return false;
         }
 
         void Subsystem::reset() {

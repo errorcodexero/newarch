@@ -36,7 +36,7 @@ namespace xero {
             /// \param id the message logger id to use for messages from this class            
             /// \sa xero::base::MotorFactory
             /// \sa xero::misc::SettingsParser
-            SingleMotorSubsystem(Robot &robot, const std::string &name, const std::string &motor, uint64_t id) ;
+            SingleMotorSubsystem(Subsystem *parent, const std::string &name, const std::string &motor, uint64_t id) ;
 
             /// \brief Create a new subsystem object
             /// The motor parameter is the number of the PWM to use for VictorSP or the CAN address
@@ -46,7 +46,7 @@ namespace xero {
             /// \param motor the motor controller
             /// \param id the message logger id to use for messages from this class
             /// \sa xero::misc::SettingsParser
-            SingleMotorSubsystem(Robot &robot, 
+            SingleMotorSubsystem(Subsystem *parent,
                                  const std::string &name, 
                                  std::shared_ptr<MotorController> motor, 
                                  uint64_t id

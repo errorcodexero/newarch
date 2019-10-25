@@ -20,7 +20,7 @@ namespace xero {
             /// \param robot the robot object this subsystem belongs to
             /// \param name the name of the OI subsystem
             /// \param adddriver if true add the driver gamepad to the OI subsystem
-            OISubsystem(Robot &robot, const std::string &name, bool adddriver = true) ;
+            OISubsystem(Subsystem *parent, const std::string &name, bool adddriver = true) ;
 
             /// \brief destroy the OI subsystem
             virtual ~OISubsystem() ;

@@ -9,7 +9,7 @@ namespace xero {
     namespace ranseur {
         class RanseurOISubsystem : public xero::base::OISubsystem {
         public:
-            RanseurOISubsystem(xero::base::Robot &robot) ;
+            RanseurOISubsystem(xero::base::Subsystem *parent) ;
             virtual ~RanseurOISubsystem() ;
         
         protected:

@@ -15,7 +15,7 @@ namespace xero {
         class Collector : public xero::base::Subsystem {
             friend class CollectTubAction ;
         public:
-            Collector(xero::base::Robot &robot) ;
+            Collector(xero::base::Subsystem* parent) ;
             virtual ~Collector() ;
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;

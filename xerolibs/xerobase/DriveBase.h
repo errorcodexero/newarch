@@ -13,7 +13,7 @@ namespace xero {
             /// \brief create a new drive base
             /// \param robot the robot the drivebase belongs to
             /// \param name the name of the drivebase subsystem
-            DriveBase(Robot &robot, const std::string &name) : Subsystem(robot, name) {
+            DriveBase(Subsystem *parent, const std::string &name) : Subsystem(parent, name) {
             }
 
             /// \brief destroy the drive base
