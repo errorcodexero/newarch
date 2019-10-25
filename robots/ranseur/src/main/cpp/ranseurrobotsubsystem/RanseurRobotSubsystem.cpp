@@ -28,6 +28,9 @@ namespace xero {
 
             bunnyArm_ = std::make_shared<BunnyArm>(robot);
             addChild(bunnyArm_);
+       
+            manipulator_ = std::make_shared<TubManipulatorSubsystem>(robot) ;
+            addChild(manipulator_) ;                 
         }
 
         RanseurRobotSubsystem::~RanseurRobotSubsystem() {
@@ -38,4 +41,3 @@ namespace xero {
         }
     }
 }
-
