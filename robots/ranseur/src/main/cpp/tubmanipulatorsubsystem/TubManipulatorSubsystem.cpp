@@ -2,7 +2,9 @@
 #include "TubManipulatorSubsystem.h"
 #include <Robot.h>
 #include <list>
-#include "tubmanipulator/tubcollector/Collector.h"
+#include "tubcollector/Collector.h"
+#include "tubarm/TubArm.h"
+#include "tubwrist/TubWrist.h"
 #include "TubManipulatorSubsystem.h"
 #include <actions/Action.h>
 
@@ -15,7 +17,14 @@ namespace xero {
         TubManipulatorSubsystem::TubManipulatorSubsystem(Robot &robot) : RobotSubsystem(robot, "ranseur") {
 
             collector_ = std::make_shared<Collector>(this) ;
-            addChild(collector_) ;                    
+            addChild(collector_) ;        
+
+            tubarm_ = std::make_shared<TubArm>(this) ;
+            addChild(tubarm_) ;            
+          
+            tubwrist_ = std::make_shared<TubWrist>(this) ;
+            addChild(tubwrist_) ;            
+        
         }
 
         bool TubManipulatorSubsystem::canAcceptAction(ActionPtr act) {

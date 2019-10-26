@@ -4,7 +4,9 @@
 #include "ranseurcameratracker/RanseurCameraTracker.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
-#include "tubmanipulator/tubcollector/Collector.h"
+#include "tubcollector/Collector.h"
+#include "tubarm/TubArm.h"
+#include "tubwrist/TubWrist.h"
 #include <actions/Action.h>
 
 namespace xero {
@@ -16,8 +18,17 @@ namespace xero {
         
         std::shared_ptr<Collector> getCollector() {
             return collector_ ;
+            
+        }
+
+        std::shared_ptr<TubArm> getTub() {
+            return tubarm_ ;
         }
         
+        std::shared_ptr<TubWrist> getWrist() {
+            return tubwrist_ ;
+        }
+
         virtual bool canAcceptAction(xero::base::ActionPtr action) ;
 
         virtual std::string toString() ;
@@ -39,7 +50,8 @@ namespace xero {
 
         private:
         std::shared_ptr<Collector> collector_ ;
-
+        std::shared_ptr<TubArm> tubarm_ ;
+        std::shared_ptr<TubWrist> tubwrist_ ;
         } ; 
     
     }

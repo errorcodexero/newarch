@@ -5,12 +5,12 @@
 #include "bunnyarm/BunnyArm.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
-#include "TubManipulatorSubsystem.h"
+#include <tubmanipulatorsubsystem/TubManipulatorSubsystem.h>
 
 namespace xero {
     namespace ranseur {
         class RanseurRobotSubsystem : public xero::base::RobotSubsystem {
-        public:
+        public:     
             RanseurRobotSubsystem(xero::base::Robot &robot) ;
             virtual ~RanseurRobotSubsystem() ;
 
