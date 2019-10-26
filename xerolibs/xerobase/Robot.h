@@ -7,6 +7,7 @@
 #include "NTPathDataWatcher.h"
 #include "basegroups.h"
 #include "PlotManager.h"
+#include "FlagManager.h"
 #include "motors/MotorFactory.h"
 #include <XeroPathManager.h>
 #include <frc/SampleRobot.h>
@@ -91,6 +92,11 @@ namespace xero {
             /// \brief Return reference to the one message logger
             xero::misc::MessageLogger& getMessageLogger() {
                 return message_logger_ ;
+            }
+
+            /// \return A reference to the flag manager
+            xero::misc::FlagManager& getFlagManager() { 
+                return *flags_;
             }
 
             /// \brief Return a reference to the plot manager
@@ -275,6 +281,8 @@ namespace xero {
 
             // The settings parser
             xero::misc::SettingsParser *parser_ ;
+
+            xero::misc::FlagManager *flags_;
 
             // The name of an output file for the robot output
             std::string output_file_name_ ;

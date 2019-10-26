@@ -4,8 +4,8 @@
 #include "ranseurcameratracker/RanseurCameraTracker.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
-#include <tubmanipulator/tubcollector/Collector.h>
-#include "Action.h"
+#include "tubmanipulator/tubcollector/Collector.h"
+#include <actions/Action.h>
 
 namespace xero {
     namespace ranseur {
@@ -19,18 +19,6 @@ namespace xero {
         }
         
         virtual bool canAcceptAction(xero::base::ActionPtr action) ;
-
-        virtual void reset() ;                  
-
-//        virtual void init(LoopType ltype) ;  
-            
-        virtual void run() ;
-
-        virtual void cancelAction() ;    
-      
-        virtual bool setAction(xero::base::ActionPtr action, bool force = false) ;
-
-        virtual void computeState() ;
 
         virtual std::string toString() ;
         

@@ -6,13 +6,13 @@
 namespace xero {
     namespace base {
         MotorEncoderSubsystem::MotorEncoderSubsystem(
-            Robot &robot, 
+            Subsystem *parent, 
             const std::string &name, 
             const std::string config,
             uint64_t id
-        ): SingleMotorSubsystem(robot, name, config + ":motor", id), configName_(name), msg_id_(id) {
+        ): SingleMotorSubsystem(parent, name, config + ":motor", id), configName_(name), msg_id_(id) {
             
-            auto &settings = robot.getSettingsParser();
+            auto &settings = getRobot().getSettingsParser();
             encoder_ = std::make_shared<frc::Encoder>(
                 settings.getInteger(config + ":encoder:1"),
                 settings.getInteger(config + ":encoder:2")

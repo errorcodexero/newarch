@@ -177,7 +177,7 @@ namespace xero {
 
         bool Subsystem::parentBusy() {
             auto parent = getParent();
-            return parent ? parent->isBusyOrParentBusy() : true;
+            return parent && parent->isBusyOrParentBusy();
         }
 
         bool Subsystem::isBusyOrParentBusy() {
