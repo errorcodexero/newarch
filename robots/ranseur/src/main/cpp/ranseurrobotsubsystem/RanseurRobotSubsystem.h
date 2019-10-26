@@ -5,14 +5,10 @@
 #include "bunnyarm/BunnyArm.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
+#include "TubManipulatorSubsystem.h"
 
 namespace xero {
     namespace ranseur {
-
-        //
-        // Add gamemanipulator
-        // Add climber
-        //
         class RanseurRobotSubsystem : public xero::base::RobotSubsystem {
         public:
             RanseurRobotSubsystem(xero::base::Robot &robot) ;
@@ -34,12 +30,17 @@ namespace xero {
                 return bunnyArm_;
             }
 
+             std::shared_ptr<TubManipulatorSubsystem> getTubManipulatorSubsystem() {
+                return manipulator_ ;
+            }    
+
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             
         private:
             std::shared_ptr<RanseurOISubsystem> oi_ ;
             std::shared_ptr<RanseurCameraTracker> tracker_ ;
             std::shared_ptr<BunnyArm> bunnyArm_;
+            std::shared_ptr<TubManipulatorSubsystem> manipulator_ ;
         } ;
     }
 }
