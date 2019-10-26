@@ -7,6 +7,9 @@
 #include <memory>
 #include <motors/MotorController.h>
 
+
+/// ** need to derive this from the motor-encoder class.. ** ///
+
 namespace xero {
     namespace ranseur {
         class TubArm ;

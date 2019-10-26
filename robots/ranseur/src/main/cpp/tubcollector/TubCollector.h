@@ -8,15 +8,17 @@
 #include <memory>
 #include <motors/MotorController.h>
 
+/// need to rename everything with "tub" in front ///
+
 namespace xero {
     namespace ranseur {
         class Intake ;
 
-        class Collector : public xero::base::Subsystem {
-            friend class CollectTubAction ;
+        class TubCollector : public xero::base::Subsystem {
+            friend class TubCollectTubAction ;
         public:
-            Collector(xero::base::Subsystem* parent) ;
-            virtual ~Collector() ;
+            TubCollector(xero::base::Subsystem* parent) ;
+            virtual ~TubCollector() ;
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             virtual void computeState() ;

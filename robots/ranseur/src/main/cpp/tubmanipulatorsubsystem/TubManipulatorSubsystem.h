@@ -4,7 +4,7 @@
 #include "ranseurcameratracker/RanseurCameraTracker.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
-#include "tubcollector/Collector.h"
+#include "tubcollector/TubCollector.h"
 #include "tubarm/TubArm.h"
 #include "tubwrist/TubWrist.h"
 #include <actions/Action.h>
@@ -16,8 +16,8 @@ namespace xero {
         public:
             TubManipulatorSubsystem(xero::base::Robot &robot) ;
         
-        std::shared_ptr<Collector> getCollector() {
-            return collector_ ;
+        std::shared_ptr<TubCollector> getTubCollector() {
+            return tubcollector_ ;
             
         }
 
@@ -41,15 +41,15 @@ namespace xero {
         // add other methods : 
         //
 
-        std::shared_ptr<Collector> getCol() {
-            return collector_ ;
+        std::shared_ptr<TubCollector> getTubCol() {
+            return tubcollector_ ;
         }    
 
         ~TubManipulatorSubsystem() {
         }
 
         private:
-        std::shared_ptr<Collector> collector_ ;
+        std::shared_ptr<TubCollector> tubcollector_ ;
         std::shared_ptr<TubArm> tubarm_ ;
         std::shared_ptr<TubWrist> tubwrist_ ;
         } ; 

@@ -1,5 +1,5 @@
-#include "Collector.h"
-#include "CollectorAction.h"
+#include "TubCollector.h"
+#include "TubCollectorAction.h"
 #include <actions/SequenceAction.h>
 #include <Robot.h>
 #include <frc/DigitalInput.h>
@@ -9,7 +9,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace ranseur {
-        Collector::Collector(Subsystem *parent) : Subsystem(parent, "collector") {
+        TubCollector::TubCollector(Subsystem *parent) : Subsystem(parent, "collector") {
             Robot &robot = getRobot();
             
             int sensor = robot.getSettingsParser().getInteger("hw:collector:tubsensor") ;
@@ -27,19 +27,19 @@ namespace xero {
 
         }
 
-        Collector::~Collector() {
+        TubCollector::~TubCollector() {
         }
 
         // sees whether or not 
-        bool Collector::canAcceptAction(ActionPtr action) {
-            auto col_act_p = std::dynamic_pointer_cast<CollectorAction>(action) ;
-            if (col_act_p == nullptr)
+        bool TubCollector::canAcceptAction(ActionPtr action) {
+            auto tub_col_act_p = std::dynamic_pointer_cast<TubCollectorAction>(action) ;
+            if (tub_col_act_p == nullptr)
                 return false ;
 
             return true ;
         }
 
-        void Collector::computeState() {
+        void TubCollector::computeState() {
             Subsystem::computeState() ;
 
             deb_sensor_->update(sensor_->Get(), getRobot().getTime()) ;

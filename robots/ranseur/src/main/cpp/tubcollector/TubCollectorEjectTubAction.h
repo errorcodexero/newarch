@@ -1,13 +1,13 @@
 #pragma once
 
-#include "CollectorAction.h"
+#include "TubCollectorAction.h"
 
 namespace xero {
     namespace ranseur {
-        class CollectorEjectTubAction : public CollectorAction {
+        class TubCollectorEjectTubAction : public TubCollectorAction {
         public:
-            CollectorEjectTubAction(Collector &col, double speed, double delay) ;
-            CollectorEjectTubAction(Collector &col, const std::string &speed, const std::string &delay) ;
+            TubCollectorEjectTubAction(TubCollector &tubcol, double speed, double delay) ;
+            TubCollectorEjectTubAction(TubCollector &tubcol, const std::string &speed, const std::string &delay) ;
 
             virtual void start() ;
             virtual void run() ;

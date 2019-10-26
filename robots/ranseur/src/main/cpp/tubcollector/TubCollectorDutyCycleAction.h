@@ -1,26 +1,26 @@
 #pragma once
 
-#include "CollectorAction.h" 
+#include "TubCollectorAction.h" 
 
 namespace xero {
     namespace ranseur {
         class Intake ;
 
         /// \brief an action that sets the duty cycle of the two intake motors
-        class CollectorDutyCycleAction : public CollectorAction {
+        class TubCollectorDutyCycleAction : public TubCollectorAction {
         public:
             /// \brief Create a new action object
             /// \param intake the subsystem this action effects
             /// \param duty the duty cycle to set the motors to
-            CollectorDutyCycleAction(Collector &intake, double duty) ;
+            TubCollectorDutyCycleAction(TubCollector &intake, double duty) ;
 
             /// \brief Create a new action object
             /// \param intake the subsystem this action effects
             /// \param name the name of a paramter that is the value
-            CollectorDutyCycleAction(Collector &intake, const std::string &name) ;
+            TubCollectorDutyCycleAction(TubCollector &intake, const std::string &name) ;
 
             /// \brief Destroy the action object
-            virtual ~CollectorDutyCycleAction() ;
+            virtual ~TubCollectorDutyCycleAction() ;
 
             /// \brief Start the duty cycle action.  This method actually sets the
             /// motor duty cycles.
