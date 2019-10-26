@@ -20,14 +20,14 @@ SIMSOURCES = \
 endif
 
 SOURCES = \
-	SequenceAction.cpp\
+	actions/SequenceAction.cpp\
+	actions/DelayAction.cpp\
+	actions/TerminateAction.cpp\
+	actions/DispatchAction.cpp\
+	actions/ParallelAction.cpp\
 	AutoMode.cpp\
 	AutoController.cpp\
 	ControllerBase.cpp\
-	DelayAction.cpp\
-	TerminateAction.cpp\
-	DispatchAction.cpp\
-	ParallelAction.cpp\
 	NTPathDataWatcher.cpp\
 	Robot.cpp\
 	PlotManager.cpp\
