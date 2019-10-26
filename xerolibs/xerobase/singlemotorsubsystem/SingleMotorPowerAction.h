@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Action.h"
+#include "actions/Action.h"
 #include "basegroups.h"
 #include "SingleMotorSubsystem.h"
 #include "SingleMotorSubsystemAction.h"

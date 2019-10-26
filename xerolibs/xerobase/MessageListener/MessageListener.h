@@ -16,7 +16,7 @@ namespace xero {
             /// \brief Constructor
             /// \param robot The robot that contains this subsystem.
             /// \param socket_port_number The port number on which the raspberry will broadcast UDP packets with the results.
-            MessageListener(Robot& robot, int socket_port_number);
+            MessageListener(Subsystem *parent, int socket_port_number);
 
             /// \brief Destructor
             virtual ~MessageListener() ;

@@ -1,7 +1,7 @@
 #include "oi/DriverGamepad.h"
 #include "oi/OISubsystem.h"
 #include "Robot.h"
-#include "SequenceAction.h"
+#include "actions/SequenceAction.h"
 #include "basegroups.h"
 #include "tankdrive/TankDrive.h"
 #include "tankdrive/actions/TankDrivePowerAction.h"

@@ -27,7 +27,7 @@ namespace xero {
             auto &settings = getRobot().getSettingsParser() ;
             auto &logger = getRobot().getMessageLogger() ;
             
-            auto tank = std::make_shared<TankDrive>(getRobot(), "hw:tankdrive:motors") ;
+            auto tank = std::make_shared<TankDrive>(this, "hw:tankdrive:motors") ;
 
             if (settings.isDefined("hw:tankdrive:leftencoder:1") && settings.isDefined("hw:tankdrive:leftencoder:2") &&
                 settings.isDefined("hw:tankdrive:rightencoder:1") && settings.isDefined("hw:tankdrive:rightencoder:2")) {

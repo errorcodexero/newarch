@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Action.h"
-#include "DispatchAction.h"
+#include "actions/Action.h"
+#include "actions/DispatchAction.h"
 #include <list>
 
 /// \file
@@ -10,7 +10,7 @@
 namespace xero {
     namespace base {
         /// \brief A class capable of doing work
-        class ParallelAction : public Action {
+        class ParallelAction : public CompositeAction {
         public:
             ParallelAction() ;
             virtual ~ParallelAction() ;
@@ -57,8 +57,9 @@ namespace xero {
             /// \returns a human readable strinct
             virtual std::string toString() ;
 
+            virtual std::vector<ActionPtr> getChildren() { return action_list_; }
         private:
-            std::list<std::shared_ptr<Action>> action_list_ ;
+            std::vector<std::shared_ptr<Action>> action_list_ ;
 
         };
 

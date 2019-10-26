@@ -9,7 +9,9 @@ using namespace xero::misc ;
 namespace xero {
     namespace ranseur {
 
-        RanseurCameraTracker::RanseurCameraTracker(Robot &robot) : CameraTracker(robot), ITerminator("Vision") {
+        RanseurCameraTracker::RanseurCameraTracker(Subsystem *parent) : 
+        CameraTracker(parent), ITerminator("Vision") {
+            Robot &robot = getRobot();
             distance_threshold_ = robot.getSettingsParser().getDouble("cameratracker:distance_threshold") ;
             rect_ratio_min_ = robot.getSettingsParser().getDouble("cameratracker:rect_ratio_min") ;
             rect_ratio_max_ = robot.getSettingsParser().getDouble("cameratracker:rect_ratio_max") ;      

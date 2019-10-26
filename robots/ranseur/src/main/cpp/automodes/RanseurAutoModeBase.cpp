@@ -1,8 +1,8 @@
 #include "RanseurAutoModeBase.h"
 #include "Ranseur.h"
-#include <TerminateAction.h>
-#include <ParallelAction.h>
-#include <DelayAction.h>
+#include <actions/TerminateAction.h>
+#include <actions/ParallelAction.h>
+#include <actions/DelayAction.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;

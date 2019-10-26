@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Action.h"
+#include "actions/Action.h"
 #include "LoopType.h"
 #include <memory>
 #include <map>
@@ -17,14 +17,19 @@ namespace xero {
         // Forward declaration of the robot class.
         //
         class Robot ;
+        
+        class Subsystem;
+        typedef std::shared_ptr<Subsystem> SubsystemPtr ;
 
         /// \brief The base class for any subsystem in the system.
         class Subsystem {
+             // RobotSubsystem doesn't have a parent, and therefore needs to use a private constructor
+            friend class RobotSubsystem;
         public: 
             /// \brief create a new subsystem
             /// \param robot the robot
             /// \param name the name of the subsystem
-            Subsystem(Robot &robot, const std::string &name) ;
+            Subsystem(Subsystem *parent, const std::string &name) ;
 
             /// \brief destroy a new subsystem
             virtual ~Subsystem() ;
@@ -46,11 +51,35 @@ namespace xero {
             /// computes a state that is meaningful to users of the subsystem.
             virtual void computeState() ;
 
+
+            enum class SetActionResult {
+                // The action was accepted.
+                Accepted,
+
+                // The action was accepted, but replaced a previous action.
+                PreviousCanceled,
+
+                // The action was rejected because canAcceptAction returned false.
+                Rejected,  
+
+                // The action was rejected because the parent subsystem is busy.
+                ParentBusy
+            };
+
+            static inline bool isAccepted(SetActionResult r) { 
+                return r == SetActionResult::Accepted || r == SetActionResult::PreviousCanceled;
+            }
+
             /// \brief set the current Action for the subsystem
             /// \param action the new Action for the subsystem
-            /// \param force if true abort the current action and force this action immediately
+            /// \param isParent Whether the new action is being set by a parent subsystems. If a parent
+            /// subsystem is busy and \c isParent is false, this method will fail with result \c parentBusy
             /// \return true if the Action is accepted, false if not
-            virtual bool setAction(ActionPtr action, bool force = false);
+            virtual SetActionResult setAction(ActionPtr action, bool isParent = false);
+
+            /// \brief Returns this subsystem's default action
+            /// The default action runs whenever no other actions are running.
+            virtual ActionPtr getDefaultAction() { return nullptr; }
 
             /// \brief return a constant pointer to the current Action
             /// \returns  a constant pointer to the current Action
@@ -62,6 +91,11 @@ namespace xero {
             /// \returns a pointer to the current Action
             ActionPtr getAction()  {
                 return action_ ;
+            }
+
+            /// \returns A pointer to the parent subsystem
+            Subsystem *getParent() { 
+                return parent_;
             }
 
             /// \brief cancel the current action for this subsystem
@@ -81,7 +115,10 @@ namespace xero {
             virtual void init(LoopType ltype) ;
 
             /// \brief reset a subsystem by remove all actions on the subsystem and its children
-            virtual void reset() ;                  
+            virtual void reset() ;
+
+            /// \brief Tests this subsystem
+            virtual void selfTest() {}
             
             /// \brief returns true if the subsystem is done with the current Action
             /// \returns true if the subsystem is done with the current Action
@@ -115,6 +152,15 @@ namespace xero {
 
             void endPlot(int id) ;
 
+            /// \return true if the subsystem is currently executing an action
+            bool isBusy();
+
+            /// \return true if the subsystem or one if its ancestors is currently executing an action
+            bool isBusyOrParentBusy();
+
+            /// \return true if the subsystem or one if its children is currently executing an action
+            bool isBusyOrChildBusy();
+
         protected:
             /// \brief check that a Action is valid for a subsystem
             /// \param Action the Action to check for a subsystem
@@ -124,6 +170,12 @@ namespace xero {
             }
 
         private:
+            Subsystem(Robot &robot, const std::string &name);
+
+            bool _canAcceptAction(ActionPtr action);
+
+            bool parentBusy();
+            
             //
             // A reference to the robot object that contains this subsystem
             //
@@ -139,17 +191,16 @@ namespace xero {
             //
             ActionPtr action_;
 
-            //
-            // A pending action, waiting on the current action to finish
-            //
-            ActionPtr pending_ ;
+            // Whether the currently active action is the default action.
+            bool isRunningDefaultAction_;
+
+            // The parent subsystem
+            Subsystem *parent_;
 
             //
             // The set of child subsystems
             //
             std::list<std::shared_ptr<Subsystem>> children_ ;
         } ;
-
-        typedef std::shared_ptr<Subsystem> SubsystemPtr ;
     }
 }

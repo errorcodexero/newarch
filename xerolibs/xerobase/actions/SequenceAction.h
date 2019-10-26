@@ -1,6 +1,6 @@
 #pragma once
-#include "Action.h"
-#include "DispatchAction.h"
+#include "actions/Action.h"
+#include "actions/DispatchAction.h"
 #include <MessageLogger.h>
 #include <memory>
 #include <vector>
@@ -18,7 +18,7 @@ namespace xero {
         /// the sequence moves to the next action.  This continues until all actions
         /// in the sequence are complete.  Once all actions in the sequence are 
         /// complete, this object will return isDone() true.
-        class SequenceAction : public Action {
+        class SequenceAction : public CompositeAction {
         public:
             /// \brief create an empty action sequence 
             /// \param logger the message logger action
@@ -69,12 +69,7 @@ namespace xero {
                 isCancel_ = false ;
             }
 
-            /// \brief return the number of actions in the sequence
-            /// \returns the count of the actions in the sequence
-            size_t size() {
-                return actions_.size() ;
-            }           
-
+            virtual std::vector<ActionPtr> getChildren() { return actions_; }
         private:
             void startNextAction();
 

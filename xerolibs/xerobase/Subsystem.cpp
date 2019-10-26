@@ -1,5 +1,6 @@
 #include "Subsystem.h"
-#include "Action.h"
+#include "actions/Action.h"
+#include "actions/DispatchAction.h"
 #include "Robot.h"
 #include "basegroups.h"
 #include <MessageLogger.h>
@@ -10,7 +11,12 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
 
-        Subsystem::Subsystem(Robot &robot, const std::string &name) : robot_(robot) , name_(name) {
+        Subsystem::Subsystem(Subsystem *parent, const std::string &name): Subsystem(parent->getRobot(), name) {
+            parent_ = parent;
+        }
+
+        Subsystem::Subsystem(Robot &robot, const std::string &name) : 
+        robot_(robot), name_(name) {
             action_ = nullptr ;
         }
 
@@ -38,19 +44,11 @@ namespace xero {
                 sub->run() ;
             }
             
-            if (action_ != nullptr){
-                action_->run() ;
-                if (pending_ != nullptr && action_->isDone()) {
-                    MessageLogger &logger = getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
-                    logger << "Actions: subsystem '" << getName() << "' pending action '" << pending_->toString() ;
-                    logger << "' was started" ;
-                    logger.endMessage() ;
-
-                    action_ = pending_ ;
-                    pending_ = nullptr ;
-                    action_->start() ;
-                }
+            if (action_ != nullptr && !action_->isDone()) {
+                action_->run();
+            } else if (!isRunningDefaultAction_) {
+                // set the default action
+                setAction(nullptr);
             }
         }
         
@@ -64,19 +62,63 @@ namespace xero {
                 action_->cancel() ;
         }
 
-        bool Subsystem::setAction(ActionPtr action, bool force) {
+        bool Subsystem::_canAcceptAction(ActionPtr action) {
+            if (auto composite = dynamic_cast<CompositeAction*>(action.get())) {
+                for (auto child : composite->getChildren()) {
+                    if (!_canAcceptAction(child)) return false;
+                }
+                return true;
+            } else if (auto dispatch = dynamic_cast<DispatchAction*>(action.get())) {
+                SubsystemPtr sub = dispatch->getSubsystem();
+                
+                // ensure the subsystem is one of our children
+                Subsystem *current = sub.get();
+                while (current != this) {
+                    current = current->getParent();
+                    if (current == nullptr) return false;
+                }
 
+                return sub->_canAcceptAction(dispatch->getAction());
+            } else if (dynamic_cast<GenericAction*>(action.get())) {
+                return true;
+            } else {
+                return canAcceptAction(action);
+            }
+        }
+
+        Subsystem::SetActionResult Subsystem::setAction(ActionPtr action, bool isParent) {
             //
             // Check that the action is valid for this subsystem.  If not, print and error
             // and do nothing else.  Any existing action remains attached to the subsystem and
             // continue to perform its function.
             //
-            if (action != nullptr && !canAcceptAction(action)) {
+            if (action == nullptr) {
+                action = getDefaultAction();
+                isRunningDefaultAction_ = true;
+            } else {
+                isRunningDefaultAction_ = false;
+            }
+
+            // No use replacing a null action with another null
+            if (action_ == nullptr && action == nullptr) return SetActionResult::Accepted;
+
+            if (action != nullptr && !_canAcceptAction(action)) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
                 logger << "Actions: subsystem '" << getName() << "' rejected action '" << action->toString() << "'" ;
                 logger.endMessage() ;
-                return false ;
+                return SetActionResult::Rejected ;
+            }
+
+            // Don't accept the action if a parent is busy
+            if (!isParent && parentBusy()) {
+                MessageLogger &logger = getRobot().getMessageLogger();
+                logger.startMessage(MessageLogger::MessageType::warning, MSG_GROUP_ACTIONS);
+                logger << "Actions; subsystem '" << getName() 
+                    << "' rejected action '" << action->toString() 
+                    << "' because a parent subsystem is busy";
+                logger.endMessage();
+                return SetActionResult::ParentBusy;
             }
 
             //
@@ -88,74 +130,66 @@ namespace xero {
                 logger << "Actions: subsystem '" << getName() << "' was assigned NULL action" ;
             else
                 logger << "Actions: subsystem '" << getName() << "' was assigned action '" << action->toString() << "'" ;    
-            if (force)
-                logger << " - FORCED" ;
-            logger.endMessage() ;            
+            if (isRunningDefaultAction_) logger << " (default)";
+            logger.endMessage() ;
+
+            SetActionResult result = SetActionResult::Accepted;
 
             if (action_ != nullptr && !action_->isDone()) {
                 //
                 // The current Action is still running, interrupt it
                 //
-
-                if (force) {
-
-                    MessageLogger &logger = getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
-                    logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString() << "' was aborted" ;
-                    logger.endMessage() ;                    
-
-                    //
-                    // We want to force the action here, so abort the current action
-                    // and assign this one
-                    //
-                    action_->abort() ;
-                    pending_ = nullptr ;
-                    assert(action_->isDone()) ;
-                }
-                else {
-                    MessageLogger &logger = getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
-                    logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString() << "' was canceled" ;
-                    logger.endMessage() ; 
-
-                    //
-                    // We are not forcing the issue (e.g. force was false) so cancel the action and
-                    // pend the new action.  THe new action will get assigned when the old action
-                    // finishes its cancel.
-                    //
-                    cancelAction();
-
-                    if(!action_->isDone()) {
-                        //
-                        // The old action did not finish immedately after cancel was called.  Pend the
-                        // new action and wait for the canceled action to complete
-                        //
-                        pending_ = action ;
-
-                        MessageLogger &logger = getRobot().getMessageLogger() ;
-                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
-                        if (action == nullptr) {
-                            logger << "Actions: subsystem '" << getName() << "' action NULL was pended" ;
-                        }
-                        else {
-                            logger << "Actions: subsystem '" << getName() << "' action '" << action->toString() << "' was pended" ;                            
-                        }
-                        logger.endMessage() ;                    
-                    }
-                }
-            }
-
-            if(pending_ == nullptr){
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
+                logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString() << "' was canceled" ;
+                logger.endMessage() ;
 
                 //
-                // And now start the Action
+                // Cancel the action and start the new action.
                 //
-                action_ = action ;
-                if (action_ != nullptr) {
-                    action_->start() ;
+                cancelAction();
+                result = SetActionResult::PreviousCanceled;
+
+                if(!action_->isDone()) {
+                    //
+                    // The old action did not finish immedately after cancel was called; log an error but proceed anyway.
+                    //
+
+                    MessageLogger &logger = getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
+                    logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString();
+                    logger << "' did not cancel immediately; proceeding anyway." ;
+                    logger.endMessage() ;
                 }
             }
-            return true ;
+            // And now start the Action
+            //
+            action_ = action ;
+            if (action_ != nullptr) {
+                action_->start() ;
+            }
+            return result;
+        }
+
+        bool Subsystem::isBusy() {
+            return action_ && !action_->isDone();
+        }
+
+        bool Subsystem::parentBusy() {
+            auto parent = getParent();
+            return parent ? parent->isBusyOrParentBusy() : true;
+        }
+
+        bool Subsystem::isBusyOrParentBusy() {
+            return isBusy() || parentBusy();
+        }
+
+        bool Subsystem::isBusyOrChildBusy() {
+            if (isBusy()) return true;
+            for (auto child : children_) {
+                if (child->isBusy()) return true;
+            }
+            return false;
         }
 
         void Subsystem::reset() {

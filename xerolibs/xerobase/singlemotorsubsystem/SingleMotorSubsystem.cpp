@@ -7,14 +7,14 @@ using namespace xero::misc;
 
 namespace xero {
     namespace base {
-        SingleMotorSubsystem::SingleMotorSubsystem(Robot & robot, const std::string &name, const std::string &motor, uint64_t mid) : Subsystem(robot,name) {
+        SingleMotorSubsystem::SingleMotorSubsystem(Subsystem *parent, const std::string &name, const std::string &motor, uint64_t mid) : Subsystem(parent,name) {
             msg_id_ = mid ;
-            motor_ = robot.getMotorFactory()->createMotor(motor);
+            motor_ = getRobot().getMotorFactory()->createMotor(motor);
             motor_->setNeutralMode(MotorController::NeutralMode::Brake) ;
             current_power_ = 0.0 ;
         }
 
-        SingleMotorSubsystem::SingleMotorSubsystem(Robot & robot, const std::string &name, std::shared_ptr<MotorController> motor, uint64_t mid) : Subsystem(robot,name) {
+        SingleMotorSubsystem::SingleMotorSubsystem(Subsystem *parent, const std::string &name, std::shared_ptr<MotorController> motor, uint64_t mid) : Subsystem(parent,name) {
             msg_id_ = mid ;
             motor_ = motor_;
             motor_->setNeutralMode(MotorController::NeutralMode::Brake);
