@@ -24,7 +24,7 @@ namespace xero {
 
             /// \brief Registers \c flag to be set upon crossing \c distanceThreshold
             /// \note Must be called before the action is started.
-            void registerFlag(double distanceThreshold, xero::misc::Flag flag);
+            void registerFlagAtDistance(xero::misc::Flag flag, double distanceThreshold);
 
             /// \brief Start the action; called once per action when it starts
             virtual void start() ;

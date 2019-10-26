@@ -41,7 +41,7 @@ namespace xero {
         TankDriveFollowPathAction::~TankDriveFollowPathAction() {                
         }
 
-        void TankDriveFollowPathAction::registerFlag(double distanceThreshold, Flag flag) {
+        void TankDriveFollowPathAction::registerFlagAtDistance(Flag flag, double distanceThreshold) {
             flags_.push_back(std::make_pair(distanceThreshold, flag));
         }
 
