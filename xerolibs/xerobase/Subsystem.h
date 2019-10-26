@@ -56,7 +56,8 @@ namespace xero {
                 // The action was accepted.
                 Accepted,
 
-                // The action was accepted, but replaced a previous action.
+                // The action was accepted, but replaced a previous action 
+                // (either on this subsystem or on a child subsystem).
                 PreviousCanceled,
 
                 // The action was rejected because canAcceptAction returned false.
@@ -72,10 +73,9 @@ namespace xero {
 
             /// \brief set the current Action for the subsystem
             /// \param action the new Action for the subsystem
-            /// \param isParent Whether the new action is being set by a parent subsystems. If a parent
-            /// subsystem is busy and \c isParent is false, this method will fail with result \c parentBusy
-            /// \return true if the Action is accepted, false if not
-            virtual SetActionResult setAction(ActionPtr action, bool isParent = false);
+            /// \param allowParentBusy \c allowParentBusy is false, this method will fail with result \c ParentBusy
+            /// \return A \c SetActionResult describing the result of the operation.
+            virtual SetActionResult setAction(ActionPtr action, bool allowParentBusy = false);
 
             /// \brief Returns this subsystem's default action
             /// The default action runs whenever no other actions are running.
@@ -175,6 +175,10 @@ namespace xero {
             bool _canAcceptAction(ActionPtr action);
 
             bool parentBusy();
+
+            // Cancels actions on this subsystem and all its descendants.
+            // Returns true if any actions were cancelled.
+            bool cancelActionsAndChildActions();
             
             //
             // A reference to the robot object that contains this subsystem

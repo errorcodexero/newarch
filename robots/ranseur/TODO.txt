@@ -9,7 +9,7 @@ TubCollector
 - Complete actions
 
 XeroBase development
-- Complete action/subsystem rework
+- [DONE] Complete action/subsystem rework
     Add new actions folder
     Move Action.h to new actions folder
     Adjust all action base classes include path (e.g. Action.h -> actions/Action.h)
@@ -42,7 +42,7 @@ XeroBase development
     Drivebase class
     o Create reset() method, set actions to nullptr, set motors to stopped
 
-- Flags manager
+- [DONE] Flags manager
   o Create flags class
     Flags::set (will automatically create)
     Flags::reset (will automatically create)

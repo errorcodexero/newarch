@@ -27,9 +27,7 @@ namespace xero {
             virtual void run() = 0 ;
 
             /// \brief Cancel the action
-            /// A cancel operation may take many cycles to complete and this action should
-            /// not return isDone() equal true until the cancel has completed.  A cancel should
-            /// restore the robot to a reasonable state.
+            /// A cancel operation should complete immediately.
             virtual void cancel() = 0 ;
 
             /// \brief abort the current action immediately.  

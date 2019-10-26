@@ -1,3 +1,5 @@
+#pragma once
+
 #include <map>
 #include <string>
 
@@ -20,7 +22,7 @@ namespace xero {
 
             bool operator<(const Flag rhs) const { return id_ < rhs.id_; }
         private:
-            const int id_;
+            int id_;
             static int nextID_;
         };
 
