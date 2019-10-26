@@ -58,7 +58,7 @@ namespace xero {
             double target_start_angle_ ;
 
             // The index of the next flag threshold to be crossed
-            int nextFlag_;
+            unsigned nextFlag_;
 
             // Distance thresholds at which to set flags
             std::vector<std::pair<double, xero::misc::Flag>> flags_;
