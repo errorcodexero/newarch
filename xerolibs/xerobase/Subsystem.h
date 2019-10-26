@@ -115,7 +115,10 @@ namespace xero {
             virtual void init(LoopType ltype) ;
 
             /// \brief reset a subsystem by remove all actions on the subsystem and its children
-            virtual void reset() ;                  
+            virtual void reset() ;
+
+            /// \brief Tests this subsystem
+            virtual void selfTest() {}
             
             /// \brief returns true if the subsystem is done with the current Action
             /// \returns true if the subsystem is done with the current Action
