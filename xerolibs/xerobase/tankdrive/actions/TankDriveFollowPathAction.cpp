@@ -41,7 +41,14 @@ namespace xero {
         TankDriveFollowPathAction::~TankDriveFollowPathAction() {                
         }
 
+        void TankDriveFollowPathAction::registerFlag(double distanceThreshold, Flag flag) {
+            flags_.push_back(std::make_pair(distanceThreshold, flag));
+        }
+
         void TankDriveFollowPathAction::start() {
+            nextFlag_ = 0;
+            std::sort(flags_.begin(), flags_.end());
+
             left_start_ = getTankDrive().getLeftDistance() ;
             right_start_ = getTankDrive().getRightDistance() ;
             
@@ -115,6 +122,12 @@ namespace xero {
 
                 ldist = td.getLeftDistance() - left_start_ ;
                 rdist = td.getRightDistance() - right_start_ ;
+
+                double dist = (ldist + rdist)/2;
+                while (nextFlag_ < flags_.size() && dist > flags_[nextFlag_].first) {
+                    getTankDrive().getRobot().getFlagManager().set(flags_[nextFlag_++].second);
+                }
+
                 double lout = left_follower_->getOutput(laccel, lvel, lpos, ldist, dt) ;
                 double rout = right_follower_->getOutput(raccel, rvel, rpos, rdist, dt) ;
 
