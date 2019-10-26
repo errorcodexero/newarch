@@ -86,7 +86,7 @@ namespace xero {
             }
         }
 
-        Subsystem::SetActionResult Subsystem::setAction(ActionPtr action, bool isParent) {
+        Subsystem::SetActionResult Subsystem::setAction(ActionPtr action, bool allowParentBusy) {
             //
             // Check that the action is valid for this subsystem.  If not, print and error
             // and do nothing else.  Any existing action remains attached to the subsystem and
@@ -99,7 +99,7 @@ namespace xero {
                 isRunningDefaultAction_ = false;
             }
 
-            // No use replacing a null action with another null
+            // Don't replace a null action with another null
             if (action_ == nullptr && action == nullptr) return SetActionResult::Accepted;
 
             if (action != nullptr && !_canAcceptAction(action)) {
@@ -111,7 +111,7 @@ namespace xero {
             }
 
             // Don't accept the action if a parent is busy
-            if (!isParent && parentBusy()) {
+            if (!allowParentBusy && parentBusy()) {
                 MessageLogger &logger = getRobot().getMessageLogger();
                 logger.startMessage(MessageLogger::MessageType::warning, MSG_GROUP_ACTIONS);
                 logger << "Actions; subsystem '" << getName() 
@@ -133,35 +133,11 @@ namespace xero {
             if (isRunningDefaultAction_) logger << " (default)";
             logger.endMessage() ;
 
-            SetActionResult result = SetActionResult::Accepted;
+            // Cancel any currently-running actions
+            SetActionResult result;
+            if (cancelActionsAndChildActions()) result = SetActionResult::PreviousCanceled;
+            else result = SetActionResult::Accepted;
 
-            if (action_ != nullptr && !action_->isDone()) {
-                //
-                // The current Action is still running, interrupt it
-                //
-                MessageLogger &logger = getRobot().getMessageLogger() ;
-                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE) ;
-                logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString() << "' was canceled" ;
-                logger.endMessage() ;
-
-                //
-                // Cancel the action and start the new action.
-                //
-                cancelAction();
-                result = SetActionResult::PreviousCanceled;
-
-                if(!action_->isDone()) {
-                    //
-                    // The old action did not finish immedately after cancel was called; log an error but proceed anyway.
-                    //
-
-                    MessageLogger &logger = getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
-                    logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString();
-                    logger << "' did not cancel immediately; proceeding anyway." ;
-                    logger.endMessage() ;
-                }
-            }
             // And now start the Action
             //
             action_ = action ;
@@ -169,6 +145,30 @@ namespace xero {
                 action_->start() ;
             }
             return result;
+        }
+
+
+        bool Subsystem::cancelActionsAndChildActions() {
+            bool canceled = false;
+            if (isBusy()) {
+                auto &logger = getRobot().getMessageLogger();
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE);
+                logger << "Actions: subsystem '" << getName() << "' overriding action '" << action_->toString();
+                logger.endMessage();
+                cancelAction();
+                canceled = true;
+
+                if (isBusy()) {
+                    // The action didn't cancel (even though it should have)
+                    MessageLogger &logger = getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::warning, MSG_GROUP_ACTIONS) ;
+                    logger << "Actions: subsystem '" << getName() << "' action '" << action_->toString();
+                    logger << "' did not cancel immediately; proceeding anyway." ;
+                    logger.endMessage() ;
+                }
+            }
+            for (auto child : children_) canceled = canceled || child->cancelActionsAndChildActions();
+            return canceled;
         }
 
         bool Subsystem::isBusy() {
