@@ -72,8 +72,10 @@ namespace xero {
 
             /// \brief set the current Action for the subsystem
             /// \param action the new Action for the subsystem
+            /// \param isParent Whether the new action is being set by a parent subsystems. If a parent
+            /// subsystem is busy and \c isParent is false, this method will fail with result \c parentBusy
             /// \return true if the Action is accepted, false if not
-            virtual SetActionResult setAction(ActionPtr action);
+            virtual SetActionResult setAction(ActionPtr action, bool isParent = false);
 
             /// \brief Returns this subsystem's default action
             /// The default action runs whenever no other actions are running.
@@ -168,6 +170,8 @@ namespace xero {
             Subsystem(Robot &robot, const std::string &name);
 
             bool _canAcceptAction(ActionPtr action);
+
+            bool parentBusy();
             
             //
             // A reference to the robot object that contains this subsystem

@@ -10,11 +10,11 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        OISubsystem::OISubsystem(SubsytemPtr parent, const std::string &name, bool adddriver) 
+        OISubsystem::OISubsystem(Subsystem *parent, const std::string &name, bool adddriver) 
                                 : Subsystem(parent, name) {
             inited_ = false ;
             if (adddriver) {
-                int driver = robot.getSettingsParser().getInteger("hw:driverstation:hid:driver") ;                
+                int driver = getRobot().getSettingsParser().getInteger("hw:driverstation:hid:driver") ;                
                 driver_ = std::make_shared<DriverGamepad>(*this, driver);
                 addHIDDevice(driver_) ;
             }

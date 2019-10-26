@@ -14,7 +14,7 @@ namespace xero {
         }
 
         void DispatchAction::start() {
-            if (!subsystem_->setAction(action_)) {
+            if (!Subsystem::isAccepted(subsystem_->setAction(action_, true))) {
                 MessageLogger &logger = subsystem_->getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::error, MSG_GROUP_ACTIONS) ;
                 logger << "Actions: subsystem '" << subsystem_->getName() << "' rejected action '" ;

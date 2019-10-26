@@ -79,12 +79,14 @@ namespace xero {
                 }
 
                 return sub->_canAcceptAction(dispatch->getAction());
+            } else if (dynamic_cast<GenericAction*>(action.get())) {
+                return true;
             } else {
                 return canAcceptAction(action);
             }
         }
 
-        Subsystem::SetActionResult Subsystem::setAction(ActionPtr action) {
+        Subsystem::SetActionResult Subsystem::setAction(ActionPtr action, bool isParent) {
             //
             // Check that the action is valid for this subsystem.  If not, print and error
             // and do nothing else.  Any existing action remains attached to the subsystem and
@@ -106,6 +108,17 @@ namespace xero {
                 logger << "Actions: subsystem '" << getName() << "' rejected action '" << action->toString() << "'" ;
                 logger.endMessage() ;
                 return SetActionResult::Rejected ;
+            }
+
+            // Don't accept the action if a parent is busy
+            if (!isParent && parentBusy()) {
+                MessageLogger &logger = getRobot().getMessageLogger();
+                logger.startMessage(MessageLogger::MessageType::warning, MSG_GROUP_ACTIONS);
+                logger << "Actions; subsystem '" << getName() 
+                    << "' rejected action '" << action->toString() 
+                    << "' because a parent subsystem is busy";
+                logger.endMessage();
+                return SetActionResult::ParentBusy;
             }
 
             //
@@ -162,9 +175,13 @@ namespace xero {
             return action_ && !action_->isDone();
         }
 
-        bool Subsystem::isBusyOrParentBusy() {
+        bool Subsystem::parentBusy() {
             auto parent = getParent();
-            return isBusy() || (parent && parent->isBusy());
+            return parent ? parent->isBusyOrParentBusy() : true;
+        }
+
+        bool Subsystem::isBusyOrParentBusy() {
+            return isBusy() || parentBusy();
         }
 
         bool Subsystem::isBusyOrChildBusy() {
