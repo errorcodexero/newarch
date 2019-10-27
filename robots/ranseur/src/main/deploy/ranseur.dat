@@ -9,6 +9,16 @@
 #
 ###################################################################################################
 
+#
+# PLACEHOLDERS
+#
+hw:bunnyarm:solenoid                                            -1
+hw:collector:tubsensor                                          -1 
+collector:tubsensor:h2ldelay                                    -1
+collector:tubsensor:l2hdelay                                    -1
+hw:tubcollector:type                                            "victor_spx"
+hw:tubcollector:canid                                           -1
+hw:collector:clamp                                              -1
 
 #
 # Drivebase
@@ -35,10 +45,6 @@ hw:tankdrive:invert:motors:left                                 true
 hw:tankdrive:shifter                                            0               # Solenoid
 endif
 
-#
-# Bunny Arm
-#
-hw:bunnyarm:solenoid
 
 
 

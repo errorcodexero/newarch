@@ -12,7 +12,10 @@ SUBSYSTEMS = \
 	src/main/cpp/ranseuroi/RanseurOIDevice.cpp\
 	src/main/cpp/ranseuroi/RanseurOISubsystem.cpp\
 	src/main/cpp/ranseurrobotsubsystem/RanseurRobotSubsystem.cpp\
-	src/main/cpp/tubmanipulator/arm/TubArm.cpp
+    src/main/cpp/tubmanipulatorsubsystem/TubManipulatorSubsystem.cpp\
+    src/main/cpp/tubarm/TubArm.cpp\
+    src/main/cpp/tubwrist/TubWrist.cpp\
+    src/main/cpp/tubcollector/TubCollector.cpp
 	
 SOURCES = \
 	src/main/cpp/main.cpp\
