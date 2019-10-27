@@ -54,7 +54,7 @@ endif
 ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/ranseursim
 	LOCAL_LIBS = $(TOPDIR)/robotsims/ranseursim
-	LOCAL_EXTERNAL_LIBS=-lcurses
+	LOCAL_EXTERNAL_LIBS=-lcurses -lpthread
 endif
 
 ifeq ($(PLATFORM),GOPIGO)
