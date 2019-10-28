@@ -10,7 +10,7 @@ namespace xero {
         class DriveByVisionAction : public xero::base::TankDriveAction
         {
         public:
-            DriveByVisionAction(xero::base::TankDrive &tank_drive, RanseurCameraTracker &camera, bool backward = false) ;
+            DriveByVisionAction(xero::base::TankDrive &tank_drive, RanseurCameraTracker &camera) ;
 
             /// \brief Start the action; called once per action when it starts
             virtual void start() ;
@@ -44,8 +44,6 @@ namespace xero {
         private:
             State state_ ;
             RanseurCameraTracker &camera_ ;
-
-            bool reverse_ ;
 
             // Drive by Yaw constants
             double yaw_base_power_ ;

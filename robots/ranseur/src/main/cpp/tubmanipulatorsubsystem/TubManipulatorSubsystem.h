@@ -15,43 +15,29 @@ namespace xero {
         class TubManipulatorSubsystem : public xero::base::RobotSubsystem {
         public:
             TubManipulatorSubsystem(xero::base::Robot &robot) ;
-        
-        std::shared_ptr<TubCollector> getTubCollector() {
-            return tubcollector_ ;
+            virtual ~TubManipulatorSubsystem() {
+            }
+
+            std::shared_ptr<TubCollector> getTubCollector() {
+                return tubcollector_ ;                
+            }
+
+            std::shared_ptr<TubArm> getTubArm() {
+                return tubarm_ ;
+            }
             
-        }
+            std::shared_ptr<TubWrist> getTubWrist() {
+                return tubwrist_ ;
+            }
 
-        std::shared_ptr<TubArm> getTub() {
-            return tubarm_ ;
-        }
-        
-        std::shared_ptr<TubWrist> getWrist() {
-            return tubwrist_ ;
-        }
+            virtual bool canAcceptAction(xero::base::ActionPtr action) ;
 
-        virtual bool canAcceptAction(xero::base::ActionPtr action) ;
-
-        virtual std::string toString() ;
-        
-        //
-        // Add gamemanipulator
-        //
-        // Add climber
-        //
-        // add other methods : 
-        //
-
-        std::shared_ptr<TubCollector> getTubCol() {
-            return tubcollector_ ;
-        }    
-
-        ~TubManipulatorSubsystem() {
-        }
+            virtual std::string toString() ;
 
         private:
-        std::shared_ptr<TubCollector> tubcollector_ ;
-        std::shared_ptr<TubArm> tubarm_ ;
-        std::shared_ptr<TubWrist> tubwrist_ ;
+            std::shared_ptr<TubCollector> tubcollector_ ;
+            std::shared_ptr<TubArm> tubarm_ ;
+            std::shared_ptr<TubWrist> tubwrist_ ;
         } ; 
     
     }

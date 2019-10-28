@@ -12,15 +12,10 @@ namespace xero {
             "tyaw", "ayaw", "error", "adj", "left", "right"
         } ;
 
-        DriveByVisionAction::DriveByVisionAction(TankDrive &tank_drive, RanseurCameraTracker &camera, bool reverse) : TankDriveAction(tank_drive), camera_(camera)
+        DriveByVisionAction::DriveByVisionAction(TankDrive &tank_drive, RanseurCameraTracker &camera) : TankDriveAction(tank_drive), camera_(camera)
         {
             yaw_base_power_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_base_power") ;
             yaw_p_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_p") ;
-
-            reverse_ = reverse ;
-            if (reverse) {
-                yaw_base_power_ = -yaw_base_power_ ;
-            }
 
             plot_id_ = tank_drive.initPlot(toString()) ;
         }
@@ -66,7 +61,7 @@ namespace xero {
                 logger << "DriveByVision: camera lost target" ;
                 logger.endMessage() ;                
 
-                lost_count_ ++ ;
+                lost_count_++ ;
 
                 if (lost_count_ > 8) {
                     state_ = State::Done ;
