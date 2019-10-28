@@ -1,6 +1,6 @@
 #include "oi/OISubsystem.h"
 #include "Robot.h"
-#include "SequenceAction.h"
+#include "actions/SequenceAction.h"
 #include "tankdrive/TankDrive.h"
 #include "basegroups.h"
 #include "DriverGamepadRumbleAction.h"
@@ -10,11 +10,11 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        OISubsystem::OISubsystem(Robot &robot, const std::string &name, bool adddriver) 
-                                : Subsystem(robot, name) {
+        OISubsystem::OISubsystem(Subsystem *parent, const std::string &name, bool adddriver) 
+                                : Subsystem(parent, name) {
             inited_ = false ;
             if (adddriver) {
-                int driver = robot.getSettingsParser().getInteger("hw:driverstation:hid:driver") ;                
+                int driver = getRobot().getSettingsParser().getInteger("hw:driverstation:hid:driver") ;                
                 driver_ = std::make_shared<DriverGamepad>(*this, driver);
                 addHIDDevice(driver_) ;
             }

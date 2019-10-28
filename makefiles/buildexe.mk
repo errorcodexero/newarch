@@ -43,8 +43,7 @@ OBJECTS = $(addprefix $(BUILDTARGETDIR)/,$(SOURCES:.cpp=.o))
 #
 # Combine to get complete list of librarys to build and link
 #
-ALLLIBLIST=$(LIBLIST) $(LOCAL_LIBS)
-
+ALLLIBLIST=$(LOCAL_LIBS) $(LIBLIST)
 #
 # Generate the flat library list that will be in the build directory
 #

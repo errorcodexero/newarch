@@ -2,7 +2,7 @@
 #include "Ranseur.h"
 
 #ifdef SIMULATOR
-#include <RanseurSimulator.h>
+#include <ranseurSimulator.h>
 xero::sim::ranseur::ranseurSimulator sim("robotsims/ranseursim/sim.dat") ;
 #endif
 

@@ -11,12 +11,12 @@ using namespace ctre::phoenix::motorcontrol ;
 
 namespace xero {
     namespace base {
-        Lifter::Lifter(Robot &robot, uint64_t id) : Subsystem(robot, "lifter") {
-            SettingsParser &parser = robot.getSettingsParser() ;
+        Lifter::Lifter(Subsystem *parent, uint64_t id) : Subsystem(parent, "lifter") {
+            SettingsParser &parser = getRobot().getSettingsParser() ;
 
             msg_id_ = id ;
             
-            getMotors(robot) ;
+            getMotors(getRobot()) ;
 
             int e1 = parser.getInteger("hw:lifter:encoder1");
             int e2 = parser.getInteger("hw:lifter:encoder2");

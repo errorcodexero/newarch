@@ -28,7 +28,7 @@ namespace xero {
             /// \param motorConfigBase The configuration ID for the motors.
             /// If motorConfigBase is "hw:tankdrive", TankDrive will look for
             /// motor groups named "hw:tankdrive:left" and "hw:tankdrive:right".
-            TankDrive(Robot& robot, const std::string motorConfigBase);
+            TankDrive(Subsystem *parent, const std::string motorConfigBase);
 
             /// \brief destroy a tank drive object
             virtual ~TankDrive() ;

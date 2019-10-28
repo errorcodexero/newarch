@@ -4,7 +4,7 @@
 
 #include <MessageLogger.h>
 #include <tankdrive/modes/StraightCharAutoMode.h>
-#include <tankdrive/modes/FollowPathAutoMode.h>
+#include <tankdrive/modes/FollowPathAutomode.h>
 #include <frc/DriverStation.h>
 
 using namespace xero::base ;

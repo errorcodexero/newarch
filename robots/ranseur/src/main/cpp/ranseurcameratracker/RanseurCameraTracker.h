@@ -9,7 +9,7 @@ namespace xero {
         class RanseurCameraTracker : public xero::base::CameraTracker, public xero::base::ITerminator
         {
         public:
-            RanseurCameraTracker(xero::base::Robot &robot) ;           
+            RanseurCameraTracker(xero::base::Subsystem *parent) ;           
 
             virtual ~RanseurCameraTracker()  ;
 

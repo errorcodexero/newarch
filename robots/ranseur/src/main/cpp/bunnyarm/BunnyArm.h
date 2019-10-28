@@ -11,7 +11,7 @@ namespace xero {
             friend class BunnyArmDeployAction ;
 
         public:
-            BunnyArm(xero::base::Robot &robot) ;
+            BunnyArm(xero::base::Subsystem *parent) ;
 
             virtual ~BunnyArm() ;
 

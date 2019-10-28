@@ -27,6 +27,77 @@ endif
 #
 
 #
+# These are for the XeroBase
+#
+ifeq ($(NEED_XEROBASE),true)
+
+#
+# WPILIB for the GOPIGO3
+#
+ifeq ($(PLATFORM),GOPIGO)
+CXXFLAGS += -I$(TOPDIR)/xerolibs/xerobase
+LIBLIST += $(TOPDIR)/xerolibs/xerobase
+endif
+
+ifeq ($(PLATFORM),SIMULATOR)
+CXXFLAGS += -I$(TOPDIR)/xerolibs/xerobase
+LIBLIST += $(TOPDIR)/xerolibs/xerobase
+endif
+
+endif
+
+#
+###########################################################################################
+#
+
+#
+# These are for the XeroMisc
+#
+ifeq ($(NEED_XEROMISC),true)
+
+#
+# WPILIB for the GOPIGO3
+#
+ifeq ($(PLATFORM),GOPIGO)
+CXXFLAGS += -I$(TOPDIR)/xerolibs/xeromisc
+LIBLIST += $(TOPDIR)/xerolibs/xeromisc
+endif
+
+ifeq ($(PLATFORM),SIMULATOR)
+CXXFLAGS += -I$(TOPDIR)/xerolibs/xeromisc
+LIBLIST += $(TOPDIR)/xerolibs/xeromisc
+endif
+
+endif
+
+#
+###########################################################################################
+#
+
+#
+# These are for the Network Tables
+#
+ifeq ($(NEED_NETWORKTABLES),true)
+
+# GOPIGO3
+ifeq ($(PLATFORM),GOPIGO)
+CXXFLAGS += -I$(TOPDIR)/gopigo3/nt/include
+LIBLIST += $(TOPDIR)/gopigo3/nt
+endif
+
+# CYGWIN SIMULATOR
+ifeq ($(PLATFORM),SIMULATOR)
+CXXFLAGS += -I$(TOPDIR)/simulator/ntsim/include
+LIBLIST += $(TOPDIR)/simulator/ntsim
+endif
+
+endif
+
+#
+###########################################################################################
+#
+
+#
 # These are for the WPIutils
 #
 ifeq ($(NEED_WPIUTIL),true)
@@ -100,29 +171,6 @@ endif
 #
 
 #
-# These are for the Network Tables
-#
-ifeq ($(NEED_NETWORKTABLES),true)
-
-# GOPIGO3
-ifeq ($(PLATFORM),GOPIGO)
-CXXFLAGS += -I$(TOPDIR)/gopigo3/nt/include
-LIBLIST += $(TOPDIR)/gopigo3/nt
-endif
-
-# CYGWIN SIMULATOR
-ifeq ($(PLATFORM),SIMULATOR)
-CXXFLAGS += -I$(TOPDIR)/simulator/ntsim/include
-LIBLIST += $(TOPDIR)/simulator/ntsim
-endif
-
-endif
-
-#
-###########################################################################################
-#
-
-#
 # There are for the NAVX
 #
 ifeq ($(NEED_NAVX),true)
@@ -182,54 +230,6 @@ endif
 ifeq ($(PLATFORM),SIMULATOR)
 CXXFLAGS += -I$(TOPDIR)/simulator/revsim
 LIBLIST += $(TOPDIR)/simulator/revsim
-endif
-
-endif
-
-#
-###########################################################################################
-#
-
-#
-# These are for the XeroMisc
-#
-ifeq ($(NEED_XEROMISC),true)
-
-#
-# WPILIB for the GOPIGO3
-#
-ifeq ($(PLATFORM),GOPIGO)
-CXXFLAGS += -I$(TOPDIR)/xerolibs/xeromisc
-LIBLIST += $(TOPDIR)/xerolibs/xeromisc
-endif
-
-ifeq ($(PLATFORM),SIMULATOR)
-CXXFLAGS += -I$(TOPDIR)/xerolibs/xeromisc
-LIBLIST += $(TOPDIR)/xerolibs/xeromisc
-endif
-
-endif
-
-#
-###########################################################################################
-#
-
-#
-# These are for the XeroBase
-#
-ifeq ($(NEED_XEROBASE),true)
-
-#
-# WPILIB for the GOPIGO3
-#
-ifeq ($(PLATFORM),GOPIGO)
-CXXFLAGS += -I$(TOPDIR)/xerolibs/xerobase
-LIBLIST += $(TOPDIR)/xerolibs/xerobase
-endif
-
-ifeq ($(PLATFORM),SIMULATOR)
-CXXFLAGS += -I$(TOPDIR)/xerolibs/xerobase
-LIBLIST += $(TOPDIR)/xerolibs/xerobase
 endif
 
 endif

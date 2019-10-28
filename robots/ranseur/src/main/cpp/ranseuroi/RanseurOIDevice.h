@@ -1,7 +1,7 @@
 #pragma once
 
 #include <oi/OIDevice.h> 
-#include <SequenceAction.h>
+#include <actions/SequenceAction.h>
 
 namespace xero {
     namespace ranseur {

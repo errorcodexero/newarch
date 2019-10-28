@@ -18,7 +18,7 @@ namespace xero {
             friend class LifterCalibrateAction ;
 
         public:
-            Lifter(xero::base::Robot &robot, uint64_t id) ;
+            Lifter(xero::base::Subsystem *parent, uint64_t id) ;
             virtual ~Lifter() ;
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;

@@ -9,7 +9,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        CameraTracker::CameraTracker(Robot &robot) : Subsystem(robot, "CameraTracker")
+        CameraTracker::CameraTracker(Subsystem *parent) : Subsystem(parent, "CameraTracker")
         {
             nt::NetworkTableInstance ntinst = nt::NetworkTableInstance::GetDefault() ;
             table_ = ntinst.GetTable(NetworkTableName) ;

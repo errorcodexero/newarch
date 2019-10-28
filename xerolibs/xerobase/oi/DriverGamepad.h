@@ -1,7 +1,7 @@
 #pragma once
 
 #include "HIDDevice.h"
-#include "Action.h"
+#include "actions/Action.h"
 #include <frc/XboxController.h>
 
 /// \file

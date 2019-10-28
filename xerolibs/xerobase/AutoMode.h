@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SequenceAction.h"
+#include "actions/SequenceAction.h"
 #include "Robot.h"
 
 

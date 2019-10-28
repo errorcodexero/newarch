@@ -13,11 +13,15 @@ SUBSYSTEMS = \
 	src/main/cpp/ranseuroi/RanseurOISubsystem.cpp\
 	src/main/cpp/ranseurrobotsubsystem/RanseurRobotSubsystem.cpp\
 	src/main/cpp/tubmanipulator/arm/TubArm.cpp\
-	src/main/cpp/tubmanipulator/tubcollector/Collector.cpp\
-	src/main/cpp/tubmanipulator/tubcollector/CollectorDutyCycleAction.cpp\
-	src/main/cpp/tubmanipulator/tubcollector/CollectorEjectTubAction.cpp\
-	src/main/cpp/tubmanipulator/tubcollector/CollectorTubAction.cpp		
-
+	src/main/cpp/tubcollector/Collector.cpp\
+	src/main/cpp/tubcollector/CollectorDutyCycleAction.cpp\
+	src/main/cpp/tubcollector/CollectorEjectTubAction.cpp\
+	src/main/cpp/tubcollector/CollectorTubAction.cpp\
+    src/main/cpp/tubmanipulatorsubsystem/TubManipulatorSubsystem.cpp\
+    src/main/cpp/tubarm/TubArm.cpp\
+    src/main/cpp/tubwrist/TubWrist.cpp\
+    src/main/cpp/tubcollector/Tub
+	
 SOURCES = \
 	src/main/cpp/main.cpp\
 	src/main/cpp/Ranseur.cpp\
@@ -55,7 +59,7 @@ endif
 ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/ranseursim
 	LOCAL_LIBS = $(TOPDIR)/robotsims/ranseursim
-	LOCAL_EXTERNAL_LIBS=-lcurses
+	LOCAL_EXTERNAL_LIBS=-lcurses -lpthread
 endif
 
 ifeq ($(PLATFORM),GOPIGO)

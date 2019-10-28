@@ -17,7 +17,7 @@ namespace xero {
             } ;
 
         public:
-            CameraTracker(Robot &robot) ;
+            CameraTracker(Subsystem *parent) ;
             virtual ~CameraTracker() ;
 
             virtual void computeState() ;

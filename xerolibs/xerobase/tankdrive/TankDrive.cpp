@@ -14,9 +14,10 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
 
-        TankDrive::TankDrive(Robot& robot, const std::string motorConfigBase) : 
-                        DriveBase(robot, "tankdrive"), angular_(2, true), left_linear_(2), right_linear_(2) {
+        TankDrive::TankDrive(Subsystem *parent, const std::string motorConfigBase) : 
+                        DriveBase(parent, "tankdrive"), angular_(2, true), left_linear_(2), right_linear_(2) {
             
+            auto &robot = getRobot();
             auto motorFactory = robot.getMotorFactory();
             left_motors_ = motorFactory->createMotor(motorConfigBase + ":left");
             right_motors_ = motorFactory->createMotor(motorConfigBase + ":right");
