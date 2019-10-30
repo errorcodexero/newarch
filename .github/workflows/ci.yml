@@ -1,0 +1,46 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  roborio:
+    name: RoboRio
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+      
+    - name: Install toolchain
+      run: ./gradlew installRoboRioToolchain
+      
+    - name: Build robot code
+      run: ./gradlew build
+      
+      
+  simulator:
+    name: Simulator
+    runs-on: ubuntu-latest
+    
+    strategy: 
+      matrix: 
+        robot: [ranseur]
+
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Install dependencies
+      run: sudo apt-get install libncurses-dev
+    
+    - name: Build robot code
+      working-directory: robots/${{ matrix.robot }}
+      run: make CONFIG=Debug PLATFORM=SIMULATOR
+      
+    - name: Deploy resources
+      working-directory: robots/${{ matrix.robot }}
+      run: make CONFIG=Debug PLATFORM=SIMULATOR deploy
+    
+    - name: Run simulator (auto)
+      run: ./runsim ${{ matrix.robot }} auto
+    
+    - name: Run simulator (teleop)
+      run: ./runsim ${{ matrix.robot }} teleop

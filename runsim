@@ -18,13 +18,13 @@ legal=NO
 if [ $2 == 'auto' ]; then
     legal=YES
     echo Running auto mode
-    $rootdir/makebuild/SIMULATOR/Debug/ranseur/$1 --auto 15 --oper 0 --start 0 --test 0 $FLAGS
+    exec $rootdir/makebuild/SIMULATOR/Debug/ranseur/$1 --auto 15 --oper 0 --start 0 --test 0 $FLAGS
 fi
 
 if [ $2 == 'teleop' ]; then
     legal=YES
     echo Running teleop mode
-    $rootdir/makebuild/SIMULATOR/Debug/ranseur/$1 --auto 0 --oper 30 --start 0 --test 0 $FLAGS
+    exec $rootdir/makebuild/SIMULATOR/Debug/ranseur/$1 --auto 0 --oper 30 --start 0 --test 0 $FLAGS
 fi
 
 if [ legal == 'NO' ]; then
