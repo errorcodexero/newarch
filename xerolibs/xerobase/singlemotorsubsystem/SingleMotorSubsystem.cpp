@@ -16,7 +16,7 @@ namespace xero {
 
         SingleMotorSubsystem::SingleMotorSubsystem(Subsystem *parent, const std::string &name, std::shared_ptr<MotorController> motor, uint64_t mid) : Subsystem(parent,name) {
             msg_id_ = mid ;
-            motor_ = motor_;
+            motor_ = motor;
             motor_->setNeutralMode(MotorController::NeutralMode::Brake);
             current_power_ = 0.0 ;
         } 
