@@ -2,6 +2,7 @@ TOPDIR=../..
 
 SOURCES = \
 	CSVData.cpp\
+    FlagManager.cpp\
 	Kinematics.cpp\
 	MessageDestFile.cpp\
 	MessageDestSeqFile.cpp\
