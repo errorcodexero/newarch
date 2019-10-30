@@ -18,18 +18,28 @@ namespace xero {
         class Flag {
         public:
             /// Creates a unique Flag.
-            Flag() : id_(nextID_++) {}
+            /// @param name The flag name (only for debugging/logging).
+            Flag(std::string name) : id_(nextID_++), name_(name) {}
 
             bool operator<(const Flag rhs) const { return id_ < rhs.id_; }
+            bool operator==(const Flag rhs) const { return id_ == rhs.id_; }
+
+            std::string getName() { return name_; }
         private:
             int id_;
+            std::string name_;
+
             static int nextID_;
         };
+
+        class MessageLogger;
 
         /// FlagManager tracks the state of flags.
         /// \ref Flag
         class FlagManager {
         public:
+            FlagManager(MessageLogger &logger, uint64_t msggroup): logger_(logger), msggroup_(msggroup) {}
+
             /// Sets the specified flag (creating it if it doesn't exist).
             void set(Flag flag) { update(flag, true); }
 
@@ -39,7 +49,7 @@ namespace xero {
             /// Sets or clears the specified flag.
             /// \param flag The flag.
             /// \param value The value to assign to the flag.
-            void update(Flag flag, bool value) { flags_[flag] = value; }
+            void update(Flag flag, bool value);
 
             /// \return true if the specified flag exists.
             /// A flag exists if it has been created by \c set or \c reset.
@@ -49,6 +59,8 @@ namespace xero {
             bool isSet(Flag flag) { return exists(flag) && flags_.at(flag); };
         private:
             std::map<Flag, bool> flags_;
+            MessageLogger &logger_;
+            uint64_t msggroup_;
         };
     }
 }

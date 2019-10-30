@@ -54,5 +54,7 @@
 
 #define MSG_GROUP_PATHWATCHER               (1ull << 16)
 
+#define MSG_GROUP_FLAGS                     (1ull << 17)
+
 /// \brief ID to get all messages
 #define MSG_GROUP_ALL                   (0xffffffffffffffffull)

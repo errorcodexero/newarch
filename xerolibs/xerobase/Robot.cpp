@@ -40,7 +40,7 @@ namespace xero {
             parser_ = new SettingsParser(message_logger_, MSG_GROUP_PARSER) ;
             output_stream_ = nullptr ;
 
-            flags_ = new FlagManager();
+            flags_ = new FlagManager(message_logger_, MSG_GROUP_FLAGS);
 
             motor_factory_ = std::make_shared<MotorFactory>(*this);
 
