@@ -17,7 +17,8 @@ namespace xero {
 
         Subsystem::Subsystem(Robot &robot, const std::string &name) : 
         robot_(robot), name_(name) {
-            action_ = nullptr ;
+            action_ = nullptr;
+            parent_ = nullptr;
         }
 
         Subsystem::~Subsystem() {
