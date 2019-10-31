@@ -12,6 +12,8 @@
 
 #define MSG_GROUP_VISION_DRIVING                    (1ull << 32)
 
-#define MSG_GROUP_RANSEUR_OI                         (1ull << 33)
+#define MSG_GROUP_RANSEUR_OI                        (1ull << 33)
 
 #define MSG_GROUP_VISION_TERMINATOR                 (1ull << 34)
+
+#define MSG_GROUP_TUBARM                            (1ull << 35)

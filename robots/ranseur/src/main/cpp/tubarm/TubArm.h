@@ -6,6 +6,7 @@
 #include <frc/VictorSP.h>
 #include <memory>
 #include <motors/MotorController.h>
+#include <motorencodersubsystem/MotorEncoderSubsystem.h>
 
 
 /// ** need to derive this from the motor-encoder class.. ** ///
@@ -14,19 +15,14 @@ namespace xero {
     namespace ranseur {
         class TubArm ;
 
-        class TubArm : public xero::base::Subsystem {
+        class TubArm : public xero::base::MotorEncoderSubsystem {
           
-            public:
+        public:
             TubArm(xero::base::Subsystem* parent) ;
             virtual ~TubArm() ;
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             virtual void computeState() ;
-
-            void createNamedSequences() {
-            }
-
-            std::shared_ptr<xero::base::MotorController> tubarm_ ;
 
         } ;
     }

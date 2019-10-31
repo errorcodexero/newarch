@@ -19,6 +19,12 @@ collector:tubsensor:l2hdelay                                    -1
 hw:tubcollector:type                                            "victor_spx"
 hw:tubcollector:canid                                           -1
 hw:collector:clamp                                              -1
+hw:tubarm:motor:1:canid                                         -1
+hw:tubarm:motor:1:type                                          "victor_spx"
+hw:tubarm:encoder:1                                             -1
+hw:tubarm:encoder:2                                             -1
+hw:tubarm:encoder:units_per_tick                                -1
+hw:tubarm:encoder:zero_ticks                                    -1
 
 #
 # Drivebase
