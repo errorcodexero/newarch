@@ -18,16 +18,16 @@ namespace xero {
         class Flag {
         public:
             /// Creates a unique Flag.
-            /// @param name The flag name (only for debugging/logging).
-            Flag(std::string name) : id_(nextID_++), name_(name) {}
+            /// @param description The flag name (only for debugging/logging).
+            Flag(std::string description) : id_(nextID_++), description_(description) {}
 
             bool operator<(const Flag rhs) const { return id_ < rhs.id_; }
             bool operator==(const Flag rhs) const { return id_ == rhs.id_; }
 
-            std::string getName() { return name_; }
+            std::string getDescription() { return description_ + " (" + std::to_string(id_) + ")"; }
         private:
             int id_;
-            std::string name_;
+            std::string description_;
 
             static int nextID_;
         };

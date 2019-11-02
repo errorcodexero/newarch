@@ -16,7 +16,7 @@ namespace xero {
             /// \param description An optional human-readable description of this action,
             ///                    for example, "Wait for vision to detect target"
             WaitForFlagAction(std::shared_ptr<xero::misc::FlagManager> flagManager, 
-                              Flag flag, 
+                              xero::misc::Flag flag, 
                               const std::string description = ""): 
             flagManager_(flagManager_), flag_(flag), desc_(description) {}
 
@@ -33,11 +33,11 @@ namespace xero {
                 if (!desc_.empty()) result += " '" + desc_ + "'";
             }
         private:
-            std::shared_ptr<xero::misc::FlagManager> flagManager+;
+            std::shared_ptr<xero::misc::FlagManager> flagManager_;
             xero::misc::Flag flag_;
             const std::string desc_;
 
             bool isDone_;
-        }
+        };
     }
 }
