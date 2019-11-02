@@ -14,7 +14,7 @@ namespace xero {
 
         CSVData::CSVItem::CSVItem(const CSVItem &other): type_(other.type_) {
             if (type_ == Type::Double) value_.doubleValue = other.value_.doubleValue;
-            else value_.stringValue = other.value_.stringValue;
+            else new (&value_.stringValue) std::string(other.value_.stringValue);
         }
 
         CSVData::CSVData(const std::string & fileOrData, bool data)
@@ -50,11 +50,14 @@ namespace xero {
             while (std::getline(strm, line)) {
                 ++lineno ;
 
+                // Strip Windows line endings
+                while (line.length() > 0 && line[line.length() - 1] == '\r') line.pop_back();
+
                 std::vector<CSVItem> newdata ;
                 
                 bool parsingString = false;
                 for (size_t i = 0; i < line.length(); i++) {
-                    if (i == 0 && line[i] == '"') parsingString = true;
+                    if (!parsingString && word.size() == 0 && line[i] == '"') parsingString = true;
                     else if (parsingString) {
                         if (line[i] == '"') {
                             // a quote should be the last thing in a field
@@ -63,6 +66,7 @@ namespace xero {
                                 newdata.push_back(CSVItem(word));
                                 word.clear();
                                 parsingString = false;
+                                i++;    // skip the comma
                             } else {
                                 assert(0 == "Strings containing double quotes are not supported");
                             }
@@ -73,10 +77,16 @@ namespace xero {
                         if (line[i] == ',') {
                             // end of double
                             newdata.push_back(CSVItem(std::stod(word)));
+                            word.clear();
                         } else {
                             word += line[i];
                         }
                     }
+                }
+
+                if (!word.empty()) {
+                    if (parsingString) newdata.push_back(CSVItem(word));
+                    else newdata.push_back(CSVItem(std::stod(word)));
                 }
 
                 if (lineno == 1) {

@@ -21,10 +21,10 @@ namespace xero {
                     String
                 };
 
-                CSVItem(std::string value): type_(Type::String) { value_.stringValue = value; }
+                CSVItem(std::string value): type_(Type::String) { new (&value_.stringValue) std::string(value); }
                 CSVItem(double value): type_(Type::Double) { value_.doubleValue = value; }
                 CSVItem(const CSVItem &other);
-                ~CSVItem() { if (isString()) (&value_.stringValue)->std::string::~string(); }
+                ~CSVItem() { if (isString()) value_.stringValue.~basic_string(); }
 
                 Type getType() { return type_; }
                 bool isDouble() const { return type_ == Type::Double; }
