@@ -10,12 +10,12 @@ namespace xero {
                 if (it == flags_.end()) {
                     // The flag did not previously exist.
                     logger_ << "FlagManager: Created and " << (value ? "set" : "cleared");
-                    logger_ << " flag '" << flag.getName() << "'";
+                    logger_ << " flag '" << flag.getDescription() << "'";
 
                     flags_.insert(std::make_pair(flag, value));
                 } else {
                     // The flag already existed
-                    logger_ << "FlagManager: " << (value ? "Set" : "Cleared") << " flag '" << flag.getName();
+                    logger_ << "FlagManager: " << (value ? "Set" : "Cleared") << " flag '" << flag.getDescription();
                     logger_ << "' (was previously " << (it->second ? "set" : "cleared") << ")";
 
                     it->second = value;
