@@ -2,7 +2,7 @@
 #
 # Make sure the CONFIG is valid
 #
-ifeq ($(CONFIG),DebugAsan)
+ifeq ($(CONFIG),ASan)
 CONFIG=Debug
 ASAN=true
 endif

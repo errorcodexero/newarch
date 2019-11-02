@@ -24,7 +24,7 @@ jobs:
     strategy: 
       matrix: 
         robot: [ranseur]
-        configuration: [Debug, DebugAsan]
+        configuration: [Debug, ASan]
 
     steps:
     - uses: actions/checkout@v1
