@@ -17,3 +17,5 @@
 #define MSG_GROUP_VISION_TERMINATOR                 (1ull << 34)
 
 #define MSG_GROUP_TUBARM                            (1ull << 35)
+
+#define MSG_GROUP_TUBWRIST                          (1ull << 36)

@@ -12,7 +12,6 @@ namespace xero {
     namespace ranseur {
       
         TubArm::TubArm(Subsystem *parent) : MotorEncoderSubsystem(parent, "tubarm", "hw:tubarm", MSG_GROUP_TUBARM) {
-    
         }
 
         TubArm::~TubArm() {
