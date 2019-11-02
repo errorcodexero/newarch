@@ -3,8 +3,8 @@
 # Make sure the CONFIG is valid
 #
 ifeq ($(CONFIG),ASan)
-CONFIG=Debug
-ASAN=true
+override CONFIG := Debug
+ASAN = true
 endif
 
 ifeq ($(CONFIG),Debug)
