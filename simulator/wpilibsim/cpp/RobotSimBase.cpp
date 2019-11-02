@@ -33,6 +33,7 @@ namespace xero {
             parser_ = new SettingsParser(logger, 1) ;
             if (!parser_->readFile(paramfile)) {
                 std::cerr << "Simulator cannot read parameter file '" << paramfile << "'" << std::endl ;
+                assert(0);
             }
 
             filestrm_ = nullptr ;
