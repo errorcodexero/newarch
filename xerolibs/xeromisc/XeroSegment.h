@@ -1,8 +1,8 @@
 #pragma once
 
-#include "XeroPathConsts.h"
 #include "xeromath.h"
-#include <array>
+#include "CSVData.h"
+#include <vector>
 
 namespace xero {
     namespace misc {
@@ -21,7 +21,7 @@ namespace xero {
                 heading_ = heading ;
             }
 
-            XeroSegment(std::array<double, HEADER_COUNT> data) 
+            XeroSegment(std::vector<double> data) 
             {
                 x_ = data[0] ;
                 y_ = data[1]  ;
@@ -30,6 +30,16 @@ namespace xero {
                 accel_ = data[4] ;
                 jerk_ = data[5] ;
                 heading_ = data[6] ;
+            }
+
+            XeroSegment(std::vector<CSVData::CSVItem> data) {
+                x_ = data[0].getDouble();
+                y_ = data[1].getDouble();
+                linPos_ = data[2].getDouble();
+                vel_ = data[3].getDouble();
+                accel_ = data[4].getDouble();
+                jerk_ = data[5].getDouble();
+                heading_ = data[6].getDouble();
             }
 
             double getX() const {

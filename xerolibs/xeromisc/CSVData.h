@@ -1,6 +1,5 @@
 #pragma once
 
-#include "XeroPathConsts.h"
 #include <map>
 #include <string>
 #include <array>
@@ -15,20 +14,60 @@ namespace xero {
     namespace misc {
         class CSVData {
         public:
-            CSVData(const std::string & fileName, bool data) ;
+            struct CSVItem {
+            public:
+                enum class Type {
+                    Double,
+                    String
+                };
+
+                CSVItem(std::string value): type_(Type::String) { value_.stringValue = value; }
+                CSVItem(double value): type_(Type::Double) { value_.doubleValue = value; }
+                CSVItem(const CSVItem &other);
+                ~CSVItem() { if (isString()) (&value_.stringValue)->std::string::~string(); }
+
+                Type getType() { return type_; }
+                bool isDouble() const { return type_ == Type::Double; }
+                bool isString() const { return type_ == Type::String; }
+
+                double getDouble() const;
+                std::string getString() const;
+            private:
+                union Value {
+                    double doubleValue;
+                    std::string stringValue;
+
+                    Value() {}
+                    ~Value() {}
+                } value_;
+                Type type_;
+            };
+
+            CSVData(const std::string & fileOrData, bool data) ;
             CSVData(std::istream &strm) ;
             
             void loadData(std::istream &strm) ;
 
-            const double getData(size_t row, size_t column) {
+            CSVItem getData(size_t row, size_t column) const {
                 assert(didLoad_) ;
                 return data_[row][column];
             }
 
-            const std::array<double, HEADER_COUNT> &getRow(int rowNum) {
+            double getDouble(size_t row, size_t column) const {
+                return getData(row, column).getDouble();
+            }
+
+            std::string getString(size_t row, size_t column) const {
+                return getData(row, column).getString();
+            }
+
+            const std::vector<CSVItem> &getRow(int rowNum) {
                 assert(didLoad_) ;
                 return data_[rowNum];
             }
+
+            /// Returns the number of columns in the CSV file.
+            int getColumns() { return columns_; }
 
             auto getAllData() {
                 assert(didLoad_) ;
@@ -45,11 +84,12 @@ namespace xero {
 
         private:
             bool didLoad_ ;
+            size_t columns_;
             size_t rowIdx_, colIdx_ ;
             std::string fileName_ ;
             std::ifstream file_ ;
-            std::array<std::string, HEADER_COUNT> headers_ ;
-            std::vector<std::array<double, HEADER_COUNT>> data_ ;
+            std::vector<std::string> headers_ ;
+            std::vector<std::vector<CSVItem>> data_ ;
         } ;
     }
 }

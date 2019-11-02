@@ -3,6 +3,20 @@
 
 namespace xero {
     namespace misc {
+        double CSVData::CSVItem::getDouble() const { 
+            assert(type_ == Type::Double);
+            return value_.doubleValue;
+        }
+        std::string CSVData::CSVItem::getString() const { 
+            assert(type_ == Type::String);
+            return value_.stringValue; 
+        }
+
+        CSVData::CSVItem::CSVItem(const CSVItem &other): type_(other.type_) {
+            if (type_ == Type::Double) value_.doubleValue = other.value_.doubleValue;
+            else value_.stringValue = other.value_.stringValue;
+        }
+
         CSVData::CSVData(const std::string & fileOrData, bool data)
         {
             if (!data)
@@ -29,32 +43,53 @@ namespace xero {
         void CSVData::loadData(std::istream &strm) 
         {
             if (!didLoad_) return;
-            std::array<double, HEADER_COUNT> newdata ;
 
             int lineno = 0 ;
             std::string line, word ;
 
-            size_t dataIdx ;
             while (std::getline(strm, line)) {
                 ++lineno ;
-                dataIdx = 0 ;
 
-                if (lineno > 1) {
-                    for(size_t i = 0 ; i < line.length() ; i++) {
-                        if (line[i] == ',') {
-                            if (dataIdx != 0 && dataIdx <= HEADER_COUNT)
-                                newdata[dataIdx - 1] = std::stod(word) ;
-                            word.clear() ;
-                            dataIdx++ ;
+                std::vector<CSVItem> newdata ;
+                
+                bool parsingString = false;
+                for (size_t i = 0; i < line.length(); i++) {
+                    if (i == 0 && line[i] == '"') parsingString = true;
+                    else if (parsingString) {
+                        if (line[i] == '"') {
+                            // a quote should be the last thing in a field
+                            if (i+1 == line.length() || line[i+1] == ',') {
+                                // end of string
+                                newdata.push_back(CSVItem(word));
+                                word.clear();
+                                parsingString = false;
+                            } else {
+                                assert(0 == "Strings containing double quotes are not supported");
+                            }
+                        } else {
+                            word += line[i];
                         }
-                        else {
-                            word += line[i] ;
+                    } else {
+                        if (line[i] == ',') {
+                            // end of double
+                            newdata.push_back(CSVItem(std::stod(word)));
+                        } else {
+                            word += line[i];
                         }
                     }
-                    if (dataIdx != 0 && dataIdx <= HEADER_COUNT)
-                        newdata[dataIdx - 1] = std::stod(word) ;
+                }
 
-                    data_.push_back(newdata) ;
+                if (lineno == 1) {
+                    columns_ = newdata.size();
+                    headers_.reserve(columns_);
+                    for (CSVItem item : newdata) {
+                        assert(item.isString() && "CSV header may only contain strings");
+                        headers_.push_back(item.getString());
+                    }
+                } else {
+                    assert(newdata.size() == columns_ && "CSV rows must have the same number of columns");
+                    data_.push_back(newdata);
+                    newdata.clear();
                 }
             }
         }
