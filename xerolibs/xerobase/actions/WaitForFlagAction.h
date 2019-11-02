@@ -33,7 +33,7 @@ namespace xero {
                 if (!desc_.empty()) result += " '" + desc_ + "'";
             }
         private:
-            std::shared_ptr<xero::misc::FlagManager> flagManager+;
+            std::shared_ptr<xero::misc::FlagManager> flagManager_;
             xero::misc::Flag flag_;
             const std::string desc_;
 
