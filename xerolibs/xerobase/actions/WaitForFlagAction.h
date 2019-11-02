@@ -13,12 +13,9 @@ namespace xero {
             /// Constructs a WaitForFlagAction.
             /// \param flagManager The flag manager.
             /// \param flag The flag to wait for.
-            /// \param description An optional human-readable description of this action,
-            ///                    for example, "Wait for vision to detect target"
             WaitForFlagAction(std::shared_ptr<xero::misc::FlagManager> flagManager, 
-                              Flag flag, 
-                              const std::string description = ""): 
-            flagManager_(flagManager_), flag_(flag), desc_(description) {}
+                              xero::misc::Flag flag): 
+            flagManager_(flagManager_), flag_(flag) {}
 
             virtual void start() { isDone_ = false; }
             virtual void cancel() { isDone_ = true; }
@@ -30,14 +27,14 @@ namespace xero {
 
             virtual std::string toString() {
                 std::string result = "WaitForFlagAction";
-                if (!desc_.empty()) result += " '" + desc_ + "'";
+                result += " '" + flag_.getDescription() + "'";
+                return result;
             }
         private:
-            std::shared_ptr<xero::misc::FlagManager> flagManager+;
+            std::shared_ptr<xero::misc::FlagManager> flagManager_;
             xero::misc::Flag flag_;
-            const std::string desc_;
 
             bool isDone_;
-        }
+        };
     }
 }
