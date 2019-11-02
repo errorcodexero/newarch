@@ -24,6 +24,7 @@ jobs:
     strategy: 
       matrix: 
         robot: [ranseur]
+        configuration: [Debug, DebugAsan]
 
     steps:
     - uses: actions/checkout@v1
@@ -33,11 +34,11 @@ jobs:
     
     - name: Build robot code
       working-directory: robots/${{ matrix.robot }}
-      run: make CONFIG=Debug PLATFORM=SIMULATOR
+      run: make CONFIG=${{ matrix.configuration }} PLATFORM=SIMULATOR
       
     - name: Deploy resources
       working-directory: robots/${{ matrix.robot }}
-      run: make CONFIG=Debug PLATFORM=SIMULATOR deploy
+      run: make CONFIG=${{ matrix.configuration }} PLATFORM=SIMULATOR deploy
     
     - name: Run simulator (auto)
       run: ./runsim ${{ matrix.robot }} auto
