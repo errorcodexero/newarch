@@ -2,6 +2,11 @@
 #
 # Make sure the CONFIG is valid
 #
+ifeq ($(CONFIG),DebugAsan)
+CONFIG=Debug
+ASAN=true
+endif
+
 ifeq ($(CONFIG),Debug)
 else
 ifeq ($(CONFIG),Release)

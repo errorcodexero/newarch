@@ -63,6 +63,11 @@ ifeq ($(CONFIG),Release)
 CXXFLAGS += -O2 -DNDEBUG
 endif
 
+ifeq ($(ASAN),true)
+CXXFLAGS += -fsanitize=address
+LINKPOSTFIX += -fsanitize=address
+endif
+
 ifneq ($(COMPILERSETUP),true)
 $(error the compiler named '$(COMPILER)' is not known)
 endif
