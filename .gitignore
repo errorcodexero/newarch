@@ -1,4 +1,4 @@
-doc/out
+gendocs
 build
 .gradle
 *.swp
