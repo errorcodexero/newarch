@@ -1,3 +1,13 @@
 /// \mainpage The Error Code Xero Robot Framework
 ///
+/// This software framework is the robot framework used by Error Code Xero.  It is
+/// divided into three distinct namespaces.  The xero::math namespace contains classes
+/// that implement low level math used by the robot algorithms.  The xero::misc namespace
+/// contains classes that are used by the robot code, but do not depend on the libraries
+/// provided by first in any way.  This makes these classes reusable on external processors
+/// like the raspberry PI.  The final name space, xero::base, contains the robot code that
+/// is dependent on the libraries from first, notably the WPILIB libraries.
 ///
+/// More information on the architecture can be found at https://www.xerosw.org/dokuwiki/doku.php?id=software:robot_software_architecture.
+///
+
