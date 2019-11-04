@@ -1,5 +1,5 @@
 #include "automodes/RanseurAutoModeController.h"
-
+#include "automodes/AutoModeXero.h"
 #include "Ranseur.h"
 
 #include <MessageLogger.h>
@@ -23,13 +23,15 @@ namespace xero {
         void RanseurAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             AutoModePtr mode = nullptr ;
 
-            sel = 8 ;
-
             switch(sel) {
             case 0:
+                mode = std::make_shared<AutoModeXero>(getRobot()) ;
+                break ;
+                
+            case 8:
                 mode = std::make_shared<StraightCharAutoMode>(getRobot(), 1.0, 5.0) ;
                 break ;
-            case 1:
+            case 9:
                 mode = std::make_shared<FollowPathAutomode>(getRobot(), "Tune_Tune") ;
                 break ;
             }

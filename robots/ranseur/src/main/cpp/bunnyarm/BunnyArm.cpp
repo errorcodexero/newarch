@@ -10,8 +10,6 @@ namespace xero {
             auto &robot = getRobot();
 
             int sol = robot.getSettingsParser().getInteger("hw:bunnyarm:solenoid") ;
-            // added "hw:bunnyarm:solenoid" to phaser.dat as 6
-
             solenoid_ = std::make_shared<frc::Solenoid>(sol) ;
             solenoid_->Set(false) ;
 

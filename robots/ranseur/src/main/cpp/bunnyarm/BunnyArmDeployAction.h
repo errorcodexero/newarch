@@ -14,7 +14,7 @@ namespace xero {
             /// @param raise True if the arm should be raised, false if it should be lowered.
             BunnyArmDeployAction(BunnyArm &bunnyArm, bool raise) : BunnyArmAction(bunnyArm), raise_(raise) { 
                 isDone_ = false;      
-                duration_ = bunnyArm.getRobot().getSettingsParser().getDouble("hw:bunnyarm:deploy:time");         
+                duration_ = bunnyArm.getRobot().getSettingsParser().getDouble("bunnyarm:deploy:time");         
             }
             
             virtual ~BunnyArmDeployAction() {                

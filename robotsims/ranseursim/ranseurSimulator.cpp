@@ -28,6 +28,9 @@ namespace xero
                 tub_manipulator_ = std::make_shared<TubManipulatorModel>(*this) ;
                 addModel(tub_manipulator_) ;
 
+                bunny_arm_ = std::make_shared<BunnyArmModel>(*this) ;
+                addModel(bunny_arm_) ;
+
                 visualizer_ = false ;
             }
 

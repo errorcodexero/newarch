@@ -1,5 +1,6 @@
 #pragma once
 #include "TubManipulatorModel.h"
+#include "BunnyArmModel.h"
 #include <frc/RobotSimBase.h>
 #include <LifterModel.h>
 #include <TankDriveModel.h>
@@ -47,6 +48,7 @@ namespace xero
                 std::shared_ptr<xero::sim::TankDriveModel> tankdrive_ ;
                 std::shared_ptr<xero::sim::ranseur::OIModel> oi_ ;
                 std::shared_ptr<TubManipulatorModel> tub_manipulator_ ;
+                std::shared_ptr<BunnyArmModel> bunny_arm_ ;
                 bool visualizer_ ;
             };
         } // namespace ranseur
