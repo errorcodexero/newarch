@@ -9,20 +9,20 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace ranseur {
-        TubCollector::TubCollector(Subsystem *parent) : Subsystem(parent, "collector") {
+        TubCollector::TubCollector(Subsystem *parent) : Subsystem(parent, "tubcollector") {
             Robot &robot = getRobot();
             
-            int sensor = robot.getSettingsParser().getInteger("hw:collector:tubsensor") ;
+            int sensor = robot.getSettingsParser().getInteger("hw:tubcollector:tubsensor") ;
             sensor_ = std::make_shared<frc::DigitalInput>(sensor) ;
 
-            double dh2l = robot.getSettingsParser().getDouble("collector:tubsensor:h2ldelay") ;
-            double dl2h = robot.getSettingsParser().getDouble("collector:tubsensor:l2hdelay") ;
+            double dh2l = robot.getSettingsParser().getDouble("tubcollector:tubsensor:h2ldelay") ;
+            double dl2h = robot.getSettingsParser().getDouble("tubcollector:tubsensor:l2hdelay") ;
             deb_sensor_ = std::make_shared<DebounceBoolean>(true, dh2l, dl2h) ;
 
             intake_ = robot.getMotorFactory()->createMotor("hw:tubcollector") ;
             intake_->setNeutralMode(MotorController::NeutralMode::Brake) ;
 
-            int clamp = robot.getSettingsParser().getInteger("hw:collector:clamp") ;
+            int clamp = robot.getSettingsParser().getInteger("hw:tubcollector:clamp") ;
             clamp_ = std::make_shared<frc::Solenoid>(clamp) ;
 
         }

@@ -21,7 +21,7 @@ endif
 
 ifeq ($(MYCOMPILER),GCC)
 CXX = g++
-CXXFLAGS = $(LOCAL_CFLAGS)
+CXXFLAGS = $(LOCAL_CFLAGS) -Wall
 COMPILERSETUP=true
 
 ifeq ($(MYOS),Windows)

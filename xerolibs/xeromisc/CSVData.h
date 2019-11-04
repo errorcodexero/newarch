@@ -10,28 +10,56 @@
 #include <algorithm>
 #include <cassert>
 
+/// @file
+
 namespace xero {
     namespace misc {
+        /// @brief represents a single peice of data from a CSV file.
+        /// Can represent a string or a number
         class CSVData {
         public:
             struct CSVItem {
             public:
+                /// @brief the type of the data
                 enum class Type {
-                    Double,
-                    String
+                    Double,             /// @brief a floating point number
+                    String              /// @brief a string
                 };
 
+                /// @brief create a new string data item
                 CSVItem(std::string value): type_(Type::String) { new (&value_.stringValue) std::string(value); }
+
+                /// @brief create a new double data item
                 CSVItem(double value): type_(Type::Double) { value_.doubleValue = value; }
+
+                /// @brief create a new data item that is a copy of an existing item
                 CSVItem(const CSVItem &other);
+
+                /// @brief destroy the string item
                 ~CSVItem() { if (isString()) value_.stringValue.~basic_string(); }
 
+                /// @brief returns the type of the data item
+                /// @returns the type of the data item
                 Type getType() { return type_; }
+
+                /// @brief returns true if the data item is a double
+                /// @returns true if the data item is a double
                 bool isDouble() const { return type_ == Type::Double; }
+
+                /// @brief returns true if the data item is a string
+                /// @returns true if the data item is a string                
                 bool isString() const { return type_ == Type::String; }
 
+                /// @brief return the double value for the data item
+                /// This method asserts if the type if not double
+                /// @returns the double value for the data item
                 double getDouble() const;
+
+                /// @brief return the string value for the data item
+                /// This method asserts if the type if not string
+                /// @returns the string value for the data item
                 std::string getString() const;
+                
             private:
                 union Value {
                     double doubleValue;

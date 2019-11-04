@@ -28,4 +28,7 @@
 
 0.1,tankdrive,xpos,2000                                 # Start center hab platform
 0.1,tankdrive,ypos,16300                                # Start center hab platform
-0.1,tankdrive,angle,0                                   # Start center hab platform    
+0.1,tankdrive,angle,0                                   # Start center hab platform
+
+10.0,tubmanipulator,tub,1                               # Fire the tub sensor at 10 seconds
+

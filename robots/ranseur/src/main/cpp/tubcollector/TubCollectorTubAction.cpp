@@ -12,8 +12,8 @@ namespace xero {
         std::string TubCollectorTubAction::action_name("TubCollectorTubAction");
 
         TubCollectorTubAction::TubCollectorTubAction(TubCollector &col) : TubCollectorAction(col){
-            speed_ = col.getRobot().getSettingsParser().getDouble("tubcollect:collectspeed") ;
-            delay_ = col.getRobot().getSettingsParser().getDouble("tubcollect:collectdelay") ;
+            speed_ = col.getRobot().getSettingsParser().getDouble("tubcollector:collect:power") ;
+            delay_ = col.getRobot().getSettingsParser().getDouble("tubcollector:collect:duration") ;
         }
         TubCollectorTubAction::~TubCollectorTubAction() {            
         }
