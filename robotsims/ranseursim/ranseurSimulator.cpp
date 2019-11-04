@@ -1,5 +1,6 @@
 #include "ranseurSimulator.h"
 #include "ranseurScreenVisualizer.h"
+
 #include "OIModel.h"
 #include <TankDriveModel.h>
 #include <cassert>
@@ -23,6 +24,9 @@ namespace xero
 
                 oi_ = std::make_shared<OIModel>(*this) ;
                 addModel(oi_) ;      
+
+                tub_manipulator_ = std::make_shared<TubManipulatorModel>(*this) ;
+                addModel(tub_manipulator_) ;
 
                 visualizer_ = false ;
             }

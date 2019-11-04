@@ -4,6 +4,7 @@ SOURCES = \
 	ranseurScreenVisualizer.cpp\
 	ranseurSimulator.cpp\
 	OIModel.cpp\
+	TubManipulatorModel.cpp
 
 TARGET=ranseursim
 

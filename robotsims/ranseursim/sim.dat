@@ -5,17 +5,28 @@
 #####################################################################################
 
 # Drivebase
-hw:tankdrive:leftmotor:1             1                                  # TalonSRX 1
-hw:tankdrive:leftmotor:2             2                                  # TalonSRX 2
-hw:tankdrive:leftmotor:3             3                                  # TalonSRX 3
-hw:tankdrive:rightmotor:1            4                                  # TalonSRX 4
-hw:tankdrive:rightmotor:2            5                                  # TalonSRX 5
-hw:tankdrive:rightmotor:3            6                                  # TalonSRX 6
-hw:tankdrive:leftencoder:1           3                                  # DIO 0
-hw:tankdrive:leftencoder:2           2                                  # DIO 1
-hw:tankdrive:rightencoder:1          0                                  # DIO 2
-hw:tankdrive:rightencoder:2          1                                  # DIO 3
-hw:tankdrive:shifter                 0                                  # Solenoid 0
+hw:tankdrive:leftmotor:1                1                               # SparkMax 1
+hw:tankdrive:leftmotor:2                2                               # SparkMax 2
+hw:tankdrive:leftmotor:3                3                               # SparkMax 3
+hw:tankdrive:rightmotor:1               4                               # SparkMax 4
+hw:tankdrive:rightmotor:2               5                               # SparkMax 5
+hw:tankdrive:rightmotor:3               6                               # SparkMax 6
+hw:tankdrive:leftencoder:1              0                               # DIO 0
+hw:tankdrive:leftencoder:2              1                               # DIO 1
+hw:tankdrive:rightencoder:1             2                               # DIO 2
+hw:tankdrive:rightencoder:2             3                               # DIO 3
+
+# Bunny Arm
+hw:bunnyarm:solenoid                    1                               # BunnyArm Solenoid
+
+# Tub Manipulator
+hw:tubmanipulator:arm:motor             7                               # VictorSPX
+hw:tubmanipulator:arm:encoder           0                               # Analog IO
+hw:tubmanipulator:wrist:motor           8                               # VictorSPX
+hw:tubmanipulator:wrist:encoder         1                               # Analog IO
+hw:tubmanipulator:collector:solenoid    0                               # Solenoid
+hw:tubmanipulator:collector:sensor      0                               # Digital Input
+hw:tubmanipulator:collector:motor       9                               # VictorSPX
 
 ######################################################################################
 #
@@ -62,7 +73,13 @@ tankdrive:sim:scrub                                     0.95177665
 #
 tankdrive:sim:width                                     22.5
 
-
+#
+# oi
+#
 oi:axis:automode                                        6                   # Axis
+
+#
+# gamepad
+#
 gamepad:axis:left_axis_y                                1
 gamepad:axis:right_axis_x                               4
