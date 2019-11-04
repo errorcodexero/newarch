@@ -13,6 +13,7 @@ class PIDCtrl
 {
 public:
     /// \brief create a new pid controller with all zero constants
+    /// \param is_angle if true, this is managing an angular quantity that stays between -180 and 180 degrees
     PIDCtrl(bool is_angle = false);
 
     /// \brief create a new pid controller with the given constants
@@ -64,7 +65,6 @@ public:
     /// \brief Return the output given a target, the current value, and the time that has passed
     /// \param target the target value we are trying to reach
     /// \param current the current value for system
-    /// \param accel the current acceleration of the target value
     /// \param timeDifference the time that has passed since the last time this was called
     /// \returns the calculated output value
     double getOutput(double target, double current, double timeDifference);

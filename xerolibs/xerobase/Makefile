@@ -41,7 +41,6 @@ SOURCES = \
 	oi/OIDevice.cpp\
 	oi/OIOutputAction.cpp\
 	oi/OISubsystem.cpp\
-	MessageListener/MessageListener.cpp\
 	tankdrive/TankDrive.cpp\
 	tankdrive/modes/FollowPathAutomode.cpp\
 	tankdrive/modes/ScrubCharMode.cpp\

@@ -20,10 +20,14 @@ namespace xero {
             /// \brief destroy a settings parser object
             virtual ~SettingsParser();
 
+            /// \brief add a new define to the list of defines
+            /// \param define the define to add to the current list of defines
             void addDefine(const std::string &define) {
                 defines_.push_back(define) ;
             }
 
+            /// \brief returns the current list of defines
+            /// \returns the current list of defines
             const std::list<std::string> &getDefines() const {
                 return defines_ ;
             }
