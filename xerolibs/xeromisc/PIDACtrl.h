@@ -49,22 +49,32 @@ namespace xero {
             /// \returns the output value for the controller
             double getOutput(double a, double v, double dtarget, double dactual, double dt);
 
+            /// \brief returns the V portion of the output value
+            /// \returns the V portion of the output value
             double getVPart() {
                 return vpart_ ;
             }
 
+            /// \brief returns the A portion of the output value
+            /// \returns the A portion of the output value
             double getAPart() {
                 return apart_ ;
             }
 
+            /// \brief returns the P portion of the output value
+            /// \returns the P portion of the output value
             double getPPart() {
                 return ppart_ ;
             }
 
+            /// \brief returns the D portion of the output value
+            /// \returns the D portion of the output value
             double getDPart() {
                 return dpart_ ;
             }
 
+            /// \brief returns the last error value
+            /// \returns the last error value
             double getLastError() {
                 return last_error_ ;
             }

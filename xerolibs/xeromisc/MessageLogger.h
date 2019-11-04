@@ -37,6 +37,8 @@ class MessageLogger
     /// \brief create a new message logger object
     MessageLogger();
 
+    /// \brief set the function that returns the time in seconds from the start of the program
+    /// \param timefun the function taht returns the time in seconds from the start of the program
     void setTimeFunction(double (* timefun)()) {
         time_func_ = timefun ;
     }

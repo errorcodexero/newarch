@@ -26,6 +26,8 @@ namespace xero {
                 delayhigh_ = high ;
             } 
 
+            /// \brief returns the debounced state of the boolean
+            /// \returns the debounced state of the boolean
             bool get() {
                 return state_ == State::high || state_ == State::maybelow ;
             }
@@ -33,7 +35,6 @@ namespace xero {
             /// \brief Return the debounced state of the boolean
             /// \param st the state of the original boolean
             /// \param now the current time
-            /// \returns the debounced state of the boolean
             void update(bool st, double now) 
             {
                 switch(state_) {
