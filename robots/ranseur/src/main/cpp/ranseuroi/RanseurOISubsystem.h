@@ -15,9 +15,6 @@ namespace xero {
         protected:
             void initializeWithGunner(int gunner, int driver) ;
             void initializeWithOI(int oi, int driver) ;
-
-        private:
-            bool detectOI(int index) ;
         } ;
     }
 }
