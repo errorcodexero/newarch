@@ -1,5 +1,5 @@
 #
-# This file describes the phaser robot.
+# This file describes the ranseur robot.
 #
 
 ###################################################################################################
@@ -10,31 +10,25 @@
 ###################################################################################################
 
 #
-# PLACEHOLDERS
+# Hardware
 #
 hw:bunnyarm:solenoid                                            1
-hw:collector:tubsensor                                          -1 
 
 hw:tubcollector:type                                            "victor_spx"
 hw:tubcollector:canid                                            9
 hw:tubcollector:clamp                                           0
 hw:tubcollector:tubsensor                                       4                           # Digital IO
+
 hw:tubarm:motor:canid                                           7
 hw:tubarm:motor:type                                            "victor_spx"
 hw:tubarm:encoder:1                                             0
 hw:tubarm:encoder:2                                             -1
-hw:tubarm:encoder:units_per_tick                                -1
-hw:tubarm:encoder:zero_ticks                                    -1
+
 hw:tubwrist:motor:canid                                         8
 hw:tubwrist:motor:type                                          "victor_spx"
 hw:tubwrist:encoder:1                                           1
 hw:tubwrist:encoder:2                                           -1
-hw:tubwrist:encoder:units_per_tick                              -1
-hw:tubwrist:encoder:zero_ticks                                  -1
 
-#
-# Drivebase
-#
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2
 hw:tankdrive:motors:left:3:canid                                3
@@ -49,15 +43,15 @@ hw:tankdrive:motors:right:2:type                                "sparkmax_brushl
 hw:tankdrive:motors:right:3:type                                "sparkmax_brushless"
 hw:tankdrive:leftencoder:1                                      0                            # Digital IO
 hw:tankdrive:leftencoder:2                                      1                            # Digital IO
-hw:tankdrive:rightencoder:1                                     2               # Digital IO
-hw:tankdrive:rightencoder:2                                     3               # Digital IO
+hw:tankdrive:rightencoder:1                                     2                            # Digital IO
+hw:tankdrive:rightencoder:2                                     3                            # Digital IO
 hw:tankdrive:invert:motors:left                                 true
 
 #
 # Driver station
 #
-hw:driverstation:hid:driver                                     0               # HID Device Index
-hw:driverstation:hid:oi                                         2               # HID Device Index
+hw:driverstation:hid:driver                                     0                            # HID Device Index
+hw:driverstation:hid:oi                                         2                            # HID Device Index
 
 ###################################################################
 #
@@ -134,6 +128,18 @@ tubcollector:collect:power                                      -0.5
 tubcollector:collect:duration                                   0.5                                        
 tubcollector:tubsensor:h2ldelay                                 0
 tubcollector:tubsensor:l2hdelay                                 0
+
+###################################################################################################
+# tubwrist
+###################################################################################################
+tubwrist:encoder:units_per_tick                              -1
+tubwrist:encoder:zero_ticks                                  -1
+
+###################################################################################################
+# tubarm
+###################################################################################################
+tubarm:encoder:units_per_tick                              -1
+tubarm:encoder:zero_ticks                                  -1
 
 ###################################################################################################
 # cameratracker
