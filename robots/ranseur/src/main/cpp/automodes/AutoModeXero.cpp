@@ -30,7 +30,7 @@ namespace xero
             act = std::make_shared<TubCollectorTubAction>(*tubcollector) ;
             pushSubActionPair(tubcollector, act) ;
 
-            pushAction(std::make_shared<DelayAction>(10.0)) ;
+            pushAction(std::make_shared<DelayAction>(6.0)) ;
 
             act = std::make_shared<TubCollectorEjectTubAction>(*tubcollector, "tubcollector:eject:power", "tubcollector:eject:duration") ;
             pushSubActionPair(tubcollector, act) ;

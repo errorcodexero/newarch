@@ -129,17 +129,17 @@ bunnyarm:deploy:time                                             0.5
 # tubcollector
 ###################################################################################################
 tubcollector:eject:power                                        0.5
-tubcollector:eject:duration                                     0.5      
+tubcollector:eject:duration                                     2.0      
 tubcollector:collect:power                                      -0.5
 tubcollector:collect:duration                                   0.5                                        
-tubcollector:tubsensor:h2ldelay                                 -1
-tubcollector:tubsensor:l2hdelay                                 -1
+tubcollector:tubsensor:h2ldelay                                 0
+tubcollector:tubsensor:l2hdelay                                 0
 
 ###################################################################################################
 # cameratracker
 ###################################################################################################
 
-cameratracker:distance_threshold                                48.0            # 60
+cameratracker:distance_threshold                                48.0
 cameratracker:rect_ratio_min                                    0.9
 cameratracker:rect_ratio_max                                    1.1
 
