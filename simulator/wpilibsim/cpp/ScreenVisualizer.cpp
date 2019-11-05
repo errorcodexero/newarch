@@ -295,7 +295,7 @@ namespace xero {
 
             model_p->generateDisplayInformation(lines) ;
             for(std::string line : lines) {
-                if (line.length() > fieldwidth)
+                if (line.length() > static_cast<size_t>(fieldwidth))
                     line = line.substr(0, fieldwidth) ;
                 wmove(getRobotWindow(),subsystem_row_++, 0) ;
                 waddstr(getRobotWindow(), line.c_str()) ;

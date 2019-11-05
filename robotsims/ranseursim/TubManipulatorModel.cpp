@@ -58,6 +58,7 @@ namespace xero {
                 lines.push_back("  CollMotor: " + std::to_string(collector_motor_power_)) ;
                 line = "  CollArms: " ;
                 line += (collector_state_ ? "OPEN" : "CLOSED") ;
+                lines.push_back(line) ;                  
                 line = "  Tub: " ;
                 line += (hasTub() ? "YES" : "NO") ;
                 lines.push_back(line) ;            
@@ -94,6 +95,12 @@ namespace xero {
                         wrist_motor_power_ = victor->Get() ;
                     else if (victor->GetDeviceID() == collector_motor_channel_)
                         collector_motor_power_ = victor->Get() ;
+                }
+
+                Solenoid *sol = dynamic_cast<Solenoid *>(obj) ;
+                if (sol != nullptr)
+                {
+                    collector_state_ = sol->Get() ;
                 }
             }
 
