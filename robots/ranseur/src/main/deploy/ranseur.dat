@@ -134,12 +134,16 @@ tubcollector:tubsensor:l2hdelay                                 0
 ###################################################################################################
 tubwrist:encoder:units_per_tick                              -1
 tubwrist:encoder:zero_ticks                                  -1
+hw:tubwrist:encoder:units_per_tick                           -1       # Need to rename in the code
+hw:tubwrist:encoder:zero_ticks                               -1       # Need to rename in the code
 
 ###################################################################################################
 # tubarm
 ###################################################################################################
 tubarm:encoder:units_per_tick                              -1
 tubarm:encoder:zero_ticks                                  -1
+hw:tubarm:encoder:units_per_tick                           -1       # Need to rename in the code
+hw:tubarm:encoder:zero_ticks                               -1       # Need to rename in the code
 
 ###################################################################################################
 # cameratracker
