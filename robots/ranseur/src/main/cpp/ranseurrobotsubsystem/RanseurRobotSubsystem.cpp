@@ -13,7 +13,7 @@ namespace xero {
             // Add the tank drive.  This is handled by the base class RobotSubsystem since all robots have a drivebase
             // and for now they are all tank drives
             //
-            /*addTankDrive() ;
+            //addTankDrive() ;
 
             //
             // Add the OI to the robot.  The OI is specific to this robot.
@@ -21,7 +21,7 @@ namespace xero {
             oi_ = std::make_shared<RanseurOISubsystem>(this) ;
             addChild(oi_) ;                    
 
-            tracker_ = std::make_shared<RanseurCameraTracker>(this) ;
+            /*tracker_ = std::make_shared<RanseurCameraTracker>(this) ;
             tracker_->setCameraMode(CameraTracker::CameraMode::DriverViewing) ;               
             tracker_->setCameraIndex(0) ;
             addChild(tracker_) ;
@@ -30,10 +30,10 @@ namespace xero {
             addChild(bunnyArm_);
        
             manipulator_ = std::make_shared<TubManipulatorSubsystem>(robot) ;
-            addChild(manipulator_) ;    */
+            addChild(manipulator_) ;*/
             
-            motor1_ = std::make_shared<SingleMotorSubsystem>(this, "motor1", "hw:testmotor:1", MSG_GROUP_SUBSYSTEMS);
-            addChild(motor1_);
+            //motor1_ = std::make_shared<SingleMotorSubsystem>(this, "motor1", "hw:testmotor:1", MSG_GROUP_SUBSYSTEMS);
+            //addChild(motor1_);
 
             motor2_ = std::make_shared<SingleMotorSubsystem>(this, "motor2", "hw:testmotor:2", MSG_GROUP_SUBSYSTEMS);
             addChild(motor2_);

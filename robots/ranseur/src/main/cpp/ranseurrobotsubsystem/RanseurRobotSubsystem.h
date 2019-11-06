@@ -37,7 +37,7 @@ namespace xero {
             }
 
             std::vector<std::shared_ptr<xero::base::SingleMotorSubsystem>> getMotors() {
-                return {motor1_, motor2_};
+                return {/*motor1_,*/ motor2_};
             }
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;

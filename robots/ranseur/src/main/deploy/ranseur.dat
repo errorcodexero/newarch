@@ -9,6 +9,11 @@
 #
 ###################################################################################################
 
+hw:testmotor:1:type                                            "sparkmax_brushless"
+hw:testmotor:2:type                                            "sparkmax_brushless"
+hw:testmotor:1:canid                                           1
+hw:testmotor:2:canid                                           2
+
 #
 # Hardware
 #

@@ -24,6 +24,7 @@ namespace xero {
         void RanseurAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             AutoModePtr mode = nullptr ;
 
+            sel = 0;
             switch(sel) {
             case 0:
                 //mode = std::make_shared<AutoModeXero>(getRobot()) ;
