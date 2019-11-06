@@ -1,5 +1,6 @@
 #include "automodes/RanseurAutoModeController.h"
 #include "automodes/AutoModeXero.h"
+#include "automodes/MotorTestAutoMode.h"
 #include "Ranseur.h"
 
 #include <MessageLogger.h>
@@ -25,7 +26,8 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = std::make_shared<AutoModeXero>(getRobot()) ;
+                //mode = std::make_shared<AutoModeXero>(getRobot()) ;
+                mode = std::make_shared<MotorTestAutoMode>(getRobot());
                 break ;
                 
             case 8:
