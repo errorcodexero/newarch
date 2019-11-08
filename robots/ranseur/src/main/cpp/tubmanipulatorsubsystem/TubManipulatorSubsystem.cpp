@@ -5,7 +5,6 @@
 #include "tubcollector/TubCollector.h"
 #include "tubarm/TubArm.h"
 #include "tubwrist/TubWrist.h"
-#include "TubManipulatorSubsystem.h"
 #include <actions/Action.h>
 
 //using namespace xero::ranseur::Collector ;
@@ -27,8 +26,8 @@ namespace xero {
         
         }
 
-        bool TubManipulatorSubsystem::canAcceptAction(ActionPtr act) {
-            return false;
+        bool TubManipulatorSubsystem::canAcceptAction(ActionPtr action) {
+            return true;
         }
 
         std::string TubManipulatorSubsystem::toString() {

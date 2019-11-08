@@ -21,8 +21,16 @@ namespace xero {
 
         private:
             void bindOI() ;
+            void initialize() ;
         private:
             size_t automode_ ;
+            size_t collect_ ;
+            size_t dump_ ;
+            size_t eject_ ;
+            size_t turtle_ ;
+            size_t spare1_ ;
+            size_t spare2_ ;
+            
         } ;
     }
 }

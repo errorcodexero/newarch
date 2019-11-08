@@ -2,8 +2,9 @@
 #include "RanseurOISubsystem.h"
 #include "Ranseur.h"
 #include "ranseurrobotsubsystem/RanseurRobotSubsystem.h"
-#include <oi/DriverGamepadRumbleAction.h>
 #include "ranseurids.h"
+
+#include <oi/DriverGamepadRumbleAction.h>
 #include <Robot.h>
 #include <TeleopController.h>
 #include <SettingsParser.h>
@@ -22,9 +23,32 @@ namespace xero {
             // Bind keys joystick buttons and axis to meaningful OI items
             //
             bindOI() ; 
+            initialize() ;
         }
 
         RanseurOIDevice::~RanseurOIDevice() {
+        }
+
+        void RanseurOIDevice::initialize() {
+            //
+            // Get button numbers
+            //
+            size_t collect_b = getSubsystem().getRobot().getSettingsParser().getDouble("hw:oi:collect") ;
+            size_t dump_b = getSubsystem().getRobot().getSettingsParser().getDouble("hw:oi:dump") ;
+            size_t turtle_b = getSubsystem().getRobot().getSettingsParser().getDouble("hw:oi:turtle") ;
+            size_t eject_b = getSubsystem().getRobot().getSettingsParser().getDouble("hw:oi:eject") ;
+            size_t spare1_b = getSubsystem().getRobot().getSettingsParser().getDouble("hw:oi:spare1") ;
+            size_t spare2_b = getSubsystem().getRobot().getSettingsParser().getDouble("hw:oi:spare2") ;
+
+            //
+            // Actions
+            //
+            collect_ = mapButton(collect_b, OIButton::ButtonType::LowToHigh) ;        // Push button
+            dump_ = mapButton(dump_b, OIButton::ButtonType::LowToHigh) ;              // Push button
+            turtle_ = mapButton(turtle_b, OIButton::ButtonType::LowToHigh) ;          // Push button
+            eject_ = mapButton(eject_b, OIButton::ButtonType::LowToHigh) ;            // Push button
+            spare1_ = mapButton(spare1_b, OIButton::ButtonType::LowToHigh) ;          // Push button
+            spare2_ = mapButton(spare2_b, OIButton::ButtonType::LowToHigh) ;          // Push button
         }
 
         void RanseurOIDevice::generateActions(SequenceAction &seq){
@@ -41,8 +65,17 @@ namespace xero {
 
             std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
             automode_ = mapAxisScale(6, mapping) ;
-            //int button ;
-            //SettingsParser &settings = getSubsystem().getRobot().getSettingsParser() ;  
+            int button ;
+            SettingsParser &settings = getSubsystem().getRobot().getSettingsParser() ;
+
+            button = settings.getInteger("oi:collect") ;
+            collect_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            dump_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            turtle_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            eject_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            spare1_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
+            spare2_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;    
+        
         }
 
         //
