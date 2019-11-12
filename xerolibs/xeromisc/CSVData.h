@@ -27,16 +27,10 @@ namespace xero {
                 };
 
                 /// @brief create a new string data item
-                CSVItem(std::string value): type_(Type::String) { new (&value_.stringValue) std::string(value); }
+                CSVItem(std::string value): type_(Type::String), stringValue_(value) {}
 
                 /// @brief create a new double data item
-                CSVItem(double value): type_(Type::Double) { value_.doubleValue = value; }
-
-                /// @brief create a new data item that is a copy of an existing item
-                CSVItem(const CSVItem &other);
-
-                /// @brief destroy the string item
-                ~CSVItem() { if (isString()) value_.stringValue.~basic_string(); }
+                CSVItem(double value): type_(Type::Double), doubleValue_(value) {}
 
                 /// @brief returns the type of the data item
                 /// @returns the type of the data item
@@ -51,24 +45,19 @@ namespace xero {
                 bool isString() const { return type_ == Type::String; }
 
                 /// @brief return the double value for the data item
-                /// This method asserts if the type if not double
+                /// This method asserts if the type is not double
                 /// @returns the double value for the data item
                 double getDouble() const;
 
                 /// @brief return the string value for the data item
-                /// This method asserts if the type if not string
+                /// This method asserts if the type is not string
                 /// @returns the string value for the data item
                 std::string getString() const;
                 
             private:
-                union Value {
-                    double doubleValue;
-                    std::string stringValue;
-
-                    Value() {}
-                    ~Value() {}
-                } value_;
                 Type type_;
+                double doubleValue_;
+                std::string stringValue_;
             };
 
             CSVData(const std::string & fileOrData, bool data) ;

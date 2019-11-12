@@ -5,18 +5,12 @@ namespace xero {
     namespace misc {
         double CSVData::CSVItem::getDouble() const { 
             assert(type_ == Type::Double);
-            return value_.doubleValue;
+            return doubleValue_;
         }
         std::string CSVData::CSVItem::getString() const { 
             assert(type_ == Type::String);
-            return value_.stringValue; 
+            return stringValue_;
         }
-
-        CSVData::CSVItem::CSVItem(const CSVItem &other): type_(other.type_) {
-            if (type_ == Type::Double) value_.doubleValue = other.value_.doubleValue;
-            else new (&value_.stringValue) std::string(other.value_.stringValue);
-        }
-
         CSVData::CSVData(const std::string & fileOrData, bool data)
         {
             if (!data)
