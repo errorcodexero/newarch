@@ -20,7 +20,6 @@ namespace xero {
             virtual void generateActions(xero::base::SequenceAction &seq) ;
 
         private:
-            void bindOI() ;
             void initialize() ;
         private:
             size_t automode_ ;

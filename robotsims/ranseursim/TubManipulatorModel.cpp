@@ -21,7 +21,7 @@ namespace xero {
                 collector_motor_channel_ = simbase.getSettingsParser().getInteger("hw:tubmanipulator:collector:motor") ;
 
                 wrist_degrees_per_volt_per_sec_ = WristDegreesPerVoltPerSecond ;
-                arm_degress_per_volt_per_sec_ = ArmDegreesPerVoltPerSecond ;
+                arm_degrees_per_volt_per_sec_ = ArmDegreesPerVoltPerSecond ;
 
                 arm_motor_power_ = 0.0 ;
                 wrist_motor_power_ = 0.0 ;
@@ -31,6 +31,9 @@ namespace xero {
                 collector_sensor_value_ = false ;
                 collector_state_ = false ;
                 has_tub_ = false ;
+
+                arm_encoder_ = nullptr ;
+                wrist_encoder_ = nullptr ;
             }
 
             TubManipulatorModel::~TubManipulatorModel() {
@@ -53,8 +56,16 @@ namespace xero {
 
                 lines.push_back("  ArmMotor: " + std::to_string(arm_motor_power_)) ;
                 lines.push_back("  ArmAngle: " + std::to_string(arm_angle_)) ;
+                if (arm_encoder_ != nullptr)
+                    lines.push_back("  ArmEncoder: " + std::to_string(arm_encoder_->GetVoltage())) ;
+                else
+                    lines.push_back("  ArmEncoder: ") ;
                 lines.push_back("  WristMotor: " + std::to_string(wrist_motor_power_)) ;
                 lines.push_back("  WristAngle: " + std::to_string(wrist_angle_)) ;
+                if (wrist_encoder_ != nullptr)
+                    lines.push_back("  WristEncoder: " + std::to_string(wrist_encoder_->GetVoltage())) ;
+                else
+                    lines.push_back("  WristEncoder: ") ;                
                 lines.push_back("  CollMotor: " + std::to_string(collector_motor_power_)) ;
                 line = "  CollArms: " ;
                 line += (collector_state_ ? "OPEN" : "CLOSED") ;
@@ -70,6 +81,23 @@ namespace xero {
             }
 
             void TubManipulatorModel::run(double dt) {
+                arm_angle_ += arm_degrees_per_volt_per_sec_ * arm_motor_power_ * dt ;
+                if (arm_angle_ > ArmMaximumAngle)
+                    arm_angle_ = ArmMaximumAngle ;
+                else if (arm_angle_ < ArmMinimumAngle)
+                    arm_angle_ = ArmMinimumAngle ;
+
+                wrist_angle_ += wrist_degrees_per_volt_per_sec_ * wrist_motor_power_ * dt ;
+                if (wrist_angle_ > WristMaxAngle)
+                    wrist_angle_ = WristMaxAngle ;
+                else if (wrist_angle_ < WristMinAngle)
+                    wrist_angle_ = WristMinAngle ;
+
+                if (arm_encoder_ != nullptr)
+                    arm_encoder_->SimulatorSetVoltage(arm_angle_ / 360.0 * 1024.0) ;
+
+                if (wrist_encoder_ != nullptr)
+                    wrist_encoder_->SimulatorSetVoltage(arm_angle_ / 360.0 * 1024.0) ;
             }
 
             void TubManipulatorModel::setArmEncoder() {

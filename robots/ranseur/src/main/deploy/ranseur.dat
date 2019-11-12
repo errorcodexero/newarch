@@ -179,9 +179,9 @@ driver:zerolevel                                                0.1
 # Variables for the OI
 ###################################################################################################
 
-hw:oi:collect                                                      1
-hw:oi:dump                                                         2
-hw:oi:turtle                                                       3
-hw:oi:eject                                                        4
-hw:oi:spare1                                                       5
-hw:oi:spare2                                                       6
+oi:collect                                                      1
+oi:dump                                                         2
+oi:turtle                                                       3
+oi:eject                                                        4
+oi:spare1                                                       5
+oi:spare2                                                       6

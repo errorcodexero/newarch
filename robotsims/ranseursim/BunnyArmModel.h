@@ -9,7 +9,6 @@
 namespace xero  {
     namespace sim {
         namespace ranseur {
-
             class BunnyArmModel : public SubsystemModel
             {
             public:
@@ -32,6 +31,7 @@ namespace xero  {
                 /// \param input the digital input to add
                 virtual void addDevice(frc::Solenoid *input) ;
 
+                /// \brief Generate display information for the model
                 void generateDisplayInformation(std::list<std::string> &lines) ;
 
             private:

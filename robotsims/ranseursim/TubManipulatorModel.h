@@ -78,7 +78,7 @@ namespace xero  {
                 frc::AnalogInput *wrist_encoder_ ;
 
                 double wrist_degrees_per_volt_per_sec_ ;
-                double arm_degress_per_volt_per_sec_ ;
+                double arm_degrees_per_volt_per_sec_ ;
 
                 double arm_motor_power_ ;
                 double wrist_motor_power_ ;

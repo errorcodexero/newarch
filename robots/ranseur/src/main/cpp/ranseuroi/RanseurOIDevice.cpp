@@ -22,7 +22,6 @@ namespace xero {
             //
             // Bind keys joystick buttons and axis to meaningful OI items
             //
-            bindOI() ; 
             initialize() ;
         }
 
@@ -30,15 +29,23 @@ namespace xero {
         }
 
         void RanseurOIDevice::initialize() {
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_RANSEUR_OI) ;
+            log << "OI: initializing button/axis mapping" ;
+            log.endMessage() ;
+
+            std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
+            automode_ = mapAxisScale(6, mapping) ;
+
             //
             // Get button numbers
             //
-            size_t collect_b = getSubsystem().getRobot().getSettingsParser().getDouble("hw:oi:collect") ;
-            size_t dump_b = getSubsystem().getRobot().getSettingsParser().getDouble("hw:oi:dump") ;
-            size_t turtle_b = getSubsystem().getRobot().getSettingsParser().getDouble("hw:oi:turtle") ;
-            size_t eject_b = getSubsystem().getRobot().getSettingsParser().getDouble("hw:oi:eject") ;
-            size_t spare1_b = getSubsystem().getRobot().getSettingsParser().getDouble("hw:oi:spare1") ;
-            size_t spare2_b = getSubsystem().getRobot().getSettingsParser().getDouble("hw:oi:spare2") ;
+            size_t collect_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:collect") ;
+            size_t dump_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:dump") ;
+            size_t turtle_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:turtle") ;
+            size_t eject_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:eject") ;
+            size_t spare1_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:spare1") ;
+            size_t spare2_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:spare2") ;
 
             //
             // Actions
@@ -52,30 +59,6 @@ namespace xero {
         }
 
         void RanseurOIDevice::generateActions(SequenceAction &seq){
-        }
-
-        //
-        // Map buttons, switches, joysticks, axis, etc. to things meaningful to the OI
-        //
-        void RanseurOIDevice::bindOI() {
-            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
-            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_RANSEUR_OI) ;
-            log << "OI: initializing button/axis mapping" ;
-            log.endMessage() ;
-
-            std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
-            automode_ = mapAxisScale(6, mapping) ;
-            int button ;
-            SettingsParser &settings = getSubsystem().getRobot().getSettingsParser() ;
-
-            button = settings.getInteger("oi:collect") ;
-            collect_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
-            dump_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
-            turtle_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
-            eject_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
-            spare1_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;
-            spare2_ = mapButton(button, OIButton::ButtonType::LowToHigh) ;    
-        
         }
 
         //
