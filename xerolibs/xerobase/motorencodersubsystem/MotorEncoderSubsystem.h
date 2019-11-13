@@ -1,11 +1,11 @@
 #pragma once
 
-#include <frc/Encoder.h>
-
-#include "singlemotorsubsystem/SingleMotorSubsystem.h" 
+#include <Speedometer.h>
+#include "singlemotorsubsystem/SingleMotorSubsystem.h"
 
 namespace xero {
     namespace base {
+        class Encoder;
         class MotorEncoderSubsystem : public SingleMotorSubsystem {
             friend class MotorEncoderGoToAction;
         public:
@@ -21,21 +21,18 @@ namespace xero {
             virtual bool canAcceptAction(xero::base::ActionPtr action);
             virtual void computeState();
 
-            double getPosition() { return position_; }
+            double getPosition() { return speedometer_.getDistance(); }
+
+            xero::misc::Speedometer &getSpeedometer() { return speedometer_; }
+
+            void calibrate();
+
+            void reset() override;
 
         private:
-            std::shared_ptr<frc::Encoder> encoder_;
+            std::shared_ptr<Encoder> encoder_;
 
-            double ticksToUnits(int ticks);
-            
-            // The number of units per encoder tick.
-            double unitsPerTick_;
-
-            // The encoder value corresponding to zero units.
-            int zeroTicks_;
-
-            int encoderValue_;
-            double position_;
+            xero::misc::Speedometer speedometer_ = xero::misc::Speedometer(/*samples=*/2);
 
             const std::string configName_;
             uint64_t msg_id_;

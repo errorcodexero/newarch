@@ -3,6 +3,8 @@
 #include "MotorEncoderSubsystem.h"
 #include "MotorEncoderSubsystemAction.h"
 
+#include "Encoder.h"
+
 namespace xero {
     namespace base {
         MotorEncoderSubsystem::MotorEncoderSubsystem(
@@ -12,18 +14,8 @@ namespace xero {
             uint64_t id
         ): SingleMotorSubsystem(parent, name, config + ":motor", id), configName_(name), msg_id_(id) {
             
-            auto &settings = getRobot().getSettingsParser();
-            encoder_ = std::make_shared<frc::Encoder>(
-                settings.getInteger(config + ":encoder:1"),
-                settings.getInteger(config + ":encoder:2")
-            );
-
-            unitsPerTick_ = settings.getDouble(config + ":encoder:units_per_tick");
-            zeroTicks_ = settings.getInteger(config + ":encoder:zero_ticks");
-        }
-
-        double MotorEncoderSubsystem::ticksToUnits(int ticks) {
-            return (ticks - zeroTicks_) * unitsPerTick_;
+            auto &robot = getRobot(); 
+            encoder_ = std::make_shared<Encoder>(robot.getMessageLogger(), robot.getSettingsParser(), config + ":encoder");
         }
 
         bool MotorEncoderSubsystem::canAcceptAction(xero::base::ActionPtr action) {
@@ -37,8 +29,11 @@ namespace xero {
         void MotorEncoderSubsystem::computeState() {
             SingleMotorSubsystem::computeState();
             
-            encoderValue_ = encoder_->Get();
-            position_ = ticksToUnits(encoderValue_);
+            speedometer_.update(encoder_->getPosition(), getRobot().getDeltaTime());
+        }
+
+        void MotorEncoderSubsystem::reset() {
+            encoder_->reset();
         }
     }
 }
