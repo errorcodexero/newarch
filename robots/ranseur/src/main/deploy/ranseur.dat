@@ -21,13 +21,11 @@ hw:tubcollector:tubsensor                                       4               
 
 hw:tubarm:motor:canid                                           7
 hw:tubarm:motor:type                                            "victor_spx"
-hw:tubarm:encoder:1                                             0
-hw:tubarm:encoder:2                                             -1
+hw:tubarm:encoder:analog                                        0
 
 hw:tubwrist:motor:canid                                         8
 hw:tubwrist:motor:type                                          "victor_spx"
-hw:tubwrist:encoder:1                                           1
-hw:tubwrist:encoder:2                                           -1
+hw:tubwrist:encoder:analog                                      1
 
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2

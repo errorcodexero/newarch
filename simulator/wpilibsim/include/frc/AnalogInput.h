@@ -6,21 +6,11 @@ namespace frc
 {
     class AnalogInput : public xero::sim::SimulatedObject {
     public:
-        AnalogInput(int index) {
-            index_ = index ;
-        }
-
-        int SimulatorGetChannel() const {
-            return index_ ;
-        }
-
-        void SimulatorSetVoltage(double v) {
-            voltage_ = v ;
-        }
-
-        double GetVoltage() {
-            return voltage_ ;
-        }
+        AnalogInput(int index) ;
+        virtual ~AnalogInput() ;
+        int SimulatorGetChannel() const  ;
+        void SimulatorSetVoltage(double v)  ;
+        double GetVoltage()  ;
 
     private:
         int index_ ;

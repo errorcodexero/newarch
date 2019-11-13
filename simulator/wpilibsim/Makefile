@@ -1,6 +1,8 @@
 TOPDIR=../..
 
 SOURCES = \
+	cpp/AnalogInput.cpp\
+	cpp/Counter.cpp\
 	cpp/DigitalInput.cpp\
 	cpp/DriverStation.cpp\
 	cpp/Encoder.cpp\
