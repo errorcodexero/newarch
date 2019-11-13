@@ -93,21 +93,24 @@ namespace xero {
                 else if (wrist_angle_ < WristMinAngle)
                     wrist_angle_ = WristMinAngle ;
 
-                if (arm_encoder_ != nullptr)
-                    arm_encoder_->SimulatorSetVoltage(arm_angle_ / 360.0 * 1024.0) ;
-
-                if (wrist_encoder_ != nullptr)
-                    wrist_encoder_->SimulatorSetVoltage(arm_angle_ / 360.0 * 1024.0) ;
+                setArmEncoder() ;
+                setWristEncoder() ;
             }
 
             void TubManipulatorModel::setArmEncoder() {
-                double v = arm_angle_ / 360.0  ;
-                arm_encoder_->SimulatorSetVoltage(v) ;
+                if (arm_encoder_ != nullptr)
+                {
+                    double v = arm_angle_ / 360.0  ;
+                    arm_encoder_->SimulatorSetVoltage(v) ;
+                }
             }
 
             void TubManipulatorModel::setWristEncoder() {
-                double v = wrist_angle_ / 360.0 ;
-                wrist_encoder_->SimulatorSetVoltage(v) ;                
+                if (wrist_encoder_ != nullptr)
+                {
+                    double v = wrist_angle_ / 360.0 ;
+                    wrist_encoder_->SimulatorSetVoltage(v) ;                
+                }
             }
 
             void TubManipulatorModel::inputChanged(SimulatedObject *obj) {
