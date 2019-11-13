@@ -2,6 +2,8 @@
 
 #include <ctre/Phoenix.h>
 #include "Encoder.h"
+#include "AnalogInput.h"
+#include "Counter.h"
 #include "DigitalInput.h"
 #include "DriverStation.h"
 #include "Solenoid.h"
@@ -36,6 +38,12 @@ namespace xero {
 
             virtual void addDevice(frc::Encoder *encoder) {                
             }
+
+            virtual void addDevice(frc::AnalogInput *input) {                
+            }            
+
+            virtual void addDevice(frc::Counter *input) {                
+            }            
 
             virtual void addDevice(frc::DigitalInput *input) {                
             }

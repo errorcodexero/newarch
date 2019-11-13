@@ -123,12 +123,24 @@ namespace xero {
             if (vicspx != nullptr) {
                 for(auto model : getModels())
                     model->addDevice(vicspx) ;
-            }            
+            }   
 
-            DigitalInput *input = dynamic_cast<DigitalInput *>(device) ;
-            if (input != nullptr) {
+            AnalogInput *ainput = dynamic_cast<AnalogInput *>(device) ;
+            if (ainput != nullptr) {
                 for(auto model : getModels())
-                    model->addDevice(input) ;                 
+                    model->addDevice(ainput) ;                 
+            }
+
+            Counter *cntr = dynamic_cast<Counter *>(device) ;
+            if (cntr != nullptr) {
+                for(auto model : getModels())
+                    model->addDevice(cntr) ;                 
+            }                   
+
+            DigitalInput *dinput = dynamic_cast<DigitalInput *>(device) ;
+            if (dinput != nullptr) {
+                for(auto model : getModels())
+                    model->addDevice(dinput) ;                 
             }               
 
             Encoder *encoder = dynamic_cast<Encoder *>(device) ;

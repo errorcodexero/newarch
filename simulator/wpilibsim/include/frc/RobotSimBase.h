@@ -1,5 +1,7 @@
 #pragma once
 #include "DigitalInput.h"
+#include "AnalogInput.h"
+#include "Counter.h"
 #include "DriverStation.h"
 #include "Encoder.h"
 #include "Solenoid.h"
