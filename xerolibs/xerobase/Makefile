@@ -60,6 +60,7 @@ SOURCES = \
 	motors/SparkMaxMotorController.cpp\
 	motorencodersubsystem/MotorEncoderSubsystem.cpp\
 	motorencodersubsystem/MotorEncoderGoToAction.cpp\
+    Encoder.cpp\
 	$(SIMSOURCES)
 
 TARGET=xerobase
