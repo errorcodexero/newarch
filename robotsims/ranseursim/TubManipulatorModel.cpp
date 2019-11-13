@@ -101,14 +101,12 @@ namespace xero {
             }
 
             void TubManipulatorModel::setArmEncoder() {
-                std::lock_guard<std::mutex> lock(getLockMutex()) ;
-                double v = arm_angle_ / 360.0 * 1024 ;
+                double v = arm_angle_ / 360.0  ;
                 arm_encoder_->SimulatorSetVoltage(v) ;
             }
 
             void TubManipulatorModel::setWristEncoder() {
-                std::lock_guard<std::mutex> lock(getLockMutex()) ;
-                double v = wrist_angle_ / 360.0 * 1024 ;
+                double v = wrist_angle_ / 360.0 ;
                 wrist_encoder_->SimulatorSetVoltage(v) ;                
             }
 
