@@ -4,6 +4,7 @@
 #include "TubManipulatorSubsystem.h"
 #include "TubManipulatorAction.h"
 #include <actions/Action.h>
+#include <actions/ParallelAction.h>
 
 namespace xero {
     namespace ranseur {
@@ -11,7 +12,7 @@ namespace xero {
         class TubManipulatorCollectAction : public xero::ranseur::TubManipulatorAction {
   
         public:
-            TubManipulatorCollectAction(TubManipulator &) ;
+            TubManipulatorCollectAction(TubManipulatorSubsystem &) ;
             virtual ~TubManipulatorCollectAction() ;
 
             virtual void start() ;
@@ -23,24 +24,9 @@ namespace xero {
             }
                          
         private:
-            enum class State
-            { 
-                reset,              // Base state when not collecting
-                waiting,            // Waiting to collect
-                grabbing,           // Running the intake to ensure we complete collection
-                clamp,              // Clamping the grabber down and stopping the intake
-                cancel
-            } ; 
-
-            std::string toString(State st) ;
-
             static std::string action_name ;
+            xero::base::ParallelAction parallel_ ;
 
-            double grab_time_ ;
-            double start_ ;
-            State state_ ;
-            double speed_ ;
-            double delay_ ;
-        } ;
+        };
     }
 }

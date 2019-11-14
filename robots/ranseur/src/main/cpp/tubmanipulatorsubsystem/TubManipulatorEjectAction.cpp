@@ -12,7 +12,7 @@ namespace xero {
 
         std::string TubManipulatorEjectAction::action_name("TubManipulatorEjectAction");
 
-        TubManipulatorEjectAction::TubManipulatorEjectAction(TubManipulator &tubm) : TubManipulatorAction(tubm) {
+        TubManipulatorEjectAction::TubManipulatorEjectAction(TubManipulatorSubsystem &tubm) : TubManipulatorAction(tubm) {
         }
 
         TubManipulatorEjectAction::~TubManipulatorEjectAction() {            

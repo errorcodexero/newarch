@@ -11,7 +11,7 @@ namespace xero {
         class TubManipulatorEjectAction : public xero::ranseur::TubManipulatorAction {
         public:
 
-            TubManipulatorEjectAction(TubManipulator &) ;
+            TubManipulatorEjectAction(TubManipulatorSubsystem &) ;
             virtual ~TubManipulatorEjectAction() ;
 
             virtual void start() ;
