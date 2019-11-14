@@ -37,3 +37,4 @@ if [ legal == 'NO' ]; then
     echo "Invalid mode, must be 'auto' or 'teleop'"
     exit 1
 fi
+
