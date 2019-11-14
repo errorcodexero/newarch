@@ -29,7 +29,7 @@ namespace xero {
             bunnyArm_ = std::make_shared<BunnyArm>(this);
             addChild(bunnyArm_);
        
-            manipulator_ = std::make_shared<TubManipulatorSubsystem>(robot) ;
+            manipulator_ = std::make_shared<TubManipulatorSubsystem>(this) ;
             addChild(manipulator_) ;                 
         }
 

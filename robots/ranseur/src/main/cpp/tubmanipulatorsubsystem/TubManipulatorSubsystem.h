@@ -8,13 +8,14 @@
 #include "tubarm/TubArm.h"
 #include "tubwrist/TubWrist.h"
 #include <actions/Action.h>
+#include "Subsystem.h"
 
 namespace xero {
     namespace ranseur {
 
-        class TubManipulatorSubsystem : public xero::base::RobotSubsystem {
+        class TubManipulatorSubsystem : public xero::base::Subsystem {
         public:
-            TubManipulatorSubsystem(xero::base::Robot &robot) ;
+            TubManipulatorSubsystem(xero::base::Subsystem* parent) ;
             virtual ~TubManipulatorSubsystem() {
             }
 

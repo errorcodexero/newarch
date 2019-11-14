@@ -4,6 +4,7 @@
 #include "TubManipulatorSubsystem.h"
 #include "TubManipulatorAction.h"
 #include <actions/Action.h>
+#include <actions/ParallelAction.h>
 
 namespace xero {
     namespace ranseur {
@@ -11,7 +12,7 @@ namespace xero {
         class TubManipulatorDumpAction : public xero::ranseur::TubManipulatorAction {
         public:
 
-            TubManipulatorDumpAction(TubManipulator &) ;
+            TubManipulatorDumpAction(TubManipulatorSubsystem &) ;
             virtual ~TubManipulatorDumpAction() ;
 
             virtual void start() ;
@@ -24,6 +25,7 @@ namespace xero {
 
         private:
             static std::string action_name ; 
+            xero::base::ParallelAction parallel_ ;
 
         };
     }

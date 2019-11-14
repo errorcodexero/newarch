@@ -59,6 +59,11 @@ namespace xero {
         }
 
         void RanseurOIDevice::generateActions(SequenceAction &seq){
+
+                /// TBD ///
+                //actions and buttons corresponding with the actions
+                //actions found on wiki under tub manipulator subsystem under ransur (robot)
+
         }
 
         //

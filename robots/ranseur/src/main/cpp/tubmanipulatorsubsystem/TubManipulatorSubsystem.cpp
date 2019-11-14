@@ -6,14 +6,15 @@
 #include "tubarm/TubArm.h"
 #include "tubwrist/TubWrist.h"
 #include <actions/Action.h>
+#include "Subsystem.h"
 
-//using namespace xero::ranseur::Collector ;
+
 using namespace xero::base ;
 using namespace xero::misc ;
 
 namespace xero {
     namespace ranseur {
-        TubManipulatorSubsystem::TubManipulatorSubsystem(Robot &robot) : RobotSubsystem(robot, "ranseur") {
+        TubManipulatorSubsystem::TubManipulatorSubsystem(xero::base::Subsystem* parent) : Subsystem(parent, "tubmanipulator") {
 
             tubcollector_ = std::make_shared<TubCollector>(this) ;
             addChild(tubcollector_) ;        
