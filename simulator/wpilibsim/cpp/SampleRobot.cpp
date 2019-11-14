@@ -45,6 +45,8 @@ namespace frc
         double now ;
         std::chrono::microseconds delay(100) ;
 
+        std::cout << "InternalControl: started" << std::endl;
+
         if (m_test_period > 0.0) {
             setRobotMode(SampleRobot::RobotMode::Test) ;
             setEnabled(true) ;
@@ -57,28 +59,35 @@ namespace frc
             setEnabled(false);
             setRobotMode(SampleRobot::RobotMode::Autonomous);
 
+            std::cout << "InternalControl: waiting to start autonomous" << std::endl;
             now = frc::Timer::GetFPGATimestamp() ;
             while (frc::Timer::GetFPGATimestamp() < now + m_start_delay)
                 std::this_thread::sleep_for(delay) ;
 
+            std::cout << "InternalControl: starting autonomous" << std::endl;
             setEnabled(true);
 
             now = frc::Timer::GetFPGATimestamp() ;
             while (frc::Timer::GetFPGATimestamp() < now + m_auto_period && !m_auto_done)
                 std::this_thread::sleep_for(delay) ;
 
+            std::cout << "InternalControl: stopping autonomous" << std::endl;
             setEnabled(false);
             now = frc::Timer::GetFPGATimestamp() ;      
             while (frc::Timer::GetFPGATimestamp() < now + 1)
                 std::this_thread::sleep_for(delay) ;
-
+            
+            std::cout << "InternalControl: starting teleop" << std::endl;
             setRobotMode(SampleRobot::RobotMode::Operator);
             setEnabled(true);
+
 
             now = frc::Timer::GetFPGATimestamp() ;
             while (frc::Timer::GetFPGATimestamp() < now + m_teleop_period)
                 std::this_thread::sleep_for(delay) ;
         }
+
+        std::cout << "InternalControl: finishing" << std::endl;
 
         setRobotMode(SampleRobot::RobotMode::Finished) ;
         setEnabled(true);
@@ -88,6 +97,8 @@ namespace frc
             std::this_thread::sleep_for(delay) ;
 
         m_running = false;
+
+        std::cout << "InternalControl: done" << std::endl;
     }
 
     bool SampleRobot::ParseDoubleArg(size_t index, double &value, const char *flag_p)
@@ -288,11 +299,13 @@ namespace frc
         RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
         sim.start(this) ;
 
+        std::cout << "StartCompetition: RobotInit" << std::endl;
         //
         // Initialize the robot hardware
         //
         RobotInit();
-
+        
+        std::cout << "StartCompetition: RobotMain" << std::endl;
         //
         // Allow a derived class to take over the main loop
         //
@@ -308,28 +321,34 @@ namespace frc
         // we ask the robot to handle specific modes
         //
         if (!m_robotMainOverridden) {
+            std::cout << "StartCompetition: !m_RobotMainOverridden" << std::endl;
             bool first = true ;
             m_running = true;
             while (m_running) {
                 if (IsDisabled()) {
+                    std::cout << "StartCompetition: disabled" << std::endl;
                     Disabled();
                     while (IsDisabled() && !IsFinished());
                 }
                 else if (IsAutonomous()) {
+                    std::cout << "StartCompetition: autonomous" << std::endl;
                     Autonomous();
                     m_auto_done = true;
                     while (IsAutonomous() && IsEnabled());
                 }
                 else if (IsTest()) {
+                    std::cout << "StartCompetition: test" << std::endl;
                     Test();
                     while (IsTest() && IsEnabled());
                 }
                 else if (IsOperatorControl()) {
+                    std::cout << "StartCompetition: teleop" << std::endl;
                     OperatorControl();
                     while (IsOperatorControl() && IsEnabled());
                 }
                 else if (m_mode == RobotMode::Finished) {
                     if (first) {
+                        std::cout << "StartCompetition: finished" << std::endl;
                         first = false ;
                     }
                 }
@@ -337,7 +356,8 @@ namespace frc
                     std::cout << "BadState" << std::endl ;
                 }
             }
-
+            
+            std::cout << "StartCompetition: done" << std::endl;
             sim.stop() ;            
         }
     }
