@@ -16,7 +16,8 @@
 namespace xero {
     namespace ranseur {
 
-        class TubManipulatorSubsystem : public xero::base::Subsystem {
+        class TubManipulatorSubsystem : public xero::base::Subsystem {      
+            ///"xero::base::Subsystem" -> derived from subsystem, not the robot (as was before Nov 13,2019) , b/c it isnt the "highest" subsytem -> that would be RanseurRobotSubsystem
         public:
             TubManipulatorSubsystem(xero::base::Subsystem* parent) ;
             virtual ~TubManipulatorSubsystem() {
