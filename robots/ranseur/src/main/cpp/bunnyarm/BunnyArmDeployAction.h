@@ -20,7 +20,7 @@ namespace xero {
             virtual ~BunnyArmDeployAction() {                
             }
 
-            virtual void start() {                
+            virtual void start() { 
                 isDone_ = false ;
                 BunnyArm &bunnyArm = getBunnyArm() ;
                 bunnyArm.solenoid_->Set(raise_);

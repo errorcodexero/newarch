@@ -1,7 +1,14 @@
 #include "RanseurRobotSubsystem.h"
 #include "ranseurids.h"
+#include "tubcollector/TubCollector.h"
+#include "tubarm/TubArm.h"
+#include "tubwrist/TubWrist.h"
 #include <Robot.h>
 #include <list>
+
+#include <actions/Action.h>
+#include "Subsystem.h"
+
 
 using namespace xero::base ;
 using namespace xero::misc ;

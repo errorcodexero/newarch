@@ -10,6 +10,9 @@
 #include <actions/Action.h>
 #include "Subsystem.h"
 
+#include "bunnyarm/BunnyArm.h"
+#include <tubmanipulatorsubsystem/TubManipulatorSubsystem.h>
+
 namespace xero {
     namespace ranseur {
 
