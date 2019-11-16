@@ -185,6 +185,7 @@ namespace xero {
 
         void RobotSimBase::incrCurrentTime(double incr) {
             std::lock_guard<std::mutex> lock(getLockMutex()) ;
+            std::cout << "incrCurrentTime: " << incr << std::endl;
             current_time_ += incr ;            
         }
 
@@ -290,6 +291,7 @@ namespace xero {
         // the robot thread.
         //
         void RobotSimBase::simLoop() {
+            std::cout << "simLoop: starting" << std::endl;
             double last = getTime() ;
             int64_t microloop = static_cast<int64_t>(sim_time_step_ * 1000000 * speed_) ;
             incrCurrentTime(sim_time_step_) ;
@@ -298,6 +300,7 @@ namespace xero {
                 model->init() ;         
 
             while (running_) {
+            std::cout << "simLoop: running" << std::endl;
                 auto start = std::chrono::high_resolution_clock::now() ;
                 double now = getTime() ;
 
@@ -338,6 +341,7 @@ namespace xero {
                 auto dur = std::chrono::duration_cast<std::chrono::microseconds>(elapsed) ;
 
                 int64_t count = microloop - dur.count() ;
+                std::cout << "simLoop sleeping: " << count << std::endl;
                 if (count > 0)
                     std::this_thread::sleep_for(std::chrono::microseconds(count)) ;
             }
