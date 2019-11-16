@@ -12,7 +12,7 @@ using namespace xero::misc ;
 namespace xero {
     namespace ranseur {
       
-    TubWrist::TubWrist(Subsystem *parent) : MotorEncoderSubsystem(parent, "tubwrist", "hw:tubwrist", MSG_GROUP_TUBWRIST) {
+    TubWrist::TubWrist(Subsystem *parent) : MotorEncoderSubsystem(parent, "tubwrist", "hw:tubwrist", MSG_GROUP_TUBWRIST, true) {
      
         }
 

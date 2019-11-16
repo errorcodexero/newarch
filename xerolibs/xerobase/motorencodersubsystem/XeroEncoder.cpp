@@ -1,4 +1,5 @@
 #include "XeroEncoder.h"
+#include <xeromath.h>
 
 using namespace xero::misc;
 
@@ -11,7 +12,9 @@ namespace xero {
             assert(0);
         }
 
-        XeroEncoder::XeroEncoder(MessageLogger &logger, SettingsParser &parser, const std::string &configName) {
+        XeroEncoder::XeroEncoder(MessageLogger &logger, SettingsParser &parser, const std::string &configName, bool angular) {
+            angular_ = angular;
+            
             std::string quadName = configName + ":quad";
             std::shared_ptr<frc::Encoder> quad;
             if (parser.isDefined(quadName + ":1") || parser.isDefined(quadName + ":2")) {
@@ -64,8 +67,11 @@ namespace xero {
         }
 
         double XeroEncoder::getPosition() {
-            if (quad_) return quadM_*quad_->Get() + quadB_;
-            else return getAbsolutePosition();
+            if (quad_) {
+                double result = quadM_*quad_->Get() + quadB_;
+                if (angular_) return xero::math::normalizeAngleDegrees(result);
+                else return result;
+            } else return getAbsolutePosition();
         }
 
         double XeroEncoder::getAbsolutePosition() {
@@ -74,7 +80,9 @@ namespace xero {
             else if (pwm_) pos = pwm_->GetPeriod();
             else assert(0 == "no absolute encoder found");
 
-            return absM_*pos + absB_;
+            double result = absM_*pos + absB_;
+            if (angular_) return xero::math::normalizeAngleDegrees(result);
+            else return result;
         }
 
         void XeroEncoder::reset() {

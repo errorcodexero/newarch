@@ -16,6 +16,7 @@ namespace xero {
             /// @param logger The message logger.
             /// @param settings The settings parser.
             /// @param configName The name of the encoder in the configuration file.
+            /// @param angular true if the encoder is angular
             /// XeroEncoder config syntax:
             /// To declare a quadrature encoder:
             /// configName:quad:1        1    # first pin
@@ -37,27 +38,36 @@ namespace xero {
             /// by an analog encoder XOR a PWM encoder.
             XeroEncoder(xero::misc::MessageLogger &logger,
                     xero::misc::SettingsParser &settings, 
-                    const std::string &configName
+                    const std::string &configName,
+                    bool angular = false
             );
 
             /// Creates a quadrature encoder.
             /// @param logger The message logger.
-            XeroEncoder(std::shared_ptr<frc::Encoder> quadratureEncoder
-            ): quad_(quadratureEncoder) {}
+            /// @param angular true if this encoder measures an angle
+            XeroEncoder(std::shared_ptr<frc::Encoder> quadratureEncoder, bool angular = false
+            ): angular_(angular), quad_(quadratureEncoder) {}
 
             /// Creates an analog encoder, or a quadrature encoder calibrated by an analog encoder.
             /// @param analogEncoder The analog input to which the encoder is connected.
             /// @param quadratureEncoder The quadrature encoder object, or \c nullptr to use just an analog encoder.
+            /// @param angular true if this encoder measures an angle
             XeroEncoder(std::shared_ptr<frc::AnalogInput> analogEncoder,
-                    std::shared_ptr<frc::Encoder>     quadratureEncoder = nullptr
-            ): quad_(quadratureEncoder), analog_(analogEncoder) {}
+                        std::shared_ptr<frc::Encoder>     quadratureEncoder = nullptr,
+                        bool angular = false
+            ): angular_(angular), quad_(quadratureEncoder), analog_(analogEncoder) {}
 
             /// Creates a PWM encoder, or a quadrature encoder calibrated by a PWM encoder.
             /// @param quadratureEncoder The quadrature encoder object, or \c nullptr to use just a PWM encoder.
             /// @param pwmEncoder A \c Counter measuring the signal from the PWM encoder.
+            /// @param angular true if this encoder measures an angle
             XeroEncoder(std::shared_ptr<frc::Counter> pwmEncoder,
-                    std::shared_ptr<frc::Encoder> quadratureEncoder = nullptr
-            ): quad_(quadratureEncoder), pwm_(pwmEncoder) { pwm_->SetSemiPeriodMode(true); }
+                        std::shared_ptr<frc::Encoder> quadratureEncoder = nullptr,
+                        bool angular = false
+            ): angular_(angular), quad_(quadratureEncoder), pwm_(pwmEncoder) { pwm_->SetSemiPeriodMode(true); }
+
+            /// Returns true if this is an angular encoder.
+            bool isAngular() { return angular_; };
 
             /// Returns the current position of this encoder.
             /// If this encoder uses both a quadrature and absolute encoder,
@@ -132,6 +142,8 @@ namespace xero {
                 absB_ = b;
             }
         private:
+            bool angular_;
+
             std::shared_ptr<frc::Encoder> quad_;    // A quadrature encoder, or nullptr.
             double quadM_ = 1;
             double quadB_ = 0;

@@ -9,13 +9,17 @@ namespace xero {
     namespace base {
         MotorEncoderSubsystem::MotorEncoderSubsystem(
             Subsystem *parent, 
-            const std::string &name, 
+            const std::string &name,
             const std::string config,
-            uint64_t id
+            uint64_t id,
+            bool angular
         ): SingleMotorSubsystem(parent, name, config + ":motor", id), configName_(name), msg_id_(id) {
             
             auto &robot = getRobot(); 
-            encoder_ = std::make_shared<XeroEncoder>(robot.getMessageLogger(), robot.getSettingsParser(), config + ":encoder");
+            encoder_ = std::make_shared<XeroEncoder>(robot.getMessageLogger(), 
+                                                     robot.getSettingsParser(), 
+                                                     config + ":encoder",
+                                                     angular);
         }
 
         bool MotorEncoderSubsystem::canAcceptAction(xero::base::ActionPtr action) {
