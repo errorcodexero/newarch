@@ -1,4 +1,4 @@
-#include "Encoder.h"
+#include "XeroEncoder.h"
 
 using namespace xero::misc;
 
@@ -11,7 +11,7 @@ namespace xero {
             assert(0);
         }
 
-        Encoder::Encoder(MessageLogger &logger, SettingsParser &parser, const std::string &configName) {
+        XeroEncoder::XeroEncoder(MessageLogger &logger, SettingsParser &parser, const std::string &configName) {
             std::string quadName = configName + ":quad";
             std::shared_ptr<frc::Encoder> quad;
             if (parser.isDefined(quadName + ":1") || parser.isDefined(quadName + ":2")) {
@@ -25,7 +25,10 @@ namespace xero {
                 );
                 
                 if (parser.isDefined(quadName + ":m")) quadM_ = parser.getDouble(quadName + ":m");
+                else invalidEncoder(logger, quadName, "m parameter is required");
+
                 if (parser.isDefined(quadName + ":b")) quadB_ = parser.getDouble(quadName + ":b");
+                else invalidEncoder(logger, quadName, "b parameter is required");
             } else quad = nullptr;
 
             std::string analogName = configName + ":analog";
@@ -34,7 +37,10 @@ namespace xero {
                 analog_ = std::make_shared<frc::AnalogInput>(parser.getInteger(analogName));
 
                 if (parser.isDefined(analogName + ":m")) absM_ = parser.getDouble(analogName + ":m");
+                else invalidEncoder(logger, analogName, "m parameter is required");
+
                 if (parser.isDefined(analogName + ":b")) absB_ = parser.getDouble(analogName + ":b");
+                else invalidEncoder(logger, analogName, "b parameter is required");
             } else analog_ = nullptr;
 
             std::string pwmName = configName + ":pwm";
@@ -44,7 +50,10 @@ namespace xero {
                 pwm_->SetSemiPeriodMode(true);
 
                 if (parser.isDefined(pwmName + ":m")) absM_ = parser.getDouble(pwmName + ":m");
+                else invalidEncoder(logger, pwmName, "m parameter is required");
+
                 if (parser.isDefined(pwmName + ":b")) absB_ = parser.getDouble(pwmName + ":b");
+                else invalidEncoder(logger, pwmName, "b parameter is required");
             } else pwm_ = nullptr;
 
             // validate configuration
@@ -54,12 +63,12 @@ namespace xero {
             }
         }
 
-        double Encoder::getPosition() {
+        double XeroEncoder::getPosition() {
             if (quad_) return quadM_*quad_->Get() + quadB_;
             else return getAbsolutePosition();
         }
 
-        double Encoder::getAbsolutePosition() {
+        double XeroEncoder::getAbsolutePosition() {
             double pos;
             if (analog_) pos = analog_->GetVoltage();
             else if (pwm_) pos = pwm_->GetPeriod();
@@ -68,14 +77,14 @@ namespace xero {
             return absM_*pos + absB_;
         }
 
-        void Encoder::reset() {
+        void XeroEncoder::reset() {
             if (quad_) {
                 quad_->Reset();
                 calibrate();
             }
         }
 
-        void Encoder::calibrate() {
+        void XeroEncoder::calibrate() {
             if (quad_ && (analog_ || pwm_)) {
                 quadB_ += getAbsolutePosition() - getPosition();
             }

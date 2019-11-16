@@ -71,11 +71,11 @@ namespace xero {
             startPosition_ = subsystem.getPosition();
             MessageLogger &logger = subsystem.getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
-            logger << "Motor/Encoder Target Distance: " << dist;
+            logger << "Motor/XeroEncoder Target Distance: " << dist;
             logger.endMessage();
 
             logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
-            logger << "Motor/Encoder Velocity Profile: " << profile_->toString() ;
+            logger << "Motor/XeroEncoder Velocity Profile: " << profile_->toString() ;
             logger.endMessage();
         }
 

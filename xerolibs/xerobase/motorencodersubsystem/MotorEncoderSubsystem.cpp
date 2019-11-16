@@ -3,7 +3,7 @@
 #include "MotorEncoderSubsystem.h"
 #include "MotorEncoderSubsystemAction.h"
 
-#include "Encoder.h"
+#include "XeroEncoder.h"
 
 namespace xero {
     namespace base {
@@ -15,7 +15,7 @@ namespace xero {
         ): SingleMotorSubsystem(parent, name, config + ":motor", id), configName_(name), msg_id_(id) {
             
             auto &robot = getRobot(); 
-            encoder_ = std::make_shared<Encoder>(robot.getMessageLogger(), robot.getSettingsParser(), config + ":encoder");
+            encoder_ = std::make_shared<XeroEncoder>(robot.getMessageLogger(), robot.getSettingsParser(), config + ":encoder");
         }
 
         bool MotorEncoderSubsystem::canAcceptAction(xero::base::ActionPtr action) {
