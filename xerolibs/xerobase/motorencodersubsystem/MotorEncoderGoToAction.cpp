@@ -23,12 +23,10 @@ namespace xero {
             threshold_ = settings.getDouble(config + ":threshold");
             
             profile_ = std::make_shared<TrapezoidalProfile>(
-                settings.getDouble(config + ":maxv"),
                 settings.getDouble(config + ":maxa"),
-                settings.getDouble(config + ":maxd")
+                settings.getDouble(config + ":maxd"),
+                settings.getDouble(config + ":maxv")
             );
-
-            holdCtrl_.initFromSettingsExtended(settings, config + ":hold");
         }
 
         void MotorEncoderGoToAction::start() {
@@ -71,25 +69,47 @@ namespace xero {
             startPosition_ = subsystem.getPosition();
             MessageLogger &logger = subsystem.getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
-            logger << "Motor/XeroEncoder Target Distance: " << dist;
+            logger << "Motor/Encoder Target Distance: " << dist;
             logger.endMessage();
 
             logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
-            logger << "Motor/XeroEncoder Velocity Profile: " << profile_->toString() ;
+            logger << "Motor/Encoder Velocity Profile: " << profile_->toString() ;
             logger.endMessage();
         }
 
         void MotorEncoderGoToAction::run() {
-            MotorEncoderSubsystem &subsystem = getSubsystem();
+            if (isDone_) return;
 
-            if (isDone_) {
-                double dist = target_ - subsystem.getPosition();
-                double out = holdCtrl_.getOutput(0, dist, subsystem.getRobot().getDeltaTime());
-                subsystem.setMotor(out);
+            auto &subsystem = getSubsystem();
+            auto &robot = subsystem.getRobot();
+
+            double dt = robot.getDeltaTime();
+            double elapsed = robot.getTime() - startTime_;
+            double position = subsystem.getPosition();
+            double traveled = position - startPosition_;
+            double remaining = target_ - position;
+
+            if (elapsed > profile_->getTotalTime()) {
+                 MessageLogger &logger = robot.getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, subsystem.getMsgID()) ;
+                logger << "LifterGoToHeightAction: action completed" ;
+                logger << ", remaining = " << remaining ;
+                logger.endMessage() ;
+
+                isDone_ = true ;
+                subsystem.setMotor(0.0);
                 return;
             }
-            
-            // TODO: finish
+
+            double targetDist = profile_->getDistance(elapsed);
+            double targetVel = profile_->getVelocity(elapsed);
+            double targetAcc = profile_->getAccel(elapsed);
+
+            double out = ctrl_->getOutput(
+                targetAcc, targetVel, targetDist, traveled, dt
+            );
+
+            subsystem.setMotor(out);
         }
     }
 }

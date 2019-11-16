@@ -37,7 +37,6 @@ namespace xero {
             double startPosition_ ;
             std::shared_ptr<xero::misc::PIDACtrl> ctrl_ ;
             std::shared_ptr<xero::misc::TrapezoidalProfile> profile_ ;
-            xero::misc::PIDCtrl holdCtrl_ ;
         };
     } 
 }
