@@ -6,9 +6,9 @@
 
 namespace xero {
     namespace ranseur {
-        class TubManipulatorSubsystem ;
+        class RanseurRobotSubsystem ;
 
-        class TubManipulatorAction : public xero::base::Action {
+        class RanseurSubsystemAction : public xero::base::Action {
 
         public:
 
@@ -25,19 +25,19 @@ namespace xero {
                 return action_.isDone();
             }
 
-            TubManipulatorAction(TubManipulatorSubsystem &tubmanipulatorsubsystem) : tubmanipulator_(tubmanipulatorsubsystem) {                
+            RanseurSubsystemAction(RanseurRobotSubsystem &ranseurrobotsubsystem) : subsystem_(ranseurrobotsubsystem) {
             }
 
-            virtual ~TubManipulatorAction() {                
+            virtual ~RanseurSubsystemAction() {                
             }
 
-            TubManipulatorSubsystem &getTubManipulator() {
-                return tubmanipulator_ ;
+            RanseurRobotSubsystem &getRanseurSubsystem() {
+                return subsystem_ ;
             }      
 
         private:
             xero::base::ParallelAction action_ ;    
-            TubManipulatorSubsystem &tubmanipulator_ ;
+            RanseurRobotSubsystem &subsystem_ ;
         };
     }
 }
