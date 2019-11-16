@@ -10,52 +10,52 @@
 
 namespace xero {
     namespace base {
-        class Encoder {
+        class XeroEncoder {
         public:
-            /// Creates an Encoder from the configuration file.
+            /// Creates an XeroEncoder from the configuration file.
             /// @param logger The message logger.
             /// @param settings The settings parser.
             /// @param configName The name of the encoder in the configuration file.
-            /// Encoder config syntax:
+            /// XeroEncoder config syntax:
             /// To declare a quadrature encoder:
             /// configName:quad:1        1    # first pin
             /// configName:quad:2        2    # second pin
-            /// configName:quad:m        100  # M constant (defaults to 1)
-            /// configName:quad:b        10   # B constant (defaults to 0)
+            /// configName:quad:m        100  # M constant
+            /// configName:quad:b        10   # B constant
             ///
             /// To declare an analog encoder:
             /// configName:analog        1     # pin
-            /// configName:analog:m      100   # M constant (defaults to 1)
-            /// configName:analog:b      10    # B constant (defaults to 0)
+            /// configName:analog:m      100   # M constant
+            /// configName:analog:b      10    # B constant
             ///
             /// To declare a PWM encoder:
             /// configName:pwm           1     # pin
-            /// configName:pwm:m         100   # M constant (defaults to 1)
-            /// configName:pwm:b         10    # B constant (defaults to 0)
+            /// configName:pwm:m         100   # M constant
+            /// configName:pwm:b         10    # B constant
             ///
             /// A quadrature encoder may optionally be calibrated
             /// by an analog encoder XOR a PWM encoder.
-            Encoder(xero::misc::MessageLogger &logger,
+            XeroEncoder(xero::misc::MessageLogger &logger,
                     xero::misc::SettingsParser &settings, 
                     const std::string &configName
             );
 
             /// Creates a quadrature encoder.
             /// @param logger The message logger.
-            Encoder(std::shared_ptr<frc::Encoder> quadratureEncoder
+            XeroEncoder(std::shared_ptr<frc::Encoder> quadratureEncoder
             ): quad_(quadratureEncoder) {}
 
             /// Creates an analog encoder, or a quadrature encoder calibrated by an analog encoder.
             /// @param analogEncoder The analog input to which the encoder is connected.
             /// @param quadratureEncoder The quadrature encoder object, or \c nullptr to use just an analog encoder.
-            Encoder(std::shared_ptr<frc::AnalogInput> analogEncoder,
+            XeroEncoder(std::shared_ptr<frc::AnalogInput> analogEncoder,
                     std::shared_ptr<frc::Encoder>     quadratureEncoder = nullptr
             ): quad_(quadratureEncoder), analog_(analogEncoder) {}
 
             /// Creates a PWM encoder, or a quadrature encoder calibrated by a PWM encoder.
             /// @param quadratureEncoder The quadrature encoder object, or \c nullptr to use just a PWM encoder.
             /// @param pwmEncoder A \c Counter measuring the signal from the PWM encoder.
-            Encoder(std::shared_ptr<frc::Counter> pwmEncoder,
+            XeroEncoder(std::shared_ptr<frc::Counter> pwmEncoder,
                     std::shared_ptr<frc::Encoder> quadratureEncoder = nullptr
             ): quad_(quadratureEncoder), pwm_(pwmEncoder) { pwm_->SetSemiPeriodMode(true); }
 

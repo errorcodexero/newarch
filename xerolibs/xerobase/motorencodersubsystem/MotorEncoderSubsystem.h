@@ -5,7 +5,7 @@
 
 namespace xero {
     namespace base {
-        class Encoder;
+        class XeroEncoder;
         class MotorEncoderSubsystem : public SingleMotorSubsystem {
             friend class MotorEncoderGoToAction;
         public:
@@ -30,7 +30,7 @@ namespace xero {
             void reset() override;
 
         private:
-            std::shared_ptr<Encoder> encoder_;
+            std::shared_ptr<XeroEncoder> encoder_;
 
             xero::misc::Speedometer speedometer_ = xero::misc::Speedometer(/*samples=*/2);
 
