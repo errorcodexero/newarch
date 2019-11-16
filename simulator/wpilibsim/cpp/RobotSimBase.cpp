@@ -300,7 +300,7 @@ namespace xero {
                 model->init() ;         
 
             while (running_) {
-            std::cout << "simLoop: running" << std::endl;
+                std::cout << "simLoop: running" << std::endl;
                 auto start = std::chrono::high_resolution_clock::now() ;
                 double now = getTime() ;
 
@@ -341,11 +341,12 @@ namespace xero {
                 auto dur = std::chrono::duration_cast<std::chrono::microseconds>(elapsed) ;
 
                 int64_t count = microloop - dur.count() ;
-                std::cout << "simLoop sleeping: " << count << std::endl;
+                std::cout << "simLoop: sleeping: " << count << std::endl;
                 if (count > 0)
                     std::this_thread::sleep_for(std::chrono::microseconds(count)) ;
             }
-
+            
+            std::cout << "simLoop: done" << std::endl;
             waiting_ = false ;
         }
     }
