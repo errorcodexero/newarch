@@ -5,6 +5,7 @@
 #include "TubManipulatorAction.h"
 #include <actions/Action.h>
 #include <actions/ParallelAction.h>
+#include <actions/SequenceAction.h>
 
 namespace xero {
     namespace ranseur {
@@ -25,8 +26,8 @@ namespace xero {
 
         private:
             static std::string action_name ; 
-            xero::base::ParallelAction parallel_ ;
-
+            xero::base::SequenceAction seq_ ;
+            
         };
     }
 }
