@@ -77,8 +77,8 @@ namespace xero {
             robot_ = robot ;
             current_time_ = 0.0 ;
             sim_time_step_ = 0.01 ;
-            model_thread_ = std::thread(&RobotSimBase::simLoop, this) ;
             running_ = true ;
+            model_thread_ = std::thread(&RobotSimBase::simLoop, this) ;
         }
 
         void RobotSimBase::stop() {
