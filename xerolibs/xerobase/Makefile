@@ -60,6 +60,7 @@ SOURCES = \
 	motors/SparkMaxMotorController.cpp\
 	motorencodersubsystem/MotorEncoderSubsystem.cpp\
 	motorencodersubsystem/MotorEncoderGoToAction.cpp\
+    motorencodersubsystem/MotorEncoderHoldAction.cpp\
     motorencodersubsystem/XeroEncoder.cpp\
 	$(SIMSOURCES)
 
