@@ -35,7 +35,7 @@ namespace xero {
         private:
             std::shared_ptr<XeroEncoder> encoder_;
 
-            xero::misc::Speedometer speedometer_ = xero::misc::Speedometer(/*samples=*/2);
+            xero::misc::Speedometer speedometer_;
 
             const std::string configName_;
             uint64_t msg_id_;
