@@ -2,10 +2,10 @@
 
 #include <Speedometer.h>
 #include "singlemotorsubsystem/SingleMotorSubsystem.h"
+#include "XeroEncoder.h"
 
 namespace xero {
     namespace base {
-        class XeroEncoder;
         class MotorEncoderSubsystem : public SingleMotorSubsystem {
             friend class MotorEncoderGoToAction;
         public:
@@ -26,6 +26,7 @@ namespace xero {
             double getPosition() { return speedometer_.getDistance(); }
 
             xero::misc::Speedometer &getSpeedometer() { return speedometer_; }
+            bool isAngular() { return encoder_->isAngular(); }
 
             void calibrate();
 
