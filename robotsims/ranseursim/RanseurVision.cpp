@@ -102,7 +102,7 @@ namespace xero {
                     else
                     {
                         tv_ = 1 ;
-                        ta_ = (dist - dmindist) / (dmaxdist - dmindist) * (dminpcnt + dmaxpcnt) + dminpcnt ;
+                        ta_ = (dmaxdist - dmindist) / (dist - dmindist) * (dminpcnt - dmaxpcnt) + dminpcnt ;
                     }
 
                     ts_ = 0.0 ;
