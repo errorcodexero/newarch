@@ -22,12 +22,11 @@
         "request": "launch",
         "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/ranseur/ranseur.exe",
         "args": [
-            "--simscreen",
             "--test","0.0",
             "--start", "0.0",
             "--auto", "20.0",
             "--oper","0.0",
-            "--events","robots/ranseur/sims/automode3.sti"
+            "--events","robots/ranseur/sims/automode0.sti"
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",

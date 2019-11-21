@@ -18,6 +18,7 @@ namespace xero  {
                 /// \returns details about the lifter's state
                 virtual std::string toString() ;
 
+                // Process events from the simulator
                 virtual bool processEvent(const std::string &name, int value) ;
 
                 /// \brief Run the model.
@@ -32,6 +33,8 @@ namespace xero  {
                 void generateDisplayInformation(std::list<std::string> &lines) ;
 
             private:
+                static constexpr const char *table_name = "limelight" ;
+
                 void compute() ;
 
             private:
@@ -50,6 +53,8 @@ namespace xero  {
 
                 double tubxpos_ ;
                 double tubypos_ ;
+                bool tubxpos_set_ ;
+                bool tubypos_set_ ;
 
                 xero::sim::TankDriveModel &tankdrive_ ;
             } ;
