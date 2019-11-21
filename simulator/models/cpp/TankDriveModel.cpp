@@ -11,18 +11,20 @@ using namespace frc ;
 using namespace xero::misc ;
 using namespace xero::math ;
 using namespace ctre::phoenix::motorcontrol::can ;
+using namespace rev ;
 
 namespace xero {
     namespace sim {
-        TankDriveModel::TankDriveModel(RobotSimBase &simbase) : SubsystemModel(simbase, "tankdrive") {
+        TankDriveModel::TankDriveModel(RobotSimBase &simbase, MotorType mt) : SubsystemModel(simbase, "tankdrive") {
+            mt_ = mt ;
             left_ = 0.0;
             right_ = 0.0;
             angle_ = 0.0;
             navx_offset_ = 0.0 ;
             left_power_ = 0.0;
             right_power_ = 0.0;
-            xpos_ = 0.0 ;
-            ypos_ = 0.0 ;
+            xpos_ = 100.0 ;
+            ypos_ = 100.0 ;
             last_xpos_ = 0.0 ;
             last_ypos_ = 0.0 ;
             speed_ = 0.0 ; 
@@ -170,7 +172,8 @@ namespace xero {
             //
             double desired_left_rps = left_power_ * left_rps_per_power_per_time_ ;
             double desired_right_rps = right_power_ * right_rps_per_power_per_time_ ;
-            
+
+         
 #ifdef TANKDRIVE_PRINT_STUFF
             std::cout << "--------------------------------------------------------" << std::endl ;
             std::cout << "Power " << left_power_ << " " << right_power_ << std::endl ;
@@ -247,16 +250,29 @@ namespace xero {
             std::lock_guard<std::mutex> lock(getLockMutex()) ;
 
             TalonSRX *talon = dynamic_cast<TalonSRX *>(obj) ;
-            if (talon != nullptr) {
-                auto itl = std::find(std::begin(left_motors_), std::end(left_motors_), talon) ;
-                if (itl != std::end(left_motors_)) {
+            CANSparkMax *spark = dynamic_cast<CANSparkMax *>(obj) ;
+            if (mt_ == MotorType::MTTalon && talon != nullptr) {
+                auto itl = std::find(std::begin(left_talon_motors_), std::end(left_talon_motors_), talon) ;
+                if (itl != std::end(left_talon_motors_)) {
                     left_power_ = talon->Get() ;
                 }
 
-                auto itr = std::find(std::begin(right_motors_), std::end(right_motors_), talon) ;
-                if (itr != std::end(right_motors_)) {
+                auto itr = std::find(std::begin(right_talon_motors_), std::end(right_talon_motors_), talon) ;
+                if (itr != std::end(right_talon_motors_)) {
                     right_power_ = talon->Get() ;
                 }
+            }
+            else if (mt_ == MotorType::MTSpark && spark != nullptr)
+            {
+                auto itl = std::find(std::begin(left_spark_motors_), std::end(left_spark_motors_), spark) ;
+                if (itl != std::end(left_spark_motors_)) {
+                    left_power_ = spark->SimulatorGetPower() ;
+                }
+
+                auto itr = std::find(std::begin(right_spark_motors_), std::end(right_spark_motors_), spark) ;
+                if (itr != std::end(right_spark_motors_)) {
+                    right_power_ = spark->SimulatorGetPower() ;
+                }                
             }
             else if (obj == left_enc_) {
                 left_ = 0.0 ;
@@ -280,14 +296,25 @@ namespace xero {
 
         void TankDriveModel::addDevice(TalonSRX *motor) {
             if (motor->GetDeviceID() == 1 || motor->GetDeviceID() == 2 || motor->GetDeviceID() == 3) {
-                left_motors_.push_back(motor) ;
+                left_talon_motors_.push_back(motor) ;
                 motor->addModel(this) ;
             }
             else if (motor->GetDeviceID() == 4 || motor->GetDeviceID() == 5 || motor->GetDeviceID() == 6) {
-                right_motors_.push_back(motor) ;
+                right_talon_motors_.push_back(motor) ;
                 motor->addModel(this) ;
             }
         }
+
+        void TankDriveModel::addDevice(CANSparkMax *motor) {
+            if (motor->GetDeviceID() == 1 || motor->GetDeviceID() == 2 || motor->GetDeviceID() == 3) {
+                left_spark_motors_.push_back(motor) ;
+                motor->addModel(this) ;
+            }
+            else if (motor->GetDeviceID() == 4 || motor->GetDeviceID() == 5 || motor->GetDeviceID() == 6) {
+                right_spark_motors_.push_back(motor) ;
+                motor->addModel(this) ;
+            }
+        }        
 
         void TankDriveModel::addDevice(Encoder *encoder) {
             int first, second ;
@@ -296,7 +323,7 @@ namespace xero {
                 left_enc_ = encoder ;
                 left_enc_->addModel(this) ;
             }
-            else if (first == 1 && second == 0) {
+            else if (first == 0 && second == 1) {
                 right_enc_ = encoder ;
                 right_enc_->addModel(this) ;
             }

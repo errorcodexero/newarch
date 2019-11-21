@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ctre/Phoenix.h>
+#include <rev/CANSparkMax.h>
 #include "Encoder.h"
 #include "AnalogInput.h"
 #include "Counter.h"
@@ -35,6 +36,9 @@ namespace xero {
 
             virtual void addDevice(ctre::phoenix::motorcontrol::can::TalonSRX *talon)  {                
             }
+
+            virtual void addDevice(rev::CANSparkMax *spark)  {                
+            }            
 
             virtual void addDevice(frc::Encoder *encoder) {                
             }

@@ -2,8 +2,8 @@
 #include "Ranseur.h"
 
 #ifdef SIMULATOR
-#include <ranseurSimulator.h>
-xero::sim::ranseur::ranseurSimulator sim("robotsims/ranseursim/sim.dat") ;
+#include <RanseurSimulator.h>
+xero::sim::ranseur::RanseurSimulator sim("robotsims/ranseursim/sim.dat") ;
 #endif
 
 int main(int ac, char **av)

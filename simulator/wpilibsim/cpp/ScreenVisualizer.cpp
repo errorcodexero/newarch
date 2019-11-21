@@ -86,8 +86,8 @@ namespace xero {
             x1-- ;
             y1-- ;
             drawScreenRectangle(field_window_, x1, y1, x2-x1, y2-y1) ;
-            wrefresh(field_window_) ;
             drawGameSpecificField(field_window_) ;
+            wrefresh(field_window_) ;
         }
 
         void ScreenVisualizer::drawScreenRectangle(WINDOW *win, int x1, int y1, int width, int height) {

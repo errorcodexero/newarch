@@ -12,6 +12,7 @@ NEED_WPILIB = true
 NEED_NETWORKTABLES = true
 NEED_NAVX = true
 NEED_CTRE = true
+NEED_REV = true
 NEED_XEROMISC=true
 
 LOCAL_CFLAGS += \

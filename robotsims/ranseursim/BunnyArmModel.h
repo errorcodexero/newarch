@@ -34,6 +34,10 @@ namespace xero  {
                 /// \brief Generate display information for the model
                 void generateDisplayInformation(std::list<std::string> &lines) ;
 
+                bool isDeployed() {
+                    return bunnyarm_state_ ;
+                }
+
             private:
                 int bunnyarm_solenoid_number_ ;
                 bool bunnyarm_state_ ;

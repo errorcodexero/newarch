@@ -7,6 +7,7 @@
 #include "Solenoid.h"
 #include "Relay.h"
 #include <ctre/Phoenix.h>
+#include <rev/CANSparkMax.h>
 #include "VictorSP.h"
 #include "AHRS.h"
 #include "Timer.h"
