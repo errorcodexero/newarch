@@ -21,7 +21,7 @@ namespace xero {
             virtual void cancel() ;
             virtual std::string toString() {
                 return action_name ;
-            }
+            } ;
 
         private:
             static std::string action_name ; 

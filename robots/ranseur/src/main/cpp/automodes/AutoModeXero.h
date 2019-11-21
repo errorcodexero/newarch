@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RanseurAutoModeBase.h"
+#include <actions/ParallelAction.h>
 
 namespace xero
 {
@@ -11,8 +12,10 @@ namespace xero
         public:
             AutoModeXero(xero::base::Robot &robot) ;
             virtual ~AutoModeXero() ;
-            
+
+        private:
         } ;
+
     }
 }
 
