@@ -79,7 +79,11 @@ namespace xero {
 
             /// \brief Returns this subsystem's default action
             /// The default action runs whenever no other actions are running.
-            virtual ActionPtr getDefaultAction() { return nullptr; }
+            ActionPtr getDefaultAction() const { return defaultAction_; }
+
+            /// \brief Sets this subsystem's default action
+            /// \return true if the action was accepted
+            bool setDefaultAction(ActionPtr action);
 
             /// \brief return a constant pointer to the current Action
             /// \returns  a constant pointer to the current Action
@@ -169,10 +173,15 @@ namespace xero {
                 return false ;
             }
 
+            /// \brief Checks that an is valid as a subsystem's default action
+            virtual bool canAcceptDefaultAction(ActionPtr action) {
+                return false;
+            }
+
         private:
             Subsystem(Robot &robot, const std::string &name);
 
-            bool _canAcceptAction(ActionPtr action);
+            bool _canAcceptAction(ActionPtr action, bool isDefault = false);
 
             bool parentBusy();
 
@@ -194,6 +203,11 @@ namespace xero {
             // The currently active Action
             //
             ActionPtr action_;
+
+            //
+            // The default action
+            //
+            ActionPtr defaultAction_;
 
             // Whether the currently active action is the default action.
             bool isRunningDefaultAction_;

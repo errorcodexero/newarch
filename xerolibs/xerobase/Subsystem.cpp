@@ -63,7 +63,7 @@ namespace xero {
                 action_->cancel() ;
         }
 
-        bool Subsystem::_canAcceptAction(ActionPtr action) {
+        bool Subsystem::_canAcceptAction(ActionPtr action, bool isDefault) {
             if (auto composite = dynamic_cast<CompositeAction*>(action.get())) {
                 for (auto child : composite->getChildren()) {
                     if (!_canAcceptAction(child)) return false;
@@ -83,7 +83,21 @@ namespace xero {
             } else if (dynamic_cast<GenericAction*>(action.get())) {
                 return true;
             } else {
-                return canAcceptAction(action);
+                return isDefault ? canAcceptDefaultAction(action) : canAcceptAction(action);
+            }
+        }
+        
+        bool Subsystem::setDefaultAction(ActionPtr action) {
+            if (_canAcceptAction(action, /*isDefault=*/true)) {
+                defaultAction_ = action;
+                setAction(nullptr);
+                return true;
+            } else {
+                MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
+                logger << "Actions: subsystem '" << getName() << "' rejected default action '" << action->toString() << "'" ;
+                logger.endMessage() ;
+                return false ;
             }
         }
 
