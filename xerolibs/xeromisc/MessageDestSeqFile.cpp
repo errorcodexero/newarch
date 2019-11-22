@@ -94,7 +94,16 @@ bool MessageDestSeqFile::openfile()
         //
         const std::string latest_file_symlink_name(dirname_ + "/latest");
         if (xero::file::exists(filename)) {
-            xero::file::create_symlink(filename, latest_file_symlink_name);
+            //
+            // The previous code worked if the dirname_ was an absolute path.  However,
+            // in some environments (simulator for sure) this is not true.  Therefore this
+            // code just keeps the link target local which should work in all cases.
+            //
+            std::string targetname = filename ;
+            size_t index = targetname.find_last_of('/') ;
+            if (index != std::string::npos)
+                targetname = targetname.substr(index + 1) ;
+            xero::file::create_symlink(targetname, latest_file_symlink_name);
         }
     }
 

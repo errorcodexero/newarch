@@ -187,20 +187,20 @@ tubarm:collect:pos                                              0
 tubarm:dump:pos                                                 0
 tubarm:eject:pos                                                0
 
-###################################################################################################
-# cameratracker
-###################################################################################################
-
-cameratracker:distance_threshold                                48.0
-cameratracker:rect_ratio_min                                    0.9
-cameratracker:rect_ratio_max                                    1.1
 
 ###################################################################################################
 # drive by vision (simple P only control)
 ###################################################################################################
+ranseurvision:detected_threshold                                60.0
+ranseurvision:area_distance_ratio                               1.0
+ranseurvision:target_height                                     4.0
+ranseurvision:camera_height                                     8.0
+ranseurvision:camera_angle                                      0.0
 
 drivebyvision:yaw_base_power                                    0.30
 drivebyvision:yaw_p                                             0.03
+drivebyvision:max_lost_count                                    10
+drivebyvision:done_distance                                     8.0
 
 ###################################################################################################
 # Driver gamepad

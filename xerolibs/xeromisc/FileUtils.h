@@ -48,9 +48,6 @@ namespace xero {
         /// \param link the actual name of the link
         /// \returns true upon success, false upon failure.
         inline bool create_symlink(const std::string& dest, const std::string& link) {
-            // Ensure the destination file exists
-            assert(exists(dest));
-
             // If link exists and is already a symlink, delete it so we may create a new link
             if (exists(link)) {
                 if (!is_a_symlink(link)) {
@@ -62,7 +59,6 @@ namespace xero {
                 }
             }
 
-            // Create the symlink
             int ret = symlink(dest.c_str(), link.c_str());
             return (ret == 0);
         }

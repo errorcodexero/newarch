@@ -83,10 +83,11 @@ namespace xero {
                     double rx = tankdrive_.getXPos() ;
                     double ry = tankdrive_.getYPos() ;
                     double ra = tankdrive_.getAngle() ;
+                    double targetheight = 3.0 ;
+                    double cameraheight = 8.0 ;
 
                     double phit = xero::math::rad2deg(atan2(tubypos_ - ry, tubxpos_ - rx)) ;
                     tx_ = phit - ra ;
-                    ty_ = -15.0 ;
 
                     double dist = std::sqrt((rx - tubxpos_) * (rx - tubxpos_) + (ry - tubypos_) * (ry - tubypos_)) ;
                     if (dist > dmaxdist || dist < dmindist || tx_ < -fov / 2.0 || tx_ > fov / 2.0)
@@ -103,6 +104,7 @@ namespace xero {
                     {
                         tv_ = 1 ;
                         ta_ = (dmaxdist - dmindist) / (dist - dmindist) * (dminpcnt - dmaxpcnt) + dminpcnt ;
+                        ty_ = xero::math::rad2deg(atan2(targetheight - cameraheight, dist)) ;
                     }
 
                     ts_ = 0.0 ;
