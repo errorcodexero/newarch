@@ -39,11 +39,19 @@ namespace xero {
                 present_ = true ;
                 tmp = table_->GetNumber(TV, 0.0) ;
                 if (std::fabs(tmp - 1.0) < 0.1)
+                {
                     tv_ = true ;
-
-                ta_ = table_->GetNumber(TA, 0.0) ;
-                tx_ = table_->GetNumber(TX, 0.0) ;
-                ty_ = table_->GetNumber(TY, 0.0) ;
+                    ta_ = table_->GetNumber(TA, 0.0) ;
+                    tx_ = table_->GetNumber(TX, 0.0) ;
+                    ty_ = table_->GetNumber(TY, 0.0) ;
+                }
+                else
+                {
+                    tv_ = false ;
+                    ta_ = 0.0 ;
+                    tx_ = 0.0 ;
+                    ty_ = 0.0 ;
+                }
 
             }
         }
@@ -53,10 +61,17 @@ namespace xero {
             MessageLogger &logger = getRobot().getMessageLogger() ;    
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CAMERA_TRACKER_VERBOSE) ;
             logger << "LimeLightSubsystem" ;
-            logger << " tv " << tv_ ;
-            logger << " ta " << ta_ ;
-            logger << " tx " << tx_ ;
-            logger << " ty " << ty_ ;
+            if (present_)
+            {
+                logger << " tv " << (tv_ ? "[detected]" : "[not detected]") ;
+                logger << " ta " << ta_ ;
+                logger << " tx " << tx_ ;
+                logger << " ty " << ty_ ;
+            }
+            else
+            {
+                logger << " not detected" ;
+            }
             logger.endMessage() ;                 
         }
 
