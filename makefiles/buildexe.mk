@@ -70,7 +70,11 @@ help:
 #
 # Target to build the library
 #
-buildexe: buildlibs apponly
+buildexe:
+	make -j buildlibs
+	make -j apponly
+
+buildold: buildlibs apponly
 
 apponly: pre mkdirs $(TARGETFILE) post
 

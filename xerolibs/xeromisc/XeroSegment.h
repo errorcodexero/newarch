@@ -38,20 +38,20 @@ namespace xero {
             }
 
             /// \brief create a new segment with the given values
-            /// \param data the data for the segment, in order x, y, linpos, vel, accel, jerk, and heading
+            /// \param data the data for the segment, in order time, x, y, linpos, vel, accel, jerk, and heading
             XeroSegment(std::vector<double> data) 
             {
-                x_ = data[0] ;
-                y_ = data[1]  ;
-                linPos_ = data[2] ;
-                vel_ = data[3] ;
-                accel_ = data[4] ;
-                jerk_ = data[5] ;
-                heading_ = data[6] ;
+                x_ = data[1] ;
+                y_ = data[2]  ;
+                linPos_ = data[3] ;
+                vel_ = data[4] ;
+                accel_ = data[5] ;
+                jerk_ = data[6] ;
+                heading_ = data[7] ;
             }
 
             /// \brief create a new segment with the given values
-            /// \param data the data for the segment, in order x, y, linpos, vel, accel, jerk, and heading
+            /// \param data the data for the segment, in order time, x, y, linpos, vel, accel, jerk, and heading
             XeroSegment(std::vector<CSVData::CSVItem> data) {
                 x_ = data[1].getDouble();
                 y_ = data[2].getDouble();
