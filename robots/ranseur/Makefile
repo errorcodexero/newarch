@@ -18,6 +18,9 @@ SUBSYSTEMS = \
 	src/main/cpp/tubcollector/TubCollectorEjectTubAction.cpp\
 	src/main/cpp/tubcollector/TubCollectorTubAction.cpp\
     src/main/cpp/tubmanipulatorsubsystem/TubManipulatorSubsystem.cpp\
+	src/main/cpp/tubmanipulatorsubsystem/TubManipulatorCollectAction.cpp\
+	src/main/cpp/tubmanipulatorsubsystem/TubManipulatorDumpAction.cpp\
+	src/main/cpp/tubmanipulatorsubsystem/TubManipulatorEjectAction.cpp\
     src/main/cpp/tubarm/TubArm.cpp\
     src/main/cpp/tubwrist/TubWrist.cpp
 
