@@ -72,7 +72,6 @@ hw:driverstation:hid:oi                                         2               
 #
 plotting:enabled                                               true
 
-
 ###################################################################################################
 # tankdrive
 ###################################################################################################
@@ -80,20 +79,20 @@ plotting:enabled                                               true
 #
 # Variables for the tankdrive subsystem code.
 #
-tankdrive:inches_per_tick                                       0.010385891
-tankdrive:width                                                 221425
-tankdrive:scrub                                                 0.95177665
+tankdrive:inches_per_tick                                       0.004889638
+tankdrive:width                                                 22.5
+tankdrive:scrub                                                 1.0
 
-tankdrive:follower:left:kv1                                     180.45
-tankdrive:follower:left:kv2                                     -19.35
+tankdrive:follower:left:kv1                                     35.998
+tankdrive:follower:left:kv2                                     -0.0296
 tankdrive:follower:left:ka                                      0.0001
-tankdrive:follower:left:kp                                      0.0003             # Recommended 0.02032 - 0.03048
+tankdrive:follower:left:kp                                      0.02032             # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kd                                      0.0
 
-tankdrive:follower:right:kv1                                    180.45
-tankdrive:follower:right:kv2                                    -19.35
+tankdrive:follower:right:kv1                                    35.998
+tankdrive:follower:right:kv2                                    -0.0296
 tankdrive:follower:right:ka                                     0.0001
-tankdrive:follower:right:kp                                     0.0003             # Recommended 0.02032 - 0.03048
+tankdrive:follower:right:kp                                     0.02032             # Recommended 0.02032 - 0.03048
 tankdrive:follower:right:kd                                     0.0
 
 tankdrive:follower:turn_correction                              0

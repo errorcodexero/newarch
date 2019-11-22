@@ -59,14 +59,14 @@ tankdrive:sim:ticks_per_rev                             2570
 #
 # The diameter of the robot wheel
 #
-tankdrive:sim:diameter                                  8.5
+tankdrive:sim:diameter                                  4.0
 
 #
 # The percent of the angle that is applied to the robot based on the
 # distance the wheels travel vs an ideal case were the wheels are
 # frictionless
 #
-tankdrive:sim:scrub                                     0.95177665
+tankdrive:sim:scrub                                    1.0
 
 #
 # The width of the drivebase for the robot

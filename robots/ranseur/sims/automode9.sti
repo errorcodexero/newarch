@@ -24,6 +24,8 @@
 
 #
 #
-0.1,oi,automode,-100
-3.0,oi,left_axis_y,100
-6.0,oi,left_axis_y,0
+0.1,oi,automode,90
+
+0.1,tankdrive,xpos,2000                                 # Start center hab platform
+0.1,tankdrive,ypos,16300                                # Start center hab platform
+0.1,tankdrive,angle,0                                   # Start center hab platform

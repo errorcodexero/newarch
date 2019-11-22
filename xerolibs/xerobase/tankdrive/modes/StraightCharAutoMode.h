@@ -6,6 +6,7 @@ namespace xero {
         {
         public:
             StraightCharAutoMode(xero::base::Robot &robot, double power, double duration, bool highgear = true) ;
+            
             virtual ~StraightCharAutoMode() ;
         } ;
     }
