@@ -28,8 +28,8 @@ namespace xero {
             double getTarget() { return target_; }
 
             virtual std::string toString() { 
-                return "MotorEncoderHoldAction: " + std::to_string(target_) + 
-                    (hasExplicitTarget_ ? " (explicit)" : " (implicit)"); 
+                return "MotorEncoderHoldAction: " + 
+                    ((hasExplicitTarget_ ? "explicit " : "implicit ") + std::to_string(target_));
             }
         private:
             bool cancelled_;

@@ -28,8 +28,9 @@ namespace xero {
             MotorEncoderSubsystem(Subsystem *parent, const std::string &name, const std::string config,
                                   uint64_t id, bool angular = false );
 
-            virtual bool canAcceptAction(xero::base::ActionPtr action);
-            virtual void computeState();
+            bool canAcceptAction(xero::base::ActionPtr action) override;
+            void computeState() override;
+            bool canAcceptDefaultAction(xero::base::ActionPtr action) override;
 
             double getPosition() { return speedometer_.getDistance(); }
 

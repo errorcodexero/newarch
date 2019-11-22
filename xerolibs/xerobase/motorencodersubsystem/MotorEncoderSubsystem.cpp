@@ -33,6 +33,10 @@ namespace xero {
             return (mot_enc_act_p != nullptr);
         }
 
+        bool MotorEncoderSubsystem::canAcceptDefaultAction(xero::base::ActionPtr action) { 
+            return std::dynamic_pointer_cast<MotorEncoderHoldAction>(action) != nullptr;
+        }
+
         void MotorEncoderSubsystem::computeState() {
             SingleMotorSubsystem::computeState();
             
