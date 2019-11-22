@@ -178,6 +178,7 @@ tubarm:follower:up:kp                                           0.0
 tubarm:follower:up:kd                                           0.0
 tubarm:follower:up:kv                                           0.01
 tubarm:follower:up:ka                                           0.0
+tubarm:collect:pos                                              0
 
 ###################################################################################################
 # cameratracker
