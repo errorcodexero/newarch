@@ -142,6 +142,7 @@ hw:tubwrist:encoder:zero_ticks                               -1       # Need to 
 ###################################################################################################
 # tubarm
 ###################################################################################################
+tubarm:collect:pos                                              0
 tubarm:encoder:units_per_tick                              -1
 tubarm:encoder:zero_ticks                                  -1
 hw:tubarm:encoder:units_per_tick                           -1       # Need to rename in the code
