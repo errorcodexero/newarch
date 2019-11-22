@@ -6,13 +6,14 @@
 namespace xero {
     namespace sim {
         namespace ranseur {
-            class ranseurScreenVisualizer : public ScreenVisualizer {
+            class RanseurScreenVisualizer : public ScreenVisualizer {
             public:
-                ranseurScreenVisualizer(RobotSimBase &sim) ;
-                virtual ~ranseurScreenVisualizer() ;
+                RanseurScreenVisualizer(RobotSimBase &sim) ;
+                virtual ~RanseurScreenVisualizer() ;
 
             protected:
                 virtual void drawGameSpecificField(WINDOW *win)  ;
+                virtual void plotRobot(double x, double y, double angle) ;
             } ;
         }
     }

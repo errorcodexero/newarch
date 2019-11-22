@@ -12,6 +12,7 @@
 using namespace xero::misc ;
 using namespace frc ;
 using namespace ctre::phoenix::motorcontrol::can ;
+using namespace rev ;
 
 namespace xero {
     namespace sim {
@@ -76,8 +77,8 @@ namespace xero {
         void RobotSimBase::start(frc::SampleRobot *robot) {
             robot_ = robot ;
             current_time_ = 0.0 ;
-            sim_time_step_ = 0.01 ;
-            running_ = true ;
+            sim_time_step_ = 0.001 ;
+            running_ = true ;            
             model_thread_ = std::thread(&RobotSimBase::simLoop, this) ;
         }
 
@@ -100,7 +101,7 @@ namespace xero {
         }
 
         void RobotSimBase::wait(double secs) {
-            std::chrono::microseconds delay(100) ;            
+            std::chrono::microseconds delay(1) ;            
             double now = current_time_ ;
 
             //
@@ -117,6 +118,13 @@ namespace xero {
             if (talon != nullptr) {
                 for(auto model : getModels())
                     model->addDevice(talon) ;
+            }
+
+            CANSparkMax *spark = dynamic_cast<CANSparkMax*>(device) ;
+            if (spark != nullptr)
+            {
+                for(auto model : getModels())
+                    model->addDevice(spark) ;
             }
 
             VictorSPX *vicspx = dynamic_cast<VictorSPX *>(device) ;

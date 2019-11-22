@@ -29,7 +29,12 @@ namespace xero {
             size_t turtle_ ;
             size_t spare1_ ;
             size_t spare2_ ;
-            
+  
+            xero::base::ActionPtr collecting_ ;
+            xero::base::ActionPtr dumping_ ;
+            xero::base::ActionPtr turtling_ ;
+            xero::base::ActionPtr ejecting_ ;
+
         } ;
     }
 }

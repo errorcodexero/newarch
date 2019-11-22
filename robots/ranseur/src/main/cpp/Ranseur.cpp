@@ -79,8 +79,10 @@ namespace xero {
 
 #else
             paths->setExtensions("_left.csv", "_right.csv") ;
+            
+            paths->loadPath("BunnyAutoMode_PathToTub") ;
 
-            paths->loadPath("Tune_Tune") ;
+            //paths->loadPath("Tune_Tune") ;
 #endif
         }
         
