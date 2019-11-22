@@ -19,6 +19,8 @@ namespace xero {
 
             auto oidev = std::make_shared<RanseurOIDevice>(*this, oi) ;
             addHIDDevice(oidev) ;
+
+            
         }
 
         RanseurOISubsystem::~RanseurOISubsystem() {

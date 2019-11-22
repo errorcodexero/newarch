@@ -1,6 +1,5 @@
 #include "AutoModeXero.h"
 #include <Ranseur.h>
-<<<<<<< HEAD
 #include <bunnyarm/BunnyArm.h>
 #include <bunnyarm/BunnyArmDeployAction.h>
 #include <tubcollector/TubCollector.h>
@@ -14,9 +13,6 @@
 #include <actions/SequenceAction.h>
 #include <actions/TerminateAction.h>
 #include <memory>
-=======
-#include <tankdrive/actions/TankDrivePowerAction.h>
->>>>>>> 7b4fe11364d3391c56f58e865e9dc70ed067e2a2
 
 using namespace xero::base ;
 
@@ -28,7 +24,6 @@ namespace xero
         {
             ActionPtr act ;
             auto &ranseur = dynamic_cast<Ranseur &>(getRobot()) ;
-<<<<<<< HEAD
             auto bunnyarm = ranseur.getRanseurRobotSubsystem()->getBunnyArm() ;
             auto tubcollector = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubCollector() ;
             auto tubarm = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubArm() ;
@@ -80,13 +75,6 @@ namespace xero
         //   pushSubActionPair(tubcollector, act) ;
 
            }
-=======
-            auto tankdrive = ranseur.getRanseurRobotSubsystem()->getTankDrive() ;
-
-            auto action = std::make_shared<TankDrivePowerAction>(*tankdrive, 0.6, 0.6) ;
-            pushSubActionPair(tankdrive, action) ;
-        }
->>>>>>> 7b4fe11364d3391c56f58e865e9dc70ed067e2a2
 
         AutoModeXero::~AutoModeXero()
         {            
