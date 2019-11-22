@@ -134,18 +134,50 @@ tubcollector:tubsensor:l2hdelay                                 0
 ###################################################################################################
 # tubwrist
 ###################################################################################################
-tubwrist:encoder:units_per_tick                              -1
-tubwrist:encoder:zero_ticks                                  -1
-hw:tubwrist:encoder:units_per_tick                           -1       # Need to rename in the code
-hw:tubwrist:encoder:zero_ticks                               -1       # Need to rename in the code
+tubwrist:hold:p                                                 1
+tubwrist:hold:i                                                 0
+tubwrist:hold:d                                                 0
+tubwrist:hold:f                                                 0
+tubwrist:hold:a                                                 0
+tubwrist:hold:min                                               -0.6
+tubwrist:hold:max                                               0.6
+tubwrist:hold:imax                                              0.0 
+tubwrist:threshold                                              3.0      # Within three degrees
+tubwrist:maxd                                                   -180.0    # maximum deceleration (way too slow, used for demo)
+tubwrist:maxa                                                   180.0     # maximum acceleration (way too slow, used for demo)
+tubwrist:maxv                                                   90.0     # maximum velocity (way too slow, used for demo)
+tubwrist:follower:down:kp                                       0.01
+tubwrist:follower:down:kd                                       0.0
+tubwrist:follower:down:kv                                       0.1
+tubwrist:follower:down:ka                                       0.0
+tubwrist:follower:up:kp                                         0.01
+tubwrist:follower:up:kd                                         0.0
+tubwrist:follower:up:kv                                         0.1
+tubwrist:follower:up:ka                                         0.0
 
 ###################################################################################################
 # tubarm
 ###################################################################################################
-tubarm:encoder:units_per_tick                              -1
-tubarm:encoder:zero_ticks                                  -1
-hw:tubarm:encoder:units_per_tick                           -1       # Need to rename in the code
-hw:tubarm:encoder:zero_ticks                               -1       # Need to rename in the code
+tubarm:hold:p                                                   1
+tubarm:hold:i                                                   0
+tubarm:hold:d                                                   0
+tubarm:hold:f                                                   0
+tubarm:hold:a                                                   0
+tubarm:hold:min                                                 -0.6
+tubarm:hold:max                                                 0.6
+tubarm:hold:imax                                                0.0
+tubarm:threshold                                                3.0      # Within three degrees
+tubarm:maxd                                                     -180.0    # maximum deceleration (way too slow, used for demo)
+tubarm:maxa                                                     180.0     # maximum acceleration (way too slow, used for demo)
+tubarm:maxv                                                     90.0     # maximum velocity (way too slow, used for demo)
+tubarm:follower:down:kp                                         0.0
+tubarm:follower:down:kd                                         0.0
+tubarm:follower:down:kv                                         0.01
+tubarm:follower:down:ka                                         0.0
+tubarm:follower:up:kp                                           0.0
+tubarm:follower:up:kd                                           0.0
+tubarm:follower:up:kv                                           0.01
+tubarm:follower:up:ka                                           0.0
 
 ###################################################################################################
 # cameratracker
