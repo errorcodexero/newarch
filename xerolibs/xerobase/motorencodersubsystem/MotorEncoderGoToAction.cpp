@@ -17,7 +17,7 @@ namespace xero {
         MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target):
             MotorEncoderSubsystemAction(subsystem) {
             
-            std::string config = subsystem.configName_ + "goto";
+            std::string config = subsystem.configName_ + ":goto";
             auto &settings = subsystem.getRobot().getSettingsParser();
             
             target_ = target;

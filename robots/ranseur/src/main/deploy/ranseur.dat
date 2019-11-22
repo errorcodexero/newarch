@@ -130,6 +130,8 @@ tubcollector:collect:power                                      -0.5
 tubcollector:collect:duration                                   0.5                                        
 tubcollector:tubsensor:h2ldelay                                 0
 tubcollector:tubsensor:l2hdelay                                 0
+tubcollector:eject:speed                                        1
+tubcollector:eject:delay                                        1
 
 ###################################################################################################
 # tubwrist
@@ -142,18 +144,21 @@ tubwrist:hold:a                                                 0
 tubwrist:hold:min                                               -0.6
 tubwrist:hold:max                                               0.6
 tubwrist:hold:imax                                              0.0 
-tubwrist:threshold                                              3.0      # Within three degrees
-tubwrist:maxd                                                   -180.0    # maximum deceleration (way too slow, used for demo)
-tubwrist:maxa                                                   180.0     # maximum acceleration (way too slow, used for demo)
-tubwrist:maxv                                                   90.0     # maximum velocity (way too slow, used for demo)
-tubwrist:follower:down:kp                                       0.01
-tubwrist:follower:down:kd                                       0.0
-tubwrist:follower:down:kv                                       0.1
-tubwrist:follower:down:ka                                       0.0
-tubwrist:follower:up:kp                                         0.01
-tubwrist:follower:up:kd                                         0.0
-tubwrist:follower:up:kv                                         0.1
-tubwrist:follower:up:ka                                         0.0
+tubwrist:goto:threshold                                          3.0      # Within three degrees
+tubwrist:goto:maxd                                                   -180.0    # maximum deceleration (way too slow, used for demo)
+tubwrist:goto:maxa                                                   180.0     # maximum acceleration (way too slow, used for demo)
+tubwrist:goto:maxv                                                   90.0     # maximum velocity (way too slow, used for demo)
+tubwrist:goto:down:kp                                       0.01
+tubwrist:goto:down:kd                                       0.0
+tubwrist:goto:down:kv                                       0.1
+tubwrist:goto:down:ka                                       0.0
+tubwrist:goto:up:kp                                         0.01
+tubwrist:goto:up:kd                                         0.0
+tubwrist:goto:up:kv                                         0.1
+tubwrist:goto:up:ka                                         0.0
+tubwrist:collect:pos                                            0
+tubwrist:dump:pos                                               0
+tubwrist:eject:pos                                              0
 
 ###################################################################################################
 # tubarm
@@ -166,19 +171,21 @@ tubarm:hold:a                                                   0
 tubarm:hold:min                                                 -0.6
 tubarm:hold:max                                                 0.6
 tubarm:hold:imax                                                0.0
-tubarm:threshold                                                3.0      # Within three degrees
-tubarm:maxd                                                     -180.0    # maximum deceleration (way too slow, used for demo)
-tubarm:maxa                                                     180.0     # maximum acceleration (way too slow, used for demo)
-tubarm:maxv                                                     90.0     # maximum velocity (way too slow, used for demo)
-tubarm:follower:down:kp                                         0.0
-tubarm:follower:down:kd                                         0.0
-tubarm:follower:down:kv                                         0.01
-tubarm:follower:down:ka                                         0.0
-tubarm:follower:up:kp                                           0.0
-tubarm:follower:up:kd                                           0.0
-tubarm:follower:up:kv                                           0.01
-tubarm:follower:up:ka                                           0.0
+tubarm:goto:threshold                                                3.0      # Within three degrees
+tubarm:goto:maxd                                                     -180.0    # maximum deceleration (way too slow, used for demo)
+tubarm:goto:maxa                                                     180.0     # maximum acceleration (way too slow, used for demo)
+tubarm:goto:maxv                                                     90.0     # maximum velocity (way too slow, used for demo)
+tubarm:goto:down:kp                                         0.0
+tubarm:goto:down:kd                                         0.0
+tubarm:goto:down:kv                                         0.01
+tubarm:goto:down:ka                                         0.0
+tubarm:goto:up:kp                                           0.0
+tubarm:goto:up:kd                                           0.0
+tubarm:goto:up:kv                                           0.01
+tubarm:goto:up:ka                                           0.0
 tubarm:collect:pos                                              0
+tubarm:dump:pos                                                 0
+tubarm:eject:pos                                                0
 
 ###################################################################################################
 # cameratracker
