@@ -10,7 +10,11 @@
 #include <SettingsParser.h>
 #include <actions/TerminateAction.h>
 #include <actions/DelayAction.h>
+#include <actions/Action.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <tubmanipulatorsubsystem/TubManipulatorCollectAction.h>
+#include <tubmanipulatorsubsystem/TubManipulatorDumpAction.h>
+#include <tubmanipulatorsubsystem/TubManipulatorEjectAction.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -59,21 +63,78 @@ namespace xero {
         }
 
         void RanseurOIDevice::generateActions(SequenceAction &seq){
+          
+            auto &ranseur = dynamic_cast<Ranseur &>(getSubsystem().getRobot()) ;
+            auto bunnyarm = ranseur.getRanseurRobotSubsystem()->getBunnyArm() ;
+            auto tubcollector = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubCollector() ;
+            auto tubarm = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubArm() ;
+            auto tubwrist = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubWrist() ;
+            auto tankdrive = ranseur.getRanseurRobotSubsystem()->getTankDrive() ;
+            auto camera = ranseur.getRanseurRobotSubsystem()->getCameraTracker() ;
+            auto tubmanipulatorsubsytem = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem() ;
+            auto ranseurrobotsubsystem = ranseur.getRanseurRobotSubsystem() ;
 
-                /// TBD ///
-                //actions and buttons corresponding with the actions
-                //actions found on wiki under tub manipulator subsystem under ransur (robot)
+            //bool ret = false ;
+            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_RANSEUR_OI) ;
+        
+        /// Initializing! ///
+            if (collecting_ == nullptr) {
+                init() ;
+            }
+            if (dumping_ == nullptr) {
+                init() ;
+            }
+            if (turtling_ == nullptr) {
+                init() ;
+            }
+            if (ejecting_ == nullptr) {
+                init() ;
+            }
 
+
+            //actions and buttons corresponding with the actions
+            //actions found on wiki under tub manipulator subsystem under ranseur (robot)
+        /// Actioning! ///
+            if(getValue(collect_)) { 
+                seq.pushSubActionPair(tubmanipulatorsubsytem, collecting_) ;
+            }
+            if(getValue(dump_)) {
+                seq.pushSubActionPair(tubmanipulatorsubsytem, dumping_) ;
+            }
+            if(getValue(turtle_)) {
+                seq.pushSubActionPair(ranseurrobotsubsystem, turtling_) ;
+            }
+            if(getValue(eject_)) {
+                seq.pushSubActionPair(tubmanipulatorsubsytem, ejecting_) ;
+            }
+      
         }
 
         //
-        // Create static actions we for the OI
+        // Create static actions for the OI
         //
         void RanseurOIDevice::init() {
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_RANSEUR_OI) ;
             log << "OI: creating static actions" ;
             log.endMessage() ;      
+
+            auto &ranseur = dynamic_cast<Ranseur &>(getSubsystem().getRobot()) ;
+            auto bunnyarm = ranseur.getRanseurRobotSubsystem()->getBunnyArm() ;
+            auto tubcollector = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubCollector() ;
+            auto tubarm = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubArm() ;
+            auto tubwrist = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubWrist() ;
+            auto tankdrive = ranseur.getRanseurRobotSubsystem()->getTankDrive() ;
+            auto camera = ranseur.getRanseurRobotSubsystem()->getCameraTracker() ;
+            auto tubmanipulatorsubsytem = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem() ;
+            auto ranseurrobotsubsystem = ranseur.getRanseurRobotSubsystem() ;
+            
+            collecting_ = std::make_shared<TubManipulatorCollectAction>(*tubmanipulatorsubsytem) ;
+            dumping_ = std::make_shared<TubManipulatorDumpAction>(*tubmanipulatorsubsytem) ;
+            //turtle_ = std::make_shared<RanseurRobotSubsystem>(*ranseurrobotsubsystem) ;
+            ejecting_ = std::make_shared<TubManipulatorEjectAction>(*tubmanipulatorsubsytem) ;
+            
         }
     }
 }
