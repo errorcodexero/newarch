@@ -18,6 +18,11 @@ namespace xero {
         void DriveByVisionAction::start() {
             lost_count_ = 0 ;
             is_done_ = false ;
+
+            MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;            
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
+            logger << "DriveByVision: started action, driving by vision" ;
+            logger.endMessage() ;              
         }
 
         void DriveByVisionAction::run() {
@@ -26,17 +31,21 @@ namespace xero {
 
             if (!camera_.isPresent())
             {
-                // There is no limelight, the limelight subsystem reported this.
-                return ;
-            }
-
-            if (!camera_.getTV())
-            {
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
-                logger << "DriveByVision: camera lost target" ;
+                logger << "DriveByVision: lost limelight in network table" ;
+                logger.endMessage() ;
+
+                is_done_ = true ;
+                setMotorsToPercents(0.0, 0.0) ;
+            }
+            else if (!camera_.getTV())
+            {
+                lost_count_++ ;
+
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
+                logger << "DriveByVision: camera lost target, count " << lost_count_ ;
                 logger.endMessage() ;                
 
-                lost_count_++ ;
                 if (lost_count_ > max_lost_count_) {
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision: action done due to too many lost targets conditions" ;
@@ -64,6 +73,15 @@ namespace xero {
                     double left = yaw_base_power_ + yawadj ;
                     double right = yaw_base_power_ - yawadj ;
                     setMotorsToPercents(left, right) ;
+
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
+                    logger << "DriveByVision:" ;
+                    logger << " yaw " << yaw ;
+                    logger << " yaw_p_ " << yaw_p_ ;
+                    logger << " yaw_base_power_ " << yaw_base_power_ ;
+                    logger << " left " << left ;
+                    logger << " right " << right ;
+                    logger.endMessage() ;                     
                 }
             }
         }
