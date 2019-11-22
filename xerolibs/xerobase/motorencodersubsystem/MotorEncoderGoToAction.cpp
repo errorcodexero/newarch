@@ -8,6 +8,7 @@
 #include <MessageLogger.h>
 
 #include "MotorEncoderSubsystem.h"
+#include "MotorEncoderHoldAction.h"
 
 using namespace xero::misc ;
 
@@ -16,7 +17,7 @@ namespace xero {
         MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target):
             MotorEncoderSubsystemAction(subsystem) {
             
-            std::string config = subsystem.configName_;
+            std::string config = subsystem.configName_ + ":goto";
             auto &settings = subsystem.getRobot().getSettingsParser();
             
             target_ = target;
@@ -31,6 +32,7 @@ namespace xero {
 
         void MotorEncoderGoToAction::start() {
             MotorEncoderSubsystem &subsystem = getSubsystem();
+            subsystem.setDefaultAction(std::make_shared<MotorEncoderHoldAction>(subsystem, target_));
 
             double dist = normalizePosition(target_ - subsystem.getPosition());
             if (std::fabs(dist) < threshold_) {
@@ -75,6 +77,12 @@ namespace xero {
             logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
             logger << "Motor/Encoder Velocity Profile: " << profile_->toString() ;
             logger.endMessage();
+        }
+
+        void MotorEncoderGoToAction::cancel() {
+            isDone_ = true;
+            // If we cancel a goto action, hold the motor at its current position
+            getSubsystem().setDefaultAction(std::make_shared<MotorEncoderHoldAction>(getSubsystem()));
         }
 
         void MotorEncoderGoToAction::run() {

@@ -23,9 +23,7 @@ namespace xero {
             virtual bool isDone() {
                 return isDone_ ;
             }
-            virtual void cancel() {
-
-            }
+            virtual void cancel();
             virtual std::string toString() {
                 return " " ;
             }

@@ -2,6 +2,7 @@
 
 #include "MotorEncoderSubsystem.h"
 #include "MotorEncoderSubsystemAction.h"
+#include "MotorEncoderHoldAction.h"
 
 #include "XeroEncoder.h"
 
@@ -14,13 +15,14 @@ namespace xero {
             const std::string config,
             uint64_t id,
             bool angular
-        ): SingleMotorSubsystem(parent, name, config + ":motor", id), 
+        ): SingleMotorSubsystem(parent, name, "hw:" + config + ":motor", id), 
         speedometer_(/*samples=*/2, angular), configName_(name), msg_id_(id) {
             auto &robot = getRobot(); 
             encoder_ = std::make_shared<XeroEncoder>(robot.getMessageLogger(), 
                                                      robot.getSettingsParser(), 
-                                                     config + ":encoder",
+                                                     "hw:" + config + ":encoder",
                                                      angular);
+            setDefaultAction(std::make_shared<MotorEncoderHoldAction>(*this));
         }
 
         bool MotorEncoderSubsystem::canAcceptAction(xero::base::ActionPtr action) {
@@ -29,6 +31,10 @@ namespace xero {
 
             auto mot_enc_act_p = std::dynamic_pointer_cast<MotorEncoderSubsystemAction>(action);
             return (mot_enc_act_p != nullptr);
+        }
+
+        bool MotorEncoderSubsystem::canAcceptDefaultAction(xero::base::ActionPtr action) { 
+            return std::dynamic_pointer_cast<MotorEncoderHoldAction>(action) != nullptr;
         }
 
         void MotorEncoderSubsystem::computeState() {

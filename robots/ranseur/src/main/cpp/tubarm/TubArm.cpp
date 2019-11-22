@@ -11,7 +11,7 @@ using namespace xero::misc ;
 namespace xero {
     namespace ranseur {
       
-        TubArm::TubArm(Subsystem *parent) : MotorEncoderSubsystem(parent, "tubarm", "hw:tubarm", MSG_GROUP_TUBARM, true) {
+        TubArm::TubArm(Subsystem *parent) : MotorEncoderSubsystem(parent, "tubarm", "tubarm", MSG_GROUP_TUBARM, true) {
         }
 
         TubArm::~TubArm() {
