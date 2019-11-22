@@ -5,11 +5,17 @@
 namespace xero {
     namespace base {
         MotorEncoderHoldAction::MotorEncoderHoldAction(MotorEncoderSubsystem &subsystem, double target):
-            MotorEncoderSubsystemAction(subsystem), target_(target) {
+            MotorEncoderSubsystemAction(subsystem), target_(target), hasExplicitTarget_(true) {
                 pid_.initFromSettingsExtended(
                     subsystem.getRobot().getSettingsParser(),
                     subsystem.configName_ + ":hold"
                 );
+        }
+
+        void MotorEncoderHoldAction::start() {
+            if (!hasExplicitTarget_) target_ = getSubsystem().getPosition();
+            cancelled_ = false;
+            pid_.reset();
         }
 
         void MotorEncoderHoldAction::run() {

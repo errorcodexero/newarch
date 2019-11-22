@@ -2,6 +2,7 @@
 
 #include "MotorEncoderSubsystem.h"
 #include "MotorEncoderSubsystemAction.h"
+#include "MotorEncoderHoldAction.h"
 
 #include "XeroEncoder.h"
 
@@ -21,6 +22,7 @@ namespace xero {
                                                      robot.getSettingsParser(), 
                                                      config + ":encoder",
                                                      angular);
+            setDefaultAction(std::make_shared<MotorEncoderHoldAction>(*this));
         }
 
         bool MotorEncoderSubsystem::canAcceptAction(xero::base::ActionPtr action) {
