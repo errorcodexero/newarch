@@ -30,30 +30,19 @@ namespace xero {
             virtual std::string toString() ;  
 
         private:
-            enum class State {
-                DriveYaw,
-                Tracking,
-                Done,
-            } ;            
-
-        private:
-            void driveByYaw() ;    
-            void driveTracking() ;
-            std::string toString(State st) ;
-
-        private:
-            State state_ ;
+            // The camera subsystem
             RanseurCameraTracker &camera_ ;
+
+            // If true, this action is done
+            bool is_done_ ;
 
             // Drive by Yaw constants
             double yaw_base_power_ ;
             double yaw_p_ ;
 
             int lost_count_ ;
-
-            double start_ ;
-            int plot_id_ ;
-            static std::vector<std::string> plot_columns_ ;             
+            int max_lost_count_ ;
+            double done_dist_ ;
         } ;
     }
 }

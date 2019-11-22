@@ -16,7 +16,9 @@ SIMSOURCES = \
 	singlemotorsubsystem/SingleMotorSubsystem.cpp\
 	singlemotorsubsystem/SingleMotorPowerAction.cpp\
 	cameratracker/CameraTracker.cpp\
-	cameratracker/CameraChangeAction.cpp
+	cameratracker/CameraChangeAction.cpp\
+	cameratracker/LimeLightSubsystem.cpp\
+	cameratracker/LimeLightChangeModeAction.cpp
 endif
 
 SOURCES = \
