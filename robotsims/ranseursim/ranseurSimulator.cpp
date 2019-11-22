@@ -1,5 +1,5 @@
-#include "ranseurSimulator.h"
-#include "ranseurScreenVisualizer.h"
+#include "RanseurSimulator.h"
+#include "RanseurScreenVisualizer.h"
 
 #include "OIModel.h"
 #include <TankDriveModel.h>
@@ -17,9 +17,9 @@ namespace xero
     {
         namespace ranseur
         {
-            ranseurSimulator::ranseurSimulator(const std::string &paramfile) : RobotSimBase(paramfile)
+            RanseurSimulator::RanseurSimulator(const std::string &paramfile) : RobotSimBase(paramfile)
             {
-                tankdrive_ = std::make_shared<TankDriveModel>(*this) ;
+                tankdrive_ = std::make_shared<TankDriveModel>(*this, TankDriveModel::MotorType::MTSpark) ;
                 addModel(tankdrive_) ;
 
                 oi_ = std::make_shared<OIModel>(*this) ;
@@ -31,19 +31,22 @@ namespace xero
                 bunny_arm_ = std::make_shared<BunnyArmModel>(*this) ;
                 addModel(bunny_arm_) ;
 
+                vision_ = std::make_shared<RanseurVision>(*this, *tankdrive_) ;
+                addModel(vision_) ;
+
                 visualizer_ = false ;
             }
 
-            ranseurSimulator::~ranseurSimulator() {
+            RanseurSimulator::~RanseurSimulator() {
             }
 
-            void ranseurSimulator::enableScreen() {
+            void RanseurSimulator::enableScreen() {
                 visualizer_ = true ;
             }
 
-            void ranseurSimulator::connect(SimulatedObject *device) {
+            void RanseurSimulator::connect(SimulatedObject *device) {
                 if (visualizer_) {
-                    auto vis = std::make_shared<ranseurScreenVisualizer>(*this) ;
+                    auto vis = std::make_shared<RanseurScreenVisualizer>(*this) ;
                     addVisualizer(vis) ;                    
                     visualizer_ = false ;
                 }
@@ -51,7 +54,7 @@ namespace xero
                 RobotSimBase::connect(device) ;
             }
 
-            void ranseurSimulator::disconnect(SimulatedObject *device) {
+            void RanseurSimulator::disconnect(SimulatedObject *device) {
                 RobotSimBase::disconnect(device) ;
             }
         }

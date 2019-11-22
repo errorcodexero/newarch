@@ -1,8 +1,10 @@
 #pragma once
 
+#include <frc/SimulatedObject.h>
+
 namespace rev
 {
-    class CANSparkMaxLowLevel
+    class CANSparkMaxLowLevel : public xero::sim::SimulatedObject
     {
     public:
         enum MotorType { 
@@ -36,6 +38,7 @@ namespace rev
 
         void Set(double value) {
             power_ = value ;
+            changed() ;            
         }
         double Get() const {
             return power_ ;
@@ -44,8 +47,28 @@ namespace rev
         void EnableVoltageCompensation(double volts) {            
         }
 
+        int GetDeviceID() {
+            return id_ ;
+        }
+
+        void SetInverted(bool b) {
+            inverted_ = b ;
+        }        
+        
+        bool GetInverted() const {
+            return inverted_ ;
+        }        
+
+        double SimulatorGetPower() {
+            if (inverted_)
+                return -power_ ;
+            else
+                return power_ ;
+        }
+
     private:
         int id_ ;
+        bool inverted_ ;        
         MotorType type_ ;
         double power_ ;
     } ;

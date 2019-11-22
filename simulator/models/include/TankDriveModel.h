@@ -11,11 +11,18 @@ namespace xero
 
         class TankDriveModel : public SubsystemModel
         {
+        public:
+            enum MotorType
+            {
+                MTTalon,
+                MTSpark,
+                MTVictor
+            } ;
         private:
             static constexpr double PI = 3.14159265359;
 
         public:
-            TankDriveModel(RobotSimBase &);
+            TankDriveModel(RobotSimBase &borobt, MotorType mt);
             virtual ~TankDriveModel();
 
             virtual bool processEvent(const std::string &name, int value) ;             
@@ -25,6 +32,7 @@ namespace xero
             virtual std::string toString()  ;
 
             virtual void addDevice(ctre::phoenix::motorcontrol::can::TalonSRX *motor);
+            virtual void addDevice(rev::CANSparkMax *motor) ;
             virtual void addDevice(frc::Encoder *encoder);
             virtual void addDevice(AHRS *navx);
             virtual void addDevice(frc::Solenoid *sol) ;
@@ -127,8 +135,11 @@ namespace xero
             int right_enc_value_ ;
 
             // The set of motors for the left and right side of the robot
-            std::vector<ctre::phoenix::motorcontrol::can::TalonSRX *> left_motors_;
-            std::vector<ctre::phoenix::motorcontrol::can::TalonSRX *> right_motors_;
+            std::vector<ctre::phoenix::motorcontrol::can::TalonSRX *> left_talon_motors_;
+            std::vector<ctre::phoenix::motorcontrol::can::TalonSRX *> right_talon_motors_;
+
+            std::vector<rev::CANSparkMax *> left_spark_motors_;
+            std::vector<rev::CANSparkMax *> right_spark_motors_;         
 
             // The left and right encoers for the robot
             frc::Encoder *left_enc_;
@@ -139,6 +150,9 @@ namespace xero
 
             // The NAVX that supplies the robot angle
             AHRS *navx_;
+
+            // The type of motors
+            MotorType mt_ ;
         };
     } // namespace sim
 } // namespace xero

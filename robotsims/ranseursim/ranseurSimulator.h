@@ -1,6 +1,7 @@
 #pragma once
 #include "TubManipulatorModel.h"
 #include "BunnyArmModel.h"
+#include "RanseurVision.h"
 #include <frc/RobotSimBase.h>
 #include <LifterModel.h>
 #include <TankDriveModel.h>
@@ -22,15 +23,15 @@ namespace xero
             class OIModel ;
 
             /// \brief A simulator for Phoenix.
-            class ranseurSimulator : public xero::sim::RobotSimBase
+            class RanseurSimulator : public xero::sim::RobotSimBase
             {
             public:
                 /// \brief Create a simulator for Phoenix.
                 /// \param paramfile the filename of the robot's parameter file
-                ranseurSimulator(const std::string &paramfile);
+                RanseurSimulator(const std::string &paramfile);
 
                 /// \brief Destroy the simulator.
-                virtual ~ranseurSimulator();
+                virtual ~RanseurSimulator();
 
                 /// \brief Connect a simulated hardware object to the simulator
                 /// \param device the simulated hardware object to connect
@@ -49,6 +50,7 @@ namespace xero
                 std::shared_ptr<xero::sim::ranseur::OIModel> oi_ ;
                 std::shared_ptr<TubManipulatorModel> tub_manipulator_ ;
                 std::shared_ptr<BunnyArmModel> bunny_arm_ ;
+                std::shared_ptr<RanseurVision> vision_ ;
                 bool visualizer_ ;
             };
         } // namespace ranseur

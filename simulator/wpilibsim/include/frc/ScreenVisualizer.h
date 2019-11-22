@@ -45,7 +45,7 @@ namespace xero {
             void deinitScreen() ;
             void drawField() ;
             void doLayout() ;
-            void plotRobot(double x, double y, double angle) ;
+            virtual void plotRobot(double x, double y, double angle) ;
 
             virtual char getRobotChar() {
                 return ' ' ;
@@ -70,7 +70,7 @@ namespace xero {
             static const int OIWindowWidth = 24 ;
             static const char *rotate_chars_ ;              
 
-        private:
+        protected:
             WINDOW *field_window_ ;
             WINDOW *robot_window_ ;
             WINDOW *oi_window_ ;

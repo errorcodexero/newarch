@@ -147,7 +147,7 @@ endif
 #
 
 #
-# These are for the WPIlib
+# These are for the simulator models
 #
 ifeq ($(NEED_MODELS),true)
 

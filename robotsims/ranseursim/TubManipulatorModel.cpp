@@ -27,13 +27,14 @@ namespace xero {
                 wrist_motor_power_ = 0.0 ;
                 collector_motor_power_ = 0.0 ;
                 arm_angle_ = ArmMaximumAngle ;
-                wrist_angle_ = WristMinAngle ;
+                wrist_angle_ = WristMaxAngle ;
                 collector_sensor_value_ = false ;
                 collector_state_ = false ;
                 has_tub_ = false ;
 
                 arm_encoder_ = nullptr ;
                 wrist_encoder_ = nullptr ;
+                tub_sensor_ = nullptr ;
             }
 
             TubManipulatorModel::~TubManipulatorModel() {

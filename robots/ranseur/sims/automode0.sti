@@ -31,4 +31,7 @@
 0.1,tankdrive,ypos,16300                                # Start center hab platform
 0.1,tankdrive,angle,0                                   # Start center hab platform
 
-8.0,tubmanipulator,tub,1                                # Set the tub sensor at 8 seconds
+0.1,vision,tubxpos,32400                            
+0.1,vision,tubypos,15700
+
+# 8.0,tubmanipulator,tub,1                                # Set the tub sensor at 8 seconds

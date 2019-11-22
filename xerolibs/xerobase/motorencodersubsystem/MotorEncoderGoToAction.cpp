@@ -32,7 +32,7 @@ namespace xero {
         void MotorEncoderGoToAction::start() {
             MotorEncoderSubsystem &subsystem = getSubsystem();
 
-            double dist = target_ - subsystem.getPosition();
+            double dist = normalizePosition(target_ - subsystem.getPosition());
             if (std::fabs(dist) < threshold_) {
                 isDone_ = true;
                 MessageLogger &logger = subsystem.getRobot().getMessageLogger();
@@ -86,13 +86,13 @@ namespace xero {
             double dt = robot.getDeltaTime();
             double elapsed = robot.getTime() - startTime_;
             double position = subsystem.getPosition();
-            double traveled = position - startPosition_;
-            double remaining = target_ - position;
+            double traveled = normalizePosition(position - startPosition_);
+            double remaining = normalizePosition(target_ - position);
 
             if (elapsed > profile_->getTotalTime()) {
                  MessageLogger &logger = robot.getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, subsystem.getMsgID()) ;
-                logger << "LifterGoToHeightAction: action completed" ;
+                logger << "MotorEncoderGoToHeightAction: action completed" ;
                 logger << ", remaining = " << remaining ;
                 logger.endMessage() ;
 

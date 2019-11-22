@@ -5,6 +5,7 @@
 
 #include "XeroEncoder.h"
 
+using namespace xero::misc;
 namespace xero {
     namespace base {
         MotorEncoderSubsystem::MotorEncoderSubsystem(
@@ -13,8 +14,8 @@ namespace xero {
             const std::string config,
             uint64_t id,
             bool angular
-        ): SingleMotorSubsystem(parent, name, config + ":motor", id), configName_(name), msg_id_(id) {
-            
+        ): SingleMotorSubsystem(parent, name, config + ":motor", id), 
+        speedometer_(/*samples=*/2, angular), configName_(name), msg_id_(id) {
             auto &robot = getRobot(); 
             encoder_ = std::make_shared<XeroEncoder>(robot.getMessageLogger(), 
                                                      robot.getSettingsParser(), 
