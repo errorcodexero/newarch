@@ -45,7 +45,8 @@ namespace xero {
             void deinitScreen() ;
             void drawField() ;
             void doLayout() ;
-            virtual void plotRobot(double x, double y, double angle) ;
+
+            virtual void plotRobot(int x, int y, double angle, int width, int length) ;
 
             virtual char getRobotChar() {
                 return ' ' ;
@@ -103,10 +104,6 @@ namespace xero {
             // The layout of the field and the text area on the screen
             int width_ ;
             int height_ ;
-
-            // The robot width and height
-            int robot_width_ ;
-            int robot_height_ ;
 
             std::string drivebase_model_ ;  
         } ;

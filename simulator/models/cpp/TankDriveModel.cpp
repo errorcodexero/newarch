@@ -35,6 +35,7 @@ namespace xero {
             diameter_ = simbase.getSettingsParser().getDouble("tankdrive:sim:diameter") ;
             scrub_ = simbase.getSettingsParser().getDouble("tankdrive:sim:scrub") ;
             width_ = simbase.getSettingsParser().getDouble("tankdrive:sim:width") ;
+            length_ = simbase.getSettingsParser().getDouble("tankdrive:sim:length") ;
             left_right_error_ = simbase.getSettingsParser().getDouble("tankdrive:sim:error_per_side") ;
 
             calcLowLevelParams(simbase) ;
@@ -81,6 +82,8 @@ namespace xero {
             lines.push_back("  Speed: " + std::to_string(getSpeed())) ;
             lines.push_back("  LeftPos: " + std::to_string(left_)) ;
             lines.push_back("  RightPos: " + std::to_string(right_)) ;
+            lines.push_back("  LeftPower: " + std::to_string(left_power_)) ;
+            lines.push_back("  RightPower: " + std::to_string(right_power_)) ;                        
         }
 
         void TankDriveModel::calcLowLevelParams(RobotSimBase &simbase) {
@@ -172,7 +175,6 @@ namespace xero {
             //
             double desired_left_rps = left_power_ * left_rps_per_power_per_time_ ;
             double desired_right_rps = right_power_ * right_rps_per_power_per_time_ ;
-
          
 #ifdef TANKDRIVE_PRINT_STUFF
             std::cout << "--------------------------------------------------------" << std::endl ;
@@ -348,7 +350,7 @@ namespace xero {
                 ypos_ += dr * std::sin(angle) ;
             }
             else {
-                double r = width_ * (dl + dr) / (2 * (dl - dr)) ;
+                double r = width_ * (dl + dr) / (2 * (dr - dl)) ;
                 double wd = (dr - dl) / width_ ;
                 xpos_ = xpos_ + r * std::sin(wd + angle) - r * std::sin(angle) ;
                 ypos_ = ypos_ - r * std::cos(wd + angle) + r * std::cos(angle) ;

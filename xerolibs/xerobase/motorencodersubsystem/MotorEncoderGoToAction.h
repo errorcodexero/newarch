@@ -24,9 +24,7 @@ namespace xero {
                 return isDone_ ;
             }
             virtual void cancel();
-            virtual std::string toString() {
-                return " " ;
-            }
+            virtual std::string toString() ;
 
         private:
             bool isDone_ ;

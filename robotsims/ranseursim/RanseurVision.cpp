@@ -10,7 +10,8 @@ namespace xero {
     namespace sim {
         namespace ranseur {
 
-            RanseurVision::RanseurVision(RobotSimBase &simbase, TankDriveModel &db) : SubsystemModel(simbase, "vision"), tankdrive_(db) {
+            RanseurVision::RanseurVision(RobotSimBase &simbase, TankDriveModel &db, TubManipulatorModel &tubmanip) 
+                        : SubsystemModel(simbase, "vision"), tankdrive_(db), tubmanipulator_(tubmanip) {
                 tubxpos_set_ = false ;
                 tubypos_set_ = false ;
             }
@@ -25,6 +26,9 @@ namespace xero {
                 {
                     lines.push_back("  tubx " + std::to_string(tubxpos_)) ;
                     lines.push_back("  tuby " + std::to_string(tubypos_)) ;
+                    lines.push_back("  camx " + std::to_string(rx_)) ;
+                    lines.push_back("  camy " + std::to_string(ry_)) ;                    
+                    lines.push_back("  dist " + std::to_string(dist_)) ;                    
                     lines.push_back("  tv " + std::to_string(tv_)) ;
                     lines.push_back("  tx " + std::to_string(tx_)) ;
                     lines.push_back("  ty " + std::to_string(ty_)) ;
@@ -75,21 +79,36 @@ namespace xero {
                     double dmaxdist = 10.0 * 12.0 ;         // Max target distance is 10 feet (120 inches)
                     double dmaxpcnt = 0.01 ;                // At max distance, the target fills 1 % of the image
 
+                    double dcamoffset = 11.0 ;              // The robot length, assuming the camera
+
                     double fov = 90.0 ;
 
                     //
                     // We assume the camera is mounted on the front of the robot
                     //
-                    double rx = tankdrive_.getXPos() ;
-                    double ry = tankdrive_.getYPos() ;
+                    double cx = tankdrive_.getXPos() ;
+                    double cy = tankdrive_.getYPos() ;
                     double ra = tankdrive_.getAngle() ;
 
-                    double phit = xero::math::rad2deg(atan2(tubypos_ - ry, tubxpos_ - rx)) ;
-                    tx_ = phit - ra ;
-                    ty_ = -15.0 ;
+                    rx_ = cx + cos(xero::math::deg2rad(ra)) * dcamoffset ;
+                    ry_ = cy + sin(xero::math::deg2rad(ra)) * dcamoffset ;
 
-                    double dist = std::sqrt((rx - tubxpos_) * (rx - tubxpos_) + (ry - tubypos_) * (ry - tubypos_)) ;
-                    if (dist > dmaxdist || dist < dmindist || tx_ < -fov / 2.0 || tx_ > fov / 2.0)
+                    double targetheight = 4.0 ;
+                    double cameraheight = 8.0 ;
+
+                    double phit = xero::math::rad2deg(atan2(tubypos_ - ry_, tubxpos_ - rx_)) ;
+                    tx_ = phit - ra ;
+
+                    dist_ = std::sqrt((rx_ - tubxpos_) * (rx_ - tubxpos_) + (ry_ - tubypos_) * (ry_ - tubypos_)) ;
+
+                    if (std::fabs(dist_) < dmindist)
+                    {
+                        tubxpos_ = -1000.0 ;
+                        tubypos_ = -1000.0 ;
+                        tubmanipulator_.hasTub(true) ;
+                    }
+
+                    if (dist_ > dmaxdist || dist_ < dmindist || tx_ < -fov / 2.0 || tx_ > fov / 2.0)
                     {
                         //
                         // Either too close or too far
@@ -102,7 +121,8 @@ namespace xero {
                     else
                     {
                         tv_ = 1 ;
-                        ta_ = (dmaxdist - dmindist) / (dist - dmindist) * (dminpcnt - dmaxpcnt) + dminpcnt ;
+                        ta_ = (dmaxdist - dmindist) / (dist_ - dmindist) * (dminpcnt - dmaxpcnt) + dminpcnt ;
+                        ty_ = xero::math::rad2deg(atan2(targetheight - cameraheight, dist_)) ;
                     }
 
                     ts_ = 0.0 ;

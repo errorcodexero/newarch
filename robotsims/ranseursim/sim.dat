@@ -35,12 +35,13 @@ hw:tubmanipulator:collector:motor       9                               # Victor
 ######################################################################################
 
 #
-# These are the real world characteristics of the drivebase
+# These are the real world characteristics of the drivebase.  There is shifter software
+# we set them both the same
 #
-tankdrive:high:maxvelocity                              160             # in / sec
-tankdrive:high:maxacceleration                          80              # in / sec / sec
-tankdrive:low:maxvelocity                               36              # in / sec
-tankdrive:low:maxacceleration                           18              # in / sec
+tankdrive:high:maxvelocity                              192             # in / sec
+tankdrive:high:maxacceleration                          128             # in / sec / sec
+tankdrive:low:maxvelocity                               192             # in / sec
+tankdrive:low:maxacceleration                           128             # in / sec / sec
 
 #
 # The maximum random error applied to the left and right
@@ -59,19 +60,20 @@ tankdrive:sim:ticks_per_rev                             2570
 #
 # The diameter of the robot wheel
 #
-tankdrive:sim:diameter                                  8.5
+tankdrive:sim:diameter                                  4.0
 
 #
 # The percent of the angle that is applied to the robot based on the
 # distance the wheels travel vs an ideal case were the wheels are
 # frictionless
 #
-tankdrive:sim:scrub                                     0.95177665
+tankdrive:sim:scrub                                    1.0
 
 #
 # The width of the drivebase for the robot
 #
-tankdrive:sim:width                                     22.5
+tankdrive:sim:width                                     30
+tankdrive:sim:length                                    30
 
 #
 # oi

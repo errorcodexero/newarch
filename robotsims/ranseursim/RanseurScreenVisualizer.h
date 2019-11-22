@@ -11,9 +11,13 @@ namespace xero {
                 RanseurScreenVisualizer(RobotSimBase &sim) ;
                 virtual ~RanseurScreenVisualizer() ;
 
+
+
             protected:
                 virtual void drawGameSpecificField(WINDOW *win)  ;
-                virtual void plotRobot(double x, double y, double angle) ;
+                virtual void plotRobot(int x, int y, double angle, int width, int length) ;
+
+                virtual char getRobotChar() ;                
             } ;
         }
     }

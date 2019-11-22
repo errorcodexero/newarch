@@ -27,18 +27,30 @@ namespace xero {
                 }
             }
 
-            void RanseurScreenVisualizer::plotRobot(double x, double y, double angle) {
-                int rx, ry ;
+            char RanseurScreenVisualizer::getRobotChar() 
+            {
+                auto tubmanip = std::dynamic_pointer_cast<TubManipulatorModel>(getSimulator().getModelByName("tubmanipulator")) ;
 
-                ScreenVisualizer::plotRobot(x, y, angle) ;
+                return tubmanip->hasTub() ? '#' : ' ' ;
+            }
 
-                std::shared_ptr<BunnyArmModel> arm = std::dynamic_pointer_cast<BunnyArmModel>(getSimulator().getModelByName("bunnyarm")) ;
-                if (arm->isDeployed())
+            void RanseurScreenVisualizer::plotRobot(int x, int y, double angle, int width, int length) {
+                ScreenVisualizer::plotRobot(x, y, angle, width, length) ;
+
+                auto bunnyarm = std::dynamic_pointer_cast<BunnyArmModel>(getSimulator().getModelByName("bunnyarm")) ;
+
+                auto db = std::dynamic_pointer_cast<TankDriveModel>(getSimulator().getModelByName("tankdrive"));
+                
+                if (bunnyarm->isDeployed())
                 {
-                    physicalToScreen(x, y, rx, ry) ;
-                    drawFilledScreenRectangle(field_window_, '#', rx, ry, 1, 1) ;
-                    wrefresh(field_window_) ;
+                    drawFilledScreenRectangle(field_window_, '|', x + width / 2 , y + 1, 1, length - 2) ;
                 }
+                else
+                {
+                    drawFilledScreenRectangle(field_window_, '-', x , y + length / 2, width - 2, 1) ;
+                }
+
+                wrefresh(field_window_) ;
             }
         }
     }

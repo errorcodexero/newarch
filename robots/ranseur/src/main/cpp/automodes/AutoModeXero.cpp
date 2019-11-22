@@ -37,22 +37,21 @@ namespace xero
             // everything else contained in parallel -> 2 seq actions
             pushAction(parallel) ;
 
-        //// 1ST SEQUENCE ////
+            //// 1ST SEQUENCE ////
             auto sequence = std::make_shared<SequenceAction>(robot.getMessageLogger()) ;
             parallel->addAction(sequence) ;
-            // TBD : terminate pathfollowing if sees the tub
             auto path = std::make_shared<TankDriveFollowPathAction>(*tankdrive, "BunnyAutoMode_PathToTub") ;
             auto term = std::make_shared<TerminateAction>(tankdrive, path , ranseur) ;
             term->addTerminator(camera) ; 
             sequence->pushAction(term) ;
             sequence->pushAction(std::make_shared<DriveByVisionAction>(*tankdrive, *camera)) ;
 
-        //// 2ND SEQUENCE ////
+            //// 2ND SEQUENCE ////
             sequence = std::make_shared<SequenceAction>(robot.getMessageLogger()) ;
             parallel->addAction(sequence) ;
-            sequence->pushAction(std::make_shared<DelayAction>(5.0)) ; //this delay time is just a place holder for a constant
+            sequence->pushAction(std::make_shared<DelayAction>(1.6)) ;
             sequence->pushAction(std::make_shared<BunnyArmDeployAction>(*bunnyarm, true)) ;
-            sequence->pushAction(std::make_shared<DelayAction>(5.0)) ; // this delay time is just a place holder for "until tub is located/reached"
+            sequence->pushAction(std::make_shared<DelayAction>(0.5)) ;
             sequence->pushAction(std::make_shared<TubManipulatorCollectAction>(*tubmanipulatorsubsytem)) ;
             sequence->pushAction(std::make_shared<TubManipulatorDumpAction>(*tubmanipulatorsubsytem)) ; 
 
