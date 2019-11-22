@@ -76,6 +76,7 @@ namespace xero {
 
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
                     logger << "DriveByVision:" ;
+                    logger << " dist " << dist ;
                     logger << " yaw " << yaw ;
                     logger << " yaw_p_ " << yaw_p_ ;
                     logger << " yaw_base_power_ " << yaw_base_power_ ;

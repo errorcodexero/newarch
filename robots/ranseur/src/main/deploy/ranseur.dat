@@ -196,10 +196,10 @@ ranseurvision:target_height                                     4.0
 ranseurvision:camera_height                                     8.0
 ranseurvision:camera_angle                                      0.0
 
-drivebyvision:yaw_base_power                                    0.30
-drivebyvision:yaw_p                                             0.03
+drivebyvision:yaw_base_power                                    0.4
+drivebyvision:yaw_p                                             0.05
 drivebyvision:max_lost_count                                    10
-drivebyvision:done_distance                                     8.0
+drivebyvision:done_distance                                     1.0
 
 ###################################################################################################
 # Driver gamepad

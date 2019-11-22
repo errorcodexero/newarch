@@ -197,7 +197,7 @@ namespace xero {
 
         void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {
             left_motors_->set(left_percent);
-            right_motors_->set(left_percent);
+            right_motors_->set(right_percent);
         }
     }
 }

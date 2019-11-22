@@ -81,6 +81,8 @@ namespace xero {
             lines.push_back("  Speed: " + std::to_string(getSpeed())) ;
             lines.push_back("  LeftPos: " + std::to_string(left_)) ;
             lines.push_back("  RightPos: " + std::to_string(right_)) ;
+            lines.push_back("  LeftPower: " + std::to_string(left_power_)) ;
+            lines.push_back("  RightPower: " + std::to_string(right_power_)) ;                        
         }
 
         void TankDriveModel::calcLowLevelParams(RobotSimBase &simbase) {
@@ -172,7 +174,6 @@ namespace xero {
             //
             double desired_left_rps = left_power_ * left_rps_per_power_per_time_ ;
             double desired_right_rps = right_power_ * right_rps_per_power_per_time_ ;
-
          
 #ifdef TANKDRIVE_PRINT_STUFF
             std::cout << "--------------------------------------------------------" << std::endl ;

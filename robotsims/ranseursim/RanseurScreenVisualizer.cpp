@@ -31,14 +31,19 @@ namespace xero {
                 int rx, ry ;
 
                 ScreenVisualizer::plotRobot(x, y, angle) ;
+                physicalToScreen(x, y, rx, ry) ;
 
-                std::shared_ptr<BunnyArmModel> arm = std::dynamic_pointer_cast<BunnyArmModel>(getSimulator().getModelByName("bunnyarm")) ;
-                if (arm->isDeployed())
-                {
-                    physicalToScreen(x, y, rx, ry) ;
-                    drawFilledScreenRectangle(field_window_, '#', rx, ry, 1, 1) ;
-                    wrefresh(field_window_) ;
-                }
+                auto bunnyarm = std::dynamic_pointer_cast<BunnyArmModel>(getSimulator().getModelByName("bunnyarm")) ;
+                auto tubmanip = std::dynamic_pointer_cast<TubManipulatorModel>(getSimulator().getModelByName("tubmanipulator")) ;
+                if (bunnyarm->isDeployed())
+                    drawFilledScreenRectangle(field_window_, '|', rx , ry, 1, 1) ;
+                else
+                    drawFilledScreenRectangle(field_window_, '-', rx , ry, 1, 1) ;                
+
+                if (tubmanip->hasTub())
+                    drawFilledScreenRectangle(field_window_, '#', rx - 1, ry - 1, 1, 1) ;
+
+                wrefresh(field_window_) ;
             }
         }
     }

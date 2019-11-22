@@ -49,12 +49,18 @@ namespace xero  {
 
                 void generateDisplayInformation(std::list<std::string> &lines) ;
 
-            private:
-                void setArmEncoder() ;
-                void setWristEncoder() ;
                 bool hasTub() {
                     return has_tub_ ;
                 }
+
+                void hasTub(bool b) {
+                    has_tub_ = b ;
+                }
+
+            private:
+                void setArmEncoder() ;
+                void setWristEncoder() ;
+
 
             private:
                 static constexpr double ArmMinimumAngle = 90.0 ;

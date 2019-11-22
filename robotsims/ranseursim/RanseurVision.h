@@ -1,5 +1,6 @@
 #pragma once
 
+#include "TubManipulatorModel.h"
 #include <TankDriveModel.h>
 #include <frc/SubsystemModel.h>
 #include <vector>
@@ -11,7 +12,7 @@ namespace xero  {
             class RanseurVision : public SubsystemModel
             {
             public:
-                RanseurVision(RobotSimBase &sim, xero::sim::TankDriveModel &model) ;
+                RanseurVision(RobotSimBase &sim, xero::sim::TankDriveModel &db, TubManipulatorModel &tubmanip) ;
                 virtual ~RanseurVision() ;
 
                 /// \brief Convert the model to a string.
@@ -51,12 +52,16 @@ namespace xero  {
                 int getpipe_ ;      // True active pipline index of the camera
                 std::vector<double> camtran_ ;   // Result of 3d position solution, 6 numbers
 
+                double dist_ ;
                 double tubxpos_ ;
                 double tubypos_ ;
+                double rx_ ;
+                double ry_ ;
                 bool tubxpos_set_ ;
                 bool tubypos_set_ ;
 
                 xero::sim::TankDriveModel &tankdrive_ ;
+                TubManipulatorModel &tubmanipulator_ ;
             } ;
         }
     }

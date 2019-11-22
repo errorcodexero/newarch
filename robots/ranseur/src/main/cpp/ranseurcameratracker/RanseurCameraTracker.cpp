@@ -51,7 +51,8 @@ namespace xero {
             //
             // See: http://docs.limelightvision.io/en/latest/cs_estimating_distance.html
             //
-            return (target_height_ - camera_height_) / tan(camera_angle_ + getTY()) ;
+            double ty = getTY() ;
+            return (target_height_ - camera_height_) / tan(xero::math::deg2rad(camera_angle_ + ty)) ;
         }        
 
         bool RanseurCameraTracker::shouldTerminate() {

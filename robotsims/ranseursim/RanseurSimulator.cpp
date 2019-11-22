@@ -31,7 +31,7 @@ namespace xero
                 bunny_arm_ = std::make_shared<BunnyArmModel>(*this) ;
                 addModel(bunny_arm_) ;
 
-                vision_ = std::make_shared<RanseurVision>(*this, *tankdrive_) ;
+                vision_ = std::make_shared<RanseurVision>(*this, *tankdrive_, *tub_manipulator_) ;
                 addModel(vision_) ;
 
                 visualizer_ = false ;
