@@ -20,27 +20,42 @@
         "name": "Simulator Launch",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/ranseur/ranseur.exe",
         "args": [
-            "--test","0.0",
-            "--start", "0.0",
-            "--auto", "20.0",
-            "--oper","0.0",
-            "--events","robots/ranseur/sims/automode0.sti"
-        ],
-        "stopAtEntry": false,
-        "cwd": "${workspaceFolder}",
-        "environment": [],
-        "externalConsole": true,
-        "MIMode": "gdb",
-        "miDebuggerPath": "C:/cygwin64/bin/gdb.exe",
-        "setupCommands": [
-            {
-                "description": "Enable pretty-printing for gdb",
-                "text": "-enable-pretty-printing",
-                "ignoreFailures": true
-            }
-        ]
-    }    
+          "--test","0.0",
+          "--start", "0.0",
+          "--auto", "20.0",
+          "--oper","0.0",
+          "--events","robots/ranseur/sims/automode0.sti"
+      ],
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/ranseur/ranseur.exe",
+      "stopAtEntry": false,
+      "environment": [],
+      "externalConsole": true,
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:/cygwin64/bin/gdb.exe",
+      "setupCommands": [
+          {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+          }
+      ]
+    },
+    {
+      "name": "LLDB Simulator Launch",
+      "type": "lldb-vscode",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/ranseur/ranseur",
+      "stopOnEntry": false,
+      "args": [
+          "--test","0.0",
+          "--start", "0.0",
+          "--auto", "20.0",
+          "--oper","0.0",
+          "--events","robots/ranseur/sims/automode0.sti"
+      ]
+      }
   ]
 }
