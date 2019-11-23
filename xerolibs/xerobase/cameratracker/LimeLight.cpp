@@ -13,6 +13,8 @@ namespace xero {
         {
             led_mode_ = ledMode::Invalid ;
             cam_mode_ = camMode::Invalid ;
+
+            table_ = nt::NetworkTableInstance::GetDefault().GetTable("limelight");            
         }
 
         LimeLight::~LimeLight()
@@ -23,18 +25,18 @@ namespace xero {
         {            
             if(cam_mode_ == camMode::VisionProcessor)
             {
-                std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-                if(table->ContainsKey("tv"))
+
+                if(table_->ContainsKey("tv"))
                 {
                     present_ = true ;
                     
-                    if(std::fabs(table->GetNumber("tv", 0.0)) < 0.01)
+                    if(std::fabs(table_->GetNumber("tv", 0.0)) < 0.01)
                         tv_ = false ;
                     else
                     {
-                        tx_ = table->GetNumber("tx",0.0);
-                        ty_ = table->GetNumber("ty",0.0);
-                        ta_ = table->GetNumber("ta",0.0);
+                        tx_ = table_->GetNumber("tx",0.0);
+                        ty_ = table_->GetNumber("ty",0.0);
+                        ta_ = table_->GetNumber("ta",0.0);
                     }
                 }
                 else
@@ -72,10 +74,10 @@ namespace xero {
                 switch(mode)
                 {
                 case camMode::VisionProcessor:
-                    table_->PutString(camModeName, "0") ;
+                    table_->PutNumber(camModeName, 0) ;
                     break ;
                 case camMode::DriverCamera:
-                    table_->PutString(camModeName, "1") ;                
+                    table_->PutNumber(camModeName, 1) ;                
                     break ;
                 case camMode::Invalid:
                     break ;

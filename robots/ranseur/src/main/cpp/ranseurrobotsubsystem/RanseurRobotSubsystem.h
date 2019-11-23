@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ranseuroi/RanseurOISubsystem.h"
-#include "ranseurcameratracker/RanseurCameraTracker.h"
+#include "ranseurcameratracker/RanseurLimeLight.h"
 #include "bunnyarm/BunnyArm.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
@@ -23,7 +23,7 @@ namespace xero {
                 return oi_ ;
             }    
 
-            std::shared_ptr<RanseurCameraTracker> getCameraTracker() {
+            std::shared_ptr<RanseurLimeLight> getCameraTracker() {
                 return tracker_ ;
             }            
 
@@ -43,7 +43,7 @@ namespace xero {
             
         private:
             std::shared_ptr<RanseurOISubsystem> oi_ ;
-            std::shared_ptr<RanseurCameraTracker> tracker_ ;
+            std::shared_ptr<RanseurLimeLight> tracker_ ;
             std::shared_ptr<BunnyArm> bunnyArm_;
             std::shared_ptr<TubToucher> tubToucher_;
             std::shared_ptr<TubManipulatorSubsystem> manipulator_ ;

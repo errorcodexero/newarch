@@ -10,7 +10,7 @@ SUBSYSTEMS = \
 	src/main/cpp/bunnyarm/BunnyArm.cpp\
 	src/main/cpp/bunnyarm/BunnyArmDeployAction.cpp\
 	src/main/cpp/ranseurcameratracker/DriveByVisionAction.cpp\
-	src/main/cpp/ranseurcameratracker/RanseurCameraTracker.cpp\
+	src/main/cpp/ranseurcameratracker/RanseurLimeLight.cpp\
 	src/main/cpp/ranseuroi/RanseurOIDevice.cpp\
 	src/main/cpp/ranseuroi/RanseurOISubsystem.cpp\
 	src/main/cpp/ranseurrobotsubsystem/RanseurRobotSubsystem.cpp\
