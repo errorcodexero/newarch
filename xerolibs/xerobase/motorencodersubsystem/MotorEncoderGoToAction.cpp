@@ -119,5 +119,12 @@ namespace xero {
 
             subsystem.setMotor(out);
         }
+
+        std::string MotorEncoderGoToAction::toString() {
+            std::string str ;
+
+            str = "MotorEncoderGoToAction " + std::to_string(target_) ;
+            return str ;
+        }
     }
 }

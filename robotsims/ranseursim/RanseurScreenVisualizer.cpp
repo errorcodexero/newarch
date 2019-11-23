@@ -27,21 +27,28 @@ namespace xero {
                 }
             }
 
-            void RanseurScreenVisualizer::plotRobot(double x, double y, double angle) {
-                int rx, ry ;
+            char RanseurScreenVisualizer::getRobotChar() 
+            {
+                auto tubmanip = std::dynamic_pointer_cast<TubManipulatorModel>(getSimulator().getModelByName("tubmanipulator")) ;
 
-                ScreenVisualizer::plotRobot(x, y, angle) ;
-                physicalToScreen(x, y, rx, ry) ;
+                return tubmanip->hasTub() ? '#' : ' ' ;
+            }
+
+            void RanseurScreenVisualizer::plotRobot(int x, int y, double angle, int width, int length) {
+                ScreenVisualizer::plotRobot(x, y, angle, width, length) ;
 
                 auto bunnyarm = std::dynamic_pointer_cast<BunnyArmModel>(getSimulator().getModelByName("bunnyarm")) ;
-                auto tubmanip = std::dynamic_pointer_cast<TubManipulatorModel>(getSimulator().getModelByName("tubmanipulator")) ;
-                if (bunnyarm->isDeployed())
-                    drawFilledScreenRectangle(field_window_, '|', rx , ry, 1, 1) ;
-                else
-                    drawFilledScreenRectangle(field_window_, '-', rx , ry, 1, 1) ;                
 
-                if (tubmanip->hasTub())
-                    drawFilledScreenRectangle(field_window_, '#', rx - 1, ry - 1, 1, 1) ;
+                auto db = std::dynamic_pointer_cast<TankDriveModel>(getSimulator().getModelByName("tankdrive"));
+                
+                if (bunnyarm->isDeployed())
+                {
+                    drawFilledScreenRectangle(field_window_, '|', x + width / 2 , y + 1, 1, length - 2) ;
+                }
+                else
+                {
+                    drawFilledScreenRectangle(field_window_, '-', x , y + length / 2, width - 2, 1) ;
+                }
 
                 wrefresh(field_window_) ;
             }

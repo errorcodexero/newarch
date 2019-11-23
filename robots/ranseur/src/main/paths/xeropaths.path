@@ -17,9 +17,9 @@
                             "name": "BunnyArm"
                         }
                     ],
-                    "maxacceleration": 180,
+                    "maxacceleration": 80,
                     "maxjerk": 1800,
-                    "maxvelocity": 180,
+                    "maxvelocity": 160,
                     "name": "PathToTub",
                     "points": [
                         {

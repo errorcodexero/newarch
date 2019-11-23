@@ -22,6 +22,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/ranseur/ranseur.exe",
         "args": [
+            "--simscreen",
             "--test","0.0",
             "--start", "0.0",
             "--auto", "15.0",

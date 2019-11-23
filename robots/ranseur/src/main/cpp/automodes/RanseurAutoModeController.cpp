@@ -29,7 +29,7 @@ namespace xero {
                 break ;
                 
             case 8:
-                mode = std::make_shared<StraightCharAutoMode>(getRobot(), 0.8, 5.0) ;
+                mode = std::make_shared<StraightCharAutoMode>(getRobot(), 1.0, 5.0) ;
                 break ;
 
             case 9:

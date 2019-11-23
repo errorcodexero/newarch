@@ -35,6 +35,7 @@ namespace xero {
             diameter_ = simbase.getSettingsParser().getDouble("tankdrive:sim:diameter") ;
             scrub_ = simbase.getSettingsParser().getDouble("tankdrive:sim:scrub") ;
             width_ = simbase.getSettingsParser().getDouble("tankdrive:sim:width") ;
+            length_ = simbase.getSettingsParser().getDouble("tankdrive:sim:length") ;
             left_right_error_ = simbase.getSettingsParser().getDouble("tankdrive:sim:error_per_side") ;
 
             calcLowLevelParams(simbase) ;
@@ -349,7 +350,7 @@ namespace xero {
                 ypos_ += dr * std::sin(angle) ;
             }
             else {
-                double r = width_ * (dl + dr) / (2 * (dl - dr)) ;
+                double r = width_ * (dl + dr) / (2 * (dr - dl)) ;
                 double wd = (dr - dl) / width_ ;
                 xpos_ = xpos_ + r * std::sin(wd + angle) - r * std::sin(angle) ;
                 ypos_ = ypos_ - r * std::cos(wd + angle) + r * std::cos(angle) ;

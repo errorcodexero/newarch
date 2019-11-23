@@ -29,7 +29,8 @@ namespace xero {
         void RanseurCameraTracker::computeState() {
             LimeLightSubsystem::computeState() ;
 
-            dist_ = calcDistanceAngles() ;
+            if (getTV())
+                dist_ = calcDistanceAngles() ;
         }
 
         double RanseurCameraTracker::calcDistanceArea() {

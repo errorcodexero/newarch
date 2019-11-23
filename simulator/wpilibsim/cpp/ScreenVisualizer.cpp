@@ -73,7 +73,22 @@ namespace xero {
 
         void ScreenVisualizer::endCycle() {
             std::shared_ptr<TankDriveModel> db = std::dynamic_pointer_cast<TankDriveModel>(getSimulator().getModelByName(drivebase_model_)) ;
-            plotRobot(db->getXPos(), db->getYPos(), db->getAngle()) ;           
+
+            int screenx, screeny ;
+            int screenwidth, screenlength ;
+            int zerox, zeroy ;
+
+            physicalToScreen(db->getXPos(), db->getYPos(), screenx, screeny) ;
+            physicalToScreen(0, 0, zerox, zeroy) ;
+            physicalToScreen(db->getWidth(), db->getLength(), screenwidth, screenlength) ;
+
+            screenwidth = screenwidth - zerox ;
+            screenlength = zeroy - screenlength ;
+
+            screenx -= screenwidth / 2 ;
+            screeny -= screenlength / 2 ; 
+
+            plotRobot(screenx, screeny, db->getAngle(), screenwidth, screenlength) ;
             wrefresh(field_window_) ;
             wrefresh(robot_window_) ;
             wrefresh(oi_window_) ;
@@ -195,14 +210,6 @@ namespace xero {
             oi_window_ = newwin(height_ / 2, width_ - field_width - RobotWindowWidth, 0, field_width + RobotWindowWidth + 3) ;
             nodelay(oi_window_, true) ;
 
-            //
-            // Calculate the size of the robot
-            //
-            physicalToScreen(0, 0, rsx, rsy) ;
-            physicalToScreen(34.0, 24.0, robot_width_, robot_height_) ;
-            robot_width_ = robot_width_ - rsx ;
-            robot_height_ = rsy - robot_height_ ;
-
             keypad(oi_window_, true) ;
             keypad(field_window_, true) ;           
             keypad(robot_window_, true) ;
@@ -234,52 +241,38 @@ namespace xero {
             return ret ;
         }
 
-        void ScreenVisualizer::plotRobot(double x, double y, double angle) {
-            int rx, ry ;
+        void ScreenVisualizer::plotRobot(int x, int y, double angle, int width, int length) {
             char ch ;
 
-            physicalToScreen(x, y, rx, ry) ;
-            if (last_info_valid_ && rx == last_x_ && ry == last_y_)
-                return ;
-
-            rx -= robot_width_ / 2 ;
-            ry -= robot_height_ / 2 ;           
+            if (last_info_valid_ && x == last_x_ && y == last_y_)
+                return ;          
 
             if (last_info_valid_)
-                drawFilledScreenRectangle(field_window_, ' ', last_x_, last_y_, robot_width_ , robot_height_ ) ;
+                drawFilledScreenRectangle(field_window_, ' ', last_x_, last_y_, width , length ) ;
 
-            if (std::fabs(angle - last_angle_) > 0.01) {
-                rotate_index_ = (rotate_index_ + 1) % 8 ;
-                ch = rotate_chars_[rotate_index_] ;
-            }
-            else {
-                ch = getRobotChar() ;
-            }
+            ch = getRobotChar() ;
 
-            drawScreenRectangle(field_window_, rx, ry, robot_width_, robot_height_) ;
-            drawFilledScreenRectangle(field_window_, ch, rx + 1, ry + 1, robot_width_ - 2, robot_height_ - 2) ;
-
-            if (angle > 50)
-                mvaddch(10, 10, '*') ;
+            drawScreenRectangle(field_window_, x, y, width, length) ;
+            drawFilledScreenRectangle(field_window_, ch, x + 1, y + 1, width - 2, length - 2) ;
 
             int side = angleToSide(rad2deg(angle)) ;
             switch(side) {
             case 0:         // Right
-                mvwaddch(field_window_, ry + robot_height_ / 2, rx + robot_width_ - 1, ACS_LTEE) ;
+                mvwaddch(field_window_, y + length / 2, x + width - 1, ACS_LTEE) ;
                 break ;
             case 1:         // Top
-                mvwaddch(field_window_, ry, rx + robot_width_ /2 , ACS_BTEE) ;
+                mvwaddch(field_window_, y, x + width /2 , ACS_BTEE) ;
                 break ;         
             case 2:         // Left
-                mvwaddch(field_window_, ry + robot_height_ / 2, rx, ACS_RTEE) ;
+                mvwaddch(field_window_, y + length / 2, x, ACS_RTEE) ;
                 break ;         
             case 3:         // Bottom
-                mvwaddch(field_window_, ry + robot_height_ - 1, rx + robot_width_ /2 , ACS_TTEE) ;
+                mvwaddch(field_window_, y + length - 1, x + width /2 , ACS_TTEE) ;
                 break ;
             }
 
-            last_x_ = rx ;
-            last_y_ = ry ;
+            last_x_ = x ;
+            last_y_ = y ;
             last_angle_ = angle ;
             last_info_valid_ = true ;
         }       

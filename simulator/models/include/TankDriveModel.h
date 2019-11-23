@@ -53,6 +53,14 @@ namespace xero
                 return speed_ ;
             }
 
+            double getWidth() {
+                return width_ ;
+            }
+
+            double getLength() {
+                return length_ ;
+            }
+
             void generateDisplayInformation(std::list<std::string> &lines) ;
 
         private:
@@ -94,6 +102,7 @@ namespace xero
             // track the location of the driverbase
             double scrub_;
             double width_;
+            double length_ ;
 
             // High gear and low gear revolutions per second per power
             double high_rps_per_power_per_time_;

@@ -83,16 +83,16 @@ tankdrive:inches_per_tick                                       0.004889638
 tankdrive:width                                                 22.5
 tankdrive:scrub                                                 1.0
 
-tankdrive:follower:left:kv1                                     35.998
-tankdrive:follower:left:kv2                                     -0.0296
+tankdrive:follower:left:kv1                                     192.0
+tankdrive:follower:left:kv2                                     0.0
 tankdrive:follower:left:ka                                      0.0001
-tankdrive:follower:left:kp                                      0.02032             # Recommended 0.02032 - 0.03048
+tankdrive:follower:left:kp                                      0.0                 # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kd                                      0.0
 
-tankdrive:follower:right:kv1                                    35.998
-tankdrive:follower:right:kv2                                    -0.0296
+tankdrive:follower:right:kv1                                    192.0
+tankdrive:follower:right:kv2                                    0.0
 tankdrive:follower:right:ka                                     0.0001
-tankdrive:follower:right:kp                                     0.02032             # Recommended 0.02032 - 0.03048
+tankdrive:follower:right:kp                                     0.0                 # Recommended 0.02032 - 0.03048
 tankdrive:follower:right:kd                                     0.0
 
 tankdrive:follower:turn_correction                              0
@@ -197,7 +197,7 @@ ranseurvision:camera_height                                     8.0
 ranseurvision:camera_angle                                      0.0
 
 drivebyvision:yaw_base_power                                    0.4
-drivebyvision:yaw_p                                             0.05
+drivebyvision:yaw_p                                             0.002
 drivebyvision:max_lost_count                                    10
 drivebyvision:done_distance                                     1.0
 

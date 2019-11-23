@@ -93,7 +93,7 @@ namespace xero {
                     rx_ = cx + cos(xero::math::deg2rad(ra)) * dcamoffset ;
                     ry_ = cy + sin(xero::math::deg2rad(ra)) * dcamoffset ;
 
-                    double targetheight = 3.0 ;
+                    double targetheight = 4.0 ;
                     double cameraheight = 8.0 ;
 
                     double phit = xero::math::rad2deg(atan2(tubypos_ - ry_, tubxpos_ - rx_)) ;
