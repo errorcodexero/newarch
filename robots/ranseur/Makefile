@@ -3,6 +3,7 @@ TOPDIR=../..
 AUTOMODES = \
 	src/main/cpp/automodes/RanseurAutoModeBase.cpp\
 	src/main/cpp/automodes/AutoModeXero.cpp\
+	src/main/cpp/automodes/AutoModeTest.cpp\
 	src/main/cpp/automodes/RanseurAutoModeController.cpp
 
 SUBSYSTEMS = \
@@ -22,7 +23,9 @@ SUBSYSTEMS = \
 	src/main/cpp/tubmanipulatorsubsystem/TubManipulatorDumpAction.cpp\
 	src/main/cpp/tubmanipulatorsubsystem/TubManipulatorEjectAction.cpp\
     src/main/cpp/tubarm/TubArm.cpp\
-    src/main/cpp/tubwrist/TubWrist.cpp
+    src/main/cpp/tubwrist/TubWrist.cpp\
+	src/main/cpp/tubtoucher/TubToucher.cpp\
+	src/main/cpp/tubtoucher/TubToucherDeployAction.cpp
 
 	
 SOURCES = \

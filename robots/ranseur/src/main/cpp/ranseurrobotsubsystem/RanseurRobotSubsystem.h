@@ -6,6 +6,7 @@
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
 #include <tubmanipulatorsubsystem/TubManipulatorSubsystem.h>
+#include <tubtoucher/TubToucher.h>
 
 namespace xero {
     namespace ranseur {
@@ -29,6 +30,10 @@ namespace xero {
             std::shared_ptr<BunnyArm> getBunnyArm() {
                 return bunnyArm_;
             }
+         
+            std::shared_ptr<TubToucher> getTubToucher() {
+                return tubToucher_;
+            }
 
              std::shared_ptr<TubManipulatorSubsystem> getTubManipulatorSubsystem() {
                 return manipulator_ ;
@@ -40,6 +45,7 @@ namespace xero {
             std::shared_ptr<RanseurOISubsystem> oi_ ;
             std::shared_ptr<RanseurCameraTracker> tracker_ ;
             std::shared_ptr<BunnyArm> bunnyArm_;
+            std::shared_ptr<TubToucher> tubToucher_;
             std::shared_ptr<TubManipulatorSubsystem> manipulator_ ;
         } ;
     }
