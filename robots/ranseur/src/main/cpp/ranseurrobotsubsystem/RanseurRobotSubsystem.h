@@ -6,6 +6,7 @@
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
 #include <tubmanipulatorsubsystem/TubManipulatorSubsystem.h>
+#include <frc/DigitalOutput.h>
 
 namespace xero {
     namespace ranseur {
@@ -35,12 +36,17 @@ namespace xero {
             }    
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
+
+            void setDIOState(int index, bool state) {
+                dios_[index]->Set(state) ;
+            }
             
         private:
             std::shared_ptr<RanseurOISubsystem> oi_ ;
             std::shared_ptr<RanseurCameraTracker> tracker_ ;
             std::shared_ptr<BunnyArm> bunnyArm_;
             std::shared_ptr<TubManipulatorSubsystem> manipulator_ ;
+            std::vector<std::shared_ptr<frc::DigitalOutput>> dios_ ;
         } ;
     }
 }

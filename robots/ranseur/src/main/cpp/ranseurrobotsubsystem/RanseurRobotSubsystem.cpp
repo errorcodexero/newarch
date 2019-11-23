@@ -37,7 +37,14 @@ namespace xero {
             addChild(bunnyArm_);
        
             manipulator_ = std::make_shared<TubManipulatorSubsystem>(this) ;
-            addChild(manipulator_) ;                 
+            addChild(manipulator_) ;
+
+            for(int i = 0 ; i < 10 ; i++)
+            {
+                auto dout = std::make_shared<frc::DigitalOutput>(i) ;
+                dout->Set(false) ;
+                dios_.push_back(dout) ;
+            }
         }
 
         RanseurRobotSubsystem::~RanseurRobotSubsystem() {
