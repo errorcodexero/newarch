@@ -12,17 +12,22 @@ namespace xero {
             RanseurOIDevice(RanseurOISubsystem &sub, int index) ;
             virtual ~RanseurOIDevice() ;
 
-            virtual int getAutoModeSelector() {
-                return getValue(automode_) ;
-            }
-
+            virtual int getAutoModeSelector() ;
+            
             virtual void init() ;
             virtual void generateActions(xero::base::SequenceAction &seq) ;
 
         private:
             void initialize() ;
         private:
+
+#ifdef RANSEUR_OLD_OI
             size_t automode_ ;
+#else
+            size_t automode1_ ;
+            size_t automode2_ ;
+#endif            
+            
             size_t collect_ ;
             size_t dump_ ;
             size_t eject_ ;

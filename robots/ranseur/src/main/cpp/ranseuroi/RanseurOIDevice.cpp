@@ -38,8 +38,13 @@ namespace xero {
             log << "OI: initializing button/axis mapping" ;
             log.endMessage() ;
 
+#ifdef RANSEUR_OLD_OI
             std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
             automode_ = mapAxisScale(6, mapping) ;
+#else
+            size_t automode1_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:automode1_b") ;
+            size_t automode2_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:automode2_b") ;
+#endif
 
             //
             // Get button numbers
@@ -60,6 +65,27 @@ namespace xero {
             eject_ = mapButton(eject_b, OIButton::ButtonType::LowToHigh) ;            // Push button
             spare1_ = mapButton(spare1_b, OIButton::ButtonType::LowToHigh) ;          // Push button
             spare2_ = mapButton(spare2_b, OIButton::ButtonType::LowToHigh) ;          // Push button
+#ifndef RANSEUR_OLD_OI
+            automode1_ = mapButton(automode1_b, OIButton::ButtonType::Level) ;        // toggle switch 
+            automode2_ = mapButton(automode2_b, OIButton::ButtonType::Level) ;        // toggle switch
+#endif
+        }
+
+        int RanseurOIDevice::getAutoModeSelector(){
+
+#ifdef RANSEUR_OLD_OI
+            return getValue(automode_) ;
+#else
+            int ret = 0 ;
+            if(getValue(automode1_)) {
+                ret |= (1 << 0) ;
+            }
+            if(getValue(automode2_)) {
+                ret |= (1 << 1) ;
+            }
+            return ret ;
+#endif   
+
         }
 
         void RanseurOIDevice::generateActions(SequenceAction &seq){
