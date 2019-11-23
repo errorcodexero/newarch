@@ -72,10 +72,10 @@ namespace xero {
                 switch(mode)
                 {
                 case camMode::VisionProcessor:
-                    table_->PutString(camModeName, "0") ;
+                    table_->PutNumber(camModeName, 0) ;
                     break ;
                 case camMode::DriverCamera:
-                    table_->PutString(camModeName, "1") ;                
+                    table_->PutNumber(camModeName, 1) ;                
                     break ;
                 case camMode::Invalid:
                     break ;

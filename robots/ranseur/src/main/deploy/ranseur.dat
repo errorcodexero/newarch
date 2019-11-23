@@ -199,12 +199,13 @@ tubarm:power                                                    0.2
 tubarm:duration                                                 4
 
 ###################################################################################################
-# cameratracker
+# ranseurvision
 ###################################################################################################
 
-cameratracker:distance_threshold                                48.0
-cameratracker:rect_ratio_min                                    0.9
-cameratracker:rect_ratio_max                                    1.1
+ranseurvision:distance_threshold                                48.0
+ranseurvision:camera_height                                     8.0
+ranseurvision:camera_angle                                      0.0
+ranseurvision:target_height                                     4.0
 
 ###################################################################################################
 # drive by vision (simple P only control)
