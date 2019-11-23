@@ -10,7 +10,7 @@ namespace xero {
     namespace base {
         class MotorController;
 
-        /// \brief This class is a subsystem that consists of a single motor.
+        /// \brief This class  a subsystem that consists of a single motor.
         /// The motor can be a controlled via a VictorSP motor controller or
         /// via a TalonSRX motor controller.<br><br>
         /// <b>Actions:</b><br>
