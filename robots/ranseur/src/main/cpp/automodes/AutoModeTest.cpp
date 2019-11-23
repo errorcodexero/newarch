@@ -15,6 +15,7 @@
 #include <memory>
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <motorencodersubsystem/MotorEncoderGoToAction.h>
+#include <tubtoucher/TubToucherDeployAction.h>
 
 using namespace xero::base ;
 
@@ -27,6 +28,7 @@ namespace xero
             ActionPtr act ;
             auto &ranseur = dynamic_cast<Ranseur &>(getRobot()) ;
             auto bunnyarm = ranseur.getRanseurRobotSubsystem()->getBunnyArm() ;
+            auto tubtoucher = ranseur.getRanseurRobotSubsystem()->getTubToucher() ;
             auto tubcollector = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubCollector() ;
             auto tubarm = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubArm() ;
             auto tubwrist = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubWrist() ;
@@ -68,6 +70,16 @@ namespace xero
                 case 5 :
                     act = std::make_shared<BunnyArmDeployAction>(*bunnyarm, false) ;
                     pushSubActionPair(bunnyarm, act) ;
+                break ;
+                
+                case 6 :
+                    act = std::make_shared<TubToucherDeployAction>(*tubtoucher, true) ;
+                    pushSubActionPair(tubtoucher, act) ;
+                break ;
+   
+                case 7 :
+                    act = std::make_shared<TubToucherDeployAction>(*tubtoucher, false) ;
+                    pushSubActionPair(tubtoucher, act) ;
                 break ;
 
             }
