@@ -90,7 +90,7 @@ namespace xero {
         bool Subsystem::setDefaultAction(ActionPtr action) {
             if (_canAcceptAction(action, /*isDefault=*/true)) {
                 defaultAction_ = action;
-                setAction(nullptr);
+                if (!isBusy()) setAction(nullptr);
                 return true;
             } else {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
@@ -182,12 +182,12 @@ namespace xero {
                     logger.endMessage() ;
                 }
             }
-            for (auto child : children_) canceled = canceled || child->cancelActionsAndChildActions();
+            for (auto child : children_) canceled = child->cancelActionsAndChildActions() || canceled;
             return canceled;
         }
 
         bool Subsystem::isBusy() {
-            return action_ && !action_->isDone();
+            return !isRunningDefaultAction_ && action_ && !action_->isDone();
         }
 
         bool Subsystem::parentBusy() {
