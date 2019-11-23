@@ -12,7 +12,7 @@ namespace xero {
         {
             yaw_base_power_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_base_power") ;
             yaw_p_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_p") ;
-            distance_threshold_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvisionvision:distance_threshold") ;
+            distance_threshold_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:distance_threshold") ;
         }
 
         void DriveByVisionAction::start() {

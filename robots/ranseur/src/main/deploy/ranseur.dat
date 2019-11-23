@@ -213,6 +213,7 @@ ranseurvision:target_height                                     4.0
 
 drivebyvision:yaw_base_power                                    0.30
 drivebyvision:yaw_p                                             0.03
+drivebyvision:distance_threshold                                2.0
 
 ###################################################################################################
 # Driver gamepad
