@@ -202,7 +202,7 @@ tubarm:duration                                                 4
 # ranseurvision
 ###################################################################################################
 
-ranseurvision:distance_threshold                                48.0
+ranseurvision:distance_threshold                                60.0
 ranseurvision:camera_height                                     8.0
 ranseurvision:camera_angle                                      0.0
 ranseurvision:target_height                                     4.0
@@ -211,8 +211,8 @@ ranseurvision:target_height                                     4.0
 # drive by vision (simple P only control)
 ###################################################################################################
 
-drivebyvision:yaw_base_power                                    0.30
-drivebyvision:yaw_p                                             0.03
+drivebyvision:yaw_base_power                                    0.4
+drivebyvision:yaw_p                                             0.002
 drivebyvision:distance_threshold                                2.0
 
 ###################################################################################################

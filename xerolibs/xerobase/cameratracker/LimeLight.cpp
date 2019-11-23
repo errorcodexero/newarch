@@ -25,7 +25,6 @@ namespace xero {
         {            
             if(cam_mode_ == camMode::VisionProcessor)
             {
-
                 if(table_->ContainsKey("tv"))
                 {
                     present_ = true ;
@@ -34,6 +33,7 @@ namespace xero {
                         tv_ = false ;
                     else
                     {
+                        tv_ = true ;                        
                         tx_ = table_->GetNumber("tx",0.0);
                         ty_ = table_->GetNumber("ty",0.0);
                         ta_ = table_->GetNumber("ta",0.0);
@@ -52,8 +52,6 @@ namespace xero {
             {
                 tv_ = false ;
             }
-            
-
         }
 
         void LimeLight::run()
