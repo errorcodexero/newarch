@@ -78,7 +78,8 @@ tankdrive:sim:length                                    30
 #
 # oi
 #
-oi:axis:automode                                        6                   # Axis
+oi:button:automode1                                      7
+oi:button:automode2                                      8
 
 #
 # gamepad

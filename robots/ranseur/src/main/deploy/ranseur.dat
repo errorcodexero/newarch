@@ -226,3 +226,5 @@ oi:turtle                                                       3
 oi:eject                                                        4
 oi:spare1                                                       5
 oi:spare2                                                       6
+oi:automode:1                                                   7
+oi:automode:2                                                   8

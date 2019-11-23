@@ -32,14 +32,22 @@ namespace xero {
         RanseurOIDevice::~RanseurOIDevice() {
         }
 
+        int RanseurOIDevice::getAutoModeSelector() {
+            int ret = 0 ;
+
+            if (getValue(automode2_))
+                ret |= 2 ;
+            if (getValue(automode1_))
+                ret |= 1 ;
+
+            return ret ;
+        }
+
         void RanseurOIDevice::initialize() {
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_RANSEUR_OI) ;
             log << "OI: initializing button/axis mapping" ;
             log.endMessage() ;
-
-            std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
-            automode_ = mapAxisScale(6, mapping) ;
 
             //
             // Get button numbers
@@ -50,6 +58,8 @@ namespace xero {
             size_t eject_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:eject") ;
             size_t spare1_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:spare1") ;
             size_t spare2_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:spare2") ;
+            size_t automode1_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:automode:1") ;
+            size_t automode2_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:automode:2") ;
 
             //
             // Actions
@@ -60,6 +70,8 @@ namespace xero {
             eject_ = mapButton(eject_b, OIButton::ButtonType::LowToHigh) ;            // Push button
             spare1_ = mapButton(spare1_b, OIButton::ButtonType::LowToHigh) ;          // Push button
             spare2_ = mapButton(spare2_b, OIButton::ButtonType::LowToHigh) ;          // Push button
+            automode1_ = mapButton(automode1_b, OIButton::ButtonType::Level) ;        // Level toggle switch
+            automode2_ = mapButton(automode2_b, OIButton::ButtonType::Level) ;        // Level toggle switch
         }
 
         void RanseurOIDevice::generateActions(SequenceAction &seq){

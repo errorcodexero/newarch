@@ -12,9 +12,7 @@ namespace xero {
             RanseurOIDevice(RanseurOISubsystem &sub, int index) ;
             virtual ~RanseurOIDevice() ;
 
-            virtual int getAutoModeSelector() {
-                return getValue(automode_) ;
-            }
+            virtual int getAutoModeSelector()  ;
 
             virtual void init() ;
             virtual void generateActions(xero::base::SequenceAction &seq) ;
@@ -22,7 +20,8 @@ namespace xero {
         private:
             void initialize() ;
         private:
-            size_t automode_ ;
+            size_t automode1_ ;
+            size_t automode2_ ;
             size_t collect_ ;
             size_t dump_ ;
             size_t eject_ ;
@@ -34,7 +33,6 @@ namespace xero {
             xero::base::ActionPtr dumping_ ;
             xero::base::ActionPtr turtling_ ;
             xero::base::ActionPtr ejecting_ ;
-
         } ;
     }
 }
