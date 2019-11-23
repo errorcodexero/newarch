@@ -27,7 +27,7 @@ namespace xero {
                 wrist_motor_power_ = 0.0 ;
                 collector_motor_power_ = 0.0 ;
                 arm_angle_ = ArmMaximumAngle ;
-                wrist_angle_ = WristMaxAngle ;
+                wrist_angle_ = WristMinimumAngle ;
                 collector_sensor_value_ = false ;
                 collector_state_ = false ;
                 has_tub_ = false ;
@@ -89,10 +89,10 @@ namespace xero {
                     arm_angle_ = ArmMinimumAngle ;
 
                 wrist_angle_ += wrist_degrees_per_volt_per_sec_ * wrist_motor_power_ * dt ;
-                if (wrist_angle_ > WristMaxAngle)
-                    wrist_angle_ = WristMaxAngle ;
-                else if (wrist_angle_ < WristMinAngle)
-                    wrist_angle_ = WristMinAngle ;
+                if (wrist_angle_ > WristMaximumAngle)
+                    wrist_angle_ = WristMaximumAngle ;
+                else if (wrist_angle_ < WristMinimumAngle)
+                    wrist_angle_ = WristMinimumAngle ;
 
                 setArmEncoder() ;
                 setWristEncoder() ;

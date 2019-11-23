@@ -3,6 +3,7 @@ TOPDIR=../..
 AUTOMODES = \
 	src/main/cpp/automodes/RanseurAutoModeBase.cpp\
 	src/main/cpp/automodes/AutoModeXero.cpp\
+	src/main/cpp/automodes/AutoModeXeroTest.cpp\
 	src/main/cpp/automodes/RanseurAutoModeController.cpp
 
 SUBSYSTEMS = \
