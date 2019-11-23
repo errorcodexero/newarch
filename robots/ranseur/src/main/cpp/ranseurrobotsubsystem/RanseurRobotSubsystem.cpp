@@ -28,9 +28,8 @@ namespace xero {
             oi_ = std::make_shared<RanseurOISubsystem>(this) ;
             addChild(oi_) ;                    
 
-            tracker_ = std::make_shared<RanseurCameraTracker>(this) ;
-            tracker_->setCameraMode(CameraTracker::CameraMode::DriverViewing) ;               
-            tracker_->setCameraIndex(0) ;
+            tracker_ = std::make_shared<RanseurLimeLight>(this) ;
+            tracker_->setCamMode(RanseurLimeLight::camMode::VisionProcessor) ;               
             addChild(tracker_) ;
 
             bunnyArm_ = std::make_shared<BunnyArm>(this);

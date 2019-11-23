@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ranseuroi/RanseurOISubsystem.h"
-#include "ranseurcameratracker/RanseurCameraTracker.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
 #include "tubcollector/TubCollector.h"

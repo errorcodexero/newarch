@@ -2,7 +2,7 @@
 
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/actions/TankDriveAction.h>
-#include "RanseurCameraTracker.h"
+#include "RanseurLimeLight.h"
 #include <vector>
 
 namespace xero {
@@ -10,7 +10,7 @@ namespace xero {
         class DriveByVisionAction : public xero::base::TankDriveAction
         {
         public:
-            DriveByVisionAction(xero::base::TankDrive &tank_drive, RanseurCameraTracker &camera) ;
+            DriveByVisionAction(xero::base::TankDrive &tank_drive, RanseurLimeLight &camera) ;
 
             /// \brief Start the action; called once per action when it starts
             virtual void start() ;
@@ -30,30 +30,16 @@ namespace xero {
             virtual std::string toString() ;  
 
         private:
-            enum class State {
-                DriveYaw,
-                Tracking,
-                Done,
-            } ;            
-
-        private:
-            void driveByYaw() ;    
-            void driveTracking() ;
-            std::string toString(State st) ;
-
-        private:
-            State state_ ;
-            RanseurCameraTracker &camera_ ;
+            
+            RanseurLimeLight &camera_ ;
 
             // Drive by Yaw constants
             double yaw_base_power_ ;
             double yaw_p_ ;
+            double distance_threshold_ ;
 
             int lost_count_ ;
-
-            double start_ ;
-            int plot_id_ ;
-            static std::vector<std::string> plot_columns_ ;             
+            bool is_done_ ;         
         } ;
     }
 }
