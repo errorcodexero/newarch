@@ -36,9 +36,10 @@ namespace xero
             auto camera = ranseur.getRanseurRobotSubsystem()->getCameraTracker() ;
             auto tubmanipulatorsubsytem = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem() ;
 
-            int which = getRobot().getSettingsParser().getInteger("which")  ;
-            double power = getRobot().getSettingsParser().getDouble("power") ;
-            double duration = getRobot().getSettingsParser().getDouble("duration") ;
+            int which = getRobot().getSettingsParser().getInteger("automode:test:which")  ;
+            double power = getRobot().getSettingsParser().getDouble("automode:test:power") ;
+            double duration = getRobot().getSettingsParser().getDouble("automode:test:duration") ;
+            double angle = getRobot().getSettingsParser().getDouble("automode:test:angle") ;
             
             switch (which) {
 
@@ -53,12 +54,12 @@ namespace xero
                 break ;
 
                 case 2 :
-                    act = std::make_shared<MotorEncoderGoToAction>(*tubarm, 0) ;
+                    act = std::make_shared<MotorEncoderGoToAction>(*tubarm, angle) ;
                     pushSubActionPair(tubarm, act) ;
                 break ;
 
                 case 3 :
-                    act = std::make_shared<MotorEncoderGoToAction>(*tubwrist, 90) ;
+                    act = std::make_shared<MotorEncoderGoToAction>(*tubwrist, angle) ;
                     pushSubActionPair(tubwrist, act) ;
                 break ;
 

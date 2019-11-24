@@ -1,5 +1,6 @@
 #include "automodes/RanseurAutoModeController.h"
 #include "automodes/AutoModeXero.h"
+#include "automodes/AutoModeTest.h"
 #include "Ranseur.h"
 
 #include <MessageLogger.h>
@@ -27,12 +28,17 @@ namespace xero {
             case 0:
                 mode = std::make_shared<AutoModeXero>(getRobot()) ;
                 break ;
+
+            case 1:
+                mode = std::make_shared<AutoModeTest>(getRobot()) ;
+                break ;                
                 
             case 8:
                 mode = std::make_shared<StraightCharAutoMode>(getRobot(), 1.0, 5.0) ;
                 break ;
+
             case 9:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "Tune_Tune") ;
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), "BunnyAutoMode_PathToTub") ;
                 break ;
             }
             setAction(mode) ;

@@ -12,6 +12,7 @@ namespace xero {
     namespace ranseur {
       
         TubArm::TubArm(Subsystem *parent) : MotorEncoderSubsystem(parent, "tubarm", "tubarm", MSG_GROUP_TUBARM, true) {
+            setSmartDashboardName("TubArm") ;
         }
 
         TubArm::~TubArm() {
@@ -27,7 +28,7 @@ namespace xero {
         }
 
         void TubArm::computeState() {
-            Subsystem::computeState() ;
+            MotorEncoderSubsystem::computeState() ;
         }        
     }
 }

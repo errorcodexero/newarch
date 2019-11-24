@@ -240,3 +240,24 @@ oi:turtle                                                       3
 oi:eject                                                        4
 oi:spare1                                                       5
 oi:spare2                                                       6
+
+###################################################################################################
+# Test automodes
+###################################################################################################
+
+#
+# Which test to run
+#
+# 0 - apply power to arm (uses power and duration)
+# 1 - apply power to wrist (users power and duration)
+# 2 - tubarm go to angle (uses angle)
+# 3 - tubwrist go to angle (uses angle)
+# 4 - bunny arm deploy
+# 5 - bunny arm retract
+# 6 - tub toucher deploy
+# 7 - tub toucher retract
+#
+automode:test:which                                             0
+automode:test:power                                             0.5
+automode:test:duration                                          20.0
+automode:test:angle                                             90

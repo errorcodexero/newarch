@@ -13,7 +13,7 @@ namespace xero {
     namespace ranseur {
       
     TubWrist::TubWrist(Subsystem *parent) : MotorEncoderSubsystem(parent, "tubwrist", "tubwrist", MSG_GROUP_TUBWRIST, true) {
-     
+            setSmartDashboardName("TubWrist") ;
         }
 
         TubWrist::~TubWrist() {

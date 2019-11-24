@@ -41,12 +41,15 @@ namespace xero {
 
             void reset() override;
 
+            void setSmartDashboardName(const std::string &name) { smartDashboardName_ = name ; }
+
         private:
             std::shared_ptr<XeroEncoder> encoder_;
 
             xero::misc::Speedometer speedometer_;
 
             const std::string configName_;
+            std::string smartDashboardName_ ;
             uint64_t msg_id_;
         };
     }

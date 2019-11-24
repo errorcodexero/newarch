@@ -5,6 +5,7 @@
 #include "MotorEncoderHoldAction.h"
 
 #include "XeroEncoder.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::misc;
 namespace xero {
@@ -39,8 +40,12 @@ namespace xero {
 
         void MotorEncoderSubsystem::computeState() {
             SingleMotorSubsystem::computeState();
+
+            double pos = encoder_->getPosition() ;
             
-            speedometer_.update(encoder_->getPosition(), getRobot().getDeltaTime());
+            speedometer_.update(pos, getRobot().getDeltaTime());
+            if (smartDashboardName_.length() > 0)
+                frc::SmartDashboard::PutNumber(smartDashboardName_, pos) ;
         }
 
         void MotorEncoderSubsystem::reset() {
