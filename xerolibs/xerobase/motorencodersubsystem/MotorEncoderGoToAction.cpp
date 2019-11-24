@@ -34,7 +34,7 @@ namespace xero {
                 settings.getDouble(config + ":maxv")
             );
 
-            plotid_ = subsystem.initPlot(toString()) ;  
+            plotid_ = subsystem.initPlot(subsystem.getName() + "-" + toString()) ;
         }
 
         void MotorEncoderGoToAction::start() {

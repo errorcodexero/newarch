@@ -155,14 +155,14 @@ tubwrist:goto:threshold                                         3.0       # With
 tubwrist:goto:maxd                                              -160.0    # maximum deceleration
 tubwrist:goto:maxa                                              160.0     # maximum acceleration
 tubwrist:goto:maxv                                              160.0     # maximum velocity
-tubwrist:goto:down:kp                                           0.0
-tubwrist:goto:down:kd                                           0.0
-tubwrist:goto:down:kv                                           0.011111111
-tubwrist:goto:down:ka                                           0.0
-tubwrist:goto:up:kp                                             0.0
-tubwrist:goto:up:kd                                             0.0
-tubwrist:goto:up:kv                                             0.011111111
-tubwrist:goto:up:ka                                             0.0
+tubwrist:follower:down:kp                                           0.0
+tubwrist:follower:down:kd                                           0.0
+tubwrist:follower:down:kv                                           0.005555556
+tubwrist:follower:down:ka                                           0.0
+tubwrist:follower:up:kp                                             0.0
+tubwrist:follower:up:kd                                             0.0
+tubwrist:follower:up:kv                                             0.005555556
+tubwrist:follower:up:ka                                             0.0
 tubwrist:collect:pos                                            0
 tubwrist:dump:pos                                               0
 tubwrist:eject:pos                                              0
@@ -186,11 +186,11 @@ tubarm:goto:maxa                                                180.0     # maxi
 tubarm:goto:maxv                                                90.0     # maximum velocity (way too slow, used for demo)
 tubarm:follower:down:kp                                         0.0
 tubarm:follower:down:kd                                         0.0
-tubarm:follower:down:kv                                         0.005555556
+tubarm:follower:down:kv                                         0.011111111
 tubarm:follower:down:ka                                         0.0
 tubarm:follower:up:kp                                           0.0
 tubarm:follower:up:kd                                           0.0
-tubarm:follower:up:kv                                           0.005555556
+tubarm:follower:up:kv                                           0.011111111
 tubarm:follower:up:ka                                           0.0
 tubarm:collect:pos                                              0
 tubarm:dump:pos                                                 0
