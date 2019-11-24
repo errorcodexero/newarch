@@ -543,10 +543,13 @@ namespace xero {
             robot_subsystem_->init(LoopType::Disabled) ;
 
             while (IsDisabled()) {
+                double initial_time = getTime() ;
+                delta_time_ = initial_time - last_time_ ;
                 updateAutoMode() ;
                 robot_subsystem_->computeState() ;
                 watcher_->update() ;
                 frc::Wait(target_loop_time_) ;              
+                last_time_ = initial_time ;                
             }
             
             message_logger_.startMessage(MessageLogger::MessageType::info) ;

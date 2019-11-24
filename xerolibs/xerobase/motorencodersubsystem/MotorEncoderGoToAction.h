@@ -35,6 +35,9 @@ namespace xero {
             std::shared_ptr<xero::misc::PIDACtrl> ctrl_ ;
             std::shared_ptr<xero::misc::TrapezoidalProfile> profile_ ;
 
+            int plotid_ ;
+            static std::vector<std::string> plot_columns_ ;
+
             // If a position is angular, normalize it so that it falls within [-180, 180).
             double normalizePosition(double pos) {
                 if (getSubsystem().isAngular()) return xero::math::normalizeAngleDegrees(pos);

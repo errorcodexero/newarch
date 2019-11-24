@@ -14,6 +14,11 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
+        std::vector<std::string> MotorEncoderGoToAction::plot_columns_ = {
+            "time", 
+            "tang", "aang", "tvel", "avel", "out"
+        } ;
+
         MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target):
             MotorEncoderSubsystemAction(subsystem) {
             
@@ -28,6 +33,8 @@ namespace xero {
                 settings.getDouble(config + ":maxd"),
                 settings.getDouble(config + ":maxv")
             );
+
+            plotid_ = subsystem.initPlot(toString()) ;  
         }
 
         void MotorEncoderGoToAction::start() {
@@ -77,6 +84,8 @@ namespace xero {
             logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
             logger << "Motor/Encoder Velocity Profile: " << profile_->toString() ;
             logger.endMessage();
+
+            subsystem.startPlot(plotid_, plot_columns_) ;
         }
 
         void MotorEncoderGoToAction::cancel() {
@@ -118,6 +127,15 @@ namespace xero {
             );
 
             subsystem.setMotor(out);
+
+            std::vector<double> data ;
+            data.push_back(elapsed) ;
+            data.push_back(startPosition_ + targetDist) ;
+            data.push_back(position) ;
+            data.push_back(targetVel) ;
+            data.push_back(subsystem.getSpeedometer().getVelocity()) ;
+            data.push_back(out) ;
+            subsystem.addPlotData(plotid_, data) ;            
         }
 
         std::string MotorEncoderGoToAction::toString() {

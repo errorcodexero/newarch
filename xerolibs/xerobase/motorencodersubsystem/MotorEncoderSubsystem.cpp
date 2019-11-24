@@ -3,11 +3,12 @@
 #include "MotorEncoderSubsystem.h"
 #include "MotorEncoderSubsystemAction.h"
 #include "MotorEncoderHoldAction.h"
-
 #include "XeroEncoder.h"
+#include <MessageLogger.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::misc;
+
 namespace xero {
     namespace base {
         MotorEncoderSubsystem::MotorEncoderSubsystem(
@@ -43,9 +44,17 @@ namespace xero {
 
             double pos = encoder_->getPosition() ;
             
-            speedometer_.update(pos, getRobot().getDeltaTime());
+            speedometer_.update(getRobot().getDeltaTime(), pos) ;
             if (smartDashboardName_.length() > 0)
                 frc::SmartDashboard::PutNumber(smartDashboardName_, pos) ;
+
+            MessageLogger &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(xero::misc::MessageLogger::MessageType::debug, msg_id_) ;
+            logger << getName() << ":" ;
+            logger << " pos " << pos ;
+            logger << " vel " << speedometer_.getVelocity() ;
+            logger << " accel " << speedometer_.getAcceleration() ;
+            logger.endMessage() ;
         }
 
         void MotorEncoderSubsystem::reset() {
