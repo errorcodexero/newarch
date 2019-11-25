@@ -154,7 +154,7 @@ namespace xero {
 
 #ifdef USE_NAVX
             if (navx_ != nullptr) {
-                angle = navx_->GetYaw() ;
+                angle = -navx_->GetYaw() ;
                 angular_.update(getRobot().getDeltaTime(), angle) ;
                 total_angle_ = navx_->GetAngle() ;
             }

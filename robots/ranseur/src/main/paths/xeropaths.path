@@ -38,6 +38,72 @@
                     "startvelocity": 0
                 }
             ]
+        },
+        {
+            "name": "Test",
+            "paths": [
+                {
+                    "constraints": [
+                        {
+                            "after": 0,
+                            "before": 110,
+                            "type": "distance_velocity",
+                            "velocity": 40
+                        },
+                        {
+                            "after": 260,
+                            "before": 360,
+                            "type": "distance_velocity",
+                            "velocity": 40
+                        },
+                        {
+                            "after": 455,
+                            "before": 550,
+                            "type": "distance_velocity",
+                            "velocity": 40
+                        }
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 120,
+                    "maxjerk": 1200,
+                    "maxvelocity": 120,
+                    "name": "TestPath",
+                    "points": [
+                        {
+                            "heading": 0,
+                            "x": 0,
+                            "y": 300
+                        },
+                        {
+                            "heading": -90,
+                            "x": 67.944106526385,
+                            "y": 149.06828867335196
+                        },
+                        {
+                            "heading": 0,
+                            "x": 135.15199736971886,
+                            "y": 35.38017425612361
+                        },
+                        {
+                            "heading": 86.98721249581669,
+                            "x": 285.2705572908104,
+                            "y": 106.98484300509617
+                        },
+                        {
+                            "heading": -180,
+                            "x": -6.173006740095346,
+                            "y": 300.4430708531974
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                }
+            ]
         }
     ]
 }

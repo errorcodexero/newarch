@@ -62,6 +62,8 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_ACTIONS);               
             logger.enableSubsystem(MSG_GROUP_OI) ;
             logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE); 
+            logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
+            logger.enableSubsystem(MSG_GROUP_TANKDRIVE_VERBOSE);                 
 
             //
             // This should stay on.  It will have no effect on the real robot
@@ -80,8 +82,7 @@ namespace xero {
             paths->setExtensions("_left.csv", "_right.csv") ;
             
             paths->loadPath("BunnyAutoMode_PathToTub") ;
-
-            //paths->loadPath("Tune_Tune") ;
+            paths->loadPath("Test_TestPath") ;
 #endif
         }
         

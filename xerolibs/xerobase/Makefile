@@ -75,7 +75,7 @@ NEED_REV=true
 NEED_NETWORKTABLES=true
 NEED_XEROMISC=true
 
-LOCAL_CFLAGS = -I. -Itankdrive -Itankdrive/modes -Itankdrive/actions
+LOCAL_CFLAGS = -I. -Itankdrive -Itankdrive/modes -Itankdrive/actions -DUSE_NAVX
 
 
 include $(TOPDIR)/makefiles/buildlib.mk
