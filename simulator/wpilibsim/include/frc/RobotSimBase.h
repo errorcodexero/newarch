@@ -50,6 +50,8 @@ namespace xero {
             virtual void enableScreen() {                
             }
 
+            virtual void enableGraphical()  ;
+
             bool setProperty(const std::string &prop)  ;
 
             virtual void start(frc::SampleRobot *robot) ;

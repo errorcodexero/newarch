@@ -1,6 +1,7 @@
 #include <frc/RobotSimBase.h>
 #include <frc/SubsystemModel.h>
 #include <frc/PrintVisualizer.h>
+#include <frc/GraphicalVisualizer.h>
 #include "JoystickManager.h"
 #include <MessageLogger.h>
 #include <Robot.h>
@@ -55,6 +56,11 @@ namespace xero {
                 return nullptr ;
 
             return *it ;
+        }
+
+        void RobotSimBase::enableGraphical() {
+            std::shared_ptr<GraphicalVisualizer> vis = std::make_shared<GraphicalVisualizer>(*this) ;
+            visualizers_.push_back(vis) ;
         }
 
         void RobotSimBase::enablePrinting() {

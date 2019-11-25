@@ -9,6 +9,7 @@ SOURCES = \
 	cpp/livewindow/LiveWindow.cpp\
 	cpp/livewindow/LiveWindowSendable.cpp\
 	cpp/PrintVisualizer.cpp\
+	cpp/GraphicalVisualizer.cpp\
 	cpp/RobotSimBase.cpp\
 	cpp/SimEventManager.cpp\
 	cpp/SampleRobot.cpp\

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "RobotSimBase.h"
-#include "SampleRobot.h"
+#include <frc/RobotSimBase.h>
+#include <frc/SampleRobot.h>
 #include <memory>
 
 namespace xero {

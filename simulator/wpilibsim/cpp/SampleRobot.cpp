@@ -254,6 +254,11 @@ namespace frc
                 index++ ;
                 screen_ = true ;
             }
+            else if (m_args[index] == "--simgraph") {
+                RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;             
+                sim.enableGraphical() ;
+                index++ ;
+            }
             else
             {
                 std::cout << "SampleRobot: invalid command line argument '";
