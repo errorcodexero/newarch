@@ -126,11 +126,11 @@ namespace xero {
             }
 
             // Don't accept the action if a parent is busy
-            if (!allowParentBusy && parentBusy()) {
+            if (!allowParentBusy && parentBusy() && action != nullptr && !isRunningDefaultAction_) {
                 MessageLogger &logger = getRobot().getMessageLogger();
                 logger.startMessage(MessageLogger::MessageType::warning, MSG_GROUP_ACTIONS);
                 logger << "Actions; subsystem '" << getName() 
-                    << "' rejected action '" << (action == nullptr ? "null" : action->toString())
+                    << "' rejected action '" << action->toString()
                     << "' because a parent subsystem is busy";
                 logger.endMessage();
                 return SetActionResult::ParentBusy;

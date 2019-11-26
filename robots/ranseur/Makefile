@@ -8,7 +8,6 @@ AUTOMODES = \
 
 SUBSYSTEMS = \
 	src/main/cpp/bunnyarm/BunnyArm.cpp\
-	src/main/cpp/bunnyarm/BunnyArmDeployAction.cpp\
 	src/main/cpp/ranseurcameratracker/DriveByVisionAction.cpp\
 	src/main/cpp/ranseurcameratracker/RanseurLimeLight.cpp\
 	src/main/cpp/ranseuroi/RanseurOIDevice.cpp\
@@ -25,8 +24,7 @@ SUBSYSTEMS = \
 	src/main/cpp/tubmanipulatorsubsystem/TubManipulatorEjectAction.cpp\
     src/main/cpp/tubarm/TubArm.cpp\
     src/main/cpp/tubwrist/TubWrist.cpp\
-	src/main/cpp/tubtoucher/TubToucher.cpp\
-	src/main/cpp/tubtoucher/TubToucherDeployAction.cpp
+	src/main/cpp/tubtoucher/TubToucher.cpp
 
 	
 SOURCES = \

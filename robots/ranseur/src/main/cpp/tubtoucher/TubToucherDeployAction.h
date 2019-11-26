@@ -43,7 +43,14 @@ namespace xero {
             }
 
             virtual std::string toString() {
-                return action_name ;
+                std::string ret ;
+
+                if (raise_)
+                    ret = "TubToucherDeployAction - extend" ;
+                else
+                    ret = "TubToucherDeployAction - retract" ;
+
+                return ret ;
             }
 
         private:
@@ -51,7 +58,6 @@ namespace xero {
             double endTime_;
             double duration_;
             bool raise_;
-            static const std::string action_name ;
         } ;
     }
 }
