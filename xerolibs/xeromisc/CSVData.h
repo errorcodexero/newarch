@@ -27,9 +27,11 @@ namespace xero {
                 };
 
                 /// @brief create a new string data item
+                /// @param value the string value for this item
                 CSVItem(std::string value): type_(Type::String), stringValue_(value) {}
 
                 /// @brief create a new double data item
+                /// @param value the double value of this item
                 CSVItem(double value): type_(Type::Double), doubleValue_(value) {}
 
                 /// @brief returns the type of the data item
@@ -60,41 +62,77 @@ namespace xero {
                 std::string stringValue_;
             };
 
+            /// @brief load data from a file or directly from a string
+            /// @param fileOrData the filename or the direct data to load
+            /// @param data if true, load direct data
             CSVData(const std::string & fileOrData, bool data) ;
+
+            /// @brief load data from a file stream
+            /// @param strm the stream to load data from
             CSVData(std::istream &strm) ;
             
+            /// @brief load data from the stream given
+            /// @param strm the stream to load data from
             void loadData(std::istream &strm) ;
 
+            /// @brief return the data for a given row and column
+            /// Asserts if the row or column are not present
+            /// @param row the row of interest
+            /// @param column the column of interest
+            /// @returns the data at the row and column given
             CSVItem getData(size_t row, size_t column) const {
                 assert(didLoad_) ;
                 return data_[row][column];
             }
 
+            /// @brief return the double data for a given row and column
+            /// Asserts if the data is not a double or if the row or column are not
+            /// present
+            /// @param row the row of interest
+            /// @param column the column of interest
+            /// @returns a double from the row and column given
             double getDouble(size_t row, size_t column) const {
                 return getData(row, column).getDouble();
             }
 
+            /// @brief return the string data for a given row and column
+            /// Asserts if the data is not a string or if the row or column are not
+            /// present
+            /// @param row the row of interest
+            /// @param column the column of interest
+            /// @returns a string from the row and column given
             std::string getString(size_t row, size_t column) const {
                 return getData(row, column).getString();
             }
 
+            /// @brief returns a specific row of data
+            /// @param rowNum the row of interest
+            /// @returns a row of data items
             const std::vector<CSVItem> &getRow(int rowNum) {
                 assert(didLoad_) ;
                 return data_[rowNum];
             }
 
-            /// Returns the number of columns in the CSV file.
+            /// @brief returns the number of columns in the CSV file.
+            /// @returns the number of columns in the data set
             int getColumns() { return columns_; }
 
+            /// @brief returns the data array for the data stored
+            /// Asserts if the data was not loaded sucessfully
+            /// @returns the data array for the data.
             auto getAllData() {
                 assert(didLoad_) ;
                 return data_;
             }
 
+            /// @brief returns true if the data loaded sucessfully
+            /// @returns true if the data was loaded sucessfully, otherwise false
             auto isLoaded() {
                 return didLoad_;
             }
 
+            /// @brief returns the number of rows of data
+            /// @returns the number of rows of data
             auto size() {
                 return data_.size() ;
             }            

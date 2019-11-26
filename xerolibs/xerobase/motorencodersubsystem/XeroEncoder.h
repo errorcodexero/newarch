@@ -10,40 +10,59 @@
 
 namespace xero {
     namespace base {
+        /// @brief The XeroEncoder class is an encoder abstraction.  It is used
+        /// primarily with the MoterEncoderSubsystem.
+        /// A complex encoder may be a single absolute analog encoder, a single 
+        /// absolute pwm encoders, or a single relative quadrature encoder.  It 
+        /// also may be a relative quadrature encoder paired with either type of
+        /// absolute encoder to support in place calibration.
+        /// @sa MotorEncoderSubsystem
         class XeroEncoder {
         public:
-            /// Creates an XeroEncoder from the configuration file.
+            /// @brief Creates an XeroEncoder from the configuration file.
+            /// 
+            /// XeroEncoder config syntax: \n 
+            /// To declare a quadrature encoder:
+            /// @code
+            ///     configName:quad:1        1    # first pin
+            ///     configName:quad:2        2    # second pin
+            ///     configName:quad:m        100  # M constant
+            ///     configName:quad:b        10   # B constant
+            /// @endcode
+            /// To declare an analog encoder:
+            /// @code
+            ///     configName:analog        1     # pin
+            ///     configName:analog:m      100   # M constant
+            ///     configName:analog:b      10    # B constant
+            /// @endcode
+            /// To declare a PWM encoder:
+            /// @code
+            ///     configName:pwm           1     # pin\n 
+            ///     configName:pwm:m         100   # M constant\n 
+            ///     configName:pwm:b         10    # B constant\n 
+            /// @endcode
+            ///
+            /// A quadrature encoder may optionally be calibrated by an analog encoder XOR a PWM encoder.
+            /// For each type of encoder, the output position is calculated by reading the value 
+            /// from the encoder and applying a linear function (Y = MX + B) to the value.  The M and B
+            /// values must be contained in the settings file, but can be overridden with methods found on
+            /// the class.\n 
+            /// This class supports calibration is the act of ensuring that the position returned from the
+            /// encoder matches the position of the mechanism being monitored on the robot.  Calibration 
             /// @param logger The message logger.
             /// @param settings The settings parser.
             /// @param configName The name of the encoder in the configuration file.
             /// @param angular true if the encoder is angular
-            /// XeroEncoder config syntax:
-            /// To declare a quadrature encoder:
-            /// configName:quad:1        1    # first pin
-            /// configName:quad:2        2    # second pin
-            /// configName:quad:m        100  # M constant
-            /// configName:quad:b        10   # B constant
-            ///
-            /// To declare an analog encoder:
-            /// configName:analog        1     # pin
-            /// configName:analog:m      100   # M constant
-            /// configName:analog:b      10    # B constant
-            ///
-            /// To declare a PWM encoder:
-            /// configName:pwm           1     # pin
-            /// configName:pwm:m         100   # M constant
-            /// configName:pwm:b         10    # B constant
-            ///
-            /// A quadrature encoder may optionally be calibrated
-            /// by an analog encoder XOR a PWM encoder.
             XeroEncoder(xero::misc::MessageLogger &logger,
                     xero::misc::SettingsParser &settings, 
                     const std::string &configName,
                     bool angular = false
             );
 
-            /// Creates a quadrature encoder.
-            /// @param logger The message logger.
+            /// @brief Creates a quadrature encoder.
+            /// If angular is true, it is assumed the position is in degrees and the
+            /// values are normalized to be between -180 and +180 degrees.
+            /// @param quadratureEncoder an FRC quadrature encoder object
             /// @param angular true if this encoder measures an angle
             XeroEncoder(std::shared_ptr<frc::Encoder> quadratureEncoder, bool angular = false
             ): angular_(angular), quad_(quadratureEncoder) {}
@@ -66,24 +85,41 @@ namespace xero {
                         bool angular = false
             ): angular_(angular), quad_(quadratureEncoder), pwm_(pwmEncoder) { pwm_->SetSemiPeriodMode(true); }
 
-            /// Returns true if this is an angular encoder.
+            /// @brief Returns true if this is measuring an angle
+            /// @returns true if this is measuring an angle
             bool isAngular() { return angular_; };
 
-            /// Returns the current position of this encoder.
+            /// @brief returns true if this encoder contains a quadrature encoder
+            /// @returns true if this XeroEncoder has a quadrature encoder
+            bool hasQuadrature() {
+                return quad_ != nullptr ;
+            }
+
+            /// @brief returns true if this encoder contains an absoluate encoder (analog or pwm)
+            /// @returns true if this XeroEncoder has a absoluate encoder (analog of pwm)
+            bool hasAbsolute() {
+                return analog_ != nullptr || pwm_ != nullptr ;
+            }
+
+            /// @brief Returns the current position of this encoder.
             /// If this encoder uses both a quadrature and absolute encoder,
             /// the value measured by the quadrature encoder is returned.
+            /// @returns the current position of the mechanism
             double getPosition();
 
+            /// @brief Returns the absolute position of the encoder.
             /// If this encoder has an absolute encoder, returns the measured position.
             /// Asserts otherwise.
+            /// @returns the position as read from the absolute encoder
             double getAbsolutePosition();
 
-            /// Resets the quadrature encoder to the zero position. If an absolute encoder
-            /// is declared, the quadrature encoder is also calibrated.
-            ///
-            /// If no quadrature encoder is in use, this method has no effect.
+            /// @brief Resets the quadrature encoder to the zero position. 
+            /// If an absolute encoder is declared, the position parameters 
+            /// are updated to calibrate the encoders. If no quadrature 
+            /// encoder is in use, this method has no effect.
             void reset();
 
+            /// @brief calibrates the quadrature encoder based on the value of the absoluate encoder
             /// If this encoder uses both a quadrature and absolute encoder,
             /// this resets the B value of the quadrature encoder
             /// such that its current value matches the absolute encoder.
@@ -91,6 +127,10 @@ namespace xero {
             /// If this encoder does not use both a quad & absolute encoder,
             /// this method has no effect.
             void calibrate();
+
+            /// @brief calibrates the quadrature encoder based on an externally supplied position
+            /// @param pos the current position of the measured mechanism
+            void calibrate(double pos) ;
 
             /// Sets the linear function mapping for the quadrature encoder.
             /// Asserts if there is no quadrature encoder.

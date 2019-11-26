@@ -19,18 +19,29 @@ namespace xero {
             /// \brief destroy the existing controller
             virtual ~TeleopController() ;
 
+            /// \brief run the TeleopController, called once each time through the robot loop
             virtual void run() ;
 
-            void addDetector(std::shared_ptr<DetectAutoSequence> det) {
-                auto_sequences_.push_back(det) ;
+            /// \brief add a takeover detector to the teleop controller
+            /// This method adds a teleop takeover object to the telop controller.  If the 
+            /// detector object returns true from isTakeoverValid(), then the teleop controller
+            /// yields control to the action stor4ed in the DetectAutoSequence class.
+            /// \param detector the detector to add to the teleop controller
+            void addDetector(std::shared_ptr<DetectAutoSequence> detector) {
+                auto_sequences_.push_back(detector) ;
             }
 
+            /// \brief remove all detectors from the teleop controller
             void clearDetectors() {
                 auto_sequences_.clear() ;
             }
 
+            /// \brief remove a specific detector from the telop controller
+            /// \param det the detector to remove
             void removeDetector(std::shared_ptr<DetectAutoSequence> det) ;
 
+            /// \brief print the detectors attached to the telop controller
+            /// The detectors are printed using the message logger
             void printDetectors() ;
 
         private:

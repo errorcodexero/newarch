@@ -94,8 +94,12 @@ namespace xero {
 
         void XeroEncoder::calibrate() {
             if (quad_ && (analog_ || pwm_)) {
-                quadB_ += getAbsolutePosition() - getPosition();
+                calibrate(getAbsolutePosition()) ;
             }
+        }
+
+        void XeroEncoder::calibrate(double pos) {
+            quadB_ = pos - quadM_ * getPosition() ;
         }
     }
 }

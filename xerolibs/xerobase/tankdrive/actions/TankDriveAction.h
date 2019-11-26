@@ -28,7 +28,9 @@ namespace xero {
                 return tank_drive_ ;
             }
 
-            
+            /// \brief set the motors to the percent power given
+            /// \param left_percent percent to set for the left motor
+            /// \param right_percent percent to set for the right motor
             void setMotorsToPercents(double left_percent, double right_percent){
                 tank_drive_.setMotorsToPercents(left_percent, right_percent) ;
             }
