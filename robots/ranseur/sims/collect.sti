@@ -36,5 +36,5 @@
 3.0,oi,collect,1                                        # Press the collect button
 3.25,oi,collect,0                                       # Release the collect button
 
-8.0,tubmanipulator,tub,1                                # A tub shows up at four seconds
+8.0,tubmanipulator,tub,1                                # A tub shows up at eight seconds
 
