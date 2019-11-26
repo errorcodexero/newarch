@@ -90,7 +90,7 @@ namespace xero {
         bool Subsystem::setDefaultAction(ActionPtr action) {
             if (_canAcceptAction(action, /*isDefault=*/true)) {
                 defaultAction_ = action;
-                if (!isBusy()) setAction(nullptr);
+                if (!isBusy()) setAction(nullptr, /*allowParentBusy=*/true);
                 return true;
             } else {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
