@@ -34,5 +34,10 @@ namespace xero {
             auto coll = std::dynamic_pointer_cast<SingleMotorSubsystemAction>(action) ;
             return coll != nullptr ;
         }
+
+        void SingleMotorSubsystem::reset() {
+            Subsystem::reset() ;
+            setMotor(0.0) ;
+        }
     }
 }

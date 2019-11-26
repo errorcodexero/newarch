@@ -45,10 +45,11 @@ namespace xero {
             void createNamedSequences() {
             }
 
-     //   private:
             void setCollectedTubState(bool st) {
                 collected_tub_ = st ;
             }
+
+            virtual void reset() ;
 
         private:
             //

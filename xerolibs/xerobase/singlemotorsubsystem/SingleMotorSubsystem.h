@@ -66,6 +66,8 @@ namespace xero {
             /// @return This subsystem's message ID.
             uint64_t getMsgID() { return msg_id_; }
 
+            virtual void reset() ;
+
         protected:
             /// \brief set the power (PWM) percentage for the motor.
             /// \param power the power to apply to the motor, between -1.0 and 1.0

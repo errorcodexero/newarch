@@ -47,5 +47,10 @@ namespace xero {
             if (!has_tub_)
                 collected_tub_ = false ;
         }        
+
+        void TubCollector::reset() {
+            Subsystem::reset() ;
+            intake_->set(0.0) ;
+        }
     }
 }
