@@ -11,8 +11,6 @@ namespace misc
 MessageLogger::MessageLogger()
 {
     //Initialize maps
-    current_message_ = "";
-    in_message_ = false;
     subsystems_enabled_ = 0;
     time_func_ = nullptr ;
 }
@@ -58,102 +56,156 @@ bool MessageLogger::isSubsystemEnabled(uint64_t subs)
     return (subsystems_enabled_ & subs) != 0ull;
 }
 
+std::shared_ptr<MessageLogger::InMessageData> MessageLogger::getMessageData()
+{
+    std::shared_ptr<InMessageData> data ;
+
+#ifdef SIMULATOR
+    //
+    // In the case of the simulator, get the message data on a per thread
+    // basic
+    //
+    auto it = mdata_.find(std::this_thread::get_id()) ;
+    if (it == mdata_.end())
+    {
+        std::shared_ptr<InMessageData> ind = std::make_shared<InMessageData>() ;
+        mdata_[std::this_thread::get_id()] = ind ;
+    }
+
+    data = mdata_[std::this_thread::get_id()] ;
+
+#else
+
+    if (mdata_ == nullptr)
+        mdata_ = std::make_shared<InMessageData>() ;
+    data = mdata_ ;
+#endif
+
+    return data ;
+}
+
 void MessageLogger::startMessage(const MessageType &type)
 {
-    if (in_message_)
+    auto mdata = getMessageData() ;
+
+    if (mdata->in_message_)
     {
-        current_message_ += "FAILED TO CALL ENDMESSAGE";
+        mdata->current_message_ += "FAILED TO CALL ENDMESSAGE";
         endMessage();
     }
-    current_type_ = type;
-    in_message_ = true;
-    current_subsystem_ = 0;
+    mdata->current_type_ = type;
+    mdata->in_message_ = true;
+    mdata->current_subsystem_ = 0;
 }
 
 void MessageLogger::startMessage(const MessageType &type, uint64_t sub)
 {
-    if (in_message_)
+    auto mdata = getMessageData() ;
+
+    if (mdata->in_message_)
     {
-        current_message_ += "FAILED TO CALL ENDMESSAGE - ";
+        mdata->current_message_ += "FAILED TO CALL ENDMESSAGE - ";
         endMessage();
     }
 
-    current_type_ = type;
-    in_message_ = true;
-    current_subsystem_ = sub;
+    mdata->current_type_ = type;
+    mdata->in_message_ = true;
+    mdata->current_subsystem_ = sub;
 }
 
 void MessageLogger::endMessage()
 {
-    in_message_ = false;
-    if (current_message_.length() > 0) {
-        if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
+    auto mdata = getMessageData() ;
+        
+    mdata->in_message_ = false;
+    if (mdata->current_message_.length() > 0) {
+        if (isMessageTypeEnabled(mdata->current_type_) && isSubsystemEnabled(mdata->current_subsystem_))
         {
             double now = std::numeric_limits<double>::infinity() ;
-            std::string msg = current_message_ ;
+            std::string msg = mdata->current_message_ ;
             if (time_func_ != nullptr) {
                 now = (*time_func_)() ;
 
                 msg = std::to_string(now) + ": " + msg ;
             }
                 
-            for (auto dest_p : destinations_)
-                dest_p->displayMessage(current_type_, current_subsystem_, msg);
+
+            {
+#ifdef SIMULATOR                
+                std::lock_guard<std::mutex> destlock(destination_lock_) ;
+#endif
+                for (auto dest_p : destinations_)
+                    dest_p->displayMessage(mdata->current_type_, mdata->current_subsystem_, msg);
+            }
         }
     }
-    current_message_ = "";
+    mdata->current_message_ = "";
 }
 
 MessageLogger &MessageLogger::operator<<(const std::string &value)
 {
-    if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
-        current_message_.append(value);
+    auto mdata = getMessageData() ;
+
+    if (isMessageTypeEnabled(mdata->current_type_) && isSubsystemEnabled(mdata->current_subsystem_))
+        mdata->current_message_.append(value);
     return *this;
 }
 
 MessageLogger &MessageLogger::operator<<(const char *value_p)
 {
-    if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
-        current_message_.append(std::string(value_p));
+    auto mdata = getMessageData() ;
+
+    if (isMessageTypeEnabled(mdata->current_type_) && isSubsystemEnabled(mdata->current_subsystem_))
+        mdata->current_message_.append(std::string(value_p));
     return *this;
 }
 
 MessageLogger &MessageLogger::operator<<(int32_t value)
 {
-    if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
-        current_message_.append(std::to_string(value));
+    auto mdata = getMessageData() ;
+
+    if (isMessageTypeEnabled(mdata->current_type_) && isSubsystemEnabled(mdata->current_subsystem_))
+        mdata->current_message_.append(std::to_string(value));
     return *this;
 }
 
 
 MessageLogger &MessageLogger::operator<<(int64_t value)
 {
-    if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
-        current_message_.append(std::to_string(value));
+    auto mdata = getMessageData() ;
+
+    if (isMessageTypeEnabled(mdata->current_type_) && isSubsystemEnabled(mdata->current_subsystem_))
+        mdata->current_message_.append(std::to_string(value));
     return *this;
 }
 
 
 MessageLogger &MessageLogger::operator<<(uint32_t value)
 {
-    if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
-        current_message_.append(std::to_string(value));
+    auto mdata = getMessageData() ;
+
+    if (isMessageTypeEnabled(mdata->current_type_) && isSubsystemEnabled(mdata->current_subsystem_))
+        mdata->current_message_.append(std::to_string(value));
     return *this;
 }
 
 
 MessageLogger &MessageLogger::operator<<(uint64_t value)
 {
-    if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
-        current_message_.append(std::to_string(value));
+    auto mdata = getMessageData() ;
+
+    if (isMessageTypeEnabled(mdata->current_type_) && isSubsystemEnabled(mdata->current_subsystem_))
+        mdata->current_message_.append(std::to_string(value));
     return *this;
 }
 
 
 MessageLogger &MessageLogger::operator<<(double value)
 {
-    if (isMessageTypeEnabled(current_type_) && isSubsystemEnabled(current_subsystem_))
-        current_message_.append(std::to_string(value));
+    auto mdata = getMessageData() ;
+
+    if (isMessageTypeEnabled(mdata->current_type_) && isSubsystemEnabled(mdata->current_subsystem_))
+        mdata->current_message_.append(std::to_string(value));
     return *this;
 }
 

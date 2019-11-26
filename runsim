@@ -5,6 +5,11 @@ if [ $1 == "--gui" ]; then
     shift
 fi
 
+if [ $1 == "--graph" ]; then
+    GUI=--simgraph
+    shift
+fi
+
 rootdir=$(git rev-parse --show-toplevel)
 cd $rootdir
 

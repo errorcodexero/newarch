@@ -7,9 +7,9 @@
 #include <cassert>
 #include <memory>
 #include <cstdint>
-
-#include "MessageLoggerData.h"
-
+#include <map>
+#include <thread>
+#include <mutex>
 
 /// \file
 
@@ -23,6 +23,8 @@ class MessageLoggerDest;
 /// \brief A utility for logging messages
 class MessageLogger
 {
+    struct InMessageData ;
+
   public:
     /// \brief the type of a message being logged
     enum class MessageType
@@ -119,73 +121,6 @@ class MessageLogger
     /// \returns a copy of the message logger
     MessageLogger &operator<<(double value);
 
-    /// \brief start logging a block of data
-    /// \param label the label for the data
-    /// \returns a reference to the MessageLogger object
-    MessageLogger &startData(const std::string &label) {
-        current_data_.init(label);
-        return *this;
-    }
-
-    /// \brief add data to the message logger
-    /// \param key the name of the data
-    /// \param value the data to log
-    /// \returns a reference to the MessageLogger object
-    MessageLogger &addData(const std::string &key, const std::string &value) {
-        current_data_.add(key, value);
-        return *this;
-    }
-
-    /// \brief add data to the message logger
-    /// \param key the name of the data
-    /// \param value the data to log
-    /// \returns a reference to the MessageLogger object
-    MessageLogger &addData(const std::string &key, const char *value) {
-        current_data_.add(key, value);
-        return *this;
-    }
-
-    /// \brief add data to the message logger
-    /// \param key the name of the data
-    /// \param value the data to log
-    /// \returns a reference to the MessageLogger object
-    MessageLogger &addData(const std::string &key, double value) {
-        current_data_.add(key, value);
-        return *this;
-    }
-
-    /// \brief add data to the message logger
-    /// \param key the name of the data
-    /// \param value the data to log
-    /// \returns a reference to the MessageLogger object
-    MessageLogger &addData(const std::string &key, int value) {
-        current_data_.add(key, value);
-        return *this;
-    }
-
-    /// \brief add data to the message logger
-    /// \param key the name of the data
-    /// \param value the data to log
-    /// \returns a reference to the MessageLogger object
-    MessageLogger &addData(const std::string &key, size_t value) {
-        current_data_.add(key, value);
-        return *this;
-    }
-
-    /// \brief add data to the message logger
-    /// \param key the name of the data
-    /// \param value the data to log
-    /// \returns a reference to the MessageLogger object
-    MessageLogger &addData(const std::string &key, bool value) {
-        current_data_.add(key, value);
-        return *this;
-    }
-
-    /// \brief end the data being sent to the logger
-    void endData() {
-        *this << current_data_.toString();
-    }
-
     /// \brief add a new destiation for messages
     /// \param dest_p the new destination to add
     void addDestination(std::shared_ptr<MessageLoggerDest> dest_p)
@@ -201,26 +136,40 @@ class MessageLogger
     }
 
   private:
+    struct InMessageData
+    {
+        // If true, we have seen a startMessage() call but not an
+        // endMessage() call
+        bool in_message_;
+
+        // The current message type
+        MessageType current_type_;
+
+        // The current message subsystem
+        uint64_t current_subsystem_;
+
+        // The current message
+        std::string current_message_;
+    } ;
+
+  private:
+    std::shared_ptr<InMessageData> getMessageData() ;    
+
+  private:
+
+#ifdef SIMULATOR
+    std::map<std::thread::id, std::shared_ptr<InMessageData>> mdata_ ;
+    std::mutex destination_lock_ ;
+#else
+    std::shared_ptr<InMessageData> mdata_ ;
+#endif
+
     // The modes currently enabled
     std::list<MessageType> enabled_modes_;
 
     // The subsystems enabled, or zero if all are enabled
     uint64_t subsystems_enabled_;
 
-    // If true, we have seen a startMessage() call but not an
-    // endMessage() call
-    bool in_message_;
-
-    // The current message type
-    MessageType current_type_;
-
-    // The current message subsystem
-    uint64_t current_subsystem_;
-
-    // The current message
-    std::string current_message_;
-
-    MessageLoggerData current_data_;
 
     // The list of message logger destinations
     std::list<std::shared_ptr<MessageLoggerDest>> destinations_;

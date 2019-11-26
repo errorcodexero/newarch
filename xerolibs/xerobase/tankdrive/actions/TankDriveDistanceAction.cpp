@@ -202,15 +202,7 @@ void TankDriveDistanceAction::run() {
             setMotorsToPercents(left_power, right_power);
         } else {
             is_done_ = true;
-
-            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
-            logger << "TankDriveDistanceAction complete";
-            logger.startData("tankdrivedistanceaction_complete")
-                .addData("time", getTankDrive().getRobot().getTime() - start_time_)
-                .endData();
-            logger.endMessage();
         }
-
         checkTriggeredEvents(total_traveled) ;
     }
     else {

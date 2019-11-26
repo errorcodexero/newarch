@@ -78,7 +78,7 @@ namespace xero {
         void TankDriveModel::generateDisplayInformation(std::list<std::string> &lines) {
             lines.push_back("  X: " + std::to_string(getXPos())) ;
             lines.push_back("  Y: " + std::to_string(getYPos())) ;
-            lines.push_back("  Angle: " + std::to_string(getAngle())) ;
+            lines.push_back("  Angle: " + std::to_string(xero::misc::rad2deg(getAngle()))) ;
             lines.push_back("  Speed: " + std::to_string(getSpeed())) ;
             lines.push_back("  LeftPos: " + std::to_string(left_)) ;
             lines.push_back("  RightPos: " + std::to_string(right_)) ;
