@@ -15,6 +15,7 @@
 #include <tubmanipulatorsubsystem/TubManipulatorCollectAction.h>
 #include <tubmanipulatorsubsystem/TubManipulatorDumpAction.h>
 #include <tubmanipulatorsubsystem/TubManipulatorEjectAction.h>
+#include <ranseurrobotsubsystem/RanseurRobotTurtleAction.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -42,8 +43,8 @@ namespace xero {
             std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
             automode_ = mapAxisScale(6, mapping) ;
 #else
-            size_t automode1_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:automode1_b") ;
-            size_t automode2_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:automode2_b") ;
+            size_t automode1_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:automode1") ;
+            size_t automode2_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:automode2") ;
 #endif
 
             //
@@ -65,6 +66,7 @@ namespace xero {
             eject_ = mapButton(eject_b, OIButton::ButtonType::LowToHigh) ;            // Push button
             spare1_ = mapButton(spare1_b, OIButton::ButtonType::LowToHigh) ;          // Push button
             spare2_ = mapButton(spare2_b, OIButton::ButtonType::LowToHigh) ;          // Push button
+            
 #ifndef RANSEUR_OLD_OI
             automode1_ = mapButton(automode1_b, OIButton::ButtonType::Level) ;        // toggle switch 
             automode2_ = mapButton(automode2_b, OIButton::ButtonType::Level) ;        // toggle switch
@@ -104,37 +106,26 @@ namespace xero {
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_RANSEUR_OI) ;
         
-        /// Initializing! ///
+            /// Initializing! ///
             if (collecting_ == nullptr) {
                 init() ;
             }
-            if (dumping_ == nullptr) {
-                init() ;
-            }
-            if (turtling_ == nullptr) {
-                init() ;
-            }
-            if (ejecting_ == nullptr) {
-                init() ;
-            }
-
 
             //actions and buttons corresponding with the actions
             //actions found on wiki under tub manipulator subsystem under ranseur (robot)
-        /// Actioning! ///
+            /// Actioning! ///
             if(getValue(collect_)) { 
-                seq.pushSubActionPair(tubmanipulatorsubsytem, collecting_) ;
+                seq.pushSubActionPair(tubmanipulatorsubsytem, sequence_, false) ;
             }
             if(getValue(dump_)) {
-                seq.pushSubActionPair(tubmanipulatorsubsytem, dumping_) ;
+                seq.pushSubActionPair(tubmanipulatorsubsytem, dumping_, false) ;
             }
             if(getValue(turtle_)) {
-                seq.pushSubActionPair(ranseurrobotsubsystem, turtling_) ;
+                seq.pushSubActionPair(ranseurrobotsubsystem, turtling_, false) ;
             }
             if(getValue(eject_)) {
-                seq.pushSubActionPair(tubmanipulatorsubsytem, ejecting_) ;
-            }
-      
+                seq.pushSubActionPair(tubmanipulatorsubsytem, ejecting_, false) ;
+            }      
         }
 
         //
@@ -158,9 +149,13 @@ namespace xero {
             
             collecting_ = std::make_shared<TubManipulatorCollectAction>(*tubmanipulatorsubsytem) ;
             dumping_ = std::make_shared<TubManipulatorDumpAction>(*tubmanipulatorsubsytem) ;
-            //turtle_ = std::make_shared<RanseurRobotSubsystem>(*ranseurrobotsubsystem) ;
+            turtling_ = std::make_shared<RanseurRobotTurtleAction>(*ranseurrobotsubsystem) ;
             ejecting_ = std::make_shared<TubManipulatorEjectAction>(*tubmanipulatorsubsytem) ;
-            
+
+            sequence_ = std::make_shared<SequenceAction>(log) ;
+            sequence_->pushSubActionPair(tubmanipulatorsubsytem, collecting_) ;
+            sequence_->pushSubActionPair(tubmanipulatorsubsytem, dumping_) ;
+            sequence_->pushSubActionPair(tubmanipulatorsubsytem, ejecting_) ;            
         }
     }
 }

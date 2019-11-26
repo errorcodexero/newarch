@@ -167,7 +167,8 @@ tubwrist:collect:pos                                            0
 tubwrist:dump:pos                                               0
 tubwrist:eject:pos                                              0
 tubwrist:power                                                  0.2
-tuwrist:duration                                                4
+tubwrist:duration                                                4
+tubwrist:turtle:pos                                             90
 
 ###################################################################################################
 # tubarm
@@ -197,6 +198,7 @@ tubarm:dump:pos                                                 0
 tubarm:eject:pos                                                0
 tubarm:power                                                    0.2
 tubarm:duration                                                 4
+tubarm:turtle:pos                                               90
 
 ###################################################################################################
 # ranseurvision
@@ -240,6 +242,9 @@ oi:turtle                                                       3
 oi:eject                                                        4
 oi:spare1                                                       5
 oi:spare2                                                       6
+oi:automode1                                                    7
+oi:automode2                                                    8
+
 
 ###################################################################################################
 # Test automodes

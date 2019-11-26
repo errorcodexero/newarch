@@ -80,6 +80,15 @@ tankdrive:sim:length                                    30
 #
 oi:axis:automode                                        6                   # Axis
 
+oi:button:collect                                       1
+oi:button:dump                                          2
+oi:button:turtle                                        3
+oi:button:eject                                         4
+oi:button:spare1                                        5
+oi:button:spare2                                        6
+oi:button:automode1                                     7
+oi:button:automode2                                     8
+
 #
 # gamepad
 #

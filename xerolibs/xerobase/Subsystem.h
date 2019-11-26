@@ -187,7 +187,7 @@ namespace xero {
 
             // Cancels actions on this subsystem and all its descendants.
             // Returns true if any actions were cancelled.
-            bool cancelActionsAndChildActions();
+            bool cancelActionsAndChildActions(std::shared_ptr<Action> action);
             
             //
             // A reference to the robot object that contains this subsystem

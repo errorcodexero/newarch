@@ -126,11 +126,11 @@ namespace xero {
             }
 
             // Don't accept the action if a parent is busy
-            if (!allowParentBusy && action_ != nullptr && parentBusy()) {
+            if (!allowParentBusy && parentBusy()) {
                 MessageLogger &logger = getRobot().getMessageLogger();
                 logger.startMessage(MessageLogger::MessageType::warning, MSG_GROUP_ACTIONS);
                 logger << "Actions; subsystem '" << getName() 
-                    << "' rejected action '" << action->toString() 
+                    << "' rejected action '" << (action == nullptr ? "null" : action->toString())
                     << "' because a parent subsystem is busy";
                 logger.endMessage();
                 return SetActionResult::ParentBusy;
@@ -150,7 +150,7 @@ namespace xero {
 
             // Cancel any currently-running actions
             SetActionResult result;
-            if (cancelActionsAndChildActions()) result = SetActionResult::PreviousCanceled;
+            if (cancelActionsAndChildActions(action)) result = SetActionResult::PreviousCanceled;
             else result = SetActionResult::Accepted;
 
             // And now start the Action
@@ -163,12 +163,13 @@ namespace xero {
         }
 
 
-        bool Subsystem::cancelActionsAndChildActions() {
+        bool Subsystem::cancelActionsAndChildActions(std::shared_ptr<Action> action) {
             bool canceled = false;
             if (isBusy()) {
                 auto &logger = getRobot().getMessageLogger();
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE);
                 logger << "Actions: subsystem '" << getName() << "' overriding action '" << action_->toString();
+                logger << "' with action '" << (action == nullptr ? "null" : action->toString()) << "'" ;
                 logger.endMessage();
                 cancelAction();
                 canceled = true;
@@ -182,7 +183,7 @@ namespace xero {
                     logger.endMessage() ;
                 }
             }
-            for (auto child : children_) canceled = child->cancelActionsAndChildActions() || canceled;
+            for (auto child : children_) canceled = child->cancelActionsAndChildActions(nullptr) || canceled;
             return canceled;
         }
 

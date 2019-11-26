@@ -24,11 +24,16 @@
 
 #
 #
-0.1,oi,automode,-80
-0.1,oi,automode1,1
+0.1,oi,automode,-100
+0.1,oi,automode1,0
 0.1,oi,automode2,0
 0.1,tubmanipulator,tub,0                                # Clear the tub sensor (should initialize to cleared)
 
 0.1,tankdrive,xpos,2000                                 # Start center hab platform
 0.1,tankdrive,ypos,16300                                # Start center hab platform
 0.1,tankdrive,angle,0                                   # Start center hab platform
+
+3.0,oi,dump,1                                        # Press the collect button
+3.25,oi,dump,0                                       # Release the collect button
+
+

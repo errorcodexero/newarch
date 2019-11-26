@@ -39,6 +39,7 @@ namespace xero {
             xero::base::ActionPtr dumping_ ;
             xero::base::ActionPtr turtling_ ;
             xero::base::ActionPtr ejecting_ ;
+            xero::base::SequenceActionPtr sequence_ ;
 
         } ;
     }

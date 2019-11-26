@@ -313,7 +313,6 @@ namespace frc
         // we ask the robot to handle specific modes
         //
         if (!m_robotMainOverridden) {
-            bool first = true ;
             m_running = true;
             while (m_running) {
                 if (IsDisabled()) {
@@ -334,9 +333,6 @@ namespace frc
                     while (IsOperatorControl() && IsEnabled());
                 }
                 else if (m_mode == RobotMode::Finished) {
-                    if (first) {
-                        first = false ;
-                    }
                 }
                 else {
                     std::cout << "BadState" << std::endl ;

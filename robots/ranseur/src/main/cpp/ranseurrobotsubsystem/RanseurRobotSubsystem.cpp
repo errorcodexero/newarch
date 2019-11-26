@@ -1,4 +1,5 @@
 #include "RanseurRobotSubsystem.h"
+#include "RanseurSubsystemAction.h"
 #include "ranseurids.h"
 #include "tubcollector/TubCollector.h"
 #include "tubarm/TubArm.h"
@@ -46,6 +47,10 @@ namespace xero {
         }
 
         bool RanseurRobotSubsystem::canAcceptAction(ActionPtr act) {
+            std::shared_ptr<RanseurSubsystemAction> ract = std::dynamic_pointer_cast<RanseurSubsystemAction>(act) ;
+            if (ract != nullptr)
+                return true ;
+
             return false;
         }
     }

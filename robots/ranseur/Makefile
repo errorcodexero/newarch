@@ -14,6 +14,7 @@ SUBSYSTEMS = \
 	src/main/cpp/ranseuroi/RanseurOIDevice.cpp\
 	src/main/cpp/ranseuroi/RanseurOISubsystem.cpp\
 	src/main/cpp/ranseurrobotsubsystem/RanseurRobotSubsystem.cpp\
+	src/main/cpp/ranseurrobotsubsystem/RanseurRobotTurtleAction.cpp\
 	src/main/cpp/tubcollector/TubCollector.cpp\
 	src/main/cpp/tubcollector/TubCollectorDutyCycleAction.cpp\
 	src/main/cpp/tubcollector/TubCollectorEjectTubAction.cpp\
@@ -48,7 +49,12 @@ NEED_MODELS=true
 DEFAULT_CONFIG=Debug
 DEFAULT_PLATFORM=SIMULATOR
 
-LOCAL_CFLAGS = -Isrc/main/cpp -DRANSEUR_OLD_OI
+#
+# Add this to the line below to use the Phaser/Phoenix OI
+#
+# -DRANSEUR_OLD_OI
+#
+LOCAL_CFLAGS = -Isrc/main/cpp
 
 SUPPORTED_PLATFORMS=ROBORIO SIMULATOR
 
