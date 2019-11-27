@@ -153,9 +153,9 @@ namespace xero {
             ejecting_ = std::make_shared<TubManipulatorEjectAction>(*tubmanipulatorsubsytem) ;
 
             sequence_ = std::make_shared<SequenceAction>(log) ;
-            sequence_->pushSubActionPair(tubmanipulatorsubsytem, collecting_) ;
-            sequence_->pushSubActionPair(tubmanipulatorsubsytem, dumping_) ;
-            sequence_->pushSubActionPair(tubmanipulatorsubsytem, ejecting_) ;            
+            sequence_->pushAction(collecting_) ;
+            sequence_->pushAction(dumping_) ;
+            sequence_->pushAction(ejecting_) ;            
         }
     }
 }

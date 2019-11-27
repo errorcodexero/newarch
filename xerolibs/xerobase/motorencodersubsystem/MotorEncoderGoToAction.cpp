@@ -46,7 +46,9 @@ namespace xero {
                 isDone_ = true;
                 MessageLogger &logger = subsystem.getRobot().getMessageLogger();
                 logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
-                logger << "MotorEncoderGoToHeightAction: action completed sucessfully in start";
+                logger << "MotorEncoderGoToAction (" ;
+                logger << subsystem.getName() ;
+                logger << "): action completed sucessfully in start";
                 logger.endMessage();
                 return;
             }
@@ -78,11 +80,15 @@ namespace xero {
             startPosition_ = subsystem.getPosition();
             MessageLogger &logger = subsystem.getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
-            logger << "Motor/Encoder Target Distance: " << dist;
+            logger << "Motor/Encoder Target Distance (" ;
+            logger << subsystem.getName() ;
+            logger << "): " << dist;
             logger.endMessage();
 
             logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
-            logger << "Motor/Encoder Velocity Profile: " << profile_->toString() ;
+            logger << "Motor/Encoder Velocity Profile: ("  ;
+            logger << subsystem.getName() ;
+            logger << ") : " << profile_->toString() ;
             logger.endMessage();
 
             subsystem.startPlot(plotid_, plot_columns_) ;
@@ -109,7 +115,9 @@ namespace xero {
             if (elapsed > profile_->getTotalTime()) {
                  MessageLogger &logger = robot.getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, subsystem.getMsgID()) ;
-                logger << "MotorEncoderGoToHeightAction: action completed" ;
+                logger << "MotorEncoderGoToAction (" ;
+                logger << subsystem.getName() ;
+                logger << "): action completed" ;
                 logger << ", remaining = " << remaining ;
                 logger.endMessage() ;
 

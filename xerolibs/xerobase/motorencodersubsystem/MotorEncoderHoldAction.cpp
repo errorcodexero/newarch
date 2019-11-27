@@ -1,18 +1,25 @@
 #include "MotorEncoderHoldAction.h"
-
+#include <MessageLogger.h>
 #include "Robot.h"
+
+using namespace xero::misc ;
 
 namespace xero {
     namespace base {
         MotorEncoderHoldAction::MotorEncoderHoldAction(MotorEncoderSubsystem &subsystem, double target):
             MotorEncoderSubsystemAction(subsystem), target_(target), hasExplicitTarget_(true) {
-                pid_.initFromSettingsExtended(
-                    subsystem.getRobot().getSettingsParser(),
-                    subsystem.configName_ + ":hold"
-                );
+
         }
 
         void MotorEncoderHoldAction::start() {
+            auto &sub = getSubsystem();
+
+            pid_.initFromSettingsExtended(
+                sub.getRobot().getSettingsParser(),
+                sub.configName_ + ":hold",
+                sub.isAngular()
+            );
+
             if (!hasExplicitTarget_) target_ = getSubsystem().getPosition();
             cancelled_ = false;
             pid_.reset();
@@ -20,9 +27,17 @@ namespace xero {
 
         void MotorEncoderHoldAction::run() {
             auto &sub = getSubsystem();
+            auto &logger = sub.getRobot().getMessageLogger() ;
 
-            double distance = normalizePosition(target_ - sub.getPosition());
-            sub.setMotor(pid_.getOutput(0, distance, sub.getRobot().getDeltaTime()));
+            double out = pid_.getOutput(target_, sub.getPosition(), sub.getRobot().getDeltaTime()) ; 
+            sub.setMotor(out) ;
+
+            logger.startMessage(MessageLogger::MessageType::debug, sub.getMsgID()) ;
+            logger << "MotorEncoderHoldAction (" << sub.getName() << "):" ;
+            logger << " target " << target_ ;
+            logger << " actual " << sub.getPosition() ;
+            logger << " output " << out ;
+            logger.endMessage() ;
         }
     }
 }

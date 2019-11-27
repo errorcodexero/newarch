@@ -143,7 +143,7 @@ tubcollector:eject:delay                                        1
 ###################################################################################################
 # tubwrist
 ###################################################################################################
-tubwrist:hold:p                                                 1
+tubwrist:hold:p                                                 0.01
 tubwrist:hold:i                                                 0
 tubwrist:hold:d                                                 0
 tubwrist:hold:f                                                 0
@@ -163,7 +163,7 @@ tubwrist:follower:up:kp                                         0.0
 tubwrist:follower:up:kd                                         0.0
 tubwrist:follower:up:kv                                         0.005555556
 tubwrist:follower:up:ka                                         0.0
-tubwrist:collect:pos                                            0
+tubwrist:collect:pos                                            1
 tubwrist:dump:pos                                               135
 tubwrist:eject:pos                                              0
 tubwrist:power                                                  0.2
@@ -173,7 +173,7 @@ tubwrist:turtle:pos                                             90
 ###################################################################################################
 # tubarm
 ###################################################################################################
-tubarm:hold:p                                                   1
+tubarm:hold:p                                                   0.01
 tubarm:hold:i                                                   0
 tubarm:hold:d                                                   0
 tubarm:hold:f                                                   0

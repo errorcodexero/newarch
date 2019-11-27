@@ -24,7 +24,7 @@ namespace xero {
                                                      robot.getSettingsParser(), 
                                                      "hw:" + config + ":encoder",
                                                      angular);
-            setDefaultAction(std::make_shared<MotorEncoderHoldAction>(*this));
+
         }
 
         bool MotorEncoderSubsystem::canAcceptAction(xero::base::ActionPtr action) {
@@ -55,6 +55,16 @@ namespace xero {
             logger << " vel " << speedometer_.getVelocity() ;
             logger << " accel " << speedometer_.getAcceleration() ;
             logger.endMessage() ;
+
+            if (getDefaultAction() == nullptr)
+            {
+                //
+                // This is placed here instead of the constructure because this action is dependent on the
+                // state.  Therefore this default action cannot be assigned until compute state has been run
+                // at least once.
+                //
+                setDefaultAction(std::make_shared<MotorEncoderHoldAction>(*this));
+            }
         }
 
         void MotorEncoderSubsystem::reset() {
