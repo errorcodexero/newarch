@@ -3,7 +3,6 @@
 #include "Ranseur.h"
 #include "ranseurrobotsubsystem/RanseurRobotSubsystem.h"
 #include "ranseurids.h"
-
 #include <oi/DriverGamepadRumbleAction.h>
 #include <Robot.h>
 #include <TeleopController.h>
@@ -106,11 +105,6 @@ namespace xero {
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_RANSEUR_OI) ;
         
-            /// Initializing! ///
-            if (collecting_ == nullptr) {
-                init() ;
-            }
-
             //actions and buttons corresponding with the actions
             //actions found on wiki under tub manipulator subsystem under ranseur (robot)
             /// Actioning! ///

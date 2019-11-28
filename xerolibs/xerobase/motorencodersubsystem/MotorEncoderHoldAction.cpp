@@ -8,7 +8,6 @@ namespace xero {
     namespace base {
         MotorEncoderHoldAction::MotorEncoderHoldAction(MotorEncoderSubsystem &subsystem, double target):
             MotorEncoderSubsystemAction(subsystem), target_(target), hasExplicitTarget_(true) {
-
         }
 
         void MotorEncoderHoldAction::start() {

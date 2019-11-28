@@ -17,7 +17,7 @@ namespace xero {
             /// \param samples the number of samples to process to calculate values
             /// \param angle if true, measuring angular velocity, normalize to degrees between -180 and 180
             Speedometer(size_t samples, bool angle = false) {
-                samples_ = samples ;
+                max_samples_ = samples ;
                 angle = angle_ ;
                 times_.resize(samples) ;
                 distances_.resize(samples) ;
@@ -28,13 +28,13 @@ namespace xero {
             /// \brief return the latest distance value
             /// \returns the latest distance value
             double getDistance() const {
-                return distances_[samples_ - 1] ;
+                return distances_[max_samples_ - 1] ;
             }
 
             /// \brief return the latest velocity value
             /// \returns the latest velocity value
             double getVelocity() const {
-                return velocities_[samples_ - 1] ;
+                return velocities_[max_samples_ - 1] ;
             }
 
             /// \brief return the latest acceleration
@@ -63,24 +63,39 @@ namespace xero {
 
                 if (dtime > 1e-6) {
 
-                    times_.push_back(dtime) ;
-                    times_.erase(times_.begin()) ;
+                    acquired_samples_++ ;
 
-                    double total = 0.0 ;
-                    for(size_t i = 1 ; i < times_.size() ; i++)
-                        total += times_[i] ;
+                    if (acquired_samples_ == 1)
+                    {
+                        times_.push_back(dtime) ;
+                        times_.erase(times_.begin()) ;
 
-                    distances_.push_back(pos) ;
-                    distances_.erase(distances_.begin()) ;
-                    if (angle_)
-                        vel = xero::math::normalizeAngleDegrees(getDistance() - getOldestDistance()) / total ;
+                        for(size_t i = 0 ; i < distances_.size() ; i++)
+                            distances_[i] = pos ;
+                            
+                        accel_ = 0.0 ;
+                    }
                     else
-                        vel = (getDistance() - getOldestDistance()) / total ;
+                    {
+                        times_.push_back(dtime) ;
+                        times_.erase(times_.begin()) ;
 
-                    velocities_.push_back(vel) ;
-                    velocities_.erase(velocities_.begin()) ;
-                        
-                    accel_ = (getVelocity() - getOldestVelocity()) / total ;
+                        double total = 0.0 ;
+                        for(size_t i = 1 ; i < times_.size() ; i++)
+                            total += times_[i] ;
+
+                        distances_.push_back(pos) ;
+                        distances_.erase(distances_.begin()) ;
+                        if (angle_)
+                            vel = xero::math::normalizeAngleDegrees(getDistance() - getOldestDistance()) / total ;
+                        else
+                            vel = (getDistance() - getOldestDistance()) / total ;
+
+                        velocities_.push_back(vel) ;
+                        velocities_.erase(velocities_.begin()) ;
+                            
+                        accel_ = (getVelocity() - getOldestVelocity()) / total ;
+                    }
                 }
             }
 
@@ -90,7 +105,8 @@ namespace xero {
             std::vector<double> times_ ;
             double accel_ ;
             bool angle_ ;
-            size_t samples_ ;
+            size_t acquired_samples_ ;
+            size_t max_samples_ ;
         } ;
     }
 }
