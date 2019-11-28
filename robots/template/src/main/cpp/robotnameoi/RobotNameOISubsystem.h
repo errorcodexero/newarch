@@ -9,7 +9,7 @@ namespace xero {
     namespace $$robotname$$ {
         class $$RobotName$$OISubsystem : public xero::base::OISubsystem {
         public:
-            $$RobotName$$OISubsystem(xero::base::Robot &robot) ;
+            $$RobotName$$OISubsystem(xero::base::Subsystem *parent) ;
             virtual ~$$RobotName$$OISubsystem() ;
         
         protected:

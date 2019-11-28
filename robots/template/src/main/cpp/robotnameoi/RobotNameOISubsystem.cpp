@@ -14,7 +14,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace $$robotname$$ {
-        $$RobotName$$OISubsystem::$$RobotName$$OISubsystem(xero::base::Robot &robot) : OISubsystem(robot, "oi") {
+        $$RobotName$$OISubsystem::$$RobotName$$OISubsystem(xero::base::Subsystem *parent) : OISubsystem(parent, "oi") {
             int oi = robot.getSettingsParser().getInteger("hw:driverstation:hid:oi") ;  
 
             auto oidev = std::make_shared<$$RobotName$$OIDevice>(*this, oi) ;
