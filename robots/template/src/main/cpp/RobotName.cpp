@@ -15,6 +15,9 @@
 using namespace xero::misc ;
 using namespace xero::base ;
 
+////$$ StartRobotDefines
+////$$ EndRobotDefines
+
 namespace xero {
     namespace $$robotname$$ {
 
