@@ -24,11 +24,11 @@ namespace xero {
 
         public:
             /// \brief Create a new tank drive object
-            /// \param robot The robot that contains this tank drive subsystem
+            /// \param parent The parent subsystem for the drivebase
             /// \param motorConfigBase The configuration ID for the motors.
             /// If motorConfigBase is "hw:tankdrive", TankDrive will look for
             /// motor groups named "hw:tankdrive:left" and "hw:tankdrive:right".
-            TankDrive(Subsystem *parent, const std::string motorConfigBase);
+            TankDrive(Subsystem *parent, const std::string &motorConfigBase);
 
             /// \brief destroy a tank drive object
             virtual ~TankDrive() ;
@@ -132,6 +132,10 @@ namespace xero {
                 return angular_.getAcceleration() ;
             }
 
+            /// \brief Return the total angle of the drive base.
+            /// The total angle is the total change in angle since the navx was reset.  The
+            /// total angle is not normalized to be between 180 and -180.
+            /// \returns the total angle of the robot
             double getTotalAngle() const {
                 return total_angle_ ;
             }
@@ -179,18 +183,6 @@ namespace xero {
             /// \brief init the subsystem for the enabled mode
             /// \param ltype the type of loop being enabled (e.g. teleop, auto, test)
             virtual void init(LoopType ltype) ;
-
-            double getX() const {
-                return kin_->getX() ;
-            }
-
-            double getY() const {
-                return kin_->getY() ;
-            }
-
-            double getXYZVelocity() {
-                return xyz_velocity_ ;
-            }
 
         private:
             /// \brief Set the motors to output at the given percentages

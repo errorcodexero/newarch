@@ -12,12 +12,7 @@ namespace xero {
             $$RobotName$$OISubsystem(xero::base::Subsystem *parent) ;
             virtual ~$$RobotName$$OISubsystem() ;
         
-        protected:
-            void initializeWithGunner(int gunner, int driver) ;
-            void initializeWithOI(int oi, int driver) ;
-
         private:
-            bool detectOI(int index) ;
         } ;
     }
 }

@@ -15,12 +15,14 @@ namespace xero {
             /// \param db the drivebase this action applies to
             /// \param left the power to apply to the left side
             /// \param right the power to apply to the right 
+            /// \param highgear if true run this action in high gear               
             TankDrivePowerAction(TankDrive &db, double left, double right, bool highgear=true) ;
 
             /// \brief create the action
             /// \param db the drivebase this action will act on
             /// \param left the name of the parameter that contains the power for the left side
             /// \param right the name of the parameter that contains the power for the right side
+            /// \param highgear if true run this action in high gear            
             TankDrivePowerAction(TankDrive &db, const std::string &left, const std::string &right, bool highgear=true) ;
 
             /// \brief destroy the action object

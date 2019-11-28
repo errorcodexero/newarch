@@ -23,8 +23,10 @@ namespace xero {
 
         /// \brief The base class for any subsystem in the system.
         class Subsystem {
-             // RobotSubsystem doesn't have a parent, and therefore needs to use a private constructor
+            /// \brief A specific subsystem that does not have a parent
+            /// RobotSubsystem doesn't have a parent, and therefore needs to use a private constructor
             friend class RobotSubsystem;
+
         public: 
             /// \brief create a new subsystem
             /// \param robot the robot
@@ -51,22 +53,17 @@ namespace xero {
             /// computes a state that is meaningful to users of the subsystem.
             virtual void computeState() ;
 
-
+            /// \brief the return status from a setAction call
             enum class SetActionResult {
-                // The action was accepted.
-                Accepted,
-
-                // The action was accepted, but replaced a previous action 
-                // (either on this subsystem or on a child subsystem).
-                PreviousCanceled,
-
-                // The action was rejected because canAcceptAction returned false.
-                Rejected,  
-
-                // The action was rejected because the parent subsystem is busy.
-                ParentBusy
+                Accepted,           ///< the action was accepted
+                PreviousCanceled,   ///< The action was accepted, but replaced a previous action (either on this subsystem or on a child subsystem).
+                Rejected,           ///< The action was rejected because canAcceptAction returned false.
+                ParentBusy          ///< The action was rejected because the parent subsystem is busy.
             };
 
+            /// \brief Returns true if the result means the action was accepted
+            /// \param r the result to test
+            /// \returns true if the action was accepted given the result
             static inline bool isAccepted(SetActionResult r) { 
                 return r == SetActionResult::Accepted || r == SetActionResult::PreviousCanceled;
             }
@@ -79,9 +76,11 @@ namespace xero {
 
             /// \brief Returns this subsystem's default action
             /// The default action runs whenever no other actions are running.
+            /// \returns the default action for this subsystem, or nullptr if one has not been assigned
             ActionPtr getDefaultAction() const { return defaultAction_; }
 
             /// \brief Sets this subsystem's default action
+            /// \param action the action to set as the default action
             /// \return true if the action was accepted
             bool setDefaultAction(ActionPtr action);
 
@@ -104,9 +103,7 @@ namespace xero {
 
             /// \brief cancel the current action for this subsystem
             /// It also cancels the actions for any children subsystems
-            /// \returns true if the action was canceled, false if it could not be
             virtual void cancelAction() ;
-
 
             /// \brief Set output actuators associated with the subsystem
             /// The output actuators are set to achieve the currently active
@@ -147,13 +144,37 @@ namespace xero {
                 for(auto child : children_)
                     child->postHWInit() ;
             }
-            
+
+            /// \brief Initialize a plot session for a subsystem
+            /// and return a handle to the plot session.  This handle must be used
+            /// an all other plot related methods.
+            /// \note Multiple plot sessions, even with the same name can be open concurrently
+            /// \param name the name of the plot session
+            /// \returns a handle to an open plot session
             int initPlot(const std::string &name)  ;
 
+            /// \brief start a plot session. 
+            /// If a previous plot session exists, the data is removed in preparation for a new
+            /// plot session.  The data is stored in the network tables in a specific format.  See
+            /// the software wiki for more information on this data format.
+            /// \param id the handle from an initPlot() call
+            /// \param cols an array of column names for the data that will be provided in the plot
+            /// \sa initPlot            
             void startPlot(int id, const std::vector<std::string> &cols) ;
 
+            /// \brief add a row of data to the plot
+            /// The vector of values must be of the same size as the vector of columns in the
+            /// start plot call.
+            /// \param id the handle from an initPlot() call
+            /// \param values the set of values for this row of plot data
+            /// \sa initPlot            
             void addPlotData(int id, const std::vector<double> &values) ;
 
+            /// \brief end the current plot sesssion signaling all data is present
+            /// This does NOT deinitialze the plot session.  It on informs any client
+            /// watching the data that no more data will be pfovided.
+            /// \param id the handle from an initPlot() call
+            /// \sa initPlot
             void endPlot(int id) ;
 
             /// \return true if the subsystem is currently executing an action
@@ -173,7 +194,11 @@ namespace xero {
                 return false ;
             }
 
-            /// \brief Checks that an is valid as a subsystem's default action
+            /// \brief Checks that an is valid as a subsystem's default action.
+            /// It is expected that a derived class will override this method to 
+            /// accept actions as default actions.
+            /// \param action the action to test
+            /// \returns true if the action can be the default action, otherwise false
             virtual bool canAcceptDefaultAction(ActionPtr action) {
                 return false;
             }

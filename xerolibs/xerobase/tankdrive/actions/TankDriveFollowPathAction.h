@@ -17,6 +17,7 @@ namespace xero {
             /// \brief this action applies power to the left and right side of the robot
             /// \param db the drivebase this action applies to
             /// \param path the name of the path to follow
+            /// \param reverse if true, drive the path in reverse
             TankDriveFollowPathAction(TankDrive &db, const std::string &path, bool reverse = false) ;
 
             /// \brief destroy the action object
@@ -24,6 +25,8 @@ namespace xero {
 
             /// \brief Registers \c flag to be set upon crossing \c distanceThreshold
             /// \note Must be called before the action is started.
+            /// \param flag the flag to register
+            /// \param distanceThreshold the distance where the flag is registered
             void registerFlagAtDistance(xero::misc::Flag flag, double distanceThreshold);
 
             /// \brief Start the action; called once per action when it starts
