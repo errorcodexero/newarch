@@ -18,7 +18,7 @@ namespace xero {
             //
             // Add the OI to the robot.  The OI is specific to this robot.
             //
-            oi_ = std::make_shared<$$RobotName$$OISubsystem>(robot) ;
+            oi_ = std::make_shared<$$RobotName$$OISubsystem>(this) ;
             addChild(oi_) ;
         }
 
