@@ -1,8 +1,8 @@
 #pragma once
 
 #include <oi/OIDevice.h> 
-#include <Action.h>
-#include <SequenceAction.h>
+#include <actions/Action.h>
+#include <actions/SequenceAction.h>
 
 namespace xero {
     namespace $$robotname$$ {
