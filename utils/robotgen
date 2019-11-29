@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+
+if [ $# != 1 ]; then
+    echo "robotgen: expected one parameter, the name of the robot"
+    exit 1 ;
+fi
+
+echo -n "Building robot generation program ... "
+g++ --std=c++17 utils/rgen.cpp -o rgen -lstdc++fs
+echo done
+
+echo Generating new robot: $1
+./rgen $1
+rm rgen
+
