@@ -39,11 +39,16 @@ namespace xero {
             manipulator_ = std::make_shared<TubManipulatorSubsystem>(this) ;
             addChild(manipulator_) ;
 
+            auto &logger = robot.getMessageLogger() ;
             for(int i = 0 ; i < 10 ; i++)
             {
                 auto dout = std::make_shared<frc::DigitalOutput>(i) ;
-                dout->Set(false) ;
+                dout->Set(true) ;
                 dios_.push_back(dout) ;
+
+                logger.startMessage(MessageLogger::MessageType::error) ;
+                logger << "Setting LED " << i << " to low" ;
+                logger.endMessage() ;
             }
         }
 
@@ -51,7 +56,7 @@ namespace xero {
         }
 
         bool RanseurRobotSubsystem::canAcceptAction(ActionPtr act) {
-            return false;
+            return true;
         }
     }
 }

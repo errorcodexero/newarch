@@ -5,6 +5,7 @@
 #include "bunnyarm/BunnyArm.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
+#include <MessageLogger.h>
 #include <tubmanipulatorsubsystem/TubManipulatorSubsystem.h>
 #include <frc/DigitalOutput.h>
 
@@ -38,7 +39,15 @@ namespace xero {
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
 
             void setDIOState(int index, bool state) {
-                dios_[index]->Set(state) ;
+                xero::misc::MessageLogger &logger = getRobot().getMessageLogger() ;
+                logger.startMessage(xero::misc::MessageLogger::MessageType::error) ;
+                logger << "Setting LED " << index << " to state " ;
+                if (state)
+                    logger << "on" ;
+                else
+                    logger << "off" ;
+                logger.endMessage() ;                
+                dios_[index]->Set(!state) ;
             }
             
         private:
