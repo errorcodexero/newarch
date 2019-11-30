@@ -15,6 +15,7 @@
 #include <tubmanipulatorsubsystem/TubManipulatorDumpAction.h>
 #include <tubmanipulatorsubsystem/TubManipulatorEjectAction.h>
 #include <ranseurrobotsubsystem/RanseurRobotTurtleAction.h>
+#include <tubtoucher/TubToucherDeployAction.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -53,7 +54,7 @@ namespace xero {
             size_t dump_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:dump") ;
             size_t turtle_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:turtle") ;
             size_t eject_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:eject") ;
-            size_t spare1_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:spare1") ;
+            size_t tubtoucher_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:tubtoucher") ;
             size_t spare2_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:spare2") ;
 
             //
@@ -63,7 +64,7 @@ namespace xero {
             dump_ = mapButton(dump_b, OIButton::ButtonType::LowToHigh) ;              // Push button
             turtle_ = mapButton(turtle_b, OIButton::ButtonType::LowToHigh) ;          // Push button
             eject_ = mapButton(eject_b, OIButton::ButtonType::LowToHigh) ;            // Push button
-            spare1_ = mapButton(spare1_b, OIButton::ButtonType::LowToHigh) ;          // Push button
+            tubtoucher_ = mapButton(tubtoucher_b, OIButton::ButtonType::LowToHigh) ;  // Push button
             spare2_ = mapButton(spare2_b, OIButton::ButtonType::LowToHigh) ;          // Push button
             
 #ifndef RANSEUR_OLD_OI
@@ -93,6 +94,7 @@ namespace xero {
           
             auto &ranseur = dynamic_cast<Ranseur &>(getSubsystem().getRobot()) ;
             auto bunnyarm = ranseur.getRanseurRobotSubsystem()->getBunnyArm() ;
+            auto tubtoucher = ranseur.getRanseurRobotSubsystem()->getTubToucher() ;
             auto tubcollector = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubCollector() ;
             auto tubarm = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubArm() ;
             auto tubwrist = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubWrist() ;
@@ -119,7 +121,7 @@ namespace xero {
             }
             if(getValue(eject_)) {
                 seq.pushSubActionPair(tubmanipulatorsubsytem, ejecting_, false) ;
-            }      
+            } 
         }
 
         //
@@ -133,6 +135,7 @@ namespace xero {
 
             auto &ranseur = dynamic_cast<Ranseur &>(getSubsystem().getRobot()) ;
             auto bunnyarm = ranseur.getRanseurRobotSubsystem()->getBunnyArm() ;
+            auto tubtoucher = ranseur.getRanseurRobotSubsystem()->getTubToucher() ;
             auto tubcollector = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubCollector() ;
             auto tubarm = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubArm() ;
             auto tubwrist = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubWrist() ;
