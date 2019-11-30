@@ -16,26 +16,32 @@ hw:bunnyarm:solenoid                                            1
 
 hw:tubtoucher:solenoid                                          2
 
-hw:tubcollector:type                                            "victor_spx"
-hw:tubcollector:canid                                           9
+hw:tubcollector:1:type                                          "victor_spx"
+hw:tubcollector:1:canid                                         6
+hw:tubcollector:2:type                                          "victor_spx"
+hw:tubcollector:2:canid                                         9
 hw:tubcollector:clamp                                           0
 hw:tubcollector:tubsensor                                       9                           # Digital IO
 
-hw:tubarm:motor:canid                                           7
+hw:tubarm:motor:canid                                           8
 hw:tubarm:motor:type                                            "victor_spx"
-hw:tubarm:encoder:analog                                        3
-hw:tubarm:encoder:analog:m                                      72
-hw:tubarm:encoder:analog:b                                      0
+hw:tubarm:motor:invert                                          true
+hw:tubarm:encoder:analog                                        1
+hw:tubarm:encoder:analog:m                                      -72
+hw:tubarm:encoder:analog:b                                      295.92
 
-hw:tubwrist:motor:canid                                         8
+hw:tubwrist:motor:canid                                         7
 hw:tubwrist:motor:type                                          "victor_spx"
-hw:tubwrist:encoder:analog                                      2
+hw:tubwrist:encoder:analog                                      0
 hw:tubwrist:encoder:analog:m                                    72
-hw:tubwrist:encoder:analog:b                                    0
+hw:tubwrist:encoder:analog:b                                    -126
 
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2
 hw:tankdrive:motors:left:3:canid                                3
+hw:tankdrive:motors:right:1:invert                               true
+hw:tankdrive:motors:right:2:invert                               true
+hw:tankdrive:motors:right:3:invert                               true
 hw:tankdrive:motors:right:1:canid                               4
 hw:tankdrive:motors:right:2:canid                               5
 hw:tankdrive:motors:right:3:canid                               6
@@ -49,7 +55,6 @@ hw:tankdrive:leftencoder:1                                      4               
 hw:tankdrive:leftencoder:2                                      5                            # Digital IO
 hw:tankdrive:rightencoder:1                                     6                            # Digital IO
 hw:tankdrive:rightencoder:2                                     7                            # Digital IO
-hw:tankdrive:invert:motors:left                                 true
 
 #
 # Driver station
@@ -82,8 +87,8 @@ plotting:enabled                                               true
 #
 # Variables for the tankdrive subsystem code.
 #
-tankdrive:inches_per_tick                                       0.004889638
-tankdrive:width                                                 22.5
+tankdrive:inches_per_tick                                       0.031024151
+tankdrive:width                                                 30.0
 tankdrive:scrub                                                 1.0
 
 tankdrive:follower:left:kv1                                     192.0
@@ -262,7 +267,7 @@ oi:automode2                                                    8
 # 6 - tub toucher deploy
 # 7 - tub toucher retract
 #
-automode:test:which                                             2
-automode:test:power                                             -1.0
-automode:test:duration                                          5.0
+automode:test:which                                             1
+automode:test:power                                             0.15
+automode:test:duration                                          0.3
 automode:test:angle                                             90

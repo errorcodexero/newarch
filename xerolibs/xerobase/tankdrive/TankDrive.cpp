@@ -65,8 +65,8 @@ namespace xero {
         void TankDrive::init(LoopType ltype) {
             Subsystem::init(ltype) ;
 
-            left_motors_->setNeutralMode(MotorController::NeutralMode::Brake);
-            right_motors_->setNeutralMode(MotorController::NeutralMode::Brake);
+            left_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
+            right_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
         }
         
         void TankDrive::lowGear() {
@@ -161,6 +161,9 @@ namespace xero {
 #endif
             left_linear_.update(getRobot().getDeltaTime(), getLeftDistance()) ;
             right_linear_.update(getRobot().getDeltaTime(), getRightDistance()) ;
+
+            frc::SmartDashboard::PutNumber("leftdb", left_linear_.getDistance()) ;
+            frc::SmartDashboard::PutNumber("rightdb", right_linear_.getDistance()) ;
 
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE_VERBOSE);
