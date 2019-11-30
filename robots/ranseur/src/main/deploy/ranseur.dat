@@ -19,18 +19,18 @@ hw:tubtoucher:solenoid                                          2
 hw:tubcollector:type                                            "victor_spx"
 hw:tubcollector:canid                                           9
 hw:tubcollector:clamp                                           0
-hw:tubcollector:tubsensor                                       4                           # Digital IO
+hw:tubcollector:tubsensor                                       9                           # Digital IO
 
 hw:tubarm:motor:canid                                           7
 hw:tubarm:motor:type                                            "victor_spx"
-hw:tubarm:encoder:analog                                        0
-hw:tubarm:encoder:analog:m                                      360
+hw:tubarm:encoder:analog                                        3
+hw:tubarm:encoder:analog:m                                      72
 hw:tubarm:encoder:analog:b                                      0
 
 hw:tubwrist:motor:canid                                         8
 hw:tubwrist:motor:type                                          "victor_spx"
-hw:tubwrist:encoder:analog                                      1
-hw:tubwrist:encoder:analog:m                                    360
+hw:tubwrist:encoder:analog                                      2
+hw:tubwrist:encoder:analog:m                                    72
 hw:tubwrist:encoder:analog:b                                    0
 
 hw:tankdrive:motors:left:1:canid                                1
@@ -45,10 +45,10 @@ hw:tankdrive:motors:left:3:type                                 "sparkmax_brushl
 hw:tankdrive:motors:right:1:type                                "sparkmax_brushless"
 hw:tankdrive:motors:right:2:type                                "sparkmax_brushless"
 hw:tankdrive:motors:right:3:type                                "sparkmax_brushless"
-hw:tankdrive:leftencoder:1                                      0                            # Digital IO
-hw:tankdrive:leftencoder:2                                      1                            # Digital IO
-hw:tankdrive:rightencoder:1                                     2                            # Digital IO
-hw:tankdrive:rightencoder:2                                     3                            # Digital IO
+hw:tankdrive:leftencoder:1                                      4                            # Digital IO
+hw:tankdrive:leftencoder:2                                      5                            # Digital IO
+hw:tankdrive:rightencoder:1                                     6                            # Digital IO
+hw:tankdrive:rightencoder:2                                     7                            # Digital IO
 hw:tankdrive:invert:motors:left                                 true
 
 #
