@@ -43,19 +43,19 @@ namespace xero {
             std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
             automode_ = mapAxisScale(6, mapping) ;
 #else
-            size_t automode1_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:automode1") ;
-            size_t automode2_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:automode2") ;
+            size_t automode1_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:automode1") ;
+            size_t automode2_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:automode2") ;
 #endif
 
             //
             // Get button numbers
             //
-            size_t collect_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:collect") ;
-            size_t dump_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:dump") ;
-            size_t turtle_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:turtle") ;
-            size_t eject_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:eject") ;
-            size_t tubtoucher_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:tubtoucher") ;
-            size_t spare2_b = getSubsystem().getRobot().getSettingsParser().getDouble("oi:spare2") ;
+            size_t collect_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:collect") ;
+            size_t dump_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:dump") ;
+            size_t turtle_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:turtle") ;
+            size_t eject_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:eject") ;
+            size_t tubtoucher_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:tubtoucher") ;
+            size_t spare2_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:spare2") ;
 
             //
             // Actions
@@ -68,8 +68,8 @@ namespace xero {
             spare2_ = mapButton(spare2_b, OIButton::ButtonType::LowToHigh) ;          // Push button
             
 #ifndef RANSEUR_OLD_OI
-            automode1_ = mapButton(automode1_b, OIButton::ButtonType::Level) ;        // toggle switch 
-            automode2_ = mapButton(automode2_b, OIButton::ButtonType::Level) ;        // toggle switch
+            automode1_ = mapButton(automode1_b, OIButton::ButtonType::LevelInv) ;        // toggle switch 
+            automode2_ = mapButton(automode2_b, OIButton::ButtonType::LevelInv) ;        // toggle switch
 #endif
         }
 
@@ -105,23 +105,28 @@ namespace xero {
 
             //bool ret = false ;
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
-            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_RANSEUR_OI) ;
+            log.startMessage(MessageLogger::MessageType::error) ;
         
             //actions and buttons corresponding with the actions
             //actions found on wiki under tub manipulator subsystem under ranseur (robot)
             /// Actioning! ///
             if(getValue(collect_)) { 
-                seq.pushSubActionPair(tubmanipulatorsubsytem, sequence_, false) ;
+                log << "Collect" ;
+                //seq.pushSubActionPair(tubmanipulatorsubsytem, sequence_, false) ;
             }
             if(getValue(dump_)) {
-                seq.pushSubActionPair(tubmanipulatorsubsytem, dumping_, false) ;
+                log << "Dump" ;
+                //seq.pushSubActionPair(tubmanipulatorsubsytem, dumping_, false) ;
             }
             if(getValue(turtle_)) {
-                seq.pushSubActionPair(ranseurrobotsubsystem, turtling_, false) ;
+                log << "Turtle" ;
+                //seq.pushSubActionPair(ranseurrobotsubsystem, turtling_, false) ;
             }
             if(getValue(eject_)) {
-                seq.pushSubActionPair(tubmanipulatorsubsytem, ejecting_, false) ;
+                log << "Eject" ;
+                //seq.pushSubActionPair(tubmanipulatorsubsytem, ejecting_, false) ;
             } 
+            log.endMessage() ;
         }
 
         //
@@ -144,6 +149,7 @@ namespace xero {
             auto tubmanipulatorsubsytem = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem() ;
             auto ranseurrobotsubsystem = ranseur.getRanseurRobotSubsystem() ;
             
+#ifdef NOTYET
             collecting_ = std::make_shared<TubManipulatorCollectAction>(*tubmanipulatorsubsytem) ;
             dumping_ = std::make_shared<TubManipulatorDumpAction>(*tubmanipulatorsubsytem) ;
             turtling_ = std::make_shared<RanseurRobotTurtleAction>(*ranseurrobotsubsystem) ;
@@ -153,6 +159,7 @@ namespace xero {
             sequence_->pushAction(collecting_) ;
             sequence_->pushAction(dumping_) ;
             sequence_->pushAction(ejecting_) ;            
+#endif
         }
     }
 }

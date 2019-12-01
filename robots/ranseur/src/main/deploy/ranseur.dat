@@ -12,15 +12,17 @@
 #
 # Hardware
 #
-hw:bunnyarm:solenoid                                            1
+hw:bunnyarm:solenoid                                            6
+hw:tubtoucher:solenoid:1_1                                      0
+hw:tubtoucher:solenoid:1_2                                      1
+hw:tubtoucher:solenoid:2_1                                      4
+hw:tubtoucher:solenoid:2_2                                      5
 
-hw:tubtoucher:solenoid                                          2
-
-hw:tubcollector:1:type                                          "victor_spx"
-hw:tubcollector:1:canid                                         6
-hw:tubcollector:2:type                                          "victor_spx"
-hw:tubcollector:2:canid                                         9
-hw:tubcollector:clamp                                           0
+hw:tubcollector1:type                                           "victor_spx"
+hw:tubcollector1:canid                                          6
+hw:tubcollector2:type                                           "victor_spx"
+hw:tubcollector2:canid                                          9
+hw:tubcollector:clamp                                           7
 hw:tubcollector:tubsensor                                       9                           # Digital IO
 
 hw:tubarm:motor:canid                                           8
@@ -241,14 +243,14 @@ driver:zerolevel                                                0.1
 # Variables for the OI
 ###################################################################################################
 
-oi:collect                                                      1
-oi:dump                                                         2
-oi:turtle                                                       3
-oi:eject                                                        4
-oi:spare1                                                       5
+oi:collect                                                      12
+oi:dump                                                         8
+oi:turtle                                                       9
+oi:eject                                                        13
+oi:tubtoucher                                                   14
 oi:spare2                                                       6
-oi:automode1                                                    7
-oi:automode2                                                    8
+oi:automode1                                                    10
+oi:automode2                                                    16
 
 
 ###################################################################################################
@@ -267,7 +269,7 @@ oi:automode2                                                    8
 # 6 - tub toucher deploy
 # 7 - tub toucher retract
 #
-automode:test:which                                             1
+automode:test:which                                             6
 automode:test:power                                             0.15
 automode:test:duration                                          0.3
 automode:test:angle                                             90

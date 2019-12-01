@@ -9,9 +9,21 @@ namespace xero {
         TubToucher::TubToucher(Subsystem *parent) : xero::base::Subsystem(parent, "tubtoucher") {
             auto &robot = getRobot();
 
-            int sol = robot.getSettingsParser().getInteger("hw:tubtoucher:solenoid") ;
-            solenoid_ = std::make_shared<frc::Solenoid>(sol) ;
-            solenoid_->Set(false) ;
+            int sol = robot.getSettingsParser().getInteger("hw:tubtoucher:solenoid:1_1") ;
+            solenoid1_1_ = std::make_shared<frc::Solenoid>(sol) ;
+            solenoid1_1_->Set(false) ;
+
+            sol = robot.getSettingsParser().getInteger("hw:tubtoucher:solenoid:1_2") ;
+            solenoid1_2_ = std::make_shared<frc::Solenoid>(sol) ;
+            solenoid1_2_->Set(false) ;            
+
+            sol = robot.getSettingsParser().getInteger("hw:tubtoucher:solenoid:2_1") ;
+            solenoid2_1_ = std::make_shared<frc::Solenoid>(sol) ;
+            solenoid2_1_->Set(false) ;   
+
+            sol = robot.getSettingsParser().getInteger("hw:tubtoucher:solenoid:2_2") ;
+            solenoid2_2_ = std::make_shared<frc::Solenoid>(sol) ;
+            solenoid2_2_->Set(false) ;                         
 
             deployed_ = false ;
         }
@@ -20,10 +32,6 @@ namespace xero {
         }
 
         void TubToucher::computeState() {
-            if (solenoid_->Get())
-                deployed_ = true ;
-            else
-                deployed_ = false ;
         }
 
         bool TubToucher::canAcceptAction(xero::base::ActionPtr action) {

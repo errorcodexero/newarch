@@ -23,7 +23,10 @@ namespace xero {
         private:
             bool deployed_ ;
 
-            std::shared_ptr<frc::Solenoid> solenoid_ ;
+            std::shared_ptr<frc::Solenoid> solenoid1_1_ ;
+            std::shared_ptr<frc::Solenoid> solenoid1_2_ ;            
+            std::shared_ptr<frc::Solenoid> solenoid2_1_; 
+            std::shared_ptr<frc::Solenoid> solenoid2_2_;                       
         } ;
     }
 }

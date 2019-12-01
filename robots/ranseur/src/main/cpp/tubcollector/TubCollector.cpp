@@ -19,8 +19,10 @@ namespace xero {
             double dl2h = robot.getSettingsParser().getDouble("tubcollector:tubsensor:l2hdelay") ;
             deb_sensor_ = std::make_shared<DebounceBoolean>(true, dh2l, dl2h) ;
 
-            intake_ = robot.getMotorFactory()->createMotor("hw:tubcollector") ;
-            intake_->setNeutralMode(MotorController::NeutralMode::Brake) ;
+            intake1_ = robot.getMotorFactory()->createMotor("hw:tubcollector1") ;
+            intake1_->setNeutralMode(MotorController::NeutralMode::Brake) ;
+            intake2_ = robot.getMotorFactory()->createMotor("hw:tubcollector2") ;
+            intake2_->setNeutralMode(MotorController::NeutralMode::Brake) ;            
 
             int clamp = robot.getSettingsParser().getInteger("hw:tubcollector:clamp") ;
             clamp_ = std::make_shared<frc::Solenoid>(clamp) ;
@@ -50,7 +52,8 @@ namespace xero {
 
         void TubCollector::reset() {
             Subsystem::reset() ;
-            intake_->set(0.0) ;
+            intake1_->set(0.0) ;
+            intake2_->set(0.0) ;            
         }
     }
 }

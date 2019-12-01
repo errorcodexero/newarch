@@ -23,7 +23,13 @@ namespace xero {
             virtual void start() { 
                 isDone_ = false ;
                 TubToucher &tubtoucher = getTubToucher() ;
-                tubtoucher.solenoid_->Set(raise_);
+
+                tubtoucher.solenoid1_1_->Set(raise_);
+                tubtoucher.solenoid1_2_->Set(!raise_);
+                tubtoucher.solenoid2_1_->Set(raise_);
+                tubtoucher.solenoid2_2_->Set(!raise_);     
+
+                tubtoucher.deployed_ = raise_ ;
 
                 // Determine the end time.
                 endTime_ = tubtoucher.getRobot().getTime() + duration_;

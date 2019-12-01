@@ -79,11 +79,7 @@ namespace xero {
             if (analog_) pos = analog_->GetVoltage();
             else if (pwm_) pos = pwm_->GetPeriod();
             else assert(0 == "no absolute encoder found");
-
-
             double result = absM_*pos + absB_;
-
-            std::cout << "Analog Voltage " << pos << " " << absM_ << " " << absB_ << " " << result << std::endl ;
             if (angular_) return xero::math::normalizeAngleDegrees(result);
             else return result;
         }
