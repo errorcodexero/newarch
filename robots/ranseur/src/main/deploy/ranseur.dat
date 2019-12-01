@@ -95,14 +95,14 @@ tankdrive:scrub                                                 1.0
 
 tankdrive:follower:left:kv1                                     192.0
 tankdrive:follower:left:kv2                                     0.0
-tankdrive:follower:left:ka                                      0.0001
-tankdrive:follower:left:kp                                      0.0                 # Recommended 0.02032 - 0.03048
+tankdrive:follower:left:ka                                      0.0
+tankdrive:follower:left:kp                                      0.0             # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kd                                      0.0
 
 tankdrive:follower:right:kv1                                    192.0
 tankdrive:follower:right:kv2                                    0.0
-tankdrive:follower:right:ka                                     0.0001
-tankdrive:follower:right:kp                                     0.0                 # Recommended 0.02032 - 0.03048
+tankdrive:follower:right:ka                                     0.0
+tankdrive:follower:right:kp                                     0.0                # Recommended 0.02032 - 0.03048
 tankdrive:follower:right:kd                                     0.0
 
 tankdrive:follower:turn_correction                              0
