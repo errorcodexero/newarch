@@ -11,22 +11,22 @@ hw:tankdrive:leftmotor:3                3                               # SparkM
 hw:tankdrive:rightmotor:1               4                               # SparkMax 4
 hw:tankdrive:rightmotor:2               5                               # SparkMax 5
 hw:tankdrive:rightmotor:3               6                               # SparkMax 6
-hw:tankdrive:leftencoder:1              0                               # DIO 0
-hw:tankdrive:leftencoder:2              1                               # DIO 1
-hw:tankdrive:rightencoder:1             2                               # DIO 2
-hw:tankdrive:rightencoder:2             3                               # DIO 3
+hw:tankdrive:leftencoder:1              4                               # DIO 0
+hw:tankdrive:leftencoder:2              5                               # DIO 1
+hw:tankdrive:rightencoder:1             6                               # DIO 2
+hw:tankdrive:rightencoder:2             7                               # DIO 3
 
 # Bunny Arm
-hw:bunnyarm:solenoid                    1                               # BunnyArm Solenoid
+hw:bunnyarm:solenoid                    6                               # BunnyArm Solenoid
 
 # Tub Manipulator
-hw:tubmanipulator:arm:motor             7                               # VictorSPX
-hw:tubmanipulator:arm:encoder           0                               # Analog IO
-hw:tubmanipulator:wrist:motor           8                               # VictorSPX
-hw:tubmanipulator:wrist:encoder         1                               # Analog IO
+hw:tubmanipulator:arm:motor             8                               # VictorSPX
+hw:tubmanipulator:arm:encoder           1                               # Analog IO
+hw:tubmanipulator:wrist:motor           7                               # VictorSPX
+hw:tubmanipulator:wrist:encoder         0                               # Analog IO
 hw:tubmanipulator:collector:solenoid    0                               # Solenoid
 hw:tubmanipulator:collector:sensor      4                               # Digital Input
-hw:tubmanipulator:collector:motor       9                               # VictorSPX
+hw:tubmanipulator:collector:motor       6                               # VictorSPX
 
 ######################################################################################
 #
@@ -55,12 +55,12 @@ tankdrive:sim:error_per_side                            0.0
 # The number of ticks per revolution of the wheel for the 
 # encoders
 #
-tankdrive:sim:ticks_per_rev                             2570
+tankdrive:sim:ticks_per_rev                             425
 
 #
 # The diameter of the robot wheel
 #
-tankdrive:sim:diameter                                  4.0
+tankdrive:sim:diameter                                  4.197
 
 #
 # The percent of the angle that is applied to the robot based on the
@@ -73,7 +73,7 @@ tankdrive:sim:scrub                                    1.0
 # The width of the drivebase for the robot
 #
 tankdrive:sim:width                                     30
-tankdrive:sim:length                                    30
+tankdrive:sim:length                                    22
 
 #
 # oi

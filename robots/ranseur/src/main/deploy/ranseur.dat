@@ -41,9 +41,9 @@ hw:tubwrist:encoder:analog:b                                    -126
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2
 hw:tankdrive:motors:left:3:canid                                3
-hw:tankdrive:motors:right:1:invert                               true
-hw:tankdrive:motors:right:2:invert                               true
-hw:tankdrive:motors:right:3:invert                               true
+hw:tankdrive:motors:right:1:invert                              true
+hw:tankdrive:motors:right:2:invert                              true
+hw:tankdrive:motors:right:3:invert                              true
 hw:tankdrive:motors:right:1:canid                               4
 hw:tankdrive:motors:right:2:canid                               5
 hw:tankdrive:motors:right:3:canid                               6
