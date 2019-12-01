@@ -23,13 +23,10 @@ namespace xero {
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             virtual void computeState() ;
 
-            std::shared_ptr<xero::base::MotorController> getIntake1() {
-                return intake1_ ;
+            void setIntakePower(double pow) {
+                intake1_->set(pow) ;
+                intake2_->set(-pow) ;
             }
-
-            std::shared_ptr<xero::base::MotorController> getIntake2() {
-                return intake2_ ;
-            }            
 
             bool hasTub() {
                 return has_tub_ ;

@@ -18,16 +18,14 @@ namespace xero {
         }
 
         void TubCollectorEjectTubAction::start() {
-            getTubCollector().getIntake1()->set(speed_) ;
-            getTubCollector().getIntake2()->set(-speed_) ;            
+            getTubCollector().setIntakePower(speed_) ;
             start_ = getTubCollector().getRobot().getTime() ;
             isdone_ = false ;
         }
 
         void TubCollectorEjectTubAction::run() {
            if (getTubCollector().getRobot().getTime() - start_ > delay_) {
-               getTubCollector().getIntake1()->set(0.0) ;
-               getTubCollector().getIntake2()->set(0.0) ;               
+               getTubCollector().setIntakePower(0.0) ;
                isdone_ = true ;
                getTubCollector().closeHand() ;
            }
@@ -38,8 +36,7 @@ namespace xero {
         }
 
         void TubCollectorEjectTubAction::cancel() {
-               getTubCollector().getIntake1()->set(0.0) ;
-               getTubCollector().getIntake2()->set(0.0) ;   
+               getTubCollector().setIntakePower(0.0) ;
            isdone_ = true ;    
         }
 

@@ -6,6 +6,7 @@
 #include <tubcollector/TubCollectorTubAction.h>
 #include <tubcollector/TubCollectorEjectTubAction.h>
 #include <tubcollector/TubCollectorDutyCycleAction.h>
+#include <tubcollector/TubCollectorTubAction.h>
 #include <ranseurcameratracker/DriveByVisionAction.h>
 #include <tubmanipulatorsubsystem/TubManipulatorCollectAction.h>
 #include <tubmanipulatorsubsystem/TubManipulatorDumpAction.h>
@@ -83,10 +84,15 @@ namespace xero
                 break ;
 
                 case 7:
-                    //act = std::make_shared<TubCollectorDutyCycleAction>(*tubcollector, power, duration) ;
-                    //pushSubActionPair(tubcollector, act) ;                
+                    act = std::make_shared<TubCollectorDutyCycleAction>(*tubcollector, power) ;
+                    pushSubActionPair(tubcollector, act) ;                
                     break ;
-   
+                
+                case 8:
+                    act = std::make_shared<TubCollectorTubAction>(*tubcollector) ;
+                    pushSubActionPair(tubcollector, act) ;
+                    break ;
+
             }
 
         }
