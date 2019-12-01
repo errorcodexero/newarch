@@ -23,7 +23,13 @@ namespace xero {
             virtual void start() { 
                 isDone_ = false ;
                 TubToucher &tubtoucher = getTubToucher() ;
-                tubtoucher.solenoid_->Set(raise_);
+
+                tubtoucher.solenoid1_1_->Set(raise_);
+                tubtoucher.solenoid1_2_->Set(!raise_);
+                tubtoucher.solenoid2_1_->Set(raise_);
+                tubtoucher.solenoid2_2_->Set(!raise_);     
+
+                tubtoucher.deployed_ = raise_ ;
 
                 // Determine the end time.
                 endTime_ = tubtoucher.getRobot().getTime() + duration_;
@@ -43,7 +49,14 @@ namespace xero {
             }
 
             virtual std::string toString() {
-                return action_name ;
+                std::string ret ;
+
+                if (raise_)
+                    ret = "TubToucherDeployAction - extend" ;
+                else
+                    ret = "TubToucherDeployAction - retract" ;
+
+                return ret ;
             }
 
         private:
@@ -51,7 +64,6 @@ namespace xero {
             double endTime_;
             double duration_;
             bool raise_;
-            static const std::string action_name ;
         } ;
     }
 }

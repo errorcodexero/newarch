@@ -9,15 +9,10 @@ namespace xero {
     namespace $$robotname$$ {
         class $$RobotName$$OISubsystem : public xero::base::OISubsystem {
         public:
-            $$RobotName$$OISubsystem(xero::base::Robot &robot) ;
+            $$RobotName$$OISubsystem(xero::base::Subsystem *parent) ;
             virtual ~$$RobotName$$OISubsystem() ;
         
-        protected:
-            void initializeWithGunner(int gunner, int driver) ;
-            void initializeWithOI(int oi, int driver) ;
-
         private:
-            bool detectOI(int index) ;
         } ;
     }
 }

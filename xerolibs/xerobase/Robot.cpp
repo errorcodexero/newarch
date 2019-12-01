@@ -56,7 +56,6 @@ namespace xero {
             message_logger_.setTimeFunction(getTimeFunc) ;
 
             switch_to_teleop_ = false ;
-
         }
 #pragma GCC diagnostic pop
 
@@ -229,7 +228,8 @@ namespace xero {
 
             last_time_ = initial_time ;
 
-            if ((iterations_[index] % 500) == 0) {
+            if ((iterations_[index] % (50 * 30)) == 0) {
+                // Print average sleep time every thirty seconds
                 double avg = sleep_time_[index] / iterations_[index] ;
                 message_logger_.startMessage(MessageLogger::MessageType::info) ;
                 message_logger_ << "RobotLoop:" ;
@@ -287,6 +287,14 @@ namespace xero {
                 if (s.isBoolean() && s.getBoolean())
                     plot_mgr_.enable(true) ;
             }
+
+            //
+            // Perform a single compute state on the subsytems now that they are defined so their
+            // state is known as soon as possible.  This assumes the robot is disabled since we are
+            // in RobotInit() and therefore all of the mechanisms are in a stationary state.
+            //
+            delta_time_ = target_loop_time_ ;
+            robot_subsystem_->computeState() ;
 
             //
             // Perform post hardware subsystem initialization.  This is initialization

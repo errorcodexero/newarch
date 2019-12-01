@@ -31,13 +31,9 @@ namespace xero {
             log << "OI: initializing button/axis mapping" ;
             log.endMessage() ;
 
-            std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
-            automode_ = mapAxisScale(6, mapping) ;
+            ////%% OI_Device_Button_Mappings
 
-            //
-            // TODO - map buttons from the OI
-            //
-
+            ////%% End OI_Device_Button_Mappings
         }
 
         void $$RobotName$$OIDevice::generateActions(xero::base::SequenceAction &seq)

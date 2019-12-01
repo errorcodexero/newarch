@@ -79,7 +79,6 @@ namespace xero {
             if (analog_) pos = analog_->GetVoltage();
             else if (pwm_) pos = pwm_->GetPeriod();
             else assert(0 == "no absolute encoder found");
-
             double result = absM_*pos + absB_;
             if (angular_) return xero::math::normalizeAngleDegrees(result);
             else return result;
@@ -94,8 +93,12 @@ namespace xero {
 
         void XeroEncoder::calibrate() {
             if (quad_ && (analog_ || pwm_)) {
-                quadB_ += getAbsolutePosition() - getPosition();
+                calibrate(getAbsolutePosition()) ;
             }
+        }
+
+        void XeroEncoder::calibrate(double pos) {
+            quadB_ = pos - quadM_ * getPosition() ;
         }
     }
 }

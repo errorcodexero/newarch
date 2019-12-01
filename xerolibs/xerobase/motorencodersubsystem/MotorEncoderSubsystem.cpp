@@ -24,6 +24,12 @@ namespace xero {
                                                      robot.getSettingsParser(), 
                                                      "hw:" + config + ":encoder",
                                                      angular);
+
+        }
+
+        void MotorEncoderSubsystem::postHWInit()
+        {
+            SingleMotorSubsystem::postHWInit() ;
             setDefaultAction(std::make_shared<MotorEncoderHoldAction>(*this));
         }
 
@@ -58,7 +64,7 @@ namespace xero {
         }
 
         void MotorEncoderSubsystem::reset() {
-            encoder_->reset();
+            SingleMotorSubsystem::reset() ;
         }
     }
 }

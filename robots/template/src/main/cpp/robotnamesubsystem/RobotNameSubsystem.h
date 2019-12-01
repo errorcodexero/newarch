@@ -27,7 +27,9 @@ namespace xero {
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             
         private:
+            ////%% Start DefineChildSubsystems        
             std::shared_ptr<$$RobotName$$OISubsystem> oi_ ;
+            ////%% End DefineChildSubsystems
         } ;
     }
 }

@@ -33,11 +33,11 @@ namespace xero {
                 mode = std::make_shared<AutoModeTest>(getRobot()) ;
                 break ;                
                 
-            case 8:
+            case 2:
                 mode = std::make_shared<StraightCharAutoMode>(getRobot(), 0.8, 5.0) ;
                 break ;
 
-            case 9:
+            case 3:
                 mode = std::make_shared<FollowPathAutomode>(getRobot(), "Test_TestPath") ;
                 break ;
             }

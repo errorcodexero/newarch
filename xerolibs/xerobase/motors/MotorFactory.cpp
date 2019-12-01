@@ -73,7 +73,9 @@ namespace xero {
 
             // Create the motor.
             MotorPtr motor = constructor->second(canID);
-            motor->setInverted(isInverted(configID));
+
+            bool v = isInverted(configID) ;
+            motor->setInverted(v) ;
 
             return motor;
         }
@@ -91,7 +93,8 @@ namespace xero {
                 std::string motorConfigID = configID + ":" + std::to_string(currentIndex + 1);
                 if (auto motor = createSingleMotor(motorConfigID)) {
                     // we need to catch the invert flag and pass it into follow
-                    motors.add(motor, isInverted(motorConfigID));
+                    bool v = isInverted(motorConfigID) ;
+                    motors.add(motor, v);
                     currentIndex += 1;
                 } else {
                     // Could not create another motor.

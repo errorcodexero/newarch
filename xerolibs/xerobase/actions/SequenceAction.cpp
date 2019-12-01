@@ -110,7 +110,7 @@ namespace xero
         void SequenceAction::cancel()
         {
             isCancel_ = true;
-            if (index_ < static_cast<int>(actions_.size()))
+            if (index_ != -1 && index_ < static_cast<int>(actions_.size()))
                 actions_[index_]->cancel() ;
         }
 

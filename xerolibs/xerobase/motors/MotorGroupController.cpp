@@ -10,7 +10,7 @@ namespace xero {
                 // Set all motors but the first to follow the first
                 MotorPtr first = nullptr;
                 for (MotorPtr motor : motors_) { 
-                    if (first) motor->follow(first);
+                    if (first != nullptr) motor->follow(first);
                     else first = motor;
                 }
             }

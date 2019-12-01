@@ -23,8 +23,9 @@ namespace xero {
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             virtual void computeState() ;
 
-            std::shared_ptr<xero::base::MotorController> getIntake() {
-                return intake_ ;
+            void setIntakePower(double pow) {
+                intake1_->set(pow) ;
+                intake2_->set(-pow) ;
             }
 
             bool hasTub() {
@@ -45,10 +46,11 @@ namespace xero {
             void createNamedSequences() {
             }
 
-     //   private:
             void setCollectedTubState(bool st) {
                 collected_tub_ = st ;
             }
+
+            virtual void reset() ;
 
         private:
             //
@@ -62,7 +64,8 @@ namespace xero {
             bool collected_tub_ ;
             std::shared_ptr<frc::DigitalInput> sensor_ ;
             std::shared_ptr<xero::misc::DebounceBoolean> deb_sensor_ ;
-            std::shared_ptr<xero::base::MotorController> intake_ ;
+            std::shared_ptr<xero::base::MotorController> intake1_ ;
+            std::shared_ptr<xero::base::MotorController> intake2_ ;            
             std::shared_ptr<frc::Solenoid> clamp_ ;
         } ;
     }

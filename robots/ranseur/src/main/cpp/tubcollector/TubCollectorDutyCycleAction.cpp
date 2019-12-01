@@ -18,7 +18,7 @@ namespace xero {
 
             }
             void TubCollectorDutyCycleAction::start() {
-                getTubCollector().getIntake()->set(duty_cycle_) ;
+                getTubCollector().setIntakePower(duty_cycle_) ;
             }
 
             void TubCollectorDutyCycleAction::run() {

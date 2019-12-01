@@ -12,30 +12,38 @@
 #
 # Hardware
 #
-hw:bunnyarm:solenoid                                            1
+hw:bunnyarm:solenoid                                            6
+hw:tubtoucher:solenoid:1_1                                      0
+hw:tubtoucher:solenoid:1_2                                      1
+hw:tubtoucher:solenoid:2_1                                      4
+hw:tubtoucher:solenoid:2_2                                      5
 
-hw:tubtoucher:solenoid                                          2
+hw:tubcollector1:type                                           "victor_spx"
+hw:tubcollector1:canid                                          6
+hw:tubcollector2:type                                           "victor_spx"
+hw:tubcollector2:canid                                          9
+hw:tubcollector:clamp                                           7
+hw:tubcollector:tubsensor                                       9                           # Digital IO
 
-hw:tubcollector:type                                            "victor_spx"
-hw:tubcollector:canid                                           9
-hw:tubcollector:clamp                                           0
-hw:tubcollector:tubsensor                                       4                           # Digital IO
-
-hw:tubarm:motor:canid                                           7
+hw:tubarm:motor:canid                                           8
 hw:tubarm:motor:type                                            "victor_spx"
-hw:tubarm:encoder:analog                                        0
-hw:tubarm:encoder:analog:m                                      360
-hw:tubarm:encoder:analog:b                                      0
+hw:tubarm:motor:invert                                          true
+hw:tubarm:encoder:analog                                        1
+hw:tubarm:encoder:analog:m                                      -72
+hw:tubarm:encoder:analog:b                                      295.92
 
-hw:tubwrist:motor:canid                                         8
+hw:tubwrist:motor:canid                                         7
 hw:tubwrist:motor:type                                          "victor_spx"
-hw:tubwrist:encoder:analog                                      1
-hw:tubwrist:encoder:analog:m                                    360
-hw:tubwrist:encoder:analog:b                                    0
+hw:tubwrist:encoder:analog                                      0
+hw:tubwrist:encoder:analog:m                                    72
+hw:tubwrist:encoder:analog:b                                    -126
 
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2
 hw:tankdrive:motors:left:3:canid                                3
+hw:tankdrive:motors:right:1:invert                               true
+hw:tankdrive:motors:right:2:invert                               true
+hw:tankdrive:motors:right:3:invert                               true
 hw:tankdrive:motors:right:1:canid                               4
 hw:tankdrive:motors:right:2:canid                               5
 hw:tankdrive:motors:right:3:canid                               6
@@ -45,11 +53,10 @@ hw:tankdrive:motors:left:3:type                                 "sparkmax_brushl
 hw:tankdrive:motors:right:1:type                                "sparkmax_brushless"
 hw:tankdrive:motors:right:2:type                                "sparkmax_brushless"
 hw:tankdrive:motors:right:3:type                                "sparkmax_brushless"
-hw:tankdrive:leftencoder:1                                      0                            # Digital IO
-hw:tankdrive:leftencoder:2                                      1                            # Digital IO
-hw:tankdrive:rightencoder:1                                     2                            # Digital IO
-hw:tankdrive:rightencoder:2                                     3                            # Digital IO
-hw:tankdrive:invert:motors:left                                 true
+hw:tankdrive:leftencoder:1                                      4                            # Digital IO
+hw:tankdrive:leftencoder:2                                      5                            # Digital IO
+hw:tankdrive:rightencoder:1                                     6                            # Digital IO
+hw:tankdrive:rightencoder:2                                     7                            # Digital IO
 
 #
 # Driver station
@@ -82,8 +89,8 @@ plotting:enabled                                               true
 #
 # Variables for the tankdrive subsystem code.
 #
-tankdrive:inches_per_tick                                       0.004889638
-tankdrive:width                                                 22.5
+tankdrive:inches_per_tick                                       0.031024151
+tankdrive:width                                                 30.0
 tankdrive:scrub                                                 1.0
 
 tankdrive:follower:left:kv1                                     192.0
@@ -143,7 +150,7 @@ tubcollector:eject:delay                                        1
 ###################################################################################################
 # tubwrist
 ###################################################################################################
-tubwrist:hold:p                                                 1
+tubwrist:hold:p                                                 0.01
 tubwrist:hold:i                                                 0
 tubwrist:hold:d                                                 0
 tubwrist:hold:f                                                 0
@@ -155,24 +162,25 @@ tubwrist:goto:threshold                                         3.0       # With
 tubwrist:goto:maxd                                              -160.0    # maximum deceleration
 tubwrist:goto:maxa                                              160.0     # maximum acceleration
 tubwrist:goto:maxv                                              160.0     # maximum velocity
-tubwrist:follower:down:kp                                           0.0
-tubwrist:follower:down:kd                                           0.0
-tubwrist:follower:down:kv                                           0.005555556
-tubwrist:follower:down:ka                                           0.0
-tubwrist:follower:up:kp                                             0.0
-tubwrist:follower:up:kd                                             0.0
-tubwrist:follower:up:kv                                             0.005555556
-tubwrist:follower:up:ka                                             0.0
-tubwrist:collect:pos                                            0
-tubwrist:dump:pos                                               0
+tubwrist:follower:down:kp                                       0.0
+tubwrist:follower:down:kd                                       0.0
+tubwrist:follower:down:kv                                       0.005555556
+tubwrist:follower:down:ka                                       0.0
+tubwrist:follower:up:kp                                         0.0
+tubwrist:follower:up:kd                                         0.0
+tubwrist:follower:up:kv                                         0.005555556
+tubwrist:follower:up:ka                                         0.0
+tubwrist:collect:pos                                            1
+tubwrist:dump:pos                                               135
 tubwrist:eject:pos                                              0
 tubwrist:power                                                  0.2
-tuwrist:duration                                                4
+tubwrist:duration                                                4
+tubwrist:turtle:pos                                             90
 
 ###################################################################################################
 # tubarm
 ###################################################################################################
-tubarm:hold:p                                                   1
+tubarm:hold:p                                                   0.01
 tubarm:hold:i                                                   0
 tubarm:hold:d                                                   0
 tubarm:hold:f                                                   0
@@ -193,10 +201,11 @@ tubarm:follower:up:kd                                           0.0
 tubarm:follower:up:kv                                           0.011111111
 tubarm:follower:up:ka                                           0.0
 tubarm:collect:pos                                              0
-tubarm:dump:pos                                                 0
+tubarm:dump:pos                                                 90
 tubarm:eject:pos                                                0
 tubarm:power                                                    0.2
 tubarm:duration                                                 4
+tubarm:turtle:pos                                               90
 
 ###################################################################################################
 # ranseurvision
@@ -234,12 +243,15 @@ driver:zerolevel                                                0.1
 # Variables for the OI
 ###################################################################################################
 
-oi:collect                                                      1
-oi:dump                                                         2
-oi:turtle                                                       3
-oi:eject                                                        4
-oi:spare1                                                       5
+oi:collect                                                      12
+oi:dump                                                         8
+oi:turtle                                                       9
+oi:eject                                                        13
+oi:tubtoucher                                                   14
 oi:spare2                                                       6
+oi:automode1                                                    10
+oi:automode2                                                    16
+
 
 ###################################################################################################
 # Test automodes
@@ -257,7 +269,7 @@ oi:spare2                                                       6
 # 6 - tub toucher deploy
 # 7 - tub toucher retract
 #
-automode:test:which                                             2
-automode:test:power                                             -1.0
-automode:test:duration                                          5.0
+automode:test:which                                             6
+automode:test:power                                             0.15
+automode:test:duration                                          0.3
 automode:test:angle                                             90

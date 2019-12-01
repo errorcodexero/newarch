@@ -7,6 +7,8 @@
 #include "tubmanipulatorsubsystem/TubManipulatorSubsystem.h"
 #include "bunnyarm/BunnyArm.h"
 #include "bunnyarm/BunnyArmDeployAction.h"
+#include "tubtoucher/TubToucher.h"
+#include "tubtoucher/TubToucherDeployAction.h"
 #include <MessageLogger.h>
 #include <Robot.h>
 #include <motorencodersubsystem/MotorEncoderGoToAction.h>
@@ -27,6 +29,7 @@ namespace xero {
             auto arm = robotss.getTubManipulatorSubsystem()->getTubArm() ;
             auto wrist = robotss.getTubManipulatorSubsystem()->getTubWrist() ;
             auto bunny_arm = robotss.getBunnyArm() ;
+            auto tub_toucher = robotss.getTubToucher() ;
 
             ///Arm/// 
             v = robotss.getRobot().getSettingsParser().getDouble("tubarm:turtle:pos") ;
@@ -41,6 +44,10 @@ namespace xero {
             // Bunny Arm //
             act = std::make_shared<BunnyArmDeployAction>(*bunny_arm, true) ;
             parallel_.addSubActionPair(bunny_arm, act) ;
+
+            // Tub Toucher //
+            act = std::make_shared<TubToucherDeployAction>(*tub_toucher, true) ;
+            parallel_.addSubActionPair(tub_toucher, act) ;
 
             ///   ^^^ grab the angle values from the dat files ^^^   ///
             ///add the action and the subsytem to the parallel action///

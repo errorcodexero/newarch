@@ -9,17 +9,15 @@ using namespace xero::misc ;
 namespace xero {
     namespace $$robotname$$ {
         $$RobotName$$Subsystem::$$RobotName$$Subsystem(Robot &robot) : RobotSubsystem(robot, "$$robotname$$") {
-            //
-            // Add the tank drive.  This is handled by the base class RobotSubsystem since all robots have a drivebase
-            // and for now they are all tank drives
-            //
-            addTankDrive() ;
 
-            //
-            // Add the OI to the robot.  The OI is specific to this robot.
-            //
-            oi_ = std::make_shared<$$RobotName$$OISubsystem>(robot) ;
+            ////%% Start AddDriveBase
+            addTankDrive() ;
+            ////%% End AddDriveBase
+
+            ////%% Start AddChildSubsystems
+            oi_ = std::make_shared<$$RobotName$$OISubsystem>(this) ;
             addChild(oi_) ;
+            ////%% End AddChildSubsystems
         }
 
         $$RobotName$$Subsystem::~$$RobotName$$Subsystem() {

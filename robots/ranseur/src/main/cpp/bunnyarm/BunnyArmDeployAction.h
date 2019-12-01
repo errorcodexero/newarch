@@ -43,7 +43,14 @@ namespace xero {
             }
 
             virtual std::string toString() {
-                return action_name ;
+                std::string ret ;
+
+                if (raise_)
+                    ret = "BunnyArmDeployAction - raise arm" ;
+                else
+                    ret = "BunnyArmDeployAction - lower arm" ;
+
+                return ret ;
             }
 
         private:
@@ -51,7 +58,6 @@ namespace xero {
             double endTime_;
             double duration_;
             bool raise_;
-            static const std::string action_name ;
         } ;
     }
 }

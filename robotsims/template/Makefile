@@ -12,7 +12,7 @@ NEED_CTRE=true
 NEED_NAVX=true
 NEED_XEROMISC=true
 NEED_MODELS=true
-
+NEED_REV=true
 LOCAL_CFLAGS +=
 
 include $(TOPDIR)/makefiles/buildlib.mk

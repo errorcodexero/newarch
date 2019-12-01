@@ -67,9 +67,6 @@ private:
                         value_ = true ;
                     else
                         value_ = false ;
-
-                    //if (getItem() == 5)
-                        //std::cout << "CHECKING " << prev_ << " " << value << " " << value_ << std::endl ;
                     break ;
 
                 case ButtonType::HighToLow:

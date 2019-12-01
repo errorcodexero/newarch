@@ -2,6 +2,8 @@
 #include <Ranseur.h>
 #include <bunnyarm/BunnyArm.h>
 #include <bunnyarm/BunnyArmDeployAction.h>
+#include <tubtoucher/TubToucher.h>
+#include <tubtoucher/TubToucherDeployAction.h>
 #include <tubcollector/TubCollector.h>
 #include <tubcollector/TubCollectorTubAction.h>
 #include <tubcollector/TubCollectorEjectTubAction.h>
@@ -25,6 +27,7 @@ namespace xero
             ActionPtr act ;
             auto &ranseur = dynamic_cast<Ranseur &>(getRobot()) ;
             auto bunnyarm = ranseur.getRanseurRobotSubsystem()->getBunnyArm() ;
+            auto tubtoucher = ranseur.getRanseurRobotSubsystem()->getTubToucher() ;
             auto tubcollector = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubCollector() ;
             auto tubarm = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubArm() ;
             auto tubwrist = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem()->getTubWrist() ;
@@ -54,6 +57,7 @@ namespace xero
             sequence->pushAction(std::make_shared<DelayAction>(0.5)) ;
             sequence->pushAction(std::make_shared<TubManipulatorCollectAction>(*tubmanipulatorsubsytem)) ;
             sequence->pushAction(std::make_shared<TubManipulatorDumpAction>(*tubmanipulatorsubsytem)) ; 
+            sequence->pushAction(std::make_shared<TubToucherDeployAction>(*tubtoucher, true)) ;
 
 
             /// Example Automode ///

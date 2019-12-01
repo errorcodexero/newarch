@@ -55,18 +55,21 @@ namespace xero {
             void TubManipulatorModel::generateDisplayInformation(std::list<std::string> &lines) {
                 std::string line ;
 
+                lines.push_back("------------------------------") ;
                 lines.push_back("  ArmMotor: " + std::to_string(arm_motor_power_)) ;
                 lines.push_back("  ArmAngle: " + std::to_string(arm_angle_)) ;
                 if (arm_encoder_ != nullptr)
                     lines.push_back("  ArmEncoder: " + std::to_string(arm_encoder_->GetVoltage())) ;
                 else
                     lines.push_back("  ArmEncoder: ") ;
+                lines.push_back("------------------------------") ;
                 lines.push_back("  WristMotor: " + std::to_string(wrist_motor_power_)) ;
                 lines.push_back("  WristAngle: " + std::to_string(wrist_angle_)) ;
                 if (wrist_encoder_ != nullptr)
                     lines.push_back("  WristEncoder: " + std::to_string(wrist_encoder_->GetVoltage())) ;
                 else
-                    lines.push_back("  WristEncoder: ") ;                
+                    lines.push_back("  WristEncoder: ") ;          
+                lines.push_back("------------------------------") ;                          
                 lines.push_back("  CollMotor: " + std::to_string(collector_motor_power_)) ;
                 line = "  CollArms: " ;
                 line += (collector_state_ ? "OPEN" : "CLOSED") ;
@@ -96,6 +99,9 @@ namespace xero {
 
                 setArmEncoder() ;
                 setWristEncoder() ;
+
+                if (collector_motor_power_ > 0.2 && has_tub_)
+                    has_tub_ = false ;
             }
 
             void TubManipulatorModel::setArmEncoder() {

@@ -38,6 +38,12 @@ if [ $2 == 'teleop' ]; then
     exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto 0 --oper 30 --start 0 --test 0 $FLAGS $GUI
 fi
 
+if [ $2 == 'both' ]; then
+    legal=YES
+    echo Running teleop mode
+    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto 15 --oper 30 --start 0 --test 0 $FLAGS $GUI
+fi
+
 if [ legal == 'NO' ]; then
     echo "Invalid mode, must be 'auto' or 'teleop'"
     exit 1

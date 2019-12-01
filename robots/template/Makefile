@@ -5,13 +5,13 @@ AUTOMODES = \
 	src/main/cpp/automodes/$$RobotName$$AutoModeBase.cpp
 
 SUBSYSTEMS = \
-	src/main/cpp/$$robotname$$subsystem/$$RobotName$$Subsystem.cpp\
+	src/main/cpp/$$RobotName$$subsystem/$$RobotName$$Subsystem.cpp\
 
 SOURCES = \
 	src/main/cpp/main.cpp\
 	src/main/cpp/$$RobotName$$.cpp\
-	src/main/cpp/$$robotname$$oi/$$RobotName$$OIDevice.cpp\
-	src/main/cpp/$$robotname$$oi/$$RobotName$$OISubsystem.cpp\
+	src/main/cpp/$$RobotName$$oi/$$RobotName$$OIDevice.cpp\
+	src/main/cpp/$$RobotName$$oi/$$RobotName$$OISubsystem.cpp\
 	$(SUBSYSTEMS)\
 	$(AUTOMODES)
 
@@ -25,6 +25,7 @@ NEED_NETWORKTABLES=true
 NEED_XEROMISC=true
 NEED_XEROBASE=true
 NEED_MODELS=true
+NEED_REV=true
 DEFAULT_CONFIG=Debug
 DEFAULT_PLATFORM=SIMULATOR
 

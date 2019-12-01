@@ -18,7 +18,7 @@ namespace xero
         {
             $$RobotName$$Simulator::$$RobotName$$Simulator(const std::string &paramfile) : RobotSimBase(paramfile)
             {
-                tankdrive_ = std::make_shared<TankDriveModel>(*this) ;
+                tankdrive_ = std::make_shared<TankDriveModel>(*this, TankDriveModel::MotorType::MTSpark) ;
                 addModel(tankdrive_) ;
 
                 oi_ = std::make_shared<OIModel>(*this) ;
