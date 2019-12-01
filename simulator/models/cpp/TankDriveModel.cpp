@@ -46,8 +46,6 @@ namespace xero {
 
             left_power_ = 0.0 ;
             right_power_ = 0.0 ;
-
-
         }
 
         TankDriveModel::~TankDriveModel() 
@@ -65,10 +63,12 @@ namespace xero {
             while (true)
             {
                 var = config + std::to_string(i) ;
-                if (!settings.isDefined(config))
+                if (!settings.isDefined(var))
                     break ;
 
                 left_motors_.push_back(settings.getInteger(var)) ;
+
+                i++ ;
             }
 
             config = "hw:tankdrive:left:motor:invert" ;
@@ -78,17 +78,25 @@ namespace xero {
                 left_motor_mult_ = 1.0 ;
 
             left_encoder_1_ = settings.getInteger("hw:tankdrive:left:encoder:1") ;
-            left_encoder_2_ = settings.getInteger("hw:tankdrive:left:encoder:2") ;            
+            left_encoder_2_ = settings.getInteger("hw:tankdrive:left:encoder:2") ;       
+
+            config = "hw:tankdrive:left:encoder:invert" ;
+            if (settings.isDefined(config) && settings.getBoolean(config) == true)
+                left_encoder_mult_ = -1 ;
+            else
+                left_encoder_mult_ = 1 ;
 
             config = "hw:tankdrive:right:motor:" ;
             i = 1 ;
             while (true)
             {
                 var = config + std::to_string(i) ;
-                if (!settings.isDefined(config))
+                if (!settings.isDefined(var))
                     break ;
 
                 right_motors_.push_back(settings.getInteger(var)) ;
+
+                i++ ;
             }
 
             config = "hw:tankdrive:right:motor:invert" ;
@@ -98,7 +106,13 @@ namespace xero {
                 right_motor_mult_ = 1.0 ;
 
             right_encoder_1_ = settings.getInteger("hw:tankdrive:right:encoder:1") ;
-            right_encoder_2_ = settings.getInteger("hw:tankdrive:right:encoder:2") ;    
+            right_encoder_2_ = settings.getInteger("hw:tankdrive:right:encoder:2") ;  
+
+            config = "hw:tankdrive:right:encoder:invert" ;
+            if (settings.isDefined(config) && settings.getBoolean(config) == true)
+                right_encoder_mult_ = -1 ;
+            else
+                right_encoder_mult_ = 1 ;              
 
             assert(left_motors_.size() == right_motors_.size()) ;
             assert(left_motors_.size() > 0) ;
@@ -399,22 +413,20 @@ namespace xero {
             if (first == left_encoder_1_ && second == left_encoder_2_) {
                 left_enc_ = encoder ;
                 left_enc_->addModel(this) ;
-                left_encoder_mult_ = 1 ;
             }
             else if (first == left_encoder_2_ && second == left_encoder_1_) {
                 left_enc_ = encoder ;
                 left_enc_->addModel(this) ;
-                left_encoder_mult_ = -1 ;
+                left_encoder_mult_ *= -1 ;
             }
             else if (first == right_encoder_1_ && second == right_encoder_2_) {
                 right_enc_ = encoder ;
                 right_enc_->addModel(this) ;
-                right_encoder_mult_ = 1 ;
             }
             else if (first == right_encoder_2_ && second == right_encoder_1_) {
                 right_enc_ = encoder ;
                 right_enc_->addModel(this) ;
-                right_encoder_mult_ = -1 ;
+                right_encoder_mult_ *= -1 ;
             }            
         }
 

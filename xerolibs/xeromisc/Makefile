@@ -7,7 +7,6 @@ SOURCES = \
 	MessageDestFile.cpp\
 	MessageDestSeqFile.cpp\
 	MessageLogger.cpp\
-	MessageLoggerData.cpp\
 	PIDACtrl.cpp\
 	PIDCtrl.cpp\
 	Point.cpp\

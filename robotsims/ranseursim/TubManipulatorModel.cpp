@@ -107,7 +107,7 @@ namespace xero {
             void TubManipulatorModel::setArmEncoder() {
                 if (arm_encoder_ != nullptr)
                 {
-                    double v = arm_angle_ / 360.0  ;
+                    double v = -(arm_angle_ - 295.92) / 72.0 ;
                     arm_encoder_->SimulatorSetVoltage(v) ;
                 }
             }
@@ -115,7 +115,7 @@ namespace xero {
             void TubManipulatorModel::setWristEncoder() {
                 if (wrist_encoder_ != nullptr)
                 {
-                    double v = wrist_angle_ / 360.0 ;
+                    double v = (wrist_angle_ + 126.0) / 72.0 ;
                     wrist_encoder_->SimulatorSetVoltage(v) ;                
                 }
             }

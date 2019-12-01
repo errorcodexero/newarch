@@ -152,12 +152,6 @@ namespace xero
 
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
                     logger << "TankDriveAngleAction";
-                    logger.startData("complete")
-                        .addData("time", getTankDrive().getRobot().getTime() - start_time_)
-                        .addData("position", getTankDrive().getAngle())
-                        .addData("velocity", getTankDrive().getAngularVelocity())
-                        .addData("accel", getTankDrive().getAngularAcceleration())
-                        .endData();
                     logger.endMessage();
                 }
             }

@@ -25,8 +25,8 @@
 #
 #
 0.1,oi,automode,-100
-0.1,oi,automode1,0
-0.1,oi,automode2,0
+0.1,oi,automode1,1
+0.1,oi,automode2,1
 0.1,tubmanipulator,tub,0                                # Clear the tub sensor (should initialize to cleared)
 
 0.1,tankdrive,xpos,2000                                 # Start center hab platform
