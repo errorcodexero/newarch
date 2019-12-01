@@ -73,6 +73,8 @@ namespace xero
 
             void calcLowLevelParams(RobotSimBase &simbase) ;
 
+            void getMotorParams(RobotSimBase &simbase) ;
+
         private:
             // If true, we are in low gear.  Otherwise high gear
             bool gear_ ;
@@ -162,6 +164,19 @@ namespace xero
 
             // The type of motors
             MotorType mt_ ;
+
+            std::vector<int> left_motors_ ;
+            std::vector<int> right_motors_ ;
+            double left_motor_mult_ ;
+            double right_motor_mult_ ;
+
+            int left_encoder_1_ ;
+            int left_encoder_2_ ;
+            int left_encoder_mult_  ;
+            int right_encoder_1_ ;
+            int right_encoder_2_ ;
+            int right_encoder_mult_ ;
+
         };
     } // namespace sim
 } // namespace xero

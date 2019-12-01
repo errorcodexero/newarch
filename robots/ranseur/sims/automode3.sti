@@ -25,9 +25,9 @@
 #
 #
 0.01,oi,automode,90
-0.1,oi,automode1,1
-0.1,oi,automode2,1
+0.1,oi,automode1,0
+0.1,oi,automode2,0
 
-0.01,tankdrive,xpos,1300                                 # Start center hab platform
+0.01,tankdrive,xpos,1000                                 # Start center hab platform
 0.01,tankdrive,ypos,1600                             # Start center hab platform
 0.01,tankdrive,angle,0                                # Start center hab platform
