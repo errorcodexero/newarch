@@ -1,3 +1,4 @@
+#include <xeromath.h>
 #include <TankDriveModel.h>
 #include <frc/RobotSimBase.h>
 #include <xeromath.h>
@@ -6,6 +7,7 @@
 #include <cmath>
 #include <random>
 #include <iostream>
+#include <algorithm>
 
 using namespace frc ;
 using namespace xero::misc ;
@@ -15,7 +17,8 @@ using namespace rev ;
 
 namespace xero {
     namespace sim {
-        TankDriveModel::TankDriveModel(RobotSimBase &simbase, MotorType mt) : SubsystemModel(simbase, "tankdrive") {
+        TankDriveModel::TankDriveModel(RobotSimBase &simbase, MotorType mt) : SubsystemModel(simbase, "tankdrive") 
+        {
             mt_ = mt ;
             left_ = 0.0;
             right_ = 0.0;
@@ -31,12 +34,8 @@ namespace xero {
             current_left_rps_ = 0.0 ;
             current_right_rps_ = 0.0 ;
 
-            ticks_per_rev_ = simbase.getSettingsParser().getInteger("tankdrive:sim:ticks_per_rev") ;
-            diameter_ = simbase.getSettingsParser().getDouble("tankdrive:sim:diameter") ;
-            scrub_ = simbase.getSettingsParser().getDouble("tankdrive:sim:scrub") ;
-            width_ = simbase.getSettingsParser().getDouble("tankdrive:sim:width") ;
-            length_ = simbase.getSettingsParser().getDouble("tankdrive:sim:length") ;
-            left_right_error_ = simbase.getSettingsParser().getDouble("tankdrive:sim:error_per_side") ;
+            getMotorParams(simbase) ;
+
 
             calcLowLevelParams(simbase) ;
             lowGear() ;
@@ -47,9 +46,69 @@ namespace xero {
 
             left_power_ = 0.0 ;
             right_power_ = 0.0 ;
+
+
         }
 
-        TankDriveModel::~TankDriveModel() {
+        TankDriveModel::~TankDriveModel() 
+        {
+        }
+
+        void TankDriveModel::getMotorParams(RobotSimBase &simbase)
+        {
+            std::string config, var ;
+            int i ;
+            SettingsParser &settings = simbase.getSettingsParser() ;
+
+            config = "hw:tankdrive:left:motor:" ;
+            i = 1 ;
+            while (true)
+            {
+                var = config + std::to_string(i) ;
+                if (!settings.isDefined(config))
+                    break ;
+
+                left_motors_.push_back(settings.getInteger(var)) ;
+            }
+
+            config = "hw:tankdrive:left:motor:invert" ;
+            if (settings.isDefined(config) && settings.getBoolean(config) == true)
+                left_motor_mult_ = -1.0 ;
+            else
+                left_motor_mult_ = 1.0 ;
+
+            left_encoder_1_ = settings.getInteger("hw:tankdrive:left:encoder:1") ;
+            left_encoder_2_ = settings.getInteger("hw:tankdrive:left:encoder:2") ;            
+
+            config = "hw:tankdrive:right:motor:" ;
+            i = 1 ;
+            while (true)
+            {
+                var = config + std::to_string(i) ;
+                if (!settings.isDefined(config))
+                    break ;
+
+                right_motors_.push_back(settings.getInteger(var)) ;
+            }
+
+            config = "hw:tankdrive:right:motor:invert" ;
+            if (settings.isDefined(config) && settings.getBoolean(config) == true)
+                right_motor_mult_ = -1.0 ;
+            else
+                right_motor_mult_ = 1.0 ;
+
+            right_encoder_1_ = settings.getInteger("hw:tankdrive:right:encoder:1") ;
+            right_encoder_2_ = settings.getInteger("hw:tankdrive:right:encoder:2") ;    
+
+            assert(left_motors_.size() == right_motors_.size()) ;
+            assert(left_motors_.size() > 0) ;
+
+            ticks_per_rev_ = simbase.getSettingsParser().getInteger("tankdrive:sim:ticks_per_rev") ;
+            diameter_ = simbase.getSettingsParser().getDouble("tankdrive:sim:diameter") ;
+            scrub_ = simbase.getSettingsParser().getDouble("tankdrive:sim:scrub") ;
+            width_ = simbase.getSettingsParser().getDouble("tankdrive:sim:width") ;
+            length_ = simbase.getSettingsParser().getDouble("tankdrive:sim:length") ;
+            left_right_error_ = simbase.getSettingsParser().getDouble("tankdrive:sim:error_per_side") ;
         }
 
         bool TankDriveModel::processEvent(const std::string &name, int value) {
@@ -76,9 +135,11 @@ namespace xero {
         }                
 
         void TankDriveModel::generateDisplayInformation(std::list<std::string> &lines) {
+            double d = xero::math::rad2deg(getAngle()) ;
+
             lines.push_back("  X: " + std::to_string(getXPos())) ;
             lines.push_back("  Y: " + std::to_string(getYPos())) ;
-            lines.push_back("  Angle: " + std::to_string(getAngle())) ;
+            lines.push_back("  Angle: " + std::to_string(d)) ;
             lines.push_back("  Speed: " + std::to_string(getSpeed())) ;
             lines.push_back("  LeftPos: " + std::to_string(left_)) ;
             lines.push_back("  RightPos: " + std::to_string(right_)) ;
@@ -110,7 +171,7 @@ namespace xero {
             }
             else {
                 right_rps_per_power_per_time_ = low_rps_per_power_per_time_  ;
-                left_rps_per_power_per_time_ = -low_rps_per_power_per_time_ ;
+                left_rps_per_power_per_time_ = low_rps_per_power_per_time_ ;
                 current_max_change_ = low_max_change_ ;
             }
 
@@ -127,7 +188,7 @@ namespace xero {
             }
             else {
                 right_rps_per_power_per_time_ = high_rps_per_power_per_time_  ;
-                left_rps_per_power_per_time_ = -high_rps_per_power_per_time_ ;
+                left_rps_per_power_per_time_ = high_rps_per_power_per_time_ ;
                 current_max_change_ = high_max_change_ ;                  
             }
 
@@ -173,9 +234,9 @@ namespace xero {
             //
             // Calculate the new desired revolutions per second (RPS)
             //
-            double desired_left_rps = left_power_ * left_rps_per_power_per_time_ ;
-            double desired_right_rps = right_power_ * right_rps_per_power_per_time_ ;
-         
+            double desired_left_rps = left_power_ * left_rps_per_power_per_time_  * left_motor_mult_ ;
+            double desired_right_rps = right_power_ * right_rps_per_power_per_time_  * right_motor_mult_ ;
+
 #ifdef TANKDRIVE_PRINT_STUFF
             std::cout << "--------------------------------------------------------" << std::endl ;
             std::cout << "Power " << left_power_ << " " << right_power_ << std::endl ;
@@ -221,8 +282,8 @@ namespace xero {
             last_xpos_ = xpos_ ;
             last_ypos_ = ypos_ ;
 
-            left_enc_value_ = static_cast<int32_t>(lrevs * ticks_per_rev_) ;
-            right_enc_value_ = static_cast<int32_t>(rrevs * ticks_per_rev_) ;
+            left_enc_value_ = static_cast<int32_t>(lrevs * ticks_per_rev_ * left_encoder_mult_) ;
+            right_enc_value_ = static_cast<int32_t>(rrevs * ticks_per_rev_ * right_encoder_mult_) ;
 
             if (left_enc_ != nullptr)
                 left_enc_->SimulatorSetValue(left_enc_value_) ;
@@ -297,38 +358,64 @@ namespace xero {
         }
 
         void TankDriveModel::addDevice(TalonSRX *motor) {
-            if (motor->GetDeviceID() == 1 || motor->GetDeviceID() == 2 || motor->GetDeviceID() == 3) {
+            auto it = std::find(left_motors_.begin(), left_motors_.end(), motor->GetDeviceID()) ;
+            if (it != left_motors_.end())
+            {
                 left_talon_motors_.push_back(motor) ;
                 motor->addModel(this) ;
+                return ;
             }
-            else if (motor->GetDeviceID() == 4 || motor->GetDeviceID() == 5 || motor->GetDeviceID() == 6) {
+
+            it = std::find(right_motors_.begin(), right_motors_.end(), motor->GetDeviceID()) ;
+            if (it != right_motors_.end())
+            {
                 right_talon_motors_.push_back(motor) ;
                 motor->addModel(this) ;
-            }
+                return ;
+            }            
         }
 
         void TankDriveModel::addDevice(CANSparkMax *motor) {
-            if (motor->GetDeviceID() == 1 || motor->GetDeviceID() == 2 || motor->GetDeviceID() == 3) {
+            auto it = std::find(left_motors_.begin(), left_motors_.end(), motor->GetDeviceID()) ;
+            if (it != left_motors_.end())
+            {
                 left_spark_motors_.push_back(motor) ;
                 motor->addModel(this) ;
+                return ;
             }
-            else if (motor->GetDeviceID() == 4 || motor->GetDeviceID() == 5 || motor->GetDeviceID() == 6) {
+
+            it = std::find(right_motors_.begin(), right_motors_.end(), motor->GetDeviceID()) ;
+            if (it != right_motors_.end())
+            {
                 right_spark_motors_.push_back(motor) ;
                 motor->addModel(this) ;
-            }
+                return ;
+            }  
         }        
 
         void TankDriveModel::addDevice(Encoder *encoder) {
             int first, second ;
             encoder->SimulatorGetDigitalIOs(first, second) ;
-            if (first == 2 && second == 3) {
+            if (first == left_encoder_1_ && second == left_encoder_2_) {
                 left_enc_ = encoder ;
                 left_enc_->addModel(this) ;
+                left_encoder_mult_ = 1 ;
             }
-            else if (first == 0 && second == 1) {
+            else if (first == left_encoder_2_ && second == left_encoder_1_) {
+                left_enc_ = encoder ;
+                left_enc_->addModel(this) ;
+                left_encoder_mult_ = -1 ;
+            }
+            else if (first == right_encoder_1_ && second == right_encoder_2_) {
                 right_enc_ = encoder ;
                 right_enc_->addModel(this) ;
+                right_encoder_mult_ = 1 ;
             }
+            else if (first == right_encoder_2_ && second == right_encoder_1_) {
+                right_enc_ = encoder ;
+                right_enc_->addModel(this) ;
+                right_encoder_mult_ = -1 ;
+            }            
         }
 
         void TankDriveModel::addDevice(AHRS *navx) {
