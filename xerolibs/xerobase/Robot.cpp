@@ -335,7 +335,7 @@ namespace xero {
         }
 
         void Robot::displayAutoModeState() {
-            std::string str = std::to_string(getAutoModelSelection()) ;
+            std::string str = std::to_string(getAutoModeSelection()) ;
             frc::SmartDashboard::PutString("AutoModeNumber", str) ;
             frc::SmartDashboard::PutString("AutoModeName", auto_controller_->getAutoModeName()) ;
             frc::SmartDashboard::PutString("AutoModeDesc", auto_controller_->getAutoModeDesc()) ;
@@ -344,7 +344,7 @@ namespace xero {
 
         /// \brief return the selector switch value for the automode
         /// \returns auto mode selector switch value
-        int Robot::getAutoModelSelection() {
+        int Robot::getAutoModeSelection() {
             int sel = -1 ;
 
             //
@@ -368,7 +368,7 @@ namespace xero {
             message_logger_.endMessage() ;
 
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
-            message_logger_ << "    Auto Mode Number: " << getAutoModelSelection() ;
+            message_logger_ << "    Auto Mode Number: " << getAutoModeSelection() ;
             message_logger_.endMessage() ;          
 
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
@@ -460,7 +460,7 @@ namespace xero {
                 // the automode program.  This also includes providing information for
                 // the drive team about what automode is selected
                 //
-                int sel = getAutoModelSelection() ;
+                int sel = getAutoModeSelection() ;
 
                 if (sel != automode_ || msg != gamedata_) {
                     automode_ = sel ;
