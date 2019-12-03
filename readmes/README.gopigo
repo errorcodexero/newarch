@@ -1,3 +1,8 @@
+This information is mostly likely superceded by information on the Wiki.  See 
+http://www.xerosw.org/ for more information
+
+-----------------------------------------------------------------------------------------------------
+
 The gopigo3 specific code if found under the gopigo3 directory.  This includes both the NAVX library,
 the hardware support library, and the FRC emulation library.  In addition, the gopigo3 specific robots
 are there as well.
