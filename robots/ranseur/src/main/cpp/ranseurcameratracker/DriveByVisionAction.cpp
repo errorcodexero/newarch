@@ -7,72 +7,88 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace ranseur {
+
+        std::vector<std::string> DriveByVisionAction::cols_ =
+        {
+            "time", 
+            "tvel", "avel", "tdist", "adist", "yaw", "left", "right",
+            "lost",
+        } ;
        
         DriveByVisionAction::DriveByVisionAction(TankDrive &tank_drive, RanseurLimeLight &camera) : TankDriveAction(tank_drive), camera_(camera)
         {
-            yaw_base_power_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_base_power") ;
             yaw_p_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:yaw_p") ;
-            distance_threshold_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:distance_threshold") ;
+
+            double a = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:maxa") ;
+            double d = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:maxd") ;            
+            double v = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:maxv") ;
+
+            profile_ = std::make_shared<TrapezoidalProfile>(a, d, v) ;
+            follower_ = std::make_shared<PIDACtrl>(tank_drive.getRobot().getSettingsParser(), "drivebyvision:kv","drivebyvision:ka","drivebyvision:kp","drivebyvision:kd") ;
+            plotid_ = getTankDrive().initPlot("drivebyvision") ;
         }
 
         void DriveByVisionAction::start() {
-         
             lost_count_ = 0 ;
             is_done_ = false ;
 
+            double dist = camera_.getDistance() ;
+            profile_->update(dist, getTankDrive().getVelocity(), 0.0) ;
+            profile_start_time_ = getTankDrive().getRobot().getTime() ;
+            profile_start_dist_ = getTankDrive().getDist() ;
+
+            getTankDrive().startPlot(plotid_, cols_) ;
         }
 
-
         void DriveByVisionAction::run() {
-            MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
+            // The time within the trapezoidal profile
+            double delta = getTankDrive().getRobot().getTime() - profile_start_time_ ;
 
-            if (!camera_.isTargetPresent()) {
-                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
-                logger << "DriveByVision: camera lost target" ;
-                logger.endMessage() ;                
-
-                lost_count_++ ;
-
-                if (lost_count_ > 8) {
-                    is_done_ = true;
-
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
-                    logger << "DriveByVision: action done due to too many lost targets conditions" ;
-                    logger.endMessage() ; 
-
-                    setMotorsToPercents(0.0, 0.0) ;
-                }
+            if (delta > profile_->getTotalTime())
+            {
+                //
+                // We are done
+                //
+                setMotorsToPercents(0.0, 0.0) ;
+                is_done_ = true ;
+                getTankDrive().endPlot(plotid_) ;
             }
-            else {
-                double yaw = camera_.getYaw() ;
-                double dist = camera_.getDistance() ;
+            else
+            {
+                double yaw = 0 ;
+                double lost = 1 ;
+                double targeta = profile_->getAccel(delta) ;
+                double targetv = profile_->getVelocity(delta) ;
+                double targetdist = profile_->getDistance(delta) ;
+                double actualdist = getTankDrive().getDist() - profile_start_dist_ ;
+                double out = follower_->getOutput(targeta, targetv, targetdist, actualdist, 
+                            getTankDrive().getRobot().getDeltaTime()) ;
 
-                if (dist < distance_threshold_) {
-                    is_done_ = true ;
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
-                    logger << "DriveByVision: action done due to being too close" ;
-                    logger.endMessage() ;     
-                }
-                else {
+                double left = out ;
+                double right = out ;
 
-                    lost_count_ = 0 ;
+                if (camera_.isTargetPresent()) {
+                    yaw = camera_.getYaw() ;
+                    lost = 0 ;
 
-                   
                     double yawadj = camera_.getYaw() * yaw_p_ ;
-                    double left = yaw_base_power_ + yawadj ;
-                    double right = yaw_base_power_ - yawadj ;
-                    setMotorsToPercents(left, right) ;
-
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
-                    logger << "DriveByVision:" ;
-                    logger << " yaw " << yaw ; 
-                    logger << " yawadj " << yawadj ;
-                    logger << " left " << left ;
-                    logger << " right " << right ;
-                    logger << " dist " << camera_.getDistance() ;
-                    logger << " valid " << camera_.isTargetPresent() ;
-                    logger.endMessage() ;
+                    left += yawadj ;
+                    right -= yawadj ;
                 }
+
+                setMotorsToPercents(left, right) ;
+
+                std::vector<double> data ;
+                data.push_back(delta) ;
+                data.push_back(targetv) ;
+                data.push_back(getTankDrive().getVelocity()) ;
+                data.push_back(targetdist) ;
+                data.push_back(actualdist) ;
+                data.push_back(yaw) ;
+                data.push_back(left) ;
+                data.push_back(right) ;
+                data.push_back(lost) ;
+                getTankDrive().addPlotData(plotid_, data) ;                 
             }
         }
 

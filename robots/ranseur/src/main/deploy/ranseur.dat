@@ -106,22 +106,6 @@ tankdrive:follower:right:kd                                     0.0
 tankdrive:follower:turn_correction                              0
 tankdrive:follower:angle_correction                             0.06
 
-tankdrive:distance_action:maxa                                  36.0
-tankdrive:distance_action:maxd                                  -36.0
-tankdrive:distance_action:maxv                                  36.0
-
-tankdrive:distance_action:angle_pid:p                           0.0
-tankdrive:distance_action:angle_pid:i                           0.0
-tankdrive:distance_action:angle_pid:d                           0.0
-tankdrive:distance_action:angle_pid:f                           0.0
-tankdrive:distance_action:angle_pid:min                         -1.0
-tankdrive:distance_action:angle_pid:max                         1.0
-tankdrive:distance_action:angle_pid:imax                        0.0
-
-tankdrive:distance_action:distance_threshold                    999.0
-tankdrive:distance_action:profile_outdated_error_long           8.0
-tankdrive:distance_action:profile_outdated_error_short          4.0
-tankdrive:distance_action:profile_outdated_error_dist           12.0
 
 ###################################################################################################
 # bunnyarm
@@ -221,6 +205,13 @@ ranseurvision:target_height                                     4.0
 drivebyvision:yaw_base_power                                    0.4
 drivebyvision:yaw_p                                             0.002
 drivebyvision:distance_threshold                                2.0
+drivebyvision:maxa                                              60
+drivebyvision:maxd                                              -60
+drivebyvision:maxv                                              120
+drivebyvision:kp                                                0
+drivebyvision:ka                                                0
+drivebyvision:kv                                                0.005208333
+drivebyvision:kd                                                0
 
 ###################################################################################################
 # Driver gamepad

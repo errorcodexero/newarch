@@ -162,8 +162,9 @@ namespace xero {
             left_linear_.update(getRobot().getDeltaTime(), getLeftDistance()) ;
             right_linear_.update(getRobot().getDeltaTime(), getRightDistance()) ;
 
-            frc::SmartDashboard::PutNumber("leftdb", left_linear_.getDistance()) ;
-            frc::SmartDashboard::PutNumber("rightdb", right_linear_.getDistance()) ;
+            frc::SmartDashboard::PutNumber("dbleft", left_linear_.getDistance()) ;
+            frc::SmartDashboard::PutNumber("dbright", right_linear_.getDistance()) ;
+            frc::SmartDashboard::PutNumber("dbyaw", getAngle()) ;
 
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE_VERBOSE);

@@ -99,6 +99,7 @@ namespace xero {
                     if (currentIndex == 0) {
                         leaderInverted = v;
                         if (groupInverted) v = !v;  // If the group is inverted, just invert the leader
+                        motor->setInverted(v) ;
                     } else if (leaderInverted) v = !v;  // If the leader is inverted, invert all other motors
                                                         // so that they follow the direction of the group
                     motors.add(motor, v);
