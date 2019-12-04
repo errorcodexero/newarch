@@ -23,9 +23,9 @@
         "args": [
           "--test","0.0",
           "--start", "0.0",
-          "--auto", "0.0",
-          "--oper","15.0",
-          "--events","robots/ranseur/sims/collect.sti"
+          "--auto", "15.0",
+          "--oper","0.0",
+          "--events","robots/ranseur/sims/automode0.sti"
       ],
       "cwd": "${workspaceFolder}",
       "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/ranseur/ranseur.exe",

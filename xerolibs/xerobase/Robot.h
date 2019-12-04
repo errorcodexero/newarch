@@ -241,7 +241,7 @@ namespace xero {
             virtual void RobotHardwareInit() ;
 
             /// \brief return the auto mode selection
-            virtual int getAutoModelSelection() ;
+            virtual int getAutoModeSelection() ;
 
         private:
             void logAutoModeState() ;

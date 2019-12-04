@@ -26,13 +26,15 @@ namespace xero {
             /// \param configID The configuration file ID where the motor is defined.
             ///
             /// To define a single motor:
-            ///     configID:canid 5         # The CAN bus ID of the motor.
-            ///     configID:type  talon_srx # The type of the motor.
+            ///     configID:canid    5         # The CAN bus ID of the motor.
+            ///     configID:type     talon_srx # The type of the motor.
             /// To define a group of motors:
-            ///     configID:1:canid 5
-            ///     configID:1:type  talon_srx
-            ///     configID:2:canid 6
-            ///     configID:2:type  talon_srx
+            ///     configID:1:canid  5
+            ///     configID:1:type   talon_srx
+            ///     configID:2:canid  6
+            ///     configID:2:type   talon_srx
+            ///     configID:2:invert true     # Inverts a single motor relative to the rest of the group
+            ///     configID:invert   true     # Inverts the entire motor group
             ///     ...
             MotorPtr createMotor(std::string configID);
 

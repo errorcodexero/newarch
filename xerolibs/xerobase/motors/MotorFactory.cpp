@@ -88,12 +88,19 @@ namespace xero {
             // Try to create a motor group instead.
             MotorGroupController motors;
             int currentIndex = 0;
+            bool groupInverted = isInverted(configID);  // True if the group invert flag is set
+            bool leaderInverted = false;                // True if the leader's invert flag is set
             while (true) {
                 // Try to create the next motor.
                 std::string motorConfigID = configID + ":" + std::to_string(currentIndex + 1);
                 if (auto motor = createSingleMotor(motorConfigID)) {
                     // we need to catch the invert flag and pass it into follow
                     bool v = isInverted(motorConfigID) ;
+                    if (currentIndex == 0) {
+                        leaderInverted = v;
+                        if (groupInverted) v = !v;  // If the group is inverted, just invert the leader
+                    } else if (leaderInverted) v = !v;  // If the leader is inverted, invert all other motors
+                                                        // so that they follow the direction of the group
                     motors.add(motor, v);
                     currentIndex += 1;
                 } else {

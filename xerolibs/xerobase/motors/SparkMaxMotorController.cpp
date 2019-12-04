@@ -17,8 +17,7 @@ namespace xero {
 
             void SparkMaxMotorController::follow(std::shared_ptr<MotorController> motor, bool invert) {
                 if (auto m = std::dynamic_pointer_cast<SparkMaxMotorController>(motor)) {
-                    motor_->Follow(*m->motor_, false);
-                    // motor_->Follow(*m->motor_, invert);                    
+                    motor_->Follow(*m->motor_, invert);
                 } else assert(0 == "SparkMax motors can only follow other SparkMax motors");
             }
 

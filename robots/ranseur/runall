@@ -1,0 +1,10 @@
+#!/bin/bash
+
+../../runsim ranseur auto automode0.sti
+../../runsim ranseur auto automode1.sti
+../../runsim ranseur auto automode2.sti
+../../runsim ranseur auto automode3.sti
+../../runsim ranseur teleop collect.sti
+../../runsim ranseur teleop dump.sti
+../../runsim ranseur teleop eject.sti
+../../runsim ranseur teleop turtle.sti

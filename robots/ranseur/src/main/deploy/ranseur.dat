@@ -19,7 +19,7 @@ hw:tubtoucher:solenoid:2_1                                      4
 hw:tubtoucher:solenoid:2_2                                      5
 
 hw:tubcollector1:type                                           "victor_spx"
-hw:tubcollector1:canid                                          6
+hw:tubcollector1:canid                                          10
 hw:tubcollector2:type                                           "victor_spx"
 hw:tubcollector2:canid                                          9
 hw:tubcollector:clamp                                           7
@@ -41,9 +41,7 @@ hw:tubwrist:encoder:analog:b                                    -126
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2
 hw:tankdrive:motors:left:3:canid                                3
-hw:tankdrive:motors:right:1:invert                               true
-hw:tankdrive:motors:right:2:invert                               true
-hw:tankdrive:motors:right:3:invert                               true
+hw:tankdrive:motors:right:invert                                true
 hw:tankdrive:motors:right:1:canid                               4
 hw:tankdrive:motors:right:2:canid                               5
 hw:tankdrive:motors:right:3:canid                               6
@@ -95,14 +93,14 @@ tankdrive:scrub                                                 1.0
 
 tankdrive:follower:left:kv1                                     192.0
 tankdrive:follower:left:kv2                                     0.0
-tankdrive:follower:left:ka                                      0.0001
-tankdrive:follower:left:kp                                      0.0                 # Recommended 0.02032 - 0.03048
+tankdrive:follower:left:ka                                      0.0
+tankdrive:follower:left:kp                                      0.0             # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kd                                      0.0
 
 tankdrive:follower:right:kv1                                    192.0
 tankdrive:follower:right:kv2                                    0.0
-tankdrive:follower:right:ka                                     0.0001
-tankdrive:follower:right:kp                                     0.0                 # Recommended 0.02032 - 0.03048
+tankdrive:follower:right:ka                                     0.0
+tankdrive:follower:right:kp                                     0.0                # Recommended 0.02032 - 0.03048
 tankdrive:follower:right:kd                                     0.0
 
 tankdrive:follower:turn_correction                              0
@@ -138,9 +136,9 @@ tubtoucher:deploy:time                                           0.5
 ###################################################################################################
 # tubcollector
 ###################################################################################################
-tubcollector:eject:power                                        0.5
+tubcollector:eject:power                                        0.8
 tubcollector:eject:duration                                     2.0      
-tubcollector:collect:power                                      -0.5
+tubcollector:collect:power                                      -0.8
 tubcollector:collect:duration                                   0.5                                        
 tubcollector:tubsensor:h2ldelay                                 0
 tubcollector:tubsensor:l2hdelay                                 0
@@ -189,16 +187,16 @@ tubarm:hold:min                                                 -0.6
 tubarm:hold:max                                                 0.6
 tubarm:hold:imax                                                0.0
 tubarm:goto:threshold                                           3.0      # Within three degrees
-tubarm:goto:maxd                                                -180.0    # maximum deceleration (way too slow, used for demo)
-tubarm:goto:maxa                                                180.0     # maximum acceleration (way too slow, used for demo)
-tubarm:goto:maxv                                                90.0     # maximum velocity (way too slow, used for demo)
-tubarm:follower:down:kp                                         0.0
+tubarm:goto:maxd                                                -360.0    # maximum deceleration (way too slow, used for demo)
+tubarm:goto:maxa                                                360.0     # maximum acceleration (way too slow, used for demo)
+tubarm:goto:maxv                                                180.0     # maximum velocity (way too slow, used for demo)
+tubarm:follower:down:kp                                         0.03
 tubarm:follower:down:kd                                         0.0
-tubarm:follower:down:kv                                         0.011111111
+tubarm:follower:down:kv                                         0.002702703
 tubarm:follower:down:ka                                         0.0
-tubarm:follower:up:kp                                           0.0
+tubarm:follower:up:kp                                           0.03
 tubarm:follower:up:kd                                           0.0
-tubarm:follower:up:kv                                           0.011111111
+tubarm:follower:up:kv                                           0.004243131
 tubarm:follower:up:ka                                           0.0
 tubarm:collect:pos                                              0
 tubarm:dump:pos                                                 90
@@ -269,7 +267,7 @@ oi:automode2                                                    16
 # 6 - tub toucher deploy
 # 7 - tub toucher retract
 #
-automode:test:which                                             7
-automode:test:power                                             0.8
-automode:test:duration                                          0.3
-automode:test:angle                                             90
+automode:test:which                                             2
+automode:test:power                                             -0.3
+automode:test:duration                                          1.0
+automode:test:angle                                             75

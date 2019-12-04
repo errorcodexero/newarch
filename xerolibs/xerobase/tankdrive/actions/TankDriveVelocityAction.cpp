@@ -59,9 +59,6 @@ void TankDriveVelocityAction::run() {
 
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
             logger << "TankDriveDistanceAction complete";
-            logger.startData("tankdrivedistanceaction_complete")
-                .addData("time", getTankDrive().getRobot().getTime() - start_time_)
-                .endData();
             logger.endMessage();
         }
     }
