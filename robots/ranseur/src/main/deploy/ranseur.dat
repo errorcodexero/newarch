@@ -269,7 +269,7 @@ oi:automode2                                                    16
 # 6 - tub toucher deploy
 # 7 - tub toucher retract
 #
-automode:test:which                                             6
-automode:test:power                                             0.15
+automode:test:which                                             7
+automode:test:power                                             0.8
 automode:test:duration                                          0.3
 automode:test:angle                                             90

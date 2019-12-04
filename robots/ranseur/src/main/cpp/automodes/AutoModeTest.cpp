@@ -83,8 +83,11 @@ namespace xero
                 break ;
 
                 case 7:
-                    //act = std::make_shared<TubCollectorDutyCycleAction>(*tubcollector, power, duration) ;
-                    //pushSubActionPair(tubcollector, act) ;                
+                    act = std::make_shared<TubCollectorDutyCycleAction>(*tubcollector, power) ;
+                    pushSubActionPair(tubcollector, act) ;                
+                    pushAction(std::make_shared<DelayAction>(3.0)) ; 
+                    act = std::make_shared<TubCollectorDutyCycleAction>(*tubcollector, 0.0) ;  
+                    pushSubActionPair(tubcollector, act) ;                                                           
                     break ;
    
             }

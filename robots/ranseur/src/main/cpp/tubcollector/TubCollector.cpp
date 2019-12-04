@@ -45,7 +45,7 @@ namespace xero {
             Subsystem::computeState() ;
 
             deb_sensor_->update(sensor_->Get(), getRobot().getTime()) ;
-            has_tub_ = deb_sensor_->get() ;
+            has_tub_ = !deb_sensor_->get() ;
             if (!has_tub_)
                 collected_tub_ = false ;
         }        
