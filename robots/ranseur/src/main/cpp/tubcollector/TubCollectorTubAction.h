@@ -20,9 +20,9 @@ namespace xero {
         private:
             enum class State 
             { 
-            motors_on,                    //motors on and ready for intake
-            closed_hand,                   //close the hand with solenoid
-            done,                         //done collecting tub (just turn motors on barely to hold tubs?)
+                motors_on,                    //motors on and ready for intake
+                closed_hand,                   //close the hand with solenoid
+                done,                         //done collecting tub (just turn motors on barely to hold tubs?)
             } ;         
 
         private:

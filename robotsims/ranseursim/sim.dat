@@ -27,7 +27,7 @@ hw:tubmanipulator:wrist:motor           7                               # Victor
 hw:tubmanipulator:wrist:encoder         0                               # Analog IO
 hw:tubmanipulator:collector:solenoid    0                               # Solenoid
 hw:tubmanipulator:collector:sensor      9                               # Digital Input
-hw:tubmanipulator:collector:motor       6                               # VictorSPX
+hw:tubmanipulator:collector:motor       9                               # VictorSPX
 
 ######################################################################################
 #
@@ -89,6 +89,7 @@ oi:button:spare1                                        5
 oi:button:spare2                                        6
 oi:button:automode1                                     10
 oi:button:automode2                                     16
+oi:button:tubtouchers                                   5
 
 #
 # gamepad

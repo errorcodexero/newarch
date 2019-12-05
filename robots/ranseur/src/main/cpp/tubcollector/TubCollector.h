@@ -42,10 +42,6 @@ namespace xero {
             void createNamedSequences() {
             }
 
-            void setCollectedTubState(bool st) {
-                collected_tub_ = st ;
-            }
-
             virtual void reset() ;
 
         private:
@@ -54,12 +50,7 @@ namespace xero {
             //
             bool has_tub_ ;
 
-            //
-            // This means we have collected a tub
-            //
-            bool collected_tub_ ;
             std::shared_ptr<frc::DigitalInput> sensor_ ;
-            std::shared_ptr<xero::misc::DebounceBoolean> deb_sensor_ ;
             std::shared_ptr<xero::base::MotorController> intake1_ ;
             std::shared_ptr<xero::base::MotorController> intake2_ ;            
             std::shared_ptr<frc::Solenoid> clamp_ ;

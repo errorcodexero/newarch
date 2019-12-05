@@ -50,17 +50,17 @@ namespace xero  {
                 void generateDisplayInformation(std::list<std::string> &lines) ;
 
                 bool hasTub() {
-                    return has_tub_ ;
+                    return !has_tub_inv_ ;
                 }
 
                 void hasTub(bool b) {
-                    has_tub_ = b ;
+                    has_tub_inv_ = !b ;
                 }
 
             private:
                 void setArmEncoder() ;
                 void setWristEncoder() ;
-
+                void setTubSensor() ;
 
             private:
                 static constexpr double ArmMinimumAngle = 00.0 ;
@@ -94,7 +94,7 @@ namespace xero  {
                 bool collector_sensor_value_ ;
                 bool collector_state_ ;
 
-                bool has_tub_ ;
+                bool has_tub_inv_ ;
 
             } ;
         }

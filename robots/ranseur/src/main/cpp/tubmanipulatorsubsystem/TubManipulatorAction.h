@@ -12,19 +12,6 @@ namespace xero {
 
         public:
 
-            virtual void start() { 
-                action_.start();
-            }
-            virtual void run() {
-                action_.run();
-            }
-            virtual void cancel() {
-                action_.cancel();
-            }
-            virtual bool isDone() {
-                return action_.isDone();
-            }
-
             TubManipulatorAction(TubManipulatorSubsystem &tubmanipulatorsubsystem) : tubmanipulator_(tubmanipulatorsubsystem) {                
             }
 
@@ -36,7 +23,6 @@ namespace xero {
             }      
 
         private:
-            xero::base::ParallelAction action_ ;    
             TubManipulatorSubsystem &tubmanipulator_ ;
         };
     }

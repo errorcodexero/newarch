@@ -39,6 +39,7 @@ namespace xero {
 
         void MotorEncoderGoToAction::start() {
             MotorEncoderSubsystem &subsystem = getSubsystem();
+            isDone_ = false ;
             subsystem.setDefaultAction(std::make_shared<MotorEncoderHoldAction>(subsystem, target_));
 
             double dist = normalizePosition(target_ - subsystem.getPosition());

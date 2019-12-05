@@ -30,7 +30,7 @@ namespace xero {
                 wrist_angle_ = WristMaxAngle ;
                 collector_sensor_value_ = false ;
                 collector_state_ = false ;
-                has_tub_ = false ;
+                has_tub_inv_ = false ;
 
                 arm_encoder_ = nullptr ;
                 wrist_encoder_ = nullptr ;
@@ -44,9 +44,8 @@ namespace xero {
                 bool ret = false ;
                 if (name == "tub") {
                     ret = true ;
-                    has_tub_ = (value ? true : false) ;
-                    if (tub_sensor_ != nullptr)
-                        tub_sensor_->SimulatorSetValue(has_tub_) ;
+                    has_tub_inv_ = (value ? true : false) ;
+                    setTubSensor() ;
                 }
 
                 return ret ;
@@ -100,8 +99,17 @@ namespace xero {
                 setArmEncoder() ;
                 setWristEncoder() ;
 
-                if (collector_motor_power_ > 0.2 && has_tub_)
-                    has_tub_ = false ;
+                if (collector_motor_power_ > 0.2 && !has_tub_inv_)
+                {
+                    has_tub_inv_ = true ;
+                    setTubSensor() ;
+                }
+            }
+
+            void TubManipulatorModel::setTubSensor()
+            {
+                if (tub_sensor_ != nullptr)
+                    tub_sensor_->SimulatorSetValue(has_tub_inv_) ;
             }
 
             void TubManipulatorModel::setArmEncoder() {
@@ -150,7 +158,7 @@ namespace xero {
                 if (input->GetChannel() == collector_tub_sensor_channel_) {
                     tub_sensor_ = input ;
                     tub_sensor_->addModel(this) ;
-                    tub_sensor_->SimulatorSetValue(has_tub_) ;
+                    tub_sensor_->SimulatorSetValue(has_tub_inv_) ;
                 }
             }
 

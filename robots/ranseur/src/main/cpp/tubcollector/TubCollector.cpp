@@ -16,12 +16,9 @@ namespace xero {
             int sensor = robot.getSettingsParser().getInteger("hw:tubcollector:tubsensor") ;
             sensor_ = std::make_shared<frc::DigitalInput>(sensor) ;
 
-            double dh2l = robot.getSettingsParser().getDouble("tubcollector:tubsensor:h2ldelay") ;
-            double dl2h = robot.getSettingsParser().getDouble("tubcollector:tubsensor:l2hdelay") ;
-            deb_sensor_ = std::make_shared<DebounceBoolean>(true, dh2l, dl2h) ;
-
             intake1_ = robot.getMotorFactory()->createMotor("hw:tubcollector1") ;
             intake1_->setNeutralMode(MotorController::NeutralMode::Brake) ;
+
             intake2_ = robot.getMotorFactory()->createMotor("hw:tubcollector2") ;
             intake2_->setNeutralMode(MotorController::NeutralMode::Brake) ;            
 
@@ -45,8 +42,6 @@ namespace xero {
         void TubCollector::computeState() {
             Subsystem::computeState() ;
 
-            deb_sensor_->update(sensor_->Get(), getRobot().getTime()) ;
-            has_tub_ = !deb_sensor_->get() ;
             has_tub_ = !sensor_->Get() ;
             frc::SmartDashboard::PutBoolean("HasTub", has_tub_) ;
         }        
@@ -54,7 +49,7 @@ namespace xero {
         void TubCollector::reset() {
             Subsystem::reset() ;
             intake1_->set(0.0) ;
-            intake2_->set(0.0) ;            
+            intake2_->set(0.0) ;
         }
     }
 }

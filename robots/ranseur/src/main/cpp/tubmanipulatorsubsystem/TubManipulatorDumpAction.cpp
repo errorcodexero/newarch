@@ -25,12 +25,12 @@ namespace xero {
             ///Arm/// 
             v = tubm.getRobot().getSettingsParser().getDouble("tubarm:dump:pos") ;
             act = std::make_shared<MotorEncoderGoToAction>(*arm, v) ;
-            seq->pushSubActionPair(arm, act) ;
+            seq->pushSubActionPair(arm, act, true) ;
 
             ///Wrist///
             v = tubm.getRobot().getSettingsParser().getDouble("tubwrist:dump:pos") ;
             act = std::make_shared<MotorEncoderGoToAction>(*wrist, v) ;
-            seq->pushSubActionPair(wrist, act) ;
+            seq->pushSubActionPair(wrist, act, true) ;
 
             parallel_.addAction(seq) ;
             

@@ -46,9 +46,6 @@ namespace xero {
                 sub->run() ;
             }
             
-            std::string str ;
-            if (action_ != nullptr && action_->isDone())
-                str = action_->toString() ;
             if (action_ != nullptr && !action_->isDone()) {
                 action_->run();
             } else if (!isRunningDefaultAction_) {
