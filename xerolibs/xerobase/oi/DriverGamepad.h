@@ -74,6 +74,10 @@ namespace xero {
 
             bool isCancelPressed() ;
 
+        protected:
+            virtual void calcLeftRightDefault(double power, double wheel, double &left, double &right) ;
+            virtual void calcLeftRightPoofs(double power, double wheel, double &left, double &right) ;
+
         private:
             double scalePower(double axis, double boost, bool slow) ;
             double scaleTurn(double axis, double boost, bool slow) ;
@@ -116,7 +120,9 @@ namespace xero {
             bool rumbling_ ;
             double start_ ;
             double duration_ ;
-            frc::XboxController::RumbleType rtype_ ;            
+            frc::XboxController::RumbleType rtype_ ;    
+
+            bool use_poofs_ ;        
         } ;
      }
  }

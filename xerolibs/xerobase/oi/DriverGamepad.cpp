@@ -68,19 +68,23 @@ namespace xero {
 
         void DriverGamepad::init(std::shared_ptr<TankDrive> db) {
             db_ = db ;
+            auto &settings = getSubsystem().getRobot().getSettingsParser() ;
 
-            default_duty_cycle_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:default") ;
-            max_duty_cycle_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:max") ;
-            turn_default_duty_cycle_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:turn:default") ;
-            turn_max_duty_cycle_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:turn:max") ;            
-            slow_factor_= getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:slowby") ;
-            zerolevel_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:zerolevel") ;
+            default_duty_cycle_ = settings.getDouble("driver:power:default") ;
+            max_duty_cycle_ = settings.getDouble("driver:power:max") ;
+            turn_default_duty_cycle_ = settings.getDouble("driver:turn:default") ;
+            turn_max_duty_cycle_ = settings.getDouble("driver:turn:max") ;            
+            slow_factor_= settings.getDouble("driver:power:slowby") ;
+            zerolevel_ = settings.getDouble("driver:zerolevel") ;
 
-            tolerance_ = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:tolerance") ;
+            tolerance_ = settings.getDouble("driver:power:tolerance") ;
 
-            double nudge_straight = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:nudge_straight") ;
-            double nudge_rotate = getSubsystem().getRobot().getSettingsParser().getDouble("driver:power:nudge_rotate") ;
-            double nudge_time = getSubsystem().getRobot().getSettingsParser().getDouble("driver:nudge_time") ;
+            double nudge_straight = settings.getDouble("driver:power:nudge_straight") ;
+            double nudge_rotate = settings.getDouble("driver:power:nudge_rotate") ;
+            double nudge_time = settings.getDouble("driver:nudge_time") ;
+
+            if (settings.isDefined("driver:usepoofs"))
+                use_poofs_ = settings.getBoolean("driver:usepoofs") ;
 
             nudge_forward_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, nudge_straight, nudge_straight, nudge_time, true) ;
             nudge_backward_low_ = std::make_shared<TankDriveTimedPowerAction>(*db_, -nudge_straight, -nudge_straight, nudge_time, true) ;
@@ -173,7 +177,7 @@ namespace xero {
                 high_gear_ = true ;
             }
 
-            double ly = ds.GetStickAxis(getIndex(),AxisNumber::LEFTY) ;
+            double ly = -ds.GetStickAxis(getIndex(),AxisNumber::LEFTY) ;
             double rx = ds.GetStickAxis(getIndex(),AxisNumber::RIGHTX) ;
 
             if (pov == POVAngle::LEFT) {
@@ -208,20 +212,10 @@ namespace xero {
                     right = 0.0 ;
                 }
                 else {
-                    bool slow = ds.GetStickButton(getIndex(),ButtonNumber::LB) ;
-                    double boost = ds.GetStickAxis(getIndex(),AxisNumber::LTRIGGER) ;
-
-                    double power = scalePower(-ly, boost, slow) ;
-                    double spin = (std::fabs(rx) > 0.01) ? scaleTurn(rx, boost, slow) : 0.0 ;
-
-                    if (reverse_) {
-                        left = power - spin ;
-                        right = power + spin ;
-                    }
-                    else {
-                        left = power + spin ;
-                        right = power - spin ;
-                    }
+                    if (use_poofs_)
+                        calcLeftRightPoofs(ly, rx, left, right) ;
+                    else
+                        calcLeftRightDefault(ly, rx, left, right) ;
                 }
                 
                 if (std::fabs(left - left_) > tolerance_ || std::fabs(right - right_) > tolerance_) {
@@ -230,6 +224,58 @@ namespace xero {
                     left_ = left ;
                     right_ = right ;
                 }
+            }
+        }
+
+        void DriverGamepad::calcLeftRightPoofs(double power, double wheel, double &left, double &right)
+        {
+            double kWheelGain = 0.05 ;
+            double kWheelNonlinearity = 0.05 ;
+            double kRobotWidth = 30.0 ;
+            double kRobotScrub = 0.98 ;
+
+            double denom = std::sin(xero::math::PI / 2.0 * kWheelGain) ;
+
+            wheel = std::sin(xero::math::PI / 2.0 * kWheelNonlinearity * wheel) ;
+            wheel = std::sin(xero::math::PI / 2.0 * kWheelNonlinearity * wheel) ;
+            wheel = wheel / (denom * denom) * std::fabs(power) ;
+            wheel = wheel * kWheelGain ;
+
+            // Twist2d, x = power, y = 0, theta = wheel
+            if (wheel < 0.0001)
+            {
+                left = power ;
+                right = power ;
+            }   
+            else
+            {
+                double dv = kRobotWidth * wheel / (2.0 * kRobotScrub) ;
+                left = power + dv ;
+                right = power - dv ;
+            }
+
+            double scale = std::max(1.0, std::max(std::fabs(left), std::fabs(right))) ;
+            left = left / scale ;
+            right = right / scale ;
+        }
+
+        void DriverGamepad::calcLeftRightDefault(double power, double wheel, double &left, double &right)
+        {
+            frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
+
+            bool slow = ds.GetStickButton(getIndex(),ButtonNumber::LB) ;
+            double boost = ds.GetStickAxis(getIndex(),AxisNumber::LTRIGGER) ;
+
+            double pwr = scalePower(power, boost, slow) ;
+            double spin = (std::fabs(wheel) > 0.01) ? scaleTurn(wheel, boost, slow) : 0.0 ;
+
+            if (reverse_) {
+                left = pwr - spin ;
+                right = pwr + spin ;
+            }
+            else {
+                left = pwr + spin ;
+                right = pwr - spin ;
             }
         }
     }
