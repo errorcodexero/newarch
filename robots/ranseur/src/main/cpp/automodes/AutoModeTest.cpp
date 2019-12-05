@@ -28,6 +28,8 @@ namespace xero
         AutoModeTest::AutoModeTest(Robot &robot) : RanseurAutoModeBase(robot, "TestingMode", "The Automode to Test Stuff")
         {
             ActionPtr act ;
+            std::shared_ptr<ParallelAction> par ;
+            std::shared_ptr<SequenceAction> seq ;
             auto &ranseur = dynamic_cast<Ranseur &>(getRobot()) ;
             auto bunnyarm = ranseur.getRanseurRobotSubsystem()->getBunnyArm() ;
             auto tubtoucher = ranseur.getRanseurRobotSubsystem()->getTubToucher() ;
@@ -68,11 +70,13 @@ namespace xero
                 case 4 :
                     act = std::make_shared<BunnyArmDeployAction>(*bunnyarm, true) ;
                     pushSubActionPair(bunnyarm, act) ;
+                    pushAction(std::make_shared<DelayAction>(3.0)) ;  
+                    act = std::make_shared<BunnyArmDeployAction>(*bunnyarm, false) ;
+                    pushSubActionPair(bunnyarm, act) ;                                      
                 break ;
 
                 case 5 :
-                    act = std::make_shared<BunnyArmDeployAction>(*bunnyarm, false) ;
-                    pushSubActionPair(bunnyarm, act) ;
+
                 break ;
                 
                 case 6 :
@@ -86,16 +90,72 @@ namespace xero
                 case 7:
                     act = std::make_shared<TubCollectorDutyCycleAction>(*tubcollector, power) ;
                     pushSubActionPair(tubcollector, act) ;                
-                    pushAction(std::make_shared<DelayAction>(3.0)) ; 
+                    pushAction(std::make_shared<DelayAction>(30.0)) ; 
                     act = std::make_shared<TubCollectorDutyCycleAction>(*tubcollector, 0.0) ;  
                     pushSubActionPair(tubcollector, act) ;                                                           
                     break ;
 
                 case 8:
-                    act = std::make_shared<TubCollectorTubAction>(*tubcollector) ;
-                    pushSubActionPair(tubcollector, act) ; 
-                    break ;
+                    par = std::make_shared<ParallelAction>() ;
 
+                    act = std::make_shared<MotorEncoderGoToAction>(*tubarm, -38) ;
+                    par->addSubActionPair(tubarm, act, true) ;
+
+                    act = std::make_shared<MotorEncoderGoToAction>(*tubwrist, 10) ;
+                    par->addSubActionPair(tubwrist, act, true) ;
+
+                    act = std::make_shared<TubCollectorTubAction>(*tubcollector) ;
+                    par->addSubActionPair(tubcollector, act, true) ; 
+
+                    pushAction(par) ;
+
+                    par = std::make_shared<ParallelAction>() ;
+
+                    act = std::make_shared<MotorEncoderGoToAction>(*tubarm, 90) ;
+                    par->addSubActionPair(tubarm, act, true) ;
+
+                    seq = std::make_shared<SequenceAction>(getRobot().getMessageLogger()) ;
+
+                    act = std::make_shared<MotorEncoderGoToAction>(*tubwrist, 45) ;
+                    seq->pushSubActionPair(tubwrist, act, true) ;
+
+                    act = std::make_shared<MotorEncoderGoToAction>(*tubwrist, -160) ;
+                    seq->pushSubActionPair(tubwrist, act, true) ;                
+
+                    par->addAction(seq) ;
+                    pushAction(par) ;
+                    break ;
+                    
+                case 9:
+                    par = std::make_shared<ParallelAction>() ;
+
+                    act = std::make_shared<MotorEncoderGoToAction>(*tubarm, -38) ;
+                    par->addSubActionPair(tubarm, act, true) ;
+
+                    act = std::make_shared<MotorEncoderGoToAction>(*tubwrist, 10) ;
+                    par->addSubActionPair(tubwrist, act, true) ;
+
+                    pushAction(par) ;
+
+                    act = std::make_shared<DelayAction>(3.0) ;
+                    pushAction(act) ;
+
+                    par = std::make_shared<ParallelAction>() ;
+
+                    act = std::make_shared<MotorEncoderGoToAction>(*tubarm, 90) ;
+                    par->addSubActionPair(tubarm, act, true) ;
+
+                    seq = std::make_shared<SequenceAction>(getRobot().getMessageLogger()) ;
+
+                    act = std::make_shared<MotorEncoderGoToAction>(*tubwrist, 45) ;
+                    seq->pushSubActionPair(tubwrist, act, true) ;
+
+                    act = std::make_shared<MotorEncoderGoToAction>(*tubwrist, -166) ;
+                    seq->pushSubActionPair(tubwrist, act, true) ;                
+
+                    par->addAction(seq) ;
+                    pushAction(par) ;
+                    break ;
             }
 
         }

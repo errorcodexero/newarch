@@ -17,6 +17,10 @@ namespace xero {
 
             virtual void computeState() ;
 
+            bool isDeployed() {
+                return deployed_ ;
+            }
+
         protected:
             virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
 

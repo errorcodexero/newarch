@@ -181,6 +181,11 @@ namespace xero {
                 assert(analog_ || pwm_);
                 absB_ = b;
             }
+
+            void setSpecialCaseFixMe()
+            {
+                special_case_fix_me_ = true ;
+            }
         private:
             bool angular_;
 
@@ -192,6 +197,10 @@ namespace xero {
             std::shared_ptr<frc::Counter> pwm_;    // A PWM encoder, or nullptr.
             double absM_ = 1;
             double absB_ = 0;
+
+            std::string name_ ;
+
+            bool special_case_fix_me_ ;
         };
     }
 }

@@ -3,6 +3,7 @@
 #include <actions/SequenceAction.h>
 #include <Robot.h>
 #include <frc/DigitalInput.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -46,8 +47,8 @@ namespace xero {
 
             deb_sensor_->update(sensor_->Get(), getRobot().getTime()) ;
             has_tub_ = !deb_sensor_->get() ;
-            if (!has_tub_)
-                collected_tub_ = false ;
+            has_tub_ = !sensor_->Get() ;
+            frc::SmartDashboard::PutBoolean("HasTub", has_tub_) ;
         }        
 
         void TubCollector::reset() {

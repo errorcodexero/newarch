@@ -34,7 +34,13 @@ namespace xero {
             size_t turtle_ ;
             size_t tubtoucher_ ;
             size_t spare2_ ;
+            size_t bunny_arm_ ;
+            size_t tub_touchers_ ;
   
+            xero::base::ActionPtr bunny_arm_deploy_ ;
+            xero::base::ActionPtr bunny_arm_retract_ ;    
+            xero::base::ActionPtr tub_touchers_deploy_ ;
+            xero::base::ActionPtr tub_touchers_retract_ ;                     
             xero::base::ActionPtr collecting_ ;
             xero::base::ActionPtr dumping_ ;
             xero::base::ActionPtr turtling_ ;

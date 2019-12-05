@@ -38,3 +38,6 @@
 
 8.0,tubmanipulator,tub,1                                # A tub shows up at eight seconds
 
+16.0,oi,collect,1                                       # Press the collect button
+16.25,oi,collect,0                                      # Release the collect button
+

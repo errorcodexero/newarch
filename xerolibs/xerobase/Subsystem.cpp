@@ -4,6 +4,7 @@
 #include "Robot.h"
 #include "basegroups.h"
 #include <MessageLogger.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <cassert>
 
 using namespace xero::misc ;
@@ -45,6 +46,9 @@ namespace xero {
                 sub->run() ;
             }
             
+            std::string str ;
+            if (action_ != nullptr && action_->isDone())
+                str = action_->toString() ;
             if (action_ != nullptr && !action_->isDone()) {
                 action_->run();
             } else if (!isRunningDefaultAction_) {
@@ -55,7 +59,9 @@ namespace xero {
         
         void Subsystem::computeState() {
             for(auto sub: children_)
-                sub->computeState() ;     
+                sub->computeState() ;   
+
+            frc::SmartDashboard::PutBoolean(name_, isBusy()) ;
         }
 
         void Subsystem::cancelAction() {

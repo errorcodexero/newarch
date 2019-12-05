@@ -1,5 +1,6 @@
 #include "XeroEncoder.h"
 #include <xeromath.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::misc;
 
@@ -15,6 +16,7 @@ namespace xero {
         XeroEncoder::XeroEncoder(MessageLogger &logger, SettingsParser &parser, const std::string &configName, bool angular) {
             angular_ = angular;
             
+            name_ = configName ;
             std::string quadName = configName + ":quad";
             std::shared_ptr<frc::Encoder> quad;
             if (parser.isDefined(quadName + ":1") || parser.isDefined(quadName + ":2")) {
@@ -76,7 +78,13 @@ namespace xero {
 
         double XeroEncoder::getAbsolutePosition() {
             double pos;
-            if (analog_) pos = analog_->GetVoltage();
+            if (analog_)
+            {
+                pos = analog_->GetVoltage();
+                if (special_case_fix_me_ && pos < 1.0)
+                    pos += 5.0 ;
+                frc::SmartDashboard::PutNumber(name_, pos) ;
+            }
             else if (pwm_) pos = pwm_->GetPeriod();
             else assert(0 == "no absolute encoder found");
             double result = absM_*pos + absB_;

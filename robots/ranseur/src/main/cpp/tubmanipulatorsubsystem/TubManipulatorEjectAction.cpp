@@ -30,16 +30,29 @@ namespace xero {
             /// Arm ///
             v = tubm.getRobot().getSettingsParser().getDouble("tubarm:eject:pos") ;
             act = std::make_shared<MotorEncoderGoToAction>(*arm, v) ;
-            par->addSubActionPair(arm, act) ;                   /// add arm into parallel action
+            par->addSubActionPair(arm, act, true) ;                   /// add arm into parallel action
 
             /// Wrist ///
             v =tubm.getRobot().getSettingsParser().getDouble("tubwrist:eject:pos") ;
             act = std::make_shared<MotorEncoderGoToAction>(*wrist, v) ;
-            par->addSubActionPair(wrist, act) ;                 /// add wrist into parallel action
+            par->addSubActionPair(wrist, act, true) ;                 /// add wrist into parallel action
 
             /// Collector ///
             act = std::make_shared<TubCollectorEjectTubAction>(*collector, "tubcollector:eject:speed", "tubcollector:eject:delay") ;
-            seq_.pushSubActionPair(collector, act) ;              /// add collector into sequence action
+            seq_.pushSubActionPair(collector, act, true) ;              /// add collector into sequence action
+
+            par = std::make_shared<ParallelAction>() ; //parallel action
+            seq_.pushAction(par) ;                          // put above par_ into the sequence
+
+            /// Arm ///
+            v = tubm.getRobot().getSettingsParser().getDouble("tubarm:eject:finish") ;
+            act = std::make_shared<MotorEncoderGoToAction>(*arm, v) ;
+            par->addSubActionPair(arm, act) ;                   /// add arm into parallel action
+
+            /// Wrist ///
+            v =tubm.getRobot().getSettingsParser().getDouble("tubwrist:eject:finish") ;
+            act = std::make_shared<MotorEncoderGoToAction>(*wrist, v) ;
+            par->addSubActionPair(wrist, act) ;                 /// add wrist into parallel action
         }
 
         TubManipulatorEjectAction::~TubManipulatorEjectAction() {            

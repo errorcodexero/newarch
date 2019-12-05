@@ -25,15 +25,11 @@ namespace xero {
 
             void setIntakePower(double pow) {
                 intake1_->set(pow) ;
-                intake2_->set(-pow) ;
+                intake2_->set(pow) ;
             }
 
             bool hasTub() {
                 return has_tub_ ;
-            }
-
-            bool collectedTub() {
-                return collected_tub_ ;
             }
 
             void openHand() {

@@ -26,7 +26,7 @@ hw:tubmanipulator:arm:encoder           1                               # Analog
 hw:tubmanipulator:wrist:motor           7                               # VictorSPX
 hw:tubmanipulator:wrist:encoder         0                               # Analog IO
 hw:tubmanipulator:collector:solenoid    0                               # Solenoid
-hw:tubmanipulator:collector:sensor      4                               # Digital Input
+hw:tubmanipulator:collector:sensor      9                               # Digital Input
 hw:tubmanipulator:collector:motor       6                               # VictorSPX
 
 ######################################################################################

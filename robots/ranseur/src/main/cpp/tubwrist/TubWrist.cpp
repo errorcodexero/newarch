@@ -12,8 +12,9 @@ using namespace xero::misc ;
 namespace xero {
     namespace ranseur {
       
-    TubWrist::TubWrist(Subsystem *parent) : MotorEncoderSubsystem(parent, "tubwrist", "tubwrist", MSG_GROUP_TUBWRIST, true) {
+    TubWrist::TubWrist(Subsystem *parent) : MotorEncoderSubsystem(parent, "tubwrist", "tubwrist", MSG_GROUP_TUBWRIST) {
             setSmartDashboardName("TubWrist") ;
+            setSpecialCaseFixMe() ;
         }
 
         TubWrist::~TubWrist() {

@@ -20,16 +20,19 @@ namespace xero {
             auto collector = tubm.getTubCollector() ;
             auto arm = tubm.getTubArm() ;
             auto wrist = tubm.getTubWrist() ;
+            auto seq = std::make_shared<SequenceAction>(tubm.getRobot().getMessageLogger()) ;
 
             ///Arm/// 
             v = tubm.getRobot().getSettingsParser().getDouble("tubarm:dump:pos") ;
             act = std::make_shared<MotorEncoderGoToAction>(*arm, v) ;
-            parallel_.addSubActionPair(arm, act) ;
+            seq->pushSubActionPair(arm, act) ;
 
             ///Wrist///
             v = tubm.getRobot().getSettingsParser().getDouble("tubwrist:dump:pos") ;
             act = std::make_shared<MotorEncoderGoToAction>(*wrist, v) ;
-            parallel_.addSubActionPair(wrist, act) ;
+            seq->pushSubActionPair(wrist, act) ;
+
+            parallel_.addAction(seq) ;
             
             /// ^^^ grab the angle values from the dat files ^^^
             ///add the action and the subsytem to the parallel action

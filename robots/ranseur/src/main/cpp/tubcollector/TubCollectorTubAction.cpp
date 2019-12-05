@@ -18,7 +18,6 @@ namespace xero {
         TubCollectorTubAction::~TubCollectorTubAction() {            
         }
         
-
         void TubCollectorTubAction::start() {
             getTubCollector().openHand() ;
             state_ = State::motors_on ;

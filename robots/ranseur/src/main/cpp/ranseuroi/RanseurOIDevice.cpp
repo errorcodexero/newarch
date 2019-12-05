@@ -16,6 +16,7 @@
 #include <tubmanipulatorsubsystem/TubManipulatorEjectAction.h>
 #include <ranseurrobotsubsystem/RanseurRobotTurtleAction.h>
 #include <tubtoucher/TubToucherDeployAction.h>
+#include <bunnyarm/BunnyArmDeployAction.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -56,6 +57,8 @@ namespace xero {
             size_t eject_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:eject") ;
             size_t tubtoucher_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:tubtoucher") ;
             size_t spare2_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:spare2") ;
+            size_t bunny_arm_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:bunnyarm") ;
+            size_t tub_touchers_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:tubtouchers") ;
 
             //
             // Actions
@@ -66,7 +69,9 @@ namespace xero {
             eject_ = mapButton(eject_b, OIButton::ButtonType::LowToHigh) ;            // Push button
             tubtoucher_ = mapButton(tubtoucher_b, OIButton::ButtonType::LowToHigh) ;  // Push button
             spare2_ = mapButton(spare2_b, OIButton::ButtonType::LowToHigh) ;          // Push button
-            
+            bunny_arm_ = mapButton(bunny_arm_b, OIButton::ButtonType::Level) ;        // Toggle switch
+            tub_touchers_ = mapButton(tub_touchers_b, OIButton::ButtonType::LevelInv) ;        // Toggle switch
+
 #ifndef RANSEUR_OLD_OI
             automode1_ = mapButton(automode1_b, OIButton::ButtonType::LevelInv) ;        // toggle switch 
             automode2_ = mapButton(automode2_b, OIButton::ButtonType::LevelInv) ;        // toggle switch
@@ -103,30 +108,37 @@ namespace xero {
             auto tubmanipulatorsubsytem = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem() ;
             auto ranseurrobotsubsystem = ranseur.getRanseurRobotSubsystem() ;
 
-            //bool ret = false ;
-            MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
-            log.startMessage(MessageLogger::MessageType::error) ;
-        
             //actions and buttons corresponding with the actions
             //actions found on wiki under tub manipulator subsystem under ranseur (robot)
             /// Actioning! ///
-            if(getValue(collect_)) { 
-                log << "Collect" ;
-                //seq.pushSubActionPair(tubmanipulatorsubsytem, sequence_, false) ;
+            if(getValue(collect_) && !tubmanipulatorsubsytem->isBusy()) { 
+                seq.pushSubActionPair(tubmanipulatorsubsytem, sequence_, false) ;
             }
-            if(getValue(dump_)) {
-                log << "Dump" ;
-                //seq.pushSubActionPair(tubmanipulatorsubsytem, dumping_, false) ;
+            if(getValue(dump_) && !tubmanipulatorsubsytem->isBusy()) {
+                seq.pushSubActionPair(tubmanipulatorsubsytem, dumping_, false) ;
             }
-            if(getValue(turtle_)) {
-                log << "Turtle" ;
-                //seq.pushSubActionPair(ranseurrobotsubsystem, turtling_, false) ;
+            if(getValue(turtle_) && !tubmanipulatorsubsytem->isBusy()) {
+                seq.pushSubActionPair(ranseurrobotsubsystem, turtling_, false) ;
             }
-            if(getValue(eject_)) {
-                log << "Eject" ;
-                //seq.pushSubActionPair(tubmanipulatorsubsytem, ejecting_, false) ;
+            if(getValue(eject_) && !tubmanipulatorsubsytem->isBusy()) {
+                seq.pushSubActionPair(tubmanipulatorsubsytem, ejecting_, false) ;
             } 
-            log.endMessage() ;
+
+            if (getValue(bunny_arm_) != bunnyarm->isDeployed())
+            {
+                if (getValue(bunny_arm_))
+                    seq.pushSubActionPair(bunnyarm, bunny_arm_deploy_) ;
+                else
+                    seq.pushSubActionPair(bunnyarm, bunny_arm_retract_) ;
+            }
+
+            if (getValue(tub_touchers_) != tubtoucher->isDeployed())
+            {
+                if (getValue(tub_touchers_))
+                    seq.pushSubActionPair(tubtoucher, tub_touchers_deploy_) ;
+                else
+                    seq.pushSubActionPair(tubtoucher, tub_touchers_retract_) ;
+            }            
         }
 
         //
@@ -149,7 +161,10 @@ namespace xero {
             auto tubmanipulatorsubsytem = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem() ;
             auto ranseurrobotsubsystem = ranseur.getRanseurRobotSubsystem() ;
             
-#ifdef NOTYET
+            bunny_arm_deploy_ = std::make_shared<BunnyArmDeployAction>(*bunnyarm, true) ;
+            bunny_arm_retract_ = std::make_shared<BunnyArmDeployAction>(*bunnyarm, false) ;            
+            tub_touchers_deploy_ = std::make_shared<TubToucherDeployAction>(*tubtoucher, true) ;
+            tub_touchers_retract_ = std::make_shared<TubToucherDeployAction>(*tubtoucher, false) ;                
             collecting_ = std::make_shared<TubManipulatorCollectAction>(*tubmanipulatorsubsytem) ;
             dumping_ = std::make_shared<TubManipulatorDumpAction>(*tubmanipulatorsubsytem) ;
             turtling_ = std::make_shared<RanseurRobotTurtleAction>(*ranseurrobotsubsystem) ;
@@ -159,7 +174,6 @@ namespace xero {
             sequence_->pushAction(collecting_) ;
             sequence_->pushAction(dumping_) ;
             sequence_->pushAction(ejecting_) ;            
-#endif
         }
     }
 }

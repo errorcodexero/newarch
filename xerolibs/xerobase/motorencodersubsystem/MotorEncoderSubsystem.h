@@ -34,6 +34,10 @@ namespace xero {
 
             double getPosition() { return speedometer_.getDistance(); }
 
+            void setSpecialCaseFixMe() {
+                encoder_->setSpecialCaseFixMe() ;
+            }
+
             xero::misc::Speedometer &getSpeedometer() { return speedometer_; }
             bool isAngular() { return encoder_->isAngular(); }
 
