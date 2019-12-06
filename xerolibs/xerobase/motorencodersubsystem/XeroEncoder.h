@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 #include <string>
 #include <memory>
 
@@ -41,6 +42,29 @@ namespace xero {
             ///     configName:pwm:m         100   # M constant\n 
             ///     configName:pwm:b         10    # B constant\n 
             /// @endcode
+            ///
+            /// Absolute encoders may optionally be configured to compensate for wrapping.
+            /// This is done with two parameters, :start and :wrap. These parameters are
+            /// specified in raw encoder units and take effect before the m and b parameters 
+            /// are applied. :offset specifies the offset by which incoming hardware values 
+            /// are shifted, and :wrap defines the point around which they wrap.
+            /// In equation form: hw_value = (hw_value - start) % wrap.
+            /// @code
+            /// Input:
+            ///   2.5           5 0           2.5
+            ///    |=============|=============|
+            /// :offset        :wrap        :offset
+            ///
+            /// Output:
+            ///    0            2.5            5
+            ///    |=============|=============|
+            /// @endcode
+            ///
+            /// Before the m and b constants are applied, :offset is added to the raw hardware value,
+            /// and the result is modded by :wrap (hw_value = (hw_value + offset) % wrap).
+            /// (in raw encoder units). If :min is declared, :max must also be declared (and vice versa).
+            /// If a range is specified, the output from the encoder will wrap such that
+            /// min <= encoderValue < max.
             ///
             /// A quadrature encoder may optionally be calibrated by an analog encoder XOR a PWM encoder.
             /// For each type of encoder, the output position is calculated by reading the value 
@@ -181,11 +205,6 @@ namespace xero {
                 assert(analog_ || pwm_);
                 absB_ = b;
             }
-
-            void setSpecialCaseFixMe()
-            {
-                special_case_fix_me_ = true ;
-            }
         private:
             bool angular_;
 
@@ -198,9 +217,16 @@ namespace xero {
             double absM_ = 1;
             double absB_ = 0;
 
+            // The start of the absolute encoder's range
+            // (i.e. the hardware position corresponding to zero).
+            double absOffset_ = 0;
+
+            // The wrap point of the absolute encoder
+            // (i.e. the maximum value output by the hardware).
+            double absWrap_ = INFINITY;
+
             std::string name_ ;
 
-            bool special_case_fix_me_ ;
         };
     }
 }
