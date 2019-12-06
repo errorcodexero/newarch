@@ -8,6 +8,10 @@ fi
 rootdir=$(git rev-parse --show-toplevel)
 cd $rootdir
 
+if [ ! -e logs ]; then
+    mkdir -p logs
+fi
+
 if [ $# -lt 2 ]; then
     echo Expected at least two arguments, the name of the robot and the mode
     echo An optional third argument can be the simulator event file
