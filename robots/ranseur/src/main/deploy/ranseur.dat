@@ -30,13 +30,13 @@ hw:tubarm:motor:type                                            "victor_spx"
 hw:tubarm:motor:invert                                          true
 hw:tubarm:encoder:analog                                        1
 hw:tubarm:encoder:analog:m                                      -72
-hw:tubarm:encoder:analog:b                                      295.92
+hw:tubarm:encoder:analog:b                                      302.0
 
 hw:tubwrist:motor:canid                                         7
 hw:tubwrist:motor:type                                          "victor_spx"
 hw:tubwrist:encoder:analog                                      0
 hw:tubwrist:encoder:analog:m                                    71.5
-hw:tubwrist:encoder:analog:b                                    -168
+hw:tubwrist:encoder:analog:b                                    -212
 
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2
@@ -51,8 +51,8 @@ hw:tankdrive:motors:left:3:type                                 "sparkmax_brushl
 hw:tankdrive:motors:right:1:type                                "sparkmax_brushless"
 hw:tankdrive:motors:right:2:type                                "sparkmax_brushless"
 hw:tankdrive:motors:right:3:type                                "sparkmax_brushless"
-hw:tankdrive:leftencoder:1                                      4                            # Digital IO
-hw:tankdrive:leftencoder:2                                      5                            # Digital IO
+hw:tankdrive:leftencoder:1                                      5                            # Digital IO
+hw:tankdrive:leftencoder:2                                      4                            # Digital IO
 hw:tankdrive:rightencoder:1                                     6                            # Digital IO
 hw:tankdrive:rightencoder:2                                     7                            # Digital IO
 
@@ -91,13 +91,13 @@ tankdrive:inches_per_tick                                       0.031024151
 tankdrive:width                                                 30.0
 tankdrive:scrub                                                 1.0
 
-tankdrive:follower:left:kv1                                     192.0
+tankdrive:follower:left:kv1                                     210.0
 tankdrive:follower:left:kv2                                     0.0
 tankdrive:follower:left:ka                                      0.0
 tankdrive:follower:left:kp                                      0.0             # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kd                                      0.0
 
-tankdrive:follower:right:kv1                                    192.0
+tankdrive:follower:right:kv1                                    210.0
 tankdrive:follower:right:kv2                                    0.0
 tankdrive:follower:right:ka                                     0.0
 tankdrive:follower:right:kp                                     0.0                # Recommended 0.02032 - 0.03048

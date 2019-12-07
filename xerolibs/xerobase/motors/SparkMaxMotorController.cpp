@@ -10,6 +10,7 @@ namespace xero {
                 else type = rev::CANSparkMaxLowLevel::MotorType::kBrushed;
 
                 motor_ = std::make_shared<rev::CANSparkMax>(id, type);
+                motor_->SetSmartCurrentLimit(40) ;
 
                 // TODO: is this correct? any other setup?
                 motor_->EnableVoltageCompensation(12.0) ;

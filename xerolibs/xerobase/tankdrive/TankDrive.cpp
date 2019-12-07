@@ -27,23 +27,18 @@ namespace xero {
             last_dist_l_ = 0.0 ;
             last_dist_r_ = 0.0 ;
 
-#ifdef USE_NAVX
-#ifdef GOPIGO       
-            navx_ = std::make_shared<AHRS>(frc::SerialPort::Port::kUSB) ;  
-#else
             navx_ = std::make_shared<AHRS>(frc::SPI::Port::kMXP) ; 
-#endif
             if (!navx_->IsConnected()) {  
                 auto &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::error) ;
                 logger << "NavX is not connected - cannot perform tankdrive auto functions" ;
                 logger .endMessage() ;
-                navx_ = nullptr ;
+                // navx_ = nullptr ;
             }
             else {
                 navx_->Reset() ;
             }   
-#endif
+
             SettingsParser &settings = robot.getSettingsParser();
             double width = settings.getDouble("tankdrive:width") ;
             double scrub = settings.getDouble("tankdrive:scrub") ;
@@ -65,8 +60,16 @@ namespace xero {
         void TankDrive::init(LoopType ltype) {
             Subsystem::init(ltype) ;
 
-            left_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
-            right_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
+            if (ltype == LoopType::Autonomous)
+            {
+                left_motors_->setNeutralMode(MotorController::NeutralMode::Brake);
+                right_motors_->setNeutralMode(MotorController::NeutralMode::Brake);
+            }
+            else
+            {
+                left_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
+                right_motors_->setNeutralMode(MotorController::NeutralMode::Coast);                
+            }
         }
         
         void TankDrive::lowGear() {
@@ -152,13 +155,12 @@ namespace xero {
                 dist_r_ = ticks_right_ * right_inches_per_tick_ ;
             }
 
-#ifdef USE_NAVX
             if (navx_ != nullptr) {
                 angle = -navx_->GetYaw() ;
                 angular_.update(getRobot().getDeltaTime(), angle) ;
-                total_angle_ = navx_->GetAngle() ;
+                total_angle_ = navx_->GetAngle() ;    
             }
-#endif
+
             left_linear_.update(getRobot().getDeltaTime(), getLeftDistance()) ;
             right_linear_.update(getRobot().getDeltaTime(), getRightDistance()) ;
 
