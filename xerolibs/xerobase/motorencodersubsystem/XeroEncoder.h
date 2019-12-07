@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 
+#include <Robot.h>
 #include <SettingsParser.h>
 #include <MessageLogger.h>
 #include <frc/Encoder.h>
@@ -73,14 +74,12 @@ namespace xero {
             /// the class.\n 
             /// This class supports calibration is the act of ensuring that the position returned from the
             /// encoder matches the position of the mechanism being monitored on the robot.  Calibration 
-            /// @param logger The message logger.
-            /// @param settings The settings parser.
+            /// @param logger The robot.
             /// @param configName The name of the encoder in the configuration file.
             /// @param angular true if the encoder is angular
-            XeroEncoder(xero::misc::MessageLogger &logger,
-                    xero::misc::SettingsParser &settings, 
-                    const std::string &configName,
-                    bool angular = false
+            XeroEncoder(Robot &robot, 
+                        const std::string &configName,
+                        bool angular = false
             );
 
             /// @brief Creates a quadrature encoder.
@@ -88,26 +87,32 @@ namespace xero {
             /// values are normalized to be between -180 and +180 degrees.
             /// @param quadratureEncoder an FRC quadrature encoder object
             /// @param angular true if this encoder measures an angle
-            XeroEncoder(std::shared_ptr<frc::Encoder> quadratureEncoder, bool angular = false
-            ): angular_(angular), quad_(quadratureEncoder) {}
+            XeroEncoder(Robot &robot,
+                        std::shared_ptr<frc::Encoder> quadratureEncoder, bool angular = false
+            ): robot_(robot), angular_(angular), quad_(quadratureEncoder) {}
 
             /// Creates an analog encoder, or a quadrature encoder calibrated by an analog encoder.
             /// @param analogEncoder The analog input to which the encoder is connected.
             /// @param quadratureEncoder The quadrature encoder object, or \c nullptr to use just an analog encoder.
             /// @param angular true if this encoder measures an angle
-            XeroEncoder(std::shared_ptr<frc::AnalogInput> analogEncoder,
+            XeroEncoder(Robot &robot,
+                        std::shared_ptr<frc::AnalogInput> analogEncoder,
                         std::shared_ptr<frc::Encoder>     quadratureEncoder = nullptr,
                         bool angular = false
-            ): angular_(angular), quad_(quadratureEncoder), analog_(analogEncoder) {}
+            ):  robot_(robot), angular_(angular), 
+                quad_(quadratureEncoder), analog_(analogEncoder) {}
 
             /// Creates a PWM encoder, or a quadrature encoder calibrated by a PWM encoder.
             /// @param quadratureEncoder The quadrature encoder object, or \c nullptr to use just a PWM encoder.
             /// @param pwmEncoder A \c Counter measuring the signal from the PWM encoder.
             /// @param angular true if this encoder measures an angle
-            XeroEncoder(std::shared_ptr<frc::Counter> pwmEncoder,
+            XeroEncoder(Robot &robot,
+                        std::shared_ptr<frc::Counter> pwmEncoder,
                         std::shared_ptr<frc::Encoder> quadratureEncoder = nullptr,
                         bool angular = false
-            ): angular_(angular), quad_(quadratureEncoder), pwm_(pwmEncoder) { pwm_->SetSemiPeriodMode(true); }
+            ):  robot_(robot), angular_(angular), 
+                quad_(quadratureEncoder), pwm_(pwmEncoder) 
+                { pwm_->SetSemiPeriodMode(true); }
 
             /// @brief Returns true if this is measuring an angle
             /// @returns true if this is measuring an angle
@@ -206,6 +211,8 @@ namespace xero {
                 absB_ = b;
             }
         private:
+            Robot &robot_;
+
             bool angular_;
 
             std::shared_ptr<frc::Encoder> quad_;    // A quadrature encoder, or nullptr.
@@ -226,7 +233,6 @@ namespace xero {
             double absWrap_ = INFINITY;
 
             std::string name_ ;
-
         };
     }
 }

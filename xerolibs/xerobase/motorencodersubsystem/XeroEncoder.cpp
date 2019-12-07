@@ -13,7 +13,10 @@ namespace xero {
             assert(0);
         }
 
-        XeroEncoder::XeroEncoder(MessageLogger &logger, SettingsParser &parser, const std::string &configName, bool angular) {
+        XeroEncoder::XeroEncoder(Robot &robot, const std::string &configName, bool angular): robot_(robot) {
+            auto &logger = robot.getMessageLogger();
+            auto &parser = robot.getSettingsParser();
+
             angular_ = angular;
             
             name_ = configName ;
@@ -87,7 +90,9 @@ namespace xero {
             if (analog_) pos = analog_->GetVoltage();
             else if (pwm_) pos = pwm_->GetPeriod();
             else assert(0 == "no absolute encoder found");
-            frc::SmartDashboard::PutNumber(name_, pos) ;
+
+            // If the robot is disabled, output the raw hardware value for characterization
+            if (robot_.IsDisabled()) frc::SmartDashboard::PutNumber(name_, pos) ;
 
             // Compensate for encoder wrapping.
             pos = fmod(pos - absOffset_, absWrap_);
