@@ -13,7 +13,10 @@ namespace xero {
             assert(0);
         }
 
-        XeroEncoder::XeroEncoder(MessageLogger &logger, SettingsParser &parser, const std::string &configName, bool angular) {
+        XeroEncoder::XeroEncoder(Robot &robot, const std::string &configName, bool angular): robot_(robot) {
+            auto &logger = robot.getMessageLogger();
+            auto &parser = robot.getSettingsParser();
+
             angular_ = angular;
             
             name_ = configName ;
@@ -46,6 +49,9 @@ namespace xero {
 
                 if (parser.isDefined(analogName + ":b")) absB_ = parser.getDouble(analogName + ":b");
                 else invalidEncoder(logger, analogName, "b parameter is required");
+
+                if (parser.isDefined(analogName + ":offset")) absOffset_ = parser.getDouble(analogName + ":offset");
+                if (parser.isDefined(analogName + ":wrap"))   absWrap_ = parser.getDouble(analogName + ":wrap");
             } else analog_ = nullptr;
 
             std::string pwmName = configName + ":pwm";
@@ -59,6 +65,9 @@ namespace xero {
 
                 if (parser.isDefined(pwmName + ":b")) absB_ = parser.getDouble(pwmName + ":b");
                 else invalidEncoder(logger, pwmName, "b parameter is required");
+
+                if (parser.isDefined(pwmName + ":offset")) absOffset_ = parser.getDouble(pwmName + ":offset");
+                if (parser.isDefined(pwmName + ":wrap"))   absWrap_ = parser.getDouble(pwmName + ":wrap");
             } else pwm_ = nullptr;
 
             // validate configuration
@@ -78,15 +87,20 @@ namespace xero {
 
         double XeroEncoder::getAbsolutePosition() {
             double pos;
-            if (analog_)
-            {
-                pos = analog_->GetVoltage();
-                if (special_case_fix_me_ && pos < 1.0)
-                    pos += 5.0 ;
-                frc::SmartDashboard::PutNumber(name_, pos) ;
-            }
+            if (analog_) pos = analog_->GetVoltage();
             else if (pwm_) pos = pwm_->GetPeriod();
             else assert(0 == "no absolute encoder found");
+
+            // If the robot is disabled, output the raw hardware value for characterization
+            if (robot_.IsDisabled()) frc::SmartDashboard::PutNumber(name_, pos) ;
+
+            // Compensate for encoder wrapping.
+            pos = fmod(pos - absOffset_, absWrap_);
+
+            // fmod will return a negative result if the numerator
+            // is negative, so handle that case.
+            if (pos < 0 && std::isfinite(absWrap_)) pos += absWrap_;
+
             double result = absM_*pos + absB_;
             if (angular_) return xero::math::normalizeAngleDegrees(result);
             else return result;

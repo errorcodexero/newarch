@@ -36,7 +36,9 @@ hw:tubwrist:motor:canid                                         7
 hw:tubwrist:motor:type                                          "victor_spx"
 hw:tubwrist:encoder:analog                                      0
 hw:tubwrist:encoder:analog:m                                    71.5
-hw:tubwrist:encoder:analog:b                                    -168
+hw:tubwrist:encoder:analog:b                                    -96.5
+hw:tubwrist:encoder:analog:offset                               1.0
+hw:tubwrist:encoder:analog:wrap                                 5.0
 
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2

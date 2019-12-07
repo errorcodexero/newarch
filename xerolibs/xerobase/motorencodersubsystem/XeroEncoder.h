@@ -1,7 +1,9 @@
 #pragma once
+#include <cmath>
 #include <string>
 #include <memory>
 
+#include <Robot.h>
 #include <SettingsParser.h>
 #include <MessageLogger.h>
 #include <frc/Encoder.h>
@@ -42,6 +44,29 @@ namespace xero {
             ///     configName:pwm:b         10    # B constant\n 
             /// @endcode
             ///
+            /// Absolute encoders may optionally be configured to compensate for wrapping.
+            /// This is done with two parameters, :start and :wrap. These parameters are
+            /// specified in raw encoder units and take effect before the m and b parameters 
+            /// are applied. :offset specifies the offset by which incoming hardware values 
+            /// are shifted, and :wrap defines the point around which they wrap.
+            /// In equation form: hw_value = (hw_value - start) % wrap.
+            /// @code
+            /// Input:
+            ///   2.5           5 0           2.5
+            ///    |=============|=============|
+            /// :offset        :wrap        :offset
+            ///
+            /// Output:
+            ///    0            2.5            5
+            ///    |=============|=============|
+            /// @endcode
+            ///
+            /// Before the m and b constants are applied, :offset is added to the raw hardware value,
+            /// and the result is modded by :wrap (hw_value = (hw_value + offset) % wrap).
+            /// (in raw encoder units). If :min is declared, :max must also be declared (and vice versa).
+            /// If a range is specified, the output from the encoder will wrap such that
+            /// min <= encoderValue < max.
+            ///
             /// A quadrature encoder may optionally be calibrated by an analog encoder XOR a PWM encoder.
             /// For each type of encoder, the output position is calculated by reading the value 
             /// from the encoder and applying a linear function (Y = MX + B) to the value.  The M and B
@@ -49,41 +74,51 @@ namespace xero {
             /// the class.\n 
             /// This class supports calibration is the act of ensuring that the position returned from the
             /// encoder matches the position of the mechanism being monitored on the robot.  Calibration 
-            /// @param logger The message logger.
-            /// @param settings The settings parser.
+            /// @param logger The robot.
             /// @param configName The name of the encoder in the configuration file.
             /// @param angular true if the encoder is angular
-            XeroEncoder(xero::misc::MessageLogger &logger,
-                    xero::misc::SettingsParser &settings, 
-                    const std::string &configName,
-                    bool angular = false
+            XeroEncoder(Robot &robot, 
+                        const std::string &configName,
+                        bool angular = false
             );
 
             /// @brief Creates a quadrature encoder.
             /// If angular is true, it is assumed the position is in degrees and the
             /// values are normalized to be between -180 and +180 degrees.
+            /// @param robot The robot.
+            /// @param name The name of the encoder (displayed on the smart dashboard for characterization)
             /// @param quadratureEncoder an FRC quadrature encoder object
             /// @param angular true if this encoder measures an angle
-            XeroEncoder(std::shared_ptr<frc::Encoder> quadratureEncoder, bool angular = false
-            ): angular_(angular), quad_(quadratureEncoder) {}
+            XeroEncoder(Robot &robot, std::string name,
+                        std::shared_ptr<frc::Encoder> quadratureEncoder, bool angular = false
+            ): robot_(robot), name_(name), angular_(angular), quad_(quadratureEncoder) {}
 
             /// Creates an analog encoder, or a quadrature encoder calibrated by an analog encoder.
+            /// @param robot The robot.
+            /// @param name The name of the encoder (displayed on the smart dashboard for characterization)
             /// @param analogEncoder The analog input to which the encoder is connected.
             /// @param quadratureEncoder The quadrature encoder object, or \c nullptr to use just an analog encoder.
             /// @param angular true if this encoder measures an angle
-            XeroEncoder(std::shared_ptr<frc::AnalogInput> analogEncoder,
+            XeroEncoder(Robot &robot, std::string name,
+                        std::shared_ptr<frc::AnalogInput> analogEncoder,
                         std::shared_ptr<frc::Encoder>     quadratureEncoder = nullptr,
                         bool angular = false
-            ): angular_(angular), quad_(quadratureEncoder), analog_(analogEncoder) {}
+            ):  robot_(robot), name_(name),
+                angular_(angular), quad_(quadratureEncoder), analog_(analogEncoder) {}
 
             /// Creates a PWM encoder, or a quadrature encoder calibrated by a PWM encoder.
+            /// @param robot The robot.
+            /// @param name The name of the encoder (displayed on the smart dashboard for characterization)
             /// @param quadratureEncoder The quadrature encoder object, or \c nullptr to use just a PWM encoder.
             /// @param pwmEncoder A \c Counter measuring the signal from the PWM encoder.
             /// @param angular true if this encoder measures an angle
-            XeroEncoder(std::shared_ptr<frc::Counter> pwmEncoder,
+            XeroEncoder(Robot &robot, std::string name,
+                        std::shared_ptr<frc::Counter> pwmEncoder,
                         std::shared_ptr<frc::Encoder> quadratureEncoder = nullptr,
                         bool angular = false
-            ): angular_(angular), quad_(quadratureEncoder), pwm_(pwmEncoder) { pwm_->SetSemiPeriodMode(true); }
+            ):  robot_(robot), name_(name), 
+                angular_(angular), quad_(quadratureEncoder), pwm_(pwmEncoder) 
+                { pwm_->SetSemiPeriodMode(true); }
 
             /// @brief Returns true if this is measuring an angle
             /// @returns true if this is measuring an angle
@@ -181,12 +216,11 @@ namespace xero {
                 assert(analog_ || pwm_);
                 absB_ = b;
             }
-
-            void setSpecialCaseFixMe()
-            {
-                special_case_fix_me_ = true ;
-            }
         private:
+            Robot &robot_;
+
+            std::string name_ ;
+
             bool angular_;
 
             std::shared_ptr<frc::Encoder> quad_;    // A quadrature encoder, or nullptr.
@@ -198,9 +232,13 @@ namespace xero {
             double absM_ = 1;
             double absB_ = 0;
 
-            std::string name_ ;
+            // The start of the absolute encoder's range
+            // (i.e. the hardware position corresponding to zero).
+            double absOffset_ = 0;
 
-            bool special_case_fix_me_ ;
+            // The wrap point of the absolute encoder
+            // (i.e. the maximum value output by the hardware).
+            double absWrap_ = INFINITY;
         };
     }
 }
