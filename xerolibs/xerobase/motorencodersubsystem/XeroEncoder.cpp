@@ -50,8 +50,14 @@ namespace xero {
                 if (parser.isDefined(analogName + ":b")) absB_ = parser.getDouble(analogName + ":b");
                 else invalidEncoder(logger, analogName, "b parameter is required");
 
-                if (parser.isDefined(analogName + ":offset")) absOffset_ = parser.getDouble(analogName + ":offset");
-                if (parser.isDefined(analogName + ":wrap"))   absWrap_ = parser.getDouble(analogName + ":wrap");
+                bool offsetDefined = parser.isDefined(analogName + ":offset");
+                bool wrapDefined = parser.isDefined(analogName + ":wrap");
+                if (offsetDefined && wrapDefined) {
+                    absOffset_ = parser.getDouble(analogName + ":offset");
+                    absWrap_ = parser.getDouble(analogName + ":wrap");
+                } else if (offsetDefined || wrapDefined) {
+                    invalidEncoder(logger, analogName, ":offset and :wrap must be specified together");
+                }
             } else analog_ = nullptr;
 
             std::string pwmName = configName + ":pwm";
@@ -66,8 +72,14 @@ namespace xero {
                 if (parser.isDefined(pwmName + ":b")) absB_ = parser.getDouble(pwmName + ":b");
                 else invalidEncoder(logger, pwmName, "b parameter is required");
 
-                if (parser.isDefined(pwmName + ":offset")) absOffset_ = parser.getDouble(pwmName + ":offset");
-                if (parser.isDefined(pwmName + ":wrap"))   absWrap_ = parser.getDouble(pwmName + ":wrap");
+                bool offsetDefined = parser.isDefined(pwmName + ":offset");
+                bool wrapDefined = parser.isDefined(pwmName + ":wrap");
+                if (offsetDefined && wrapDefined) {
+                    absOffset_ = parser.getDouble(pwmName + ":offset");
+                    absWrap_ = parser.getDouble(pwmName + ":wrap");
+                } else if (offsetDefined || wrapDefined) {
+                    invalidEncoder(logger, analogName, ":offset and :wrap must be specified together");
+                }
             } else pwm_ = nullptr;
 
             // validate configuration
