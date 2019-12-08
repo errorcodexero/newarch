@@ -12,9 +12,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 180,
+                    "maxacceleration": 90,
                     "maxjerk": 1800,
-                    "maxvelocity": 180,
+                    "maxvelocity": 90,
                     "name": "PathToTub",
                     "points": [
                         {
@@ -24,7 +24,7 @@
                         },
                         {
                             "heading": 0,
-                            "x": 300,
+                            "x": 278,
                             "y": 180
                         }
                     ],

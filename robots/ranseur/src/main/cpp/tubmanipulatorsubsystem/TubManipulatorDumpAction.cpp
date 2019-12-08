@@ -3,6 +3,7 @@
 #include "TubManipulatorSubsystem.h"
 #include <actions/Action.h>
 #include <MessageLogger.h>
+#include <actions/DelayAction.h>
 #include <Robot.h>
 #include <motorencodersubsystem/MotorEncoderGoToAction.h>
 
@@ -21,16 +22,27 @@ namespace xero {
             auto arm = tubm.getTubArm() ;
             auto wrist = tubm.getTubWrist() ;
             auto seq = std::make_shared<SequenceAction>(tubm.getRobot().getMessageLogger()) ;
+            auto seqarm = std::make_shared<SequenceAction>(tubm.getRobot().getMessageLogger()) ;
+            auto seqwrist = std::make_shared<SequenceAction>(tubm.getRobot().getMessageLogger()) ;            
 
             ///Arm/// 
+            act = std::make_shared<DelayAction>(0.0) ;
+            seqarm->pushAction(act) ;
             v = tubm.getRobot().getSettingsParser().getDouble("tubarm:dump:pos") ;
             act = std::make_shared<MotorEncoderGoToAction>(*arm, v) ;
-            seq->pushSubActionPair(arm, act, true) ;
+            seqarm->pushSubActionPair(arm, act, true) ;
+            seq->pushAction(seqarm) ;
 
             ///Wrist///
+            act = std::make_shared<DelayAction>(0.0) ;
+            seqwrist->pushAction(act) ;
             v = tubm.getRobot().getSettingsParser().getDouble("tubwrist:dump:pos") ;
             act = std::make_shared<MotorEncoderGoToAction>(*wrist, v) ;
-            seq->pushSubActionPair(wrist, act, true) ;
+            seqwrist->pushSubActionPair(wrist, act, true) ;
+            seq->pushAction(seqwrist) ;
+
+            act = std::make_shared<DelayAction>(0.5) ;
+            seqwrist->pushAction(act) ;
 
             parallel_.addAction(seq) ;
             

@@ -1,6 +1,7 @@
 #include "RanseurLimeLight.h"
 #include "ranseurids.h"
 #include <Ranseur.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -15,7 +16,6 @@ namespace xero {
             camera_height_ = robot.getSettingsParser().getDouble("ranseurvision:camera_height") ;
             target_height_ = robot.getSettingsParser().getDouble("ranseurvision:target_height") ;
             distance_threshold_ = robot.getSettingsParser().getDouble("ranseurvision:distance_threshold") ;
-
         }
 
         RanseurLimeLight::~RanseurLimeLight() {            
@@ -33,8 +33,15 @@ namespace xero {
 
             double angle = xero::math::deg2rad(camera_angle_ + getTY()) ;
             if(isLimeLightPresent() && isTargetPresent()){
-                distance_ = (target_height_ - camera_height_)/tan(angle) ;
+                dist_angle_ = (target_height_ - camera_height_)/tan(angle) ;
             }
+
+            dist_area_ = 44.05 / std::sqrt(getTA()) ;
+
+            frc::SmartDashboard::PutNumber("AreaVisionDist", dist_area_) ;
+            frc::SmartDashboard::PutNumber("VisionDist", distance_) ;
+
+            distance_ = dist_area_ ;
         }
 
         bool RanseurLimeLight::shouldTerminate() {

@@ -28,6 +28,9 @@ namespace xero {
         private:
 
         private:
+            double dist_area_ ;
+            double dist_angle_ ;
+            double dist_area_constant_ ;
             double distance_ ;
             double distance_threshold_ ;
             double camera_angle_ ;

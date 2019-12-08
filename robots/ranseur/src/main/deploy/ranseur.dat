@@ -91,21 +91,18 @@ tankdrive:inches_per_tick                                       0.031024151
 tankdrive:width                                                 30.0
 tankdrive:scrub                                                 1.0
 
-tankdrive:follower:left:kv1                                     210.0
-tankdrive:follower:left:kv2                                     0.0
+tankdrive:follower:left:kv                                      0.0047619048
 tankdrive:follower:left:ka                                      0.0
-tankdrive:follower:left:kp                                      0.0             # Recommended 0.02032 - 0.03048
+tankdrive:follower:left:kp                                      0.031          # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kd                                      0.0
 
-tankdrive:follower:right:kv1                                    210.0
-tankdrive:follower:right:kv2                                    0.0
+tankdrive:follower:right:kv                                     0.0047619048
 tankdrive:follower:right:ka                                     0.0
-tankdrive:follower:right:kp                                     0.0                # Recommended 0.02032 - 0.03048
+tankdrive:follower:right:kp                                     0.031          # Recommended 0.02032 - 0.03048
 tankdrive:follower:right:kd                                     0.0
 
 tankdrive:follower:turn_correction                              0
-tankdrive:follower:angle_correction                             0.06
-
+tankdrive:follower:angle_correction                             -0.04
 
 ###################################################################################################
 # bunnyarm
@@ -142,16 +139,16 @@ tubwrist:goto:threshold                                         3.0       # With
 tubwrist:goto:maxd                                             -720.0       # maximum deceleration
 tubwrist:goto:maxa                                              720.0     # maximum acceleration
 tubwrist:goto:maxv                                              720.0     # maximum velocity
-tubwrist:follower:down:kp                                       0.04
+tubwrist:follower:down:kp                                       0.06
 tubwrist:follower:down:kd                                       0.0
 tubwrist:follower:down:kv                                       0.002757353
 tubwrist:follower:down:ka                                       0.0
-tubwrist:follower:up:kp                                         0.04
+tubwrist:follower:up:kp                                         0.06
 tubwrist:follower:up:kd                                         0.0
 tubwrist:follower:up:kv                                         0.002757353
 tubwrist:follower:up:ka                                         0.0
 tubwrist:collect:pos                                            10
-tubwrist:dump:pos                                               180
+tubwrist:dump:pos                                               210
 tubwrist:eject:pos                                              160
 tubwrist:eject:finish                                            90
 tubwrist:power                                                  0.2
@@ -194,9 +191,9 @@ tubarm:turtle:pos                                               90
 ###################################################################################################
 
 ranseurvision:distance_threshold                                60.0
-ranseurvision:camera_height                                     8.0
+ranseurvision:camera_height                                     20.0
 ranseurvision:camera_angle                                      0.0
-ranseurvision:target_height                                     4.0
+ranseurvision:target_height                                     3.5
 
 ###################################################################################################
 # drive by vision (simple P only control)

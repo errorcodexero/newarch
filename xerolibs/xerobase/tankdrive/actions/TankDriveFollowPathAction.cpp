@@ -27,9 +27,9 @@ namespace xero {
 
             std::string pname = "tankdrive:follower:";
             
-            left_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), pname + "left:kv1", pname + "left:kv2",
+            left_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), pname + "left:kv",
                                 pname + "left:ka", pname + "left:kp", pname + "left:kd") ;
-            right_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), pname + "right:kv1", pname + "left:kv2",
+            right_follower_ = std::make_shared<PIDACtrl>(db.getRobot().getSettingsParser(), pname + "right:kv", 
                                 pname + "right:ka", pname + "right:kp", pname + "right:kd") ;
 
             turn_correction_ = db.getRobot().getSettingsParser().getDouble("tankdrive:follower:turn_correction") ;
@@ -209,7 +209,10 @@ namespace xero {
             }
             index_++ ;     
             if (index_ == path_->size())
+            {
                 getTankDrive().endPlot(plot_id_) ;
+                setMotorsToPercents(0.0, 0.0) ;
+            }
         }
 
         bool TankDriveFollowPathAction::isDone() {
