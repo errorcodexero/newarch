@@ -14,7 +14,10 @@ namespace xero {
             led_mode_ = ledMode::Invalid ;
             cam_mode_ = camMode::Invalid ;
 
-            table_ = nt::NetworkTableInstance::GetDefault().GetTable("limelight");            
+            table_ = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+
+            camera_latency_ = getRobot().getSettingsParser().getDouble("limelight:camera_latency") ;
+            network_latency_ = getRobot().getSettingsParser().getDouble("limelight:network_latency") ;
         }
 
         LimeLight::~LimeLight()
@@ -37,6 +40,7 @@ namespace xero {
                         tx_ = table_->GetNumber("tx",0.0);
                         ty_ = table_->GetNumber("ty",0.0);
                         ta_ = table_->GetNumber("ta",0.0);
+                        total_latency_ = table_->GetNumber("tl", 10.0) + camera_latency_ + network_latency_ ;
                     }
                 }
                 else

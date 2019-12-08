@@ -39,15 +39,19 @@ namespace xero {
             bool isLimeLightPresent(){
                 return present_ ;
             }
+
             bool isTargetPresent(){
                 return tv_ ;
             }
+
             double getTX(){
                 return tx_ ;
             }
+
             double getTY(){
                 return ty_ ;
             }
+
             double getTA(){
                 return ta_ ;
             }
@@ -56,8 +60,15 @@ namespace xero {
                 return cam_mode_ ;
             }
 
-            ledMode getLEDMode(){
+            ledMode getLEDMode() {
                 return led_mode_ ;
+            }
+
+            double getLatency() {
+                //
+                // Convert to seconds since everything else is done in seconds
+                //
+                return total_latency_ / 1000.0 ;
             }
 
             static std::string toString();
@@ -83,6 +94,9 @@ namespace xero {
             bool tv_ ;
             double tx_ ; 
             double ty_ ;
+            double camera_latency_ ;
+            double network_latency_ ;
+            double total_latency_ ;
             bool present_ ;
         } ;
     }

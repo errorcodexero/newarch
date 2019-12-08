@@ -47,6 +47,8 @@ namespace xero {
             double profile_start_time_ ;
             double profile_start_dist_ ;
 
+            double camera_collector_distance_ ;
+
             static std::vector<std::string> cols_ ;  
         } ;
     }
