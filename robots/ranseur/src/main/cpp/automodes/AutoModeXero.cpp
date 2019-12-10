@@ -11,6 +11,7 @@
 #include <tubmanipulatorsubsystem/TubManipulatorCollectAction.h>
 #include <tubmanipulatorsubsystem/TubManipulatorDumpAction.h>
 #include <tankdrive/actions/TankDriveFollowPathAction.h>
+#include <motorencodersubsystem/MotorEncoderGoToAction.h>
 #include <actions/DelayAction.h>
 #include <actions/SequenceAction.h>
 #include <actions/TerminateAction.h>
@@ -58,9 +59,10 @@ namespace xero
             sequence->pushAction(std::make_shared<BunnyArmDeployAction>(*bunnyarm, false)) ;
             sequence->pushAction(std::make_shared<DelayAction>(0.0)) ;
             sequence->pushAction(std::make_shared<TubManipulatorCollectAction>(*tubmanipulatorsubsytem)) ;
-            sequence->pushAction(std::make_shared<TubManipulatorDumpAction>(*tubmanipulatorsubsytem)) ; 
+            sequence->pushAction(std::make_shared<TubManipulatorDumpAction>(*tubmanipulatorsubsytem)) ;
+            sequence->pushAction(std::make_shared<MotorEncoderGoToAction>(*tubarm, 90.0)) ;
+            sequence->pushAction(std::make_shared<MotorEncoderGoToAction>(*tubwrist, 90.0)) ;            
             sequence->pushAction(std::make_shared<TubToucherDeployAction>(*tubtoucher, true)) ;
-
         }
 
         AutoModeXero::~AutoModeXero()
