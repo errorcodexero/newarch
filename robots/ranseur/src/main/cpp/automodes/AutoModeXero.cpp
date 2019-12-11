@@ -36,7 +36,7 @@ namespace xero
             auto camera = ranseur.getRanseurRobotSubsystem()->getCameraTracker() ;
             auto tubmanipulatorsubsytem = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem() ;
             auto parallel = std::make_shared<ParallelAction>() ;
-            
+           
             // add parallel to sequence
             // everything else contained in parallel -> 2 seq actions
             pushAction(parallel) ;
@@ -48,7 +48,12 @@ namespace xero
             sequence->pushSubActionPair(tubwrist, std::make_shared<MotorEncoderGoToAction>(*tubwrist, 10)) ;            
             sequence->pushAction(std::make_shared<DelayAction>(0.2)) ;            
             auto path = std::make_shared<TankDriveFollowPathAction>(*tankdrive, "BunnyAutoMode_PathToTub") ;
-            auto term = std::make_shared<TerminateAction>(tankdrive, path , ranseur, 4.5) ;
+
+            //
+            // Delay for 2 seconds before we start looking for the terminate condition, this gives us enough
+            // time to let the arm get out of the way of the camera
+            //
+            auto term = std::make_shared<TerminateAction>(tankdrive, path , ranseur, 2.0) ;
             term->addTerminator(camera) ; 
             sequence->pushAction(term) ;
             sequence->pushAction(std::make_shared<DriveByVisionAction>(*tankdrive, *camera)) ;

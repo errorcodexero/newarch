@@ -28,7 +28,9 @@ namespace xero {
         private:
 
         private:
-            double dist_area_ ;
+            double prev_dist_ ;
+            int count_ ;
+            int target_count_ ;
             double dist_angle_ ;
             double dist_area_constant_ ;
             double distance_ ;

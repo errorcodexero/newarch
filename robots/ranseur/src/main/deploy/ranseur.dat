@@ -24,6 +24,8 @@ hw:tubcollector2:type                                           "victor_spx"
 hw:tubcollector2:canid                                          9
 hw:tubcollector:clamp                                           7
 hw:tubcollector:tubsensor                                       9                           # Digital IO
+hw:tubcollector:collectmotor:pdp:1                              4                           # PDP channel for this motor
+hw:tubcollector:collectmotor:pdp:2                              11                          # PDP channel for this motor
 
 hw:tubarm:motor:canid                                           8
 hw:tubarm:motor:type                                            "victor_spx"
@@ -123,6 +125,10 @@ tubcollector:tubsensor:h2ldelay                                 0
 tubcollector:tubsensor:l2hdelay                                 0
 tubcollector:eject:speed                                        0.5
 tubcollector:eject:delay                                        1
+tubcollector:first_current_trigger                              70
+tubcollector:second_current_trigger                             50
+tubcollector:second_current_limit                               10
+tubcollector:third_current_trigger                              60
 
 ###################################################################################################
 # tubwrist
@@ -192,8 +198,9 @@ tubarm:turtle:pos                                               90
 
 ranseurvision:distance_threshold                                90.0
 ranseurvision:camera_height                                     20.0
-ranseurvision:camera_angle                                      0.0
-ranseurvision:target_height                                     3.5
+ranseurvision:camera_angle                                      64.67
+ranseurvision:camera_target_height                              17.75
+ranseurvision:target_count                                      10
 limelight:camera_latency                                        11.0
 limelight:network_latency                                       10.0
 

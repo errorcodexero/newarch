@@ -26,9 +26,18 @@ namespace xero {
             int clamp = robot.getSettingsParser().getInteger("hw:tubcollector:clamp") ;
             clamp_ = std::make_shared<frc::Solenoid>(clamp) ;
 
-            debounce_ = std::make_shared<DebounceBoolean>(false, 0.4) ;
+            first_current_trigger_ = robot.getSettingsParser().getInteger("tubcollector:first_current_trigger") ;
+            second_current_trigger_ = robot.getSettingsParser().getInteger("tubcollector:second_current_trigger") ;
+            second_current_limit_ = robot.getSettingsParser().getInteger("tubcollector:second_current_limit") ;
+            third_current_trigger_ = robot.getSettingsParser().getInteger("tubcollector:third_current_trigger") ;
+            collector_motor_pdp_1_ = robot.getSettingsParser().getInteger("hw:tubcollector:collectmotor:pdp:1") ;
+            collector_motor_pdp_2_ = robot.getSettingsParser().getInteger("hw:tubcollector:collectmotor:pdp:2") ;
+            delay_time_ = robot.getSettingsParser().getDouble("tubcollector:third_state_delay_time") ;
 
+            debounce_ = std::make_shared<DebounceBoolean>(false, 0.08) ;
             loops_ = 0 ;
+            state_ = 0 ;
+            has_tub_ = false ;
         }
 
         TubCollector::~TubCollector() {
@@ -46,15 +55,95 @@ namespace xero {
         void TubCollector::computeState() {
             Subsystem::computeState() ;
 
-            if (pdp_.GetCurrent(4) > 80.0 || pdp_.GetCurrent(11) > 80.0)
-                has_tub_ = true ;
-            
-            #ifdef NOTYET
-            debounce_->update(!sensor_->Get(), getRobot().getTime()) ;
-            has_tub_ = debounce_->get() ;
-            #endif
-            frc::SmartDashboard::PutBoolean("HasTub", has_tub_) ;
-        }        
+            if (power_mode_)
+            {
+                double power = (pdp_.GetCurrent(collector_motor_pdp_1_) + pdp_.GetCurrent(collector_motor_pdp_2_)) / 2.0 ;
+
+                switch (state_)
+                {
+                    case 0:
+                        //
+                        // Start state, looking for current to start to flow
+                        //
+                        has_tub_ = false ;
+                        if (power > first_current_trigger_)
+                            state_ = 1 ;
+                        break ;
+
+                    case 1:
+                        //
+                        // We have seen the initial current spike, the motors are turning on
+                        // and the current should be higher than steady state.  We want for the current
+                        // to drop below the peak and under some steady state limit (but above zero)
+                        //
+                        has_tub_ = false ;
+                        if (power < second_current_trigger_)
+                        {
+                            if (power < second_current_limit_)
+                            {
+                                //
+                                // It fell too low, start over
+                                //
+                                state_ = 0 ;
+                            }
+                            else
+                            {
+                                //
+                                // Motor current in its steady state
+                                //
+                                state_ = 2 ;
+                            }
+                        }
+
+                    case 2:
+                        //
+                        // We are in the steady state, look for a spike as the current ramps
+                        // as we collect a tub
+                        //
+                        has_tub_ = false ;
+                        if (power > third_current_trigger_)
+                        {
+                            state_ = 3 ;
+                            start_time_ = getRobot().getTime() ;
+                        }
+                        else if (power < second_current_limit_)
+                        {
+                            state_ = 0 ;
+                        }
+                        break ;
+
+                    case 3:
+                        if (getRobot().getTime() - start_time_ > delay_time_)
+                        {
+                            has_tub_ = true ;
+                            state_ = 4 ;
+                        }
+                        break ;
+
+                    case 4:
+                        if (power < second_current_limit_)
+                        {
+                            has_tub_ = false ;
+                            state_ = 0 ;
+                        }
+                        break ;
+                }
+            }
+            else
+            {
+                debounce_->update(!sensor_->Get(), getRobot().getTime()) ;
+                has_tub_ = debounce_->get() ;
+                frc::SmartDashboard::PutBoolean("HasTub", has_tub_) ;
+            }
+        }
+
+        void TubCollector::init(LoopType lt)
+        {
+            if (lt == LoopType::Autonomous)
+                power_mode_ = true ;
+            else
+                power_mode_ = false ;
+        }
 
         void TubCollector::reset() {
             Subsystem::reset() ;
