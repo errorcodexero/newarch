@@ -23,6 +23,8 @@ namespace xero {
             double d = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:maxd") ;            
             double v = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:maxv") ;
 
+            camera_collector_distance_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:camera_collector_distance") ;
+
             profile_ = std::make_shared<TrapezoidalProfile>(a, d, v) ;
             follower_ = std::make_shared<PIDACtrl>(tank_drive.getRobot().getSettingsParser(), "drivebyvision:kv","drivebyvision:ka","drivebyvision:kp","drivebyvision:kd") ;
             plotid_ = getTankDrive().initPlot("drivebyvision") ;
@@ -32,8 +34,39 @@ namespace xero {
             lost_count_ = 0 ;
             is_done_ = false ;
 
-            double dist = camera_.getDistance() ;
+            // 
+            // The distance we need to travel is the reported distance from the camera to the target, 
+            //
+            //     minus the distance from the camera to the collector on the robot
+            //            this is read as a constant from the parameter file
+            //
+            //     minus the distance we have traveled since the camera image was take that led to the distance report
+            //            this is time * velocity
+            //                velocity comes from the drivebase
+            //                time is the time from the limelight pipeline latench
+            //                            plus image acquisition latency (~11 ms, from params file)
+            //                            plus network latency from limelight to roborio (~10 ms, from params fiel)
+            //
+            double dist = camera_.getDistance() - camera_collector_distance_ - camera_.getLatency() * getTankDrive().getVelocity() ;
+
+            auto &logger = getTankDrive().getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CAMERA_TRACKER) ;
+            logger << "DriveByVision:" ;
+            logger << " camera " << camera_.getDistance() ;
+            logger << " collector " << camera_collector_distance_ ;
+            logger << " latency " << camera_.getLatency() ;
+            logger << " speed " << getTankDrive().getVelocity() ;
+            logger << " total " << dist ;
+            logger.endMessage() ;
+            
+            //
+            // Update the trapezoidal speed profile, to match the distance to the target
+            //
             profile_->update(dist, getTankDrive().getVelocity(), 0.0) ;
+
+            //
+            // Grab the start time and distance for processing the profile
+            //
             profile_start_time_ = getTankDrive().getRobot().getTime() ;
             profile_start_dist_ = getTankDrive().getDist() ;
 
@@ -41,7 +74,7 @@ namespace xero {
         }
 
         void DriveByVisionAction::run() {
-            // The time within the trapezoidal profile
+            // The time from the start of the profile
             double delta = getTankDrive().getRobot().getTime() - profile_start_time_ ;
 
             if (delta > profile_->getTotalTime())

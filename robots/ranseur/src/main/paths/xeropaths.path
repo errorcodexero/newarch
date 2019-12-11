@@ -11,25 +11,20 @@
                     "endangledelay": 0,
                     "endvelocity": 0,
                     "flags": [
-                        {
-                            "after": 100,
-                            "before": 307,
-                            "name": "BunnyArm"
-                        }
                     ],
-                    "maxacceleration": 180,
+                    "maxacceleration": 90,
                     "maxjerk": 1800,
-                    "maxvelocity": 180,
+                    "maxvelocity": 90,
                     "name": "PathToTub",
                     "points": [
                         {
                             "heading": 0,
-                            "x": 13.0192333346412,
+                            "x": 9.459693176913731,
                             "y": 180
                         },
                         {
                             "heading": 0,
-                            "x": 307.67486169419703,
+                            "x": 278,
                             "y": 180
                         }
                     ],

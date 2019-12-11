@@ -5,6 +5,7 @@
 #include <frc/DigitalInput.h>
 #include <frc/Solenoid.h>
 #include <frc/VictorSP.h>
+#include <frc/PowerDistributionPanel.h>
 #include <memory>
 #include <motors/MotorController.h>
 
@@ -22,6 +23,14 @@ namespace xero {
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             virtual void computeState() ;
+
+            void setPowerMode() {
+                power_mode_ = true ;
+            }
+
+            void setSensorMode() {
+                power_mode_ = false ;
+            }
 
             void setIntakePower(double pow) {
                 intake1_->set(pow) ;
@@ -44,16 +53,33 @@ namespace xero {
 
             virtual void reset() ;
 
+            virtual void init(xero::base::LoopType lt) ;
+
         private:
             //
             // This is the raw tub state, does not mean a tub is collected
             //
             bool has_tub_ ;
+            std::shared_ptr<xero::misc::DebounceBoolean> debounce_ ;
 
             std::shared_ptr<frc::DigitalInput> sensor_ ;
             std::shared_ptr<xero::base::MotorController> intake1_ ;
             std::shared_ptr<xero::base::MotorController> intake2_ ;            
             std::shared_ptr<frc::Solenoid> clamp_ ;
+
+            bool power_mode_ ;
+            frc::PowerDistributionPanel pdp_ ;
+            double first_current_trigger_ ;
+            double second_current_trigger_ ;
+            double second_current_limit_ ;
+            double third_current_trigger_ ;
+            double start_time_ ;
+            double delay_time_ ;
+            
+            int loops_ ;
+            int state_ ;
+            int collector_motor_pdp_1_ ;
+            int collector_motor_pdp_2_ ;
         } ;
     }
 }

@@ -7,10 +7,7 @@
 #include <frc/Solenoid.h>
 #include <frc/Encoder.h>
 #include <list>
-
-#ifdef USE_NAVX
 #include <AHRS.h>       
-#endif
 
 /// \file
 
@@ -202,9 +199,7 @@ namespace xero {
 
             std::shared_ptr<frc::Solenoid> gear_ ;
 
-#ifdef USE_NAVX
             std::shared_ptr<AHRS> navx_ ;
-#endif
             double total_angle_ ;
 
             xero::misc::Speedometer angular_ ;

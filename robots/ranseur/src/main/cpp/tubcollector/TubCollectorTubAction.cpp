@@ -1,6 +1,7 @@
 #include "TubCollectorTubAction.h"
 #include "TubCollector.h"
 #include "TubCollectorDutyCycleAction.h"
+#include "ranseurids.h"
 #include <MessageLogger.h>
 #include <Robot.h>
 
@@ -27,6 +28,10 @@ namespace xero {
         void TubCollectorTubAction::run() {
             if(state_ == State::motors_on) {
                 if(getTubCollector().hasTub()) {
+                    auto &logger = getTubCollector().getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TUBCOLLECTOR) ;
+                    logger << "Detect tub, moving to next state" ;
+                    logger.endMessage() ;
                     getTubCollector().closeHand() ;
                     state_ = State::closed_hand ;
                     start_ = getTubCollector().getRobot().getTime() ;

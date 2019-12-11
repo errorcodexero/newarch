@@ -28,11 +28,17 @@ namespace xero {
         private:
 
         private:
+            double prev_dist_ ;
+            int count_ ;
+            int target_count_ ;
+            double dist_angle_ ;
+            double dist_area_constant_ ;
             double distance_ ;
             double distance_threshold_ ;
             double camera_angle_ ;
             double camera_height_ ;
             double target_height_ ;
+            int plotid_ ;
         } ;
     }
 }

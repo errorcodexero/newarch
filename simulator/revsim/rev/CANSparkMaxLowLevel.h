@@ -53,6 +53,9 @@ namespace rev
         void EnableVoltageCompensation(double volts) {            
         }
 
+        void SetSmartCurrentLimit(double current) {            
+        }
+
         int GetDeviceID() {
             return id_ ;
         }
