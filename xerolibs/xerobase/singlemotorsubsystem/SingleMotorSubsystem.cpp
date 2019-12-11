@@ -39,5 +39,10 @@ namespace xero {
             Subsystem::reset() ;
             setMotor(0.0) ;
         }
+
+        void SingleMotorSubsystem::init(LoopType ltype) {
+            Subsystem::init(ltype);
+            motor_->reapplyInverted();
+        }
     }
 }

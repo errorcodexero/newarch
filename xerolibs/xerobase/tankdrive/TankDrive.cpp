@@ -70,6 +70,8 @@ namespace xero {
                 left_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
                 right_motors_->setNeutralMode(MotorController::NeutralMode::Coast);                
             }
+            left_motors_->reapplyInverted();
+            right_motors_->reapplyInverted();
         }
         
         void TankDrive::lowGear() {
@@ -158,7 +160,7 @@ namespace xero {
             if (navx_ != nullptr) {
                 angle = -navx_->GetYaw() ;
                 angular_.update(getRobot().getDeltaTime(), angle) ;
-                total_angle_ = navx_->GetAngle() ;    
+                total_angle_ = navx_->GetAngle() ;
             }
 
             left_linear_.update(getRobot().getDeltaTime(), getLeftDistance()) ;

@@ -27,6 +27,8 @@ namespace xero {
             void MotorGroupController::setInverted(bool inverted) {
                 motors_.front()->setInverted(inverted);
             }
+            
+            void MotorGroupController::reapplyInverted() { motors_.front()->reapplyInverted(); }
 
             void MotorGroupController::setNeutralMode(NeutralMode neutralMode) {
                 for (MotorPtr motor : motors_) motor->setNeutralMode(neutralMode);

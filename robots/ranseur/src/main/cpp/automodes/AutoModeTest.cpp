@@ -18,7 +18,6 @@
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <motorencodersubsystem/MotorEncoderGoToAction.h>
 #include <tubtoucher/TubToucherDeployAction.h>
-#include <ranseurcameratracker/DriveByVisionAction.h>
 
 using namespace xero::base ;
 
@@ -77,6 +76,7 @@ namespace xero
                 break ;
 
                 case 5 :
+
                 break ;
                 
                 case 6 :

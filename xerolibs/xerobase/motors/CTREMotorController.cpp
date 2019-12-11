@@ -32,8 +32,11 @@ namespace xero {
             }
 
             void CTREMotorController::setInverted(bool inverted) {
+                isInverted_ = inverted;
                 motor_->SetInverted(inverted);
             }
+
+            void CTREMotorController::reapplyInverted() { setInverted(isInverted_); }
 
             void CTREMotorController::setNeutralMode(NeutralMode neutralMode) {
                 ctre::phoenix::motorcontrol::NeutralMode mode;
