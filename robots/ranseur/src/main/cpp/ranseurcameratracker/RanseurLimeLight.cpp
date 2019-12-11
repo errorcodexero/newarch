@@ -28,30 +28,26 @@ namespace xero {
 
         RanseurLimeLight::~RanseurLimeLight() {            
         }
-
+        
         bool RanseurLimeLight::canAcceptAction(ActionPtr ptr) {
             if (LimeLight::canAcceptAction(ptr))
                 return true ;
 
             return false ;
         }
+        void RanseurLimeLight::init(LoopType lt) {
+            if (lt == LoopType::Autonomous)
+                startPlot(plotid_, cols_) ;
+        }
 
-        bool started = false ;
+        void RanseurLimeLight::reset() {
+            endPlot(plotid_) ;
+        }
+
         void RanseurLimeLight::computeState() {
             LimeLight::computeState() ;
 
-            if (getRobot().IsEnabled() && !started)
-            {
-                startPlot(plotid_, cols_) ;
-                started = true ;
-            }
-            else if (getRobot().IsDisabled() && started)
-            {
-                endPlot(plotid_) ;
-                started = false ;
-            }
-
-            if(isLimeLightPresent() && isTargetPresent()) 
+            if (isLimeLightPresent() && isTargetPresent()) 
             {
                 //
                 // Valid target, use the angle method for computing distance based on the
@@ -69,7 +65,7 @@ namespace xero {
             
             frc::SmartDashboard::PutNumber("Distance", dist_angle_) ;
 
-            if (getRobot().IsEnabled())
+            if (getRobot().IsEnabled() && getRobot().IsAutonomous())
             {
                 std::vector<double> data ;
                 data.push_back(getRobot().getTime()) ;
@@ -81,7 +77,6 @@ namespace xero {
 
             distance_ = dist_angle_ ;
         }
-
         bool RanseurLimeLight::shouldTerminate() {
             if (!isTargetPresent()) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;

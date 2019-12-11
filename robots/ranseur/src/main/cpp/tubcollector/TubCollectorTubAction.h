@@ -1,6 +1,8 @@
 #pragma once
 
 #include "TubCollectorAction.h"
+#include <string>
+#include <vector>
 
 namespace xero {
     namespace ranseur {
@@ -37,6 +39,9 @@ namespace xero {
             State state_ ;
             double speed_ ;
             double delay_ ;
+
+            int plotid_ ;
+            static std::vector<std::string> cols_ ;
         } ;
     }
 }

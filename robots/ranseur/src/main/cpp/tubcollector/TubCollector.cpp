@@ -57,7 +57,7 @@ namespace xero {
 
             if (power_mode_)
             {
-                double power = (pdp_.GetCurrent(collector_motor_pdp_1_) + pdp_.GetCurrent(collector_motor_pdp_2_)) / 2.0 ;
+                collect_power_ = (pdp_.GetCurrent(collector_motor_pdp_1_) + pdp_.GetCurrent(collector_motor_pdp_2_)) / 2.0 ;
 
                 switch (state_)
                 {
@@ -66,7 +66,7 @@ namespace xero {
                         // Start state, looking for current to start to flow
                         //
                         has_tub_ = false ;
-                        if (power > first_current_trigger_)
+                        if (collect_power_ > first_current_trigger_)
                             state_ = 1 ;
                         break ;
 
@@ -77,9 +77,9 @@ namespace xero {
                         // to drop below the peak and under some steady state limit (but above zero)
                         //
                         has_tub_ = false ;
-                        if (power < second_current_trigger_)
+                        if (collect_power_ < second_current_trigger_)
                         {
-                            if (power < second_current_limit_)
+                            if (collect_power_ < second_current_limit_)
                             {
                                 //
                                 // It fell too low, start over
@@ -101,12 +101,12 @@ namespace xero {
                         // as we collect a tub
                         //
                         has_tub_ = false ;
-                        if (power > third_current_trigger_)
+                        if (collect_power_ > third_current_trigger_)
                         {
                             state_ = 3 ;
                             start_time_ = getRobot().getTime() ;
                         }
-                        else if (power < second_current_limit_)
+                        else if (collect_power_ < second_current_limit_)
                         {
                             state_ = 0 ;
                         }
@@ -121,7 +121,7 @@ namespace xero {
                         break ;
 
                     case 4:
-                        if (power < second_current_limit_)
+                        if (collect_power_ < second_current_limit_)
                         {
                             has_tub_ = false ;
                             state_ = 0 ;

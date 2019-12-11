@@ -163,6 +163,12 @@ namespace xero {
                     model->addDevice(encoder) ;                    
             }
 
+            PowerDistributionPanel *pdp = dynamic_cast<PowerDistributionPanel *>(device) ;
+            if (pdp != nullptr) {
+                for(auto model : getModels())
+                    model->addDevice(pdp) ;    
+            }
+
             VictorSP *victor = dynamic_cast<VictorSP *>(device) ;
             if (victor != nullptr) {
                 for(auto model : getModels())

@@ -25,6 +25,9 @@ namespace xero {
             }
             virtual bool canAcceptAction(xero::base::ActionPtr act) ;
 
+            virtual void init(xero::base::LoopType lt) ;
+            virtual void reset() ;
+
         private:
 
         private:

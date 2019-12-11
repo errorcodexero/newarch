@@ -55,6 +55,10 @@ namespace xero {
 
             virtual void init(xero::base::LoopType lt) ;
 
+            double getCollectPower() {
+                return collect_power_ ;
+            }
+
         private:
             //
             // This is the raw tub state, does not mean a tub is collected
@@ -75,6 +79,7 @@ namespace xero {
             double third_current_trigger_ ;
             double start_time_ ;
             double delay_time_ ;
+            double collect_power_ ;
             
             int loops_ ;
             int state_ ;
