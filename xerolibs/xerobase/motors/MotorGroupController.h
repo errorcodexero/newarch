@@ -27,6 +27,7 @@ namespace xero {
 
             virtual void set(double percent);
             virtual void setInverted(bool inverted);
+            virtual void reapplyInverted();
             virtual void setNeutralMode(NeutralMode neutralMode);
             virtual void follow(MotorPtr motor, bool invert = false) {
                 assert(0 == "MotorGroupController cannot follow");

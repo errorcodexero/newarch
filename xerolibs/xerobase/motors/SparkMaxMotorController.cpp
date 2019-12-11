@@ -26,8 +26,11 @@ namespace xero {
             }
 
             void SparkMaxMotorController::setInverted(bool inverted) {
+                isInverted_ = inverted;
                 motor_->SetInverted(inverted);
             }
+
+            void SparkMaxMotorController::reapplyInverted() { setInverted(isInverted_); }
 
             void SparkMaxMotorController::setNeutralMode(NeutralMode neutralMode) {
                 rev::CANSparkMax::IdleMode mode;

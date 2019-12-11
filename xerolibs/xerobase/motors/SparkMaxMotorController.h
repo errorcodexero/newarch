@@ -22,8 +22,10 @@ namespace xero {
             virtual void setInverted(bool inverted);
             virtual void setNeutralMode(NeutralMode neutralMode);
             virtual void follow(std::shared_ptr<MotorController> motor, bool invert = false);
+            virtual void reapplyInverted();
         private:
             MotorPtr motor_;
+            bool isInverted_;
         };
     }
 }

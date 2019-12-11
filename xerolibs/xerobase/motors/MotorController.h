@@ -24,6 +24,10 @@ namespace xero {
             /// \warning If called after \c follow, the behavior is unspecified.
             virtual void setInverted(bool inverted) = 0;
 
+            /// \brief Workaround for what seems to be a SPARK MAX bug.
+            /// Calls \c setInverted again with the same value.
+            virtual void reapplyInverted() = 0;
+
             /// \brief Sets whether the motor will brake or coast.
             /// \param neutralMode The desired neutral mode.
             virtual void setNeutralMode(NeutralMode neutralMode) = 0;

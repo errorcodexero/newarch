@@ -66,7 +66,9 @@ namespace xero {
             Subsystem::init(ltype) ;
 
             left_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
+            left_motors_->reapplyInverted();
             right_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
+            right_motors_->reapplyInverted();
         }
         
         void TankDrive::lowGear() {

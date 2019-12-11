@@ -66,6 +66,8 @@ namespace xero {
             /// @return This subsystem's message ID.
             uint64_t getMsgID() { return msg_id_; }
 
+            virtual void init(LoopType ltype);
+
             virtual void reset() ;
 
         protected:
