@@ -49,6 +49,16 @@ namespace xero {
             //
             double dist = camera_.getDistance() - camera_collector_distance_ - camera_.getLatency() * getTankDrive().getVelocity() ;
 
+            auto &logger = getTankDrive().getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CAMERA_TRACKER) ;
+            logger << "DriveByVision:" ;
+            logger << " camera " << camera_.getDistance() ;
+            logger << " collector " << camera_collector_distance_ ;
+            logger << " latency " << camera_.getLatency() ;
+            logger << " speed " << getTankDrive().getVelocity() ;
+            logger << " total " << dist ;
+            logger.endMessage() ;
+            
             //
             // Update the trapezoidal speed profile, to match the distance to the target
             //

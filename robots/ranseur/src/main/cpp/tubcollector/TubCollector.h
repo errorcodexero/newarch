@@ -5,6 +5,7 @@
 #include <frc/DigitalInput.h>
 #include <frc/Solenoid.h>
 #include <frc/VictorSP.h>
+#include <frc/PowerDistributionPanel.h>
 #include <memory>
 #include <motors/MotorController.h>
 
@@ -49,11 +50,15 @@ namespace xero {
             // This is the raw tub state, does not mean a tub is collected
             //
             bool has_tub_ ;
+            std::shared_ptr<xero::misc::DebounceBoolean> debounce_ ;
 
             std::shared_ptr<frc::DigitalInput> sensor_ ;
             std::shared_ptr<xero::base::MotorController> intake1_ ;
             std::shared_ptr<xero::base::MotorController> intake2_ ;            
             std::shared_ptr<frc::Solenoid> clamp_ ;
+
+            frc::PowerDistributionPanel pdp_ ;
+            int loops_ ;
         } ;
     }
 }

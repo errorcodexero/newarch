@@ -30,7 +30,7 @@ hw:tubarm:motor:type                                            "victor_spx"
 hw:tubarm:motor:invert                                          true
 hw:tubarm:encoder:analog                                        1
 hw:tubarm:encoder:analog:m                                      -72
-hw:tubarm:encoder:analog:b                                      302.0
+hw:tubarm:encoder:analog:b                                      312.0
 
 hw:tubwrist:motor:canid                                         7
 hw:tubwrist:motor:type                                          "victor_spx"
@@ -190,7 +190,7 @@ tubarm:turtle:pos                                               90
 # ranseurvision
 ###################################################################################################
 
-ranseurvision:distance_threshold                                60.0
+ranseurvision:distance_threshold                                90.0
 ranseurvision:camera_height                                     20.0
 ranseurvision:camera_angle                                      0.0
 ranseurvision:target_height                                     3.5
@@ -201,13 +201,12 @@ limelight:network_latency                                       10.0
 # drive by vision (simple P only control)
 ###################################################################################################
 
-drivebyvision:camera_collector_distance                         12.0
+drivebyvision:camera_collector_distance                         0
 drivebyvision:yaw_base_power                                    0.4
-drivebyvision:yaw_p                                             0.002
-drivebyvision:distance_threshold                                2.0
-drivebyvision:maxa                                              60
-drivebyvision:maxd                                              -60
-drivebyvision:maxv                                              120
+drivebyvision:yaw_p                                             0.015
+drivebyvision:maxa                                              40
+drivebyvision:maxd                                              -40
+drivebyvision:maxv                                              40
 drivebyvision:kp                                                0
 drivebyvision:ka                                                0
 drivebyvision:kv                                                0.005208333

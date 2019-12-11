@@ -36,6 +36,7 @@ namespace xero {
             double camera_angle_ ;
             double camera_height_ ;
             double target_height_ ;
+            int plotid_ ;
         } ;
     }
 }
