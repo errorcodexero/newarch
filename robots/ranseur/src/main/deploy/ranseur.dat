@@ -32,13 +32,13 @@ hw:tubarm:motor:type                                            "victor_spx"
 hw:tubarm:motor:invert                                          true
 hw:tubarm:encoder:analog                                        1
 hw:tubarm:encoder:analog:m                                      -72
-hw:tubarm:encoder:analog:b                                      312.0
+hw:tubarm:encoder:analog:b                                      320.0
 
 hw:tubwrist:motor:canid                                         7
 hw:tubwrist:motor:type                                          "victor_spx"
 hw:tubwrist:encoder:analog                                      0
 hw:tubwrist:encoder:analog:m                                    71.5
-hw:tubwrist:encoder:analog:b                                    -212
+hw:tubwrist:encoder:analog:b                                    -95
 
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2
@@ -125,11 +125,12 @@ tubcollector:tubsensor:h2ldelay                                 0
 tubcollector:tubsensor:l2hdelay                                 0
 tubcollector:eject:speed                                        0.5
 tubcollector:eject:delay                                        1
-tubcollector:first_current_trigger                              30
+tubcollector:first_current_trigger                              25
 tubcollector:second_current_trigger                             20
 tubcollector:second_current_limit                               10
 tubcollector:third_current_trigger                              35
 tubcollector:third_state_delay_time                             0.1
+
 ###################################################################################################
 # tubwrist
 ###################################################################################################
@@ -200,7 +201,7 @@ ranseurvision:distance_threshold                                90.0
 ranseurvision:camera_height                                     20.0
 ranseurvision:camera_angle                                      64.67
 ranseurvision:camera_target_height                              17.75
-ranseurvision:target_count                                      10
+ranseurvision:target_count                                      4
 limelight:camera_latency                                        11.0
 limelight:network_latency                                       10.0
 
@@ -208,13 +209,12 @@ limelight:network_latency                                       10.0
 # drive by vision (simple P only control)
 ###################################################################################################
 
-drivebyvision:camera_collector_distance                         0
-drivebyvision:yaw_base_power                                    0.4
-drivebyvision:yaw_p                                             0.015
+drivebyvision:camera_collector_distance                         8
+drivebyvision:yaw_p                                             0.01
 drivebyvision:maxa                                              40
 drivebyvision:maxd                                              -40
 drivebyvision:maxv                                              40
-drivebyvision:kp                                                0
+drivebyvision:kp                                                0.031
 drivebyvision:ka                                                0
 drivebyvision:kv                                                0.005208333
 drivebyvision:kd                                                0

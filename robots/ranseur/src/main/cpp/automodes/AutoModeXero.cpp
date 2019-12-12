@@ -43,10 +43,7 @@ namespace xero
 
             //// 1ST SEQUENCE ////
             auto sequence = std::make_shared<SequenceAction>(robot.getMessageLogger()) ;
-            parallel->addAction(sequence) ;
-            sequence->pushSubActionPair(tubarm, std::make_shared<MotorEncoderGoToAction>(*tubarm, -38)) ;
-            sequence->pushSubActionPair(tubwrist, std::make_shared<MotorEncoderGoToAction>(*tubwrist, 10)) ;            
-            sequence->pushAction(std::make_shared<DelayAction>(0.2)) ;            
+            parallel->addAction(sequence) ;                   
             auto path = std::make_shared<TankDriveFollowPathAction>(*tankdrive, "BunnyAutoMode_PathToTub") ;
 
             //
@@ -56,18 +53,21 @@ namespace xero
             auto term = std::make_shared<TerminateAction>(tankdrive, path , ranseur, 2.0) ;
             term->addTerminator(camera) ; 
             sequence->pushAction(term) ;
+            sequence->pushSubActionPair(tubtoucher, std::make_shared<TubToucherDeployAction>(*tubtoucher, true)) ;            
             sequence->pushAction(std::make_shared<DriveByVisionAction>(*tankdrive, *camera)) ;
+            sequence->pushSubActionPair(tubmanipulatorsubsytem, std::make_shared<TubManipulatorDumpAction>(*tubmanipulatorsubsytem)) ;   
 
             //// 2ND SEQUENCE ////
             sequence = std::make_shared<SequenceAction>(robot.getMessageLogger()) ;
             parallel->addAction(sequence) ;
             sequence->pushAction(std::make_shared<BunnyArmDeployAction>(*bunnyarm, true)) ;
-            sequence->pushAction(std::make_shared<DelayAction>(1.0)) ;
+            sequence->pushAction(std::make_shared<DelayAction>(0.5)) ;
             sequence->pushAction(std::make_shared<BunnyArmDeployAction>(*bunnyarm, false)) ;
-            sequence->pushAction(std::make_shared<DelayAction>(0.0)) ;
+            sequence->pushSubActionPair(tubarm, std::make_shared<MotorEncoderGoToAction>(*tubarm, -38)) ;
+            sequence->pushSubActionPair(tubwrist, std::make_shared<MotorEncoderGoToAction>(*tubwrist, 10)) ;              
             sequence->pushAction(std::make_shared<TubManipulatorCollectAction>(*tubmanipulatorsubsytem)) ;
             sequence->pushAction(std::make_shared<TubManipulatorDumpAction>(*tubmanipulatorsubsytem)) ;       
-            sequence->pushAction(std::make_shared<TubToucherDeployAction>(*tubtoucher, true)) ;
+
         }
 
         AutoModeXero::~AutoModeXero()

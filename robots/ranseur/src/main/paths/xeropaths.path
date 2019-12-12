@@ -6,6 +6,12 @@
             "paths": [
                 {
                     "constraints": [
+                        {
+                            "after": 220,
+                            "before": 268,
+                            "type": "distance_velocity",
+                            "velocity": 40
+                        }
                     ],
                     "endangle": 0,
                     "endangledelay": 0,

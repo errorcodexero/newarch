@@ -36,8 +36,6 @@ namespace xero {
             int count_ ;
             int target_count_ ;
             double yaw_ ;
-            double dist_angle_ ;
-            double dist_area_constant_ ;
             double distance_ ;
             double distance_threshold_ ;
             double camera_angle_ ;

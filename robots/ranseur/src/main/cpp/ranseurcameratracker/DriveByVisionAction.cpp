@@ -49,15 +49,7 @@ namespace xero {
             //
             double dist = camera_.getDistance() - camera_collector_distance_ - camera_.getLatency() * getTankDrive().getVelocity() ;
 
-            auto &logger = getTankDrive().getRobot().getMessageLogger() ;
-            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CAMERA_TRACKER) ;
-            logger << "DriveByVision:" ;
-            logger << " camera " << camera_.getDistance() ;
-            logger << " collector " << camera_collector_distance_ ;
-            logger << " latency " << camera_.getLatency() ;
-            logger << " speed " << getTankDrive().getVelocity() ;
-            logger << " total " << dist ;
-            logger.endMessage() ;
+
             
             //
             // Update the trapezoidal speed profile, to match the distance to the target
@@ -71,6 +63,18 @@ namespace xero {
             profile_start_dist_ = getTankDrive().getDist() ;
 
             getTankDrive().startPlot(plotid_, cols_) ;
+
+            auto &logger = getTankDrive().getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CAMERA_TRACKER) ;
+            logger << "DriveByVision:" ;
+            logger << " camera " << camera_.getDistance() ;
+            logger << " collector " << camera_collector_distance_ ;
+            logger << " latency " << camera_.getLatency() ;
+            logger << " speed " << getTankDrive().getVelocity() ;
+            logger << " total " << dist ;
+            logger << " profile start dist " << profile_start_dist_ ;
+            logger << " profile " << profile_->toString() ;
+            logger.endMessage() ;            
         }
 
         void DriveByVisionAction::run() {
@@ -101,16 +105,15 @@ namespace xero {
                 double right = out ;
                 double yawadj = 0.0 ;
 
+                yaw = camera_.getYaw() ;
                 if (camera_.isTargetPresent()) {
-                    yaw = camera_.getYaw() ;
                     lost = 0 ;
 
                     yawadj = camera_.getYaw() * yaw_p_ ;
                     left += yawadj ;
                     right -= yawadj ;
+                    setMotorsToPercents(left, right) ;                    
                 }
-
-                setMotorsToPercents(left, right) ;
 
                 std::vector<double> data ;
                 data.push_back(delta) ;
