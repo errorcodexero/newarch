@@ -11,7 +11,7 @@ namespace xero {
         std::vector<std::string> DriveByVisionAction::cols_ =
         {
             "time", 
-            "tvel", "avel", "tdist", "adist", "yaw", "left", "right",
+            "tvel", "avel", "tdist", "adist", "yaw", "yawadj", "left", "right",
             "lost",
         } ;
        
@@ -99,12 +99,13 @@ namespace xero {
 
                 double left = out ;
                 double right = out ;
+                double yawadj = 0.0 ;
 
                 if (camera_.isTargetPresent()) {
                     yaw = camera_.getYaw() ;
                     lost = 0 ;
 
-                    double yawadj = camera_.getYaw() * yaw_p_ ;
+                    yawadj = camera_.getYaw() * yaw_p_ ;
                     left += yawadj ;
                     right -= yawadj ;
                 }
@@ -118,6 +119,7 @@ namespace xero {
                 data.push_back(targetdist) ;
                 data.push_back(actualdist) ;
                 data.push_back(yaw) ;
+                data.push_back(yawadj);
                 data.push_back(left) ;
                 data.push_back(right) ;
                 data.push_back(lost) ;

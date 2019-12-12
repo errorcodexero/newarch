@@ -54,6 +54,7 @@ namespace xero {
                 // limelight documentation
                 //
                 dist_angle_ = camera_height_ * std::tan(xero::math::deg2rad(camera_angle_ + getTY())) ;
+                yaw_ = getTX() ;
             }
             else
             {
@@ -64,6 +65,7 @@ namespace xero {
             }
             
             frc::SmartDashboard::PutNumber("Distance", dist_angle_) ;
+            frc::SmartDashboard::PutNumber("YAW", yaw_) ;
 
             if (getRobot().IsEnabled() && getRobot().IsAutonomous())
             {

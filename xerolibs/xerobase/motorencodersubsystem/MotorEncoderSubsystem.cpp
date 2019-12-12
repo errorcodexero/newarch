@@ -27,14 +27,9 @@ namespace xero {
 
         }
 
-        void MotorEncoderSubsystem::postHWInit()
+        void MotorEncoderSubsystem::init(LoopType ltype)
         {
-            MessageLogger &logger = getRobot().getMessageLogger() ;
-            logger.startMessage(xero::misc::MessageLogger::MessageType::debug, msg_id_) ;
-            logger << getName() << ": setting default hold action at postHWInit" ;
-            logger.endMessage() ;
-
-            SingleMotorSubsystem::postHWInit() ;
+            SingleMotorSubsystem::init(ltype) ;
             setDefaultAction(std::make_shared<MotorEncoderHoldAction>(*this));
         }
 

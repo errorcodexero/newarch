@@ -20,9 +20,10 @@ namespace xero {
             double getDistance(){
                 return distance_ ;
             }   
-            double getYaw(){
-                return getTX() ;
+            double getYaw() {
+                return yaw_ ;
             }
+
             virtual bool canAcceptAction(xero::base::ActionPtr act) ;
 
             virtual void init(xero::base::LoopType lt) ;
@@ -34,6 +35,7 @@ namespace xero {
             double prev_dist_ ;
             int count_ ;
             int target_count_ ;
+            double yaw_ ;
             double dist_angle_ ;
             double dist_area_constant_ ;
             double distance_ ;
