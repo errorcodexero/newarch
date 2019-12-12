@@ -2,6 +2,7 @@
 #include "TubCollectorAction.h"
 #include <actions/SequenceAction.h>
 #include <Robot.h>
+#include <DriveBase.h>
 #include <frc/DigitalInput.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/PowerDistributionPanel.h>
@@ -59,6 +60,15 @@ namespace xero {
 
             if (power_mode_)
             {
+                if (!sensor_->Get() && db_ != nullptr && std::fabs(db_->getVelocity()) < 1.0)
+                {
+                    //
+                    // Kind of a hack.  If the infrared sensor is true and we are in auto mode (where we do current sensing) and
+                    // the drivebase has stopped driving, return the fact that we have a tub.
+                    //
+                    has_tub_ = true ;
+                    return ;
+                }
 
                 switch (state_)
                 {
