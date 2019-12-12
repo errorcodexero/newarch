@@ -27,9 +27,9 @@ namespace xero {
 
         }
 
-        void MotorEncoderSubsystem::postHWInit()
+        void MotorEncoderSubsystem::init(LoopType ltype)
         {
-            SingleMotorSubsystem::postHWInit() ;
+            SingleMotorSubsystem::init(ltype) ;
             setDefaultAction(std::make_shared<MotorEncoderHoldAction>(*this));
         }
 
