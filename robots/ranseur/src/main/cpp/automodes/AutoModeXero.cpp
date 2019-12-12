@@ -62,7 +62,7 @@ namespace xero
             parallel->addAction(sequence) ;
             sequence->pushAction(std::make_shared<BunnyArmDeployAction>(*bunnyarm, true)) ;
             sequence->pushAction(std::make_shared<DelayAction>(0.5)) ;
-            sequence->pushAction(std::make_shared<BunnyArmDeployAction>(*bunnyarm, false)) ;
+            sequence->pushSubActionPair(bunnyarm, std::make_shared<BunnyArmDeployAction>(*bunnyarm, false)) ;
             sequence->pushSubActionPair(tubarm, std::make_shared<MotorEncoderGoToAction>(*tubarm, -38)) ;
             sequence->pushSubActionPair(tubwrist, std::make_shared<MotorEncoderGoToAction>(*tubwrist, 10)) ;              
             sequence->pushAction(std::make_shared<TubManipulatorCollectAction>(*tubmanipulatorsubsytem)) ;
