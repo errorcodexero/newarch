@@ -3,28 +3,11 @@
 #
 
 #
-# Automode values
-#
-#  Value        Setting
-#    0          -100
-#    1          -80
-#    2          -60
-#    3          -40
-#    4          -20
-#    5           10
-#    6           30
-#    7           50
-#    8           70
-#    9           90
-#
-
-#
 # Start up conditions
 #
 
 #
 #
-0.1,oi,automode,-100
 0.1,oi,automode1,0
 0.1,oi,automode2,0
 0.1,tubmanipulator,tub,1                                # Clear the tub sensor (should initialize to cleared)

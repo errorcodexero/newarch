@@ -47,6 +47,26 @@ namespace xero {
                     has_tub_inv_ = (value ? true : false) ;
                     setTubSensor() ;
                 }
+                else if (name == "arm")
+                {
+                    ret = true ;
+                    arm_angle_ = static_cast<double>(value) ;
+                    if (arm_angle_ > ArmMaximumAngle)
+                        arm_angle_ = ArmMaximumAngle ;
+                    else if (arm_angle_ < ArmMinimumAngle)
+                        arm_angle_ = ArmMinimumAngle ;                    
+                    setArmEncoder() ;
+                }
+                else if (name == "wrist")
+                {
+                    ret = true ;
+                    wrist_angle_ = static_cast<double>(value) ;
+                    if (wrist_angle_ > WristMaxAngle)
+                        wrist_angle_ = WristMaxAngle ;
+                    else if (wrist_angle_ < WristMinAngle)
+                        wrist_angle_ = WristMinAngle ;                    
+                    setWristEncoder() ;
+                }
 
                 return ret ;
             }
@@ -115,7 +135,11 @@ namespace xero {
             void TubManipulatorModel::setArmEncoder() {
                 if (arm_encoder_ != nullptr)
                 {
-                    double v = -(arm_angle_ - 295.92) / 72.0 ;
+                    double v = (arm_angle_  + 180) / 72.0 ;
+
+                    v += 1.0 ;
+                    if (v > 5.0)
+                        v -= 5.0 ;
                     arm_encoder_->SimulatorSetVoltage(v) ;
                 }
             }
@@ -123,7 +147,11 @@ namespace xero {
             void TubManipulatorModel::setWristEncoder() {
                 if (wrist_encoder_ != nullptr)
                 {
-                    double v = (wrist_angle_ + 126.0) / 72.0 ;
+                    double v = (wrist_angle_ - 180) / -72.0 ;
+
+                    v += 2.0 ;
+                    if (v > 5.0)
+                        v -= 5.0 ;
                     wrist_encoder_->SimulatorSetVoltage(v) ;                
                 }
             }

@@ -63,8 +63,8 @@ namespace xero  {
                 void setTubSensor() ;
 
             private:
-                static constexpr double ArmMinimumAngle = 00.0 ;
-                static constexpr double ArmMaximumAngle = 90.0 ;
+                static constexpr double ArmMinimumAngle = -45.0 ;
+                static constexpr double ArmMaximumAngle = 130.0 ;
                 static constexpr double ArmDegreesPerVoltPerSecond = -(ArmMaximumAngle - ArmMinimumAngle) / 1.0 ;
                 static constexpr double WristMinAngle = 0.0 ;
                 static constexpr double WristMaxAngle = 180.0 ;

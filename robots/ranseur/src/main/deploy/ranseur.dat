@@ -31,14 +31,18 @@ hw:tubarm:motor:canid                                           8
 hw:tubarm:motor:type                                            "victor_spx"
 hw:tubarm:motor:invert                                          true
 hw:tubarm:encoder:analog                                        1
-hw:tubarm:encoder:analog:m                                      -72
-hw:tubarm:encoder:analog:b                                      320.0
+hw:tubarm:encoder:analog:m                                      72
+hw:tubarm:encoder:analog:b                                      0
+hw:tubarm:encoder:analog:wrap                                   1.0
+hw:tubarm:encoder:analog:offset                                 3.5
 
 hw:tubwrist:motor:canid                                         7
 hw:tubwrist:motor:type                                          "victor_spx"
 hw:tubwrist:encoder:analog                                      0
-hw:tubwrist:encoder:analog:m                                    71.5
-hw:tubwrist:encoder:analog:b                                    -95
+hw:tubwrist:encoder:analog:m                                    -72
+hw:tubwrist:encoder:analog:b                                    0
+hw:tubwrist:encoder:analog:wrap                                 2.0
+hw:tubwrist:encoder:analog:offset                               4.5
 
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2

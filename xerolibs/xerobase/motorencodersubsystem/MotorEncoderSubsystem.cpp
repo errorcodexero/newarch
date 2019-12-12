@@ -20,16 +20,15 @@ namespace xero {
         ): SingleMotorSubsystem(parent, name, "hw:" + config + ":motor", id), 
         speedometer_(/*samples=*/2, angular), configName_(name), msg_id_(id) {
             auto &robot = getRobot(); 
-            encoder_ = std::make_shared<XeroEncoder>(robot.getMessageLogger(), 
-                                                     robot.getSettingsParser(), 
+            encoder_ = std::make_shared<XeroEncoder>(robot,
                                                      "hw:" + config + ":encoder",
                                                      angular);
 
         }
 
-        void MotorEncoderSubsystem::init(LoopType ltype)
+        void MotorEncoderSubsystem::postHWInit()
         {
-            SingleMotorSubsystem::init(ltype) ;
+            SingleMotorSubsystem::postHWInit() ;
             setDefaultAction(std::make_shared<MotorEncoderHoldAction>(*this));
         }
 
