@@ -59,6 +59,10 @@ namespace xero {
                 return collect_power_ ;
             }
 
+            int getState() {
+                return state_ ;
+            }
+
         private:
             //
             // This is the raw tub state, does not mean a tub is collected

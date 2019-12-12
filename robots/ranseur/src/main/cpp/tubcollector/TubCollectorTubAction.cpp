@@ -13,7 +13,8 @@ namespace xero {
         std::vector<std::string> TubCollectorTubAction::cols_ = 
         {
             "time",
-            "current"
+            "current",
+            "state"
         } ;
 
         std::string TubCollectorTubAction::action_name("TubCollectorTubAction");
@@ -57,6 +58,7 @@ namespace xero {
             std::vector<double> data ;
             data.push_back(getTubCollector().getRobot().getTime()) ;
             data.push_back(getTubCollector().getCollectPower()) ;
+            data.push_back(getTubCollector().getState()) ;
             getTubCollector().addPlotData(plotid_, data) ;
         }
 

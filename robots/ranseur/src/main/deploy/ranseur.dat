@@ -125,10 +125,10 @@ tubcollector:tubsensor:h2ldelay                                 0
 tubcollector:tubsensor:l2hdelay                                 0
 tubcollector:eject:speed                                        0.5
 tubcollector:eject:delay                                        1
-tubcollector:first_current_trigger                              70
-tubcollector:second_current_trigger                             50
+tubcollector:first_current_trigger                              30
+tubcollector:second_current_trigger                             20
 tubcollector:second_current_limit                               10
-tubcollector:third_current_trigger                              60
+tubcollector:third_current_trigger                              35
 tubcollector:third_state_delay_time                             0.1
 ###################################################################################################
 # tubwrist
@@ -145,16 +145,16 @@ tubwrist:goto:threshold                                         3.0       # With
 tubwrist:goto:maxd                                             -720.0       # maximum deceleration
 tubwrist:goto:maxa                                              720.0     # maximum acceleration
 tubwrist:goto:maxv                                              720.0     # maximum velocity
-tubwrist:follower:down:kp                                       0.06
+tubwrist:follower:down:kp                                       0.05
 tubwrist:follower:down:kd                                       0.0
 tubwrist:follower:down:kv                                       0.002757353
 tubwrist:follower:down:ka                                       0.0
-tubwrist:follower:up:kp                                         0.06
+tubwrist:follower:up:kp                                         0.05
 tubwrist:follower:up:kd                                         0.0
 tubwrist:follower:up:kv                                         0.002757353
 tubwrist:follower:up:ka                                         0.0
 tubwrist:collect:pos                                            10
-tubwrist:dump:pos                                               210
+tubwrist:dump:pos                                               190
 tubwrist:eject:pos                                              160
 tubwrist:eject:finish                                            90
 tubwrist:power                                                  0.2
