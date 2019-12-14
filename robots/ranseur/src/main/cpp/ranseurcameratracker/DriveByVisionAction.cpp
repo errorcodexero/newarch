@@ -35,6 +35,7 @@ namespace xero {
         void DriveByVisionAction::start() {
             lost_count_ = 0 ;
             is_done_ = false ;
+            last_yaw_ = 0;
 
             // 
             // The distance we need to travel is the reported distance from the camera to the target, 
