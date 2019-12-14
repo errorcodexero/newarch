@@ -11,7 +11,7 @@ namespace xero {
         std::vector<std::string> DriveByVisionAction::cols_ =
         {
             "time", 
-            "tvel", "avel", "tdist", "adist", "yaw", "yawadj", "left", "right",
+            "tvel", "avel", "tdist", "adist", "yaw", "effyaw", "yawadj", "left", "right",
             "lost",
         } ;
        
@@ -22,6 +22,8 @@ namespace xero {
             double a = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:maxa") ;
             double d = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:maxd") ;            
             double v = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:maxv") ;
+
+            decay_factor_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:decay") ;
 
             camera_collector_distance_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:camera_collector_distance") ;
 
@@ -108,12 +110,18 @@ namespace xero {
                 yaw = camera_.getYaw() ;
                 if (camera_.isTargetPresent()) {
                     lost = 0 ;
-
-                    yawadj = camera_.getYaw() * yaw_p_ ;
-                    left += yawadj ;
-                    right -= yawadj ;
-                    setMotorsToPercents(left, right) ;                    
+                    last_yaw_ = camera_.getYaw() ;
                 }
+                else
+                {
+                    last_yaw_ *= decay_factor_ ;
+                }
+                
+                yawadj = camera_.getYaw() * yaw_p_ ;
+                left += yawadj ;
+                right -= yawadj ;   
+
+                setMotorsToPercents(left, right) ; 
 
                 std::vector<double> data ;
                 data.push_back(delta) ;
@@ -122,6 +130,7 @@ namespace xero {
                 data.push_back(targetdist) ;
                 data.push_back(actualdist) ;
                 data.push_back(yaw) ;
+                data.push_back(last_yaw_) ;
                 data.push_back(yawadj);
                 data.push_back(left) ;
                 data.push_back(right) ;

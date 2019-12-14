@@ -186,6 +186,10 @@ namespace xero {
             {
                 special_case_fix_me_ = true ;
             }
+
+            void offsetBValue(double o) {
+                absB_ += o ;
+            }
         private:
             bool angular_;
 

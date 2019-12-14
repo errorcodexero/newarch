@@ -49,6 +49,10 @@ namespace xero {
 
             void init(LoopType ltype) override;
 
+            std::shared_ptr<XeroEncoder> getEncoder() {
+                return encoder_ ;
+            }
+
         private:
             std::shared_ptr<XeroEncoder> encoder_;
 

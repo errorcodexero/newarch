@@ -7,7 +7,7 @@
                 {
                     "constraints": [
                         {
-                            "after": 220,
+                            "after": 200,
                             "before": 268,
                             "type": "distance_velocity",
                             "velocity": 40

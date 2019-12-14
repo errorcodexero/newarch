@@ -31,6 +31,17 @@ namespace xero {
         TubToucher::~TubToucher() {
         }
 
+        void TubToucher::init(LoopType lt)
+        {
+            if (lt == LoopType::OperatorControl)
+            {
+                solenoid1_1_->Set(false);
+                solenoid1_2_->Set(true);
+                solenoid2_1_->Set(false);
+                solenoid2_2_->Set(true);                  
+            }
+        }
+
         void TubToucher::computeState() {
         }
 

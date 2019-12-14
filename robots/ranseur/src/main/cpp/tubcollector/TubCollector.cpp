@@ -6,6 +6,7 @@
 #include <frc/DigitalInput.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/PowerDistributionPanel.h>
+#include "ranseurids.h"
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -60,8 +61,23 @@ namespace xero {
 
             if (power_mode_)
             {
-                if (!sensor_->Get() && db_ != nullptr && std::fabs(db_->getVelocity()) < 1.0)
+                auto db = getRobot().getDriveBase() ;
+                assert(db != nullptr) ;
+                
+                if (std::fabs(db->getVelocity()) < 1.0 && !has_tub_)
                 {
+                    auto &logger = getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TUBCOLLECTOR) ;
+                    logger << "Drive base stopped, checking for tub via sensor" ;
+                    logger.endMessage() ;
+
+                    if (!sensor_->Get())
+                    {
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TUBCOLLECTOR) ;
+                        logger << "Note, sensor was true" ;
+                        logger.endMessage() ;                        
+                    }
+                    
                     //
                     // Kind of a hack.  If the infrared sensor is true and we are in auto mode (where we do current sensing) and
                     // the drivebase has stopped driving, return the fact that we have a tub.

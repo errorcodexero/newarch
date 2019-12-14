@@ -24,6 +24,7 @@ namespace xero {
             plotid_ = initPlot("LimeLight") ;
             prev_dist_ = std::numeric_limits<double>::max() ;
             count_ = 0 ;
+            distance_ = 36 ;
         }
 
         RanseurLimeLight::~RanseurLimeLight() {            

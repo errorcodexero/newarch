@@ -32,13 +32,13 @@ hw:tubarm:motor:type                                            "victor_spx"
 hw:tubarm:motor:invert                                          true
 hw:tubarm:encoder:analog                                        1
 hw:tubarm:encoder:analog:m                                      -72
-hw:tubarm:encoder:analog:b                                      320.0
+hw:tubarm:encoder:analog:b                                      364.0
 
 hw:tubwrist:motor:canid                                         7
 hw:tubwrist:motor:type                                          "victor_spx"
 hw:tubwrist:encoder:analog                                      0
 hw:tubwrist:encoder:analog:m                                    71.5
-hw:tubwrist:encoder:analog:b                                    -95
+hw:tubwrist:encoder:analog:b                                    -90
 
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2
@@ -114,13 +114,13 @@ bunnyarm:deploy:time                                             0.5
 ###################################################################################################
 # tubtoucher
 ###################################################################################################
-tubtoucher:deploy:time                                           0.5
+tubtoucher:deploy:time                                           1.0
 
 ###################################################################################################
 # tubcollector
 ###################################################################################################   
 tubcollector:collect:power                                      -0.8
-tubcollector:collect:duration                                   0.250
+tubcollector:collect:duration                                   0.100
 tubcollector:tubsensor:h2ldelay                                 0
 tubcollector:tubsensor:l2hdelay                                 0
 tubcollector:eject:speed                                        0.5
@@ -165,7 +165,7 @@ tubwrist:turtle:pos                                             90
 ###################################################################################################
 # tubarm
 ###################################################################################################
-tubarm:hold:p                                                   0.01
+tubarm:hold:p                                                   0.02
 tubarm:hold:i                                                   0
 tubarm:hold:d                                                   0
 tubarm:hold:f                                                   0
@@ -218,6 +218,7 @@ drivebyvision:kp                                                0.031
 drivebyvision:ka                                                0
 drivebyvision:kv                                                0.005208333
 drivebyvision:kd                                                0
+drivebyvision:decay                                             0.9
 
 ###################################################################################################
 # Driver gamepad
