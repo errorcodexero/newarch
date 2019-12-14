@@ -2,7 +2,7 @@
 #include "Phoenix.h"
 #include "phoenixsubsystem/PhoenixRobotSubsystem.h"
 #include <Robot.h>
-#include <SequenceAction.h>
+#include <actions/SequenceAction.h>
 #include <frc/DriverStation.h>
 #include <iostream>
 #include <cmath>
@@ -11,9 +11,9 @@ using namespace xero::base ;
 
 namespace xero {
     namespace phoenix {
-        PhoenixOISubsystem::PhoenixOISubsystem(Robot &robot) : OISubsystem(robot, "phoenixoi") {
+        PhoenixOISubsystem::PhoenixOISubsystem(Subsystem *parent) : OISubsystem(parent, "phoenixoi") {
 #ifdef NOTYET
-            int oi = robot.getSettingsParser().getInteger("hw:driverstation:hid:oi") ;
+            int oi = getRobot().getSettingsParser().getInteger("hw:driverstation:hid:oi") ;
             auto oidev = std::make_shared<PhoenixOIDevice>(*this, oi) ;
             addHIDDevice(oidev) ;
 #endif

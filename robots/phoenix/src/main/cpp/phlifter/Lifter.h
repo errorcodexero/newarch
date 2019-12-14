@@ -16,7 +16,7 @@ namespace xero {
             friend class LifterGoToEncoderAction ;
             friend class LifterHoldClimbAction ;
         public:
-            Lifter(xero::base::Robot &robot) ;
+            Lifter(xero::base::Subsystem *parent) ;
             virtual ~Lifter() ;
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;

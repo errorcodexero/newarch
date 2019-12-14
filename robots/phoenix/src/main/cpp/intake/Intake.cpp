@@ -6,7 +6,8 @@ using namespace xero::base;
 
 namespace xero {
     namespace phoenix {
-        Intake::Intake(Robot & robot):Subsystem(robot,"intake") {
+        Intake::Intake(Subsystem *parent):Subsystem(parent,"intake") {
+           auto &robot = getRobot();
            int m1 = robot.getSettingsParser().getInteger("hw:intake:leftmotor") ;
            int m2 = robot.getSettingsParser().getInteger("hw:intake:rightmotor") ;
 

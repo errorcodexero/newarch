@@ -2,6 +2,7 @@
 
 #include <tankdrive/TankDrive.h>
 #include <Subsystem.h>
+#include <RobotSubsystem.h>
 
 namespace xero {
     namespace phoenix {
@@ -9,7 +10,7 @@ namespace xero {
         class PhoenixOISubsystem ;
         class Wings ;
 
-        class PhoenixRobotSubsystem : public xero::base::Subsystem {
+        class PhoenixRobotSubsystem : public xero::base::RobotSubsystem {
         public:
             PhoenixRobotSubsystem(xero::base::Robot &robot) ;
             virtual ~PhoenixRobotSubsystem() ;

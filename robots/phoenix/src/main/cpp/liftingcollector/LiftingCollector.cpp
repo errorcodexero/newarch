@@ -4,7 +4,7 @@
 #include "collector/Collector.h"
 #include "collector/CollectCubeAction.h"
 #include "LiftingCollectCubeAction.h"
-#include <SequenceAction.h>
+#include <actions/SequenceAction.h>
 #include <Robot.h>
 
 using namespace xero::base ;
@@ -12,13 +12,12 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phoenix {
-        LiftingCollector::LiftingCollector(Robot &robot) : Subsystem(robot, "liftingcollector") {
-
-            lifter_ = std::make_shared<Lifter>(robot) ;
+        LiftingCollector::LiftingCollector(Subsystem *parent) : Subsystem(parent, "liftingcollector") {
+            lifter_ = std::make_shared<Lifter>(parent) ;
             addChild(lifter_) ;
             lifter_->createNamedSequences() ;
             
-            collector_ = std::make_shared<Collector>(robot) ;
+            collector_ = std::make_shared<Collector>(parent) ;
             addChild(collector_) ;
             collector_->createNamedSequences() ;
         }

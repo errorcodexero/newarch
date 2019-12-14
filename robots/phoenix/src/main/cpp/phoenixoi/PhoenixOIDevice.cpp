@@ -21,7 +21,7 @@
 #include "phoenixsubsystem/PhoenixRobotSubsystem.h"
 
 // Action related classes
-#include <SequenceAction.h>
+#include <actions/SequenceAction.h>
 
 
 using namespace xero::base ;

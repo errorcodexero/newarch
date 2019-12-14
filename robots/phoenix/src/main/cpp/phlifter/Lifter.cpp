@@ -9,7 +9,9 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phoenix {
-        Lifter::Lifter(Robot &robot) : Subsystem(robot, "lifter") {
+        Lifter::Lifter(Subsystem *parent) : Subsystem(parent, "lifter") {
+            auto &robot = getRobot();
+
             int m1 = robot.getSettingsParser().getInteger("hw:lifter:motor1");
             int m2 = robot.getSettingsParser().getInteger("hw:lifter:motor2");
             int e1 = robot.getSettingsParser().getInteger("hw:lifter:encoder1");

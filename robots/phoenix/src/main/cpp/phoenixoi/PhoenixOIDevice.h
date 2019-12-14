@@ -1,7 +1,7 @@
 #pragma once
 
 #include <oi/OIDevice.h>
-#include <Action.h>
+#include <actions/Action.h>
 
 namespace xero {
     namespace phoenix {

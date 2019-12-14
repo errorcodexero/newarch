@@ -1,7 +1,7 @@
 #pragma once
 
 #include <AutoController.h>
-#include <SequenceAction.h>
+#include <actions/SequenceAction.h>
 #include <string>
 
 namespace xero {

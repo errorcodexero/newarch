@@ -12,7 +12,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phoenix {
-        PhoenixRobotSubsystem::PhoenixRobotSubsystem(Robot &robot) : Subsystem(robot, "PhoenixRobotSubsystem") {
+        PhoenixRobotSubsystem::PhoenixRobotSubsystem(Robot &robot) : RobotSubsystem(robot, "PhoenixRobotSubsystem") {
             auto &settings = robot.getSettingsParser() ;
             auto &logger = robot.getMessageLogger() ;
             std::list<int> left, right ;
@@ -21,13 +21,13 @@ namespace xero {
             //
             // Create the wings subsystem
             //
-            wings_ = std::make_shared<Wings>(robot) ;
+            wings_ = std::make_shared<Wings>(this) ;
             addChild(wings_) ;
 
             //
             // Create the lifting collector subsystem
             //
-            lifting_collector_ = std::make_shared<LiftingCollector>(robot) ;
+            lifting_collector_ = std::make_shared<LiftingCollector>(this) ;
             addChild(lifting_collector_) ;
             lifting_collector_->createNamedSequences() ;
 
@@ -52,7 +52,7 @@ namespace xero {
                 logger.endMessage() ;
             }
             
-            db_ = std::make_shared<TankDrive>(robot, left, right) ;
+            db_ = std::make_shared<TankDrive>(this, "hw:tankdrive") ;
 
             if (settings.isDefined("hw:tankdrive:leftencoder1") && settings.isDefined("hw:tankdrive:leftencoder2") &&
                 settings.isDefined("hw:tankdrive:rightencoder1") && settings.isDefined("hw:tankdrive:rightencoder2")) {
@@ -80,7 +80,7 @@ namespace xero {
             // Create the Phoenix OI subsystem.  It is created last as it may
             // refer to the other subsystems
             //
-            oi_ = std::make_shared<PhoenixOISubsystem>(robot) ;
+            oi_ = std::make_shared<PhoenixOISubsystem>(this) ;
             addChild(oi_) ;         
         }
 

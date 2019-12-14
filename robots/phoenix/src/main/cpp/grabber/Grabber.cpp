@@ -4,7 +4,7 @@
 #include "GrabberHoldCubeAction.h"
 #include "phoenixgroups.h"
 #include <Robot.h>
-#include <SequenceAction.h>
+#include <actions/SequenceAction.h>
 #include <MessageLogger.h>
 
 using namespace xero::base ;
@@ -12,7 +12,9 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phoenix {
-        Grabber::Grabber(xero::base::Robot &robot) : Subsystem(robot, "grabber") {
+        Grabber::Grabber(xero::base::Subsystem *parent) : Subsystem(parent, "grabber") {
+            auto &robot = getRobot();
+            
             int motor = robot.getSettingsParser().getInteger("hw:grabber:motor") ;
             int enc1 = robot.getSettingsParser().getInteger("hw:grabber:encoder1") ;
             int enc2 = robot.getSettingsParser().getInteger("hw:grabber:encoder2") ;

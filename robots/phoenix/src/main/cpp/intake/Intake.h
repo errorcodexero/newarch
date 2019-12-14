@@ -15,7 +15,7 @@ namespace xero {
         public:
             /// \brief create a new Intake subsystem
             /// \param robot the robot this Intak subsystem belongs to
-            Intake(xero::base::Robot &robot);
+            Intake(xero::base::Subsystem *parent);
 
             /// \brief destroy the intake subsystem
             virtual ~Intake();

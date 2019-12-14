@@ -9,7 +9,7 @@ namespace xero {
     namespace phoenix {
         class PhoenixOISubsystem : public xero::base::OISubsystem {
         public:
-            PhoenixOISubsystem(xero::base::Robot &robot) ;
+            PhoenixOISubsystem(xero::base::Subsystem *parent) ;
             virtual ~PhoenixOISubsystem() ;
 
         protected:

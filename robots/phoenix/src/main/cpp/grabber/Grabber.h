@@ -20,7 +20,7 @@ namespace xero {
             friend class GrabberPowerAction ;
             
         public:
-            Grabber(xero::base::Robot &robot) ;
+            Grabber(xero::base::Subsystem *parent) ;
             virtual ~Grabber() ;
             
             void createNamedSequences() ;

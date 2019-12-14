@@ -24,7 +24,7 @@ namespace xero {
         public:
             /// \brief create the wings subsystem
             /// \param robot the base robot class
-            Wings(xero::base::Robot &robot) ;
+            Wings(xero::base::Subsystem *parent) ;
 
             /// \brief destroy the wings subsystem
             virtual ~Wings() ;
