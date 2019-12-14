@@ -79,6 +79,7 @@ namespace xero {
             logger << ",turn" ;
             logger.endMessage() ;
             getTankDrive().startPlot(plot_id_, plot_columns_) ;
+            getTankDrive().startTrip(TripName) ;
         }
 
         void TankDriveFollowPathAction::run() {
