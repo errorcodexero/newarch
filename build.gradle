@@ -51,33 +51,33 @@ model {
         //
         // 2019 Bunnybots - Knockout, Ranseur, New Architecture
         //
-        frcUserProgram(NativeExecutableSpec) {
-            targetPlatform wpi.platforms.roborio
-			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO" , "-DUSE_NAVX"
-				lib library: "xerobase", linkage: "static"
-				lib library: "xeromisc", linkage: "static"                
-			}            
-            if (includeDesktopSupport) {
-                targetPlatform wpi.platforms.desktop
-            }
+        // frcUserProgram(NativeExecutableSpec) {
+        //     targetPlatform wpi.platforms.roborio
+		// 	binaries.all {
+		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO" , "-DUSE_NAVX"
+		// 		lib library: "xerobase", linkage: "static"
+		// 		lib library: "xeromisc", linkage: "static"                
+		// 	}            
+        //     if (includeDesktopSupport) {
+        //         targetPlatform wpi.platforms.desktop
+        //     }
 
-            sources.cpp {
-                source {
-                    srcDir 'robots/ranseur/src/main/cpp'
-                    include '**/*.cpp'
-                }
-                exportedHeaders {
-                    srcDir 'robots/ranseur/src/main/cpp'
-                    include '**/*.h'
-                }
+        //     sources.cpp {
+        //         source {
+        //             srcDir 'robots/ranseur/src/main/cpp'
+        //             include '**/*.cpp'
+        //         }
+        //         exportedHeaders {
+        //             srcDir 'robots/ranseur/src/main/cpp'
+        //             include '**/*.h'
+        //         }
                                 
-            }
+        //     }
 
-            // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-            useLibrary(it, "wpilib")
-            wpi.deps.vendor.cpp(it)
-        }     
+        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
+        //     useLibrary(it, "wpilib")
+        //     wpi.deps.vendor.cpp(it)
+        // }     
 
         //
         // 2016 Stronghold, Grond, Old Architecture
@@ -197,33 +197,33 @@ model {
         // //
         // 2018 Power Up, Phoenix, New Architecture
         //
-        // frcUserProgram(NativeExecutableSpec) {
-        //     targetPlatform wpi.platforms.roborio
-		// 	binaries.all {
-		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-		// 		lib library: "xerobase", linkage: "static"
-		// 		lib library: "xeromisc", linkage: "static"                
-		// 	}            
-        //     if (includeDesktopSupport) {
-        //         targetPlatform wpi.platforms.desktop
-        //     }
+        frcUserProgram(NativeExecutableSpec) {
+            targetPlatform wpi.platforms.roborio
+			binaries.all {
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
+				lib library: "xerobase", linkage: "static"
+				lib library: "xeromisc", linkage: "static"                
+			}            
+            if (includeDesktopSupport) {
+                targetPlatform wpi.platforms.desktop
+            }
 
-        //     sources.cpp {
-        //         source {
-        //             srcDir 'robots/phoenix/src/main/cpp'
-        //             include '**/*.cpp'
-        //         }
-        //         exportedHeaders {
-        //             srcDir 'robots/phoenix/src/main/cpp'
-        //             include '**/*.h'
-        //         }
+            sources.cpp {
+                source {
+                    srcDir 'robots/phoenix/src/main/cpp'
+                    include '**/*.cpp'
+                }
+                exportedHeaders {
+                    srcDir 'robots/phoenix/src/main/cpp'
+                    include '**/*.h'
+                }
                                 
-        //     }
+            }
 
-        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-        //     useLibrary(it, "wpilib")
-        //     wpi.deps.vendor.cpp(it)
-        // }            
+            // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
+            useLibrary(it, "wpilib")
+            wpi.deps.vendor.cpp(it)
+        }            
 
 		xeromisc(NativeLibrarySpec) {
             targetPlatform wpi.platforms.roborio
