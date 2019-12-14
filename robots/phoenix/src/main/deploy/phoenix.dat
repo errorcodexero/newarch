@@ -3,12 +3,18 @@
 # Describe the hardware of the robot
 #
 ##############################################################
-hw:tankdrive:leftmotor1             1
-hw:tankdrive:leftmotor2             2
-hw:tankdrive:leftmotor3             3
-hw:tankdrive:rightmotor1            4
-hw:tankdrive:rightmotor2            5
-hw:tankdrive:rightmotor3            6
+hw:tankdrive:left:1:canid           1
+hw:tankdrive:left:1:type            "talon_srx"
+hw:tankdrive:left:2:canid           2
+hw:tankdrive:left:2:type            "talon_srx"
+hw:tankdrive:left:3:canid           3
+hw:tankdrive:left:3:type            "talon_srx"
+hw:tankdrive:right:1:canid          4
+hw:tankdrive:right:1:type           "talon_srx"
+hw:tankdrive:right:2:canid          5
+hw:tankdrive:right:2:type           "talon_srx"
+hw:tankdrive:right:3:canid          6
+hw:tankdrive:right:3:type           "talon_srx"
 hw:tankdrive:leftencoder1           0
 hw:tankdrive:leftencoder2           1
 hw:tankdrive:rightencoder1          2
