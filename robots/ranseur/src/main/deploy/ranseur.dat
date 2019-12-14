@@ -119,8 +119,8 @@ tubtoucher:deploy:time                                           1.0
 ###################################################################################################
 # tubcollector
 ###################################################################################################   
-tubcollector:collect:power                                      -0.8
-tubcollector:collect:duration                                   0.100
+tubcollector:collect:power                                      -0.4
+tubcollector:collect:duration                                   0.1
 tubcollector:tubsensor:h2ldelay                                 0
 tubcollector:tubsensor:l2hdelay                                 0
 tubcollector:eject:speed                                        0.5
@@ -144,7 +144,7 @@ tubwrist:hold:max                                               0.6
 tubwrist:hold:imax                                              0.0 
 tubwrist:goto:threshold                                         3.0       # Within three degrees
 tubwrist:goto:maxd                                             -720.0       # maximum deceleration
-tubwrist:goto:maxa                                              720.0     # maximum acceleration
+tubwrist:goto:maxa                                              360.0     # maximum acceleration
 tubwrist:goto:maxv                                              720.0     # maximum velocity
 tubwrist:follower:down:kp                                       0.05
 tubwrist:follower:down:kd                                       0.0
@@ -154,8 +154,8 @@ tubwrist:follower:up:kp                                         0.05
 tubwrist:follower:up:kd                                         0.0
 tubwrist:follower:up:kv                                         0.002757353
 tubwrist:follower:up:ka                                         0.0
-tubwrist:collect:pos                                            10
-tubwrist:dump:pos                                               190
+tubwrist:collect:pos                                            15
+tubwrist:dump:pos                                               200
 tubwrist:eject:pos                                              160
 tubwrist:eject:finish                                            90
 tubwrist:power                                                  0.2
@@ -165,7 +165,7 @@ tubwrist:turtle:pos                                             90
 ###################################################################################################
 # tubarm
 ###################################################################################################
-tubarm:hold:p                                                   0.02
+tubarm:hold:p                                                   0.01
 tubarm:hold:i                                                   0
 tubarm:hold:d                                                   0
 tubarm:hold:f                                                   0
