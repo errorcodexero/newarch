@@ -1,5 +1,5 @@
 #include "PhoenixAutoController.h"
-#include <frc/DriverStation.h>
+#include <tankdrive/modes/StraightCharAutoMode.h>
 
 using namespace xero::base ;
 
@@ -12,7 +12,23 @@ namespace xero {
         }
 
         void PhoenixAutoController::updateAutoMode(int sel, const std::string &gamedata) {
-            setAction(nullptr) ;
+            AutoModePtr mode = nullptr ;
+
+            switch(sel) {
+            case 0:
+                break ;
+
+            case 1:
+                break ;                
+                
+            case 2:
+                break ;
+
+            case 9:
+                mode = std::make_shared<StraightCharAutoMode>(getRobot(), 0.5, 3.0, true) ;
+                break ;
+            }
+            setAction(mode) ;
         }
     }
 }

@@ -1,14 +1,15 @@
 #include "OIModel.h"
-
 #include <frc/RobotSimBase.h>
 
 using namespace frc ;
+using namespace xero::misc ;
 
 namespace xero {
     namespace sim {
         namespace phoenix {
             OIModel::OIModel(RobotSimBase &simbase) : SubsystemModel(simbase, "oi") {
-                ds_ = nullptr ;
+                ds_ = &frc::DriverStation::GetInstance() ;
+                ds_->SimulatorSetGameSpecificData("LLL") ;                
             }
 
             OIModel::~OIModel() {               
@@ -18,13 +19,50 @@ namespace xero {
                 std::string result("OI: ") ;
                 return result ;
             }
+            
+            bool OIModel::processEvent(const std::string &event, int value) {
+                bool ret = false ;
+                SettingsParser &settings =  getSimulator().getSettingsParser() ;
+                std::string name = "oi:button:" + event ;
+                if (settings.isDefined(name)) {
+                    int button = settings.getInteger(name) ;
+                    setButton(2, button, (value ? true : false)) ;
+                    ret = true ;
+                }
+
+                name = "oi:axis:" + event ;
+                if (!ret && settings.isDefined(name))
+                {
+                    int axis = settings.getInteger(name) ;
+                    double v = static_cast<double>(value) / 100.0 ;
+                    setAxis(2, axis, v) ;
+                    ret = true ;
+                }
+
+                name = "gamepad:axis:" + event ;
+                if (!ret && settings.isDefined(name))
+                {
+                    int axis = settings.getInteger(name) ;
+                    double v = static_cast<double>(value) / 100.0 ;
+                    setAxis(0, axis, v) ;
+                    ret = true ;
+                }
+
+                name = "gamepad:button:" + event ;
+                if (!ret && settings.isDefined(name))
+                {
+                    int button = settings.getInteger(name) ;
+                    setButton(0, button, (value ? true : false)) ;
+                    ret = true ;
+                }                
+
+                return ret ;
+            }
 
             void OIModel::run(double dt) {
             }
 
             void OIModel::init() {
-                frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
-                ds.SimulatorSetGameSpecificData("LLL") ;
             }
 
             void OIModel::inputChanged(SimulatedObject *obj) {              
@@ -32,22 +70,6 @@ namespace xero {
             }    
 
             void OIModel::addDevice(frc::DriverStation *ds) {
-                ds_ = ds ;
-                auto &stick = ds_->getStick(2) ;
-                //
-                // Axis used to detect the OI
-                //
-                stick.setAxisValue(9, 1.0) ;
-
-                //
-                // Axis used to control the automode switch
-                //
-                stick.setAxisValue(6, autovalue_) ;
-
-                //
-                // The climb diabled button is true to start, disabling climb
-                //
-                stick.setButtonValue(15, false) ;
             }     
 
             void OIModel::setButton(int which, int button, bool value) {

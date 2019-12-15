@@ -67,7 +67,6 @@ namespace xero {
             grabber_mode_ = mapAxisSwitch(2, 3) ;                                   // Toggle three position
             intake_mode_ = mapAxisSwitch(4, 3) ;                                    // Toggle three position
             collect_end_height_ = mapAxisSwitch(3, 3) ;                             // Toggle three position
-
         }
 
         void PhoenixOIDevice::createActions() {

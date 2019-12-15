@@ -8,8 +8,8 @@ hw:tankdrive:left:motor:3               3                               # TalonS
 hw:tankdrive:right:motor:1              4                               # TalonSRX 4
 hw:tankdrive:right:motor:2              5                               # TalonSRX 5
 hw:tankdrive:right:motor:3              6                               # TalonSRX 6
-hw:tankdrive:left:encoder:1             0                               # Digital IO
-hw:tankdrive:left:encoder:2             1                               # Digital IO
+hw:tankdrive:left:encoder:1             1                               # Digital IO
+hw:tankdrive:left:encoder:2             0                               # Digital IO
 hw:tankdrive:right:encoder:1            2                               # Digital IO
 hw:tankdrive:right:encoder:2            3                               # Digital IO
 hw:tankdrive:shifter                    0                               # Solenoid
@@ -60,3 +60,5 @@ grabber:sim:degrees_per_tick            0.1
 grabber:sim:cube_angle                  90
 
 collector:eject_duration                0.25
+
+oi:axis:automode                        6

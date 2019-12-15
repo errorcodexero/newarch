@@ -3,24 +3,24 @@
 # Describe the hardware of the robot
 #
 ##############################################################
-hw:tankdrive:left:1:canid           1
-hw:tankdrive:left:1:type            "talon_srx"
-hw:tankdrive:left:2:canid           2
-hw:tankdrive:left:2:type            "talon_srx"
-hw:tankdrive:left:3:canid           3
-hw:tankdrive:left:3:type            "talon_srx"
-hw:tankdrive:right:1:canid          4
-hw:tankdrive:right:1:type           "talon_srx"
-hw:tankdrive:right:2:canid          5
-hw:tankdrive:right:2:type           "talon_srx"
-hw:tankdrive:right:3:canid          6
-hw:tankdrive:right:3:type           "talon_srx"
-hw:tankdrive:leftencoder1           0
-hw:tankdrive:leftencoder2           1
-hw:tankdrive:rightencoder1          2
-hw:tankdrive:rightencoder2          3
-hw:tankdrive:shifter                0
-hw:tankdrive:invertleft             true
+hw:tankdrive:motors:left:1:canid                                1
+hw:tankdrive:motors:left:2:canid                                2
+hw:tankdrive:motors:left:3:canid                                3
+hw:tankdrive:motors:right:invert                                true
+hw:tankdrive:motors:right:1:canid                               4
+hw:tankdrive:motors:right:2:canid                               5
+hw:tankdrive:motors:right:3:canid                               6
+hw:tankdrive:motors:left:1:type                                 "talon_srx"
+hw:tankdrive:motors:left:2:type                                 "talon_srx"
+hw:tankdrive:motors:left:3:type                                 "talon_srx"
+hw:tankdrive:motors:right:1:type                                "talon_srx"
+hw:tankdrive:motors:right:2:type                                "talon_srx"
+hw:tankdrive:motors:right:3:type                                "talon_srx"
+hw:tankdrive:leftencoder:1                                      0                            # Digital IO
+hw:tankdrive:leftencoder:2                                      1                            # Digital IO
+hw:tankdrive:rightencoder:1                                     3                            # Digital IO
+hw:tankdrive:rightencoder:2                                     2                            # Digital IO
+hw:tankdrive:shifter                                            0
 
 hw:lifter:motor1                    0
 hw:lifter:motor2                    1
@@ -248,3 +248,8 @@ auto:c_switch_r:segment1				 60
 auto:c_switch_r:segment2				 24
 auto:c_switch_r:segment3                 100
 
+#
+# Enable plotting.  Plot data is stored in the network tables and display
+# programs read the data from the network tables
+#
+plotting:enabled                                               true

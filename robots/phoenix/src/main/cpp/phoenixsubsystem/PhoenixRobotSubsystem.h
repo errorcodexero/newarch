@@ -15,7 +15,11 @@ namespace xero {
             PhoenixRobotSubsystem(xero::base::Robot &robot) ;
             virtual ~PhoenixRobotSubsystem() ;
 
-            virtual bool canAcceptAction(xero::base::ActionPtr action) ;            
+            virtual bool canAcceptAction(xero::base::ActionPtr action) ;      
+
+            std::shared_ptr<xero::base::TankDrive> getTankDrive() {
+                return std::dynamic_pointer_cast<xero::base::TankDrive>(getDriveBase()) ;
+            }      
 
             std::shared_ptr<PhoenixOISubsystem> getOI() { 
                 return oi_ ;
@@ -29,15 +33,10 @@ namespace xero {
                 return lifting_collector_ ;
             }
 
-            std::shared_ptr<xero::base::TankDrive> getTankDrive() {
-                return db_ ;
-            }
-            
         private:
             std::shared_ptr<PhoenixOISubsystem> oi_ ;
             std::shared_ptr<Wings> wings_ ;
             std::shared_ptr<LiftingCollector> lifting_collector_ ;
-            std::shared_ptr<xero::base::TankDrive> db_ ;
         } ;
     }
 }
