@@ -4,31 +4,62 @@
 #include "CTREMotorController.h"
 #include "SparkMaxMotorController.h"
 #include "MotorGroupController.h"
+#include "VictorSPMotorController.h"
 
 using namespace xero::misc;
 
 namespace xero {
     namespace base {
         // For each motor type, a function to construct that motor given the CAN ID.
-        std::map<std::string, 
-                 std::function<MotorFactory::MotorPtr(int)>
-                > MotorFactory::motorConstructors_ = {
-            { "talon_srx", [](int canID) {
-                return std::make_shared<CTREMotorController>(canID, CTREMotorController::Type::TalonSRX);
-            }},
-            { "victor_spx", [](int canID) {
-                return std::make_shared<CTREMotorController>(canID, CTREMotorController::Type::VictorSPX);
-            }},
-            { "sparkmax_brushless", [](int canID) {
-                return std::make_shared<SparkMaxMotorController>(canID, true);
-            }},
-            { "sparkmax_brushed", [](int canID) {
-                return std::make_shared<SparkMaxMotorController>(canID, false);
-            }}
+        std::map<std::string, MotorFactory::MotorDescriptor> MotorFactory::motorConstructors_ = {
+            { 
+                "talon_srx", 
+                {
+                    MotorType::CAN,
+                    [](int canID) {
+                        return std::make_shared<CTREMotorController>(canID, CTREMotorController::Type::TalonSRX);
+                    }
+                }
+            },
+            { 
+                "victor_spx", 
+                {
+                    MotorType::CAN,
+                    [](int canID) {
+                        return std::make_shared<CTREMotorController>(canID, CTREMotorController::Type::VictorSPX);
+                    }
+                }
+            },
+            { 
+                "sparkmax_brushless", 
+                {
+                    MotorType::CAN,
+                    [](int canID) {
+                        return std::make_shared<SparkMaxMotorController>(canID, true);
+                    }
+                }
+            },
+            { 
+                "sparkmax_brushed", 
+                {
+                    MotorType::CAN,
+                    [](int canID) {
+                        return std::make_shared<SparkMaxMotorController>(canID, false);
+                    }
+                }
+            },
+            { 
+                "victorsp", 
+                {
+                    MotorType::PWM,
+                    [](int pwmID) {
+                        return std::make_shared<VictorSPMotorController>(pwmID) ;
+                    }
+                }
+            },
         };
 
         MotorFactory::MotorFactory(Robot &robot) :
-            idsUsed_(), 
             messageLogger_(robot.getMessageLogger()),
             settingsParser_(robot.getSettingsParser()) {}
 
@@ -45,17 +76,24 @@ namespace xero {
         }
 
         MotorFactory::MotorPtr MotorFactory::createSingleMotor(std::string configID) {
-            bool hasCanID = settingsParser_.isDefined(configID + ":canid");
             bool hasType = settingsParser_.isDefined(configID + ":type");
+            bool hasCanID = settingsParser_.isDefined(configID + ":canid");
+            bool hasPWMID = settingsParser_.isDefined(configID + ":pwmid");
 
-            if (!(hasCanID && hasType)) {
-                if (hasCanID || hasType) handleError(configID, "must define both canid and type");
-                else return nullptr;
+            if (!hasType)
+            {
+                if (hasCanID)
+                    handleError(configID, "has canid but not type, must have both") ;
+
+                if (hasPWMID)
+                    handleError(configID, "has pwmid but not type, must have both") ;
+                
+                // This is the case of neither, this happens when we are creating a
+                // motor group with multiple motors.
+                return nullptr ;
             }
 
-            int canID = settingsParser_.getInteger(configID + ":canid");
             std::string type = settingsParser_.getString(configID + ":type");
-            
             auto constructor = motorConstructors_.find(type);
             if (constructor == motorConstructors_.end()) {
                 // The motor type does not exist. List supported motor types and crash.
@@ -66,17 +104,43 @@ namespace xero {
                 handleError(configID, message + ")");
             }
 
-            // Ensure CAN ID does not already exist.
-            if (idsUsed_.find(canID) != idsUsed_.end()) {
-                handleError(configID, "duplicate CAN ID " + std::to_string(canID));
+            MotorPtr motor ;
+            if (constructor->second.type_ == MotorType::CAN)
+            {
+                if (!hasCanID) {
+                    std::string msg = "for motor type '" + constructor->first + "' you must define 'canid'" ;
+                    handleError(configID, msg) ;
+                }
+
+                int canID = settingsParser_.getInteger(configID + ":canid");
+                // Ensure CAN ID does not already exist.
+                if (canIdsUsed_.find(canID) != canIdsUsed_.end()) {
+                    handleError(configID, "duplicate CAN ID " + std::to_string(canID));
+                }
+
+                // Create the motor.
+                motor = constructor->second.createFunction(canID);
+                canIdsUsed_.insert(canID) ;
+            }
+            else
+            {
+
+                if (!hasPWMID) {
+                    std::string msg = "for motor type '" + constructor->first + "' you must define 'pwmid'" ;
+                    handleError(configID, msg) ;
+                }
+
+                int pwmID = settingsParser_.getInteger(configID + ":pwmid");
+                // Ensure PWM ID does not already exist.
+                if (pwmIdsUsed_.find(pwmID) != pwmIdsUsed_.end()) {
+                    handleError(configID, "duplicate PWM ID " + std::to_string(pwmID));
+                }                
+                // Create the motor.
+                motor = constructor->second.createFunction(pwmID) ;
+                pwmIdsUsed_.insert(pwmID) ;
             }
 
-            // Create the motor.
-            MotorPtr motor = constructor->second(canID);
-
-            bool v = isInverted(configID) ;
-            motor->setInverted(v) ;
-
+            motor->setInverted(isInverted(configID)) ;
             return motor;
         }
 
@@ -100,16 +164,13 @@ namespace xero {
                         leaderInverted = v;
                         if (groupInverted) v = !v;  // If the group is inverted, just invert the leader
                         motor->setInverted(v) ;
-                    } else if (leaderInverted) v = !v;  // If the leader is inverted, invert all other motors
                                                         // so that they follow the direction of the group
                     motors.add(motor, v);
                     currentIndex += 1;
-                } else {
                     // Could not create another motor.
                     if (!currentIndex) {
                         // No motors were declared.
                         handleError(configID, "invalid motor declaration");
-                    } else {
                         // We've reached the end of the motor list.
                         break;
                     }

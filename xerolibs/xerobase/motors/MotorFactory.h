@@ -39,14 +39,28 @@ namespace xero {
             MotorPtr createMotor(std::string configID);
 
         private:
-            std::set<int> idsUsed_;
+            enum MotorType { CAN, PWM } ;        
+            struct MotorDescriptor
+            {
+                MotorDescriptor(MotorType t, std::function<MotorPtr(int)> fun)
+                {
+                    type_ = t ;
+                    createFunction = fun ;
+                }
+
+                MotorType type_ ;
+                std::function<MotorPtr(int)> createFunction ;
+            } ;
+
+        private:
+            std::set<int> canIdsUsed_;
+            std::set<int> pwmIdsUsed_;
+            
             xero::misc::MessageLogger &messageLogger_;
             xero::misc::SettingsParser &settingsParser_;
             void handleError(std::string configID, std::string msg);
 
-            static std::map<std::string, 
-                            std::function<MotorPtr(int)>
-                           > motorConstructors_;
+            static std::map<std::string, MotorDescriptor> motorConstructors_;
 
             MotorPtr createSingleMotor(std::string configID);
             

@@ -24,7 +24,7 @@ legal=NO
 if [ $2 == 'auto' ]; then
     legal=YES
     echo Running auto mode
-    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto 15 --oper 0 --start 0 --test 0 $FLAGS $GUI
+    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto 150 --oper 0 --start 0 --test 0 $FLAGS $GUI
 fi
 
 if [ $2 == 'teleop' ]; then
