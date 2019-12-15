@@ -17,7 +17,7 @@ XEROMISCLIBS=$(TOPDIR)/makebuild/$(PLATFORM)/$(CONFIG)/$(BASENAME)/$(BASENAME).a
 all: $(MYDIR)
 
 $(MYDIR): $(OBJFILES)
-	gcc -o $@ $(OBJFILES) $(XEROMISCLIBS) $(GTESTLIBS) -lstdc++
+	gcc -o $@ $(OBJFILES) $(XEROMISCLIBS) $(GTESTLIBS) -lstdc++ -lm
 
 runtest:
 	./$(MYDIR)

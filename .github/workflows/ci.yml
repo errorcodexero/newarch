@@ -45,3 +45,23 @@ jobs:
     
     - name: Run simulator (teleop)
       run: ./runsim ${{ matrix.robot }} teleop
+  
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build xeromisc
+      working-directory: xerolibs/xeromisc
+      run: make CONFIG=Debug PLATFORM=SIMULATOR
+
+    - name: Build xeromisctest
+      working-directory: xerolibs/xeromisctest
+      run: make CONFIG=Debug
+
+    - name: Run xeromisctest
+      working-directory: xerolibs/xeromisctest
+      run: ./xeromisctest
