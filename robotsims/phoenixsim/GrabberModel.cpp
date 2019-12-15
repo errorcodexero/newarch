@@ -25,13 +25,6 @@ namespace xero {
             }
 
             void GrabberModel::init() {
-                if (getSimulator().hasProperty("grabber")) {
-                    const std::string &prop = getSimulator().getProperty("grabber") ;
-                    double value ;
-                    if (parseDouble(prop, value)) {
-                        angle_ = value ;
-                    }
-                }               
             }
 
             std::string GrabberModel::toString() {

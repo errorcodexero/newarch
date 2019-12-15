@@ -202,30 +202,6 @@ namespace xero {
             current_time_ += incr ;            
         }
 
-
-        bool RobotSimBase::setProperty(const std::string &str) {
-            size_t pos = str.find('=') ;
-            if (pos == std::string::npos)
-                return false ;
-
-            std::string name = str.substr(0, pos) ;
-            std::string value = str.substr(pos + 1) ;
-            properties_[name] = value ;
-
-            return true ;
-        }
-
-
-        bool RobotSimBase::hasProperty(const std::string &name) {
-            auto it = properties_.find(name) ;
-            return it != properties_.end() ;
-        }
-
-        const std::string &RobotSimBase::getProperty(const std::string &name) {
-            auto it = properties_.find(name) ;
-            return it->second ;
-        }        
-
         void RobotSimBase::readJoysticks() {
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
 

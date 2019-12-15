@@ -22,7 +22,7 @@ namespace xero
         {
             PhoenixSimulator::PhoenixSimulator(const std::string &paramfile) : RobotSimBase(paramfile)
             {
-                tankdrive_ = std::make_shared<TankDriveModel>(*this) ;
+                tankdrive_ = std::make_shared<TankDriveModel>(*this, TankDriveModel::MotorType::MTTalon) ;
                 addModel(tankdrive_) ;
 
                 lifter_ = std::make_shared<LifterModel>(*this) ;

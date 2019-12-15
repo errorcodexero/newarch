@@ -124,7 +124,6 @@ namespace xero {
             }
             else
             {
-
                 if (!hasPWMID) {
                     std::string msg = "for motor type '" + constructor->first + "' you must define 'pwmid'" ;
                     handleError(configID, msg) ;
@@ -164,13 +163,16 @@ namespace xero {
                         leaderInverted = v;
                         if (groupInverted) v = !v;  // If the group is inverted, just invert the leader
                         motor->setInverted(v) ;
+                    } else if (leaderInverted) v = !v;  // If the leader is inverted, invert all other motors
                                                         // so that they follow the direction of the group
                     motors.add(motor, v);
                     currentIndex += 1;
+                } else {
                     // Could not create another motor.
                     if (!currentIndex) {
                         // No motors were declared.
                         handleError(configID, "invalid motor declaration");
+                    } else {
                         // We've reached the end of the motor list.
                         break;
                     }
