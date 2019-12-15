@@ -12,11 +12,17 @@ namespace xero
         class TankDriveModel : public SubsystemModel
         {
         public:
-            enum MotorType
+            enum class MotorType
             {
                 MTTalon,
                 MTSpark,
                 MTVictor
+            } ;
+
+            enum class Gear
+            {
+                LowGear,
+                HighGear,
             } ;
         private:
             static constexpr double PI = 3.14159265359;
@@ -77,7 +83,7 @@ namespace xero
 
         private:
             // If true, we are in low gear.  Otherwise high gear
-            bool gear_ ;
+            Gear gear_ ;
 
             // The distance the left and right wheels have traveled
             double left_;
@@ -176,6 +182,7 @@ namespace xero
             int right_encoder_1_ ;
             int right_encoder_2_ ;
             int right_encoder_mult_ ;
+            int shifter_channel_ ;
 
         };
     } // namespace sim

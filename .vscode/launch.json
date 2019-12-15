@@ -25,10 +25,10 @@
           "--start", "0.0",
           "--auto", "0.0",
           "--oper","30.0",
-          "--events","robots/ranseur/sims/collect.sti"
+          "--events","robots/phoenix/sims/teleop.sti"
       ],
       "cwd": "${workspaceFolder}",
-      "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/ranseur/ranseur.exe",
+      "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/phoenix/phoenix.exe",
       "stopAtEntry": false,
       "environment": [],
       "externalConsole": true,
