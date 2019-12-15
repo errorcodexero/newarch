@@ -17,19 +17,12 @@
       "desktop": false,
     },
     {
-        "name": "CygWin Simulator Launch",
-        "type": "cppdbg",
-        "request": "launch",
-        "args": [
-          "--test","0.0",
-          "--start", "0.0",
-          "--auto", "0.0",
-          "--oper","30.0",
-          "--events","robots/ranseur/sims/collect.sti"
-      ],
+      "name": "CygWin Simulator Launch",
+      "type": "cppdbg",
+      "request": "launch",
       "cwd": "${workspaceFolder}",
-      "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/ranseur/ranseur.exe",
-      "stopAtEntry": false,
+      "program": "${workspaceFolder}/xerolibs/xeromisctest/xeromisctest.exe",
+      "stopAtEntry": true,
       "environment": [],
       "externalConsole": true,
       "MIMode": "gdb",
@@ -55,7 +48,7 @@
           "--auto", "15.0",
           "--oper","0.0",
           "--events","robots/ranseur/sims/automode0.sti"
-      ]
+        ]
       }
   ]
 }

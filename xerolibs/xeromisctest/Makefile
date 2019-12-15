@@ -1,7 +1,8 @@
 TESTFILES = \
 	main.cpp\
 	PIDCtrlTest.cpp\
-	TrapezoidProfileTest.cpp
+	TrapezoidProfileTest.cpp\
+	EncoderMapperTest.cpp
 
 TOPDIR=../..
 
