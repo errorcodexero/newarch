@@ -1,4 +1,5 @@
 #include "VictorSPMotorController.h"
+#include <cassert>
 
 namespace xero
 {
@@ -26,12 +27,12 @@ namespace xero
 
         void VictorSPMotorController::setNeutralMode(NeutralMode neutralMode)
         {
-            assert(false) ;
+            assert(nullptr == "VictorSP controllers do not support setNeutralMode()") ;
         }
 
-        void VictorSPMotorController::follow(std::shared_ptr<MotorController> motor, bool invert = false)
+        void VictorSPMotorController::follow(std::shared_ptr<MotorController> motor, bool invert)
         {
-            assert(false) ;
+            assert(nullptr == "VictorSP controllers do not support follow()") ;
         }
 
         void VictorSPMotorController::reapplyInverted()

@@ -11,6 +11,7 @@ namespace xero  {
                 OIModel(RobotSimBase &simbase) ;
                 virtual ~OIModel() ;
 
+                virtual void init() ;
                 virtual void run(double dt) ;
                 virtual std::string toString() ;
 

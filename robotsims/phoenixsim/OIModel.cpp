@@ -22,6 +22,11 @@ namespace xero {
             void OIModel::run(double dt) {
             }
 
+            void OIModel::init() {
+                frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
+                ds.SimulatorSetGameSpecificData("LLL") ;
+            }
+
             void OIModel::inputChanged(SimulatedObject *obj) {              
                 std::lock_guard<std::mutex> lock(getLockMutex()) ;
             }    

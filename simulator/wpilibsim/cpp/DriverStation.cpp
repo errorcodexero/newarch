@@ -49,11 +49,6 @@ namespace frc {
     }
 
     std::string DriverStation::GetGameSpecificMessage() const {
-        std::string ret = "LLL" ;
-        RobotSimBase &sim = RobotSimBase::getRobotSimulator() ;
-        if (sim.hasProperty("gamedata"))
-            ret = sim.getProperty("gamedata") ;
-
-        return ret ;
+        return game_data_ ;
     }
 }

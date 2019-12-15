@@ -132,6 +132,10 @@ namespace frc
             return 12.0;
         }
 
+        void SimulatorSetGameSpecificData(const std::string &value) {
+            game_data_ = value ;
+        }
+
     private:
         DriverStation() ;
         virtual ~DriverStation() ;
@@ -141,5 +145,6 @@ namespace frc
 
     private:
         std::vector<Stick> sticks_ ;
+        std::string game_data_ ;
     } ;
 }

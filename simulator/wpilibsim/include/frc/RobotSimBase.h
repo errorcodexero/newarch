@@ -75,9 +75,6 @@ namespace xero {
                 speed_ = s ;
             }
 
-            bool hasProperty(const std::string &name) ;
-            const std::string &getProperty(const std::string &name) ;
-
             std::shared_ptr<SubsystemModel> getModelByName(const std::string &name) ;
 
             double getRobotXPos() {
