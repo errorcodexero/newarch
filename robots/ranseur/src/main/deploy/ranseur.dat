@@ -129,6 +129,7 @@ tubcollector:first_current_trigger                              70
 tubcollector:second_current_trigger                             50
 tubcollector:second_current_limit                               10
 tubcollector:third_current_trigger                              60
+tubcollector:third_state_delay_time                             0.1
 
 ###################################################################################################
 # tubwrist
