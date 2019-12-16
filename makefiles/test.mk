@@ -1,18 +1,30 @@
-ifndef CONFIG
-CONFIG=DEBUG
-endif
-
-PLATFORM=SIMULATOR
 
 OBJFILES=$(subst .cpp,.o,$(TESTFILES))
 
-CATCH2DIR = $(TOPDIR)/external/catch
+ifndef GTESTLIBDIR
+GTESTLIBDIR=../external/build/googletest
+endif
+
+ifndef GTESTLIBS
+GTESTLIBS=-L$(GTESTLIBDIR) -lgtest_main -lgtest
+endif
+
+ifndef GTESTINCDIR
+GTESTINCDIR=../external/googletest/googletest/include
+endif
 
 MYDIR=$(notdir $(PWD))
+SIMNAME=$(subst test,sim,$(MYDIR))
 BASENAME=$(subst test,,$(MYDIR))
 
-CPPFLAGS = -I../$(BASENAME) -I$(CATCH2DIR) -std=gnu++11 $(LOCALFLAGS)
-XEROMISCLIBS=$(TOPDIR)/makebuild/$(PLATFORM)/$(CONFIG)/$(BASENAME)/$(BASENAME).a
+ifdef DEBUG
+$(info MYDIR $(MYDIR))
+$(info BASENAME $(BASENAME))
+$(info SIMNAME $(SIMNAME))
+endif
+
+CPPFLAGS = -I../$(BASENAME) -I$(GTESTINCDIR) -std=gnu++11 $(LOCALFLAGS)
+XEROMISCLIBS=../build/libs/$(SIMNAME)/static/$(SIMNAME).lib
 
 all: $(MYDIR)
 

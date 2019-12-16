@@ -2,6 +2,7 @@
 
 #include "Subsystem.h"
 #include "DebounceBoolean.h"
+#include <DriveBase.h>
 #include <frc/DigitalInput.h>
 #include <frc/Solenoid.h>
 #include <frc/VictorSP.h>
@@ -55,6 +56,14 @@ namespace xero {
 
             virtual void init(xero::base::LoopType lt) ;
 
+            double getCollectPower() {
+                return collect_power_ ;
+            }
+
+            int getState() {
+                return state_ ;
+            }
+
         private:
             //
             // This is the raw tub state, does not mean a tub is collected
@@ -75,6 +84,7 @@ namespace xero {
             double third_current_trigger_ ;
             double start_time_ ;
             double delay_time_ ;
+            double collect_power_ ;
             
             int loops_ ;
             int state_ ;

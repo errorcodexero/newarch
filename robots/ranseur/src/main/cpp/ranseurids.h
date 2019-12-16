@@ -21,3 +21,5 @@
 #define MSG_GROUP_TUBWRIST                          (1ull << 36)
 
 #define MSG_GROUP_TUBCOLLECTOR                      (1ull << 37)
+
+#define MSG_GROUP_TUBTOUCHER                        (1ull << 38)

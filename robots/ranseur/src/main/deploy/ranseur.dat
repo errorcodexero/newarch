@@ -122,21 +122,22 @@ bunnyarm:deploy:time                                             0.5
 ###################################################################################################
 # tubtoucher
 ###################################################################################################
-tubtoucher:deploy:time                                           0.5
+tubtoucher:deploy:time                                           1.0
 
 ###################################################################################################
 # tubcollector
 ###################################################################################################   
-tubcollector:collect:power                                      -0.8
-tubcollector:collect:duration                                   0.250
+tubcollector:collect:power                                      -0.4
+tubcollector:collect:duration                                   0.1
 tubcollector:tubsensor:h2ldelay                                 0
 tubcollector:tubsensor:l2hdelay                                 0
 tubcollector:eject:speed                                        0.5
 tubcollector:eject:delay                                        1
-tubcollector:first_current_trigger                              70
-tubcollector:second_current_trigger                             50
+tubcollector:first_current_trigger                              25
+tubcollector:second_current_trigger                             20
 tubcollector:second_current_limit                               10
-tubcollector:third_current_trigger                              60
+tubcollector:third_current_trigger                              35
+tubcollector:third_state_delay_time                             0.1
 
 ###################################################################################################
 # tubwrist
@@ -151,18 +152,18 @@ tubwrist:hold:max                                               0.6
 tubwrist:hold:imax                                              0.0 
 tubwrist:goto:threshold                                         3.0       # Within three degrees
 tubwrist:goto:maxd                                             -720.0       # maximum deceleration
-tubwrist:goto:maxa                                              720.0     # maximum acceleration
+tubwrist:goto:maxa                                              360.0     # maximum acceleration
 tubwrist:goto:maxv                                              720.0     # maximum velocity
-tubwrist:follower:down:kp                                       0.06
+tubwrist:follower:down:kp                                       0.05
 tubwrist:follower:down:kd                                       0.0
 tubwrist:follower:down:kv                                       0.002757353
 tubwrist:follower:down:ka                                       0.0
-tubwrist:follower:up:kp                                         0.06
+tubwrist:follower:up:kp                                         0.05
 tubwrist:follower:up:kd                                         0.0
 tubwrist:follower:up:kv                                         0.002757353
 tubwrist:follower:up:ka                                         0.0
-tubwrist:collect:pos                                            10
-tubwrist:dump:pos                                               210
+tubwrist:collect:pos                                            15
+tubwrist:dump:pos                                               200
 tubwrist:eject:pos                                              160
 tubwrist:eject:finish                                            90
 tubwrist:power                                                  0.2
@@ -208,7 +209,7 @@ ranseurvision:distance_threshold                                90.0
 ranseurvision:camera_height                                     20.0
 ranseurvision:camera_angle                                      64.67
 ranseurvision:camera_target_height                              17.75
-ranseurvision:target_count                                      10
+ranseurvision:target_count                                      4
 limelight:camera_latency                                        11.0
 limelight:network_latency                                       10.0
 
@@ -216,16 +217,16 @@ limelight:network_latency                                       10.0
 # drive by vision (simple P only control)
 ###################################################################################################
 
-drivebyvision:camera_collector_distance                         0
-drivebyvision:yaw_base_power                                    0.4
-drivebyvision:yaw_p                                             0.015
+drivebyvision:camera_collector_distance                         8
+drivebyvision:yaw_p                                             0.01
 drivebyvision:maxa                                              40
 drivebyvision:maxd                                              -40
 drivebyvision:maxv                                              40
-drivebyvision:kp                                                0
+drivebyvision:kp                                                0.031
 drivebyvision:ka                                                0
 drivebyvision:kv                                                0.005208333
 drivebyvision:kd                                                0
+drivebyvision:decay                                             0.9
 
 ###################################################################################################
 # Driver gamepad

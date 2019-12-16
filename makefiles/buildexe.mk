@@ -76,18 +76,18 @@ buildexe:
 
 buildold: buildlibs apponly
 
-apponly: post
+apponly: pre mkdirs $(TARGETFILE) post
 
 pre:
 	@echo Building executable file $(TARGET)$(EXEEXT)
 
-mkdirs: pre
+mkdirs:
 	$(QUIET)mkdir -p $(BUILDTARGETDIR)
 
-post: $(TARGETFILE)
+post:
 	@echo Executable file $(TARGET)$(EXEEXT) complete
 
-$(TARGETFILE): mkdirs $(OBJECTS) $(LINKLIBS)
+$(TARGETFILE): $(OBJECTS) $(LINKLIBS)
 	@echo Linking ...
 	$(QUIET)$(CXX) -o $@ $(OBJECTS) $(LINKPREFIX) $(ALLLIBS) $(LINKPOSTFIX)
 
