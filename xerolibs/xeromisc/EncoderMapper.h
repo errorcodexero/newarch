@@ -10,7 +10,7 @@ namespace xero
             EncoderMapper(double rmax, double rmin, double emax, double emin) ;
             virtual ~EncoderMapper() ;
 
-            void calibrate(double encoder, double robot) ;
+            void calibrate(double robot, double encoder) ;
 
             double toRobot(double encoder) ;
 

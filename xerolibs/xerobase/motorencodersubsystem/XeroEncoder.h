@@ -6,6 +6,7 @@
 #include <Robot.h>
 #include <SettingsParser.h>
 #include <MessageLogger.h>
+#include <EncoderMapper.h>
 #include <frc/Encoder.h>
 #include <frc/AnalogInput.h>
 #include <frc/Counter.h>
@@ -176,15 +177,6 @@ namespace xero {
                 setQuadB(b);
             }
 
-            /// Sets the linear function mapping for the absolute encoder.
-            /// Asserts if there is no absolute encoder.
-            /// @param m The M constant.
-            /// @param b The B constant.
-            void setAbsoluteMapping(double m, double b) {
-                setAbsoluteM(m);
-                setAbsoluteB(b);
-            }
-
             /// Sets the quadrature encoder's M constant.
             /// Asserts if there is no quadrature encoder.
             /// @param m The new M constant.
@@ -201,21 +193,6 @@ namespace xero {
                 quadB_ = b;
             }
 
-            /// Sets the absolute encoder's M constant.
-            /// Asserts if there is no absolute encoder.
-            /// @param m The new M constant.
-            void setAbsoluteM(double m) {
-                assert(analog_ || pwm_);
-                absM_ = m;
-            }
-
-            /// Sets the absolute encoder's B constant.
-            /// Asserts if there is no absolute encoder.
-            /// @param b The new B constant.
-            void setAbsoluteB(double b) {
-                assert(analog_ || pwm_);
-                absB_ = b;
-            }
         private:
             Robot &robot_;
 
@@ -229,16 +206,8 @@ namespace xero {
 
             std::shared_ptr<frc::AnalogInput> analog_;    // An analog encoder, or nullptr.
             std::shared_ptr<frc::Counter> pwm_;    // A PWM encoder, or nullptr.
-            double absM_ = 1;
-            double absB_ = 0;
 
-            // The start of the absolute encoder's range
-            // (i.e. the hardware position corresponding to zero).
-            double absOffset_ = 0;
-
-            // The wrap point of the absolute encoder
-            // (i.e. the maximum value output by the hardware).
-            double absWrap_ = INFINITY;
+            std::shared_ptr<xero::misc::EncoderMapper> abs_mapper_ ;
         };
     }
 }
