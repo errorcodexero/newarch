@@ -42,18 +42,18 @@ OBJECTS = $(addprefix $(BUILDTARGETDIR)/,$(SOURCES:.cpp=.o))
 #
 # Target to build the library
 #
-buildlib: post
+buildlib: pre mkdirs $(TARGETFILE) post
 
 pre:
 	@echo Building library target $(TARGET).a
 
-mkdirs: pre
+mkdirs:
 	$(QUIET)mkdir -p $(BUILDTARGETDIR)
 
-post: $(TARGETFILE)
+post:
 	@echo Library target $(TARGET).a is complete
 
-$(TARGETFILE): mkdirs $(OBJECTS)
+$(TARGETFILE): $(OBJECTS)
 	$(QUIET)$(AR) rvs $@ $(OBJECTS) $(CMDTERM)
 
 clean:

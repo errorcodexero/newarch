@@ -4,6 +4,7 @@
 #include "Counter.h"
 #include "DriverStation.h"
 #include "Encoder.h"
+#include "PowerDistributionPanel.h"
 #include "Solenoid.h"
 #include "Relay.h"
 #include <ctre/Phoenix.h>

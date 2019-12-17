@@ -117,7 +117,7 @@ namespace xero {
             if(getValue(dump_) && !tubmanipulatorsubsytem->isBusy()) {
                 seq.pushSubActionPair(tubmanipulatorsubsytem, dumping_, false) ;
             }
-            if(getValue(turtle_) && !tubmanipulatorsubsytem->isBusy()) {
+            if(getValue(turtle_)) {
                 seq.pushSubActionPair(ranseurrobotsubsystem, turtling_, false) ;
             }
             if(getValue(eject_) && !tubmanipulatorsubsytem->isBusy()) {

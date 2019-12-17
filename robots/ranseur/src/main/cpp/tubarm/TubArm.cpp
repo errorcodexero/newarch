@@ -30,5 +30,15 @@ namespace xero {
         void TubArm::computeState() {
             MotorEncoderSubsystem::computeState() ;
         }        
+
+        void TubArm::init(LoopType lt) 
+        {
+            MotorEncoderSubsystem::init(lt) ;
+        }
+
+        void TubArm::postHWInit()
+        {
+            MotorEncoderSubsystem::postHWInit() ;
+        }
     }
 }

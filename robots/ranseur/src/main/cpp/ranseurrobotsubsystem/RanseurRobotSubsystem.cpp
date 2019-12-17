@@ -40,7 +40,7 @@ namespace xero {
             addChild(tubToucher_);
 
             manipulator_ = std::make_shared<TubManipulatorSubsystem>(this) ;
-            addChild(manipulator_) ;                 
+            addChild(manipulator_) ;
         }
 
         RanseurRobotSubsystem::~RanseurRobotSubsystem() {

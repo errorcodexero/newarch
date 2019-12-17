@@ -3,6 +3,7 @@
 #include <ctre/Phoenix.h>
 #include <rev/CANSparkMax.h>
 #include "Encoder.h"
+#include "PowerDistributionPanel.h"
 #include "AnalogInput.h"
 #include "Counter.h"
 #include "DigitalInput.h"
@@ -42,6 +43,9 @@ namespace xero {
 
             virtual void addDevice(frc::Encoder *encoder) {                
             }
+
+            virtual void addDevice(frc::PowerDistributionPanel *pdp) {                
+            }            
 
             virtual void addDevice(frc::AnalogInput *input) {                
             }            

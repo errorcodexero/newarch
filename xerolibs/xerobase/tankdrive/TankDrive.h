@@ -7,6 +7,8 @@
 #include <frc/Solenoid.h>
 #include <frc/Encoder.h>
 #include <list>
+#include <map>
+#include <string>
 #include <AHRS.h>       
 
 /// \file
@@ -181,6 +183,15 @@ namespace xero {
             /// \param ltype the type of loop being enabled (e.g. teleop, auto, test)
             virtual void init(LoopType ltype) ;
 
+            /// \brief start a trip timer for the drive base
+            /// \param name name of the trip timer
+            void startTrip(const std::string &name) ;
+
+            /// \brief return the current value for a trip timer
+            /// \param name name of the trip timer
+            double getTripDistance(const std::string &name) ;
+
+
         private:
             /// \brief Set the motors to output at the given percentages
             /// \param left_percent the percent output for the left motors
@@ -214,6 +225,8 @@ namespace xero {
 
             double left_inches_per_tick_ ;
             double right_inches_per_tick_ ;
+
+            std::map<std::string, double> trip_start_ ;
 
             std::shared_ptr<xero::misc::Kinematics> kin_ ;
 

@@ -105,7 +105,13 @@ namespace xero
 
         bool SequenceAction::isDone()
         {
-            return isDone_ ;
+            if (isCancel_) {
+                if (index_ >= 0 && index_ <= static_cast<int>(actions_.size())) {
+                    return actions_[index_]->isDone();
+                } else {
+                    return true;
+                }
+            } else return isDone_ ;
         }
 
         void SequenceAction::cancel()

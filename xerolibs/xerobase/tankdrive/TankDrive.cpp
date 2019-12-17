@@ -49,6 +49,20 @@ namespace xero {
             setMotorsToPercents(0, 0);   // Turn motors off     
         }
 
+        void TankDrive::startTrip(const std::string &name) 
+        {
+            trip_start_[name] = getDist() ;
+        }
+
+        double TankDrive::getTripDistance(const std::string &name)
+        {
+            auto it = trip_start_.find(name) ;
+            if (it == trip_start_.end())
+                return 0.0 ;
+
+            return getDist() - it->second ;            
+        }
+
         void TankDrive::reset() {
             Subsystem::reset() ;
 

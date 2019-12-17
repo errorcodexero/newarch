@@ -79,6 +79,7 @@ namespace xero {
             logger << ",turn" ;
             logger.endMessage() ;
             getTankDrive().startPlot(plot_id_, plot_columns_) ;
+            getTankDrive().startTrip(TripName) ;
         }
 
         void TankDriveFollowPathAction::run() {
@@ -209,7 +210,10 @@ namespace xero {
             }
             index_++ ;     
             if (index_ == path_->size())
+            {
                 getTankDrive().endPlot(plot_id_) ;
+                setMotorsToPercents(0.0, 0.0) ;
+            }
         }
 
         bool TankDriveFollowPathAction::isDone() {
