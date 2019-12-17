@@ -14,6 +14,8 @@ namespace xero
 
             double toRobot(double encoder) ;
 
+            double toEncoder(double robot) ;
+
         private:
             // The maximum robot value for the mechanism (inches, degrees, etc.)
             double rmax_ ;

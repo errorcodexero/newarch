@@ -59,5 +59,30 @@ namespace xero
 
             return ret ;
         }
+
+        double EncoderMapper::toEncoder(double robot)
+        {
+            double ret ;
+            double offset ;
+
+            offset = ec_ - (rc_ - rmin_) / kEncoder2Robot_ ;   
+            if (offset < emin_)
+                offset += emax_ ;
+            else if (offset > emax_)
+                offset -= emax_ ;            
+
+            if (kEncoder2Robot_ >= 0)
+            {
+                ret = robot / kEncoder2Robot_ + offset ;
+                if (ret < rmin_)
+                    ret -= rmax_ ;
+                
+            }   
+            else
+            {
+            }
+
+
+        }
     }
 }
