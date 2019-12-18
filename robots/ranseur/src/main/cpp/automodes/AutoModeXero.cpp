@@ -50,8 +50,8 @@ namespace xero
             auto path = std::make_shared<TankDriveFollowPathAction>(*tankdrive, "BunnyAutoMode_PathToTub") ;
 
             //
-            // Delay for 2 seconds before we start looking for the terminate condition, this gives us enough
-            // time to let the arm get out of the way of the camera
+            // Delay for 3 seconds before we start looking for the terminate condition, this gives us enough
+            // time to let the arm get out of the way of the camera & slow to vision speed
             //
             auto term = std::make_shared<TerminateAction>(tankdrive, path , ranseur, 3.0) ;
             term->addTerminator(camera) ; 
@@ -67,7 +67,7 @@ namespace xero
             sequence = std::make_shared<SequenceAction>(robot.getMessageLogger()) ;
             parallel->addAction(sequence) ;
             sequence->pushAction(std::make_shared<BunnyArmDeployAction>(*bunnyarm, true)) ;
-            sequence->pushAction(std::make_shared<DelayAction>(0.5)) ;
+            sequence->pushAction(std::make_shared<DelayAction>(0.35)) ;
             sequence->pushSubActionPair(bunnyarm, std::make_shared<BunnyArmDeployAction>(*bunnyarm, false)) ;
             sequence->pushSubActionPair(tubarm, std::make_shared<MotorEncoderGoToAction>(*tubarm, armangle)) ;
             sequence->pushSubActionPair(tubwrist, std::make_shared<MotorEncoderGoToAction>(*tubwrist, wristangle)) ;
