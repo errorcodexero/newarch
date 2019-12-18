@@ -209,7 +209,7 @@ limelight:network_latency                                       10.0
 # drive by vision (simple P only control)
 ###################################################################################################
 
-drivebyvision:camera_collector_distance                         8
+drivebyvision:camera_collector_distance                         12
 drivebyvision:yaw_p                                             0.01
 drivebyvision:maxa                                              40
 drivebyvision:maxd                                              -40
