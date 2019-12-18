@@ -1,5 +1,6 @@
 #include "DriveByVisionAction.h"
 #include "ranseurids.h"
+#include <tankdrive/actions/TankDriveFollowPathAction.h>
 #include <cmath>
 
 using namespace xero::base ;
@@ -35,6 +36,12 @@ namespace xero {
         void DriveByVisionAction::start() {
             lost_count_ = 0 ;
             is_done_ = false ;
+            last_yaw_ = 0;
+            double dist = 0.0 ;
+
+            const double field_length = 54.0 ;
+            const double robot_length = 22.0 ;
+            const double bumper_width = 3.0 ;
 
             // 
             // The distance we need to travel is the reported distance from the camera to the target, 
@@ -49,10 +56,18 @@ namespace xero {
             //                            plus image acquisition latency (~11 ms, from params file)
             //                            plus network latency from limelight to roborio (~10 ms, from params fiel)
             //
-            double dist = camera_.getDistance() - camera_collector_distance_ - camera_.getLatency() * getTankDrive().getVelocity() ;
+            double camdist = camera_.getDistance() - camera_collector_distance_ - camera_.getLatency() * getTankDrive().getVelocity() ;
 
+            double totaldist = 
+                    field_length / 2.0 -            // Half the field
+                    robot_length / 2.0 -            // Half the robot length on the back wall
+                    bumper_width -                  // Bumpers on the back wall
+                    robot_length / 2.0 ;            // Half the robot length on the centerline, its ok that the bumpers hang over
 
-            
+            double pathdist = totaldist - getTankDrive().getTripDistance(TankDriveFollowPathAction::TripName) ;
+
+            dist = pathdist ;
+
             //
             // Update the trapezoidal speed profile, to match the distance to the target
             //
@@ -74,7 +89,8 @@ namespace xero {
             logger << " latency " << camera_.getLatency() ;
             logger << " speed " << getTankDrive().getVelocity() ;
             logger << " total " << dist ;
-            logger << " dist " << dist ;
+            logger << " path distance " << pathdist ;
+            logger << " camera distance " << camdist ;
             logger << " profile " << profile_->toString() ;
             logger.endMessage() ;            
         }

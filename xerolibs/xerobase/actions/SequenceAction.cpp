@@ -25,6 +25,7 @@ namespace xero
         {
             index_ = -1 ;
             isDone_ = false ;
+            isCancel_ = false ;
         }
 
         void SequenceAction::startNextAction()

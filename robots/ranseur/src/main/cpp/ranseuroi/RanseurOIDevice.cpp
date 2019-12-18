@@ -95,7 +95,7 @@ namespace xero {
 
         }
 
-        void RanseurOIDevice::generateActions(SequenceAction &seq){
+        void RanseurOIDevice::generateActions(SequenceAction &seq) {
           
             auto &ranseur = dynamic_cast<Ranseur &>(getSubsystem().getRobot()) ;
             auto bunnyarm = ranseur.getRanseurRobotSubsystem()->getBunnyArm() ;
@@ -111,8 +111,17 @@ namespace xero {
             //actions and buttons corresponding with the actions
             //actions found on wiki under tub manipulator subsystem under ranseur (robot)
             /// Actioning! ///
-            if(getValue(collect_) && !tubmanipulatorsubsytem->isBusy()) { 
-                seq.pushSubActionPair(tubmanipulatorsubsytem, sequence_, false) ;
+            if(getValue(collect_))
+            {
+                if (!tubmanipulatorsubsytem->isBusy())
+                    seq.pushSubActionPair(tubmanipulatorsubsytem, sequence_, false) ;
+                else
+                {
+                    MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
+                    log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_RANSEUR_OI) ;
+                    log << "OI: could not execut collect, subsystem is busy" ;
+                    log.endMessage() ;                    
+                }
             }
             if(getValue(dump_) && !tubmanipulatorsubsytem->isBusy()) {
                 seq.pushSubActionPair(tubmanipulatorsubsytem, dumping_, false) ;
@@ -127,17 +136,17 @@ namespace xero {
             if (getValue(bunny_arm_) != bunnyarm->isDeployed())
             {
                 if (getValue(bunny_arm_))
-                    seq.pushSubActionPair(bunnyarm, bunny_arm_deploy_) ;
+                    seq.pushSubActionPair(bunnyarm, bunny_arm_deploy_, false) ;
                 else
-                    seq.pushSubActionPair(bunnyarm, bunny_arm_retract_) ;
+                    seq.pushSubActionPair(bunnyarm, bunny_arm_retract_, false) ;
             }
 
             if (getValue(tub_touchers_) != tubtoucher->isDeployed())
             {
                 if (getValue(tub_touchers_))
-                    seq.pushSubActionPair(tubtoucher, tub_touchers_deploy_) ;
+                    seq.pushSubActionPair(tubtoucher, tub_touchers_deploy_, false) ;
                 else
-                    seq.pushSubActionPair(tubtoucher, tub_touchers_retract_) ;
+                    seq.pushSubActionPair(tubtoucher, tub_touchers_retract_, false) ;
             }            
         }
 

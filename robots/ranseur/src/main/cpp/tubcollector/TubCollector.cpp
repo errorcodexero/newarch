@@ -64,25 +64,28 @@ namespace xero {
                 auto db = getRobot().getDriveBase() ;
                 assert(db != nullptr) ;
                 
-                if (std::fabs(db->getVelocity()) < 1.0 && !has_tub_)
+                if (std::fabs(db->getVelocity()) < 1.0)
                 {
-                    auto &logger = getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TUBCOLLECTOR) ;
-                    logger << "Drive base stopped, checking for tub via sensor" ;
-                    logger.endMessage() ;
-
-                    if (!sensor_->Get())
+                    if (!has_tub_)
                     {
+                        auto &logger = getRobot().getMessageLogger() ;
                         logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TUBCOLLECTOR) ;
-                        logger << "Note, sensor was true" ;
-                        logger.endMessage() ;                        
+                        logger << "Drive base stopped, checking for tub via sensor" ;
+                        logger.endMessage() ;
+
+                        if (!sensor_->Get())
+                        {
+                            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TUBCOLLECTOR) ;
+                            logger << "    note, sensor was true" ;
+                            logger.endMessage() ;                        
+                        }
+                        
+                        //
+                        // Kind of a hack.  If the infrared sensor is true and we are in auto mode (where we do current sensing) and
+                        // the drivebase has stopped driving, return the fact that we have a tub.
+                        //
+                        has_tub_ = true ;
                     }
-                    
-                    //
-                    // Kind of a hack.  If the infrared sensor is true and we are in auto mode (where we do current sensing) and
-                    // the drivebase has stopped driving, return the fact that we have a tub.
-                    //
-                    has_tub_ = true ;
                     return ;
                 }
 

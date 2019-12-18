@@ -56,7 +56,7 @@ namespace xero
             auto term = std::make_shared<TerminateAction>(tankdrive, path , ranseur, 2.0) ;
             term->addTerminator(camera) ; 
             sequence->pushAction(term) ;
-            sequence->pushSubActionPair(tubtoucher, std::make_shared<TubToucherDeployAction>(*tubtoucher, true)) ;            
+            sequence->pushSubActionPair(tubtoucher, std::make_shared<TubToucherDeployAction>(*tubtoucher, true), false) ;            
             sequence->pushAction(std::make_shared<DriveByVisionAction>(*tankdrive, *camera)) ;
 
             //// 2ND SEQUENCE ////
