@@ -64,9 +64,9 @@ namespace xero {
                     bumper_width -                  // Bumpers on the back wall
                     robot_length / 2.0 ;            // Half the robot length on the centerline, its ok that the bumpers hang over
 
-            double pathdist = totaldist - getTankDrive().getTripDistance(TankDriveFollowPathAction::TripName) ;
+            double pathdist = totaldist - getTankDrive().getTripDistance(TankDriveFollowPathAction::TripName) - 20 ;
 
-            dist = pathdist - 20.0;
+            dist = pathdist ;
 
             //
             // Update the trapezoidal speed profile, to match the distance to the target

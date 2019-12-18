@@ -53,13 +53,13 @@ namespace xero
             // Delay for 2 seconds before we start looking for the terminate condition, this gives us enough
             // time to let the arm get out of the way of the camera
             //
-            auto term = std::make_shared<TerminateAction>(tankdrive, path , ranseur, 2.0) ;
+            auto term = std::make_shared<TerminateAction>(tankdrive, path , ranseur, 3.0) ;
             term->addTerminator(camera) ; 
             sequence->pushAction(term) ;
             sequence->pushSubActionPair(tubtoucher, std::make_shared<TubToucherDeployAction>(*tubtoucher, true), false) ;            
 
             auto dbv = std::make_shared<DriveByVisionAction>(*tankdrive, *camera) ;
-            term = std::make_shared<TerminateAction>(tankdrive, dbv, ranseur, 2.0) ;
+            term = std::make_shared<TerminateAction>(tankdrive, dbv, ranseur, 0.0) ;
             term->addTerminator(tubcollector) ;
             sequence->pushAction(term) ;
 
