@@ -39,7 +39,7 @@ namespace xero {
             last_yaw_ = 0;
             double dist = 0.0 ;
 
-            const double field_length = 54.0 ;
+            const double field_length = 54.0 * 12 ;
             const double robot_length = 22.0 ;
             const double bumper_width = 3.0 ;
 
@@ -66,7 +66,7 @@ namespace xero {
 
             double pathdist = totaldist - getTankDrive().getTripDistance(TankDriveFollowPathAction::TripName) ;
 
-            dist = pathdist ;
+            dist = pathdist - 20.0;
 
             //
             // Update the trapezoidal speed profile, to match the distance to the target
@@ -92,10 +92,13 @@ namespace xero {
             logger << " path distance " << pathdist ;
             logger << " camera distance " << camdist ;
             logger << " profile " << profile_->toString() ;
-            logger.endMessage() ;            
+            logger.endMessage() ;     
         }
 
         void DriveByVisionAction::run() {
+            if (is_done_)
+                return ;
+
             // The time from the start of the profile
             double delta = getTankDrive().getRobot().getTime() - profile_start_time_ ;
 
@@ -123,17 +126,28 @@ namespace xero {
                 double right = out ;
                 double yawadj = 0.0 ;
 
+                lost = !camera_.isTargetPresent() ;             
                 yaw = camera_.getYaw() ;
-                if (camera_.isTargetPresent()) {
-                    lost = 0 ;
-                    last_yaw_ = camera_.getYaw() ;
+
+                if (profile_->getDistance(profile_->getTotalTime()) - profile_->getDistance(delta) >= 24.0)
+                {
+                    if (!lost)
+                    {
+                        last_yaw_ = yaw ;
+                    }
+                    else
+                    {
+                        last_yaw_ *= decay_factor_ ;
+                        yaw = last_yaw_ ;
+                    }
                 }
                 else
                 {
                     last_yaw_ *= decay_factor_ ;
+                    yaw = last_yaw_ ;                    
                 }
                 
-                yawadj = camera_.getYaw() * yaw_p_ ;
+                yawadj = yaw * yaw_p_ ;
                 left += yawadj ;
                 right -= yawadj ;   
 
@@ -158,13 +172,14 @@ namespace xero {
         /// \brief Cancel the action
         void DriveByVisionAction::cancel() { 
             MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
-
-
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
             logger << "DriveByVision: action canceled" ;
             logger << " yaw " << camera_.getYaw() ;
             logger << " dist " << camera_.getDistance() ;
             logger.endMessage() ;             
+
+            setMotorsToPercents(0.0, 0.0) ;
+            is_done_ = true ;
         }
 
         /// \brief Return true if the action is complete
