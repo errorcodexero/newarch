@@ -74,7 +74,7 @@ namespace xero {
             logger << " latency " << camera_.getLatency() ;
             logger << " speed " << getTankDrive().getVelocity() ;
             logger << " total " << dist ;
-            logger << " profile start dist " << profile_start_dist_ ;
+            logger << " dist " << dist ;
             logger << " profile " << profile_->toString() ;
             logger.endMessage() ;            
         }
