@@ -1,35 +1,23 @@
+ifndef CONFIG
+CONFIG=DEBUG
+endif
+
+PLATFORM=SIMULATOR
 
 OBJFILES=$(subst .cpp,.o,$(TESTFILES))
 
-ifndef GTESTLIBDIR
-GTESTLIBDIR=../external/build/googletest
-endif
-
-ifndef GTESTLIBS
-GTESTLIBS=-L$(GTESTLIBDIR) -lgtest_main -lgtest
-endif
-
-ifndef GTESTINCDIR
-GTESTINCDIR=../external/googletest/googletest/include
-endif
+CATCH2DIR = $(TOPDIR)/external/catch
 
 MYDIR=$(notdir $(PWD))
-SIMNAME=$(subst test,sim,$(MYDIR))
 BASENAME=$(subst test,,$(MYDIR))
 
-ifdef DEBUG
-$(info MYDIR $(MYDIR))
-$(info BASENAME $(BASENAME))
-$(info SIMNAME $(SIMNAME))
-endif
-
-CPPFLAGS = -I../$(BASENAME) -I$(GTESTINCDIR) -std=gnu++11 $(LOCALFLAGS)
-XEROMISCLIBS=../build/libs/$(SIMNAME)/static/$(SIMNAME).lib
+CPPFLAGS = -I../$(BASENAME) -I$(CATCH2DIR) -std=gnu++11 $(LOCALFLAGS)
+XEROMISCLIBS=$(TOPDIR)/makebuild/$(PLATFORM)/$(CONFIG)/$(BASENAME)/$(BASENAME).a
 
 all: $(MYDIR)
 
 $(MYDIR): $(OBJFILES)
-	gcc -o $@ $(OBJFILES) $(XEROMISCLIBS) $(GTESTLIBS) -lstdc++
+	gcc -o $@ $(OBJFILES) $(XEROMISCLIBS) $(GTESTLIBS) -lstdc++ -lm
 
 runtest:
 	./$(MYDIR)
