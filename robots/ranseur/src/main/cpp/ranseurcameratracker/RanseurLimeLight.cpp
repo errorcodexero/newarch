@@ -24,64 +24,54 @@ namespace xero {
             plotid_ = initPlot("LimeLight") ;
             prev_dist_ = std::numeric_limits<double>::max() ;
             count_ = 0 ;
+            distance_ = 36 ;
         }
 
         RanseurLimeLight::~RanseurLimeLight() {            
         }
-
+        
         bool RanseurLimeLight::canAcceptAction(ActionPtr ptr) {
             if (LimeLight::canAcceptAction(ptr))
                 return true ;
 
             return false ;
         }
+        void RanseurLimeLight::init(LoopType lt) {
+            if (lt == LoopType::Autonomous)
+                startPlot(plotid_, cols_) ;
+        }
 
-        bool started = false ;
+        void RanseurLimeLight::reset() {
+            endPlot(plotid_) ;
+        }
+
         void RanseurLimeLight::computeState() {
             LimeLight::computeState() ;
 
-            if (getRobot().IsEnabled() && !started)
-            {
-                startPlot(plotid_, cols_) ;
-                started = true ;
-            }
-            else if (getRobot().IsDisabled() && started)
-            {
-                endPlot(plotid_) ;
-                started = false ;
-            }
-
-            if(isLimeLightPresent() && isTargetPresent()) 
+            if (isLimeLightPresent() && isTargetPresent()) 
             {
                 //
                 // Valid target, use the angle method for computing distance based on the
                 // limelight documentation
                 //
-                dist_angle_ = camera_height_ * std::tan(xero::math::deg2rad(camera_angle_ + getTY())) ;
-            }
-            else
-            {
-                //
-                // If no camera or no target, infinite distance
-                //
-                dist_angle_ = std::numeric_limits<double>::max() ;
+                distance_ = camera_height_ * std::tan(xero::math::deg2rad(camera_angle_ + getTY())) ;
+                yaw_ = getTX() ;
             }
             
-            frc::SmartDashboard::PutNumber("Distance", dist_angle_) ;
+            frc::SmartDashboard::PutNumber("Distance", distance_) ;
+            frc::SmartDashboard::PutNumber("YAW", yaw_) ;
 
-            if (getRobot().IsEnabled())
+            if (getRobot().IsEnabled() && getRobot().IsAutonomous())
             {
                 std::vector<double> data ;
                 data.push_back(getRobot().getTime()) ;
                 data.push_back(getTY()) ;
-                data.push_back(dist_angle_) ;
+                data.push_back(distance_) ;
                 data.push_back(isTargetPresent()) ;
                 addPlotData(plotid_, data) ;
             }
-
-            distance_ = dist_angle_ ;
         }
-
+        
         bool RanseurLimeLight::shouldTerminate() {
             if (!isTargetPresent()) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
@@ -99,10 +89,9 @@ namespace xero {
 
             double dist = getDistance() ;
 
-            if (dist > distance_threshold_)
+            if (dist < distance_threshold_ && dist < prev_dist_)
             {
-                if (dist < prev_dist_)
-                    count_++ ;
+                count_++ ;
             }
             else
             {

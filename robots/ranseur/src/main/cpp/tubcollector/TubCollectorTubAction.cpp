@@ -10,16 +10,26 @@ using namespace xero::misc ;
 namespace xero {
     namespace ranseur {
 
+        std::vector<std::string> TubCollectorTubAction::cols_ = 
+        {
+            "time",
+            "current",
+            "state"
+        } ;
+
         std::string TubCollectorTubAction::action_name("TubCollectorTubAction");
 
         TubCollectorTubAction::TubCollectorTubAction(TubCollector &col) : TubCollectorAction(col){
             speed_ = col.getRobot().getSettingsParser().getDouble("tubcollector:collect:power") ;
             delay_ = col.getRobot().getSettingsParser().getDouble("tubcollector:collect:duration") ;
+
+            plotid_ = col.initPlot("tubcollect") ;
         }
         TubCollectorTubAction::~TubCollectorTubAction() {            
         }
         
         void TubCollectorTubAction::start() {
+            getTubCollector().startPlot(plotid_, cols_) ;
             getTubCollector().openHand() ;
             state_ = State::motors_on ;
             getTubCollector().setIntakePower(speed_) ;
@@ -41,8 +51,15 @@ namespace xero {
                 if(getTubCollector().getRobot().getTime() - start_ > delay_) {
                     getTubCollector().setIntakePower(0.0) ;
                     state_ = State::done ;
+                    getTubCollector().endPlot(plotid_) ;
                 }
             }
+
+            std::vector<double> data ;
+            data.push_back(getTubCollector().getRobot().getTime()) ;
+            data.push_back(getTubCollector().getCollectPower()) ;
+            data.push_back(getTubCollector().getState()) ;
+            getTubCollector().addPlotData(plotid_, data) ;
         }
 
         bool TubCollectorTubAction::isDone() {

@@ -4,6 +4,7 @@
 
 #include "TubToucherAction.h"
 #include "TubToucher.h"
+#include <MessageLogger.h>
 
 namespace xero {
     namespace ranseur {
@@ -24,20 +25,43 @@ namespace xero {
                 isDone_ = false ;
                 TubToucher &tubtoucher = getTubToucher() ;
 
-                tubtoucher.solenoid1_1_->Set(raise_);
-                tubtoucher.solenoid1_2_->Set(!raise_);
-                tubtoucher.solenoid2_1_->Set(raise_);
-                tubtoucher.solenoid2_2_->Set(!raise_);     
-
+                if (!raise_)
+                {
+                    tubtoucher.solenoid1_1_->Set(false);
+                    tubtoucher.solenoid1_2_->Set(true);
+                    tubtoucher.solenoid2_1_->Set(false);
+                    tubtoucher.solenoid2_2_->Set(true);  
+                    isDone_ = true ;                    
+                }
+                else
+                {
+                    tubtoucher.solenoid1_1_->Set(true);
+                    tubtoucher.solenoid1_2_->Set(false);
+                    tubtoucher.solenoid2_1_->Set(true);
+                    tubtoucher.solenoid2_2_->Set(false);   
+                    endTime_ = tubtoucher.getRobot().getTime() + duration_;           
+                    isDone_ = false ;         
+                }
                 tubtoucher.deployed_ = raise_ ;
-
-                // Determine the end time.
-                endTime_ = tubtoucher.getRobot().getTime() + duration_;
             }
 
             virtual void run() {
                 // we're done once we pass the end time
-                isDone_ = (getTubToucher().getRobot().getTime() > endTime_);
+                if (!isDone_ && getTubToucher().getRobot().getTime() > endTime_)
+                {
+                    auto &logger = getTubToucher().getRobot().getMessageLogger() ;
+                    logger.startMessage(xero::misc::MessageLogger::MessageType::debug) ;
+                    logger << "Disengaged tub touchers" ;
+                    logger.endMessage() ;
+
+                    TubToucher &tubtoucher = getTubToucher() ;                    
+                    tubtoucher.solenoid1_1_->Set(false);
+                    tubtoucher.solenoid1_2_->Set(false);
+                    tubtoucher.solenoid2_1_->Set(false);
+                    tubtoucher.solenoid2_2_->Set(false);                     
+
+                    isDone_ = true ;
+                }
             }
 
             virtual bool isDone() {

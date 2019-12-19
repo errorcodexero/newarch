@@ -11,3 +11,4 @@ TEST_CASE("PID Controller", "BasicTest")
     double v = ctrl.getOutput(100.0, 98.0, 0.1) ;
     REQUIRE_THAT(v, Catch::Matchers::Floating::WithinAbsMatcher(2.0, 0.01)) ;
 }
+

@@ -40,6 +40,8 @@ namespace xero {
             int plotid_ ;
 
             double yaw_p_ ;
+            double last_yaw_ ;
+            double decay_factor_ ;
 
             int lost_count_ ;
             bool is_done_ ;       

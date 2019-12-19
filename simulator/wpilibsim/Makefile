@@ -5,6 +5,7 @@ SOURCES = \
 	cpp/Counter.cpp\
 	cpp/DigitalInput.cpp\
 	cpp/DriverStation.cpp\
+	cpp/PowerDistributionPanel.cpp\
 	cpp/Encoder.cpp\
 	cpp/livewindow/LiveWindow.cpp\
 	cpp/livewindow/LiveWindowSendable.cpp\

@@ -14,6 +14,7 @@ namespace xero {
       
     TubWrist::TubWrist(Subsystem *parent) : MotorEncoderSubsystem(parent, "tubwrist", "tubwrist", MSG_GROUP_TUBWRIST) {
             setSmartDashboardName("TubWrist") ;
+            setSpecialCaseFixMe() ;
         }
 
         TubWrist::~TubWrist() {
@@ -31,5 +32,6 @@ namespace xero {
         void TubWrist::computeState() {
             MotorEncoderSubsystem::computeState() ;
         }        
+
     }
 }
