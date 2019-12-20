@@ -6,7 +6,7 @@
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2
 hw:tankdrive:motors:left:3:canid                                3
-hw:tankdrive:motors:right:invert                                true
+hw:tankdrive:motors:left:invert                                true
 hw:tankdrive:motors:right:1:canid                               4
 hw:tankdrive:motors:right:2:canid                               5
 hw:tankdrive:motors:right:3:canid                               6
@@ -105,7 +105,14 @@ lifter:height:exchange              14.5
 lifter:height:switch                36.0
 lifter:height:scale                 74.0
 lifter:climb:delta                  2000
-
+lifter:height:climb                 100
+lifter:dutycycle:low:up             0
+lifter:dutycycle:low:down             0
+lifter:dutycycle:high:up             0
+lifter:dutycycle:high:down             0
+lifter:dutycycle:climb:up             0
+lifter:dutycycle:climb:down             0
+lifter:climbhold:delta                0
 #
 # Intake subsystem constants
 #
@@ -129,6 +136,7 @@ collector:outrun_time               1.0
 collector:eject:fast          		-1.0
 collector:eject:medium				-0.4
 collector:eject:slow				-0.2
+collector:eject:middle              0
 
 #
 # LiftingCollector subsystem constants
