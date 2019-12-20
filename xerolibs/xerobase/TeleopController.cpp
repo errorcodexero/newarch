@@ -102,7 +102,8 @@ namespace xero {
                         seq_->run() ;
                         if (!seq_->isDone()) {
                             logger.startMessage(MessageLogger::MessageType::error) ;
-                            logger << "telop sequence did not complete in one cycle" ;
+                            logger << "telop sequence did not complete in one cycle: " ;
+                            logger << seq_->toString() ;
                             logger.endMessage() ;
                             logger.startMessage(MessageLogger::MessageType::error) ;
                             logger << "Sequence: " << seq_->toString() ;

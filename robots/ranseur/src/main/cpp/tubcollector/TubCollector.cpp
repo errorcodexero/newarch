@@ -13,7 +13,7 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace ranseur {
-        TubCollector::TubCollector(Subsystem *parent) : Subsystem(parent, "tubcollector"), pdp_(0) {
+        TubCollector::TubCollector(Subsystem *parent) : Subsystem(parent, "tubcollector"), ITerminator("TubCollector"), pdp_(0) {
             Robot &robot = getRobot();
             
             int sensor = robot.getSettingsParser().getInteger("hw:tubcollector:tubsensor") ;
