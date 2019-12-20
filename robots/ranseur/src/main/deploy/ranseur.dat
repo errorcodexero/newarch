@@ -79,7 +79,7 @@ hw:driverstation:hid:oi                                         2               
 # Enable plotting.  Plot data is stored in the network tables and display
 # programs read the data from the network tables
 #
-plotting:enabled                                               true
+plotting:enabled                                               false
 
 
 ###################################################################################################
@@ -109,7 +109,7 @@ tankdrive:follower:angle_correction                             -0.04
 ###################################################################################################
 # bunnyarm
 ###################################################################################################
-bunnyarm:deploy:time                                             0.5
+bunnyarm:deploy:time                                             0.25
 
 ###################################################################################################
 # tubtoucher
@@ -209,7 +209,7 @@ limelight:network_latency                                       10.0
 # drive by vision (simple P only control)
 ###################################################################################################
 
-drivebyvision:camera_collector_distance                         8
+drivebyvision:camera_collector_distance                         12
 drivebyvision:yaw_p                                             0.01
 drivebyvision:maxa                                              40
 drivebyvision:maxd                                              -40

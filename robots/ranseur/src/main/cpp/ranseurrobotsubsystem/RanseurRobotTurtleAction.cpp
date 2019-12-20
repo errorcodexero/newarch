@@ -51,7 +51,6 @@ namespace xero {
 
             ///   ^^^ grab the angle values from the dat files ^^^   ///
             ///add the action and the subsytem to the parallel action///
-
         }
 
         RanseurRobotTurtleAction::~RanseurRobotTurtleAction() {            
