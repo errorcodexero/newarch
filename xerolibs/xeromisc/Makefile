@@ -16,7 +16,8 @@ SOURCES = \
 	SettingsParser.cpp\
 	StallMonitor.cpp\
 	TrapezoidalProfile.cpp\
-	XeroPathManager.cpp
+	XeroPathManager.cpp\
+	EncoderMapper.cpp
 
 TARGET=xeromisc
 
