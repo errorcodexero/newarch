@@ -46,20 +46,14 @@
                 {
                     "constraints": [
                         {
-                            "after": 0,
-                            "before": 110,
+                            "after": 225,
+                            "before": 325,
                             "type": "distance_velocity",
-                            "velocity": 40
+                            "velocity": 60
                         },
                         {
-                            "after": 260,
-                            "before": 360,
-                            "type": "distance_velocity",
-                            "velocity": 40
-                        },
-                        {
-                            "after": 455,
-                            "before": 550,
+                            "after": 500,
+                            "before": 590,
                             "type": "distance_velocity",
                             "velocity": 40
                         }
@@ -76,13 +70,28 @@
                     "points": [
                         {
                             "heading": 0,
-                            "x": 11,
-                            "y": 100
+                            "x": 8.347785145368249,
+                            "y": 15.914183701494835
+                        },
+                        {
+                            "heading": -8.905553108097848e-14,
+                            "x": 232.95320751755796,
+                            "y": 20.36181582767682
                         },
                         {
                             "heading": 90,
-                            "x": 131,
-                            "y": 220
+                            "x": 295.22005728410556,
+                            "y": 163.7979518970455
+                        },
+                        {
+                            "heading": 180,
+                            "x": 231.84129948601245,
+                            "y": 300.5626397771412
+                        },
+                        {
+                            "heading": -180,
+                            "x": 9.459693176913731,
+                            "y": 306.12217993486865
                         }
                     ],
                     "startangle": 0,

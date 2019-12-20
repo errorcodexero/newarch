@@ -38,7 +38,7 @@ namespace xero {
                 break ;
 
             case 3:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "BunnyAutoMode_PathToTub") ;
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), "Test_TestPath") ;
                 break ;
             }
             setAction(mode) ;
