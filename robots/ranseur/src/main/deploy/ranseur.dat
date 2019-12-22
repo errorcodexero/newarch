@@ -79,7 +79,7 @@ hw:driverstation:hid:oi                                         2               
 # Enable plotting.  Plot data is stored in the network tables and display
 # programs read the data from the network tables
 #
-plotting:enabled                                               false
+plotting:enabled                                               true
 
 
 ###################################################################################################

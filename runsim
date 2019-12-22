@@ -1,8 +1,19 @@
 #!/bin/bash
 
+AUTOTIME=15
+OPERTIME=120
+
 if [ $1 == "--gui" ]; then
     GUI=--simscreen
     shift
+elif [ $1 == "--autotime" ]; then
+    shift
+    AUTOTIME=$1
+    shift
+elif [ $1 == "--opertime" ]; then
+     shift
+     OPERTIME=$1
+     shift
 fi
 
 rootdir=$(git rev-parse --show-toplevel)
@@ -24,19 +35,19 @@ legal=NO
 if [ $2 == 'auto' ]; then
     legal=YES
     echo Running auto mode
-    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto 15 --oper 0 --start 0 --test 0 $FLAGS $GUI
+    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto $AUTOTIME --oper 0 --start 0 --test 0 $FLAGS $GUI
 fi
 
 if [ $2 == 'teleop' ]; then
     legal=YES
     echo Running teleop mode
-    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto 0 --oper 30 --start 0 --test 0 $FLAGS $GUI
+    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto 0 --oper $OPERTIME --start 0 --test 0 $FLAGS $GUI
 fi
 
 if [ $2 == 'both' ]; then
     legal=YES
     echo Running teleop mode
-    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto 15 --oper 30 --start 0 --test 0 $FLAGS $GUI
+    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto AUTOTIME --oper $OPERTIME --start 0 --test 0 $FLAGS $GUI
 fi
 
 if [ legal == 'NO' ]; then
