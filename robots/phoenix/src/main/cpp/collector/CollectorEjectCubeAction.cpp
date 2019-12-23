@@ -1,10 +1,12 @@
 #include "CollectorEjectCubeAction.h"
 #include "Collector.h"
-#include "intake/Intake.h"
-#include "intake/IntakeDutyCycleAction.h"
 #include "grabber/Grabber.h"
-#include "grabber/GrabberToAngleAction.h"
+#include <singlemotorsubsystem/SingleMotorPowerAction.h>
+#include <motorencodersubsystem/MotorEncoderGoToAction.h>
 #include <Robot.h>
+
+using namespace xero::base ;
+using namespace xero::misc ;
 
 namespace xero {
     namespace phoenix {
@@ -34,11 +36,11 @@ namespace xero {
 
         void CollectorEjectCubeAction::start() {
             auto intake = getCollector().getIntake() ;
-            auto intakeaction = std::make_shared<IntakeDutyCycleAction>(*intake, speed_) ;
+            auto intakeaction = std::make_shared<SingleMotorPowerAction>(*intake, speed_) ;
             intake->setAction(intakeaction) ;
 
             auto grabber = getCollector().getGrabber() ;
-            auto grabberaction = std::make_shared<GrabberToAngleAction>(*grabber, "grabber:angle:eject") ;
+            auto grabberaction = std::make_shared<MotorEncoderGoToAction>(*grabber, "grabber:angle:eject") ;
             grabber->setAction(grabberaction) ;
 
             start_ = getCollector().getRobot().getTime() ;
@@ -49,7 +51,7 @@ namespace xero {
             auto intake = getCollector().getIntake() ;            
             if (sensor_) {
                 if (getCollector().hasCube() == false) {
-                    auto intakeaction = std::make_shared<IntakeDutyCycleAction>(*intake, 0.0) ;
+                    auto intakeaction = std::make_shared<SingleMotorPowerAction>(*intake, 0.0) ;
                     intake->setAction(intakeaction) ;
                     isdone_ = true ;
                 }
@@ -57,7 +59,8 @@ namespace xero {
             else {
                 double now = getCollector().getRobot().getTime() ;
                 if (now > start_ + delay_) {
-                    intake->setAction(nullptr) ;
+                    auto intakeaction = std::make_shared<SingleMotorPowerAction>(*intake, 0.0) ;
+                    intake->setAction(intakeaction) ;
                     isdone_ = true ;                    
                 }
             }
@@ -69,7 +72,8 @@ namespace xero {
 
         void CollectorEjectCubeAction::cancel() {
             auto intake = getCollector().getIntake() ;
-            intake->setAction(nullptr) ;
+            auto intakeaction = std::make_shared<SingleMotorPowerAction>(*intake, 0.0) ;
+            intake->setAction(intakeaction) ;
             isdone_ = true ;            
         }
 

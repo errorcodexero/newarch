@@ -3,47 +3,50 @@
 # Describe the hardware of the robot
 #
 ##############################################################
-hw:tankdrive:motors:left:1:canid                                1
-hw:tankdrive:motors:left:2:canid                                2
-hw:tankdrive:motors:left:3:canid                                3
-hw:tankdrive:motors:left:invert                                true
-hw:tankdrive:motors:right:1:canid                               4
-hw:tankdrive:motors:right:2:canid                               5
-hw:tankdrive:motors:right:3:canid                               6
+hw:tankdrive:motors:left:1:canid                                1                      # CAN ID
+hw:tankdrive:motors:left:2:canid                                2                      # CAN ID
+hw:tankdrive:motors:left:3:canid                                3                      # CAN ID
 hw:tankdrive:motors:left:1:type                                 "talon_srx"
 hw:tankdrive:motors:left:2:type                                 "talon_srx"
 hw:tankdrive:motors:left:3:type                                 "talon_srx"
+hw:tankdrive:motors:left:invert                                 true
+
+hw:tankdrive:motors:right:1:canid                               4                      # CAN ID
+hw:tankdrive:motors:right:2:canid                               5                      # CAN ID
+hw:tankdrive:motors:right:3:canid                               6                      # CAN ID
 hw:tankdrive:motors:right:1:type                                "talon_srx"
 hw:tankdrive:motors:right:2:type                                "talon_srx"
 hw:tankdrive:motors:right:3:type                                "talon_srx"
-hw:tankdrive:leftencoder:1                                      0                            # Digital IO
-hw:tankdrive:leftencoder:2                                      1                            # Digital IO
-hw:tankdrive:rightencoder:1                                     3                            # Digital IO
-hw:tankdrive:rightencoder:2                                     2                            # Digital IO
-hw:tankdrive:shifter                                            0
 
-hw:lifter:motor1                    0
-hw:lifter:motor2                    1
-hw:lifter:encoder1                  4
-hw:lifter:encoder2                  5
-hw:lifter:limit:bottom              9
-hw:lifter:limit:top                 8
-hw:lifter:shifter                   1
-hw:lifter:brake                     3
+hw:tankdrive:leftencoder:1                                      0                      # Digital IO
+hw:tankdrive:leftencoder:2                                      1                      # Digital IO
+hw:tankdrive:rightencoder:1                                     3                      # Digital IO
+hw:tankdrive:rightencoder:2                                     2                      # Digital IO
 
-hw:intake:leftmotor                 3
-hw:intake:rightmotor                4
+hw:tankdrive:shifter                                            0                      # Solenoid
 
-hw:grabber:motor                    2
-hw:grabber:encoder1                 6
-hw:grabber:encoder2                 7
+hw:lifter:motor1                                                0                      # PWM ID
+hw:lifter:motor2                                                1                      # PWM ID
+hw:lifter:encoder1                                              4                      # Digital IO
+hw:lifter:encoder2                                              5                      # Digital IO
+hw:lifter:limit:bottom                                          9                      # Digital IO
+hw:lifter:limit:top                                             8                      # Digital IO
+hw:lifter:shifter                                               1                      # Solenoid
+hw:lifter:brake                                                 3                      # Solenoid
 
-hw:collector:cubesensor             23
+hw:intake:leftmotor                                             3                      # PWM ID
+hw:intake:rightmotor                                            4                      # PWM ID
 
-hw:wings:solenoid                   2
+hw:grabber:motor                                                2                      # PWM ID
+hw:grabber:encoder1                                             6                      # Digital IO
+hw:grabber:encoder2                                             7                      # Digital IO
 
-hw:driverstation:hid:oi             2
-hw:driverstation:hid:driver         0
+hw:collector:cubesensor                                         23                     # Digital IO
+
+hw:wings:solenoid                                               2                      # Solenoid
+
+hw:driverstation:hid:oi                                         2                      # HID ID
+hw:driverstation:hid:driver                                     0                      # HID ID
 
 ##############################################################
 #
@@ -60,83 +63,83 @@ hw:driverstation:hid:driver         0
 #
 # Grabber Subsystem constants
 #
-grabber:degrees_per_tick            0.625
-grabber:calibrate:count             5
-grabber:calibrate:value             -0.4
-grabber:calibrate:diff              2
-grabber:a
-grabber:p                           0.1
-grabber:i                           0.0
-grabber:d                           0.0
-grabber:f                           0.0
-grabber:min                         -0.4
-grabber:max                         0.4
-grabber:imax                        1e21
-grabber:hold                        -0.4
-grabber:clamp                       -0.9
-grabber:angle:stowed                98.0
-grabber:angle:minimum               -20.0
-grabber:angle:maximum               98.0
-grabber:angle:collect               45.0
-grabber:angle:eject                 45.0
-grabber:threshold                   5.0
+grabber:degrees_per_tick                                        0.625
+grabber:calibrate:count                                         5
+grabber:calibrate:value                                         -0.4
+grabber:calibrate:diff                                          2
+grabber:a                                                       0
+grabber:p                                                       0.1
+grabber:i                                                       0.0
+grabber:d                                                       0.0
+grabber:f                                                       0.0
+grabber:min                                                     -0.4
+grabber:max                                                     0.4
+grabber:imax                                                    1e21
+grabber:hold                                                   -0.4
+grabber:clamp                                                  -0.9
+grabber:angle:stowed                                           98.0
+grabber:angle:minimum                                          -20.0
+grabber:angle:maximum                                          98.0
+grabber:angle:collect                                          45.0
+grabber:angle:eject                                            45.0
+grabber:threshold                                              5.0
 
 
 #
 # Lifter subsystem constants
 #
-lifter:base							11.375
-lifter:inches_per_tick              0.08327
-lifter:max_height                   86.0
-lifter:min_height                   11.375
-lifter:goto:distance_threshold      1.0
-lifter:goto:speed_threshold         1.0
-lifter:goto:angle					0.0
-lifter:goto:a						0.0
-lifter:goto:p                       0.1
-lifter:goto:i                       0.0
-lifter:goto:d                       0.0001
-lifter:goto:f                       0.0
-lifter:goto:max                     1.0
-lifter:goto:min                     -1.0
-lifter:goto:imax                    6.0
-lifter:height:floor                 11.375
-lifter:height:exchange              14.5
-lifter:height:switch                36.0
-lifter:height:scale                 74.0
-lifter:climb:delta                  2000
-lifter:height:climb                 100
-lifter:dutycycle:low:up             0
-lifter:dutycycle:low:down             0
-lifter:dutycycle:high:up             0
-lifter:dutycycle:high:down             0
-lifter:dutycycle:climb:up             0
-lifter:dutycycle:climb:down             0
-lifter:climbhold:delta                0
+lifter:base				                                       11.375
+lifter:inches_per_tick                                         0.08327
+lifter:max_height                                              86.0
+lifter:min_height                                              11.375
+lifter:goto:distance_threshold                                 1.0
+lifter:goto:speed_threshold                                    1.0
+lifter:goto:angle					                           0.0
+lifter:goto:a						                           0.0
+lifter:goto:p                                                  0.1
+lifter:goto:i                                                  0.0
+lifter:goto:d                                                  0.0001
+lifter:goto:f                                                  0.0
+lifter:goto:max                                                1.0
+lifter:goto:min                                                -1.0
+lifter:goto:imax                                               6.0
+lifter:height:floor                                            11.375
+lifter:height:exchange                                         14.5
+lifter:height:switch                                           36.0
+lifter:height:scale                                            74.0
+lifter:climb:delta                                             2000
+lifter:height:climb                                            100
+lifter:dutycycle:low:up                                        0
+lifter:dutycycle:low:down                                      0
+lifter:dutycycle:high:up                                       0
+lifter:dutycycle:high:down                                     0
+lifter:dutycycle:climb:up                                      0
+lifter:dutycycle:climb:down                                    0
+lifter:climbhold:delta                                         0
 #
 # Intake subsystem constants
 #
-intake:eject:fast                   -1.0
-intake:eject:middle                 -0.5
-intake:eject:slow                   -0.2
-intake:speed:collect                1.0
+intake:eject:fast                                              -1.0
+intake:eject:middle                                            -0.5
+intake:eject:slow                                              -0.2
+intake:speed:collect                                           1.0
 
 #
 # Collector subsystem constants
 #
-collector:cubesensor:h2ldelay       0.1
-collector:cubesensor:l2hdelay       0.1
-collector:grab_time                 0.25
-collector:eject:fast                -1
-collector:eject:slow                -0.1
-collector:eject_time                0.75
-collector:collect_angle             45.0
-collector:intake_duty_cycle         1.0
-collector:outrun_time               1.0
-collector:eject:fast          		-1.0
-collector:eject:medium				-0.4
-collector:eject:slow				-0.2
-collector:eject:middle              0
+collector:cubesensor:h2ldelay                                  0.1
+collector:cubesensor:l2hdelay                                  0.1
+collector:grab_time                                            0.25
+collector:eject:fast                                           -1
+collector:eject:slow                                           -0.1
+collector:eject_time                                           0.75
+collector:collect_angle                                        45.0
+collector:intake_duty_cycle                                    1.0
+collector:outrun_time                                          1.0
+collector:eject:fast          		                           -1.0
+collector:eject:medium				                           -0.4
+collector:eject:slow				                           -0.2
+collector:eject:middle                                         0
 
 #
 # LiftingCollector subsystem constants
@@ -192,42 +195,35 @@ tankdrive:angle_action:velocity_pid:max                         0.6
 tankdrive:angle_action:velocity_pid:min                         -0.6
 tankdrive:angle_action:velocity_pid:imax                        6.0
 
-tankdrive:angle_action:maxa               430
-tankdrive:angle_action:maxd               -430
-tankdrive:angle_action:maxv               860
-tankdrive:angle_action:recalc1            10.0
-tankdrive:angle_action:distance2          10.0
-tankdrive:angle_action:recalc2            2.0
-tankdrive:angle_action:threshold          4.0
-tankdrive:angle_action:p                  0.0
-tankdrive:angle_action:i                  0.0
-tankdrive:angle_action:d                  0.0
-tankdrive:angle_action:f                  0.00126
-tankdrive:angle_action:max                1.0
-tankdrive:angle_action:min                -1.0
-tankdrive:angle_action:imax               6.
+tankdrive:angle_action:maxa                                     430
+tankdrive:angle_action:maxd                                     -430
+tankdrive:angle_action:maxv                                     860
+tankdrive:angle_action:recalc1                                  10.0
+tankdrive:angle_action:distance2                                10.0
+tankdrive:angle_action:recalc2                                  2.0
+tankdrive:angle_action:threshold                                4.0
+tankdrive:angle_action:p                                        0.0
+tankdrive:angle_action:i                                        0.0
+tankdrive:angle_action:d                                        0.0
+tankdrive:angle_action:f                                        0.00126
+tankdrive:angle_action:max                                      1.0
+tankdrive:angle_action:min                                      -1.0
+tankdrive:angle_action:imax                                     6.
 
-tankdrive:follower:left:kp              0.0
-tankdrive:follower:left:kv              0.0
-tankdrive:follower:left:ka              0.0
-tankdrive:follower:left:kd              0.0
+tankdrive:follower:left:kp                                      0.0
+tankdrive:follower:left:kv                                      0.0
+tankdrive:follower:left:ka                                      0.0
+tankdrive:follower:left:kd                                      0.0
 
-tankdrive:follower:right:kp              0.0
-tankdrive:follower:right:kv              0.0
-tankdrive:follower:right:ka              0.0
-tankdrive:follower:right:kd              0.0
+tankdrive:follower:right:kp                                     0.0
+tankdrive:follower:right:kv                                     0.0
+tankdrive:follower:right:ka                                     0.0
+tankdrive:follower:right:kd                                     0.0
 
 #
 # Wings subsystem constants
 #
 
-
-#
-# MessageListener subsystem constants
-#
-
-# The port number must match the port parameter set on raspberry in the vision directory.  *** Don't change one without the other. ***
-messagelistener:port               5808
 
 #
 # DriverStation subsystem constants
@@ -246,15 +242,15 @@ driver:zerolevel                                                0.1
 #
 # Auto mode constants
 #
-auto:c_switch_l:segment1                 48
-auto:c_switch_l:segment2                 110
-auto:c_switch_l:segment3                 58
-auto:c_switch_l:segment4                 -25
-auto:c_switch_l:segment5                 158
+auto:c_switch_l:segment1                                        48
+auto:c_switch_l:segment2                                        110
+auto:c_switch_l:segment3                                        58
+auto:c_switch_l:segment4                                        -25
+auto:c_switch_l:segment5                                        158
 
-auto:c_switch_r:segment1				 60
-auto:c_switch_r:segment2				 24
-auto:c_switch_r:segment3                 100
+auto:c_switch_r:segment1				                        60
+auto:c_switch_r:segment2				                        24
+auto:c_switch_r:segment3                                        100
 
 #
 # Enable plotting.  Plot data is stored in the network tables and display

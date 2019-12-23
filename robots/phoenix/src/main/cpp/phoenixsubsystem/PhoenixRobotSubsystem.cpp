@@ -3,7 +3,7 @@
 #include "wings/Wings.h"
 #include "phoenixoi/PhoenixOISubsystem.h"
 #include "PhoenixRobotSubsystemAction.h"
-#include "phoenixgroups.h"
+#include "phoenixids.h"
 #include <tankdrive/TankDrive.h>
 #include <Robot.h>
 

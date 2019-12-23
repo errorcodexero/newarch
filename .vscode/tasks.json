@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build Simulator - Phaser",
+            "label": "Build Simulator - Phoenix",
             "type": "shell",
-            "command": "c:\\cygwin64\\bin\\bash.exe -c 'PATH=/bin:/usr/bin ; cd robots/phaser ; make '",
+            "command": "c:\\cygwin64\\bin\\bash.exe -c 'PATH=/bin:/usr/bin ; cd robots/phoenix ; make apponly'",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -16,9 +16,9 @@
             ]
         },
         {
-            "label": "Build Simulator - Phaser Deploy",
+            "label": "Build Simulator - Phoenix Deploy",
             "type": "shell",
-            "command": "c:\\cygwin64\\bin\\bash.exe -c 'PATH=/bin:/usr/bin ; cd robots/phaser ; make deploy'"
+            "command": "c:\\cygwin64\\bin\\bash.exe -c 'PATH=/bin:/usr/bin ; cd robots/phoenix ; make deploy'"
         }
     ]
 }

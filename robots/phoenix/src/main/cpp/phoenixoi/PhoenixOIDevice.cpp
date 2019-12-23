@@ -5,7 +5,6 @@
 // Subsystems and associated actions
 #include "wings/Wings.h"
 #include "wings/WingsDeployAction.h"
-#include "intake/Intake.h"
 #include "phlifter/Lifter.h"
 #include "phlifter/LifterGoToHeightAction.h"
 #include "phlifter/LifterPowerAction.h"
@@ -14,13 +13,13 @@
 #include "liftingcollector/LiftingCollector.h"
 #include "grabber/Grabber.h"
 #include "grabber/GrabberCalibrateAction.h"
-#include "grabber/GrabberToAngleAction.h"
 #include "collector/Collector.h"
 #include "collector/CollectCubeAction.h"
 #include "collector/CollectorEjectCubeAction.h"
 #include "phoenixsubsystem/PhoenixRobotSubsystem.h"
 
 // Action related classes
+#include <motorencodersubsystem/MotorEncoderGoToAction.h>
 #include <actions/SequenceAction.h>
 
 
@@ -92,7 +91,7 @@ namespace xero {
             lifter_hold_climb_ = std::make_shared<LifterHoldClimbAction>(*lifter, "lifter:climbhold:delta") ;           
             lifter_calibrate_ = std::make_shared<LifterCalibrateAction>(*lifter) ;
             grabber_calibrate_ = std::make_shared<GrabberCalibrateAction>(*grabber) ;
-            grabber_stow_ = std::make_shared<GrabberToAngleAction>(*grabber, "grabber:angle:stowed") ;
+            grabber_stow_ = std::make_shared<MotorEncoderGoToAction>(*grabber, "grabber:angle:stowed") ;
             collect_cube_ = std::make_shared<CollectCubeAction>(*collector) ;
             eject_normal_ = std::make_shared<CollectorEjectCubeAction>(*collector, "collector:eject:fast") ;
             eject_medium_ = std::make_shared<CollectorEjectCubeAction>(*collector, "collector:eject:middle") ;

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "wings/Wings.h"
-#include "intake/Intake.h"
 #include "phlifter/Lifter.h"
 #include "grabber/Grabber.h"
 #include "collector/Collector.h"

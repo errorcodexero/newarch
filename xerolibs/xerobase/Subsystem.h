@@ -203,6 +203,9 @@ namespace xero {
                 return false;
             }
 
+            /// \brief the name of the hardware prefix in the params file
+            constexpr static const char *HWPrefix = "hw:" ;
+
         private:
             Subsystem(Robot &robot, const std::string &name);
 

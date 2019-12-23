@@ -17,6 +17,7 @@ namespace xero {
         class MotorEncoderGoToAction : public MotorEncoderSubsystemAction {
         public:
             MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target);
+            MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, const std::string &param) ;
 
             virtual void start();
             virtual void run();

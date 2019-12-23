@@ -6,12 +6,6 @@ SUBSYSTEMS = \
 	./src/main/cpp/collector/CollectorEjectCubeAction.cpp\
 	./src/main/cpp/grabber/Grabber.cpp\
 	./src/main/cpp/grabber/GrabberCalibrateAction.cpp\
-	./src/main/cpp/grabber/GrabberHoldCubeAction.cpp\
-	./src/main/cpp/grabber/GrabberPowerAction.cpp\
-	./src/main/cpp/grabber/GrabberToAngleAction.cpp\
-	./src/main/cpp/intake/Intake.cpp\
-	./src/main/cpp/intake/IntakeAction.cpp\
-	./src/main/cpp/intake/IntakeDutyCycleAction.cpp\
 	./src/main/cpp/liftingcollector/LiftingCollectCubeAction.cpp\
 	./src/main/cpp/liftingcollector/LiftingCollector.cpp\
 	./src/main/cpp/phoenixoi/PhoenixOIDevice.cpp\

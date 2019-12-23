@@ -1,14 +1,13 @@
 #include "CollectCubeAction.h"
 #include "Collector.h"
-#include "intake/Intake.h"
 #include "grabber/Grabber.h"
-#include "intake/IntakeDutyCycleAction.h"
-#include "grabber/GrabberToAngleAction.h"
-#include "grabber/GrabberHoldCubeAction.h"
-#include "phoenixgroups.h"
+#include "phoenixids.h"
+#include <motorencodersubsystem/MotorEncoderGoToAction.h>
+#include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <MessageLogger.h>
 #include <Robot.h>
 
+using namespace xero::base ;
 using namespace xero::misc ;
 
 namespace xero {
@@ -49,10 +48,10 @@ namespace xero {
         }
 
         void CollectCubeAction::start() {
-            auto grabber_dir_p = std::make_shared<GrabberToAngleAction>(*getCollector().getGrabber(), "grabber:angle:collect") ;
+            auto grabber_dir_p = std::make_shared<MotorEncoderGoToAction>(*getCollector().getGrabber(), "grabber:angle:collect") ;
             getCollector().getGrabber()->setAction(grabber_dir_p) ;
 
-            auto intake_dir_p = std::make_shared<IntakeDutyCycleAction>(*getCollector().getIntake(), "intake:speed:collect") ;
+            auto intake_dir_p = std::make_shared<SingleMotorPowerAction>(*getCollector().getIntake(), "intake:power:collect") ;
             getCollector().getIntake()->setAction(intake_dir_p) ;
 
             state_ = State::waiting ;
@@ -69,7 +68,7 @@ namespace xero {
                     state_ = State::grabbing ;
                     start_ = getCollector().getRobot().getTime() ;
 
-                    auto grabber_dir_p = std::make_shared<GrabberHoldCubeAction>(*getCollector().getGrabber()) ;
+                    auto grabber_dir_p = std::make_shared<SingleMotorPowerAction>(*getCollector().getGrabber(), "intake:power:hold") ;
                     getCollector().getGrabber()->setAction(grabber_dir_p) ;
                 }
                 break ;
@@ -85,12 +84,12 @@ namespace xero {
                     //
                     // We really have the cube now, go to the hold state
                     //
-                    auto intake_dir_p = std::make_shared<IntakeDutyCycleAction>(*getCollector().getIntake(), 0) ;                   
+                    auto intake_dir_p = std::make_shared<SingleMotorPowerAction>(*getCollector().getIntake(), "intake:power:hold") ;                   
                     getCollector().getIntake()->setAction(intake_dir_p) ;
                     getCollector().setCollectedCubeState(true) ;
                     state_ = State::clamp ;
-                    
                 }
+                break ;
 
             case State::clamp:
                 if (!getCollector().hasCube()) {
@@ -128,6 +127,7 @@ namespace xero {
             action = getCollector().getGrabber()->getAction() ;
             if (action != nullptr)
                 action->cancel() ;
+
             state_ = State::cancel ;
         }
     }

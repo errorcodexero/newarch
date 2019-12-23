@@ -6,6 +6,7 @@
 #include <Robot.h>
 #include <SettingsParser.h>
 #include <MessageLogger.h>
+#include <EncoderMapper.h>
 #include <frc/Encoder.h>
 #include <frc/AnalogInput.h>
 #include <frc/Counter.h>
@@ -221,24 +222,14 @@ namespace xero {
 
             std::string name_ ;
 
-            bool angular_;
-
-            std::shared_ptr<frc::Encoder> quad_;    // A quadrature encoder, or nullptr.
+            std::shared_ptr<frc::Encoder> quad_;            // A quadrature encoder, or nullptr.
             double quadM_ = 1;
             double quadB_ = 0;
 
-            std::shared_ptr<frc::AnalogInput> analog_;    // An analog encoder, or nullptr.
-            std::shared_ptr<frc::Counter> pwm_;    // A PWM encoder, or nullptr.
-            double absM_ = 1;
-            double absB_ = 0;
+            std::shared_ptr<frc::AnalogInput> analog_;      // An analog encoder, or nullptr.
+            std::shared_ptr<frc::Counter> pwm_;             // A PWM encoder, or nullptr.
 
-            // The start of the absolute encoder's range
-            // (i.e. the hardware position corresponding to zero).
-            double absOffset_ = 0;
-
-            // The wrap point of the absolute encoder
-            // (i.e. the maximum value output by the hardware).
-            double absWrap_ = INFINITY;
+            std::shared_ptr<EncoderMappter> mapper_ ;
         };
     }
 }
