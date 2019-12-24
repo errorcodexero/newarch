@@ -5,6 +5,7 @@ using namespace xero::misc ;
 
 TEST_CASE("EncoderMapper", "BasicTest")
 {
+#ifdef NOTYET
     SECTION("Simple linear scale")
     {
         //
@@ -123,5 +124,60 @@ TEST_CASE("EncoderMapper", "BasicTest")
 
         REQUIRE_THAT(mapper.toEncoder(20.0), Catch::Matchers::Floating::WithinAbsMatcher(1.0, 1e-6)) ;      
         REQUIRE_THAT(mapper.toEncoder(80.0), Catch::Matchers::Floating::WithinAbsMatcher(3.0, 1e-6)) ;
+    } 
+#endif
+
+    SECTION("Ranseur tub arm")
+    {
+        //
+        //  Encoder    Physical
+        //   5.0          -90
+        //   4.5          -126
+        //   4.0          -162
+        //   3.5          162
+        //   3.0          126
+        //   2.5          90
+        //   2.0          54
+        //   1.5          18
+        //   1.0          -18
+        //   0.5          -54
+        //   0.0          -90
+        //
+        EncoderMapper mapper(180.0, -180.0, 5.0, 0.0) ;
+        mapper.calibrate(90.0, 2.5) ;
+        REQUIRE_THAT(mapper.toRobot(4.5), Catch::Matchers::Floating::WithinAbsMatcher(-126.0, 1e-6)) ;
+        REQUIRE_THAT(mapper.toRobot(3.5), Catch::Matchers::Floating::WithinAbsMatcher(162.0, 1e-6)) ;
+        REQUIRE_THAT(mapper.toRobot(2.5), Catch::Matchers::Floating::WithinAbsMatcher(90.0, 1e-6)) ;        
+
+        REQUIRE_THAT(mapper.toEncoder(-162.0), Catch::Matchers::Floating::WithinAbsMatcher(4.0, 1e-6)) ;      
+        REQUIRE_THAT(mapper.toEncoder(54.0), Catch::Matchers::Floating::WithinAbsMatcher(2.0, 1e-6)) ;   
+        REQUIRE_THAT(mapper.toEncoder(90.0), Catch::Matchers::Floating::WithinAbsMatcher(2.5, 1e-6)) ;   
     }    
+
+    SECTION("Ranseur tub wrist")
+    {
+        //
+        //  Encoder    Physical
+        //   5.0          -162
+        //   4.5          -126
+        //   4.0          -90
+        //   3.5          -54
+        //   3.0          -18
+        //   2.5          18
+        //   2.0          54
+        //   1.5          90
+        //   1.0          126
+        //   0.5          162
+        //   0.0          -162
+        //
+        EncoderMapper mapper(180.0, -180.0, 5.0, 0.0) ;
+        mapper.calibrate(90.0, 2.5) ;
+        REQUIRE_THAT(mapper.toRobot(4.5), Catch::Matchers::Floating::WithinAbsMatcher(-126.0, 1e-6)) ;
+        REQUIRE_THAT(mapper.toRobot(3.5), Catch::Matchers::Floating::WithinAbsMatcher(162.0, 1e-6)) ;
+        REQUIRE_THAT(mapper.toRobot(2.5), Catch::Matchers::Floating::WithinAbsMatcher(90.0, 1e-6)) ;        
+
+        REQUIRE_THAT(mapper.toEncoder(-162.0), Catch::Matchers::Floating::WithinAbsMatcher(4.0, 1e-6)) ;      
+        REQUIRE_THAT(mapper.toEncoder(54.0), Catch::Matchers::Floating::WithinAbsMatcher(2.0, 1e-6)) ;   
+        REQUIRE_THAT(mapper.toEncoder(90.0), Catch::Matchers::Floating::WithinAbsMatcher(2.5, 1e-6)) ;   
+    }                       
 }

@@ -71,7 +71,7 @@ namespace xero
 
             encoder = clamp(encoder, emax_, emin_) ;
             offset = normalize(ec_ - (rc_ - rmin_) / kEncoder2Robot_, emax_, emin_) ;
-            ret = normalize((encoder - offset) * kEncoder2Robot_, rmax_, rmin_) ;
+            ret = normalize((encoder - offset) * kEncoder2Robot_ + rmin_, rmax_, rmin_) ;
             
             return ret ;
         }
@@ -83,7 +83,7 @@ namespace xero
 
             robot = clamp(robot, rmax_, rmin_) ;
             offset = normalize(ec_ - (rc_ - rmin_) / kEncoder2Robot_,  emax_, emin_) ;
-            ret = normalize(offset + robot / kEncoder2Robot_,  emax_, emin_) ;
+            ret = normalize(offset + (robot - rmin_) / kEncoder2Robot_,  emax_, emin_) ;
             
             return ret ;
         }
