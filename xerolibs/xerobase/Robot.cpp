@@ -26,9 +26,7 @@ namespace xero {
             return theOne->getTime() ;
         }
         
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-        Robot::Robot(const std::string &name, double looptime) {
+        Robot::Robot(const std::string &name, double looptime) : TimedRobot(looptime) {
             assert(theOne == nullptr) ;
             theOne = this ;
             name_ = name ;
@@ -57,7 +55,6 @@ namespace xero {
 
             switch_to_teleop_ = false ;
         }
-#pragma GCC diagnostic pop
 
         Robot::~Robot() {
             theOne = nullptr ;
@@ -471,9 +468,7 @@ namespace xero {
             }           
         }
 
-        void Robot::Autonomous() {
-            LoopType type = LoopType::Autonomous ;
-
+        void Robot::AutonomousInit() {
             //
             // Just in case something like the field data changes as we enter
             // the autonomous state
@@ -482,17 +477,9 @@ namespace xero {
             logAutoModeState() ;
 
             controller_ = auto_controller_ ;
-            robot_subsystem_->init(type) ;
+            robot_subsystem_->init(LoopType::Autonomous) ;
 
-            while (IsAutonomous() && IsEnabled()) {
-                robotLoop(type) ;
-                if (switch_to_teleop_) {
-                    controller_ = teleop_controller_ ;
-                    type = LoopType::OperatorControl ;
-                    switch_to_teleop_ = false ;
-                }
-            }
-
+#ifdef NOTYET
             controller_ = nullptr ;
 
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
@@ -500,28 +487,37 @@ namespace xero {
             message_logger_.endMessage() ;
 
             robot_subsystem_->reset() ;
+#endif
+        }        
+
+        void Robot::AutonomousPeriodic() {
+            robotLoop(LoopType::Autonomous) ;
         }
 
-        void Robot::OperatorControl() {
+        void Robot::TeleopInit() {
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
             message_logger_ << "Starting Teleop mode" ;
             message_logger_.endMessage() ;           
 
             controller_ = teleop_controller_ ;
             robot_subsystem_->init(LoopType::OperatorControl) ;
-            while (IsOperatorControl() && IsEnabled())
-                robotLoop(LoopType::OperatorControl) ;
 
+#ifdef NOTYET
             controller_ = nullptr ;
 
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
             message_logger_ << "Leaving Teleop mode" ;
             message_logger_.endMessage() ;  
 
-            robot_subsystem_->reset() ;                 
+            robot_subsystem_->reset() ;
+#endif
         }
 
-        void Robot::Test() {
+        void Robot::TeleopPeriodic() {
+            robotLoop(LoopType::OperatorControl) ;
+        }        
+
+        void Robot::TestInit() {
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
             message_logger_ << "Starting Test mode" ;
             message_logger_.endMessage() ;
@@ -529,40 +525,33 @@ namespace xero {
             controller_ = createTestController() ;
             robot_subsystem_->init(LoopType::Test) ;
 
-            while (IsTest() && IsEnabled())
-                robotLoop(LoopType::Test) ;
-
-            controller_ = nullptr ;
-
-            message_logger_.startMessage(MessageLogger::MessageType::info) ;
-            message_logger_ << "Leaving Test mode" ;
-            message_logger_.endMessage() ;      
-
-            robot_subsystem_->reset() ;             
         }
 
-        void Robot::Disabled() {
+        void Robot::TestPeriodic() {
+            robotLoop(LoopType::Test) ;
+        }        
+
+        void Robot::DisabledInit() {
 
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
             message_logger_ << "Robot Disabled" ;
             message_logger_.endMessage() ;
 
+            controller_ = nullptr ;            
+            robot_subsystem_->reset() ;  
+
             automode_ = -1 ;
             robot_subsystem_->init(LoopType::Disabled) ;
-
-            while (IsDisabled()) {
-                double initial_time = getTime() ;
-                delta_time_ = initial_time - last_time_ ;
-                updateAutoMode() ;
-                robot_subsystem_->computeState() ;
-                watcher_->update() ;
-                frc::Wait(target_loop_time_) ;              
-                last_time_ = initial_time ;                
-            }
-            
-            message_logger_.startMessage(MessageLogger::MessageType::info) ;
-            message_logger_ << "Leaving Robot Disabled" ;
-            message_logger_.endMessage() ;
         }
+
+        void Robot::DisabledPeriodic() {
+            double initial_time = getTime() ;
+            delta_time_ = initial_time - last_time_ ;
+            updateAutoMode() ;
+            robot_subsystem_->computeState() ;
+            watcher_->update() ;
+            frc::Wait(target_loop_time_) ;              
+            last_time_ = initial_time ;                
+        }        
     }
 }

@@ -14,6 +14,7 @@ SOURCES = \
 	cpp/RobotSimBase.cpp\
 	cpp/SimEventManager.cpp\
 	cpp/SampleRobot.cpp\
+	cpp/TimedRobot.cpp\
 	cpp/ScreenVisualizer.cpp\
 	cpp/SimulatedObject.cpp\
 	cpp/smartdashboard/NamedSendable.cpp\

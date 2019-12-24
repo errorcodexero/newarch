@@ -34,19 +34,11 @@ namespace xero {
         void TubArm::init(LoopType lt) 
         {
             MotorEncoderSubsystem::init(lt) ;
-
-            if (lt == LoopType::Autonomous)
-            {
-                double delta = 90 - getPosition()  ;
-                getEncoder()->offsetBValue(delta) ;
-            }
         }
 
         void TubArm::postHWInit()
         {
             MotorEncoderSubsystem::postHWInit() ;
-            double delta = 90 - getPosition() ;
-            getEncoder()->offsetBValue(delta) ;            
         }
     }
 }

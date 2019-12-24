@@ -10,7 +10,7 @@
 #include "FlagManager.h"
 #include "motors/MotorFactory.h"
 #include <XeroPathManager.h>
-#include <frc/SampleRobot.h>
+#include <frc/TimedRobot.h>
 #include <memory>
 #include <list>
 #include <string>
@@ -54,7 +54,7 @@ namespace xero {
         /// <br>
         /// Finally, the robot calls each of the subsytems to execute on any assigned actions.
         ///
-        class Robot : public frc::SampleRobot {
+        class Robot : public frc::TimedRobot {
         public:
 
         public:
@@ -76,16 +76,28 @@ namespace xero {
             virtual void RobotInit() ;
 
             /// \brief run the autonomous mode (software in charge)
-            virtual void Autonomous() ;
+            virtual void AutonomousInit() ;
 
             /// \brief run the teleop mode (drive in charge)
-            virtual void OperatorControl() ;
+            virtual void TeleopInit() ;
 
             /// \brief run the test mode (testing in the pits)
-            virtual void Test() ;
+            virtual void TestInit() ;
 
             /// \brief run the disabled mode (doing nothing)
-            virtual void Disabled() ;
+            virtual void DisabledInit() ;
+
+            /// \brief run the autonomous mode (software in charge)
+            virtual void AutonomousPeriodic() ;
+
+            /// \brief run the teleop mode (drive in charge)
+            virtual void TeleopPeriodic() ;
+
+            /// \brief run the test mode (testing in the pits)
+            virtual void TestPeriodic() ;
+
+            /// \brief run the disabled mode (doing nothing)
+            virtual void DisabledPeriodic() ;
 
             /// \brief Return a reference to the one message logger
             /// \returns a reference to the one message logger
