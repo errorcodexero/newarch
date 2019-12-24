@@ -3,6 +3,7 @@
 
 using namespace frc ;
 using namespace xero::sim ;
+using namespace xero::misc ;
 using namespace ctre::phoenix::motorcontrol::can ;
 
 namespace xero {
@@ -35,6 +36,18 @@ namespace xero {
                 arm_encoder_ = nullptr ;
                 wrist_encoder_ = nullptr ;
                 tub_sensor_ = nullptr ;
+
+                double ec, rc ;
+
+                arm_mapper_ = new EncoderMapper(-180.0, 180.0, 0.0, 5.0) ;
+                ec = simbase.getSettingsParser().getDouble("hw:tubmanipulator:arm:ec") ;
+                rc = simbase.getSettingsParser().getDouble("hw:tubmanipulator:arm:rc") ;                
+                arm_mapper_->calibrate(ec, rc) ;
+
+                wrist_mapper_ = new EncoderMapper(-180.0, 180.0, 5.0, 0.0) ;
+                ec = simbase.getSettingsParser().getDouble("hw:tubmanipulator:wrist:ec") ;
+                rc = simbase.getSettingsParser().getDouble("hw:tubmanipulator:wrist:rc") ;                 
+                wrist_mapper_->calibrate(ec, rc) ;
             }
 
             TubManipulatorModel::~TubManipulatorModel() {
@@ -115,7 +128,7 @@ namespace xero {
             void TubManipulatorModel::setArmEncoder() {
                 if (arm_encoder_ != nullptr)
                 {
-                    double v = -(arm_angle_ - 295.92) / 72.0 ;
+                    double v = arm_mapper_->toEncoder(arm_angle_) ;
                     arm_encoder_->SimulatorSetVoltage(v) ;
                 }
             }
@@ -123,7 +136,7 @@ namespace xero {
             void TubManipulatorModel::setWristEncoder() {
                 if (wrist_encoder_ != nullptr)
                 {
-                    double v = (wrist_angle_ + 126.0) / 72.0 ;
+                    double v = wrist_mapper_->toEncoder(wrist_angle_) ;
                     wrist_encoder_->SimulatorSetVoltage(v) ;                
                 }
             }

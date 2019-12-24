@@ -21,6 +21,8 @@ namespace xero {
                 return deployed_ ;
             }
 
+            virtual void init(xero::base::LoopType lt) ;
+
         protected:
             virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
 

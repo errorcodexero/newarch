@@ -1,0 +1,24 @@
+#
+# Drive the robot straight in teleop using the gamepad
+#
+
+#
+# Start up conditions
+#
+
+#
+#
+0.1,oi,automode1,0
+0.1,oi,automode2,0
+0.1,tubmanipulator,tub,1                                # Clear the tub sensor (should initialize to cleared)
+0.1,oi,tubtouchers,1                                    # Set the tub touchers to off
+
+0.1,tankdrive,xpos,2000                                 # Start center hab platform
+0.1,tankdrive,ypos,16300                                # Start center hab platform
+0.1,tankdrive,angle,0                                   # Start center hab platform
+
+0.1,tubmanipulator,arm,0                                # Arm at 0 degrees
+0.1,tubmanipulator,wrist,0                              # Wrist at 0 degrees
+
+8.0,tubmanipulator,arm,90                               # Arm at 0 degrees
+8.0,tubmanipulator,wrist,180                            # Wrist at 180 degrees

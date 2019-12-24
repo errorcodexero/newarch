@@ -45,6 +45,9 @@ namespace xero {
             /// \brief return a human readable string representing the action
             /// \returns a human readable string representing the action
             virtual std::string toString() ;
+
+        public:
+            static constexpr const char *TripName = "pathfollower" ;
                         
         private:
             size_t index_ ;

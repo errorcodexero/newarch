@@ -17,18 +17,63 @@
       "desktop": false,
     },
     {
-        "name": "CygWin Simulator Launch",
-        "type": "cppdbg",
-        "request": "launch",
-        "args": [
-          "--test","0.0",
-          "--start", "0.0",
-          "--auto", "15.0",
-          "--oper","0.0",
-          "--events","robots/phoenix/sims/automode9.sti"
-      ],
+      "name": "CygWin Ranseur Simulator Launch",
+      "type": "cppdbg",
+      "request": "launch",
       "cwd": "${workspaceFolder}",
       "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/phoenix/phoenix.exe",
+      "stopAtEntry": false,
+      "environment": [],
+      "args" : [
+        "--test","0.0",
+        "--start", "0.0",
+        "--auto", "15.0",
+        "--oper","0.0",
+        "--events","robots/ranseur/sims/automode0.sti"
+      ],
+      "externalConsole": true,
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:/cygwin64/bin/gdb.exe",
+      "setupCommands": [
+          {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+          }
+      ]
+    },
+    {
+      "name": "CygWin Phoenix Simulator Launch",
+      "type": "cppdbg",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/phoenix/phoenix.exe",
+      "stopAtEntry": false,
+      "environment": [],
+      "args" : [
+        "--test","0.0",
+        "--start", "0.0",
+        "--auto", "15.0",
+        "--oper","0.0",
+        "--events","robots/phoenix/sims/automode0.sti"
+      ],      
+      "externalConsole": true,
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:/cygwin64/bin/gdb.exe",
+      "setupCommands": [
+          {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+          }
+      ]
+    },    
+    {
+      "name": "CygWin Unit Test Launch",
+      "type": "cppdbg",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/xerolibs/xeromisctest/xeromisctest.exe",
       "stopAtEntry": false,
       "environment": [],
       "externalConsole": true,
@@ -41,7 +86,7 @@
               "ignoreFailures": true
           }
       ]
-    },
+    },    
     {
       "name": "LLDB Simulator Launch",
       "type": "lldb-vscode",
@@ -55,7 +100,7 @@
           "--auto", "15.0",
           "--oper","0.0",
           "--events","robots/ranseur/sims/automode0.sti"
-      ]
+        ]
       }
   ]
 }

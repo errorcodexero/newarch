@@ -1,5 +1,6 @@
 #pragma once
 
+#include <EncoderMapper.h>
 #include <frc/SubsystemModel.h>
 #include <frc/AnalogInput.h>
 #include <frc/Solenoid.h>
@@ -82,6 +83,9 @@ namespace xero  {
                 frc::DigitalInput *tub_sensor_ ;
                 frc::AnalogInput *arm_encoder_ ;
                 frc::AnalogInput *wrist_encoder_ ;
+
+                xero::misc::EncoderMapper *wrist_mapper_ ;
+                xero::misc::EncoderMapper *arm_mapper_ ;
 
                 double wrist_degrees_per_volt_per_sec_ ;
                 double arm_degrees_per_volt_per_sec_ ;

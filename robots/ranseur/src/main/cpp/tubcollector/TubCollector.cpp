@@ -2,16 +2,18 @@
 #include "TubCollectorAction.h"
 #include <actions/SequenceAction.h>
 #include <Robot.h>
+#include <DriveBase.h>
 #include <frc/DigitalInput.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/PowerDistributionPanel.h>
+#include "ranseurids.h"
 
 using namespace xero::base ;
 using namespace xero::misc ;
 
 namespace xero {
     namespace ranseur {
-        TubCollector::TubCollector(Subsystem *parent) : Subsystem(parent, "tubcollector"), pdp_(0) {
+        TubCollector::TubCollector(Subsystem *parent) : Subsystem(parent, "tubcollector"), ITerminator("TubCollector"), pdp_(0) {
             Robot &robot = getRobot();
             
             int sensor = robot.getSettingsParser().getInteger("hw:tubcollector:tubsensor") ;
@@ -55,9 +57,37 @@ namespace xero {
         void TubCollector::computeState() {
             Subsystem::computeState() ;
 
+            collect_power_ = (pdp_.GetCurrent(collector_motor_pdp_1_) + pdp_.GetCurrent(collector_motor_pdp_2_)) / 2.0 ;
+
             if (power_mode_)
             {
-                double power = (pdp_.GetCurrent(collector_motor_pdp_1_) + pdp_.GetCurrent(collector_motor_pdp_2_)) / 2.0 ;
+                auto db = getRobot().getDriveBase() ;
+                assert(db != nullptr) ;
+                
+                if (std::fabs(db->getVelocity()) < 1.0)
+                {
+                    if (!has_tub_)
+                    {
+                        auto &logger = getRobot().getMessageLogger() ;
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TUBCOLLECTOR) ;
+                        logger << "Drive base stopped, checking for tub via sensor" ;
+                        logger.endMessage() ;
+
+                        if (!sensor_->Get())
+                        {
+                            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TUBCOLLECTOR) ;
+                            logger << "    note, sensor was true" ;
+                            logger.endMessage() ;                        
+                        }
+                        
+                        //
+                        // Kind of a hack.  If the infrared sensor is true and we are in auto mode (where we do current sensing) and
+                        // the drivebase has stopped driving, return the fact that we have a tub.
+                        //
+                        has_tub_ = true ;
+                    }
+                    return ;
+                }
 
                 switch (state_)
                 {
@@ -66,7 +96,7 @@ namespace xero {
                         // Start state, looking for current to start to flow
                         //
                         has_tub_ = false ;
-                        if (power > first_current_trigger_)
+                        if (collect_power_ > first_current_trigger_)
                             state_ = 1 ;
                         break ;
 
@@ -77,9 +107,9 @@ namespace xero {
                         // to drop below the peak and under some steady state limit (but above zero)
                         //
                         has_tub_ = false ;
-                        if (power < second_current_trigger_)
+                        if (collect_power_ < second_current_trigger_)
                         {
-                            if (power < second_current_limit_)
+                            if (collect_power_ < second_current_limit_)
                             {
                                 //
                                 // It fell too low, start over
@@ -94,6 +124,7 @@ namespace xero {
                                 state_ = 2 ;
                             }
                         }
+                        break ;
 
                     case 2:
                         //
@@ -101,12 +132,12 @@ namespace xero {
                         // as we collect a tub
                         //
                         has_tub_ = false ;
-                        if (power > third_current_trigger_)
+                        if (collect_power_ > third_current_trigger_)
                         {
                             state_ = 3 ;
                             start_time_ = getRobot().getTime() ;
                         }
-                        else if (power < second_current_limit_)
+                        else if (collect_power_ < second_current_limit_)
                         {
                             state_ = 0 ;
                         }
@@ -121,7 +152,7 @@ namespace xero {
                         break ;
 
                     case 4:
-                        if (power < second_current_limit_)
+                        if (collect_power_ < second_current_limit_)
                         {
                             has_tub_ = false ;
                             state_ = 0 ;

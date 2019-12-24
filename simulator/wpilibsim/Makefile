@@ -5,6 +5,7 @@ SOURCES = \
 	cpp/Counter.cpp\
 	cpp/DigitalInput.cpp\
 	cpp/DriverStation.cpp\
+	cpp/PowerDistributionPanel.cpp\
 	cpp/Encoder.cpp\
 	cpp/livewindow/LiveWindow.cpp\
 	cpp/livewindow/LiveWindowSendable.cpp\
@@ -13,6 +14,7 @@ SOURCES = \
 	cpp/RobotSimBase.cpp\
 	cpp/SimEventManager.cpp\
 	cpp/SampleRobot.cpp\
+	cpp/TimedRobot.cpp\
 	cpp/ScreenVisualizer.cpp\
 	cpp/SimulatedObject.cpp\
 	cpp/smartdashboard/NamedSendable.cpp\

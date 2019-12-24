@@ -10,13 +10,52 @@ namespace xero
         {    
             rmax_ = rmax ;
             rmin_ = rmin ;
-            emax_ = std::max(emax, emin) ;
-            emin_ = std::min(emax, emin) ;
+            emax_ = emax ;
+            emin_ = emin ;
             kEncoder2Robot_ = (rmax - rmin) / (emax - emin) ;        
         }
 
         EncoderMapper::~EncoderMapper()
         {                
+        }
+
+        double EncoderMapper::normalize(double value, double vmax, double vmin)
+        {
+            if (vmax < vmin)
+            {
+                double temp = vmax ;
+                vmax = vmin ;
+                vmin = temp ;
+            }
+
+            while (value < vmin)
+            {
+                value += (vmax - vmin) ;
+            }
+
+            while (value > vmax)
+            {
+                value -= (vmax - vmin) ;
+            }
+
+            return value ;
+        }
+
+        double EncoderMapper::clamp(double value, double vmax, double vmin)
+        {
+            if (vmax < vmin)
+            {
+                double temp = vmax ;
+                vmax = vmin ;
+                vmin = temp ;
+            }
+
+            if (value > vmax)
+                value = vmax ;
+            else if (value < vmin)
+                value = vmin ;
+
+            return value ;
         }
 
         void EncoderMapper::calibrate(double encoder, double robot)
@@ -30,33 +69,22 @@ namespace xero
             double ret ;
             double offset; 
 
-            if (encoder < emin_)
-                encoder = emin_ ;
-            else if (encoder > emax_)
-                encoder = emax_ ;
+            encoder = clamp(encoder, emax_, emin_) ;
+            offset = normalize(ec_ - (rc_ - rmin_) / kEncoder2Robot_, emax_, emin_) ;
+            ret = normalize((encoder - offset) * kEncoder2Robot_, rmax_, rmin_) ;
+            
+            return ret ;
+        }
 
-            offset = ec_ - (rc_ - rmin_) / kEncoder2Robot_ ;   
-            if (offset < emin_)
-                offset += emax_ ;
-            else if (offset > emax_)
-                offset -= emax_ ;
+        double EncoderMapper::toEncoder(double robot)
+        {
+            double ret ;
+            double offset ;
 
-            if (kEncoder2Robot_ < 0.0)
-            {
-                ret = emax_ - encoder + offset ;
-            }
-            else
-            {
-                ret = encoder - offset ;
-            }
-
-            if (ret < emin_)
-                ret += emax_ ;
-            else if (ret > emax_)
-                ret -= emax_ ;
-
-            ret *= std::fabs(kEncoder2Robot_) ;
-
+            robot = clamp(robot, rmax_, rmin_) ;
+            offset = normalize(ec_ - (rc_ - rmin_) / kEncoder2Robot_,  emax_, emin_) ;
+            ret = normalize(offset + robot / kEncoder2Robot_,  emax_, emin_) ;
+            
             return ret ;
         }
     }

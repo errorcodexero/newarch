@@ -28,6 +28,10 @@ hw:tubmanipulator:wrist:encoder         0                               # Analog
 hw:tubmanipulator:collector:solenoid    0                               # Solenoid
 hw:tubmanipulator:collector:sensor      9                               # Digital Input
 hw:tubmanipulator:collector:motor       9                               # VictorSPX
+hw:tubmanipulator:arm:ec                2.5                             # Arm straight up
+hw:tubmanipulator:arm:rc                90.0                            # Arm straight up
+hw:tubmanipulator:wrist:ec              1.5                             # Wrist straight up
+hw:tubmanipulator:wrist:rc              90.0                            # Wrist straight up
 
 ######################################################################################
 #

@@ -2,6 +2,8 @@
 
 #include "Subsystem.h"
 #include "DebounceBoolean.h"
+#include <DriveBase.h>
+#include <ITerminator.h>
 #include <frc/DigitalInput.h>
 #include <frc/Solenoid.h>
 #include <frc/VictorSP.h>
@@ -15,7 +17,8 @@ namespace xero {
     namespace ranseur {
         class Intake ;
 
-        class TubCollector : public xero::base::Subsystem {
+        class TubCollector : public xero::base::Subsystem, public xero::base::ITerminator
+        {
             friend class TubCollectTubAction ;
         public:
             TubCollector(xero::base::Subsystem* parent) ;
@@ -23,6 +26,10 @@ namespace xero {
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             virtual void computeState() ;
+
+            virtual bool shouldTerminate() {
+                return has_tub_ ;
+            }
 
             void setPowerMode() {
                 power_mode_ = true ;
@@ -55,6 +62,14 @@ namespace xero {
 
             virtual void init(xero::base::LoopType lt) ;
 
+            double getCollectPower() {
+                return collect_power_ ;
+            }
+
+            int getState() {
+                return state_ ;
+            }
+
         private:
             //
             // This is the raw tub state, does not mean a tub is collected
@@ -75,6 +90,7 @@ namespace xero {
             double third_current_trigger_ ;
             double start_time_ ;
             double delay_time_ ;
+            double collect_power_ ;
             
             int loops_ ;
             int state_ ;

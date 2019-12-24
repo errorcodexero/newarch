@@ -1,7 +1,10 @@
 TESTFILES = \
+	main.cpp\
 	PIDCtrlTest.cpp\
-	TrapezoidProfileTest.cpp
+	TrapezoidProfileTest.cpp\
+	EncoderMapperTest.cpp\
+	DebounceBooleanTest.cpp
 
-LOCALFLAGS = -I../xeromath
+TOPDIR=../..
 
-include ../makefiles/test.mk
+include ../../makefiles/test.mk
