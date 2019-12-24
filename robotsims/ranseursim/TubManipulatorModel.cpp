@@ -40,13 +40,13 @@ namespace xero {
                 double ec, rc ;
 
                 arm_mapper_ = new EncoderMapper(-180.0, 180.0, 0.0, 5.0) ;
-                ec = simbase.getSettingsParser().getInteger("hw:tubmanipulator:arm:ec") ;
-                rc = simbase.getSettingsParser().getInteger("hw:tubmanipulator:arm:rc") ;                
+                ec = simbase.getSettingsParser().getDouble("hw:tubmanipulator:arm:ec") ;
+                rc = simbase.getSettingsParser().getDouble("hw:tubmanipulator:arm:rc") ;                
                 arm_mapper_->calibrate(ec, rc) ;
 
                 wrist_mapper_ = new EncoderMapper(-180.0, 180.0, 5.0, 0.0) ;
-                ec = simbase.getSettingsParser().getInteger("hw:tubmanipulator:wrist:ec") ;
-                rc = simbase.getSettingsParser().getInteger("hw:tubmanipulator:wrist:rc") ;                 
+                ec = simbase.getSettingsParser().getDouble("hw:tubmanipulator:wrist:ec") ;
+                rc = simbase.getSettingsParser().getDouble("hw:tubmanipulator:wrist:rc") ;                 
                 wrist_mapper_->calibrate(ec, rc) ;
             }
 
