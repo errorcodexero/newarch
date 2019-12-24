@@ -60,6 +60,18 @@ namespace xero {
                     has_tub_inv_ = (value ? true : false) ;
                     setTubSensor() ;
                 }
+                else if (name == "arm")
+                {
+                    ret = true ;
+                    arm_angle_ = static_cast<double>(angle) ;
+                    setArmEncoder() ;
+                }
+                else if (name == "wrist")
+                {
+                    ret = true ;
+                    wrist_angle_ = static_cast<double>(angle) ;
+                    setWristEncoder() ;
+                }
 
                 return ret ;
             }
