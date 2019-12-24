@@ -133,7 +133,7 @@ namespace xero {
                 seq.pushSubActionPair(tubmanipulatorsubsytem, ejecting_, false) ;
             } 
 
-            if (getValue(bunny_arm_) != bunnyarm->isDeployed())
+            if (getValue(bunny_arm_) != bunnyarm->isRaised())
             {
                 if (getValue(bunny_arm_))
                     seq.pushSubActionPair(bunnyarm, bunny_arm_deploy_, false) ;

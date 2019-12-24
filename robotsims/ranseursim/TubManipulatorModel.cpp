@@ -39,15 +39,15 @@ namespace xero {
 
                 double ec, rc ;
 
-                arm_mapper_ = new EncoderMapper(-180.0, 180.0, 0.0, 5.0) ;
+                arm_mapper_ = new EncoderMapper(180.0, -180.0, 5.0, 0.0) ;
                 ec = simbase.getSettingsParser().getDouble("hw:tubmanipulator:arm:ec") ;
                 rc = simbase.getSettingsParser().getDouble("hw:tubmanipulator:arm:rc") ;                
-                arm_mapper_->calibrate(ec, rc) ;
+                arm_mapper_->calibrate(rc, ec) ;
 
-                wrist_mapper_ = new EncoderMapper(-180.0, 180.0, 5.0, 0.0) ;
+                wrist_mapper_ = new EncoderMapper(180.0, -180.0, 0.0, 5.0) ;
                 ec = simbase.getSettingsParser().getDouble("hw:tubmanipulator:wrist:ec") ;
                 rc = simbase.getSettingsParser().getDouble("hw:tubmanipulator:wrist:rc") ;                 
-                wrist_mapper_->calibrate(ec, rc) ;
+                wrist_mapper_->calibrate(rc, ec) ;
             }
 
             TubManipulatorModel::~TubManipulatorModel() {
@@ -63,13 +63,13 @@ namespace xero {
                 else if (name == "arm")
                 {
                     ret = true ;
-                    arm_angle_ = static_cast<double>(angle) ;
+                    arm_angle_ = static_cast<double>(value) ;
                     setArmEncoder() ;
                 }
                 else if (name == "wrist")
                 {
                     ret = true ;
-                    wrist_angle_ = static_cast<double>(angle) ;
+                    wrist_angle_ = static_cast<double>(value) ;
                     setWristEncoder() ;
                 }
 

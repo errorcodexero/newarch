@@ -20,10 +20,13 @@ namespace xero {
             virtual ~BunnyArmDeployAction() {                
             }
 
-            virtual void start() { 
+            virtual void start() {
                 isDone_ = false ;
                 BunnyArm &bunnyArm = getBunnyArm() ;
-                bunnyArm.solenoid_->Set(raise_);
+                if (raise_)
+                    bunnyArm.raise() ;
+                else
+                    bunnyArm.lower() ;
 
                 // Determine the end time.
                 endTime_ = bunnyArm.getRobot().getTime() + duration_;

@@ -57,8 +57,6 @@ namespace xero {
         void Subsystem::computeState() {
             for(auto sub: children_)
                 sub->computeState() ;   
-
-            frc::SmartDashboard::PutBoolean(name_, isBusy()) ;
         }
 
         void Subsystem::cancelAction() {

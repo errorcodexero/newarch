@@ -1,5 +1,11 @@
 #!/bin/bash
 
+TELEOPTIME=120
+AUTOTIME=15
+DISABLEDTIME=30
+STARTTIME=5
+TESTTIME=0
+
 if [ $1 == "--gui" ]; then
     GUI=--simscreen
     shift
@@ -24,19 +30,19 @@ legal=NO
 if [ $2 == 'auto' ]; then
     legal=YES
     echo Running auto mode
-    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto 15 --oper 0 --start 0 --test 0 $FLAGS $GUI
+    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto $AUTOTIME --oper 0 --start $STARTTIME --test 0 $FLAGS $GUI
 fi
 
 if [ $2 == 'teleop' ]; then
     legal=YES
     echo Running teleop mode
-    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto 0 --oper 30 --start 0 --test 0 $FLAGS $GUI
+    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto 0 --oper $TELEOPTIME --start $STARTTIME --test 0 $FLAGS $GUI
 fi
 
 if [ $2 == 'both' ]; then
     legal=YES
     echo Running teleop mode
-    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto 15 --oper 30 --start 0 --test 0 $FLAGS $GUI
+    exec makebuild/SIMULATOR/Debug/ranseur/$1 --auto $AUTOTIME --oper $TELEOPTIME --start $STARTTIME --test 0 $FLAGS $GUI
 fi
 
 if [ legal == 'NO' ]; then

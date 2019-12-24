@@ -35,18 +35,18 @@ hw:tubarm:encoder:analog:rmin                                   -180
 hw:tubarm:encoder:analog:rmax                                   180
 hw:tubarm:encoder:analog:emin                                   0
 hw:tubarm:encoder:analog:emax                                   5
-hw:tubarm:encoder:analog:rc                                     0
-hw:tubarm:encoder:analog:ec                                     0
+hw:tubarm:encoder:analog:rc                                     90
+hw:tubarm:encoder:analog:ec                                     2.5
 
 hw:tubwrist:motor:canid                                         7
 hw:tubwrist:motor:type                                          "victor_spx"
 hw:tubwrist:encoder:analog                                      0
 hw:tubwrist:encoder:analog:rmin                                 -180
 hw:tubwrist:encoder:analog:rmax                                 180
-hw:tubwrist:encoder:analog:emin                                 0
-hw:tubwrist:encoder:analog:emax                                 5
-hw:tubwrist:encoder:analog:rc                                   0
-hw:tubwrist:encoder:analog:ec                                   0
+hw:tubwrist:encoder:analog:emin                                 5
+hw:tubwrist:encoder:analog:emax                                 0
+hw:tubwrist:encoder:analog:rc                                   90
+hw:tubwrist:encoder:analog:ec                                   1.5
 
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2

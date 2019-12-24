@@ -50,7 +50,7 @@ namespace xero {
                 rmin = robot.getSettingsParser().getDouble(configName + ":analog:rmin") ;
                 rmax = robot.getSettingsParser().getDouble(configName + ":analog:rmax") ;
                 emin = robot.getSettingsParser().getDouble(configName + ":analog:emin") ;
-                rmax = robot.getSettingsParser().getDouble(configName + ":analog:emax") ;
+                emax = robot.getSettingsParser().getDouble(configName + ":analog:emax") ;
                 rc = robot.getSettingsParser().getDouble(configName + ":analog:rc") ;
                 ec = robot.getSettingsParser().getDouble(configName + ":analog:ec") ;
 

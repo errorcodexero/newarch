@@ -12,18 +12,13 @@ namespace xero {
             int sol = robot.getSettingsParser().getInteger("hw:bunnyarm:solenoid") ;
             solenoid_ = std::make_shared<frc::Solenoid>(sol) ;
             solenoid_->Set(false) ;
-
-            deployed_ = false ;
+            raised_ = true ;
         }
 
         BunnyArm::~BunnyArm() {
         }
 
         void BunnyArm::computeState() {
-            if (solenoid_->Get())
-                deployed_ = true ;
-            else
-                deployed_ = false ;
         }
 
         bool BunnyArm::canAcceptAction(xero::base::ActionPtr action) {

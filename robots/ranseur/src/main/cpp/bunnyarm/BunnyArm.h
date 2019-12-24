@@ -17,16 +17,25 @@ namespace xero {
 
             virtual void computeState() ;
 
-            bool isDeployed() {
-                return deployed_ ;
+            bool isRaised() {
+                return raised_ ;
+            }
+
+            void raise() {
+                raised_ = true ;
+                solenoid_->Set(false) ;
+            }
+
+            void lower() {
+                raised_ = false ;
+                solenoid_->Set(true) ;
             }
 
         protected:
             virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
 
         private:
-            bool deployed_ ;
-
+            bool raised_ ;
             std::shared_ptr<frc::Solenoid> solenoid_ ;
         } ;
     }

@@ -17,5 +17,5 @@
 0.1,tankdrive,ypos,16300                                # Start center hab platform
 0.1,tankdrive,angle,0                                   # Start center hab platform
 
-8.0,tubmanipulator,arm,90                               # Arm at 0 degrees
-8.0,tubmanipulator,wrist,90                            # Wrist at 180 degrees
+0.1,tubmanipulator,arm,90                               # Arm at 0 degrees
+0.1,tubmanipulator,wrist,90                            # Wrist at 180 degrees
