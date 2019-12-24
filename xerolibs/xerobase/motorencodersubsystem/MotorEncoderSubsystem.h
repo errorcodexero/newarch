@@ -28,6 +28,9 @@ namespace xero {
             MotorEncoderSubsystem(Subsystem *parent, const std::string &name, const std::string config,
                                   uint64_t id, bool angular = false );
 
+            bool isAngular() const {
+                return angular_ ;
+            }
             bool canAcceptAction(xero::base::ActionPtr action) override;
             void computeState() override;
             bool canAcceptDefaultAction(xero::base::ActionPtr action) override;
@@ -35,7 +38,6 @@ namespace xero {
             double getPosition() { return speedometer_.getDistance(); }
 
             xero::misc::Speedometer &getSpeedometer() { return speedometer_; }
-            bool isAngular() { return encoder_->isAngular(); }
 
             void calibrate();
 
@@ -53,6 +55,8 @@ namespace xero {
             const std::string configName_;
             std::string smartDashboardName_ ;
             uint64_t msg_id_;
+
+            bool angular_ ;
         };
     }
 }

@@ -8,7 +8,6 @@
 
 /// \file
 
-
 namespace xero {
     namespace base {
         /// \brief This action assigns a power to the motor in the subsystem

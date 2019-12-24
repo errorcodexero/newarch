@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SingleMotorSubsystem.h"
 #include "actions/Action.h"
 #include "basegroups.h"
 
@@ -9,7 +10,6 @@
 
 namespace xero {
     namespace base {
-        class SingleMotorSubsystem;
 
         /// \brief This is the base class for all actions that can be assigned to the SingleMotorSubsystem
         /// \sa SingleMotorSubsystem
@@ -25,6 +25,16 @@ namespace xero {
             /// \returns the subsystem associated with the action
             SingleMotorSubsystem &getSubsystem() {
                 return subsystem_ ;
+            }
+
+            /// \brief set the motor power
+            /// \param v the power for the motor
+            void setMotor(double v) {
+                subsystem_.setMotor(v) ;
+            }
+
+            uint64_t getID() {
+                return subsystem_.msg_id_ ;
             }
 
         private:

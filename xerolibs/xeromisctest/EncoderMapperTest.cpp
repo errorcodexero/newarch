@@ -22,7 +22,7 @@ TEST_CASE("EncoderMapper", "BasicTest")
         //   0.0           0
         //
         EncoderMapper mapper(100.0, 0.0, 5.0, 0.0) ;
-        mapper.calibrate(2.5, 50.0) ;
+        mapper.calibrate(50.0, 2.5) ;
         REQUIRE_THAT(mapper.toRobot(0.01), Catch::Matchers::Floating::WithinAbsMatcher(0.2, 1e-6)) ;
         REQUIRE_THAT(mapper.toRobot(-0.01), Catch::Matchers::Floating::WithinAbsMatcher(0.0, 1e-6)) ;        
         REQUIRE_THAT(mapper.toRobot(2.5), Catch::Matchers::Floating::WithinAbsMatcher(50.0, 1e-6)) ;
@@ -51,7 +51,7 @@ TEST_CASE("EncoderMapper", "BasicTest")
         //   0.0          40
         //        
         EncoderMapper mapper(100.0, 0.0, 5.0, 0.0) ;
-        mapper.calibrate(3.0, 0.0) ;
+        mapper.calibrate(0.0, 3.0) ;
         REQUIRE_THAT(mapper.toRobot(0.0), Catch::Matchers::Floating::WithinAbsMatcher(40.0, 1e-6)) ;
         REQUIRE_THAT(mapper.toRobot(-0.01), Catch::Matchers::Floating::WithinAbsMatcher(40.0, 1e-6)) ;        
         REQUIRE_THAT(mapper.toRobot(2.5), Catch::Matchers::Floating::WithinAbsMatcher(90.0, 1e-6)) ;
@@ -83,7 +83,7 @@ TEST_CASE("EncoderMapper", "BasicTest")
         //   0.0         100
         //        
         EncoderMapper mapper(100.0, 0.0, 0.0, 5.0) ;
-        mapper.calibrate(2.5, 50.0) ;
+        mapper.calibrate(50.0, 2.5) ;
         REQUIRE_THAT(mapper.toRobot(0.0), Catch::Matchers::Floating::WithinAbsMatcher(100.0, 1e-6)) ;
         REQUIRE_THAT(mapper.toRobot(-0.01), Catch::Matchers::Floating::WithinAbsMatcher(100.0, 1e-6)) ;        
         REQUIRE_THAT(mapper.toRobot(2.5), Catch::Matchers::Floating::WithinAbsMatcher(50.0, 1e-6)) ;
@@ -112,7 +112,7 @@ TEST_CASE("EncoderMapper", "BasicTest")
         //   0.0          40
         //   
         EncoderMapper mapper(100.0, 0.0, 0.0, 5.0) ;
-        mapper.calibrate(2.5, 90.0) ;
+        mapper.calibrate(90.0, 2.5) ;
         REQUIRE_THAT(mapper.toRobot(0.0), Catch::Matchers::Floating::WithinAbsMatcher(40.0, 1e-6)) ;
         REQUIRE_THAT(mapper.toRobot(-0.01), Catch::Matchers::Floating::WithinAbsMatcher(40.0, 1e-6)) ;        
         REQUIRE_THAT(mapper.toRobot(2.5), Catch::Matchers::Floating::WithinAbsMatcher(90.0, 1e-6)) ;

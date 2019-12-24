@@ -59,6 +59,7 @@ SOURCES = \
 	motors/MotorFactory.cpp\
 	motors/MotorGroupController.cpp\
 	motors/SparkMaxMotorController.cpp\
+	motors/VictorSPMotorController.cpp\
 	motorencodersubsystem/MotorEncoderSubsystem.cpp\
 	motorencodersubsystem/MotorEncoderGoToAction.cpp\
     motorencodersubsystem/MotorEncoderHoldAction.cpp\

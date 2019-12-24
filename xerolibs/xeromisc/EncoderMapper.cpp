@@ -58,7 +58,7 @@ namespace xero
             return value ;
         }
 
-        void EncoderMapper::calibrate(double encoder, double robot)
+        void EncoderMapper::calibrate(double robot, double encoder)
         {
             ec_ = encoder ;
             rc_ = robot ;

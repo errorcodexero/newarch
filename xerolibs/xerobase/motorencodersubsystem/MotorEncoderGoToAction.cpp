@@ -37,6 +37,24 @@ namespace xero {
             plotid_ = subsystem.initPlot(subsystem.getName() + "-" + toString()) ;
         }
 
+        MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, const std::string &targetparam):
+            MotorEncoderSubsystemAction(subsystem) {
+            
+            std::string config = subsystem.configName_ + ":goto";
+            auto &settings = subsystem.getRobot().getSettingsParser();
+            
+            target_ = subsystem.getRobot().getSettingsParser().getDouble(targetparam) ;
+            threshold_ = settings.getDouble(config + ":threshold");
+            
+            profile_ = std::make_shared<TrapezoidalProfile>(
+                settings.getDouble(config + ":maxa"),
+                settings.getDouble(config + ":maxd"),
+                settings.getDouble(config + ":maxv")
+            );
+
+            plotid_ = subsystem.initPlot(subsystem.getName() + "-" + toString()) ;
+        }        
+
         void MotorEncoderGoToAction::start() {
             MotorEncoderSubsystem &subsystem = getSubsystem();
             isDone_ = false ;

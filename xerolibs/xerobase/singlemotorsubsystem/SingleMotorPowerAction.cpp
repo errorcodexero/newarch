@@ -34,9 +34,9 @@ namespace xero {
 
             void SingleMotorPowerAction::start() {
                 auto &logger = getSubsystem().getRobot().getMessageLogger() ;
-                getSubsystem().setMotor(power_) ;
+                setMotor(power_) ;
                 if (timed_) {
-                    logger.startMessage(MessageLogger::MessageType::debug, getSubsystem().msg_id_) ;
+                    logger.startMessage(MessageLogger::MessageType::debug, getID()) ;
                     logger << getSubsystem().getName() << ": SingleMotorPowerAction" ;
                     logger << ", time " << duration_ << ", power " << power_ ;
                     logger.endMessage() ;
@@ -44,7 +44,7 @@ namespace xero {
                     start_ = getSubsystem().getRobot().getTime() ;
                 }
                 else {
-                    logger.startMessage(MessageLogger::MessageType::debug, getSubsystem().msg_id_) ;
+                    logger.startMessage(MessageLogger::MessageType::debug, getID()) ;
                     logger << getSubsystem().getName() << ": SingleMotorPowerAction" ;
                     logger << ", power " << power_ ;
                     logger.endMessage() ;                   
@@ -55,10 +55,10 @@ namespace xero {
             void SingleMotorPowerAction::run() {
                 if (timed_ && getSubsystem().getRobot().getTime() - start_ > duration_) {
                     auto &logger = getSubsystem().getRobot().getMessageLogger() ;                   
-                    logger.startMessage(MessageLogger::MessageType::debug, getSubsystem().msg_id_) ;
+                    logger.startMessage(MessageLogger::MessageType::debug, getID()) ;
                     logger << getSubsystem().getName() << ": SingleMotorPowerAction complete" ;
                     logger.endMessage() ;                       
-                    getSubsystem().setMotor(0) ;
+                    setMotor(0) ;
                     is_done_ = true ;
                 }
             }

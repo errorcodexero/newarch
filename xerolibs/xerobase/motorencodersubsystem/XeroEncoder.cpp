@@ -17,8 +17,7 @@ namespace xero {
             auto &logger = robot.getMessageLogger();
             auto &parser = robot.getSettingsParser();
 
-            angular_ = angular;
-            
+            angular_ = angular ;
             name_ = configName ;
             std::string quadName = configName + ":quad";
             std::shared_ptr<frc::Encoder> quad;
@@ -44,21 +43,21 @@ namespace xero {
                 // parse an analog encoder
                 analog_ = std::make_shared<frc::AnalogInput>(parser.getInteger(analogName));
 
-                if (parser.isDefined(analogName + ":m")) absM_ = parser.getDouble(analogName + ":m");
-                else invalidEncoder(logger, analogName, "m parameter is required");
+                double rmin, rmax ;
+                double emin, emax ;
+                double rc, ec ;
 
-                if (parser.isDefined(analogName + ":b")) absB_ = parser.getDouble(analogName + ":b");
-                else invalidEncoder(logger, analogName, "b parameter is required");
+                rmin = robot.getSettingsParser().getDouble(configName + ":analog:rmin") ;
+                rmax = robot.getSettingsParser().getDouble(configName + ":analog:rmax") ;
+                emin = robot.getSettingsParser().getDouble(configName + ":analog:emin") ;
+                rmax = robot.getSettingsParser().getDouble(configName + ":analog:emax") ;
+                rc = robot.getSettingsParser().getDouble(configName + ":analog:rc") ;
+                ec = robot.getSettingsParser().getDouble(configName + ":analog:ec") ;
 
-                bool offsetDefined = parser.isDefined(analogName + ":offset");
-                bool wrapDefined = parser.isDefined(analogName + ":wrap");
-                if (offsetDefined && wrapDefined) {
-                    absOffset_ = parser.getDouble(analogName + ":offset");
-                    absWrap_ = parser.getDouble(analogName + ":wrap");
-                } else if (offsetDefined || wrapDefined) {
-                    invalidEncoder(logger, analogName, ":offset and :wrap must be specified together");
-                }
-            } else analog_ = nullptr;
+                mapper_ = std::make_shared<EncoderMapper>(rmax, rmin, emax, emin) ;
+                mapper_->calibrate(rc, ec) ;
+            } else 
+                analog_ = nullptr;
 
             std::string pwmName = configName + ":pwm";
             if (parser.isDefined(pwmName)) {
@@ -66,21 +65,22 @@ namespace xero {
                 pwm_ = std::make_shared<frc::Counter>(parser.getInteger(pwmName));
                 pwm_->SetSemiPeriodMode(true);
 
-                if (parser.isDefined(pwmName + ":m")) absM_ = parser.getDouble(pwmName + ":m");
-                else invalidEncoder(logger, pwmName, "m parameter is required");
+                double rmin, rmax ;
+                double emin, emax ;
+                double rc, ec ;
 
-                if (parser.isDefined(pwmName + ":b")) absB_ = parser.getDouble(pwmName + ":b");
-                else invalidEncoder(logger, pwmName, "b parameter is required");
+                rmin = robot.getSettingsParser().getDouble(configName + ":analog:rmin") ;
+                rmax = robot.getSettingsParser().getDouble(configName + ":analog:rmax") ;
+                emin = robot.getSettingsParser().getDouble(configName + ":analog:emin") ;
+                rmax = robot.getSettingsParser().getDouble(configName + ":analog:emax") ;
+                rc = robot.getSettingsParser().getDouble(configName + ":analog:rc") ;
+                ec = robot.getSettingsParser().getDouble(configName + ":analog:ec") ;
 
-                bool offsetDefined = parser.isDefined(pwmName + ":offset");
-                bool wrapDefined = parser.isDefined(pwmName + ":wrap");
-                if (offsetDefined && wrapDefined) {
-                    absOffset_ = parser.getDouble(pwmName + ":offset");
-                    absWrap_ = parser.getDouble(pwmName + ":wrap");
-                } else if (offsetDefined || wrapDefined) {
-                    invalidEncoder(logger, analogName, ":offset and :wrap must be specified together");
-                }
-            } else pwm_ = nullptr;
+                mapper_ = std::make_shared<EncoderMapper>(rmax, rmin, emax, emin) ;
+                mapper_->calibrate(rc, ec) ;                
+
+            } else 
+                pwm_ = nullptr;
 
             // validate configuration
             if (pwm_ && analog_) invalidEncoder(logger, configName, "cannot declare two absolute encoders");
@@ -90,32 +90,40 @@ namespace xero {
         }
 
         double XeroEncoder::getPosition() {
-            if (quad_) {
+            double result ;
+
+            if (quad_) 
+            {
                 double result = quadM_*quad_->Get() + quadB_;
-                if (angular_) return xero::math::normalizeAngleDegrees(result);
-                else return result;
-            } else return getAbsolutePosition();
+                if (angular_) 
+                    result = xero::math::normalizeAngleDegrees(result);
+            } 
+            else  
+            {
+                result = getAbsolutePosition();
+            }
+
+            return result ;
         }
 
         double XeroEncoder::getAbsolutePosition() {
             double pos;
-            if (analog_) pos = analog_->GetVoltage();
-            else if (pwm_) pos = pwm_->GetPeriod();
-            else assert(0 == "no absolute encoder found");
+            if (analog_ != nullptr)
+                pos = analog_->GetVoltage();
+            else if (pwm_ != nullptr)
+                pos = pwm_->GetPeriod();
+            else 
+                assert(0 == "no absolute encoder found");
 
             // If the robot is disabled, output the raw hardware value for characterization
-            if (robot_.IsDisabled()) frc::SmartDashboard::PutNumber(name_, pos) ;
+            if (robot_.IsDisabled()) 
+                frc::SmartDashboard::PutNumber(name_, pos) ;
 
-            // Compensate for encoder wrapping.
-            pos = fmod(pos - absOffset_, absWrap_);
+            pos = mapper_->toRobot(pos) ;            
+            if (angular_)
+                pos = xero::math::normalizeAngleDegrees(pos) ;
 
-            // fmod will return a negative result if the numerator
-            // is negative, so handle that case.
-            if (pos < 0 && std::isfinite(absWrap_)) pos += absWrap_;
-
-            double result = absM_*pos + absB_;
-            if (angular_) return xero::math::normalizeAngleDegrees(result);
-            else return result;
+            return pos ;
         }
 
         void XeroEncoder::reset() {

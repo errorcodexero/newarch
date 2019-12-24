@@ -35,8 +35,6 @@ namespace xero {
             current_right_rps_ = 0.0 ;
 
             getMotorParams(simbase) ;
-
-
             calcLowLevelParams(simbase) ;
             lowGear() ;
 
@@ -123,6 +121,13 @@ namespace xero {
             width_ = simbase.getSettingsParser().getDouble("tankdrive:sim:width") ;
             length_ = simbase.getSettingsParser().getDouble("tankdrive:sim:length") ;
             left_right_error_ = simbase.getSettingsParser().getDouble("tankdrive:sim:error_per_side") ;
+
+            //
+            // If this drive base has a shifting gear box
+            //
+            shifter_channel_ = -1 ;
+            if (simbase.getSettingsParser().isDefined("hw:tankdrive:shifter"))
+                shifter_channel_ = simbase.getSettingsParser().getInteger("hw:tankdrive:shifter") ;
         }
 
         bool TankDriveModel::processEvent(const std::string &name, int value) {
@@ -189,7 +194,7 @@ namespace xero {
                 current_max_change_ = low_max_change_ ;
             }
 
-            gear_ = true ;
+            gear_ = Gear::LowGear ;
         }
 
         void TankDriveModel::highGear() {
@@ -206,7 +211,7 @@ namespace xero {
                 current_max_change_ = high_max_change_ ;                  
             }
 
-            gear_ = false ;
+            gear_ = Gear::HighGear ;
         }
 
         std::string TankDriveModel::toString() {
@@ -362,12 +367,10 @@ namespace xero {
             }
             else if (obj == shifter_) {
                 Solenoid *sol = dynamic_cast<Solenoid *>(obj) ;
-                if (sol->Get() != gear_) {
-                    if (sol->Get())
-                        lowGear() ;
-                    else
-                        highGear() ;
-                }
+                if (sol->Get() && gear_ != Gear::LowGear)
+                    lowGear() ;
+                else if (!sol->Get() && gear_ != Gear::HighGear)
+                    highGear() ;
             }
         }
 

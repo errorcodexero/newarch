@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Subsystem.h" 
-#include "SingleMotorSubsystemAction.h" 
 #include <iostream>
 
 /// \file
@@ -19,9 +18,6 @@ namespace xero {
             /// \brief Action class for this subsystem
             friend class SingleMotorSubsystemAction;
 
-            /// \brief Action class for this subsystem          
-            friend class SingleMotorPowerAction ;
-
         private:
             constexpr static double epsilon = 1e-3 ;
 
@@ -36,7 +32,10 @@ namespace xero {
             /// \param id the message logger id to use for messages from this class            
             /// \sa xero::base::MotorFactory
             /// \sa xero::misc::SettingsParser
-            SingleMotorSubsystem(Subsystem *parent, const std::string &name, const std::string &motor, uint64_t id) ;
+            SingleMotorSubsystem(Subsystem *parent, 
+                                 const std::string &name, 
+                                 const std::string &motor, 
+                                 uint64_t id) ;
 
             /// \brief Create a new subsystem object
             /// The motor parameter is the number of the PWM to use for VictorSP or the CAN address
@@ -49,8 +48,7 @@ namespace xero {
             SingleMotorSubsystem(Subsystem *parent,
                                  const std::string &name, 
                                  std::shared_ptr<MotorController> motor, 
-                                 uint64_t id
-            ) ;
+                                 uint64_t id) ;
 
             /// \brief destroy the subsystem, freeing up the motor controllers
             virtual ~SingleMotorSubsystem();
