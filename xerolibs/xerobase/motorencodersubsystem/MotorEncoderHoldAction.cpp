@@ -15,7 +15,7 @@ namespace xero {
 
             pid_.initFromSettingsExtended(
                 sub.getRobot().getSettingsParser(),
-                sub.configName_ + ":hold",
+                sub.getName() + ":hold",
                 sub.isAngular()
             );
 

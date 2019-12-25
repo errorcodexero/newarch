@@ -34,7 +34,6 @@ namespace xero {
             /// \sa xero::misc::SettingsParser
             SingleMotorSubsystem(Subsystem *parent, 
                                  const std::string &name, 
-                                 const std::string &motor, 
                                  uint64_t id) ;
 
             /// \brief Create a new subsystem object

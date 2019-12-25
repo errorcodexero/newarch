@@ -13,14 +13,13 @@ namespace xero {
     namespace base {
         MotorEncoderSubsystem::MotorEncoderSubsystem(Subsystem *parent, 
                                                      const std::string &name,
-                                                     const std::string config,
                                                      uint64_t id,
                                                      bool angular)
-                    : SingleMotorSubsystem(parent, name, Subsystem::HWPrefix + config + ":motor", id), 
-                      speedometer_(/*samples=*/2, angular), configName_(name), msg_id_(id) 
+                    : SingleMotorSubsystem(parent, name, id), 
+                      speedometer_(/*samples=*/2, angular), msg_id_(id) 
         {
             auto &robot = getRobot(); 
-            std::string encname = Subsystem::HWPrefix + config + ":encoder" ;
+            std::string encname = Subsystem::HWPrefix + name + ":encoder" ;
             encoder_ = std::make_shared<XeroEncoder>(robot, encname) ;
             angular_ = angular ;
         }

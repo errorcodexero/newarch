@@ -14,7 +14,7 @@ namespace xero {
         Collector::Collector(Subsystem *parent) : Subsystem(parent, "collector") {   
             auto &robot = parent->getRobot();
                      
-            intake_ = std::make_shared<SingleMotorSubsystem>(this, "intake", "hw:intake", MSG_GROUP_INTAKE) ;
+            intake_ = std::make_shared<SingleMotorSubsystem>(this, "intake", MSG_GROUP_INTAKE) ;
             addChild(intake_) ;
 
             grabber_ = std::make_shared<Grabber>(this);

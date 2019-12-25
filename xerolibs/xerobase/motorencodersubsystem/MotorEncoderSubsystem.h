@@ -50,8 +50,8 @@ namespace xero {
 
             xero::misc::Speedometer speedometer_;
 
-            const std::string configName_;
             std::string smartDashboardName_ ;
+            
             uint64_t msg_id_;
 
             bool angular_ ;

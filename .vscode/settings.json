@@ -119,7 +119,9 @@
     "__hash_table": "cpp",
     "variant": "cpp",
     "concepts": "cpp",
-    "forward_list": "cpp"
+    "forward_list": "cpp",
+    "resumable": "cpp",
+    "regex": "cpp"
   },
   "C_Cpp.configurationWarnings": "Disabled"
 }

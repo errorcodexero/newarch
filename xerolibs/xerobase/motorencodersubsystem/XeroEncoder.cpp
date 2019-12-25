@@ -20,13 +20,12 @@ namespace xero {
             angular_ = angular ;
             name_ = configName ;
             std::string quadName = configName + ":quad";
-            std::shared_ptr<frc::Encoder> quad;
             if (parser.isDefined(quadName + ":1") || parser.isDefined(quadName + ":2")) {
                 // parse a quadrature encoder
                 if (!parser.isDefined(quadName + ":1") || !parser.isDefined(quadName + ":2")) {
                     invalidEncoder(logger, quadName, "quadrature encoder requires both pins");
                 }
-                quad = std::make_shared<frc::Encoder>(
+                quad_ = std::make_shared<frc::Encoder>(
                     parser.getInteger(quadName + ":1"),
                     parser.getInteger(quadName + ":2")
                 );
@@ -36,7 +35,7 @@ namespace xero {
 
                 if (parser.isDefined(quadName + ":b")) quadB_ = parser.getDouble(quadName + ":b");
                 else invalidEncoder(logger, quadName, "b parameter is required");
-            } else quad = nullptr;
+            } else quad_ = nullptr;
 
             std::string analogName = configName + ":analog";
             if (parser.isDefined(analogName)) {
@@ -90,7 +89,7 @@ namespace xero {
         }
 
         double XeroEncoder::getPosition() {
-            double result ;
+            double result = 0.0 ;
 
             if (quad_) 
             {

@@ -1,9 +1,10 @@
 #pragma once
 #include "MotorController.h"
-
+#include <frc/VictorSP.h>
 #include <list>
 #include <memory>
-#include <frc/VictorSP.h>
+#include <cassert>
+
 
 namespace xero {
     namespace base {
@@ -23,9 +24,16 @@ namespace xero {
             virtual void follow(std::shared_ptr<MotorController> motor, bool invert = false);
             virtual void reapplyInverted();
 
+        protected:
+            void addAsFollower(VictorSPMotorController *motor) {
+                followers_.push_back(motor) ;
+            }
+
         private:
             MotorPtr motor_;
             bool isInverted_;
+            std::shared_ptr<VictorSPMotorController> following_ ;
+            std::list<VictorSPMotorController *> followers_ ;
         };
     }
 }

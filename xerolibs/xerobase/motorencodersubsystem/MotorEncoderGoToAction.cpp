@@ -22,7 +22,7 @@ namespace xero {
         MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target):
             MotorEncoderSubsystemAction(subsystem) {
             
-            std::string config = subsystem.configName_ + ":goto";
+            std::string config = subsystem.getName() + ":goto";
             auto &settings = subsystem.getRobot().getSettingsParser();
             
             target_ = target;
@@ -40,7 +40,7 @@ namespace xero {
         MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, const std::string &targetparam):
             MotorEncoderSubsystemAction(subsystem) {
             
-            std::string config = subsystem.configName_ + ":goto";
+            std::string config = subsystem.getName() + ":goto";
             auto &settings = subsystem.getRobot().getSettingsParser();
             
             target_ = subsystem.getRobot().getSettingsParser().getDouble(targetparam) ;
@@ -72,7 +72,7 @@ namespace xero {
                 return;
             }
 
-            std::string config = subsystem.configName_ + ":follower";
+            std::string config = subsystem.getName() + ":follower";
             auto &settings = subsystem.getRobot().getSettingsParser();
 
             if (dist < 0) {
