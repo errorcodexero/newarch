@@ -19,10 +19,10 @@ hw:tankdrive:motors:right:2:type                                "talon_srx"
 hw:tankdrive:motors:right:3:type                                "talon_srx"
 hw:tankdrive:motors:right:invert                                 true
 
-hw:tankdrive:leftencoder:1                                      1                      # Digital IO
-hw:tankdrive:leftencoder:2                                      0                      # Digital IO
-hw:tankdrive:rightencoder:1                                     2                      # Digital IO
-hw:tankdrive:rightencoder:2                                     3                      # Digital IO
+hw:tankdrive:encoders:left:1                                      1                      # Digital IO
+hw:tankdrive:encoders:left:2                                      0                      # Digital IO
+hw:tankdrive:encoders:right:1                                     2                      # Digital IO
+hw:tankdrive:encoders:right:2                                     3                      # Digital IO
 
 hw:tankdrive:shifter                                            0                      # Solenoid
 

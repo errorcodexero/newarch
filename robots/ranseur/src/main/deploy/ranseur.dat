@@ -61,10 +61,10 @@ hw:tankdrive:motors:left:3:type                                 "sparkmax_brushl
 hw:tankdrive:motors:right:1:type                                "sparkmax_brushless"
 hw:tankdrive:motors:right:2:type                                "sparkmax_brushless"
 hw:tankdrive:motors:right:3:type                                "sparkmax_brushless"
-hw:tankdrive:leftencoder:1                                      5                            # Digital IO
-hw:tankdrive:leftencoder:2                                      4                            # Digital IO
-hw:tankdrive:rightencoder:1                                     6                            # Digital IO
-hw:tankdrive:rightencoder:2                                     7                            # Digital IO
+hw:tankdrive:encoders:left:1                                    5                            # Digital IO
+hw:tankdrive:encoders:left:2                                    4                            # Digital IO
+hw:tankdrive:encoders:right:1                                   6                            # Digital IO
+hw:tankdrive:encoders:right:2                                   7                            # Digital IO
 
 #
 # Driver station

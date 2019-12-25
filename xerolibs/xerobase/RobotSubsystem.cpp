@@ -26,16 +26,19 @@ namespace xero {
         void RobotSubsystem::addTankDrive() {
             auto &settings = getRobot().getSettingsParser() ;
             auto &logger = getRobot().getMessageLogger() ;
+
+            const char *l1str = "hw:tankdrive:encoders:left:1" ;
+            const char *l2str = "hw:tankdrive:encoders:left:2" ;
+            const char *r1str = "hw:tankdrive:encoders:right:1" ;
+            const char *r2str = "hw:tankdrive:encoders:right:2" ;
             
             auto tank = std::make_shared<TankDrive>(this, "hw:tankdrive:motors") ;
 
-            if (settings.isDefined("hw:tankdrive:leftencoder:1") && settings.isDefined("hw:tankdrive:leftencoder:2") &&
-                settings.isDefined("hw:tankdrive:rightencoder:1") && settings.isDefined("hw:tankdrive:rightencoder:2")) {
-                
-                int l1 = settings.getInteger("hw:tankdrive:leftencoder:1") ;
-                int l2 = settings.getInteger("hw:tankdrive:leftencoder:2") ;
-                int r1 = settings.getInteger("hw:tankdrive:rightencoder:1") ;
-                int r2 = settings.getInteger("hw:tankdrive:rightencoder:2") ;
+            if (settings.isDefined(l1str) && settings.isDefined(l2str) && settings.isDefined(r1str) && settings.isDefined(r2str)) {                
+                int l1 = settings.getInteger(l1str) ;
+                int l2 = settings.getInteger(l2str) ;
+                int r1 = settings.getInteger(r1str) ;
+                int r2 = settings.getInteger(r2str) ;
 
                 tank->setEncoders(l1, l2, r1, r2) ;
                 
