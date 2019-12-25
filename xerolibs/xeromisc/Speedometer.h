@@ -2,6 +2,7 @@
 
 #include <xeromath.h>
 #include <cmath>
+#include <cstdlib>
 #include <vector>
 
 /// \file
