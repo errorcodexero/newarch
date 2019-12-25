@@ -51,6 +51,8 @@ namespace xero {
             }
 
             TubManipulatorModel::~TubManipulatorModel() {
+                delete arm_mapper_ ;
+                delete wrist_mapper_ ;
             }
 
             bool TubManipulatorModel::processEvent(const std::string &name, int value) {
