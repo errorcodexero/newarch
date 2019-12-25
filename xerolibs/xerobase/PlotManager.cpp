@@ -57,6 +57,7 @@ namespace xero {
 
                 plottable->PutStringArray("columns", cols) ;
                 plottable->PutNumber("points", 0) ;
+                plottable->Delete("data") ;
             }
         }
 

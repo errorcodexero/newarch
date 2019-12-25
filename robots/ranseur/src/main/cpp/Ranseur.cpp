@@ -62,13 +62,8 @@ namespace xero {
 
             logger.enableSubsystem(MSG_GROUP_OI) ;
             logger.enableSubsystem(MSG_GROUP_ACTIONS);               
-            logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);            
-            logger.enableSubsystem(MSG_GROUP_VISION_TERMINATOR);   
-            logger.enableSubsystem(MSG_GROUP_CAMERA_TRACKER); 
-            logger.enableSubsystem(MSG_GROUP_TUBCOLLECTOR) ;  
-            logger.enableSubsystem(MSG_GROUP_VISION_DRIVING); 
-            logger.enableSubsystem(MSG_GROUP_VISION_TERMINATOR);  
-            logger.enableSubsystem(MSG_GROUP_RANSEUR_OI);  
+            logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);      
+            logger.enableSubsystem(MSG_GROUP_TUBARM) ;                  
 
             //
             // This should stay on.  It will have no effect on the real robot

@@ -66,9 +66,9 @@ namespace xero
             //// 2ND SEQUENCE ////
             sequence = std::make_shared<SequenceAction>(robot.getMessageLogger()) ;
             parallel->addAction(sequence) ;
-            sequence->pushAction(std::make_shared<BunnyArmDeployAction>(*bunnyarm, true)) ;
+            sequence->pushAction(std::make_shared<BunnyArmDeployAction>(*bunnyarm, false)) ;
             sequence->pushAction(std::make_shared<DelayAction>(0.35)) ;
-            sequence->pushSubActionPair(bunnyarm, std::make_shared<BunnyArmDeployAction>(*bunnyarm, false)) ;
+            sequence->pushSubActionPair(bunnyarm, std::make_shared<BunnyArmDeployAction>(*bunnyarm, true)) ;
             sequence->pushSubActionPair(tubarm, std::make_shared<MotorEncoderGoToAction>(*tubarm, armangle)) ;
             sequence->pushSubActionPair(tubwrist, std::make_shared<MotorEncoderGoToAction>(*tubwrist, wristangle)) ;
             sequence->pushAction(std::make_shared<TubManipulatorCollectAction>(*tubmanipulatorsubsytem)) ;

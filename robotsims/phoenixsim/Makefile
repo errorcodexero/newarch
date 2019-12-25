@@ -14,6 +14,7 @@ TARGET=phoenixsim
 
 NEED_WPILIB=true
 NEED_CTRE=true
+NEED_REV=true
 NEED_NAVX=true
 NEED_XEROMISC=true
 NEED_MODELS=true

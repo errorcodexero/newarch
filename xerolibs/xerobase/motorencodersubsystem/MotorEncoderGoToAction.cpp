@@ -132,7 +132,7 @@ namespace xero {
             double remaining = normalizePosition(target_ - position);
 
             if (elapsed > profile_->getTotalTime()) {
-                 MessageLogger &logger = robot.getMessageLogger() ;
+                MessageLogger &logger = robot.getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, subsystem.getMsgID()) ;
                 logger << "MotorEncoderGoToAction (" ;
                 logger << subsystem.getName() ;
@@ -142,6 +142,7 @@ namespace xero {
 
                 isDone_ = true ;
                 subsystem.setMotor(0.0);
+                subsystem.endPlot(plotid_) ;
                 return;
             }
 

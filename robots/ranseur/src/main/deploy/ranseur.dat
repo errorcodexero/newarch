@@ -150,9 +150,9 @@ tubwrist:hold:min                                               -0.6
 tubwrist:hold:max                                               0.6
 tubwrist:hold:imax                                              0.0 
 tubwrist:goto:threshold                                         3.0       # Within three degrees
-tubwrist:goto:maxd                                             -720.0       # maximum deceleration
-tubwrist:goto:maxa                                              360.0     # maximum acceleration
-tubwrist:goto:maxv                                              720.0     # maximum velocity
+tubwrist:goto:maxd                                             -720.0     # maximum deceleration
+tubwrist:goto:maxa                                              720.0     # maximum acceleration
+tubwrist:goto:maxv                                              360.0     # maximum velocity
 tubwrist:follower:down:kp                                       0.05
 tubwrist:follower:down:kd                                       0.0
 tubwrist:follower:down:kv                                       0.002757353
@@ -162,7 +162,7 @@ tubwrist:follower:up:kd                                         0.0
 tubwrist:follower:up:kv                                         0.002757353
 tubwrist:follower:up:ka                                         0.0
 tubwrist:collect:pos                                            15
-tubwrist:dump:pos                                               200
+tubwrist:dump:pos                                               -160
 tubwrist:eject:pos                                              160
 tubwrist:eject:finish                                            90
 tubwrist:power                                                  0.2
@@ -273,7 +273,7 @@ oi:tubtouchers                                                  5
 # 6 - tub toucher deploy
 # 7 - tub toucher retract
 #
-automode:test:which                                             3
+automode:test:which                                             2
 automode:test:power                                             -1.0
 automode:test:duration                                          1.0
-automode:test:angle                                             185
+automode:test:angle                                             -38

@@ -37,12 +37,16 @@ namespace xero {
             return false ;
         }
         void RanseurLimeLight::init(LoopType lt) {
+#ifdef PLOT_LIMELIGHT
             if (lt == LoopType::Autonomous)
                 startPlot(plotid_, cols_) ;
+#endif
         }
 
         void RanseurLimeLight::reset() {
+#ifdef PLOT_LIMELIGHT            
             endPlot(plotid_) ;
+#endif
         }
 
         void RanseurLimeLight::computeState() {
@@ -61,6 +65,7 @@ namespace xero {
             frc::SmartDashboard::PutNumber("Distance", distance_) ;
             frc::SmartDashboard::PutNumber("YAW", yaw_) ;
 
+#ifdef PLOT_LIMELIGHT
             if (getRobot().IsEnabled() && getRobot().IsAutonomous())
             {
                 std::vector<double> data ;
@@ -70,6 +75,7 @@ namespace xero {
                 data.push_back(isTargetPresent()) ;
                 addPlotData(plotid_, data) ;
             }
+#endif
         }
         
         bool RanseurLimeLight::shouldTerminate() {

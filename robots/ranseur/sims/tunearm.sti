@@ -18,4 +18,4 @@
 0.1,tankdrive,angle,0                                   # Start center hab platform
 
 0.1,tubmanipulator,arm,90                               # Arm at 0 degrees
-0.1,tubmanipulator,wrist,90                            # Wrist at 180 degrees
+0.1,tubmanipulator,wrist,90                             # Wrist at 180 degrees

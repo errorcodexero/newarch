@@ -116,10 +116,12 @@ namespace xero {
                     arm_angle_ = ArmMinimumAngle ;
 
                 wrist_angle_ += wrist_degrees_per_volt_per_sec_ * wrist_motor_power_ * dt ;
+#ifdef NOTYET
                 if (wrist_angle_ > WristMaxAngle)
                     wrist_angle_ = WristMaxAngle ;
                 else if (wrist_angle_ < WristMinAngle)
                     wrist_angle_ = WristMinAngle ;
+#endif
 
                 setArmEncoder() ;
                 setWristEncoder() ;

@@ -12,8 +12,8 @@ hw:tankdrive:right:motor:1               4                               # Spark
 hw:tankdrive:right:motor:2               5                               # SparkMax 5
 hw:tankdrive:right:motor:3               6                               # SparkMax 6
 hw:tankdrive:right:motor:invert          true                            # Invert the sense of the right motor
-hw:tankdrive:left:encoder:1              4                               # DIO 0
-hw:tankdrive:left:encoder:2              5                               # DIO 1
+hw:tankdrive:left:encoder:1              5                               # DIO 0
+hw:tankdrive:left:encoder:2              4                               # DIO 1
 hw:tankdrive:right:encoder:1             6                               # DIO 2
 hw:tankdrive:right:encoder:2             7                               # DIO 3
 
