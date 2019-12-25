@@ -44,15 +44,6 @@ namespace xero
                 addModel(oi_) ;
 
                 visualizer_ = false ;
-
-                addCubeLocation(134.5, 168) ;
-                addCubeLocation(134.5, 179) ;
-                addCubeLocation(134.5, 157) ;
-
-                addCubeLocation(123.5, 173.5) ;
-                addCubeLocation(123.5, 162.5) ;
-
-                addCubeLocation(112.5, 168) ;
             }
 
             PhoenixSimulator::~PhoenixSimulator() {

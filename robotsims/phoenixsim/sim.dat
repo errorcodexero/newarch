@@ -8,12 +8,15 @@ hw:tankdrive:left:motor:3               3                               # TalonS
 hw:tankdrive:right:motor:1              4                               # TalonSRX 4
 hw:tankdrive:right:motor:2              5                               # TalonSRX 5
 hw:tankdrive:right:motor:3              6                               # TalonSRX 6
+
 hw:tankdrive:left:encoder:1             1                               # Digital IO
 hw:tankdrive:left:encoder:2             0                               # Digital IO
+
 hw:tankdrive:right:encoder:1            2                               # Digital IO
 hw:tankdrive:right:encoder:2            3                               # Digital IO
+
 hw:tankdrive:shifter                    0                               # Solenoid
-hw:tankdrive:left:motor:invert          true                            # Invert the sense of the left motor
+hw:tankdrive:right:motor:invert          true                           # Invert the sense of the right motor
 
 hw:lifter:encoder1                      4                               # Digital IO
 hw:lifter:encoder2                      5                               # Digital IO
@@ -45,8 +48,8 @@ tankdrive:sim:scrub                     1.0
 tankdrive:sim:width                     28
 tankdrive:sim:length                    28
 tankdrive:sim:error_per_side            0
-tankdrive:high:maxvelocity              120
-tankdrive:high:maxacceleration          120
+tankdrive:high:maxvelocity              180
+tankdrive:high:maxacceleration          180
 tankdrive:low:maxvelocity               60
 tankdrive:low:maxacceleration           60
 
