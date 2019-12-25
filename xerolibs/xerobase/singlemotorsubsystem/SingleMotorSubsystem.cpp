@@ -14,6 +14,12 @@ namespace xero {
                                                    uint64_t mid) : Subsystem(parent,name) 
         {
             msg_id_ = mid ;
+
+            //
+            // The hardware fields in the params file are derived from the subsystem name.  If the subsystem name is intake, then the
+            // hardware fields in the parameters file will be hw:intake.
+            //
+            std::string motor = HWPrefix + name + suffix ;
             motor_ = getRobot().getMotorFactory()->createMotor(motor);
             motor_->setNeutralMode(MotorController::NeutralMode::Brake) ;
             current_power_ = 0.0 ;

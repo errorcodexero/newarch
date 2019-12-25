@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Subsystem.h>
+#include <singlemotorsubsystem/SingleMotorSubsystem.h>
 #include <DebounceBoolean.h>
 #include <frc/DigitalInput.h>
 
@@ -12,7 +13,7 @@ namespace xero {
         class Collector : public xero::base::Subsystem {
             friend class CollectCubeAction ;
         public:
-            Collector(xero::base::Robot &robot) ;
+            Collector(xero::base::Subsystem *parent) ;
             virtual ~Collector() ;
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
@@ -22,7 +23,7 @@ namespace xero {
                 return grabber_ ;
             }
 
-            std::shared_ptr<Intake> getIntake() {
+            std::shared_ptr<xero::base::SingleMotorSubsystem> getIntake() {
                 return intake_ ;
             }
 
@@ -52,7 +53,7 @@ namespace xero {
             // This means we have collected a cube
             //
             bool collected_cube_ ;
-            std::shared_ptr<Intake> intake_ ;
+            std::shared_ptr<xero::base::SingleMotorSubsystem> intake_ ;
             std::shared_ptr<Grabber> grabber_ ;
             std::shared_ptr<frc::DigitalInput> sensor_ ;
             std::shared_ptr<xero::misc::DebounceBoolean> deb_sensor_ ;

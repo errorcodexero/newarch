@@ -11,9 +11,10 @@ namespace xero  {
                 OIModel(RobotSimBase &simbase) ;
                 virtual ~OIModel() ;
 
+                virtual bool processEvent(const std::string &event, int value) ;
+                virtual void init() ;
                 virtual void run(double dt) ;
                 virtual std::string toString() ;
-                virtual void init()  ;          
 
                 virtual void addDevice(frc::DriverStation *station) ;
                 virtual void inputChanged(SimulatedObject *obj) ;

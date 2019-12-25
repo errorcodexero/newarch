@@ -9,7 +9,9 @@ namespace xero {
         //
         // Create the wings subsystem object
         //
-        Wings::Wings(xero::base::Robot &robot) : xero::base::Subsystem(robot, "wings") {
+        Wings::Wings(xero::base::Subsystem *parent) : xero::base::Subsystem(parent, "wings") {
+            auto &robot = getRobot();
+            
             int sol = robot.getSettingsParser().getInteger("hw:wings:solenoid") ;
 
             //

@@ -1,8 +1,8 @@
 #include "Phoenix.h"
-#include "phoenixgroups.h"
+#include "phoenixids.h"
 #include "automodes/PhoenixAutoController.h"
-#include <SequenceAction.h>
-#include <DelayAction.h>
+#include <actions/SequenceAction.h>
+#include <actions/DelayAction.h>
 #include <TeleopController.h>
 #include <basegroups.h>
 #include <MessageDestDS.h>
@@ -36,15 +36,14 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_ACTIONS);
             // logger.enableSubsystem(MSG_GROUP_PARSER) ;
             // logger.enableSubsystem(MSG_GROUP_OI) ;
-            //
-            
+            //            
             logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
             logger.enableSubsystem(MSG_GROUP_ACTIONS);
         }
 
         void Phoenix::loadPaths() {
             auto paths = getPathManager() ;
-            paths->loadPath("TestPathOne") ;
+            // paths->loadPath("TestPathOne") ;
         }
         
         void Phoenix::RobotHardwareInit() {

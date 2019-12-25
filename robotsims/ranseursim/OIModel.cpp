@@ -1,7 +1,5 @@
 #include "OIModel.h"
-
 #include <frc/RobotSimBase.h>
-#include <ncurses.h>
 
 using namespace frc ;
 using namespace xero::misc ;

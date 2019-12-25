@@ -3,8 +3,8 @@
 #include "liftingcollector/LiftingCollector.h"
 #include "liftingcollector/LiftingCollectCubeAction.h"
 #include "tankdrive/TankDrive.h"
-#include "tankdrive/TankDriveDistanceAction.h"
-#include "tankdrive/TankDrivePowerAction.h"
+#include "tankdrive/actions/TankDriveDistanceAction.h"
+#include "tankdrive/actions/TankDrivePowerAction.h"
 #include <Robot.h>
 
 using namespace xero::base ;

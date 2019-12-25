@@ -1,8 +1,8 @@
 #include "Collector.h"
 #include "CollectorAction.h"
-#include "intake/Intake.h"
 #include "grabber/Grabber.h"
-#include <SequenceAction.h>
+#include "phoenixids.h"
+#include <actions/SequenceAction.h>
 #include <Robot.h>
 #include <frc/DigitalInput.h>
 
@@ -11,14 +11,14 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phoenix {
-        Collector::Collector(Robot &robot) : Subsystem(robot, "collector") {            
-            intake_ = std::make_shared<Intake>(robot) ;
+        Collector::Collector(Subsystem *parent) : Subsystem(parent, "collector") {   
+            auto &robot = parent->getRobot();
+                     
+            intake_ = std::make_shared<SingleMotorSubsystem>(this, "intake", "hw:intake", MSG_GROUP_INTAKE) ;
             addChild(intake_) ;
-            intake_->createNamedSequences() ;
 
-            grabber_ = std::make_shared<Grabber>(robot);
+            grabber_ = std::make_shared<Grabber>(this);
             addChild(grabber_) ;
-            grabber_->createNamedSequences() ;
 
             int sensor = robot.getSettingsParser().getInteger("hw:collector:cubesensor") ;
             sensor_ = std::make_shared<frc::DigitalInput>(sensor) ;

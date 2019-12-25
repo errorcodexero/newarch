@@ -13,7 +13,7 @@ namespace xero {
             } ;
 
         public:
-            LiftingCollector(xero::base::Robot &robot) ;
+            LiftingCollector(xero::base::Subsystem *parent) ;
             virtual ~LiftingCollector() ;
 
             virtual void createNamedSequences() ;

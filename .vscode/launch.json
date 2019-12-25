@@ -21,7 +21,7 @@
       "type": "cppdbg",
       "request": "launch",
       "cwd": "${workspaceFolder}",
-      "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/ranseur/ranseur.exe",
+      "program": "${workspaceFolder}/makebuild/SIMULATOR/Debug/phoenix/phoenix.exe",
       "stopAtEntry": false,
       "environment": [],
       "args" : [
