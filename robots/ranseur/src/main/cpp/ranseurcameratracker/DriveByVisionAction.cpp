@@ -24,6 +24,8 @@ namespace xero {
             double d = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:maxd") ;            
             double v = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:maxv") ;
 
+            fudge_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:fudge") ;
+
             decay_factor_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:decay") ;
 
             camera_collector_distance_ = tank_drive.getRobot().getSettingsParser().getDouble("drivebyvision:camera_collector_distance") ;
@@ -64,7 +66,7 @@ namespace xero {
                     bumper_width -                  // Bumpers on the back wall
                     robot_length / 2.0 ;            // Half the robot length on the centerline, its ok that the bumpers hang over
 
-            double pathdist = totaldist - getTankDrive().getTripDistance(TankDriveFollowPathAction::TripName) - 20 ;
+            double pathdist = totaldist - getTankDrive().getTripDistance(TankDriveFollowPathAction::TripName)  - fudge_ ;
 
             dist = pathdist ;
 

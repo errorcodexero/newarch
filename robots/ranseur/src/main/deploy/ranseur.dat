@@ -38,7 +38,7 @@ hw:tubwrist:motor:canid                                         7
 hw:tubwrist:motor:type                                          "victor_spx"
 hw:tubwrist:encoder:analog                                      0
 hw:tubwrist:encoder:analog:m                                    71.5
-hw:tubwrist:encoder:analog:b                                    -90
+hw:tubwrist:encoder:analog:b                                    -112
 
 hw:tankdrive:motors:left:1:canid                                1
 hw:tankdrive:motors:left:2:canid                                2
@@ -219,6 +219,7 @@ drivebyvision:ka                                                0
 drivebyvision:kv                                                0.005208333
 drivebyvision:kd                                                0
 drivebyvision:decay                                             0.9
+drivebyvision:fudge                                             4
 
 ###################################################################################################
 # Driver gamepad

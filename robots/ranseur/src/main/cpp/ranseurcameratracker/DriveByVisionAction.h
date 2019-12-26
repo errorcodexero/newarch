@@ -51,6 +51,8 @@ namespace xero {
 
             double camera_collector_distance_ ;
 
+            double fudge_ ;
+
             static std::vector<std::string> cols_ ;  
         } ;
     }
