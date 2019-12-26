@@ -178,14 +178,14 @@ tankdrive:maxv                                                  150
 tankdrive:maxa                                                  150
 tankdrive:maxd                                                  -150
 
-tankdrive:follower:left:kp                                      0.0
+tankdrive:follower:left:kp                                      0.031                   # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kv                                      0.005555556
-tankdrive:follower:left:ka                                      0.0
+tankdrive:follower:left:ka                                      0.000111111
 tankdrive:follower:left:kd                                      0.0
 
-tankdrive:follower:right:kp                                     0.0
+tankdrive:follower:right:kp                                     0.031                   # Recommended 0.02032 - 0.03048
 tankdrive:follower:right:kv                                     0.005555556
-tankdrive:follower:right:ka                                     0.0
+tankdrive:follower:right:ka                                     0.0001111111
 tankdrive:follower:right:kd                                     0.0
 
 #

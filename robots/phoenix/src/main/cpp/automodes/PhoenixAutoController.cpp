@@ -17,7 +17,7 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "ThreeScale_P1") ;            
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), "Test_Left90") ;            
                 break ;
 
             case 1:

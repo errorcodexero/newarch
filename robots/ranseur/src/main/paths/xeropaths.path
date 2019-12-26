@@ -45,24 +45,6 @@
             "paths": [
                 {
                     "constraints": [
-                        {
-                            "after": 0,
-                            "before": 110,
-                            "type": "distance_velocity",
-                            "velocity": 40
-                        },
-                        {
-                            "after": 260,
-                            "before": 360,
-                            "type": "distance_velocity",
-                            "velocity": 40
-                        },
-                        {
-                            "after": 455,
-                            "before": 550,
-                            "type": "distance_velocity",
-                            "velocity": 40
-                        }
                     ],
                     "endangle": 0,
                     "endangledelay": 0,

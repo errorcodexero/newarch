@@ -45,6 +45,8 @@ namespace xero {
             auto paths = getPathManager() ;
             paths->setExtensions("_left.csv", "_right.csv") ;            
             paths->loadPath("ThreeScale_P1") ;
+            paths->loadPath("Test_Straight") ;
+            paths->loadPath("Test_Left90") ;            
         }
 
         void Phoenix::RobotHardwareInit() {

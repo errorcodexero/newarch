@@ -26,6 +26,6 @@
 #
 0.1,oi,automode,-100
 
-0.1,tankdrive,xpos,2000                                 # Start center of field
-0.1,tankdrive,ypos,16300                                # Start center of field
-0.1,tankdrive,angle,0                                   # Start center of field
+0.1,tankdrive,xpos,1610
+0.1,tankdrive,ypos,4240
+0.1,tankdrive,angle,0
