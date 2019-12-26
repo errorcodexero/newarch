@@ -10,7 +10,6 @@ hw:tankdrive:motors:left:1:type                                 "talon_srx"
 hw:tankdrive:motors:left:2:type                                 "talon_srx"
 hw:tankdrive:motors:left:3:type                                 "talon_srx"
 
-
 hw:tankdrive:motors:right:1:canid                               4                      # CAN ID
 hw:tankdrive:motors:right:2:canid                               5                      # CAN ID
 hw:tankdrive:motors:right:3:canid                               6                      # CAN ID
@@ -173,12 +172,12 @@ tankdrive:scrub                                                 1.0
 tankdrive:inches_per_tick                                       0.062831853
 
 tankdrive:follower:left:kp                                      0.0
-tankdrive:follower:left:kv                                      0.0
+tankdrive:follower:left:kv                                      0.005555556
 tankdrive:follower:left:ka                                      0.0
 tankdrive:follower:left:kd                                      0.0
 
 tankdrive:follower:right:kp                                     0.0
-tankdrive:follower:right:kv                                     0.0
+tankdrive:follower:right:kv                                     0.005555556
 tankdrive:follower:right:ka                                     0.0
 tankdrive:follower:right:kd                                     0.0
 
