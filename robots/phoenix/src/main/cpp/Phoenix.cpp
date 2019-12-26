@@ -43,9 +43,10 @@ namespace xero {
 
         void Phoenix::loadPaths() {
             auto paths = getPathManager() ;
-            // paths->loadPath("TestPathOne") ;
+            paths->setExtensions("_left.csv", "_right.csv") ;            
+            paths->loadPath("ThreeScale_P1") ;
         }
-        
+
         void Phoenix::RobotHardwareInit() {
             auto sub_p = std::make_shared<PhoenixRobotSubsystem>(*this) ;
             setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getTankDrive()) ;

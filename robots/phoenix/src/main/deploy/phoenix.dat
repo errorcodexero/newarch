@@ -171,6 +171,13 @@ tankdrive:width                                                 28
 tankdrive:scrub                                                 1.0
 tankdrive:inches_per_tick                                       0.062831853
 
+tankdrive:follower:turn_correction                              0
+tankdrive:follower:angle_correction                             0
+
+tankdrive:maxv                                                  150
+tankdrive:maxa                                                  150
+tankdrive:maxd                                                  -150
+
 tankdrive:follower:left:kp                                      0.0
 tankdrive:follower:left:kv                                      0.005555556
 tankdrive:follower:left:ka                                      0.0

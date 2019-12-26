@@ -1,5 +1,6 @@
 #include "PhoenixAutoController.h"
 #include <tankdrive/modes/StraightCharAutoMode.h>
+#include <tankdrive/modes/FollowPathAutomode.h>
 
 using namespace xero::base ;
 
@@ -16,6 +17,7 @@ namespace xero {
 
             switch(sel) {
             case 0:
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), "ThreeScale_P1") ;            
                 break ;
 
             case 1:
