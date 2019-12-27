@@ -1,4 +1,5 @@
 #include "PhoenixAutoController.h"
+#include "ThreeCubeAutoMode.h"
 #include <tankdrive/modes/StraightCharAutoMode.h>
 #include <tankdrive/modes/FollowPathAutomode.h>
 
@@ -17,10 +18,11 @@ namespace xero {
 
             switch(sel) {
             case 0:
-                mode = std::make_shared<FollowPathAutomode>(getRobot(), "ThreeScale_P1") ;            
+                mode = std::make_shared<ThreeCubeAutoMode>(getRobot(), ThreeCubeAutoMode::Side::Right);
                 break ;
 
             case 1:
+                mode = std::make_shared<ThreeCubeAutoMode>(getRobot(), ThreeCubeAutoMode::Side::Left);            
                 break ;                
                 
             case 2:

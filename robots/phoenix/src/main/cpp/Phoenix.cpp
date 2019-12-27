@@ -37,7 +37,6 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_PARSER) ;
             // logger.enableSubsystem(MSG_GROUP_OI) ;
             //            
-            logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
             logger.enableSubsystem(MSG_GROUP_ACTIONS);
         }
 

@@ -16,7 +16,9 @@ SUBSYSTEMS = \
 	./src/main/cpp/wings/WingsDeployAction.cpp
 
 AUTOMODES = \
-	./src/main/cpp/automodes/PhoenixAutoController.cpp
+	./src/main/cpp/automodes/PhoenixAutoController.cpp\
+	./src/main/cpp/automodes/PhoenixAutoMode.cpp\
+	./src/main/cpp/automodes/ThreeCubeAutoMode.cpp
 
 SOURCES = \
 	./src/main/cpp/main.cpp\
