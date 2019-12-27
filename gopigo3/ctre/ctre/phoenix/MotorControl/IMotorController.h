@@ -16,7 +16,8 @@ namespace ctre
             class IMotorController : public frc::GPG3MotorController
             {
             public:
-                IMotorController(int id)  : frc::GPG3MotorController(id)  {                    
+                IMotorController(int id)  : frc::GPG3MotorController(id)  {
+                    isInverted_ = false;
                 }
 
                 virtual ~IMotorController() {
@@ -31,12 +32,17 @@ namespace ctre
                 void SetInverted(InvertType type) {                    
                 }
 
-                void SetInverted(bool b) {                    
+                void SetInverted(bool b) {
+                    isInverted_ = b;
                 }
 
                 void Set(ControlMode mode, double value) {
+                    double motorPower = value;
                     assert(mode == ControlMode::PercentOutput) ;
-                    frc::GPG3MotorController::Set(value) ;
+                    if (isInverted_) {
+                        motorPower *= -1;
+                    }
+                    frc::GPG3MotorController::Set(motorPower) ;
                 }
 
                 void ConfigVoltageCompSaturation(double voltage, int timeout) {
@@ -46,6 +52,7 @@ namespace ctre
                 }
 
             private:
+                bool isInverted_;
             } ;
         }
     }
