@@ -73,5 +73,6 @@
                 }
             ]
         }
-    ]
+    ],
+    "outdir": "C:/cygwin64/home/ButchGriffin/rtools/master/robots/ranseur/src/main/deploy/output"
 }

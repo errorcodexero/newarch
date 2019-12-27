@@ -291,7 +291,7 @@ namespace xero {
             double lrevs = left_ / (PI * diameter_);
             double rrevs = right_ / (PI * diameter_) ;
 
-            double dv = (dleft - dright) / 2 * scrub_;
+            double dv = (dright - dleft) / 2 * scrub_;
             angle_ = normalizeAngleRadians(angle_ + (dv * 2.0) / width_) ;
             updatePosition(dleft, dright, angle_) ;
 

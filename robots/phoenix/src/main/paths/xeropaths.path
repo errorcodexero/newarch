@@ -156,5 +156,6 @@
                 }
             ]
         }
-    ]
+    ],
+    "outdir": "C:/cygwin64/home/ButchGriffin/rtools/master/robots/phoenix/src/main/deploy/output"
 }
