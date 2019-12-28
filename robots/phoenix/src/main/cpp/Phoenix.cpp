@@ -36,8 +36,16 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_ACTIONS);
             // logger.enableSubsystem(MSG_GROUP_PARSER) ;
             // logger.enableSubsystem(MSG_GROUP_OI) ;
+            // logger.enableSubsystem(MSG_GROUP_LIFTER) ;
             //            
             logger.enableSubsystem(MSG_GROUP_ACTIONS);
+
+            //
+            // This should stay on.  It will have no effect on the real robot
+            // but will show information about injected events in the simulation
+            // environment.
+            //
+            logger.enableSubsystem(MSG_GROUP_SIMULATOR) ;
         }
 
         void Phoenix::loadPaths() {

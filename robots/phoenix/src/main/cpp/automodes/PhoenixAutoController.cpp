@@ -1,5 +1,6 @@
 #include "PhoenixAutoController.h"
 #include "ThreeCubeAutoMode.h"
+#include "PhoenixTestTuneMode.h"
 #include <tankdrive/modes/StraightCharAutoMode.h>
 #include <tankdrive/modes/FollowPathAutomode.h>
 
@@ -29,7 +30,7 @@ namespace xero {
                 break ;
 
             case 9:
-                mode = std::make_shared<StraightCharAutoMode>(getRobot(), 0.5, 3.0, true) ;
+                mode = std::make_shared<PhoenixTestTuneMode>(getRobot()) ;
                 break ;
             }
             setAction(mode) ;

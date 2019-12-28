@@ -9,10 +9,6 @@ TOPDIR=../..
 
 ifeq ($(PLATFORM),SIMULATOR)
 SIMSOURCES = \
-	lifter/Lifter.cpp\
-	lifter/LifterCalibrateAction.cpp\
-	lifter/LifterGoToHeightAction.cpp\
-	lifter/LifterPowerAction.cpp\
 	singlemotorsubsystem/SingleMotorSubsystem.cpp\
 	singlemotorsubsystem/SingleMotorPowerAction.cpp\
 	cameratracker/CameraTracker.cpp\
@@ -63,6 +59,7 @@ SOURCES = \
 	motorencodersubsystem/MotorEncoderSubsystem.cpp\
 	motorencodersubsystem/MotorEncoderGoToAction.cpp\
     motorencodersubsystem/MotorEncoderHoldAction.cpp\
+	motorencodersubsystem/MotorEncoderPowerAction.cpp\
     motorencodersubsystem/XeroEncoder.cpp\
 	$(SIMSOURCES)
 

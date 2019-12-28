@@ -177,6 +177,10 @@ namespace xero {
                 quadB_ = b;
             }
 
+            bool isAngular() const {
+                return angular_;
+            }
+
         private:
             Robot &robot_;
 

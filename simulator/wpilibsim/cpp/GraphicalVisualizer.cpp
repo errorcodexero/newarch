@@ -38,7 +38,7 @@ namespace xero {
                 logger.startMessage(MessageLogger::MessageType::info) ;
                 logger << "%%%%" << model_p->getName() << "," << line ;
                 logger.endMessage() ;  
-            }              
+            }
         }
     }
 }

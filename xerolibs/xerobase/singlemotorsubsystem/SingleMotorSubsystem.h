@@ -67,6 +67,10 @@ namespace xero {
 
             virtual void reset() ;
 
+            double getMotor() const {
+                return current_power_;
+            }
+
         protected:
             /// \brief set the power (PWM) percentage for the motor.
             /// \param power the power to apply to the motor, between -1.0 and 1.0

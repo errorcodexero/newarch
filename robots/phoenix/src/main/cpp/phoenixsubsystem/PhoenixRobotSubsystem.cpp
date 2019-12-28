@@ -30,7 +30,6 @@ namespace xero {
             //
             lifting_collector_ = std::make_shared<LiftingCollector>(this) ;
             addChild(lifting_collector_) ;
-            lifting_collector_->createNamedSequences() ;
 
             //
             // Create the Phoenix OI subsystem.  It is created last as it may

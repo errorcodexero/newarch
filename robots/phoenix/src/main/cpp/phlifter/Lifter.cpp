@@ -9,30 +9,23 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace phoenix {
-        Lifter::Lifter(Subsystem *parent) : Subsystem(parent, "lifter") {
-            auto &robot = getRobot();
+        Lifter::Lifter(Subsystem *parent) : MotorEncoderSubsystem(parent, "lifter", MSG_GROUP_LIFTER) 
+        {
+            int idx;
 
-            int m1 = robot.getSettingsParser().getInteger("hw:lifter:motor1");
-            int m2 = robot.getSettingsParser().getInteger("hw:lifter:motor2");
-            int e1 = robot.getSettingsParser().getInteger("hw:lifter:encoder1");
-            int e2 = robot.getSettingsParser().getInteger("hw:lifter:encoder2");
-            int lbottom = robot.getSettingsParser().getInteger("hw:lifter:limit:bottom");
-            int ltop = robot.getSettingsParser().getInteger("hw:lifter:limit:top");
-            int s1 = robot.getSettingsParser().getInteger("hw:lifter:shifter");
-            int s2 = robot.getSettingsParser().getInteger("hw:lifter:brake") ;
+            idx = getRobot().getSettingsParser().getInteger("hw:lifter:shifter");
+            gear_box_ = std::make_shared<frc::Solenoid>(idx);
 
-            motor1_ = std::make_shared<frc::VictorSP>(m1) ;
-            motor2_ = std::make_shared<frc::VictorSP>(m2) ;
-            encoder_ = std::make_shared<frc::Encoder>(e1, e2) ;
-            bottom_limit_ = std::make_shared<frc::DigitalInput>(lbottom) ;
-            top_limit_ = std::make_shared<frc::DigitalInput>(ltop) ;
-            gear_box_ = std::make_shared<frc::Solenoid>(s1) ;
-            brake_ = std::make_shared<frc::Solenoid>(s2) ;
+            idx = getRobot().getSettingsParser().getInteger("hw:lifter:brake");
+            brake_ = std::make_shared<frc::Solenoid>(idx);
 
-            collector_offset_ = robot.getSettingsParser().getDouble("lifter:base") ;
-            inches_per_tick_high_ = robot.getSettingsParser().getDouble("lifter:inches_per_tick") ;
-            max_height_ = robot.getSettingsParser().getDouble("lifter:max_height") ;
-            min_height_ = robot.getSettingsParser().getDouble("lifter:min_height") ;
+            idx = getRobot().getSettingsParser().getInteger("hw:lifter:limit:bottom");
+            bottom_limit_ = std::make_shared<frc::DigitalInput>(idx);
+
+            idx = getRobot().getSettingsParser().getInteger("hw:lifter:limit:top");
+            top_limit_ = std::make_shared<frc::DigitalInput>(idx);            
+
+            floor_ = getRobot().getSettingsParser().getDouble("lifter:height:floor");
 
             // Start in high gear
             setHighGear() ;
@@ -43,89 +36,40 @@ namespace xero {
             // And we start without calibration
             is_calibrated_ = false ;
 
-            encoder_value_ = 0 ;
+            setSmartDashboardName("lifter");
         }
 
         Lifter::~Lifter() {
         }
 
-        bool Lifter::canAcceptAction(ActionPtr action) {
-            auto dir_p = std::dynamic_pointer_cast<LifterAction>(action) ;
-            if (dir_p == nullptr)
-                return false ;
+        bool Lifter::canAcceptAction(ActionPtr action)
+        {
+            if (MotorEncoderSubsystem::canAcceptAction(action))
+                return true;
 
-            return true ;
+            std::shared_ptr<LifterAction> lact = std::dynamic_pointer_cast<LifterAction>(action);
+            if (lact == nullptr)
+                return false;
+
+            return true;
         }
 
-        void Lifter::setMotorDutyCycle(double v) {
-            if (is_calibrated_) {
-                if (v < 0 && height_ <= min_height_)
-                    v = 0.0 ;
-                else if (v > 0 && height_ >= max_height_)
-                    v = 0.0 ;
-            }
-
-            if (v > 0 && isAtTop())
-                v = 0.0 ;
-            else if (v < 0 && isAtBottom())
-                v = 0.0 ;
-
-            motor1_->Set(v) ;
-            motor2_->Set(v) ;
+        void Lifter::init(LoopType ltype)
+        {
+            if (ltype == LoopType::Autonomous)
+                calibrate(floor_);
         }
 
-        bool Lifter::isAtBottom() {
-            if (is_calibrated_ && height_ <= min_height_) {
-                return true ;
-            }
+        void Lifter::computeState() 
+        {
+            MotorEncoderSubsystem::computeState();
 
-            return !bottom_limit_->Get() ;
+            bottom_limit_hit_ = !bottom_limit_->Get();
+            top_limit_hit_ = !top_limit_->Get();
         }
 
-        bool Lifter::isAtTop() {
-            if (is_calibrated_ && height_ >= max_height_)
-                return true ;
-
-            return !top_limit_->Get() ;
-        }
-
-        void Lifter::computeState() {
-            encoder_value_ = encoder_->Get() ;
-
-            if (!bottom_limit_->Get() && high_gear_) {
-                //
-                // The bottom limit switch is is true, reset the encoders and
-                // effectively recalibrate
-                //
-                calibrate() ;
-            }           
-
-            if (is_calibrated_) {
-                height_ = encoder_value_ * inches_per_tick_high_ + collector_offset_ ;
-                speed_ = (height_ - last_height_) / getRobot().getDeltaTime() ;
-                last_height_ = height_ ;
-            }
-        }
-
-        void Lifter::calibrate() {
-            //
-            // The calibrate action assumes the lifter starts the match
-            // at the bottom most position.  This position is the floor position
-            // and the calibration activity is just remembering the encoder value
-            // at this lifter position
-            //
-            if (is_calibrated_ == false) {
-                is_calibrated_ = true ;
-                MessageLogger &logger = getRobot().getMessageLogger() ;
-                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_LIFTER) ;
-                logger << "Lifter: lifter calibrated" ;
-                logger.endMessage() ;
-            }
-            encoder_->Reset() ;
-            last_height_ = collector_offset_ ;
-        }
-
-        void Lifter::setLowGear() {
+        void Lifter::setLowGear() 
+        {
             if (high_gear_) {
                 gear_box_->Set(true) ;
                 high_gear_ = false ;
@@ -133,7 +77,30 @@ namespace xero {
             }
         }
 
-        void Lifter::setHighGear() {
+        void Lifter::run()
+        {
+            auto &logger = getRobot().getMessageLogger();
+            MotorEncoderSubsystem::run();
+
+            double power = getMotor();
+            if (power < 0 && bottom_limit_hit_)
+            {
+                logger.startMessage(MessageLogger::MessageType::warning);
+                logger << "stopping motors - bottom limit switch detected";
+                logger.endMessage();
+                setMotor(0.0);
+            }
+            else if (power > 0 && top_limit_hit_)
+            {
+                logger.startMessage(MessageLogger::MessageType::warning);
+                logger << "stopping motors - top limit switch detected";
+                logger.endMessage();
+                setMotor(0.0);
+            }
+        }
+
+        void Lifter::setHighGear() 
+        {
             if (!high_gear_) {
                 gear_box_->Set(false) ;
                 high_gear_ = true ;
@@ -141,14 +108,16 @@ namespace xero {
             }
         }
 
-        void Lifter::setBrakeOn() {
+        void Lifter::setBrakeOn() 
+        {
             if (!brake_on_) {
                 brake_->Set(false) ;
                 brake_on_ = true ;
             }
         }
 
-        void Lifter::setBrakeOff() {
+        void Lifter::setBrakeOff() 
+        {
             if (brake_on_) {
                 brake_->Set(true) ;
                 brake_on_ = false ;

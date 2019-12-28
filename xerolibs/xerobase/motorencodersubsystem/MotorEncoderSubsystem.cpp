@@ -20,8 +20,7 @@ namespace xero {
         {
             auto &robot = getRobot(); 
             std::string encname = Subsystem::HWPrefix + name + ":encoder" ;
-            encoder_ = std::make_shared<XeroEncoder>(robot, encname) ;
-            angular_ = angular ;
+            encoder_ = std::make_shared<XeroEncoder>(robot, encname, angular) ;
         }
 
         void MotorEncoderSubsystem::postHWInit()
@@ -65,6 +64,27 @@ namespace xero {
 
         void MotorEncoderSubsystem::reset() {
             SingleMotorSubsystem::reset() ;
+        }
+
+        void MotorEncoderSubsystem::calibrate()
+        {
+            //
+            // Assumes a complex encoder with both an absolute and a quadrature
+            // position indicator.
+            //
+            encoder_->calibrate();
+        }
+
+        void MotorEncoderSubsystem::calibrate(double pos)
+        {
+            //
+            // Assumes a quadrature encoder only where the current robot
+            // position is supplied from the outside world some how.  This is usually
+            // by assuming the robot is setup in a pre agreed position, or running a
+            // mechanism until it hits a hard stop or limit switch and then knowing
+            // the position at that point.
+            //
+            encoder_->calibrate(pos);
         }
     }
 }

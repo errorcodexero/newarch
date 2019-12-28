@@ -1,6 +1,10 @@
 #include "LifterModel.h"
+#include <MessageLogger.h>
+#include <basegroups.h>
 #include <frc/RobotSimBase.h>
+
 using namespace frc ;
+using namespace xero::misc;
 
 namespace xero {
     namespace sim {
@@ -15,7 +19,8 @@ namespace xero {
                 brake_value_ = true ;
                 highgear_ = true ;
 
-                inch_per_sec_per_volt_ = simbase.getSettingsParser().getDouble("lifter:sim:inches_per_sec_per_volt") ;
+                lowgear_inch_per_sec_per_volt_ = simbase.getSettingsParser().getDouble("lifter:sim:lowgear:inches_per_sec_per_volt") ;
+                highgear_inch_per_sec_per_volt_ = simbase.getSettingsParser().getDouble("lifter:sim:highgear:inches_per_sec_per_volt") ;                
                 encoder_base_ = 0  ;
 
                 encoder_1_ = simbase.getSettingsParser().getInteger("hw:lifter:encoder1") ;
@@ -64,8 +69,15 @@ namespace xero {
             }
 
             void LifterModel::run(double dt) {
-                if (!brake_value_) {
-                    double dh = voltage_ * inch_per_sec_per_volt_ * dt ;
+                double dh;
+
+                if (!brake_value_)
+                {
+                    if (highgear_)
+                        dh = voltage_ * highgear_inch_per_sec_per_volt_ * dt ;
+                    else
+                        dh = voltage_ * lowgear_inch_per_sec_per_volt_ * dt ;
+
                     height_ += dh ;
                 }
                 
@@ -92,6 +104,18 @@ namespace xero {
                 int encval = static_cast<int>((height_ - bottom_limit_height_) / in_per_tick_) + encoder_base_ ;
                 if (enc_ != nullptr)
                     enc_->SimulatorSetValue(encval) ;
+
+#ifdef LIFTER_SIMULATION_MESSAGES
+                auto &logger = getRobotMessageLogger();
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SIMULATOR);
+                logger << "lifter model";
+                logger << ", dt " << dt;
+                logger << ", power " << voltage_;
+                logger << ", dh " << dh;
+                logger << ", height " << height_;
+                logger << ", encoder " << encval;
+                logger.endMessage();
+#endif
             }
 
             void LifterModel::inputChanged(SimulatedObject *obj) {

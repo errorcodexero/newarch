@@ -30,6 +30,7 @@ legal=NO
 if [ $2 == 'auto' ]; then
     legal=YES
     echo Running auto mode
+    echo makebuild/SIMULATOR/Debug/$1/$1 --auto $AUTOTIME --oper 0 --start $STARTTIME --test 0 $FLAGS $GUI
     exec makebuild/SIMULATOR/Debug/$1/$1 --auto $AUTOTIME --oper 0 --start $STARTTIME --test 0 $FLAGS $GUI
 fi
 

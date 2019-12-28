@@ -16,7 +16,6 @@ namespace xero {
             LiftingCollector(xero::base::Subsystem *parent) ;
             virtual ~LiftingCollector() ;
 
-            virtual void createNamedSequences() ;
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             virtual void computeState() ;
 

@@ -104,7 +104,8 @@ namespace xero  {
                 double bottom_limit_height_ ;
                 double top_limit_height_ ;
 
-                double inch_per_sec_per_volt_ ;
+                double highgear_inch_per_sec_per_volt_ ;
+                double lowgear_inch_per_sec_per_volt_ ;                
                 double height_ ;
                 double in_per_tick_ ;
                 double voltage_ ;

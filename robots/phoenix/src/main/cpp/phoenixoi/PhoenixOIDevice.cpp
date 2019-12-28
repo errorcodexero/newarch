@@ -6,9 +6,9 @@
 #include "wings/Wings.h"
 #include "wings/WingsDeployAction.h"
 #include "phlifter/Lifter.h"
-#include "phlifter/LifterGoToHeightAction.h"
-#include "phlifter/LifterPowerAction.h"
-#include "phlifter/LifterHoldClimbAction.h"
+//#include "phlifter/LifterGoToHeightAction.h"
+//#include "phlifter/LifterPowerAction.h"
+//#include "phlifter/LifterHoldClimbAction.h"
 #include "phlifter/LifterCalibrateAction.h"
 #include "liftingcollector/LiftingCollector.h"
 #include "grabber/Grabber.h"
@@ -77,18 +77,18 @@ namespace xero {
             //
             // Prebuilt actions
             //
-            to_floor_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:floor") ;
-            to_exchange_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:exchange") ;
-            to_switch_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:switch") ;
-            to_scale_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:scale") ;
-            to_climb_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:climb") ;
-            lifter_up_low_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:low:up") ;
-            lifter_down_low_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:low:down") ;
-            lifter_up_high_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:high:up") ;
-            lifter_down_high_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:high:down") ;          
-            lifter_climb_up_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:climb:up", true) ;
-            lifter_climb_down_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:climb:down", true) ;            
-            lifter_hold_climb_ = std::make_shared<LifterHoldClimbAction>(*lifter, "lifter:climbhold:delta") ;           
+            //to_floor_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:floor") ;
+            //to_exchange_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:exchange") ;
+            //to_switch_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:switch") ;
+            //to_scale_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:scale") ;
+            //to_climb_ = std::make_shared<LifterGoToHeightAction>(*lifter, "lifter:height:climb") ;
+            //lifter_up_low_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:low:up") ;
+            //lifter_down_low_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:low:down") ;
+            //lifter_up_high_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:high:up") ;
+            //lifter_down_high_power_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:high:down") ;          
+            //lifter_climb_up_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:climb:up", true) ;
+            //lifter_climb_down_ = std::make_shared<LifterPowerAction>(*lifter, "lifter:dutycycle:climb:down", true) ;            
+            //lifter_hold_climb_ = std::make_shared<LifterHoldClimbAction>(*lifter, "lifter:climbhold:delta") ;           
             lifter_calibrate_ = std::make_shared<LifterCalibrateAction>(*lifter) ;
             grabber_calibrate_ = std::make_shared<GrabberCalibrateAction>(*grabber) ;
             grabber_stow_ = std::make_shared<MotorEncoderGoToAction>(*grabber, "grabber:angle:stowed") ;
@@ -96,7 +96,7 @@ namespace xero {
             eject_normal_ = std::make_shared<CollectorEjectCubeAction>(*collector, "collector:eject:fast") ;
             eject_medium_ = std::make_shared<CollectorEjectCubeAction>(*collector, "collector:eject:middle") ;
             eject_slow_action_ = std::make_shared<CollectorEjectCubeAction>(*collector, "collector:eject:slow") ;
-            lifter_zero_ = std::make_shared<LifterPowerAction>(*lifter, 0.0) ;
+            // lifter_zero_ = std::make_shared<LifterPowerAction>(*lifter, 0.0) ;
         }
 
         void PhoenixOIDevice::generateActions(SequenceAction &seq) {

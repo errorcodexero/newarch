@@ -25,10 +25,14 @@ hw:tankdrive:encoders:right:2                                     3             
 
 hw:tankdrive:shifter                                            0                      # Solenoid
 
-hw:lifter:motor1                                                0                      # PWM ID
-hw:lifter:motor2                                                1                      # PWM ID
-hw:lifter:encoder1                                              4                      # Digital IO
-hw:lifter:encoder2                                              5                      # Digital IO
+hw:lifter:motor:1:type                                          "victorsp"
+hw:lifter:motor:1:pwmid                                         0                      # PWM ID
+hw:lifter:motor:2:type                                          "victorsp"
+hw:lifter:motor:2:pwmid                                         1                      # PWM ID
+hw:lifter:encoder:quad:1                                        4                      # Digital IO
+hw:lifter:encoder:quad:2                                        5                      # Digital IO
+hw:lifter:encoder:quad:m                                        0.08327                # Inches per tick (slope of conversion line)
+hw:lifter:encoder:quad:b                                        11.0                   # Zero encoder value off floor
 hw:lifter:limit:bottom                                          9                      # Digital IO
 hw:lifter:limit:top                                             8                      # Digital IO
 hw:lifter:shifter                                               1                      # Solenoid
@@ -106,34 +110,32 @@ grabber:angle:eject                                            45.0
 #
 # Lifter subsystem constants
 #
-lifter:base				                                       11.375
-lifter:inches_per_tick                                         0.08327
-lifter:max_height                                              86.0
-lifter:min_height                                              11.375
-lifter:goto:distance_threshold                                 1.0
-lifter:goto:speed_threshold                                    1.0
-lifter:goto:angle					                           0.0
-lifter:goto:a						                           0.0
-lifter:goto:p                                                  0.1
-lifter:goto:i                                                  0.0
-lifter:goto:d                                                  0.0001
-lifter:goto:f                                                  0.0
-lifter:goto:max                                                1.0
-lifter:goto:min                                                -1.0
-lifter:goto:imax                                               6.0
+lifter:height:max                                              86.0
+lifter:height:min                                              11.375
 lifter:height:floor                                            11.375
 lifter:height:exchange                                         14.5
 lifter:height:switch                                           36.0
 lifter:height:scale                                            74.0
-lifter:climb:delta                                             2000
 lifter:height:climb                                            100
-lifter:dutycycle:low:up                                        0
-lifter:dutycycle:low:down                                      0
-lifter:dutycycle:high:up                                       0
-lifter:dutycycle:high:down                                     0
-lifter:dutycycle:climb:up                                      0
-lifter:dutycycle:climb:down                                    0
-lifter:climbhold:delta                                         0
+lifter:goto:threshold                                          1.0
+lifter:hold:p                                                  0.01
+lifter:hold:i                                                  0.0
+lifter:hold:d                                                  0.0
+lifter:hold:f                                                  0.0
+lifter:hold:min                                                -0.6
+lifter:hold:max                                                0.6
+lifter:hold:imax                                               0.0
+lifter:goto:maxd                                               -36       # maximum deceleration
+lifter:goto:maxa                                               36.0      # maximum acceleration
+lifter:goto:maxv                                               36.0      # maximum velocity
+lifter:follower:down:kp                                        0.05
+lifter:follower:down:kd                                        0.0
+lifter:follower:down:kv                                        0.0277778
+lifter:follower:down:ka                                        0.000556
+lifter:follower:up:kp                                          0.05
+lifter:follower:up:kd                                          0.0
+lifter:follower:up:kv                                          0.0277778
+lifter:follower:up:ka                                          0.000556
 
 #
 # Intake subsystem constants
@@ -225,3 +227,24 @@ auto:c_switch_r:segment3                                        100
 # programs read the data from the network tables
 #
 plotting:enabled                                               true
+
+
+#
+# Test automode, used for testing the various subsystem
+#
+
+#
+# Drive characterization, uses power and duration
+#
+# auto:testmode:which                                             0
+# auto:testmode:duration                                          3.0
+# auto:testmode:power                                             0.3
+# auto:testmode:distance                                          0.0
+
+#
+# Lift characterization, uses power and duration
+#
+auto:testmode:which                                               2
+auto:testmode:duration                                            3.0
+auto:testmode:power                                               0.3
+auto:testmode:distance                                            100.0

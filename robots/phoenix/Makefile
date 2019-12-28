@@ -1,6 +1,8 @@
 TOPDIR=../..
 
 SUBSYSTEMS = \
+	./src/main/cpp/phlifter/Lifter.cpp\
+	./src/main/cpp/phlifter/LifterCalibrateAction.cpp\
 	./src/main/cpp/collector/CollectCubeAction.cpp\
 	./src/main/cpp/collector/Collector.cpp\
 	./src/main/cpp/collector/CollectorEjectCubeAction.cpp\
@@ -18,16 +20,11 @@ SUBSYSTEMS = \
 AUTOMODES = \
 	./src/main/cpp/automodes/PhoenixAutoController.cpp\
 	./src/main/cpp/automodes/PhoenixAutoMode.cpp\
-	./src/main/cpp/automodes/ThreeCubeAutoMode.cpp
+	./src/main/cpp/automodes/ThreeCubeAutoMode.cpp\
+	./src/main/cpp/automodes/PhoenixTestTuneMode.cpp
 
 SOURCES = \
 	./src/main/cpp/main.cpp\
-	./src/main/cpp/phlifter/Lifter.cpp\
-	./src/main/cpp/phlifter/LifterCalibrateAction.cpp\
-	./src/main/cpp/phlifter/LifterGoToHeightAction.cpp\
-	./src/main/cpp/phlifter/LifterHoldClimbAction.cpp\
-	./src/main/cpp/phlifter/LifterLowGearAction.cpp\
-	./src/main/cpp/phlifter/LifterPowerAction.cpp\
 	./src/main/cpp/Phoenix.cpp\
 	$(SUBSYSTEMS)\
 	$(AUTOMODES)

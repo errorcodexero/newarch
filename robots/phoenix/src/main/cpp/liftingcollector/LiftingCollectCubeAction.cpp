@@ -3,7 +3,6 @@
 #include "collector/Collector.h"
 #include "collector/CollectCubeAction.h"
 #include "phlifter/Lifter.h"
-#include "phlifter/LifterGoToHeightAction.h"
 #include <Robot.h>
 
 using namespace xero::base ;
@@ -24,11 +23,13 @@ namespace xero {
         }
 
         void LiftingCollectCubeAction::start() { 
+#ifdef NOTYET            
             ActionPtr go = std::make_shared<LifterGoToHeightAction>(*getLiftingCollector().getLifter(), "lifter:height:floor") ;
             getLiftingCollector().getLifter()->setAction(go) ;
 
             collect_action_ = std::make_shared<CollectCubeAction>(*getLiftingCollector().getCollector()) ;
             getLiftingCollector().getCollector()->setAction(collect_action_) ;
+#endif
         }
 
         void LiftingCollectCubeAction::run() {            

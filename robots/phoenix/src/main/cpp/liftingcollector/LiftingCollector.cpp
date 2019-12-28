@@ -1,9 +1,6 @@
 #include "LiftingCollector.h"
 #include "phlifter/Lifter.h"
-#include "phlifter/LifterGoToHeightAction.h"
 #include "collector/Collector.h"
-#include "collector/CollectCubeAction.h"
-#include "LiftingCollectCubeAction.h"
 #include <actions/SequenceAction.h>
 #include <Robot.h>
 
@@ -15,24 +12,15 @@ namespace xero {
         LiftingCollector::LiftingCollector(Subsystem *parent) : Subsystem(parent, "liftingcollector") {
             lifter_ = std::make_shared<Lifter>(parent) ;
             addChild(lifter_) ;
-            lifter_->createNamedSequences() ;
             
             collector_ = std::make_shared<Collector>(parent) ;
             addChild(collector_) ;
-            collector_->createNamedSequences() ;
         }
 
         LiftingCollector::~LiftingCollector() {
         }
 
-        void LiftingCollector::createNamedSequences() {
-        }
-
         bool LiftingCollector::canAcceptAction(ActionPtr action) {
-            auto ldir_p = std::dynamic_pointer_cast<LiftingCollectCubeAction>(action) ;
-            if (ldir_p == nullptr)
-                return false ;
-
             return true ;
         }
 

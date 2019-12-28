@@ -49,7 +49,10 @@ namespace xero {
             size_t lineno = 0 ;
 
             if (in.bad() || in.fail())
+            {
+                std::cerr << "error: could not read file '" << filename << "'" << std::endl;
                 return false ;
+            }
 
             while (std::getline(in, line)) {
                 lineno++ ;

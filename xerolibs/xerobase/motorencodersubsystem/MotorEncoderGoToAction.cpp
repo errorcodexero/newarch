@@ -16,7 +16,7 @@ namespace xero {
     namespace base {
         std::vector<std::string> MotorEncoderGoToAction::plot_columns_ = {
             "time", 
-            "tang", "aang", "tvel", "avel", "out"
+            "tpos", "apos", "tvel", "avel", "out"
         } ;
 
         MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target):

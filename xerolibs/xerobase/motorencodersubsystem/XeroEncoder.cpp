@@ -93,7 +93,7 @@ namespace xero {
 
             if (quad_) 
             {
-                double result = quadM_*quad_->Get() + quadB_;
+                result = quadM_ * quad_->Get() + quadB_;
                 if (angular_) 
                     result = xero::math::normalizeAngleDegrees(result);
             } 
@@ -139,7 +139,8 @@ namespace xero {
         }
 
         void XeroEncoder::calibrate(double pos) {
-            quadB_ = pos - quadM_ * getPosition() ;
+            quad_->Reset();
+            quadB_ = pos;
         }
     }
 }

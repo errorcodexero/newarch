@@ -2,66 +2,67 @@
 # Start of HW definition
 #
 
-hw:tankdrive:left:motor:1               1                               # TalonSRX 1
-hw:tankdrive:left:motor:2               2                               # TalonSRX 2
-hw:tankdrive:left:motor:3               3                               # TalonSRX 3
-hw:tankdrive:right:motor:1              4                               # TalonSRX 4
-hw:tankdrive:right:motor:2              5                               # TalonSRX 5
-hw:tankdrive:right:motor:3              6                               # TalonSRX 6
+hw:tankdrive:left:motor:1                           1                               # TalonSRX 1
+hw:tankdrive:left:motor:2                           2                               # TalonSRX 2
+hw:tankdrive:left:motor:3                           3                               # TalonSRX 3
+hw:tankdrive:right:motor:1                          4                               # TalonSRX 4
+hw:tankdrive:right:motor:2                          5                               # TalonSRX 5
+hw:tankdrive:right:motor:3                          6                               # TalonSRX 6
 
-hw:tankdrive:left:encoder:1             1                               # Digital IO
-hw:tankdrive:left:encoder:2             0                               # Digital IO
+hw:tankdrive:left:encoder:1                         1                               # Digital IO
+hw:tankdrive:left:encoder:2                         0                               # Digital IO
 
-hw:tankdrive:right:encoder:1            2                               # Digital IO
-hw:tankdrive:right:encoder:2            3                               # Digital IO
+hw:tankdrive:right:encoder:1                        2                               # Digital IO
+hw:tankdrive:right:encoder:2                        3                               # Digital IO
 
-hw:tankdrive:shifter                    0                               # Solenoid
-hw:tankdrive:right:motor:invert          true                           # Invert the sense of the right motor
+hw:tankdrive:shifter                                0                               # Solenoid
+hw:tankdrive:right:motor:invert                     true                           # Invert the sense of the right motor
 
-hw:lifter:encoder1                      4                               # Digital IO
-hw:lifter:encoder2                      5                               # Digital IO
-hw:lifter:limit:bottom                  9                               # Digital IO
-hw:lifter:limit:top                     8                               # Digital IO
-hw:lifter:motor1                        0                               # PWM
-hw:lifter:motor2                        1                               # PWM
-hw:lifter:brake                         3                               # Solenoid
-hw:lifter:shifter                       1                               # Solenoid
+hw:lifter:encoder1                                  4                               # Digital IO
+hw:lifter:encoder2                                  5                               # Digital IO
+hw:lifter:limit:bottom                              9                               # Digital IO
+hw:lifter:limit:top                                 8                               # Digital IO
+hw:lifter:motor1                                    0                               # PWM
+hw:lifter:motor2                                    1                               # PWM
+hw:lifter:brake                                     3                               # Solenoid
+hw:lifter:shifter                                   1                               # Solenoid
 
-hw:wings:solenoid                       2                               # Solenoid
+hw:wings:solenoid                                   2                               # Solenoid
 
-hw:grabber:motor                        2                               # PWM
-hw:grabber:encoder1                     6                               # Digital IO
-hw:grabber:encoder2                     7                               # Digital IO
+hw:grabber:motor                                    2                               # PWM
+hw:grabber:encoder1                                 6                               # Digital IO
+hw:grabber:encoder2                                 7                               # Digital IO
 
-hw:collector:cubesensor                 23                              # Digital IO
+hw:collector:cubesensor                             23                              # Digital IO
 
-hw:intake:leftmotor                     3                               # PWM
-hw:intake:rightmotor                    4                               # PWM
+hw:intake:leftmotor                                 3                               # PWM
+hw:intake:rightmotor                                4                               # PWM
 
 #
 # End of Hardware
 #
 
-tankdrive:sim:ticks_per_rev             200
-tankdrive:sim:diameter                  4
-tankdrive:sim:scrub                     1.0
-tankdrive:sim:width                     28
-tankdrive:sim:length                    28
-tankdrive:sim:error_per_side            0
-tankdrive:high:maxvelocity              180
-tankdrive:high:maxacceleration          180
-tankdrive:low:maxvelocity               60
-tankdrive:low:maxacceleration           60
+tankdrive:sim:ticks_per_rev                         200
+tankdrive:sim:diameter                              4
+tankdrive:sim:scrub                                 1.0
+tankdrive:sim:width                                 28
+tankdrive:sim:length                                28
+tankdrive:sim:error_per_side                        0
+tankdrive:high:maxvelocity                          180
+tankdrive:high:maxacceleration                      180
+tankdrive:low:maxvelocity                           60
+tankdrive:low:maxacceleration                       60
 
-lifter:sim:bottom_limit_height          11
-lifter:sim:top_limit_height             85
-lifter:sim:inches_per_tick              0.001
-lifter:sim:inches_per_sec_per_volt      12
+lifter:sim:bottom_limit_height                      11.375
+lifter:sim:top_limit_height                         85
+lifter:sim:inches_per_tick                          0.08327
+lifter:sim:highgear:inches_per_sec_per_volt         36
+lifter:sim:lowgear:inches_per_sec_per_volt          12
 
-grabber:sim:degrees_per_second          30
-grabber:sim:degrees_per_tick            0.1
-grabber:sim:cube_angle                  90
+grabber:sim:degrees_per_second                      30
+grabber:sim:degrees_per_tick                        0.1
+grabber:sim:cube_angle                              90
 
-collector:eject_duration                0.25
+collector:eject_duration                            0.25
 
-oi:axis:automode                        6
+oi:axis:automode                                    6
