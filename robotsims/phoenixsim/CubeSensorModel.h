@@ -17,6 +17,8 @@ namespace xero  {
                 /// \brief Destroy the model.
                 virtual ~CubeSensorModel() ;
 
+                virtual bool processEvent(const std::string &name, int value) ;                     
+
                 /// \brief Convert the model to a string.
                 /// \returns details about the cube sensor's status
                 virtual std::string toString() ;
@@ -44,14 +46,6 @@ namespace xero  {
                 }
 
             private:
-                struct OnTime {
-                    OnTime(double s) {
-                        start = s ;
-                    }
-                    double start ;
-                } ;
-
-            private:
                 void evalSensor() ;
                 std::vector<std::string> split(const std::string &line) ;
 
@@ -72,8 +66,6 @@ namespace xero  {
                 bool running_ ;
                 double start_ ;
                 double eject_duration_ ;
-
-                std::list<OnTime> ontimes_ ;
             } ;
         }
     }

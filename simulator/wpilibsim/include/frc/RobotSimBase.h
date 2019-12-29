@@ -117,6 +117,9 @@ namespace xero {
 
             void readJoysticks() ;
 
+            virtual void updateDriveBase() {                
+            }
+
         private:
             void simLoop() ;
             void incrCurrentTime(double incr) ;

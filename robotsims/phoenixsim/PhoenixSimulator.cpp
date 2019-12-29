@@ -8,6 +8,8 @@
 #include <TankDriveModel.h>
 #include <cassert>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 #include <cmath>
 
 using namespace ctre::phoenix::motorcontrol::can ;
@@ -47,6 +49,19 @@ namespace xero
             }
 
             PhoenixSimulator::~PhoenixSimulator() {
+            }
+
+            void PhoenixSimulator::updateDriveBase() {
+                double lift_height = lifter_->getHeight();
+                double grabber_angle = grabber_->getAngle();
+                bool cube = ballsensor_->getCubeSensed();
+
+                std::ostringstream strm;
+
+                strm << std::fixed << std::setw(2) << std::setprecision(0);
+                strm << lift_height << "," << grabber_angle;
+                strm << (cube ? "[#]" : "[_]");
+                tankdrive_->setRobotText(strm.str());
             }
 
             void PhoenixSimulator::enableScreen() {

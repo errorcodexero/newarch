@@ -21,6 +21,19 @@ namespace xero {
             CubeSensorModel::~CubeSensorModel() {                
             }
 
+            bool CubeSensorModel::processEvent(const std::string &name, int value)
+            {
+                bool ret = false;
+
+                if (name == "cube")
+                {
+                    ret = true;
+                    cube_sensed_ = (value != 0);
+                }
+
+                return ret;
+            }
+
             std::string CubeSensorModel::toString() {
                 std::string result("cube sensor: ") ;
 
@@ -57,32 +70,10 @@ namespace xero {
 
                 double now = phoenix.getTime() ;
 
-                if (cube_sensed_ == false) {
-                    //
-                    // Cubes based on time
-                    //
-                    for(const auto &entry: ontimes_) {
-                        if (entry.start > last_time_ && entry.start <= now)
-                            cube_sensed_ = true ;
-                    }
-
-                    //
-                    // Cubes based on position
-                    //
-                    double x = phoenix.getRobotXPos() ;
-                    double y = phoenix.getRobotYPos() ;
-                    if (phoenix.isCubeAtPosition(x, y)) {
-                        phoenix.removeCube(x, y) ;
-                        cube_sensed_ = true ;
-                    }
-                }
-
                 if (input_ != nullptr)
                     input_->SimulatorSetValue(cube_sensed_) ;
 
                 last_time_ = now ;
-
-
             }
 
             void CubeSensorModel::inputChanged(SimulatedObject *obj) {   

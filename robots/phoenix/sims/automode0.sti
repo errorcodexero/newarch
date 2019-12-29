@@ -29,3 +29,6 @@
 0.1,tankdrive,xpos,1610
 0.1,tankdrive,ypos,4240
 0.1,tankdrive,angle,0
+
+0.1,cubesensor,cube,1
+

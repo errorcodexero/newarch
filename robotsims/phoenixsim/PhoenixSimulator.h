@@ -59,6 +59,9 @@ namespace xero
                 bool isCubeAtPosition(double x, double y) ;
                 void removeCube(double x, double y) ;
 
+            protected:
+                virtual void updateDriveBase();
+
             private:
                 size_t findCubeIndexByPos(double x, double y) ;
 

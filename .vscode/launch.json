@@ -55,7 +55,7 @@
         "--start", "0.0",
         "--auto", "15.0",
         "--oper","0.0",
-        "--events","robots/phoenix/sims/automode9.sti"
+        "--events","robots/phoenix/sims/automode0.sti"
       ],      
       "externalConsole": true,
       "MIMode": "gdb",

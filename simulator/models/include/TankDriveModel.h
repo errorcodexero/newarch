@@ -2,6 +2,7 @@
 
 #include <frc/SubsystemModel.h>
 #include <vector>
+#include <string>
 
 namespace xero
 {
@@ -30,6 +31,8 @@ namespace xero
         public:
             TankDriveModel(RobotSimBase &borobt, MotorType mt);
             virtual ~TankDriveModel();
+
+            void setRobotText(const std::string &text) { robot_text_ = text; }
 
             virtual bool processEvent(const std::string &name, int value) ;             
 
@@ -184,6 +187,7 @@ namespace xero
             int right_encoder_mult_ ;
             int shifter_channel_ ;
 
+            std::string robot_text_;
         };
     } // namespace sim
 } // namespace xero

@@ -91,7 +91,7 @@ namespace xero {
             xero::misc::MessageLogger &getRobotMessageLogger()  ;
 
             virtual void generateDisplayInformation(std::list<std::string> &lines) ;
-
+            
         protected:
 
         private:

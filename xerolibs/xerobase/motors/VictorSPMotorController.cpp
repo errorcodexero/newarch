@@ -9,6 +9,7 @@ namespace xero
         VictorSPMotorController::VictorSPMotorController(int pwmID)
         {
             motor_ = std::make_shared<frc::VictorSP>(pwmID) ;
+            isInverted_ = false;
         }
 
         VictorSPMotorController::~VictorSPMotorController() 
@@ -25,7 +26,7 @@ namespace xero
 
         void VictorSPMotorController::setInverted(bool inverted)
         {
-            isInverted_ = true ;
+            isInverted_ = inverted ;
         }
 
         void VictorSPMotorController::setNeutralMode(NeutralMode neutralMode)

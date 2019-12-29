@@ -19,7 +19,7 @@ namespace xero {
             "tpos", "apos", "tvel", "avel", "out"
         } ;
 
-        MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target):
+        MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target, bool addhold):
             MotorEncoderSubsystemAction(subsystem) {
             
             std::string config = subsystem.getName() + ":goto";
@@ -35,9 +35,10 @@ namespace xero {
             );
 
             plotid_ = subsystem.initPlot(subsystem.getName() + "-" + toString()) ;
+            addhold_ = addhold;
         }
 
-        MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, const std::string &targetparam):
+        MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, const std::string &targetparam, bool addhold):
             MotorEncoderSubsystemAction(subsystem) {
             
             std::string config = subsystem.getName() + ":goto";
@@ -53,12 +54,17 @@ namespace xero {
             );
 
             plotid_ = subsystem.initPlot(subsystem.getName() + "-" + toString()) ;
+            addhold_ = addhold;            
         }        
 
         void MotorEncoderGoToAction::start() {
             MotorEncoderSubsystem &subsystem = getSubsystem();
             isDone_ = false ;
-            subsystem.setDefaultAction(std::make_shared<MotorEncoderHoldAction>(subsystem, target_));
+
+            if (addhold_)
+                subsystem.setDefaultAction(std::make_shared<MotorEncoderHoldAction>(subsystem, target_));
+            else
+                subsystem.setDefaultAction(nullptr);
 
             double dist = normalizePosition(target_ - subsystem.getPosition());
             if (std::fabs(dist) < threshold_) {

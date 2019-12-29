@@ -316,6 +316,8 @@ namespace xero {
                 for(auto model : models_)
                     model->run(now - last) ;
 
+                updateDriveBase();
+
                 for(auto v:visualizers_) {
                     for (auto model : models_)
                         v->visualizeSubsystem(model) ;

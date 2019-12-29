@@ -163,7 +163,9 @@ namespace xero {
             lines.push_back("  LeftPos: " + std::to_string(left_)) ;
             lines.push_back("  RightPos: " + std::to_string(right_)) ;
             lines.push_back("  LeftPower: " + std::to_string(left_power_)) ;
-            lines.push_back("  RightPower: " + std::to_string(right_power_)) ;                        
+            lines.push_back("  RightPower: " + std::to_string(right_power_)) ;
+            if (robot_text_.length() > 0)
+                lines.push_back("  Display: " + robot_text_);
         }
 
         void TankDriveModel::calcLowLevelParams(RobotSimBase &simbase) {

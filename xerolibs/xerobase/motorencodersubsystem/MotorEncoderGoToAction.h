@@ -16,8 +16,8 @@ namespace xero {
     namespace base {
         class MotorEncoderGoToAction : public MotorEncoderSubsystemAction {
         public:
-            MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target);
-            MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, const std::string &param) ;
+            MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target, bool addhold = true);
+            MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, const std::string &param, bool addhold = true) ;
 
             virtual void start();
             virtual void run();
@@ -35,6 +35,8 @@ namespace xero {
             double startPosition_ ;
             std::shared_ptr<xero::misc::PIDACtrl> ctrl_ ;
             std::shared_ptr<xero::misc::TrapezoidalProfile> profile_ ;
+
+            bool addhold_;
 
             int plotid_ ;
             static std::vector<std::string> plot_columns_ ;

@@ -107,6 +107,8 @@ grabber:angle:collect                                          45.0
 grabber:angle:eject                                            45.0
 
 
+
+
 #
 # Lifter subsystem constants
 #
@@ -144,6 +146,8 @@ intake:eject:fast                                              -1.0
 intake:eject:middle                                            -0.5
 intake:eject:slow                                              -0.2
 intake:speed:collect                                           1.0
+intake:eject:fast:power                                        -0.4
+intake:eject:fast:duration                                     0.1
 
 #
 # Collector subsystem constants
