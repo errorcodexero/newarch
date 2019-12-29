@@ -194,6 +194,15 @@ tankdrive:follower:right:kv                                     0.005555556
 tankdrive:follower:right:ka                                     0.0001111111
 tankdrive:follower:right:kd                                     0.0
 
+tankdrive:angle_action:angle_threshold                          1.0
+tankdrive:angle_action:maxa                                     40.0
+tankdrive:angle_action:maxv                                     40.0
+tankdrive:angle_action:maxd                                     -40.0
+tankdrive:angle_action:kp                                       0.0                     # Recommended 0.02032 - 0.03048
+tankdrive:angle_action:kv                                       0.0003
+tankdrive:angle_action:ka                                       0.0
+tankdrive:angle_action:kd                                       0.0
+
 #
 # Wings subsystem constants
 #
@@ -212,19 +221,6 @@ driver:power:nudge_straight                                     0.2
 driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
 driver:zerolevel                                                0.1
-
-#
-# Auto mode constants
-#
-auto:c_switch_l:segment1                                        48
-auto:c_switch_l:segment2                                        110
-auto:c_switch_l:segment3                                        58
-auto:c_switch_l:segment4                                        -25
-auto:c_switch_l:segment5                                        158
-
-auto:c_switch_r:segment1				                        60
-auto:c_switch_r:segment2				                        24
-auto:c_switch_r:segment3                                        100
 
 #
 # Enable plotting.  Plot data is stored in the network tables and display
@@ -248,7 +244,12 @@ plotting:enabled                                               true
 #
 # Lift characterization, uses power and duration
 #
-auto:testmode:which                                               2
-auto:testmode:duration                                            3.0
+auto:testmode:which                                               3
+auto:testmode:duration                                            3600
 auto:testmode:power                                               0.3
-auto:testmode:distance                                            100.0
+auto:testmode:distance                                            70.0
+
+#
+# Three cube scale auto mode
+#
+automode:threecube:rotate1                                       160

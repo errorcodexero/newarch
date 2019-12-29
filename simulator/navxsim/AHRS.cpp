@@ -29,6 +29,12 @@ double AHRS::GetYaw()
     return yaw_ ;
 }
 
+double AHRS::GetAngle()
+{
+    std::lock_guard<std::mutex> lock(getLockMutex()) ;
+    return total_ ;    
+}
+
 void AHRS::ZeroYaw()
 {
     yaw_ = 0 ;

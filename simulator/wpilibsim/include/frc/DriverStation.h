@@ -56,6 +56,10 @@ namespace frc
                 pov_[which] = value ;
             }
 
+            bool IsFMSAttached() {
+                return false;
+            }
+
         private:
             std::vector<double> axis_ ;
             std::vector<bool> buttons_ ;

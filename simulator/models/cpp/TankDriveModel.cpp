@@ -23,7 +23,9 @@ namespace xero {
             left_ = 0.0;
             right_ = 0.0;
             angle_ = 0.0;
-            navx_offset_ = 0.0 ;
+            last_angle_ = 0.0;
+            total_angle_ = 0.0;
+            navx_offset_ = 0.0;
             left_power_ = 0.0;
             right_power_ = 0.0;
             xpos_ = 100.0 ;
@@ -315,6 +317,7 @@ namespace xero {
             if (navx_ != nullptr) {
                 double deg = normalizeAngleDegrees(-rad2deg(angle_ + navx_offset_)) ;
                 navx_->SimulatorSetYaw(deg) ;
+                navx_->SimulatorSetTotalAngle(-rad2deg(total_angle_ + navx_offset_));
             }
 
 #ifdef NOTYET
@@ -459,6 +462,9 @@ namespace xero {
                 xpos_ = xpos_ + r * std::sin(wd + angle) - r * std::sin(angle) ;
                 ypos_ = ypos_ - r * std::cos(wd + angle) + r * std::cos(angle) ;
             }
+
+            double dangle = xero::math::normalizeAngleRadians(angle_ - last_angle_);
+            total_angle_ += dangle;
         }
     }
 }

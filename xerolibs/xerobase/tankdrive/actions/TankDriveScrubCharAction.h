@@ -2,6 +2,8 @@
 
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/actions/TankDriveAction.h>
+#include <vector>
+#include <string>
 
 /// \file
 
@@ -50,6 +52,9 @@ namespace xero {
             double start_left_ ;
             bool high_gear_ ;
             size_t index_ ;
+
+            int plot_id_;
+            static std::vector<std::string> columns_;
         } ;
     }
 }

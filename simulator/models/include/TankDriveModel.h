@@ -95,6 +95,12 @@ namespace xero
             // The current angle of the robot
             double angle_;
 
+            // The total angle of the robot
+            double total_angle_;
+
+            // The last angle
+            double last_angle_;
+
             // The navx offset, used to return the correct navx angle if the
             // navx has been reset to zero yaw at an arbitrary robot angle
             double navx_offset_ ;

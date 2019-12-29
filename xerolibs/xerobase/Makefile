@@ -46,7 +46,6 @@ SOURCES = \
 	tankdrive/actions/TankDriveVelocityAction.cpp\
 	tankdrive/actions/TankDriveCharAction.cpp\
 	tankdrive/actions/TankDriveAngleAction.cpp\
-	tankdrive/actions/TankDriveAngleCharAction.cpp\
 	tankdrive/actions/TankDrivePowerAction.cpp\
 	tankdrive/actions/TankDriveTimedPowerAction.cpp\
 	tankdrive/actions/TankDriveFollowPathAction.cpp\

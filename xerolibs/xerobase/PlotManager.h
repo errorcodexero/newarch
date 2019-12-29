@@ -1,5 +1,6 @@
 #pragma once
 
+#include <frc/DriverStation.h>
 #include <string>
 #include <vector>
 #include <map>
@@ -46,6 +47,9 @@ namespace xero
 
             // If true, plotting is enabled
             bool enabled_ ;
+
+            // The driver station
+            frc::DriverStation &ds_;
         } ;
     }
 }

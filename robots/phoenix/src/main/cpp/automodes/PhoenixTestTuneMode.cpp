@@ -5,6 +5,7 @@
 #include "phlifter/LifterShiftAction.h"
 #include <actions/Action.h>
 #include <tankdrive/actions/TankDriveCharAction.h>
+#include <tankdrive/actions/TankDriveScrubCharAction.h>
 #include <motorencodersubsystem/MotorEncoderPowerAction.h>
 #include <motorencodersubsystem/MotorEncoderGoToAction.h>
 
@@ -30,18 +31,22 @@ namespace xero
 
             switch(mode)
             {
-            case 0:     // Drive base characterization
+            case 0:     // Drive base straight characterization
                 pushSubActionPair(tankdrive, std::make_shared<TankDriveCharAction>(*tankdrive, duration, power, true)) ;
                 break;
 
-            case 1:     // Lift characterization
+            case 1:     // Drive base rotate characterization (note duration it total angle)
+                pushSubActionPair(tankdrive, std::make_shared<TankDriveScrubCharAction>(*tankdrive, power, duration, true));
+                break;
+
+            case 2:     // Lift characterization
                 pushSubActionPair(lift, std::make_shared<LifterShiftAction>(*lift, true)) ;                          // Shift to high gear (make this false for low gear)
                 pushSubActionPair(lift, std::make_shared<LifterBreakAction>(*lift, false)) ;                         // Disable the break                
                 pushSubActionPair(lift, std::make_shared<MotorEncoderPowerAction>(*lift, power, duration)) ;         // Run the lift motor
                 pushSubActionPair(lift, std::make_shared<LifterBreakAction>(*lift, true)) ;                          // Enable the break                 
                 break ;
 
-            case 2:     // Lift goto test
+            case 3:     // Lift goto test
                 pushSubActionPair(lift, std::make_shared<LifterShiftAction>(*lift, true)) ;                          // Shift to high gear (make this false for low gear)
                 pushSubActionPair(lift, std::make_shared<LifterBreakAction>(*lift, false)) ;                         // Disable the break               
                 pushSubActionPair(lift, std::make_shared<MotorEncoderGoToAction>(*lift, dist));

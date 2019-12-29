@@ -1,5 +1,6 @@
 #include "TankDriveScrubCharAction.h"
 #include <tankdrive/TankDrive.h>
+#include <MessageLogger.h>
 #include <Robot.h>
 #include <iostream>
 
@@ -8,10 +9,21 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
 
+        std::vector<std::string> TankDriveScrubCharAction::columns_ =
+        {
+            "time",
+            "pos",
+            "vel",
+            "accel",
+            "out"
+        } ;
+
         TankDriveScrubCharAction::TankDriveScrubCharAction(TankDrive &drive, double power, double total, bool highgear) : TankDriveAction(drive) {
             power_ = power ;
             total_ = total ;
             high_gear_ = highgear ;
+
+            plot_id_ = drive.initPlot("ScrubAction");
         }
 
         TankDriveScrubCharAction::~TankDriveScrubCharAction() {           
@@ -19,7 +31,7 @@ namespace xero {
 
         void TankDriveScrubCharAction::start() {
             is_done_ = false ;
-            start_time_ = frc::Timer::GetFPGATimestamp() ;
+            start_time_ = getTankDrive().getRobot().getTime();
             start_angle_ = getTankDrive().getTotalAngle() ;
             start_left_ = getTankDrive().getLeftDistance() ;
             start_right_ = getTankDrive().getRightDistance() ;
@@ -28,11 +40,21 @@ namespace xero {
             else
                 getTankDrive().lowGear() ;
                 
-            setMotorsToPercents(power_, -power_) ;
+            setMotorsToPercents(-power_, power_) ;
+
+            auto &logger = getTankDrive().getRobot().getMessageLogger();
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
+            logger << "Elapsed,angle,left,right";
+            logger.endMessage();
+
+            getTankDrive().startPlot(plot_id_, columns_);
         }
 
         void TankDriveScrubCharAction::run() {
+            auto &logger = getTankDrive().getRobot().getMessageLogger();
+
             if (!is_done_) {
+                double elapsed = getTankDrive().getRobot().getTime() - start_time_;
                 double angle = getTankDrive().getTotalAngle() - start_angle_ ;
                 double distl = getTankDrive().getLeftDistance() - start_left_ ;
                 double distr = getTankDrive().getRightDistance() - start_right_ ;
@@ -46,19 +68,27 @@ namespace xero {
                     double revs = angle / 360.0 ;
                     double effr = avgc / (xero::math::PI * revs) ;
 
-                    std::cout << "Total Angle (NaVX) " << angle << std::endl ;
-                    std::cout << "Left " << distl << std::endl ;
-                    std::cout << "Right " << distr<< std::endl ;                        
-                    std::cout << "Effective Width " << effr * 2.0 << std::endl ;
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
+                    logger << "Total Angle (NaVX) " << angle;
+                    logger << ", left " << distl;
+                    logger << ", right " << distr;
+                    logger << "effective Width " << effr * 2.0;
                 }
                 else
                 {
-                    std::cout << "Progress" ;
-                    std::cout << " time " << frc::Timer::GetFPGATimestamp() - start_time_ ;
-                    std::cout << " angle " << angle ;
-                    std::cout << " left " << distl ;
-                    std::cout << " right " << distr ;
-                    std::cout << std::endl ;
+                    logger << elapsed ;
+                    logger << "," << angle ;
+                    logger<<  "," << distl ;
+                    logger << "," << distr ;
+                    logger.endMessage();
+
+                    std::vector<double> data;
+                    data.push_back(elapsed);
+                    data.push_back(angle);
+                    data.push_back(getTankDrive().getAngularVelocity());
+                    data.push_back(getTankDrive().getAngularAcceleration());
+                    data.push_back(power_);
+                    getTankDrive().addPlotData(plot_id_, data);
                 }
             }
         }

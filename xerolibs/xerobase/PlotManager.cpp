@@ -1,11 +1,12 @@
 #include "PlotManager.h"
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
+#include <frc/DriverStation.h>
 #include <cassert>
 
 namespace xero {
     namespace base {
-        PlotManager::PlotManager()
+        PlotManager::PlotManager() : ds_(frc::DriverStation::GetInstance())
         {
             plot_table_ = "/XeroPlot" ;
             next_plot_id_ = 1 ;
@@ -29,23 +30,28 @@ namespace xero {
 
         int PlotManager::initPlot(const std::string &name)
         {
-            for(auto &pair : active_plots_)
-            {
-                if (pair.second.name_ == name)
-                    return pair.first ;
-            }
+            int id = -1;
 
-            int id = next_plot_id_++ ;
-            plotinfo info ;
-            info.name_ = name ;
-            active_plots_[id] = info ;
+            if (enabled_ && !ds_.IsFMSAttached())
+            {
+                for(auto &pair : active_plots_)
+                {
+                    if (pair.second.name_ == name)
+                        return pair.first ;
+                }
+
+                id = next_plot_id_++ ;
+                plotinfo info ;
+                info.name_ = name ;
+                active_plots_[id] = info ;
+            }
 
             return id ;
         }
 
         void PlotManager::startPlot(int id, const std::vector<std::string> &cols) 
         {
-            if (enabled_)
+            if (enabled_ && !ds_.IsFMSAttached())
             {
                 auto &info = active_plots_[id] ;
                 info.cols_ = cols.size() ;
@@ -63,7 +69,7 @@ namespace xero {
 
         void PlotManager::addPlotData(int id, const std::vector<double> &values)
         {
-            if (enabled_)
+            if (enabled_ && !ds_.IsFMSAttached())
             {
                 auto &info = active_plots_[id] ;
 
@@ -82,7 +88,7 @@ namespace xero {
 
         void PlotManager::endPlot(int id)
         {
-            if (enabled_)
+            if (enabled_ && !ds_.IsFMSAttached())
             {
                 auto &info = active_plots_[id] ;
                 nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;

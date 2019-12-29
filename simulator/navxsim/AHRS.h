@@ -22,9 +22,7 @@ public:
 
     double GetYaw();
     void ZeroYaw();
-    double GetAngle() {
-        return 0.0 ;
-    }
+    double GetAngle();
 
     double GetVelocityX() {
         return 0.0 ;
@@ -46,7 +44,12 @@ public:
         yaw_ = yaw ;
     }
 
+    void SimulatorSetTotalAngle(double angle) {
+        total_ = angle;
+    }
+
 private:
+    double total_;
     double yaw_;
 };
 

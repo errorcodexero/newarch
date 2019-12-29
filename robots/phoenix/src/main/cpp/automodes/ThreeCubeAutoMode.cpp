@@ -1,6 +1,9 @@
 #include "ThreeCubeAutoMode.h"
-#include "liftingcollector/LiftingCollector.h"
 #include "Phoenix.h"
+#include "liftingcollector/LiftingCollector.h"
+#include "phlifter/LifterBreakAction.h"
+#include "phlifter/LifterShiftAction.h"
+
 #include <actions/Action.h>
 #include <actions/ParallelAction.h>
 #include <actions/SequenceAction.h>
@@ -8,6 +11,7 @@
 #include <motorencodersubsystem/MotorEncoderGoToAction.h>
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <tankdrive/actions/TankDriveFollowPathAction.h>
+#include <tankdrive/actions/TankDriveAngleAction.h>
 
 using namespace xero::base;
 using namespace xero::misc;
@@ -40,12 +44,24 @@ namespace xero
 
             parallel->addAction(sequence);
             sequence->pushAction(std::make_shared<DelayAction>(1.0));
+            sequence->pushSubActionPair(lifter, std::make_shared<LifterShiftAction>(*lifter, true)) ;                          // Shift to high gear (make this false for low gear)
+            sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, false)) ;                         // Disable the break             
             sequence->pushSubActionPair(lifter, std::make_shared<MotorEncoderGoToAction>(*lifter, "lifter:height:scale"));
+            sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, true)) ;                         // Disable the break  
 
             pushAction(parallel);
 
             act = std::make_shared<SingleMotorPowerAction>(*intake, "intake:eject:fast:power", "intake:eject:fast:duration");
             pushSubActionPair(intake, act);
+
+            parallel = std::make_shared<ParallelAction>();
+            pushAction(parallel);
+            
+            act = std::make_shared<MotorEncoderGoToAction>(*lifter, "lifter:height:floor");
+            parallel->addSubActionPair(lifter, act);
+
+            act = std::make_shared<TankDriveAngleAction>(*tankdrive, "automode:threecube:rotate1", true);
+            parallel->addSubActionPair(tankdrive, act);
         }
 
         ThreeCubeAutoMode::~ThreeCubeAutoMode()

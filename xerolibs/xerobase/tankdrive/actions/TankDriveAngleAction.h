@@ -2,9 +2,10 @@
 
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/actions/TankDriveAction.h>
-#include "PIDCtrl.h"
+#include <PIDACtrl.h>
 #include "TrapezoidalProfile.h"
-
+#include <vector>
+#include <string>
 
 
 /// \file
@@ -17,12 +18,12 @@ namespace xero {
             /// \brief Create action to rotate the robot a specific angle
             /// \param db the tankdrive subsystem to rotate
             /// \param angle the angle of rotate for the robot
-            TankDriveAngleAction(TankDrive &db, double angle) ;
+            TankDriveAngleAction(TankDrive &db, double angle, bool relative = false) ;
 
             /// \brief Create action to rotate the robot a specific angle
             /// \param db the tankdrive subsystem to rotate
             /// \param name the name of the parameter for the angle to rotate the robot
-            TankDriveAngleAction(TankDrive &db, const std::string &name) ;          
+            TankDriveAngleAction(TankDrive &db, const std::string &name, bool relative = false);
 
             /// \brief destroy the action to rotate the robot
             virtual ~TankDriveAngleAction() ;
@@ -45,18 +46,18 @@ namespace xero {
             virtual std::string toString() ;
 
         private:
-            xero::misc::PIDCtrl velocity_pid_ ;
+            std::shared_ptr<xero::misc::PIDACtrl> velocity_pid_ ;
             std::shared_ptr<xero::misc::TrapezoidalProfile> profile_;
             double start_time_ ;
-            double profile_start_time_; 
-            double profile_initial_angle_;
+            double start_angle_;
             double angle_threshold_;
             double target_angle_;
-            double profile_outdated_error_long_;
-            double profile_outdated_error_short_ ;
-            double profile_outdated_error_angle_ ;
             double total_angle_so_far_ ;
             bool is_done_;
+            bool relative_;
+
+            int plot_id_;
+            static std::vector<std::string> columns_;
         } ;
     }
 }
