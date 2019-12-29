@@ -57,11 +57,39 @@ namespace xero
             parallel = std::make_shared<ParallelAction>();
             pushAction(parallel);
             
+            sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
+            sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, false)) ;
             act = std::make_shared<MotorEncoderGoToAction>(*lifter, "lifter:height:floor");
-            parallel->addSubActionPair(lifter, act);
+            sequence->pushSubActionPair(lifter, act);
+            sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, true)) ;                
+            parallel->addAction(sequence);
 
+            sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
             act = std::make_shared<TankDriveAngleAction>(*tankdrive, "automode:threecube:rotate1", true);
-            parallel->addSubActionPair(tankdrive, act);
+            sequence->pushSubActionPair(tankdrive, act);
+            act = std::make_shared<TankDriveFollowPathAction>(*tankdrive, "ThreeScale_P2");
+            sequence->pushSubActionPair(tankdrive, act);
+            parallel->addAction(sequence);
+
+            parallel = std::make_shared<ParallelAction>();
+            pushAction(parallel);
+
+            act = std::make_shared<TankDriveFollowPathAction>(*tankdrive, "ThreeScale_P3", true);
+            sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
+            sequence->pushSubActionPair(tankdrive, act);
+            act = std::make_shared<TankDriveAngleAction>(*tankdrive, "automode:threecube:rotate2", true);
+            sequence->pushSubActionPair(tankdrive, act);
+            parallel->addAction(sequence);            
+
+            sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
+            sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, false)) ;
+            act = std::make_shared<MotorEncoderGoToAction>(*lifter, "lifter:height:scale");
+            sequence->pushSubActionPair(lifter, act);
+            sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, true)) ;  
+            parallel->addAction(sequence);
+
+            act = std::make_shared<SingleMotorPowerAction>(*intake, "intake:eject:fast:power", "intake:eject:fast:duration");
+            pushSubActionPair(intake, act);
         }
 
         ThreeCubeAutoMode::~ThreeCubeAutoMode()

@@ -226,7 +226,10 @@ namespace xero {
         }
 
         std::string TankDriveFollowPathAction::toString() {
-            return "TankDriveFollowPathAction-" + path_->getName() ;
+            std::string name = "TankDriveFollowPathAction-" + path_->getName() ;
+            if (reverse_)
+                name += "-rev";
+            return name;
         }
     }
 }

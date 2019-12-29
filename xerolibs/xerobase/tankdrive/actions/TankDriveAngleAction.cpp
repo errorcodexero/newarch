@@ -19,7 +19,8 @@ namespace xero
             "avel",
             "taccel",
             "aaccel",
-            "out"
+            "out",
+            "angle"
         } ;
 
         TankDriveAngleAction::TankDriveAngleAction(TankDrive &tank_drive, double target_angle, bool relative) : TankDriveAction(tank_drive)
@@ -34,7 +35,7 @@ namespace xero
             profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv);
 
             velocity_pid_ = std::make_shared<PIDACtrl>(parser, "tankdrive:angle_action:kv", 
-                    "tankdrive:angle_action:kv", "tankdrive:angle_action:kp", "tankdrive:angle_action:kd", true);
+                    "tankdrive:angle_action:ka", "tankdrive:angle_action:kp", "tankdrive:angle_action:kd", true);
             angle_threshold_ = parser.getDouble("tankdrive:angle_action:angle_threshold");
 
             plot_id_ = tank_drive.initPlot(toString());
@@ -52,7 +53,7 @@ namespace xero
             profile_ = std::make_shared<TrapezoidalProfile>(maxa, maxd, maxv);
 
             velocity_pid_ = std::make_shared<PIDACtrl>(parser, "tankdrive:angle_action:kv", 
-                    "tankdrive:angle_action:kv", "tankdrive:angle_action:kp", "tankdrive:angle_action:kd", true);  
+                    "tankdrive:angle_action:ka", "tankdrive:angle_action:kp", "tankdrive:angle_action:kd", true);  
             angle_threshold_ = parser.getDouble("tankdrive:angle_action:angle_threshold");
 
             plot_id_ = tank_drive.initPlot(toString());            
@@ -122,12 +123,14 @@ namespace xero
                     data.push_back(profile_->getAccel(elapsed));
                     data.push_back(getTankDrive().getAngularAcceleration());
                     data.push_back(out);
+                    data.push_back(getTankDrive().getAngle());
                     getTankDrive().addPlotData(plot_id_, data);
                 }
                 else
                 {
                     is_done_ = true;
                     getTankDrive().endPlot(plot_id_);
+                    setMotorsToPercents(0, 0);
                 }
             }
         }
