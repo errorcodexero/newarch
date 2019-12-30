@@ -180,10 +180,6 @@ tankdrive:inches_per_tick                                       0.062831853
 tankdrive:follower:turn_correction                              0
 tankdrive:follower:angle_correction                             0
 
-tankdrive:maxv                                                  160
-tankdrive:maxa                                                  160
-tankdrive:maxd                                                  -160
-
 tankdrive:follower:left:kp                                      0.031                   # Recommended 0.02032 - 0.03048
 tankdrive:follower:left:kv                                      0.005555556
 tankdrive:follower:left:ka                                      0.000111111
@@ -195,9 +191,9 @@ tankdrive:follower:right:ka                                     0.0001111111
 tankdrive:follower:right:kd                                     0.0
 
 tankdrive:angle_action:angle_threshold                          1.0
-tankdrive:angle_action:maxa                                     190.0
-tankdrive:angle_action:maxv                                     190.0
-tankdrive:angle_action:maxd                                     -190.0
+tankdrive:angle_action:maxa                                     900.0
+tankdrive:angle_action:maxv                                     400.0
+tankdrive:angle_action:maxd                                     -900.0
 tankdrive:angle_action:kp                                       0.0                     # Recommended 0.02032 - 0.03048
 tankdrive:angle_action:kv                                       0.001357466
 tankdrive:angle_action:ka                                       0.0
@@ -252,5 +248,7 @@ auto:testmode:distance                                            160
 #
 # Three cube scale auto mode
 #
-automode:threecube:rotate1                                       110
-automode:threecube:rotate2                                       0
+automode:threecube:rotate1                                       120
+automode:threecube:rotate2                                       -160
+automode:threecube:rotate3                                       180
+automode:threecube:rotate4                                       180

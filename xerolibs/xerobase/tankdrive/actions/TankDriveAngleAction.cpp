@@ -39,6 +39,8 @@ namespace xero
             angle_threshold_ = parser.getDouble("tankdrive:angle_action:angle_threshold");
 
             plot_id_ = tank_drive.initPlot(toString());
+
+            relative_ = relative;
         }
 
         TankDriveAngleAction::TankDriveAngleAction(TankDrive &tank_drive, const std::string &name, bool relative) : TankDriveAction(tank_drive)
@@ -56,7 +58,8 @@ namespace xero
                     "tankdrive:angle_action:ka", "tankdrive:angle_action:kp", "tankdrive:angle_action:kd", true);  
             angle_threshold_ = parser.getDouble("tankdrive:angle_action:angle_threshold");
 
-            plot_id_ = tank_drive.initPlot(toString());            
+            plot_id_ = tank_drive.initPlot(toString());  
+            relative_ = relative;                      
         }
 
         TankDriveAngleAction::~TankDriveAngleAction()
@@ -71,10 +74,15 @@ namespace xero
             if (relative_)
             {
                 distance = target_angle_;
+
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
+                logger << "TankDriveAngleAction start, relative " << distance;
+                logger.endMessage() ;                  
             }
             else
             {
                 distance = xero::math::normalizeAngleDegrees(target_angle_ - getTankDrive().getAngle());
+                logger << "TankDriveAngleAction start, absolute " << distance;                
             }
 
             if (std::fabs(distance) < angle_threshold_)

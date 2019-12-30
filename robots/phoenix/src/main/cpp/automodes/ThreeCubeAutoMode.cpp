@@ -36,12 +36,21 @@ namespace xero
             auto lifter = phoenix.getPhoenixRobotSubsystem()->getLiftingCollector()->getLifter();
             auto grabber = phoenix.getPhoenixRobotSubsystem()->getLiftingCollector()->getCollector()->getGrabber();
             auto intake = phoenix.getPhoenixRobotSubsystem()->getLiftingCollector()->getCollector()->getIntake();
-            std::shared_ptr<ParallelAction> parallel = std::make_shared<ParallelAction>();
-            std::shared_ptr<SequenceAction> sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
+            std::shared_ptr<ParallelAction> parallel;
 
+            std::shared_ptr<SequenceAction> sequence;
+
+
+            // Parallel one - drive to scale while raising the lift
+            parallel = std::make_shared<ParallelAction>();
+            pushAction(parallel);
+
+            // Parallel one action one - action to drive to scale
             act = std::make_shared<TankDriveFollowPathAction>(*tankdrive, "ThreeScale_P1");
             parallel->addSubActionPair(tankdrive, act);
 
+            // Parallel one action two - sequence to raise lift to scale height
+            sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
             parallel->addAction(sequence);
             sequence->pushAction(std::make_shared<DelayAction>(1.0));
             sequence->pushSubActionPair(lifter, std::make_shared<LifterShiftAction>(*lifter, true)) ;                          // Shift to high gear (make this false for low gear)
@@ -49,47 +58,101 @@ namespace xero
             sequence->pushSubActionPair(lifter, std::make_shared<MotorEncoderGoToAction>(*lifter, "lifter:height:scale"));
             sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, true)) ;                         // Disable the break  
 
-            pushAction(parallel);
-
+            // Action to eject cube
             act = std::make_shared<SingleMotorPowerAction>(*intake, "intake:eject:fast:power", "intake:eject:fast:duration");
             pushSubActionPair(intake, act);
 
+            // Parallel two - action to lower lift to floor, rotate drivebase and drive to cube at corner of scale
             parallel = std::make_shared<ParallelAction>();
             pushAction(parallel);
             
+            // Parllel two action one - sequence to lower lift to floor height
             sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
+            parallel->addAction(sequence);            
             sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, false)) ;
             act = std::make_shared<MotorEncoderGoToAction>(*lifter, "lifter:height:floor");
             sequence->pushSubActionPair(lifter, act);
             sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, true)) ;                
-            parallel->addAction(sequence);
 
+            // Parallel two action two - sequence to rotate toward scale and drive to first cube
             sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
+            parallel->addAction(sequence);            
             act = std::make_shared<TankDriveAngleAction>(*tankdrive, "automode:threecube:rotate1", true);
             sequence->pushSubActionPair(tankdrive, act);
             act = std::make_shared<TankDriveFollowPathAction>(*tankdrive, "ThreeScale_P2");
             sequence->pushSubActionPair(tankdrive, act);
-            parallel->addAction(sequence);
 
+            // Parallel three - action to rotate to scale and then drive to scale while raising lift
             parallel = std::make_shared<ParallelAction>();
             pushAction(parallel);
 
-            act = std::make_shared<TankDriveFollowPathAction>(*tankdrive, "ThreeScale_P3", true);
+            // Parallel three action one - sequence to rotate to scale and drive to scale
             sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
-            sequence->pushSubActionPair(tankdrive, act);
+            parallel->addAction(sequence); 
+
             act = std::make_shared<TankDriveAngleAction>(*tankdrive, "automode:threecube:rotate2", true);
             sequence->pushSubActionPair(tankdrive, act);
-            parallel->addAction(sequence);            
-
+            act = std::make_shared<TankDriveFollowPathAction>(*tankdrive, "ThreeScale_P3");
+            sequence->pushSubActionPair(tankdrive, act);
+         
+            // Parallel three action two - sequence to raise lift to scale height
             sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
+            parallel->addAction(sequence);            
             sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, false)) ;
             act = std::make_shared<MotorEncoderGoToAction>(*lifter, "lifter:height:scale");
             sequence->pushSubActionPair(lifter, act);
             sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, true)) ;  
-            parallel->addAction(sequence);
 
+            // Action to eject cube
             act = std::make_shared<SingleMotorPowerAction>(*intake, "intake:eject:fast:power", "intake:eject:fast:duration");
             pushSubActionPair(intake, act);
+
+            // Parallel four - rotate to scale and drive to second cube while lower lift to floor
+            parallel = std::make_shared<ParallelAction>();
+            pushAction(parallel);
+
+            // Parallel four action one - sequence to lower lift to floor
+            sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
+            parallel->addAction(sequence);
+
+            sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, false)) ;
+            act = std::make_shared<MotorEncoderGoToAction>(*lifter, "lifter:height:floor");
+            sequence->pushSubActionPair(lifter, act);
+            sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, true)) ;                
+
+            // Parallel four action two - sequence to rotate drivebase and drive to second cube
+            sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
+            parallel->addAction(sequence);
+
+            act = std::make_shared<TankDriveAngleAction>(*tankdrive, "automode:threecube:rotate3", true);
+            sequence->pushSubActionPair(tankdrive, act);
+            act = std::make_shared<TankDriveFollowPathAction>(*tankdrive, "ThreeScale_P4");
+            sequence->pushSubActionPair(tankdrive, act);
+
+            // Parallel five - action to rotate to scale and then drive to scale while raising lift
+            parallel = std::make_shared<ParallelAction>();
+            pushAction(parallel);
+
+            // Parallel three action one - sequence to rotate to scale and drive to scale
+            sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
+            parallel->addAction(sequence); 
+
+            act = std::make_shared<TankDriveAngleAction>(*tankdrive, "automode:threecube:rotate4", true);
+            sequence->pushSubActionPair(tankdrive, act);
+            act = std::make_shared<TankDriveFollowPathAction>(*tankdrive, "ThreeScale_P5");
+            sequence->pushSubActionPair(tankdrive, act);
+         
+            // Parallel three action two - sequence to raise lift to scale height
+            sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
+            parallel->addAction(sequence);            
+            sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, false)) ;
+            act = std::make_shared<MotorEncoderGoToAction>(*lifter, "lifter:height:scale");
+            sequence->pushSubActionPair(lifter, act);
+            sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, true)) ;  
+
+            // Action to eject cube
+            act = std::make_shared<SingleMotorPowerAction>(*intake, "intake:eject:fast:power", "intake:eject:fast:duration");
+            pushSubActionPair(intake, act);            
         }
 
         ThreeCubeAutoMode::~ThreeCubeAutoMode()

@@ -39,3 +39,8 @@
 # Collect second cube
 #
 8.4,cubesensor,cube,1
+
+#
+# Collect third cube
+#
+14.4,cubesensor,cube,1
