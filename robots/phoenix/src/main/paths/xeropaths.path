@@ -12,9 +12,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 300,
+                    "maxacceleration": 180,
                     "maxjerk": 1200,
-                    "maxvelocity": 150,
+                    "maxvelocity": 180,
                     "name": "P1",
                     "points": [
                         {
@@ -45,9 +45,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 300,
+                    "maxacceleration": 180,
                     "maxjerk": 1200,
-                    "maxvelocity": 150,
+                    "maxvelocity": 180,
                     "name": "P2",
                     "points": [
                         {
@@ -73,9 +73,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 300,
+                    "maxacceleration": 180,
                     "maxjerk": 1200,
-                    "maxvelocity": 150,
+                    "maxvelocity": 180,
                     "name": "P3",
                     "points": [
                         {
@@ -101,9 +101,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 300,
+                    "maxacceleration": 180,
                     "maxjerk": 1200,
-                    "maxvelocity": 150,
+                    "maxvelocity": 180,
                     "name": "P4",
                     "points": [
                         {
@@ -129,9 +129,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 300,
+                    "maxacceleration": 180,
                     "maxjerk": 1200,
-                    "maxvelocity": 150,
+                    "maxvelocity": 180,
                     "name": "P5",
                     "points": [
                         {
@@ -142,6 +142,123 @@
                         {
                             "heading": 0,
                             "x": 283.44693281402147,
+                            "y": 75.44303797468353
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 0,
+                    "maxjerk": 1500,
+                    "maxvelocity": 0,
+                    "name": "P6",
+                    "points": [
+                        {
+                            "heading": 114.49179146564333,
+                            "x": 286.6,
+                            "y": 56.1
+                        },
+                        {
+                            "heading": -180,
+                            "x": 220.50632911392407,
+                            "y": 89.77604673807204
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 180,
+                    "maxjerk": 1500,
+                    "maxvelocity": 180,
+                    "name": "P7",
+                    "points": [
+                        {
+                            "heading": -90,
+                            "x": 220.5,
+                            "y": 89.8
+                        },
+                        {
+                            "heading": 32.7,
+                            "x": 286.6,
+                            "y": 56.1
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 180,
+                    "maxjerk": 1500,
+                    "maxvelocity": 180,
+                    "name": "P8",
+                    "points": [
+                        {
+                            "heading": 114.5,
+                            "x": 286.6,
+                            "y": 56.1
+                        },
+                        {
+                            "heading": 143.59028520806731,
+                            "x": 253.5345666991237,
+                            "y": 86.03700097370981
+                        },
+                        {
+                            "heading": 149.8842774122298,
+                            "x": 222.99902629016557,
+                            "y": 105.3554040895813
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 180,
+                    "maxjerk": 1500,
+                    "maxvelocity": 180,
+                    "name": "P9",
+                    "points": [
+                        {
+                            "heading": -90,
+                            "x": 219.9,
+                            "y": 107.8
+                        },
+                        {
+                            "heading": 0,
+                            "x": 285.3164556962025,
                             "y": 75.44303797468353
                         }
                     ],

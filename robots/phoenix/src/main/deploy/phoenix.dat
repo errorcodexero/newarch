@@ -47,7 +47,7 @@ hw:grabber:motor:pwmid                                          2               
 hw:grabber:motor:type                                           "victorsp"             # PWM based VictorSP motor controller
 hw:grabber:encoder:quad:1                                       6                      # Digital IO
 hw:grabber:encoder:quad:2                                       7                      # Digital IO
-hw:grabber:encoder:quad:m                                       1.0
+hw:grabber:encoder:quad:m                                       0.625
 hw:grabber:encoder:quad:b                                       0.0
 
 hw:collector:cubesensor                                         23                     # Digital IO
@@ -72,7 +72,7 @@ hw:driverstation:hid:driver                                     0               
 #
 # Grabber Subsystem constants
 #
-grabber:degrees_per_tick                                        0.625
+grabber:degrees_per_tick                                        0.1
 grabber:calibrate:count                                         5
 grabber:calibrate:value                                         -0.4
 grabber:calibrate:diff                                          2
@@ -85,19 +85,25 @@ grabber:hold:min                                                -0.4
 grabber:hold:max                                                0.4
 grabber:hold:imax                                               1e21
 
-grabber:goto:threshold                                          5.0
-grabber:goto:maxd                                              -720.0     # maximum deceleration
-grabber:goto:maxa                                               720.0     # maximum acceleration
-grabber:goto:maxv                                               360.0     # maximum velocity
-grabber:follower:down:kp                                        0.05
+grabber:goto:threshold                                          1.0
+grabber:goto:maxd                                              -180.0               # maximum deceleration
+grabber:goto:maxa                                               180.0                # maximum acceleration
+grabber:goto:maxv                                               90.0               # maximum velocity
+grabber:follower:down:kp                                        0.1
 grabber:follower:down:kd                                        0.0
-grabber:follower:down:kv                                        0.002757353
+grabber:follower:down:kv                                        0.012
 grabber:follower:down:ka                                        0.0
-grabber:follower:up:kp                                          0.05
+grabber:follower:up:kp                                          0.1
 grabber:follower:up:kd                                          0.0
-grabber:follower:up:kv                                          0.002757353
+grabber:follower:up:kv                                          0.012
 grabber:follower:up:ka                                          0.0
 
+#
+# Grabber angle reference
+# Straight out is 0 degrees
+# Close in on itself is negative
+# Open out wide is 90+ degrees
+#
 grabber:hold                                                   -0.4
 grabber:clamp                                                  -0.9
 grabber:angle:stowed                                           98.0
@@ -105,9 +111,7 @@ grabber:angle:minimum                                          -20.0
 grabber:angle:maximum                                          98.0
 grabber:angle:collect                                          45.0
 grabber:angle:eject                                            45.0
-
-
-
+grabber:angle:closed                                            0.0
 
 #
 # Lifter subsystem constants
@@ -142,10 +146,8 @@ lifter:follower:up:ka                                          0.000556
 #
 # Intake subsystem constants
 #
-intake:eject:fast                                              -1.0
-intake:eject:middle                                            -0.5
-intake:eject:slow                                              -0.2
-intake:speed:collect                                           1.0
+intake:power:collect                                           1.0
+intake:power:hold                                              0.1
 intake:eject:fast:power                                        -0.4
 intake:eject:fast:duration                                     0.1
 
@@ -154,7 +156,7 @@ intake:eject:fast:duration                                     0.1
 #
 collector:cubesensor:h2ldelay                                  0.1
 collector:cubesensor:l2hdelay                                  0.1
-collector:grab_time                                            0.25
+collector:grab_time                                            0.08
 collector:eject:fast                                           -1
 collector:eject:slow                                           -0.1
 collector:eject_time                                           0.75
@@ -191,9 +193,9 @@ tankdrive:follower:right:ka                                     0.0001111111
 tankdrive:follower:right:kd                                     0.0
 
 tankdrive:angle_action:angle_threshold                          1.0
-tankdrive:angle_action:maxa                                     900.0
-tankdrive:angle_action:maxv                                     400.0
-tankdrive:angle_action:maxd                                     -900.0
+tankdrive:angle_action:maxa                                     1473
+tankdrive:angle_action:maxv                                     736.6
+tankdrive:angle_action:maxd                                     -1473
 tankdrive:angle_action:kp                                       0.0                     # Recommended 0.02032 - 0.03048
 tankdrive:angle_action:kv                                       0.001357466
 tankdrive:angle_action:ka                                       0.0
@@ -240,15 +242,15 @@ plotting:enabled                                               true
 #
 # Lift characterization, uses power and duration
 #
-auto:testmode:which                                               2
-auto:testmode:duration                                            3600
-auto:testmode:power                                               0.3
+auto:testmode:which                                               0
+auto:testmode:duration                                            5.0
+auto:testmode:power                                               1.0
 auto:testmode:distance                                            160
 
 #
 # Three cube scale auto mode
 #
-automode:threecube:rotate1                                       120
-automode:threecube:rotate2                                       -160
-automode:threecube:rotate3                                       180
-automode:threecube:rotate4                                       180
+automode:threecube:rotate1                                       81.8
+automode:threecube:rotate2                                       90
+automode:threecube:rotate3                                       81.8
+automode:threecube:rotate4                                       120.1

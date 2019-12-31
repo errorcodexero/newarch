@@ -59,10 +59,10 @@ lifter:sim:inches_per_tick                          0.08327
 lifter:sim:highgear:inches_per_sec_per_volt         36
 lifter:sim:lowgear:inches_per_sec_per_volt          12
 
-grabber:sim:degrees_per_second                      30
-grabber:sim:degrees_per_tick                        0.1
-grabber:sim:cube_angle                              90
+grabber:sim:degrees_per_second                      90
+grabber:sim:degrees_per_tick                        0.625
+grabber:sim:cube_angle                              0
 
-collector:eject_duration                            0.08
+collector:eject_duration                            0.02
 
 oi:axis:automode                                    6

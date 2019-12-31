@@ -27,6 +27,7 @@ namespace xero {
                 break ;                
                 
             case 2:
+                mode = std::make_shared<FollowPathAutomode>(getRobot(), "TestPath_P1");
                 break ;
 
             case 9:

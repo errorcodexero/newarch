@@ -49,10 +49,10 @@ namespace xero {
 
         void CollectCubeAction::start() {
             auto grabber_dir_p = std::make_shared<MotorEncoderGoToAction>(*getCollector().getGrabber(), "grabber:angle:collect") ;
-            getCollector().getGrabber()->setAction(grabber_dir_p) ;
+            getCollector().getGrabber()->setAction(grabber_dir_p, true) ;
 
             auto intake_dir_p = std::make_shared<SingleMotorPowerAction>(*getCollector().getIntake(), "intake:power:collect") ;
-            getCollector().getIntake()->setAction(intake_dir_p) ;
+            getCollector().getIntake()->setAction(intake_dir_p, true) ;
 
             state_ = State::waiting ;
         }
@@ -69,7 +69,7 @@ namespace xero {
                     start_ = getCollector().getRobot().getTime() ;
 
                     auto grabber_dir_p = std::make_shared<SingleMotorPowerAction>(*getCollector().getGrabber(), "intake:power:hold") ;
-                    getCollector().getGrabber()->setAction(grabber_dir_p) ;
+                    getCollector().getGrabber()->setAction(grabber_dir_p, true) ;
                 }
                 break ;
 
@@ -85,7 +85,7 @@ namespace xero {
                     // We really have the cube now, go to the hold state
                     //
                     auto intake_dir_p = std::make_shared<SingleMotorPowerAction>(*getCollector().getIntake(), "intake:power:hold") ;                   
-                    getCollector().getIntake()->setAction(intake_dir_p) ;
+                    getCollector().getIntake()->setAction(intake_dir_p, true) ;
                     getCollector().setCollectedCubeState(true) ;
                     state_ = State::clamp ;
                 }

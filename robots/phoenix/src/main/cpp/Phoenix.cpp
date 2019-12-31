@@ -55,7 +55,11 @@ namespace xero {
             paths->loadPath("ThreeScale_P2") ;
             paths->loadPath("ThreeScale_P3") ;
             paths->loadPath("ThreeScale_P4") ;
-            paths->loadPath("ThreeScale_P5") ;                                                
+            paths->loadPath("ThreeScale_P5");
+            paths->loadPath("ThreeScale_P6");
+            paths->loadPath("ThreeScale_P7") ;
+            paths->loadPath("ThreeScale_P8") ;
+            paths->loadPath("ThreeScale_P9") ;
         }
 
         void Phoenix::RobotHardwareInit() {

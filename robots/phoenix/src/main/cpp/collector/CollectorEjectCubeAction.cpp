@@ -37,11 +37,11 @@ namespace xero {
         void CollectorEjectCubeAction::start() {
             auto intake = getCollector().getIntake() ;
             auto intakeaction = std::make_shared<SingleMotorPowerAction>(*intake, speed_) ;
-            intake->setAction(intakeaction) ;
+            intake->setAction(intakeaction, true) ;
 
             auto grabber = getCollector().getGrabber() ;
             auto grabberaction = std::make_shared<MotorEncoderGoToAction>(*grabber, "grabber:angle:eject") ;
-            grabber->setAction(grabberaction) ;
+            grabber->setAction(grabberaction, true) ;
 
             start_ = getCollector().getRobot().getTime() ;
             isdone_ = false ;
@@ -52,7 +52,7 @@ namespace xero {
             if (sensor_) {
                 if (getCollector().hasCube() == false) {
                     auto intakeaction = std::make_shared<SingleMotorPowerAction>(*intake, 0.0) ;
-                    intake->setAction(intakeaction) ;
+                    intake->setAction(intakeaction, true) ;
                     isdone_ = true ;
                 }
             }
@@ -60,7 +60,7 @@ namespace xero {
                 double now = getCollector().getRobot().getTime() ;
                 if (now > start_ + delay_) {
                     auto intakeaction = std::make_shared<SingleMotorPowerAction>(*intake, 0.0) ;
-                    intake->setAction(intakeaction) ;
+                    intake->setAction(intakeaction, true) ;
                     isdone_ = true ;                    
                 }
             }

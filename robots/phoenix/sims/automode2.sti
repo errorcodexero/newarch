@@ -24,23 +24,8 @@
 
 #
 #
-0.1,oi,automode,-100
+0.1,oi,automode,-60
 
 0.1,tankdrive,xpos,1610
 0.1,tankdrive,ypos,4240
 0.1,tankdrive,angle,0
-
-#
-# Loaded with first cube
-#
-0.1,cubesensor,cube,1
-
-#
-# Collect second cube
-#
-6.0,cubesensor,cube,1
-
-#
-# Collect third cube
-#
-11.82,cubesensor,cube,1
