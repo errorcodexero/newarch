@@ -12,9 +12,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 180,
+                    "maxacceleration": 144,
                     "maxjerk": 1200,
-                    "maxvelocity": 180,
+                    "maxvelocity": 144,
                     "name": "P1",
                     "points": [
                         {
@@ -45,9 +45,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 180,
+                    "maxacceleration": 144,
                     "maxjerk": 1200,
-                    "maxvelocity": 180,
+                    "maxvelocity": 144,
                     "name": "P2",
                     "points": [
                         {
@@ -157,9 +157,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 0,
-                    "maxjerk": 1500,
-                    "maxvelocity": 0,
+                    "maxacceleration": 144,
+                    "maxjerk": 1200,
+                    "maxvelocity": 144,
                     "name": "P6",
                     "points": [
                         {
@@ -168,8 +168,13 @@
                             "y": 56.1
                         },
                         {
+                            "heading": 153.36559523691855,
+                            "x": 257.27361246348596,
+                            "y": 77.31256085686465
+                        },
+                        {
                             "heading": -180,
-                            "x": 220.50632911392407,
+                            "x": 225.50632911392407,
                             "y": 89.77604673807204
                         }
                     ],
@@ -185,9 +190,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 180,
-                    "maxjerk": 1500,
-                    "maxvelocity": 180,
+                    "maxacceleration": 144,
+                    "maxjerk": 1200,
+                    "maxvelocity": 144,
                     "name": "P7",
                     "points": [
                         {
@@ -213,9 +218,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 180,
-                    "maxjerk": 1500,
-                    "maxvelocity": 180,
+                    "maxacceleration": 144,
+                    "maxjerk": 1200,
+                    "maxvelocity": 144,
                     "name": "P8",
                     "points": [
                         {
@@ -246,9 +251,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 180,
-                    "maxjerk": 1500,
-                    "maxvelocity": 180,
+                    "maxacceleration": 144,
+                    "maxjerk": 1200,
+                    "maxvelocity": 144,
                     "name": "P9",
                     "points": [
                         {
