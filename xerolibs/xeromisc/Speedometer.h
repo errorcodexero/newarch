@@ -19,7 +19,7 @@ namespace xero {
             /// \param angle if true, measuring angular velocity, normalize to degrees between -180 and 180
             Speedometer(size_t samples, bool angle = false) {
                 max_samples_ = samples ;
-                angle = angle_ ;
+                angle_ = angle ;
                 times_.resize(samples) ;
                 distances_.resize(samples) ;
                 velocities_.resize(samples) ;

@@ -23,6 +23,9 @@ namespace xero {
             /// \brief Create a new setting with unset type
             Setting() {
                 type_ = Type::Invalid;
+                int_ = 0 ;
+                double_ = 0.0 ;
+                bool_ = false ;
             }
 
             /// \brief Create a new setting holding the given boolean value
@@ -30,6 +33,8 @@ namespace xero {
             Setting(bool b) {
                 type_ = Type::Boolean;
                 bool_ = b;
+                int_ = 0 ;
+                double_ = 0.0 ;                
             }
 
             /// \brief Create a new setting holding the given integer value
@@ -37,6 +42,8 @@ namespace xero {
             Setting(int i) {
                 type_ = Type::Integer;
                 int_ = i;
+                double_ = 0.0 ; 
+                bool_ = false ;                
             }
 
             /// \brief Create a new setting holding the given double value
@@ -44,6 +51,8 @@ namespace xero {
             Setting(double d) {
                 type_ = Type::Double;
                 double_ = d;
+                int_ = 0 ;
+                bool_ = false ;
             }
 
             /// \brief Create a new setting holding the given string value
@@ -51,6 +60,10 @@ namespace xero {
             Setting(std::string s) {
                 type_ = Type::String;
                 string_ = s;
+                int_ = 0;
+                double_ = 0.0 ; 
+                int_ = 0 ;     
+                bool_ = false ;                              
             }
 
             /// \brief Create a new setting holding the given string value
@@ -58,6 +71,10 @@ namespace xero {
             Setting(const char *s) {
                 type_ = Type::String ;
                 string_ = s ;
+                int_ = 0;
+                double_ = 0.0 ; 
+                int_ = 0 ;      
+                bool_ = false ;                             
             }
 
             /// \brief returns true if the setting is a boolean

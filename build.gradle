@@ -1,7 +1,7 @@
 plugins {
     id "cpp"
     id "google-test-test-suite"
-    id "edu.wpi.first.GradleRIO" version "2019.4.1"
+    id "edu.wpi.first.GradleRIO" version "2020.1.1"
 }
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
@@ -26,15 +26,13 @@ deploy {
         // Built in artifact to deploy arbitrary files to the roboRIO.
         fileTreeArtifact('frcStaticFileDeploy') {
             // The directory below is the local directory to deploy
-            files = fileTree(dir: 'robots/ranseur/src/main/deploy')
+            files = fileTree(dir: 'src/main/deploy')
             // Deploy to RoboRIO target, into /home/lvuser/deploy
             targets << "roborio"
             directory = '/home/lvuser/deploy'
         }
     }
 }
-
-//2019-2020 main robot name : hunga munga
 
 // Set this to true to include the src folder in the include directories passed
 // to the compiler. Some eclipse project imports depend on this behavior.
@@ -45,158 +43,14 @@ def includeSrcInIncludeRoot = false
 // Set this to true to enable desktop support.
 def includeDesktopSupport = false
 
+// Enable simulation gui support. Must check the box in vscode to enable support
+// upon debugging
+dependencies {
+    simulation wpi.deps.sim.gui(wpi.platforms.desktop, true)
+}
+
 model {
     components {
-
-        //
-        // 2019 Bunnybots - Knockout, Ranseur, New Architecture
-        //
-        // frcUserProgram(NativeExecutableSpec) {
-        //     targetPlatform wpi.platforms.roborio
-		// 	binaries.all {
-		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO" , "-DUSE_NAVX"
-		// 		lib library: "xerobase", linkage: "static"
-		// 		lib library: "xeromisc", linkage: "static"                
-		// 	}            
-        //     if (includeDesktopSupport) {
-        //         targetPlatform wpi.platforms.desktop
-        //     }
-
-        //     sources.cpp {
-        //         source {
-        //             srcDir 'robots/ranseur/src/main/cpp'
-        //             include '**/*.cpp'
-        //         }
-        //         exportedHeaders {
-        //             srcDir 'robots/ranseur/src/main/cpp'
-        //             include '**/*.h'
-        //         }
-                                
-        //     }
-
-        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-        //     useLibrary(it, "wpilib")
-        //     wpi.deps.vendor.cpp(it)
-        // }     
-
-        //
-        // 2016 Stronghold, Grond, Old Architecture
-        //
-        // frcUserProgramGrondOld(NativeExecutableSpec) {
-        //     targetPlatform wpi.platforms.roborio
-		// 	binaries.all {
-		// 		cppCompiler.args "-g"
-		// 	}            
-        //     if (includeDesktopSupport) {
-        //         targetPlatform wpi.platforms.desktop
-        //     }
-
-        //     sources.cpp {
-        //         source {
-        //             srcDir 'old/robots/sabre'
-        //             include '**/*.cpp'
-        //         }
-        //         exportedHeaders {
-        //             srcDir 'old/robots/sabre'
-        //             include '**/*.h'
-        //         }
-        //         exportedHeaders {
-        //             srcDir 'old/robots/sabre/util'
-        //             include '**/*.h'
-        //         }                
-        //         exportedHeaders {
-        //             srcDir 'old/robots/sabre/control'
-        //             include '**/*.h'
-        //         }                  
-        //         exportedHeaders {
-        //             srcDir 'old/robots/sabre/helpers'
-        //             include '**/*.h'
-        //         }                                                
-        //     }
-
-        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-        //     useLibrary(it, "wpilib")
-        //     wpi.deps.vendor.cpp(it)
-        // }   
-
-        //
-        // 2018 Power Up, Phoenix, Old Architecture
-        //
-        // frcUserProgramPhoenixOld(NativeExecutableSpec) {
-        //     targetPlatform wpi.platforms.roborio
-		// 	binaries.all {
-		// 		cppCompiler.args "-std=c++11", "-g", "-DCLAYMORE"
-		// 	}            
-        //     if (includeDesktopSupport) {
-        //         targetPlatform wpi.platforms.desktop
-        //     }
-
-        //     sources.cpp {
-        //         source {
-        //             srcDir 'old/robots/claymore'
-        //             include '**/*.cpp'
-        //         }
-        //         source {
-        //             srcDir 'old/robots/common/helpers'
-        //             include '**/*.cpp'
-        //         }
-        //         exportedHeaders {
-        //             srcDir 'old/robots/claymore'
-        //             include '**/*.h'
-        //         }
-        //         exportedHeaders {
-        //             srcDir 'old/robots/claymore/util'
-        //             include '**/*.h'
-        //         }                
-        //         exportedHeaders {
-        //             srcDir 'old/robots/claymore/control'
-        //             include '**/*.h'
-        //         }                  
-        //         exportedHeaders {
-        //             srcDir 'old/robots/common/helpers'
-        //             include '**/*.h'
-        //         }                                                
-        //     }
-
-        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-        //     useLibrary(it, "wpilib")
-        //     wpi.deps.vendor.cpp(it)
-        // }         
-
-        // //
-        // // 2019 Deep Space, Endurance, New Architecture
-        // //
-        // frcUserProgram(NativeExecutableSpec) {
-        //     targetPlatform wpi.platforms.roborio
-		// 	binaries.all {
-		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-		// 		lib library: "xerobase", linkage: "static"
-		// 		lib library: "xeromisc", linkage: "static"                
-		// 	}            
-        //     if (includeDesktopSupport) {
-        //         targetPlatform wpi.platforms.desktop
-        //     }
-
-        //     sources.cpp {
-        //         source {
-        //             srcDir 'robots/phaser/src/main/cpp'
-        //             include '**/*.cpp'
-        //         }
-        //         exportedHeaders {
-        //             srcDir 'robots/phaser/src/main/cpp'
-        //             include '**/*.h'
-        //         }
-                                
-        //     }
-
-        //     // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-        //     useLibrary(it, "wpilib")
-        //     wpi.deps.vendor.cpp(it)
-        // }     
-
-        // //
-        // 2018 Power Up, Phoenix, New Architecture
-        //
         frcUserProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
 			binaries.all {
@@ -211,19 +65,20 @@ model {
             sources.cpp {
                 source {
                     srcDir 'robots/phoenix/src/main/cpp'
-                    include '**/*.cpp'
+                    include '**/*.cpp', '**/*.cc'
                 }
                 exportedHeaders {
                     srcDir 'robots/phoenix/src/main/cpp'
-                    include '**/*.h'
+                    if (includeSrcInIncludeRoot) {
+                        srcDir 'src/main/cpp'
+                    }
                 }
-                                
             }
 
-            // Defining my dependencies. In this case, WPILibs (+ friends), and vendor libraries.
-            useLibrary(it, "wpilib")
+            // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
+            wpi.deps.wpilib(it)
             wpi.deps.vendor.cpp(it)
-        }            
+        }
 
 		xeromisc(NativeLibrarySpec) {
             targetPlatform wpi.platforms.roborio
@@ -243,8 +98,8 @@ model {
 					include "**/*.h"
 				}
 			}
-            useLibrary(it, "wpilib")       
-            wpi.deps.vendor.cpp(it)                           
+            wpi.deps.wpilib(it)
+            wpi.deps.vendor.cpp(it)                        
 		}
 
 		xerobase(NativeLibrarySpec) {
@@ -267,9 +122,9 @@ model {
 
 				lib library: "xeromisc", linkage: "static"
 			}
-            useLibrary(it, "wpilib")
-            wpi.deps.vendor.cpp(it)            
-		}        
+            wpi.deps.wpilib(it)
+            wpi.deps.vendor.cpp(it)       
+		}     
     }
 
     testSuites {
@@ -283,7 +138,8 @@ model {
                 }
             }
 
-            useLibrary(it, "wpilib", "googletest")
+            wpi.deps.wpilib(it)
+            wpi.deps.googleTest(it)
             wpi.deps.vendor.cpp(it)
         }
     }

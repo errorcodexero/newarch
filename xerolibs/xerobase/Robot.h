@@ -65,7 +65,7 @@ namespace xero {
             /// given.
             /// \param name the name of the robot, must be a legal directory name in the filesystem
             /// \param looptime the loop time for each robot loop (generally between 0.02 and 0.05)
-            Robot(const std::string &name, double looptime = 0.050) ;
+            Robot(const std::string &name, double looptime = 0.02) ;
 
             /// \brief destroy the robot object
             virtual ~Robot() ;

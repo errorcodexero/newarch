@@ -26,7 +26,7 @@ namespace xero {
             return theOne->getTime() ;
         }
         
-        Robot::Robot(const std::string &name, double looptime) : TimedRobot(looptime) {
+        Robot::Robot(const std::string &name, double looptime) : TimedRobot(static_cast<units::second_t>(looptime)) {
             assert(theOne == nullptr) ;
             theOne = this ;
             name_ = name ;
