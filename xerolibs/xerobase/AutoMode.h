@@ -27,10 +27,6 @@ namespace xero {
                 return desc_ ;
             }
 
-            /// \brief create a human readable string representing this action sequence
-            /// \returns a human readable string representing this action sequence
-            std::string toString();
-
         protected:
             Robot &getRobot() {
                 return robot_ ;

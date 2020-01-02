@@ -11,6 +11,7 @@ namespace xero
 
         Action::Action(MessageLogger &logger) : logger_(logger)
         {
+            action_id_ = global_action_id_++;            
             is_done_ = false;
         }
 
@@ -20,11 +21,9 @@ namespace xero
 
         void Action::start()
         {
-            action_id_ = global_action_id_++;
-
             setNotDone();
             logger_.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS);
-            logger_ << "starting action: id = " << action_id_ << ", action " << toString();
+            logger_ << "starting action: id " << action_id_ << ", action " << toString();
             logger_.endMessage();
         }
 

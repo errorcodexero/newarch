@@ -8,7 +8,6 @@ namespace xero
 {
     namespace base
     {
-
         AutoMode::AutoMode(Robot &robot, const std::string &name, const std::string &desc) : SequenceAction(robot.getMessageLogger()), robot_(robot)
         {
             name_ = name ;
@@ -18,14 +17,5 @@ namespace xero
         AutoMode::~AutoMode()
         {            
         }
-
-        std::string AutoMode::toString()
-        {
-            std::string result ;
-            result += name_;
-            result += SequenceAction::toString() ;
-            return result ;
-        }
-
     }
 }

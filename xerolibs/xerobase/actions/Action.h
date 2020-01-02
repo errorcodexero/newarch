@@ -25,6 +25,10 @@ namespace xero {
             Action(xero::misc::MessageLogger &logger);
             virtual ~Action();
 
+            uint32_t getID() const {
+                return action_id_ ;
+            }
+
             /// \brief Start the action; called once per action when it starts
             virtual void start();
 

@@ -51,17 +51,21 @@ namespace xero {
         /// \brief return a human readable string representing the action
         /// \returns a human readable strinct
         std::string ParallelAction::toString() {
-            std::string ret("Parallel [") ;
+            std::string ret("Parallel [[") ;
             bool first = true ;
 
             for(auto act : action_list_) {
                 if (!first)
                     ret += "," ;
 
+                ret += std::to_string(act->getID()) ;
+                ret += "{{" ;
                 ret += act->toString() ;
+                ret += "}}" ;
                 first = false ;
             }
 
+            ret += "]]" ;
             return ret ;
         }
     }

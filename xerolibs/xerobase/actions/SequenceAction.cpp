@@ -111,16 +111,22 @@ namespace xero
 
         std::string SequenceAction::toString()
         {
-            std::string result ;
-            result += " [" ;
-            for(size_t i = 0 ; i < actions_.size() ; i++) {
-                auto ptr = actions_[i] ;
-                if (i != 0)
-                    result += "," ;
-                result += actions_[i]->toString() ;
+            std::string ret = "Sequence [[" ;
+            bool first = true ;
+
+            for(auto act : actions_) {
+                if (!first)
+                    ret += "," ;
+
+                ret += std::to_string(act->getID()) ;
+                ret += "{{" ;
+                ret += act->toString() ;
+                ret += "}}" ;
+                first = false ;
             }
-            result += "]" ;
-            return result ;
+
+            ret += "]]" ;
+            return ret ;
         }
 
 

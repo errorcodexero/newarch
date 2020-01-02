@@ -50,8 +50,8 @@ namespace xero {
             std::string result ;
 
             result = "DispatchAction(" ;
-            result += subsystem_->getName() + "," + action_->toString() ;
-            result += ", " ;
+            result += subsystem_->getName() + "," + std::to_string(action_->getID()) + "{{" + action_->toString() ;
+            result += "}}, " ;
             result += block_ ? "BLOCK" : "NONBLOCKING" ;
             result += ")" ;
             return result ;
