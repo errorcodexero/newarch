@@ -23,8 +23,8 @@ namespace xero {
         }
 
         void TankDriveTimedPowerAction::start() {
-            std::cout << "Powered " << left_ << " " << right_ << std::endl ;
-            isdone_ = false ;
+            TankDriveAction::start();
+
             start_ = getTankDrive().getRobot().getTime() ;
             if (getTankDrive().hasGearShifter()) {
                 if (lowgear_)
@@ -35,19 +35,18 @@ namespace xero {
             setMotorsToPercents(left_, right_) ;
         }
 
-        void TankDriveTimedPowerAction::run() {                
-            isdone_ = (getTankDrive().getRobot().getTime() > start_ + duration_) ;
-            if (isdone_) {
+        void TankDriveTimedPowerAction::run() {
+            TankDriveAction::run();
+
+            if (getTankDrive().getRobot().getTime() > start_ + duration_)
+            {
+                setDone();
                 setMotorsToPercents(0.0, 0.0) ;
             }
         }
 
-        bool TankDriveTimedPowerAction::isDone() {
-            return isdone_ ;
-        }
-
         void TankDriveTimedPowerAction::cancel()  {
-            isdone_ = true ;
+            TankDriveAction::cancel();
             setMotorsToPercents(0, 0) ;
         }
 

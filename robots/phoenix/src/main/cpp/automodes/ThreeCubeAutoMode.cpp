@@ -45,7 +45,7 @@ namespace xero
 
 
             // Parallel one - drive to scale while raising the lift
-            parallel = std::make_shared<ParallelAction>();
+            parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
             pushAction(parallel);
 
             // Parallel one action one - action to drive to scale
@@ -55,7 +55,7 @@ namespace xero
             // Parallel one action two - sequence to raise lift to scale height
             sequence = std::make_shared<SequenceAction>(phoenix.getMessageLogger());
             parallel->addAction(sequence);
-            sequence->pushAction(std::make_shared<DelayAction>(0.0));
+            sequence->pushAction(std::make_shared<DelayAction>(phoenix.getMessageLogger(), 0.0));
             sequence->pushSubActionPair(lifter, std::make_shared<LifterShiftAction>(*lifter, true)) ;                          
             sequence->pushSubActionPair(lifter, std::make_shared<LifterBreakAction>(*lifter, false)) ;
             sequence->pushSubActionPair(lifter, std::make_shared<MotorEncoderGoToAction>(*lifter, "lifter:height:scale"));
@@ -66,7 +66,7 @@ namespace xero
             pushSubActionPair(collector, act);
 
             // Parallel two - action to lower lift to floor, rotate drivebase and drive to cube at corner of scale
-            parallel = std::make_shared<ParallelAction>();
+            parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
             pushAction(parallel);
             
             // Parllel two action one - sequence to lower lift to floor height
@@ -88,7 +88,7 @@ namespace xero
             sequence->pushSubActionPair(tankdrive, act);
 
             // Parallel three - action to rotate to scale and then drive to scale while raising lift
-            parallel = std::make_shared<ParallelAction>();
+            parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
             pushAction(parallel);
 
             // Parallel three action one - sequence to rotate to scale and drive to scale
@@ -113,7 +113,7 @@ namespace xero
             pushSubActionPair(collector, act);
 
             // Parallel four - rotate to scale and drive to second cube while lower lift to floor
-            parallel = std::make_shared<ParallelAction>();
+            parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
             pushAction(parallel);
 
             // Parallel four action one - sequence to lower lift to floor
@@ -137,7 +137,7 @@ namespace xero
             sequence->pushSubActionPair(tankdrive, act);
 
             // Parallel five - action to rotate to scale and then drive to scale while raising lift
-            parallel = std::make_shared<ParallelAction>();
+            parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
             pushAction(parallel);
 
             // Parallel three action one - sequence to rotate to scale and drive to scale

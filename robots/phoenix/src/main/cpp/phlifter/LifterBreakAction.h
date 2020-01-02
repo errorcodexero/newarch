@@ -18,20 +18,22 @@ namespace xero
             }
 
             virtual void start() {
+                LifterAction::start() ;
+
                 if (break_)
                     getLifter().setBrakeOn();
                 else
                     getLifter().setBrakeOff();
+
+                setDone();
             }
 
-            virtual void run() {                
-            }
-
-            virtual bool isDone() {
-                return true ;
+            virtual void run() {
+                LifterAction::run();
             }
 
             virtual void cancel() {
+                LifterAction::cancel();
             }
 
             virtual std::string toString() {

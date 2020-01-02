@@ -70,7 +70,7 @@ namespace xero
                 case 4 :
                     act = std::make_shared<BunnyArmDeployAction>(*bunnyarm, true) ;
                     pushSubActionPair(bunnyarm, act) ;
-                    pushAction(std::make_shared<DelayAction>(3.0)) ;  
+                    pushAction(std::make_shared<DelayAction>(robot.getMessageLogger(), 3.0)) ;  
                     act = std::make_shared<BunnyArmDeployAction>(*bunnyarm, false) ;
                     pushSubActionPair(bunnyarm, act) ;                                      
                 break ;
@@ -82,7 +82,7 @@ namespace xero
                 case 6 :
                     act = std::make_shared<TubToucherDeployAction>(*tubtoucher, true) ;
                     pushSubActionPair(tubtoucher, act) ;
-                    pushAction(std::make_shared<DelayAction>(3.0)) ;
+                    pushAction(std::make_shared<DelayAction>(robot.getMessageLogger(), 3.0)) ;
                     act = std::make_shared<TubToucherDeployAction>(*tubtoucher, false) ;
                     pushSubActionPair(tubtoucher, act) ;
                 break ;
@@ -90,13 +90,13 @@ namespace xero
                 case 7:
                     act = std::make_shared<TubCollectorDutyCycleAction>(*tubcollector, power) ;
                     pushSubActionPair(tubcollector, act) ;                
-                    pushAction(std::make_shared<DelayAction>(30.0)) ; 
+                    pushAction(std::make_shared<DelayAction>(robot.getMessageLogger(), 30.0)) ; 
                     act = std::make_shared<TubCollectorDutyCycleAction>(*tubcollector, 0.0) ;  
                     pushSubActionPair(tubcollector, act) ;                                                           
                     break ;
 
                 case 8:
-                    par = std::make_shared<ParallelAction>() ;
+                    par = std::make_shared<ParallelAction>(robot.getMessageLogger()) ;
 
                     act = std::make_shared<MotorEncoderGoToAction>(*tubarm, -38) ;
                     par->addSubActionPair(tubarm, act, true) ;
@@ -109,7 +109,7 @@ namespace xero
 
                     pushAction(par) ;
 
-                    par = std::make_shared<ParallelAction>() ;
+                    par = std::make_shared<ParallelAction>(robot.getMessageLogger()) ;
 
                     act = std::make_shared<MotorEncoderGoToAction>(*tubarm, 90) ;
                     par->addSubActionPair(tubarm, act, true) ;
@@ -127,7 +127,7 @@ namespace xero
                     break ;
                     
                 case 9:
-                    par = std::make_shared<ParallelAction>() ;
+                    par = std::make_shared<ParallelAction>(robot.getMessageLogger()) ;
 
                     act = std::make_shared<MotorEncoderGoToAction>(*tubarm, -38) ;
                     par->addSubActionPair(tubarm, act, true) ;
@@ -137,10 +137,10 @@ namespace xero
 
                     pushAction(par) ;
 
-                    act = std::make_shared<DelayAction>(3.0) ;
+                    act = std::make_shared<DelayAction>(robot.getMessageLogger(), 3.0) ;
                     pushAction(act) ;
 
-                    par = std::make_shared<ParallelAction>() ;
+                    par = std::make_shared<ParallelAction>(robot.getMessageLogger()) ;
 
                     act = std::make_shared<MotorEncoderGoToAction>(*tubarm, 90) ;
                     par->addSubActionPair(tubarm, act, true) ;

@@ -18,7 +18,6 @@ namespace xero {
 
             virtual void start() ;
             virtual void run() ;
-            virtual bool isDone() ;
             virtual void cancel() ;
             virtual std::string toString() {
                 return action_name ;

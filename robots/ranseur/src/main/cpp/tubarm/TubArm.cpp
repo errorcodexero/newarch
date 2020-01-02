@@ -1,5 +1,4 @@
 #include "TubArm.h"
-#include "TubArmAction.h"
 #include "ranseurids.h"
 #include <Robot.h>
 #include <actions/SequenceAction.h>
@@ -17,19 +16,6 @@ namespace xero {
 
         TubArm::~TubArm() {
         }
-
-        // sees whether or not 
-        bool TubArm::canAcceptAction(ActionPtr action) {
-            if (MotorEncoderSubsystem::canAcceptAction(action))
-                return true ;
-
-            auto tub_arm_act_p = std::dynamic_pointer_cast<TubArmAction>(action) ;
-            return (tub_arm_act_p != nullptr);
-        }
-
-        void TubArm::computeState() {
-            MotorEncoderSubsystem::computeState() ;
-        }        
 
         void TubArm::init(LoopType lt) 
         {

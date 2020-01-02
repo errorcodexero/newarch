@@ -12,7 +12,7 @@ namespace xero {
         /// \brief A class capable of doing work
         class ParallelAction : public CompositeAction {
         public:
-            ParallelAction() ;
+            ParallelAction(xero::misc::MessageLogger &logger) ;
             virtual ~ParallelAction() ;
 
             /// \brief add a parallel action
@@ -48,16 +48,12 @@ namespace xero {
             /// This method calls the cancel method on each of the parallel actions to be executes
             virtual void cancel() ;
 
-            /// \brief Return true if the action is complete.
-            /// This method returns true only when all of the parallel actions are complete.
-            /// \returns True if the action is complete
-            virtual bool isDone() ;
-
             /// \brief return a human readable string representing the action
             /// \returns a human readable strinct
             virtual std::string toString() ;
 
             virtual std::vector<ActionPtr> getChildren() { return action_list_; }
+
         private:
             std::vector<std::shared_ptr<Action>> action_list_ ;
 

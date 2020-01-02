@@ -17,9 +17,6 @@ namespace xero {
             public:
             TubWrist(xero::base::Subsystem* parent) ;
             virtual ~TubWrist() ;
-
-            virtual bool canAcceptAction(xero::base::ActionPtr action) ;
-            virtual void computeState() ;
         } ;
     }
 }

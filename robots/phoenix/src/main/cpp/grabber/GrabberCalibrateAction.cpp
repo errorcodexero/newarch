@@ -20,13 +20,24 @@ namespace xero {
         GrabberCalibrateAction::~GrabberCalibrateAction() {            
         }
 
+        void GrabberCalibrateAction::start() {
+            GrabberAction::start();
+
+            is_calibrated_ = false;
+        }
+
         void GrabberCalibrateAction::run() {
-            if (!is_calibrated_) {
+            GrabberAction::run();
+
+            if (!is_calibrated_)
+            {
                 assert(false) ;
             }
         }
 
         void GrabberCalibrateAction::cancel() {
+            GrabberAction::cancel();
+            setDone();
         }
     }
 }

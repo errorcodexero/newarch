@@ -11,17 +11,17 @@ namespace xero {
             virtual ~LifterCalibrateAction() ;
 
             virtual void start() {
-                getLifter().calibrate() ;
+                LifterAction::start();
+                getLifter().calibrate();
+                setDone();
             }
 
-            virtual void run() {                
-            }
-
-            virtual bool isDone() {
-                return true ;
+            virtual void run() {
+                LifterAction::run();
             }
 
             virtual void cancel() {
+                setDone();
             }
 
             virtual std::string toString() {

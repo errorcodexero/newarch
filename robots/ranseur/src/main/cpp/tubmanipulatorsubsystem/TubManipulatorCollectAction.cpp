@@ -14,7 +14,7 @@ namespace xero {
 
         std::string TubManipulatorCollectAction::action_name("TubManipulatorCollectAction");
 
-        TubManipulatorCollectAction::TubManipulatorCollectAction(TubManipulatorSubsystem &tubm) : TubManipulatorAction(tubm) {
+        TubManipulatorCollectAction::TubManipulatorCollectAction(TubManipulatorSubsystem &tubm) : TubManipulatorAction(tubm), parallel_(tubm.getRobot().getMessageLogger()) {
             double v ;                                          //value
             ActionPtr act ;                                     //action
             auto collector = tubm.getTubCollector() ;
@@ -34,12 +34,8 @@ namespace xero {
             /// Collector ///
             act = std::make_shared<TubCollectorTubAction>(*collector) ;
             parallel_.addSubActionPair(collector, act) ;
-
-            ///   ^^^ grab the angle values from the dat files ^^^   ///
-            ///add the action and the subsytem to the parallel action///
-
         }
-
+        
         TubManipulatorCollectAction::~TubManipulatorCollectAction() {            
         }
         

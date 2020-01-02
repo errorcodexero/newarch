@@ -34,10 +34,6 @@ namespace xero {
             /// \brief Cancel the action
             virtual void cancel() ;
 
-            /// \brief Return true if the action is complete
-            /// \returns True if the action is complete
-            virtual bool isDone() ;
-
             /// \brief return a human readable string representing the action
             /// \returns a human readable string representing the action
             virtual std::string toString() ;
@@ -45,7 +41,6 @@ namespace xero {
         private:
             double start_time_ ;
             double start_angle_ ;
-            bool is_done_ ;
             double power_;
             double total_ ;
             double start_right_ ;

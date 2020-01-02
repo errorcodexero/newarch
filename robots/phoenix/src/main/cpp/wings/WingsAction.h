@@ -1,6 +1,8 @@
 #pragma once
 
+#include "wings/Wings.h"
 #include <actions/Action.h>
+#include <Robot.h>
 
 namespace xero {
     namespace phoenix {
@@ -12,11 +14,11 @@ namespace xero {
         /// of an action to be assigned to a subsystem.  Second, it stores a reference to the actual
         /// Wings subsystem so that derived classes has access to the subsystem object (i.e. the Wings
         /// objects).
-        class WingsAction : public xero::base::Action {
+        class WingsAction : public xero::base::GenericAction {
         public:
             /// \brief Create the WingAction object
             /// \param wings a reference to the wings subsystem object
-            WingsAction(Wings &wings) : wings_(wings) {                
+            WingsAction(Wings &wings) : GenericAction(wings.getRobot().getMessageLogger()), wings_(wings) {                
             }
             
             /// \brief Return the wings subsystem object associated with this action

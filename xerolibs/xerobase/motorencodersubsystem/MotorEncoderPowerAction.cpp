@@ -41,6 +41,7 @@ namespace xero {
 
         void MotorEncoderPowerAction::start() {
             SingleMotorPowerAction::start();
+
             if (plot_id_ != -1)
             {
                 getSubsystem().startPlot(plot_id_, columns_);
@@ -63,18 +64,16 @@ namespace xero {
 
                 sub.addPlotData(plot_id_, data);
             }
-        }
 
-        bool MotorEncoderPowerAction::isDone()
-        {
-            bool ret = SingleMotorPowerAction::isDone();
-            if (ret && plot_id_ != -1)
+            if (isDone() && plot_id_ != -1)
             {
                 getSubsystem().endPlot(plot_id_);
                 plot_id_ = -1;
             }
+        }
 
-            return ret;
+        void MotorEncoderPowerAction::cancel() {
+            SingleMotorPowerAction::cancel();
         }
     }
 }

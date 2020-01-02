@@ -37,10 +37,6 @@ namespace xero {
             /// \brief Cancel the action
             virtual void cancel() ;
 
-            /// \brief Return true if the action is complete
-            /// \returns True if the action is complete
-            virtual bool isDone() ;
-
             /// \brief return a human readable string representing the action
             /// \returns a human readable string representing the action
             virtual std::string toString() ;
@@ -53,7 +49,6 @@ namespace xero {
             double angle_threshold_;
             double target_angle_;
             double total_angle_so_far_ ;
-            bool is_done_;
             bool relative_;
 
             int plot_id_;

@@ -12,7 +12,6 @@ namespace xero {
             /// \brief Create the wings deploy action
             /// \param wings a reference to the Wings subsystem
             WingsDeployAction(Wings &wings) : WingsAction(wings) { 
-                is_done_ = false;               
             }
 
             /// \brief Destroys a wings deploy action object
@@ -21,25 +20,17 @@ namespace xero {
 
             /// \brief called to start the action.  
             /// For this WingsDepolyAction this method does nothing
-            virtual void start() {                
-                is_done_ = false ;
+            virtual void start() {
+                WingsAction::start();
             }
 
             /// \brief called during the robot loop to execute this action
             /// This method reaches into the Wings subsystem and sets the solenoid that
             /// deploys the wings.
             virtual void run() {
-                if (!is_done_) {
-                    Wings &wings = getWings() ;
-                    wings.solenoid_->Set(true);
-                    is_done_ = true ;
-                }
-            }
-
-            /// \brief this method returns true when this action is done.
-            /// This action is done when the wings have been deployed
-            virtual bool isDone() {
-                return is_done_ ;
+                WingsAction::run();
+                Wings &wings = getWings();
+                wings.solenoid_->Set(true);
             }
 
             /// \brief this method is called to cancel this action.
@@ -48,7 +39,7 @@ namespace xero {
             /// it.  If the wings are not deployed, they will not be deployed after cancel
             /// is called.
             virtual void cancel() {
-                is_done_ = true ;
+                setDone();
             }
 
             /// \brief return a name to this action.
@@ -62,11 +53,6 @@ namespace xero {
             }
 
         private:
-            //
-            // Set to true to indicate the wings are deployed.  
-            //
-            bool is_done_ ;
-
             //
             // The name of this action to return via the toString() call.
             //

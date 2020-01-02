@@ -1,14 +1,16 @@
 #pragma once
 
+#include "bunnyarm/BunnyArm.h"
 #include <actions/Action.h>
+#include <Robot.h>
 
 namespace xero {
     namespace ranseur {
         class BunnyArm ;
 
-        class BunnyArmAction : public xero::base::Action {
+        class BunnyArmAction : public xero::base::GenericAction {
         public:
-            BunnyArmAction(BunnyArm &bunnyArm) : bunnyArm_(bunnyArm) {                
+            BunnyArmAction(BunnyArm &bunnyArm) : GenericAction(bunnyArm.getRobot().getMessageLogger()), bunnyArm_(bunnyArm) {
             }
             
             BunnyArm &getBunnyArm() {

@@ -46,6 +46,8 @@ namespace xero {
         }
 
         void TankDriveFollowPathAction::start() {
+            TankDriveAction::start();
+
             nextFlag_ = 0;
             std::sort(flags_.begin(), flags_.end());
 
@@ -60,36 +62,18 @@ namespace xero {
             if (getTankDrive().hasGearShifter())
                 getTankDrive().highGear() ;
 
-            auto &logger = getTankDrive().getRobot().getMessageLogger() ;
-            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
-            logger << "runtime" ;
-            logger << ",ltpos" ;
-            logger << ",lapos" ;
-            logger << ",ltvel" ;
-            logger << ",lout" ;
-            logger << "," ;
-            logger << ",rtpos" ;
-            logger << ",rapos" ;
-            logger << ",rtvel" ;
-            logger << ",rout" ;
-            logger << "," ;
-            logger << ",thead" ;
-            logger << ",ahead" ;
-            logger << ",angerr" ;
-            logger << ",turn" ;
-            logger.endMessage() ;
             getTankDrive().startPlot(plot_id_, plot_columns_) ;
             getTankDrive().startTrip(TripName) ;
         }
 
         void TankDriveFollowPathAction::run() {
+            TankDriveAction::run();
+
             std::vector<double> data ;
             auto &td = getTankDrive() ;
             auto &rb = td.getRobot() ;
 
             if (index_ < path_->size()) {
-                auto &logger = td.getRobot().getMessageLogger() ;
-
                 double dt = td.getRobot().getDeltaTime() ;
                 const XeroSegment lseg = path_->getLeftSegment(index_) ;
                 const XeroSegment rseg = path_->getRightSegment(index_) ;
@@ -152,24 +136,6 @@ namespace xero {
 
                 setMotorsToPercents(lout, rout) ;
 
-                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
-                logger << td.getRobot().getTime() - start_time_ ;
-                logger << "," << lpos ;
-                logger << "," << ldist ;
-                logger << "," << lvel ;                
-                logger << "," << lout ;
-                logger << "," ;
-                logger << "," << rpos ;
-                logger << "," << rdist ;
-                logger << "," << rvel ;                
-                logger << "," << rout ;
-                logger << "," ;
-                logger << "," << thead ;
-                logger << "," << ahead ;
-                logger << "," << angerr ;
-                logger << "," << turn ;
-                logger.endMessage() ;
-
                 data.clear() ;
                 data.push_back(rb.getTime() - start_time_) ;
 
@@ -209,19 +175,19 @@ namespace xero {
                 getTankDrive().addPlotData(plot_id_, data) ;
             }
             index_++ ;     
+
             if (index_ == path_->size())
             {
                 getTankDrive().endPlot(plot_id_) ;
                 setMotorsToPercents(0.0, 0.0) ;
+                setDone();
             }
         }
 
-        bool TankDriveFollowPathAction::isDone() {
-            return index_ >= path_->size() ;
-        }
-
         void TankDriveFollowPathAction::cancel()  {
+            TankDriveAction::cancel();
             index_ = path_->size() ;
+            setDone();
             getTankDrive().endPlot(plot_id_) ;
         }
 

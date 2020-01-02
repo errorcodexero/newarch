@@ -11,6 +11,8 @@ namespace xero {
         }
 
         void MotorEncoderHoldAction::start() {
+            MotorEncoderSubsystemAction::start();
+
             auto &sub = getSubsystem();
 
             pid_.initFromSettingsExtended(
@@ -19,12 +21,15 @@ namespace xero {
                 sub.isAngular()
             );
 
-            if (!hasExplicitTarget_) target_ = getSubsystem().getPosition();
-            cancelled_ = false;
+            if (!hasExplicitTarget_) 
+                target_ = getSubsystem().getPosition();
+
             pid_.reset();
         }
 
         void MotorEncoderHoldAction::run() {
+            MotorEncoderSubsystemAction::run();
+
             auto &sub = getSubsystem();
             auto &logger = sub.getRobot().getMessageLogger() ;
 
@@ -37,6 +42,13 @@ namespace xero {
             logger << " actual " << sub.getPosition() ;
             logger << " output " << out ;
             logger.endMessage() ;
+        }
+
+        void MotorEncoderHoldAction::cancel()
+        {
+            MotorEncoderSubsystemAction::cancel();
+            setDone();
+            getSubsystem().setMotor(0.0);
         }
     }
 }

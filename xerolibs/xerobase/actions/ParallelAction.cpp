@@ -3,7 +3,7 @@
 
 namespace xero {
     namespace base {
-        ParallelAction::ParallelAction() {
+        ParallelAction::ParallelAction(xero::misc::MessageLogger &logger) : CompositeAction(logger) {
         }
 
         ParallelAction::~ParallelAction() {            
@@ -12,6 +12,7 @@ namespace xero {
         /// \brief Start the action; called once per action when it starts
         /// This method calls the start method on each of the parallel actions to be executed
         void ParallelAction::start() {
+            CompositeAction::start();
             for(auto act : action_list_)
                 act->start() ;
         }
@@ -19,33 +20,32 @@ namespace xero {
         /// \brief Manage the action; called each time through the robot loop
         /// This method calls the run method on each of the parallel actions to be executes
         void ParallelAction::run() {
+            CompositeAction::run();
+
+            bool done = true;
             for(auto act : action_list_)
-                act->run() ;
+            {
+                if (!act->isDone())
+                {
+                    act->run() ;
+                    if (!act->isDone())
+                        done = false;
+                }
+            }
+
+            if (done)
+                setDone();
         }
 
         /// \brief Cancel the action
         /// This method calls the cancel method on each of the parallel actions to be executes
         void ParallelAction::cancel() {
+            CompositeAction::cancel();
             for(auto act : action_list_) {
                 if (!act->isDone()) {
                     act->cancel() ;
                 }
             }
-        }
-
-        /// \brief Return true if the action is complete.
-        /// This method returns true only when all of the parallel actions are complete.
-        /// \returns True if the action is complete
-        bool ParallelAction::isDone() {
-            bool done = true ;
-            for(auto act : action_list_) {
-                if (!act->isDone()) {
-                    done = false ;
-                    break ;
-                }
-            }
-
-            return done  ;
         }
 
         /// \brief return a human readable string representing the action

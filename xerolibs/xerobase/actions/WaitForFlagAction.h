@@ -13,16 +13,24 @@ namespace xero {
             /// Constructs a WaitForFlagAction.
             /// \param flagManager The flag manager.
             /// \param flag The flag to wait for.
-            WaitForFlagAction(std::shared_ptr<xero::misc::FlagManager> flagManager, 
+            WaitForFlagAction(xero::misc::MessageLogger &logger, 
+                              std::shared_ptr<xero::misc::FlagManager> flagManager, 
                               xero::misc::Flag flag): 
-            flagManager_(flagManager_), flag_(flag) {}
+                GenericAction(logger), flagManager_(flagManager_), flag_(flag) 
+            {
 
-            virtual void start() { isDone_ = false; }
-            virtual void cancel() { isDone_ = true; }
+            }
 
-            virtual bool isDone() {
-                if (isDone_) return true;
-                else return (isDone_ = flagManager_->isSet(flag_));
+            virtual void start() {
+            }
+
+            virtual void cancel() {
+                setDone();
+            }
+
+            virtual void run() {
+                if (flagManager_->isSet(flag_))
+                    setDone();
             }
 
             virtual std::string toString() {
@@ -33,8 +41,6 @@ namespace xero {
         private:
             std::shared_ptr<xero::misc::FlagManager> flagManager_;
             xero::misc::Flag flag_;
-
-            bool isDone_;
         };
     }
 }

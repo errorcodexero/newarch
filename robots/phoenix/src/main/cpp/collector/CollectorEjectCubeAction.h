@@ -13,7 +13,6 @@ namespace xero {
 
             virtual void start() ;
             virtual void run() ;
-            virtual bool isDone() ;
             virtual void cancel() ;
             virtual std::string toString() ;            
 
@@ -21,7 +20,6 @@ namespace xero {
             bool sensor_ ;
             double speed_ ;
             double delay_ ;
-            bool isdone_ ;
             double start_ ;
         } ;
     }

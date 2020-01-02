@@ -1,18 +1,19 @@
 #pragma once
 
+#include "tubmanipulatorsubsystem/TubManipulatorSubsystem.h"
 #include <actions/Action.h>
-#include <actions/DispatchAction.h>
-#include <actions/ParallelAction.h>
+#include <Robot.h>
 
 namespace xero {
     namespace ranseur {
         class TubManipulatorSubsystem ;
 
-        class TubManipulatorAction : public xero::base::Action {
+        class TubManipulatorAction : public xero::base::GenericAction {
 
         public:
 
-            TubManipulatorAction(TubManipulatorSubsystem &tubmanipulatorsubsystem) : tubmanipulator_(tubmanipulatorsubsystem) {                
+            TubManipulatorAction(TubManipulatorSubsystem &tubmanipulatorsubsystem) 
+                        : GenericAction(tubmanipulatorsubsystem.getRobot().getMessageLogger()), tubmanipulator_(tubmanipulatorsubsystem) {
             }
 
             virtual ~TubManipulatorAction() {                

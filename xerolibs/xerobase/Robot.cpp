@@ -49,7 +49,7 @@ namespace xero {
             std::fill(iterations_.begin(), iterations_.end(), 0) ;
 
             setupPaths() ;
-            srand(time(NULL)) ;
+            srand(::time(NULL)) ;
 
             message_logger_.setTimeFunction(getTimeFunc) ;
 

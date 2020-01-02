@@ -71,7 +71,7 @@ namespace xero
 
             case 21:    // Test goto angle
                 pushSubActionPair(grabber, std::make_shared<MotorEncoderGoToAction>(*grabber, 90));                 // Go to a fixed angle
-                pushAction(std::make_shared<DelayAction>(2.0));
+                pushAction(std::make_shared<DelayAction>(phoenix.getMessageLogger(), 2.0));
                 pushSubActionPair(grabber, std::make_shared<MotorEncoderGoToAction>(*grabber, 0));                 // Go to a fixed angle                
                 break;                
 

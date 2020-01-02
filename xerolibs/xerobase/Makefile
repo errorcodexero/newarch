@@ -11,12 +11,11 @@ ifeq ($(PLATFORM),SIMULATOR)
 SIMSOURCES = \
 	singlemotorsubsystem/SingleMotorSubsystem.cpp\
 	singlemotorsubsystem/SingleMotorPowerAction.cpp\
-	cameratracker/CameraTracker.cpp\
-	cameratracker/LimeLight.cpp\
-	cameratracker/CameraChangeAction.cpp
+	cameratracker/LimeLight.cpp
 endif
 
 SOURCES = \
+	actions/Action.cpp\
 	actions/SequenceAction.cpp\
 	actions/DelayAction.cpp\
 	actions/TerminateAction.cpp\
@@ -42,8 +41,6 @@ SOURCES = \
 	tankdrive/modes/FollowPathAutomode.cpp\
 	tankdrive/modes/ScrubCharMode.cpp\
 	tankdrive/modes/StraightCharAutoMode.cpp\
-	tankdrive/actions/TankDriveDistanceAction.cpp\
-	tankdrive/actions/TankDriveVelocityAction.cpp\
 	tankdrive/actions/TankDriveCharAction.cpp\
 	tankdrive/actions/TankDriveAngleAction.cpp\
 	tankdrive/actions/TankDrivePowerAction.cpp\

@@ -14,17 +14,13 @@ namespace xero {
         public:
             /// \brief create a delay object with the delay given
             /// \param delayTime the delay in seconds
-            DelayAction(double delayTime);
+            DelayAction(xero::misc::MessageLogger &logger, double delayTime);
 
             /// \brief start the delay action, starting the delay period
             void start();
 
             /// \brief run the action, does nothing for the delay
             void run();
-
-            /// \brief returns true when the desired delay has occured
-            /// \returns true when the delay has elapsed
-            bool isDone();
 
             /// \brief cancel the delay, isDone will return true immediately
             void cancel();

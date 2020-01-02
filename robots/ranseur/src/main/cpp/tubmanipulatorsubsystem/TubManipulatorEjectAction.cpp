@@ -24,7 +24,7 @@ namespace xero {
  
             //put the parallel action(of arm and wrist) and the collector(eject action) in a sequence
 
-            auto par = std::make_shared<ParallelAction>() ; //parallel action
+            auto par = std::make_shared<ParallelAction>(tubm.getRobot().getMessageLogger()) ; //parallel action
             seq_.pushAction(par) ;                          // put above par_ into the sequence
 
             /// Arm ///
@@ -41,7 +41,7 @@ namespace xero {
             act = std::make_shared<TubCollectorEjectTubAction>(*collector, "tubcollector:eject:speed", "tubcollector:eject:delay") ;
             seq_.pushSubActionPair(collector, act, true) ;              /// add collector into sequence action
 
-            par = std::make_shared<ParallelAction>() ; //parallel action
+            par = std::make_shared<ParallelAction>(tubm.getRobot().getMessageLogger()) ; //parallel action
             seq_.pushAction(par) ;                          // put above par_ into the sequence
 
             /// Arm ///
@@ -59,19 +59,21 @@ namespace xero {
         }
         
         void TubManipulatorEjectAction::start() {
+            TubManipulatorAction::start();
             seq_.start() ;
         }
 
         void TubManipulatorEjectAction::run() {
+            TubManipulatorAction::run();
             seq_.run() ;
-        }
-
-        bool TubManipulatorEjectAction::isDone() {
-            return seq_.isDone() ;
+            if (seq_.isDone())
+                setDone();
         }
 
         void TubManipulatorEjectAction::cancel() {
+            TubManipulatorAction::cancel();
             seq_.cancel() ;
+            setDone();
         }
         
     }

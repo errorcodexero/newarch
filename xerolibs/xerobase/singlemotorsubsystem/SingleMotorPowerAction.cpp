@@ -39,6 +39,8 @@ namespace xero {
         }
 
         void SingleMotorPowerAction::start() {
+            SingleMotorSubsystemAction::start();
+
             auto &logger = getSubsystem().getRobot().getMessageLogger() ;
             setMotor(power_) ;
             if (timed_) {
@@ -46,19 +48,20 @@ namespace xero {
                 logger << getSubsystem().getName() << ": SingleMotorPowerAction" ;
                 logger << ", time " << duration_ << ", power " << power_ ;
                 logger.endMessage() ;
-                is_done_ = false ;
                 start_ = getSubsystem().getRobot().getTime() ;
             }
             else {
                 logger.startMessage(MessageLogger::MessageType::debug, getID()) ;
                 logger << getSubsystem().getName() << ": SingleMotorPowerAction" ;
                 logger << ", power " << power_ ;
-                logger.endMessage() ;                   
-                is_done_ = true ;
+                logger.endMessage() ;
+                setDone();
             }
         }
 
         void SingleMotorPowerAction::run() {
+            SingleMotorSubsystemAction::run();
+
             if (timed_ && getSubsystem().getRobot().getTime() - start_ > duration_) {
                 std::vector<double> data;
                 auto &logger = getSubsystem().getRobot().getMessageLogger() ;                   
@@ -66,16 +69,14 @@ namespace xero {
                 logger << getSubsystem().getName() << ": SingleMotorPowerAction complete" ;
                 logger.endMessage() ;                       
                 setMotor(0) ;
-                is_done_ = true ;
+                setDone();
             }
         }
 
-        bool SingleMotorPowerAction::isDone() {
-            return is_done_ ;
-        }
-
         void SingleMotorPowerAction::cancel() {
-            is_done_ = true ;
+            SingleMotorSubsystemAction::cancel();
+            setMotor(0) ;            
+            setDone();
         }
 
         std::string SingleMotorPowerAction::toString() {

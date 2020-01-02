@@ -21,8 +21,7 @@ namespace xero {
 
             virtual void start();
             virtual void run();
-            virtual bool isDone() { return cancelled_; }
-            virtual void cancel() { cancelled_ = true; }
+            virtual void cancel();
 
             /// Returns the target of this hold action.
             double getTarget() { return target_; }
@@ -32,7 +31,6 @@ namespace xero {
                     ((hasExplicitTarget_ ? "explicit " : "implicit ") + std::to_string(target_));
             }
         private:
-            bool cancelled_;
             xero::misc::PIDCtrl pid_ ;
             double target_;
             bool hasExplicitTarget_;

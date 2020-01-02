@@ -2,6 +2,7 @@
 
 #include "SingleMotorSubsystem.h"
 #include "actions/Action.h"
+#include "Robot.h"
 #include "basegroups.h"
 
 
@@ -13,11 +14,11 @@ namespace xero {
 
         /// \brief This is the base class for all actions that can be assigned to the SingleMotorSubsystem
         /// \sa SingleMotorSubsystem
-        class SingleMotorSubsystemAction : public Action {
+        class SingleMotorSubsystemAction : public GenericAction {
         public:
             /// \brief Create a new SingleMotorSubsystemAction
             /// \param subsystem SingleMotor subsystem
-            SingleMotorSubsystemAction(SingleMotorSubsystem &subsystem) : subsystem_(subsystem) {
+            SingleMotorSubsystemAction(SingleMotorSubsystem &subsystem) : GenericAction(subsystem.getRobot().getMessageLogger()), subsystem_(subsystem) {
             }
 
         protected:

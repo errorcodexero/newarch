@@ -2,9 +2,10 @@
 
 namespace frc
 {
-    TimedRobot::TimedRobot(double looptime)
+    TimedRobot::TimedRobot(second_t looptime)
     {
-        looptime_ = std::chrono::milliseconds(static_cast<int>(looptime * 1000)) ;
+        double v = static_cast<double>(looptime);
+        looptime_ = std::chrono::milliseconds(static_cast<int>(v * 1000)) ;
     }
 
     TimedRobot::~TimedRobot()

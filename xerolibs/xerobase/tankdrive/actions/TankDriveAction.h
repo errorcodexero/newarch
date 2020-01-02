@@ -14,11 +14,11 @@ namespace xero {
 
         /// \brief This is the base class for all actions for the to be assigned to the TankDrive class.
         /// \sa TankDrive
-        class TankDriveAction : public Action {
+        class TankDriveAction : public GenericAction {
         public:
             /// \brief Create a new TankDriveAction
             /// \param tank_drive the tank drive subsystem
-            TankDriveAction(TankDrive &tank_drive) : tank_drive_(tank_drive) {
+            TankDriveAction(TankDrive &tank_drive) : GenericAction(tank_drive.getRobot().getMessageLogger()), tank_drive_(tank_drive) {
             }
 
         protected:

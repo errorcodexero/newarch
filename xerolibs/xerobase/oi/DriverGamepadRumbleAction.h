@@ -8,7 +8,7 @@
 namespace xero {
     namespace base {
         /// \brief this is a an action that wraps a subsystem and an action to assign to a subsystem
-        class DriverGamepadRumbleAction : public Action {
+        class DriverGamepadRumbleAction : public GenericAction {
         public:
             /// \brief create a new wrapper to wrap a subsystem and an assocaited action
             /// \param subsystem the subsystem to assign an action to

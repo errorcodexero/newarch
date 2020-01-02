@@ -1,13 +1,16 @@
 #pragma once
 
 #include <frc/SampleRobot.h>
+#include <units/units.h>
+
+using namespace units;
 
 namespace frc
 {
     class TimedRobot : public SampleRobot
     {
     public:
-        TimedRobot(double looptime) ;
+        TimedRobot(second_t looptime) ;
         virtual ~TimedRobot() ;
 
         virtual void Disabled() ;

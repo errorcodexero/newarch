@@ -29,14 +29,19 @@ namespace xero {
         }
         
         void TubCollectorTubAction::start() {
-            getTubCollector().startPlot(plotid_, cols_) ;
+            TubCollectorAction::start();
+
+            getTubCollector().startPlot(plotid_, cols_);
             getTubCollector().openHand() ;
             state_ = State::motors_on ;
             getTubCollector().setIntakePower(speed_) ;
         }
 
         void TubCollectorTubAction::run() {
-            if(state_ == State::motors_on) {
+            TubCollectorAction::run();
+
+            if (state_ == State::motors_on)
+            {
                 if(getTubCollector().hasTub()) {
                     auto &logger = getTubCollector().getRobot().getMessageLogger() ;
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TUBCOLLECTOR) ;
@@ -51,7 +56,8 @@ namespace xero {
                 if(getTubCollector().getRobot().getTime() - start_ > delay_) {
                     getTubCollector().setIntakePower(0.0) ;
                     state_ = State::done ;
-                    getTubCollector().endPlot(plotid_) ;
+                    setDone();
+                    getTubCollector().endPlot(plotid_);
                 }
             }
 
@@ -62,12 +68,9 @@ namespace xero {
             getTubCollector().addPlotData(plotid_, data) ;
         }
 
-        bool TubCollectorTubAction::isDone() {
-            return state_ == State::done ;
-        }
-
         void TubCollectorTubAction::cancel() {
-            getTubCollector().setIntakePower(0.0) ;
+            TubCollectorAction::cancel();
+            getTubCollector().setIntakePower(0.0);
             getTubCollector().closeHand() ;
             state_ = State::done ;
         }

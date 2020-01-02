@@ -1,5 +1,4 @@
 #include "TubWrist.h"
-#include "TubWristAction.h"
 #include "ranseurids.h"
 #include <Robot.h>
 #include <actions/SequenceAction.h>
@@ -18,19 +17,5 @@ namespace xero {
 
         TubWrist::~TubWrist() {
         }
-
-        // sees whether or not 
-       bool TubWrist::canAcceptAction(ActionPtr action) {
-            if (MotorEncoderSubsystem::canAcceptAction(action))
-                return true ;
-
-            auto tub_wrist_act_p = std::dynamic_pointer_cast<TubWristAction>(action) ;
-            return (tub_wrist_act_p != nullptr);
-        }
-
-        void TubWrist::computeState() {
-            MotorEncoderSubsystem::computeState() ;
-        }        
-
     }
 }

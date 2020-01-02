@@ -18,26 +18,27 @@ namespace xero {
         }
 
         void TubCollectorEjectTubAction::start() {
+            TubCollectorAction::start();
+
             getTubCollector().setIntakePower(speed_) ;
             start_ = getTubCollector().getRobot().getTime() ;
-            isdone_ = false ;
         }
 
         void TubCollectorEjectTubAction::run() {
-           if (getTubCollector().getRobot().getTime() - start_ > delay_) {
-               getTubCollector().setIntakePower(0.0) ;
-               isdone_ = true ;
-               getTubCollector().closeHand() ;
+            TubCollectorAction::run();
+
+            if (getTubCollector().getRobot().getTime() - start_ > delay_)
+            {
+                getTubCollector().setIntakePower(0.0);
+                getTubCollector().closeHand();
+                setDone();
            }
         }
 
-        bool TubCollectorEjectTubAction::isDone() {
-            return isdone_ ;
-        }
-
         void TubCollectorEjectTubAction::cancel() {
-               getTubCollector().setIntakePower(0.0) ;
-           isdone_ = true ;    
+            TubCollectorAction::cancel();
+            getTubCollector().setIntakePower(0.0) ;
+            setDone();
         }
 
         std::string TubCollectorEjectTubAction::toString() {

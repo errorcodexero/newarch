@@ -48,7 +48,9 @@ namespace xero {
             
             if (action_ != nullptr && !action_->isDone()) {
                 action_->run();
-            } else if (!isRunningDefaultAction_) {
+            }
+            else if (!isRunningDefaultAction_)
+            {
                 // set the default action
                 setAction(nullptr);
             }

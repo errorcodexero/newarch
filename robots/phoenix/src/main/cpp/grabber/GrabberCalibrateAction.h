@@ -14,15 +14,9 @@ namespace xero {
                 return calibration_location_ ;
             }
 
-            virtual void start() {
-                is_calibrated_ = false ;
-            }
+            virtual void start();
 
             virtual void run() ;
-
-            virtual bool isDone() {
-                return is_calibrated_ ;
-            }
 
             virtual void cancel() ;
 

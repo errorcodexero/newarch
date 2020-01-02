@@ -23,10 +23,6 @@ namespace xero {
             /// \brief Cancel the action
             virtual void cancel() ;
 
-            /// \brief Return true if the action is complete
-            /// \returns True if the action is complete
-            virtual bool isDone() ;
-
             /// \brief return a human readable string representing the action
             /// \returns a human readable string representing the action
             virtual std::string toString() ;  
@@ -44,7 +40,6 @@ namespace xero {
             double decay_factor_ ;
 
             int lost_count_ ;
-            bool is_done_ ;       
 
             double profile_start_time_ ;
             double profile_start_dist_ ;

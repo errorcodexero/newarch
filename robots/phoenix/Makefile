@@ -8,11 +8,9 @@ SUBSYSTEMS = \
 	./src/main/cpp/collector/CollectorEjectCubeAction.cpp\
 	./src/main/cpp/grabber/Grabber.cpp\
 	./src/main/cpp/grabber/GrabberCalibrateAction.cpp\
-	./src/main/cpp/liftingcollector/LiftingCollectCubeAction.cpp\
 	./src/main/cpp/liftingcollector/LiftingCollector.cpp\
 	./src/main/cpp/phoenixoi/PhoenixOIDevice.cpp\
 	./src/main/cpp/phoenixoi/PhoenixOISubsystem.cpp\
-	./src/main/cpp/phoenixsubsystem/DriveAndCollectAction.cpp\
 	./src/main/cpp/phoenixsubsystem/PhoenixRobotSubsystem.cpp\
 	./src/main/cpp/wings/Wings.cpp\
 	./src/main/cpp/wings/WingsDeployAction.cpp

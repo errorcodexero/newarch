@@ -47,7 +47,7 @@ namespace xero
 
             virtual void run();
             virtual void start();
-            virtual bool isDone();
+            virtual void cancel();
 
 
         private:

@@ -9,9 +9,8 @@ namespace xero
 {
     namespace base
     {
-        SequenceAction::SequenceAction(xero::misc::MessageLogger &logger) : logger_(logger) 
+        SequenceAction::SequenceAction(xero::misc::MessageLogger &logger) : CompositeAction(logger)
         {
-            isDone_ = false;
             isCancel_ = false ;
             group_ = MSG_GROUP_ACTIONS ;
         }
@@ -21,10 +20,16 @@ namespace xero
             actions_.push_back(action);
         }
 
+        void SequenceAction::pushSubActionPair(SubsystemPtr subsystem, ActionPtr action, bool block)
+        {
+            auto p = std::make_shared<DispatchAction>(subsystem, action, block);
+            pushAction(p);
+        }        
+
         void SequenceAction::start()
         {
+            CompositeAction::start();
             index_ = -1 ;
-            isDone_ = false ;
             isCancel_ = false ;
         }
 
@@ -33,24 +38,17 @@ namespace xero
             index_++;
             if (static_cast<size_t>(index_) < actions_.size())
             {
-                assert(group_ != 0) ;
-                logger_.startMessage(MessageLogger::MessageType::debug, group_) ;
-                logger_ << "Actions: starting " << index_ << " of " << static_cast<int>(actions_.size() - 1) ;
-                logger_ << " '" << actions_[index_]->toString() << "'" ;
-                logger_.endMessage() ;
                 actions_[index_]->start();
                 frc::SmartDashboard::PutString("Step", actions_[index_]->toString()) ;
             }
             else {
-                //
-                // We have reached the end of the sequence
-                //
-                isDone_ = true ;
+                setDone();
             }
         }
 
         void SequenceAction::run()
         {
+            CompositeAction::run();
             if (isCancel_)
             {
                 //
@@ -63,16 +61,19 @@ namespace xero
                     if (actions_[index_]->isDone())
                     {
                         isCancel_ = false ;
-                        isDone_ = true ;
+                        setDone();
                     }
                 }
                 else
                 {
+                    //
+                    // The current action finished normally, we are still done
+                    //
                     isCancel_ = false ;
-                    isDone_ = true ;
+                    setDone();
                 }
             }
-            else if (!isDone_)
+            else
             {
                 //
                 // We are actively running if we get here
@@ -80,17 +81,13 @@ namespace xero
                 while (1)
                 {
                     if (index_ == static_cast<int>(actions_.size()))
+                    {
+                        setDone();
                         break ;
+                    }
 
                     if (index_ == -1 || actions_[index_]->isDone())
                     {
-                        if (index_ != -1) {
-                            logger_.startMessage(MessageLogger::MessageType::debug, group_) ;
-                            logger_ << "Actions: completed " << index_ << " of " << static_cast<int>(actions_.size() - 1) ;
-                            logger_ << " '" << actions_[index_]->toString() << "'" ;
-                            logger_.endMessage() ;
-                        }
-                        
                         startNextAction();
                         if (static_cast<size_t>(index_) == actions_.size())
                             break;
@@ -104,19 +101,9 @@ namespace xero
             }
         }
 
-        bool SequenceAction::isDone()
-        {
-            if (isCancel_) {
-                if (index_ >= 0 && index_ <= static_cast<int>(actions_.size())) {
-                    return actions_[index_]->isDone();
-                } else {
-                    return true;
-                }
-            } else return isDone_ ;
-        }
-
         void SequenceAction::cancel()
         {
+            Action::cancel();
             isCancel_ = true;
             if (index_ != -1 && index_ < static_cast<int>(actions_.size()))
                 actions_[index_]->cancel() ;
@@ -136,11 +123,6 @@ namespace xero
             return result ;
         }
 
-        void SequenceAction::pushSubActionPair(SubsystemPtr subsystem, ActionPtr action, bool block)
-        {
-            auto p = std::make_shared<DispatchAction>(subsystem, action, block);
-            pushAction(p);
-        }
 
     } // namespace base
 } // namespace xero

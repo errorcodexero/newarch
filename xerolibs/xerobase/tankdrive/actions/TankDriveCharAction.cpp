@@ -29,6 +29,8 @@ namespace xero {
         }
 
         void TankDriveCharAction::start() {
+            TankDriveAction::start();
+
             is_done_ = false ;
             start_time_ = frc::Timer::GetFPGATimestamp() ;
             if (getTankDrive().hasGearShifter())
@@ -49,46 +51,43 @@ namespace xero {
         }
 
         void TankDriveCharAction::run() {
+            TankDriveAction::run();
+
             std::vector<double> data ;
 
-            if (!is_done_) {
-                double now = frc::Timer::GetFPGATimestamp() ;
-                if (now - start_time_ >= duration_) {
-                    is_done_ = true ;
-                    setMotorsToPercents(0.0, 0.0) ;
-                    getTankDrive().endPlot(plot_id_) ;
-                } else {
-                    auto &logger = getTankDrive().getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
-                    logger << (now - start_time_) ;
-                    logger << ", " << getTankDrive().getDist() ;
-                    logger << ", " << getTankDrive().getVelocity() ;
-                    logger << ", " << getTankDrive().getAcceleration() ;
-                    logger << ", " << getTankDrive().getLeftTickCount() ;
-                    logger << ", " << getTankDrive().getRightTickCount() ;
-                    logger << ", " << voltage_ ;
-                    logger.endMessage() ;
+            double now = frc::Timer::GetFPGATimestamp() ;
+            if (now - start_time_ >= duration_) {
+                setDone();
+                setMotorsToPercents(0.0, 0.0) ;
+                getTankDrive().endPlot(plot_id_) ;
+            } else {
+                auto &logger = getTankDrive().getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
+                logger << (now - start_time_) ;
+                logger << ", " << getTankDrive().getDist() ;
+                logger << ", " << getTankDrive().getVelocity() ;
+                logger << ", " << getTankDrive().getAcceleration() ;
+                logger << ", " << getTankDrive().getLeftTickCount() ;
+                logger << ", " << getTankDrive().getRightTickCount() ;
+                logger << ", " << voltage_ ;
+                logger.endMessage() ;
 
-                    data.push_back(now - start_time_) ;
-                    data.push_back(getTankDrive().getDist()) ;
-                    data.push_back(getTankDrive().getVelocity()) ;
-                    data.push_back(getTankDrive().getAcceleration()) ;
-                    data.push_back(getTankDrive().getLeftTickCount()) ;
-                    data.push_back(getTankDrive().getRightTickCount()) ;
-                    data.push_back(voltage_) ;
-                    getTankDrive().addPlotData(plot_id_, data) ;
+                data.push_back(now - start_time_) ;
+                data.push_back(getTankDrive().getDist()) ;
+                data.push_back(getTankDrive().getVelocity()) ;
+                data.push_back(getTankDrive().getAcceleration()) ;
+                data.push_back(getTankDrive().getLeftTickCount()) ;
+                data.push_back(getTankDrive().getRightTickCount()) ;
+                data.push_back(voltage_) ;
+                getTankDrive().addPlotData(plot_id_, data) ;
 
-                    index_++ ;
-
-                }
+                index_++ ;
             }
         }
 
         void TankDriveCharAction::cancel() {
-            is_done_ = true ;
-        }
-        bool TankDriveCharAction::isDone() {
-            return is_done_ ;
+            TankDriveAction::cancel();
+            setDone();
         }
 
         std::string TankDriveCharAction::toString() {

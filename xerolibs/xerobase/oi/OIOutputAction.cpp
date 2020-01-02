@@ -4,7 +4,7 @@
 
 namespace xero {
     namespace base {
-        OIOutputAction::OIOutputAction(int hid, int output, int state) {
+        OIOutputAction::OIOutputAction(xero::misc::MessageLogger &logger, int hid, int output, int state) : GenericAction(logger) {
             hid_ = hid ;
             output_ = output ;
             state_ = state ;
@@ -15,22 +15,22 @@ namespace xero {
 
         /// \brief Start the action; called once per action when it starts
         void OIOutputAction::start() {
+            GenericAction::start();
+
             frc::Joystick joy(hid_) ;
             joy.SetOutput(output_, state_ ? true : false) ;
+            setDone();
         }
 
         /// \brief Manage the action; called each time through the robot loop
         void OIOutputAction::run() {
+            GenericAction::run();
+
         }
 
         /// \brief Cancel the action
         void OIOutputAction::cancel() {
-        }
-
-        /// \brief Return true if the action is complete
-        /// \returns True if the action is complete
-        bool OIOutputAction::isDone() {
-            return true ;
+            GenericAction::cancel();
         }
 
         /// \brief return a human readable string representing the action

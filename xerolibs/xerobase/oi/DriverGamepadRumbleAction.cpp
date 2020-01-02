@@ -1,11 +1,12 @@
 #include "DriverGamepadRumbleAction.h"
+#include "Robot.h"
 
 using namespace xero::misc ;
 
 namespace xero {
     namespace base {
 
-        DriverGamepadRumbleAction::DriverGamepadRumbleAction(OISubsystem &oi, bool left, double value, double duration) : oi_(oi) {
+        DriverGamepadRumbleAction::DriverGamepadRumbleAction(OISubsystem &oi, bool left, double value, double duration) : GenericAction(oi.getRobot().getMessageLogger()), oi_(oi) {
             value_ = value ;
             left_ = left ;
             duration_ = duration ;
@@ -14,13 +15,10 @@ namespace xero {
         void DriverGamepadRumbleAction::start() {
             auto driver = oi_.getDriverGamepad() ;
             driver->rumble(left_, value_, duration_) ;
+            setDone();
         }
 
         void DriverGamepadRumbleAction::run() {
-        }
-
-        bool DriverGamepadRumbleAction::isDone() {
-            return true ;
         }
 
         void DriverGamepadRumbleAction::cancel() {

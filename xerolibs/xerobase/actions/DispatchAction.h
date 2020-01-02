@@ -22,20 +22,12 @@ namespace xero {
             /// \brief if this operation is blocking checks the subsystem to see if the assigned action is complete
             void run();
 
-            /// \brief if non blocking, returns true immeidately, otherwise returns true when the subsystem completes the action
-            /// \returns true when the action is complete
-            bool isDone();
-
             /// \brief if the operation is blocking, cancels the operation on the subsystem
             void cancel();
 
             /// \brief returns a human readable string representing this wrapped action
             /// \returns a human readable string for this action
             std::string toString();
-
-            /// \brief returns true if the subsystem did not accept the action
-            /// \returns true if the action was not accepted by the subsystem
-            bool isDenied() { return denied_ ;}
 
             /// \returns A pointer to the subsystem.
             SubsystemPtr getSubsystem() { return subsystem_; }
@@ -60,12 +52,6 @@ namespace xero {
             // completes.
             //
             bool block_;
-
-            //
-            // This is set to true when the subsystem does not
-            // accept the action.
-            //
-            bool denied_;
         };
     }
 }

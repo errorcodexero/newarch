@@ -28,7 +28,6 @@ namespace xero
             SettingsParser &parser = tank_drive.getRobot().getSettingsParser();
 
             target_angle_ = target_angle;
-            is_done_ = false;
             double maxa = parser.getDouble("tankdrive:angle_action:maxa");
             double maxd = parser.getDouble("tankdrive:angle_action:maxd");
             double maxv = parser.getDouble("tankdrive:angle_action:maxv");
@@ -48,7 +47,6 @@ namespace xero
             SettingsParser &parser = tank_drive.getRobot().getSettingsParser();
 
             target_angle_ = tank_drive.getRobot().getSettingsParser().getDouble(name);
-            is_done_ = false;
             double maxa = parser.getDouble("tankdrive:angle_action:maxa");
             double maxd = parser.getDouble("tankdrive:angle_action:maxd");
             double maxv = parser.getDouble("tankdrive:angle_action:maxv");
@@ -68,6 +66,8 @@ namespace xero
 
         void TankDriveAngleAction::start()
         {
+            TankDriveAction::start();
+            
             MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
             double distance = 0.0;
 
@@ -87,7 +87,7 @@ namespace xero
 
             if (std::fabs(distance) < angle_threshold_)
             {
-                is_done_ = true;
+                setDone();
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE) ;
                 logger << "TankDriveAngleAction completed in start";
                 logger.endMessage() ;                
@@ -108,50 +108,44 @@ namespace xero
 
         void TankDriveAngleAction::run()
         {
-            if (!is_done_)
+            TankDriveAction::run();
+            double elapsed = getTankDrive().getRobot().getTime() - start_time_;
+
+            if (elapsed < profile_->getTotalTime())
             {
-                double elapsed = getTankDrive().getRobot().getTime() - start_time_;
+                double current_angle = getTankDrive().getAngle() - start_angle_;
+                double plan_angle = profile_->getDistance(elapsed);
+                double vel = profile_->getVelocity(elapsed);
+                double acc = profile_->getAccel(elapsed);
 
-                if (elapsed < profile_->getTotalTime())
-                {
-                    double current_angle = getTankDrive().getAngle() - start_angle_;
-                    double plan_angle = profile_->getDistance(elapsed);
-                    double vel = profile_->getVelocity(elapsed);
-                    double acc = profile_->getAccel(elapsed);
+                double out = velocity_pid_->getOutput(acc, vel, plan_angle, current_angle, getTankDrive().getRobot().getDeltaTime());
+                setMotorsToPercents(-out, out);
 
-                    double out = velocity_pid_->getOutput(acc, vel, plan_angle, current_angle, getTankDrive().getRobot().getDeltaTime());
-                    setMotorsToPercents(-out, out);
-
-                    std::vector<double> data;
-                    data.push_back(elapsed);
-                    data.push_back(current_angle);
-                    data.push_back(plan_angle);
-                    data.push_back(profile_->getVelocity(elapsed));
-                    data.push_back(getTankDrive().getAngularVelocity());
-                    data.push_back(profile_->getAccel(elapsed));
-                    data.push_back(getTankDrive().getAngularAcceleration());
-                    data.push_back(out);
-                    data.push_back(getTankDrive().getAngle());
-                    getTankDrive().addPlotData(plot_id_, data);
-                }
-                else
-                {
-                    is_done_ = true;
-                    getTankDrive().endPlot(plot_id_);
-                    setMotorsToPercents(0, 0);
-                }
+                std::vector<double> data;
+                data.push_back(elapsed);
+                data.push_back(current_angle);
+                data.push_back(plan_angle);
+                data.push_back(profile_->getVelocity(elapsed));
+                data.push_back(getTankDrive().getAngularVelocity());
+                data.push_back(profile_->getAccel(elapsed));
+                data.push_back(getTankDrive().getAngularAcceleration());
+                data.push_back(out);
+                data.push_back(getTankDrive().getAngle());
+                getTankDrive().addPlotData(plot_id_, data);
+            }
+            else
+            {
+                setDone();
+                getTankDrive().endPlot(plot_id_);
+                setMotorsToPercents(0, 0);
             }
         }
 
         void TankDriveAngleAction::cancel()
         {
-            is_done_ = true ;
+            TankDriveAction::cancel();
+            setDone();
             setMotorsToPercents(0, 0) ;
-        }
-
-        bool TankDriveAngleAction::isDone()
-        {
-            return is_done_;
         }
 
         std::string TankDriveAngleAction::toString()

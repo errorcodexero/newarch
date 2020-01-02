@@ -37,11 +37,6 @@ namespace xero{
             /// Calls cancel on the child action
             virtual void cancel() ;
 
-            /// @brief returns true if this action is done
-            /// Calls isDone() on the child action.
-            /// @returns true if this action is done (i.e. the child action is done)
-            virtual bool isDone() ;
-
             /// @brief returns a string representation of the object
             /// @returns a string representation of the object
             virtual std::string toString() ;
@@ -59,7 +54,6 @@ namespace xero{
         private: 
             ActionPtr action_ ;
             std::list<std::shared_ptr<ITerminator>> terminators_ ;
-            bool is_done_ ;
             Robot &robot_ ;
             double delay_ ;
             double start_ ;

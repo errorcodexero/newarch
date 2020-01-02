@@ -1,14 +1,14 @@
 #pragma once
 
-#include <actions/Action.h>
+#include "MotorEncoderSubsystem.h"
+#include "actions/Action.h"
+#include "Robot.h"
 
 namespace xero {
     namespace base {
-        class MotorEncoderSubsystem ;
-
-        class MotorEncoderSubsystemAction : public xero::base::Action {
+        class MotorEncoderSubsystemAction : public GenericAction {
         public:
-            MotorEncoderSubsystemAction(MotorEncoderSubsystem &subsystem) : subsystem_(subsystem) {                
+            MotorEncoderSubsystemAction(MotorEncoderSubsystem &subsystem) : GenericAction(subsystem.getRobot().getMessageLogger()), subsystem_(subsystem) {                
             }
 
             MotorEncoderSubsystem &getSubsystem() {

@@ -18,17 +18,16 @@ namespace xero {
 
             }
             void TubCollectorDutyCycleAction::start() {
+                TubCollectorAction::start();
                 getTubCollector().setIntakePower(duty_cycle_) ;
             }
 
             void TubCollectorDutyCycleAction::run() {
-            }
-
-            bool TubCollectorDutyCycleAction::isDone() {
-                return true ;
+                TubCollectorAction::run();
             }
 
             void TubCollectorDutyCycleAction::cancel() {
+                TubCollectorAction::cancel();
             }
 
             std::string TubCollectorDutyCycleAction::toString() {

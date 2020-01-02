@@ -3,28 +3,25 @@
 namespace xero {
     namespace base {
 
-        DelayAction::DelayAction(double delay) {
+        DelayAction::DelayAction(xero::misc::MessageLogger &logger, double delay) : GenericAction(logger) {
             delayTime_ = delay ;
         }
 
         void DelayAction::start() {
+            Action::start();
             startTime_ = frc::Timer::GetFPGATimestamp();
-            isDone_ = false;
         }
 
         void DelayAction::run() {
-        }
-
-        bool DelayAction::isDone() {
+            Action::run();
             double elapsed = frc::Timer::GetFPGATimestamp()-startTime_;
-            if (elapsed >= delayTime_) {
-                isDone_ = true;
-            }
-            return isDone_;
+            if (elapsed >= delayTime_)
+                setDone();
         }
 
         void DelayAction::cancel() {
-            isDone_ = true;
+            Action::cancel();
+            setDone();
         }
 
         std::string DelayAction::toString() {

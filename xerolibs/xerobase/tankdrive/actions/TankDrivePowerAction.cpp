@@ -20,6 +20,8 @@ namespace xero {
         }
 
         void TankDrivePowerAction::start() {
+            TankDriveAction::start();
+
             if (getTankDrive().hasGearShifter())
             {
                 if (highgear_)
@@ -30,14 +32,12 @@ namespace xero {
             setMotorsToPercents(left_, right_) ;
         }
 
-        void TankDrivePowerAction::run() {                
-        }
-
-        bool TankDrivePowerAction::isDone() {
-            return true ;
+        void TankDrivePowerAction::run() {
+            TankDriveAction::run();
         }
 
         void TankDrivePowerAction::cancel()  {
+            TankDriveAction::cancel();
         }
 
         std::string TankDrivePowerAction::toString() {

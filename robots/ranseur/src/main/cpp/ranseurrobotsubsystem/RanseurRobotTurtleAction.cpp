@@ -23,7 +23,7 @@ namespace xero {
 
         std::string RanseurRobotTurtleAction::action_name("RanseurRobotTurtleAction");
 
-        RanseurRobotTurtleAction::RanseurRobotTurtleAction(RanseurRobotSubsystem &robotss) : RanseurSubsystemAction(robotss) {
+        RanseurRobotTurtleAction::RanseurRobotTurtleAction(RanseurRobotSubsystem &robotss) : RanseurSubsystemAction(robotss), parallel_(robotss.getRobot().getMessageLogger()) {
             double v ;                                          //value
             ActionPtr act ;                                     //action
             auto arm = robotss.getTubManipulatorSubsystem()->getTubArm() ;
@@ -57,20 +57,21 @@ namespace xero {
         }
         
         void RanseurRobotTurtleAction::start() {
+            RanseurSubsystemAction::start();
             parallel_.start() ;
         }
 
         void RanseurRobotTurtleAction::run() {
+            RanseurSubsystemAction::run();
             parallel_.run() ;
-        }
-
-        bool RanseurRobotTurtleAction::isDone() {
-            return parallel_.isDone(); 
+            if (parallel_.isDone())
+                setDone();
         }
 
         void RanseurRobotTurtleAction::cancel() {
+            RanseurSubsystemAction::cancel();
             parallel_.cancel() ;
+            setDone();
         }
-
     }
 }

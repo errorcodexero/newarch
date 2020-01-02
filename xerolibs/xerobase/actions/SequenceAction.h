@@ -31,11 +31,6 @@ namespace xero {
             /// This method calls run on the currently active action in the action sequence.
             void run();
 
-            /// \brief returns false until all actions in the sequence are complete, or until cancel is called.
-            /// Once all actions in the sequence are complete, or if cancel is called, then this returns true.
-            /// \returns true whan the last action is the sequence is complete
-            bool isDone();
-
             /// \brief cancel the action sequence.
             /// This method calls cancel on the currently active action, then sets the internal state of this 
             /// sequence such that it appears this sequence is complete.  None of the remaining actions will be
@@ -65,18 +60,14 @@ namespace xero {
             /// \brief clear the list of actions
             void clear() {
                 actions_.clear() ;
-                isDone_ = false ;
-                isCancel_ = false ;
             }
 
             virtual std::vector<ActionPtr> getChildren() { return actions_; }
+
         private:
             void startNextAction();
 
         private:
-            // state of the sequence, true when all contained actions are complete or cancel is called
-            bool isDone_;
-
             // trying to cancel
             bool isCancel_ ;
 
@@ -88,9 +79,6 @@ namespace xero {
 
             // The message group for the message logger
             int group_ ;
-
-            // The message logger
-            xero::misc::MessageLogger &logger_ ;
         };
 
         /// \brief convience definition for a shared pointer to an action sequence

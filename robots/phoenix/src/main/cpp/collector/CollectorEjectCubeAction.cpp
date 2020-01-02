@@ -35,6 +35,8 @@ namespace xero {
         }
 
         void CollectorEjectCubeAction::start() {
+            CollectorAction::start();
+
             auto intake = getCollector().getIntake() ;
             auto intakeaction = std::make_shared<SingleMotorPowerAction>(*intake, speed_) ;
             intake->setAction(intakeaction, true) ;
@@ -44,16 +46,17 @@ namespace xero {
             grabber->setAction(grabberaction, true) ;
 
             start_ = getCollector().getRobot().getTime() ;
-            isdone_ = false ;
         }
 
         void CollectorEjectCubeAction::run() {
+            CollectorAction::run();
+
             auto intake = getCollector().getIntake() ;            
             if (sensor_) {
                 if (getCollector().hasCube() == false) {
                     auto intakeaction = std::make_shared<SingleMotorPowerAction>(*intake, 0.0) ;
                     intake->setAction(intakeaction, true) ;
-                    isdone_ = true ;
+                    setDone();
                 }
             }
             else {
@@ -61,20 +64,16 @@ namespace xero {
                 if (now > start_ + delay_) {
                     auto intakeaction = std::make_shared<SingleMotorPowerAction>(*intake, 0.0) ;
                     intake->setAction(intakeaction, true) ;
-                    isdone_ = true ;                    
+                    setDone();
                 }
             }
-        }
-
-        bool CollectorEjectCubeAction::isDone() {
-            return isdone_ ;
         }
 
         void CollectorEjectCubeAction::cancel() {
             auto intake = getCollector().getIntake() ;
             auto intakeaction = std::make_shared<SingleMotorPowerAction>(*intake, 0.0) ;
             intake->setAction(intakeaction) ;
-            isdone_ = true ;            
+            setDone();
         }
 
         std::string CollectorEjectCubeAction::toString() {

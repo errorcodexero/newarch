@@ -15,7 +15,7 @@ namespace xero {
 
         std::string TubManipulatorDumpAction::action_name("TubManipulatorDumpAction") ;
 
-        TubManipulatorDumpAction::TubManipulatorDumpAction(TubManipulatorSubsystem &tubm) : TubManipulatorAction(tubm) {
+        TubManipulatorDumpAction::TubManipulatorDumpAction(TubManipulatorSubsystem &tubm) : TubManipulatorAction(tubm), parallel_(tubm.getRobot().getMessageLogger()) {
             double v ;                                          //value to store angles of arm and wrist
             ActionPtr act ;                                     //action
             auto collector = tubm.getTubCollector() ;
@@ -26,7 +26,7 @@ namespace xero {
             auto seqwrist = std::make_shared<SequenceAction>(tubm.getRobot().getMessageLogger()) ;            
 
             ///Arm/// 
-            act = std::make_shared<DelayAction>(0.0) ;
+            act = std::make_shared<DelayAction>(tubm.getRobot().getMessageLogger(), 0.0) ;
             seqarm->pushAction(act) ;
             v = tubm.getRobot().getSettingsParser().getDouble("tubarm:dump:pos") ;
             act = std::make_shared<MotorEncoderGoToAction>(*arm, v) ;
@@ -34,14 +34,14 @@ namespace xero {
             seq->pushAction(seqarm) ;
 
             ///Wrist///
-            act = std::make_shared<DelayAction>(0.0) ;
+            act = std::make_shared<DelayAction>(tubm.getRobot().getMessageLogger(), 0.0) ;
             seqwrist->pushAction(act) ;
             v = tubm.getRobot().getSettingsParser().getDouble("tubwrist:dump:pos") ;
             act = std::make_shared<MotorEncoderGoToAction>(*wrist, v) ;
             seqwrist->pushSubActionPair(wrist, act, true) ;
             seq->pushAction(seqwrist) ;
 
-            act = std::make_shared<DelayAction>(0.5) ;
+            act = std::make_shared<DelayAction>(tubm.getRobot().getMessageLogger(), 0.5) ;
             seqwrist->pushAction(act) ;
 
             parallel_.addAction(seq) ;
@@ -54,20 +54,21 @@ namespace xero {
         }
         
         void TubManipulatorDumpAction::start() {
+            TubManipulatorAction::start();
             parallel_.start() ;
         }
 
         void TubManipulatorDumpAction::run() {
+            TubManipulatorAction::run();            
             parallel_.run() ;
-        }
-
-        bool TubManipulatorDumpAction::isDone() {
-            return parallel_.isDone() ;
+            if (parallel_.isDone())
+                setDone();
         }
 
         void TubManipulatorDumpAction::cancel() {
-            parallel_.isDone() ;
+            TubManipulatorAction::cancel();
+            parallel_.cancel();
+            setDone();
         }
-
     }
 }

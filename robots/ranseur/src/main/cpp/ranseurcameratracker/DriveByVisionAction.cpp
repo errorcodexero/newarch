@@ -34,8 +34,9 @@ namespace xero {
         }
 
         void DriveByVisionAction::start() {
+            TankDriveAction::start();
+
             lost_count_ = 0 ;
-            is_done_ = false ;
             last_yaw_ = 0;
             double dist = 0.0 ;
 
@@ -96,8 +97,7 @@ namespace xero {
         }
 
         void DriveByVisionAction::run() {
-            if (is_done_)
-                return ;
+            TankDriveAction::run();
 
             // The time from the start of the profile
             double delta = getTankDrive().getRobot().getTime() - profile_start_time_ ;
@@ -108,7 +108,7 @@ namespace xero {
                 // We are done
                 //
                 setMotorsToPercents(0.0, 0.0) ;
-                is_done_ = true ;
+                setDone();
                 getTankDrive().endPlot(plotid_) ;
             }
             else
@@ -170,7 +170,9 @@ namespace xero {
         }
 
         /// \brief Cancel the action
-        void DriveByVisionAction::cancel() { 
+        void DriveByVisionAction::cancel() {
+            TankDriveAction::cancel();
+
             MessageLogger &logger = getTankDrive().getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_VISION_DRIVING) ;
             logger << "DriveByVision: action canceled" ;
@@ -179,13 +181,7 @@ namespace xero {
             logger.endMessage() ;             
 
             setMotorsToPercents(0.0, 0.0) ;
-            is_done_ = true ;
-        }
-
-        /// \brief Return true if the action is complete
-        /// \returns True if the action is complete
-        bool DriveByVisionAction::isDone() {
-            return is_done_ ;
+            setDone();
         }
 
         /// \brief return a human readable string representing the action

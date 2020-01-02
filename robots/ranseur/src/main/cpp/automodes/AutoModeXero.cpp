@@ -35,7 +35,7 @@ namespace xero
             auto tankdrive = ranseur.getRanseurRobotSubsystem()->getTankDrive() ;
             auto camera = ranseur.getRanseurRobotSubsystem()->getCameraTracker() ;
             auto tubmanipulatorsubsytem = ranseur.getRanseurRobotSubsystem()->getTubManipulatorSubsystem() ;
-            auto parallel = std::make_shared<ParallelAction>() ;
+            auto parallel = std::make_shared<ParallelAction>(robot.getMessageLogger()) ;
 
             double armangle = robot.getSettingsParser().getDouble("tubarm:collect:pos") ;
             double wristangle = robot.getSettingsParser().getDouble("tubwrist:collect:pos") ;
@@ -67,7 +67,7 @@ namespace xero
             sequence = std::make_shared<SequenceAction>(robot.getMessageLogger()) ;
             parallel->addAction(sequence) ;
             sequence->pushAction(std::make_shared<BunnyArmDeployAction>(*bunnyarm, false)) ;
-            sequence->pushAction(std::make_shared<DelayAction>(0.35)) ;
+            sequence->pushAction(std::make_shared<DelayAction>(robot.getMessageLogger(), 0.35)) ;
             sequence->pushSubActionPair(bunnyarm, std::make_shared<BunnyArmDeployAction>(*bunnyarm, true)) ;
             sequence->pushSubActionPair(tubarm, std::make_shared<MotorEncoderGoToAction>(*tubarm, armangle)) ;
             sequence->pushSubActionPair(tubwrist, std::make_shared<MotorEncoderGoToAction>(*tubwrist, wristangle)) ;

@@ -55,13 +55,6 @@ namespace xero {
         
             virtual void run() ;
  
-            /// \brief Returns true if the action is complete.
-            /// If the power has no duration, the power is assigned and this method returns true immediately.  If the power
-            /// has a duration, this method only returns true after the duration has expired and the motor power is set back
-            /// to zero.
-            /// \returns true if the action is complete
-            virtual bool isDone() ;
-
             virtual void cancel() ;
 
             virtual std::string toString() ;
@@ -76,7 +69,6 @@ namespace xero {
             double power_;
             bool timed_ ;
             double duration_ ;
-            bool is_done_ ;
             double start_ ;
         };
     }

@@ -1,31 +1,18 @@
 #pragma once
 
+#include "ranseurrobotsubsystem/RanseurRobotSubsystem.h"
 #include <actions/Action.h>
-#include <actions/DispatchAction.h>
-#include <actions/ParallelAction.h>
+#include <Robot.h>
 
 namespace xero {
     namespace ranseur {
         class RanseurRobotSubsystem ;
 
-        class RanseurSubsystemAction : public xero::base::Action {
+        class RanseurSubsystemAction : public xero::base::GenericAction {
 
         public:
 
-            virtual void start() { 
-                action_.start();
-            }
-            virtual void run() {
-                action_.run();
-            }
-            virtual void cancel() {
-                action_.cancel();
-            }
-            virtual bool isDone() {
-                return action_.isDone();
-            }
-
-            RanseurSubsystemAction(RanseurRobotSubsystem &ranseurrobotsubsystem) : subsystem_(ranseurrobotsubsystem) {
+            RanseurSubsystemAction(RanseurRobotSubsystem &ranseurrobotsubsystem) : GenericAction(ranseurrobotsubsystem.getRobot().getMessageLogger()), subsystem_(ranseurrobotsubsystem) {
             }
 
             virtual ~RanseurSubsystemAction() {                
@@ -36,7 +23,6 @@ namespace xero {
             }      
 
         private:
-            xero::base::ParallelAction action_ ;    
             RanseurRobotSubsystem &subsystem_ ;
         };
     }
