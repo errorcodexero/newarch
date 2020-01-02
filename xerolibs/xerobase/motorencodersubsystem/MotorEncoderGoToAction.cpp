@@ -58,8 +58,9 @@ namespace xero {
         }        
 
         void MotorEncoderGoToAction::start() {
+            MotorEncoderSubsystemAction::start() ;
+
             MotorEncoderSubsystem &subsystem = getSubsystem();
-            isDone_ = false ;
 
             if (addhold_)
                 subsystem.setDefaultAction(std::make_shared<MotorEncoderHoldAction>(subsystem, target_));
@@ -68,7 +69,7 @@ namespace xero {
 
             double dist = normalizePosition(target_ - subsystem.getPosition());
             if (std::fabs(dist) < threshold_) {
-                isDone_ = true;
+                setDone() ;
                 MessageLogger &logger = subsystem.getRobot().getMessageLogger();
                 logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
                 logger << "MotorEncoderGoToAction (" ;
@@ -99,7 +100,6 @@ namespace xero {
                 );
             }
 
-            isDone_ = false;
             profile_->update(dist, 0, 0);
             startTime_ = subsystem.getRobot().getTime();
             startPosition_ = subsystem.getPosition();
@@ -120,14 +120,15 @@ namespace xero {
         }
 
         void MotorEncoderGoToAction::cancel() {
-            isDone_ = true;
-            // If we cancel a goto action, hold the motor at its current position
+            MotorEncoderSubsystemAction::cancel() ;
+
+            setDone() ;
             getSubsystem().setDefaultAction(std::make_shared<MotorEncoderHoldAction>(getSubsystem()));
         }
 
         void MotorEncoderGoToAction::run() {
-            if (isDone_) return;
-
+            MotorEncoderSubsystemAction::run() ;
+            
             auto &subsystem = getSubsystem();
             auto &robot = subsystem.getRobot();
 
@@ -146,7 +147,7 @@ namespace xero {
                 logger << ", remaining = " << remaining ;
                 logger.endMessage() ;
 
-                isDone_ = true ;
+                setDone() ;
                 subsystem.setMotor(0.0);
                 subsystem.endPlot(plotid_) ;
                 return;
