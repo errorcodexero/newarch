@@ -209,9 +209,9 @@ namespace xero {
             iterations_[index]++ ;
 
             double elapsed_time = frc::Timer::GetFPGATimestamp() - initial_time ;
+
             if (elapsed_time < target_loop_time_) {
                 sleep_time_[index] += target_loop_time_ - elapsed_time ;
-                frc::Wait(target_loop_time_ - elapsed_time);
             } else if (elapsed_time > target_loop_time_) {
                 message_logger_.startMessage(MessageLogger::MessageType::warning) ;
                 message_logger_ << "Robot loop exceeded target loop time\n";

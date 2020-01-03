@@ -52,7 +52,7 @@
       "environment": [],
       "args" : [
         "--test","0.0",
-        "--start", "0.0",
+        "--start", "2.0",
         "--auto", "15.0",
         "--oper","0.0",
         "--events","robots/phoenix/sims/automode0.sti"

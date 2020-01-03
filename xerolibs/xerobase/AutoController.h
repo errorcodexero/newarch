@@ -24,14 +24,15 @@ namespace xero {
         public:
             /// \brief Create a new automode controller object
             /// \param robot the robot this controller is associated with
-            AutoController(Robot &robot):ControllerBase(robot) {                
+            AutoController(Robot &robot, bool padintr = false):ControllerBase(robot) {
+                started_ = false;
+                gamepad_interrupt_ = padintr;
             }
 
             /// \brief This method is called once per robot loop by the main robot class
             /// For the AutoController class this method calls the action that is the current
             /// automode that is running.
             virtual void run()  ;
-
 
             /// \brief return a human readable name for the auto mode
             /// \returns auto mode name
@@ -64,13 +65,13 @@ namespace xero {
             /// \param action run for a controller
             void setAction(AutoModePtr action) {
                 actionptr_ = action;
-                if (actionptr_ != nullptr)
-                    actionptr_->start() ;
             }
 
 
         private:
             AutoModePtr actionptr_;
-        } ;
+            bool started_;
+            bool gamepad_interrupt_;
+        };
     }
 }
