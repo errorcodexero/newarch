@@ -37,7 +37,7 @@ namespace xero
             }
 
             virtual std::string toString() {
-                std::string ret = "LifterBreak - ";
+                std::string ret = "LifterBrake - ";
                 if (break_)
                     ret += "ON";
                 else

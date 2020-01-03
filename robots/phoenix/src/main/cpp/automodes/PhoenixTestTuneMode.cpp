@@ -1,7 +1,7 @@
 #include "PhoenixTestTuneMode.h"
 #include "Phoenix.h"
 #include "liftingcollector/LiftingCollector.h"
-#include "phlifter/LifterBreakAction.h"
+#include "phlifter/LifterBrakeAction.h"
 #include "phlifter/LifterShiftAction.h"
 #include "collector/Collector.h"
 #include "grabber/Grabber.h"

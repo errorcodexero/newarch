@@ -1,7 +1,7 @@
 #include "ThreeCubeAutoMode.h"
 #include "Phoenix.h"
 #include "liftingcollector/LiftingCollector.h"
-#include "phlifter/LifterBreakAction.h"
+#include "phlifter/LifterBrakeAction.h"
 #include "phlifter/LifterShiftAction.h"
 #include "collector/CollectCubeAction.h"
 #include "collector/CollectorEjectCubeAction.h"
