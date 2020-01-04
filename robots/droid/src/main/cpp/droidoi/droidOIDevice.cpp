@@ -1,5 +1,5 @@
-#include "droidOIDevice.h"
-#include "droidOISubsystem.h"
+#include "DroidOIDevice.h"
+#include "DroidOISubsystem.h"
 #include "droid.h"
 #include <Robot.h>
 #include <TeleopController.h>
@@ -12,20 +12,20 @@ using namespace xero::misc ;
 namespace xero {
     namespace droid {
 
-        droidOIDevice::droidOIDevice(droidOISubsystem &sub, int index) : OIDevice(sub, index) {
+        DroidOIDevice::DroidOIDevice(DroidOISubsystem &sub, int index) : OIDevice(sub, index) {
             //
             // Bind keys joystick buttons and axis to meaningful OI items
             //
             bindOI() ;
         }
 
-        droidOIDevice::~droidOIDevice() {
+        DroidOIDevice::~DroidOIDevice() {
         }
 
         //
         // Map buttons, switches, joysticks, axis, etc. to things meaningful to the OI
         //
-        void droidOIDevice::bindOI() {
+        void DroidOIDevice::bindOI() {
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_OI) ;
             log << "OI: initializing button/axis mapping" ;
@@ -36,7 +36,7 @@ namespace xero {
             ////%% End OI_Device_Button_Mappings
         }
 
-        void droidOIDevice::generateActions(xero::base::SequenceAction &seq)
+        void DroidOIDevice::generateActions(xero::base::SequenceAction &seq)
         {
             //
             // TODO - generate the list of actions based on the buttons pushed and the
@@ -47,7 +47,7 @@ namespace xero {
         //
         // Create static actions we for the OI
         //
-        void droidOIDevice::init() {
+        void DroidOIDevice::init() {
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_OI) ;
             log << "OI: creating static actions" ;

@@ -1,6 +1,6 @@
 #include "droid.h"
 #include "droidids.h"
-#include "automodes/droidAutoModeController.h"
+#include "automodes/DroidAutoModeController.h"
 #include <TeleopController.h>
 #include <basegroups.h>
 #include <MessageDestDS.h>
@@ -21,11 +21,11 @@ using namespace xero::base ;
 namespace xero {
     namespace droid {
 
-        droid::droid() : xero::base::Robot("droid", 0.02) {
+        Droid::Droid() : xero::base::Robot("droid", 0.02) {
             comp_bot_flag_set_ = false ;
         }
 
-        bool droid::isCompBot() {
+        bool Droid::isCompBot() {
             //
             // For the practice bot, we have a jumper between digital IO 6 and ground.  For the
             // competition bot we have nothing and the roborio pulls this value up to one.  In this
@@ -38,7 +38,7 @@ namespace xero {
             return comp_bot_ ;
         }
 
-        void droid::enableSpecificMessages() {
+        void Droid::enableSpecificMessages() {
             MessageLogger& logger = getMessageLogger();
                         
             //
@@ -65,7 +65,7 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_SIMULATOR) ;
         }
         
-        void droid::loadPaths() {
+        void Droid::loadPaths() {
             auto paths = getPathManager() ;
 
 
@@ -74,24 +74,24 @@ namespace xero {
             // paths->loadPath("PATH_NAME_HERE") ;
         }
         
-        void droid::RobotHardwareInit() {
-            auto sub_p = std::make_shared<droidSubsystem>(*this) ;
+        void Droid::RobotHardwareInit() {
+            auto sub_p = std::make_shared<DroidSubsystem>(*this) ;
             setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getTankDrive()) ;
         }
 
-        std::shared_ptr<ControllerBase> droid::createAutoController() {
-            auto ctrl = std::make_shared<droidAutoModeController>(*this) ;
+        std::shared_ptr<ControllerBase> Droid::createAutoController() {
+            auto ctrl = std::make_shared<DroidAutoModeController>(*this) ;
             return ctrl ;
         }
         
-        std::shared_ptr<ControllerBase> droid::createTeleopController() {
+        std::shared_ptr<ControllerBase> Droid::createTeleopController() {
             //
             // The base teleop controller is sufficient
             //
             return std::make_shared<xero::base::TeleopController>(*this) ;
         }
          
-        std::shared_ptr<ControllerBase> droid::createTestController() {
+        std::shared_ptr<ControllerBase> Droid::createTestController() {
             //
             // This is where the test controller is created
             //

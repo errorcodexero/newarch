@@ -6,10 +6,10 @@
 
 namespace xero {
     namespace droid {
-        class droidAutoModeController : public xero::base::AutoController {
+        class DroidAutoModeController : public xero::base::AutoController {
         public:
-            droidAutoModeController(xero::base::Robot &robot) ;
-            virtual ~droidAutoModeController() ;
+            DroidAutoModeController(xero::base::Robot &robot) ;
+            virtual ~DroidAutoModeController() ;
 
             virtual void updateAutoMode(int sel, const std::string &gamedata) ;
 

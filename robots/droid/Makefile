@@ -1,17 +1,18 @@
 TOPDIR=../..
 
 AUTOMODES = \
-	src/main/cpp/automodes/droidAutoModeController.cpp\
-	src/main/cpp/automodes/droidAutoModeBase.cpp
+	src/main/cpp/automodes/DroidAutoModeController.cpp\
+	src/main/cpp/automodes/DroidAutoMode.cpp\
+	src/main/cpp/automodes/DroidTestTuneMode.cpp
 
 SUBSYSTEMS = \
-	src/main/cpp/droidsubsystem/droidSubsystem.cpp\
+	src/main/cpp/droidsubsystem/DroidSubsystem.cpp\
 
 SOURCES = \
 	src/main/cpp/main.cpp\
 	src/main/cpp/droid.cpp\
-	src/main/cpp/droidoi/droidOIDevice.cpp\
-	src/main/cpp/droidoi/droidOISubsystem.cpp\
+	src/main/cpp/droidoi/DroidOIDevice.cpp\
+	src/main/cpp/droidoi/DroidOISubsystem.cpp\
 	$(SUBSYSTEMS)\
 	$(AUTOMODES)
 

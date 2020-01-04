@@ -1,4 +1,4 @@
-#include "automodes/droidAutoModeController.h"
+#include "automodes/DroidAutoModeController.h"
 #include "droid.h"
 #include <tankdrive/modes/FollowPathAutomode.h>
 #include <tankdrive/modes/ScrubCharMode.h>
@@ -11,13 +11,13 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace droid {
-        droidAutoModeController::droidAutoModeController(Robot &robot) : AutoController(robot) {
+        DroidAutoModeController::DroidAutoModeController(Robot &robot) : AutoController(robot) {
         }
         
-        droidAutoModeController::~droidAutoModeController() {
+        DroidAutoModeController::~DroidAutoModeController() {
         }
 
-        void droidAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
+        void DroidAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             AutoModePtr mode = nullptr ;
 
             switch(sel) {

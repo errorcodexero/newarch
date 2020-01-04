@@ -6,12 +6,12 @@
 
 namespace xero {
     namespace droid {
-        class droidOISubsystem ;
+        class DroidOISubsystem ;
 
-        class droidOIDevice : public xero::base::OIDevice {
+        class DroidOIDevice : public xero::base::OIDevice {
         public:
-            droidOIDevice(droidOISubsystem &sub, int index) ;
-            virtual ~droidOIDevice() ;
+            DroidOIDevice(DroidOISubsystem &sub, int index) ;
+            virtual ~DroidOIDevice() ;
 
             virtual int getAutoModeSelector() {
                 return getValue(automode_) ;

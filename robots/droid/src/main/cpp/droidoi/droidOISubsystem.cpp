@@ -1,7 +1,7 @@
-#include "droidOISubsystem.h"
-#include "droidOIDevice.h"
+#include "DroidOISubsystem.h"
+#include "DroidOIDevice.h"
 #include "droid.h"
-#include "droidsubsystem/droidSubsystem.h"
+#include "droidsubsystem/DroidSubsystem.h"
 #include <Robot.h>
 #include <SettingsParser.h>
 #include <oi/DriverGamepad.h>
@@ -14,13 +14,13 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace droid {
-        droidOISubsystem::droidOISubsystem(xero::base::Subsystem *parent) : OISubsystem(parent, "oi") {
+        DroidOISubsystem::DroidOISubsystem(xero::base::Subsystem *parent) : OISubsystem(parent, "oi") {
             int oi = parent->getRobot().getSettingsParser().getInteger("hw:driverstation:hid:oi") ;  
-            auto oidev = std::make_shared<droidOIDevice>(*this, oi) ;
+            auto oidev = std::make_shared<DroidOIDevice>(*this, oi) ;
             addHIDDevice(oidev) ;
         }
 
-        droidOISubsystem::~droidOISubsystem() {
+        DroidOISubsystem::~DroidOISubsystem() {
         }
     }
 }

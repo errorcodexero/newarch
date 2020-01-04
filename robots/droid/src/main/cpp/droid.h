@@ -1,6 +1,6 @@
 #pragma once
 
-#include <droidsubsystem/droidSubsystem.h>
+#include <droidsubsystem/DroidSubsystem.h>
 #include <tankdrive/TankDrive.h>
 #include <Robot.h>
 #include <frc/Compressor.h>
@@ -9,14 +9,14 @@ namespace xero {
     namespace droid {
 
         /// \brief the concrete class that represents the robot Phoenix
-        class droid : public xero::base::Robot {
+        class Droid : public xero::base::Robot {
         public:
-            droid() ;
+            Droid() ;
 
             /// \brief return the robot subsystem cast to the phoenix specific type
             /// \returns the robot subsystem cast to the phoenix specific type
-            std::shared_ptr<droidSubsystem> getdroidSubsystem() {
-                return std::dynamic_pointer_cast<droidSubsystem>(getRobotSubsystem()) ;
+            std::shared_ptr<DroidSubsystem> getDroidSubsystem() {
+                return std::dynamic_pointer_cast<DroidSubsystem>(getRobotSubsystem()) ;
             }
 
             virtual void loadPaths() ;

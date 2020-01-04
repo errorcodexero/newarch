@@ -10,9 +10,9 @@ int main(int ac, char **av)
 {
 
 #ifdef SIMULATOR
-    frc::StartRobot<xero::droid::droid>(ac, av) ;
+    frc::StartRobot<xero::droid::Droid>(ac, av) ;
 #else
-    frc::StartRobot<xero::droid::droid>() ;
+    frc::StartRobot<xero::droid::Droid>() ;
 #endif
     return 0 ;
 }

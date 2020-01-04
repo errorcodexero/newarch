@@ -1,6 +1,6 @@
 #pragma once
 
-#include "droidoi/droidOISubsystem.h"
+#include "droidoi/DroidOISubsystem.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
 
@@ -11,16 +11,16 @@ namespace xero {
         // Add gamemanipulator
         // Add climber
         //
-        class droidSubsystem : public xero::base::RobotSubsystem {
+        class DroidSubsystem : public xero::base::RobotSubsystem {
         public:
-            droidSubsystem(xero::base::Robot &robot) ;
-            virtual ~droidSubsystem() ;
+            DroidSubsystem(xero::base::Robot &robot) ;
+            virtual ~DroidSubsystem() ;
 
             std::shared_ptr<xero::base::TankDrive> getTankDrive() {
                 return std::dynamic_pointer_cast<xero::base::TankDrive>(getDriveBase()) ;
             }
           
-            std::shared_ptr<droidOISubsystem> getOI() {
+            std::shared_ptr<DroidOISubsystem> getOI() {
                 return oi_ ;
             }    
 
@@ -28,7 +28,7 @@ namespace xero {
             
         private:
             ////%% Start DefineChildSubsystems        
-            std::shared_ptr<droidOISubsystem> oi_ ;
+            std::shared_ptr<DroidOISubsystem> oi_ ;
             ////%% End DefineChildSubsystems
         } ;
     }
