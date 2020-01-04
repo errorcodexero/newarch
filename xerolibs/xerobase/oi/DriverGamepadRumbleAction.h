@@ -22,10 +22,6 @@ namespace xero {
             /// \brief if this operation is blocking checks the subsystem to see if the assigned action is complete
             void run();
 
-            /// \brief if non blocking, returns true immeidately, otherwise returns true when the subsystem completes the action
-            /// \returns true when the action is complete
-            bool isDone();
-
             /// \brief if the operation is blocking, cancels the operation on the subsystem
             void cancel();
 
