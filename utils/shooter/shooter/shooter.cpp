@@ -182,7 +182,7 @@ int main(int ac, char** av)
 		{
 			double dist;
 
-			double vm = inchesToMeters(velocity * 12.0);
+			double vm = inchesToMeters(velocity * 12.0) ;
 
 			if (distAtTargetHeight(angle, vm, dist))
 			{
@@ -196,4 +196,4 @@ int main(int ac, char** av)
 			}
 		}
 	}
-}
+} 
