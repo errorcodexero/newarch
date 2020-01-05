@@ -10,10 +10,13 @@ double powerCellDiameter = 0.1778;              // m
 double airDensity = 1.2;                        // kg/m^3
 double shooterHeight = 0.9144;                  // m
 double targetHeight = 2.49555;                  // m (98.25 in)
-double startAngle;
-double endAngle;
-double startVelocity;
-double endVelocity;
+
+double startAngle = 45.0;						// degrees
+double endAngle = 45.0;							// degrees
+double angleStep = 1.0;							// degrees
+double startVelocity = 1.0;						// ft / sec
+double endVelocity = 45.0;						// ft / sec
+double velocityStep = 1.0;						// ft / sec
 
 inline double metersToInches(double m)
 {
@@ -49,7 +52,6 @@ bool parseDouble(const std::string& str, double& v)
 //
 bool distAtTargetHeight(double angle, double velocity, double& dist)
 {
-	bool first = true;
 	double t = 0.0;
 	double crossSection = (powerCellDiameter / 2.0) * (powerCellDiameter / 2.0) * PI;
 	double k = airDensity * crossSection * dragCoefficient;
@@ -98,6 +100,11 @@ bool distAtTargetHeight(double angle, double velocity, double& dist)
 	dist = x + pcnt * (xnext - x);
 
 	return true;
+}
+
+void usage()
+{
+
 }
 
 int main(int ac, char** av)
@@ -169,31 +176,127 @@ int main(int ac, char** av)
 				return 1;
 			}
 		}
+		else if (arg == "--startAngle")
+		{
+			if (ac == 0)
+			{
+				std::cerr << "--startAngle option requires one additional argument" << std::endl;
+				return 1;
+			}
+
+			arg = *av++;
+			if (!parseDouble(arg, startAngle))
+			{
+				std::cerr << "argument following --startAngle option must be a floating point number" << std::endl;
+				return 1;
+			}
+		}
+		else if (arg == "--endAngle")
+		{
+			if (ac == 0)
+			{
+				std::cerr << "--endAngle option requires one additional argument" << std::endl;
+				return 1;
+			}
+
+			arg = *av++;
+			if (!parseDouble(arg, endAngle))
+			{
+				std::cerr << "argument following --endAngle option must be a floating point number" << std::endl;
+				return 1;
+			}
+		}
+		else if (arg == "--angleStep")
+		{
+			if (ac == 0)
+			{
+				std::cerr << "--angleStep option requires one additional argument" << std::endl;
+				return 1;
+			}
+
+			arg = *av++;
+			if (!parseDouble(arg, angleStep))
+			{
+				std::cerr << "argument following --angleStep option must be a floating point number" << std::endl;
+				return 1;
+			}
+		}
+		else if (arg == "--startVelocity")
+		{
+			if (ac == 0)
+			{
+				std::cerr << "--startVelocity option requires one additional argument" << std::endl;
+				return 1;
+			}
+
+			arg = *av++;
+			if (!parseDouble(arg, startVelocity))
+			{
+				std::cerr << "argument following --startVelocity option must be a floating point number" << std::endl;
+				return 1;
+			}
+		}
+		else if (arg == "--endVelocity")
+		{
+			if (ac == 0)
+			{
+				std::cerr << "--endVelocity option requires one additional argument" << std::endl;
+				return 1;
+			}
+
+			arg = *av++;
+			if (!parseDouble(arg, endVelocity))
+			{
+				std::cerr << "argument following --endVelocity option must be a floating point number" << std::endl;
+				return 1;
+			}
+		}
+		else if (arg == "--velocityStep")
+		{
+			if (ac == 0)
+			{
+				std::cerr << "--velocityStep option requires one additional argument" << std::endl;
+				return 1;
+			}
+
+			arg = *av++;
+			if (!parseDouble(arg, velocityStep))
+			{
+				std::cerr << "argument following --velocityStep option must be a floating point number" << std::endl;
+				return 1;
+			}
+		}
 		else
 		{
+			usage();
 			std::cerr << "invalid option '" << arg << "'" << std::endl;
 			return 1;
 		}
 	}
 
-	for (double angle = 44; angle <= 46; angle++)
-	{
-		for (double velocity = 20; velocity < 60; velocity += 1)
+	std::cout << "angle, velocity, distance" << std::endl;
+
+	double angle = startAngle;
+	do {
+		double velocity = startVelocity;
+		do
 		{
 			double dist;
 
-			double vm = inchesToMeters(velocity * 12.0) ;
+			// Convert velocity from ft/sec to m/sec
+			double vm = inchesToMeters(velocity * 12.0);
 
+			// Get distance traveled from shooter height to target height
 			if (distAtTargetHeight(angle, vm, dist))
 			{
+				// Convert to feet
 				dist = metersToInches(dist) / 12.0;
-
 				std::cout << angle << ", " << velocity << ", " << dist << std::endl;
 			}
-			else
-			{
-				std::cout << angle << ", " << velocity << ", -" << std::endl;
-			}
-		}
-	}
-} 
+			velocity += velocityStep;
+		} while (velocity < endVelocity);
+
+		angle += angleStep;
+
+	} while (angle < endAngle);
+}

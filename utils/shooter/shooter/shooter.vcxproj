@@ -152,6 +152,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="shooter.cpp" />
+    <ClCompile Include="ShooterSolver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ShooterSolver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
