@@ -1,0 +1,99 @@
+#
+# This file describes the motorcontroller robot.
+#
+
+###################################################################################################
+#
+# Hardware definitions, this is the equivalent of the old signal power table, 
+# at least the signal part of it.
+#
+###################################################################################################
+
+
+#
+# Drivebase
+#
+
+# Drivebase motors
+hw:tankdrive:motors:left:1:canid                                1                           # CAN ID
+hw:tankdrive:motors:left:1:type                                 "sparkmax_brushless"        # Type of motor controller
+hw:tankdrive:motors:left:2:canid                                2                           # CAN ID
+hw:tankdrive:motors:left:2:type                                 "sparkmax_brushless"        # Type of motor controller
+hw:tankdrive:motors:left:3:canid                                3                           # CAN ID
+hw:tankdrive:motors:left:3:type                                 "sparkmax_brushless"        # Type of motor controller
+hw:tankdrive:motors:right:1:canid                               4                           # CAN ID
+hw:tankdrive:motors:right:1:type                                "sparkmax_brushless"        # Type of motor controller
+hw:tankdrive:motors:right:2:canid                               5                           # CAN ID
+hw:tankdrive:motors:right:2:type                                "sparkmax_brushless"        # Type of motor controller
+hw:tankdrive:motors:right:3:canid                               6                           # CAN ID
+hw:tankdrive:motors:right:3:type                                "sparkmax_brushless"        # Type of motor controller
+hw:tankdrive:invert:motors:right                                true                        # Invert the direction of the right motors
+
+# Drivebase encoders
+hw:tankdrive:encoders:left:1                                    0                           # Digital IO
+hw:tankdrive:encoders:left:2                                    1                           # Digital IO
+hw:tankdrive:encoders:right:1                                   2                           # Digital IO
+hw:tankdrive:encoders:right:2                                   3                           # Digital IO
+
+#
+# Driver station
+#
+hw:driverstation:hid:driver                                     0                           # HID Device Index
+hw:driverstation:hid:oi                                         2                           # HID Device Index
+
+hw:testsubsystem:input                                          0                           # analog input 0
+hw:testsubsystem:motor:canid                                    8
+hw:testsubsystem:motor:type                                     "sparkmax"
+hw:testsubsystem:motor:invert                                   false
+hw:testsubsystem:encoder:quad:1                                 4                      # Digital IO
+hw:testsubsystem:encoder:quad:2                                 5                      # Digital IO
+hw:testsubsystem:encoder:quad:m                                 0.08327                # Inches per tick (slope of conversion line)
+hw:testsubsystem:encoder:quad:b                                 11.0                   # Zero encoder value off floor
+
+###################################################################
+#
+# The sections below describe the software parameters for the various
+# robot subsystems
+#
+###################################################################
+
+###################################################################################################
+# tankdrive
+###################################################################################################
+
+#
+# Variables for the tankdrive subsystem code.
+#
+tankdrive:inches_per_tick                                       0.010385891
+tankdrive:width                                                 221425
+tankdrive:scrub                                                 0.95177665
+
+tankdrive:follower:left:ka                                      0.0025
+tankdrive:follower:left:kv                                      0.006112469         # 0.005
+tankdrive:follower:left:kp                                      0.03248             # Recommended 0.02032 - 0.03048
+tankdrive:follower:left:kd                                      0.0
+
+tankdrive:follower:right:ka                                     0.0025
+tankdrive:follower:right:kv                                     0.006112469         # 0.005
+tankdrive:follower:right:kp                                     0.03248             # Recommended 0.02032 - 0.03048
+tankdrive:follower:right:kd                                     0.0
+
+tankdrive:follower:turn_correction                              0
+tankdrive:follower:angle_correction                             0.06
+
+
+#
+# Variables for the driver gamepad
+#
+driver:power:max                                                1.0
+driver:power:default                                            0.6
+driver:turn:max                                                 0.8
+driver:turn:default                                             0.4
+driver:power:slowby                                             0.5
+driver:power:tolerance                                          0.05
+driver:power:nudge_straight                                     0.2
+driver:power:nudge_rotate                                       0.2
+driver:nudge_time                                               0.1
+driver:zerolevel                                                0.1
+
+
