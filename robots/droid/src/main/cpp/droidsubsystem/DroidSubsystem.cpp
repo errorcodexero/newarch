@@ -3,7 +3,7 @@
 #include "collector/Collector.h"
 #include "conveyor/Conveyor.h"
 #include "controlpanelrotator/ControlPanelRotator.h"
-#include "climber/climber.h"
+#include "climber/Climber.h"
 #include "droidids.h"
 #include <Robot.h>
 #include <list>
