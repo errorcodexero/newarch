@@ -7,6 +7,12 @@ AUTOMODES = \
 
 SUBSYSTEMS = \
 	src/main/cpp/droidsubsystem/DroidSubsystem.cpp\
+	src/main/cpp/shooter/Shooter.cpp\
+	src/main/cpp/shooter/turret/Turret.cpp\
+	src/main/cpp/collector/Collector.cpp\
+	src/main/cpp/conveyor/Conveyor.cpp\
+	src/main/cpp/controlpanelrotator/ControlPanelRotator.cpp\
+	src/main/cpp/climber/Climber.cpp\
 
 SOURCES = \
 	src/main/cpp/main.cpp\

@@ -6,6 +6,11 @@
 
 namespace xero {
     namespace droid {
+        class Shooter;
+        class Collector;
+        class Conveyor;
+        class ControlPanelRotator;
+        class Climber;
 
         //
         // Add gamemanipulator
@@ -23,12 +28,33 @@ namespace xero {
             std::shared_ptr<DroidOISubsystem> getOI() {
                 return oi_ ;
             }    
+          
+            std::shared_ptr<Shooter> getShooter() {
+                return shooter_ ;
+            }
+          
+            std::shared_ptr<Collector> getCollector() {
+                return collector_ ;
+            }    
+          
+            std::shared_ptr<Conveyor> getConveyor() {
+                return conveyor_ ;
+            }    
+          
+            std::shared_ptr<ControlPanelRotator> getControlPanelRotator() {
+                return control_panel_rotator_ ;
+            }    
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             
         private:
             ////%% Start DefineChildSubsystems        
             std::shared_ptr<DroidOISubsystem> oi_ ;
+            std::shared_ptr<Shooter> shooter_;
+            std::shared_ptr<Collector> collector_;
+            std::shared_ptr<Conveyor> conveyor_;
+            std::shared_ptr<ControlPanelRotator> control_panel_rotator_;
+            std::shared_ptr<Climber> climber_;
             ////%% End DefineChildSubsystems
         } ;
     }
