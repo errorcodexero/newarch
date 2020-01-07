@@ -10,7 +10,7 @@ SUBSYSTEMS = \
 
 SOURCES = \
 	src/main/cpp/main.cpp\
-	src/main/cpp/droid.cpp\
+	src/main/cpp/Droid.cpp\
 	src/main/cpp/droidoi/DroidOIDevice.cpp\
 	src/main/cpp/droidoi/DroidOISubsystem.cpp\
 	$(SUBSYSTEMS)\
