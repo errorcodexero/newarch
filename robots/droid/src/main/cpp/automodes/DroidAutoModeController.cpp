@@ -1,4 +1,5 @@
 #include "automodes/DroidAutoModeController.h"
+#include "automodes/DroidAutoMode.h"
 #include "droid.h"
 #include <tankdrive/modes/FollowPathAutomode.h>
 #include <tankdrive/modes/ScrubCharMode.h>
@@ -22,6 +23,7 @@ namespace xero {
 
             switch(sel) {
             case 0:
+                mode = std::make_shared<DroidAutoMode>(getRobot(), "Mode 0", "The one and only automode");
                 break ;
 
             case 1:

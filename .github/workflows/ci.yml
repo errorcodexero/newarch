@@ -23,7 +23,7 @@ jobs:
     
     strategy: 
       matrix: 
-        robot: [ranseur]
+        robot: [droid]
         configuration: [Debug, ASan]
 
     steps:
