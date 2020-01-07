@@ -6,7 +6,7 @@ using namespace xero::base;
 
 namespace xero {
     namespace droid {
-        Climber::Climber(Subsystem *parent): Subsystem(parent, "collector") {
+        Climber::Climber(Subsystem *parent): Subsystem(parent, "climber") {
             msg_id_ = MSG_GROUP_CLIMBER;
         }
     }
