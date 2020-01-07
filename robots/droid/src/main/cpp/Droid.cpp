@@ -1,4 +1,4 @@
-#include "droid.h"
+#include "Droid.h"
 #include "droidids.h"
 #include "automodes/DroidAutoModeController.h"
 #include <TeleopController.h>

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "droid.h"
+#include "Droid.h"
 
 #ifdef SIMULATOR
 #include <droidSimulator.h>

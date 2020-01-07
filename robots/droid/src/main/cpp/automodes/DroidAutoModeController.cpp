@@ -1,6 +1,6 @@
 #include "automodes/DroidAutoModeController.h"
 #include "automodes/DroidAutoMode.h"
-#include "droid.h"
+#include "Droid.h"
 #include <tankdrive/modes/FollowPathAutomode.h>
 #include <tankdrive/modes/ScrubCharMode.h>
 #include <tankdrive/modes/StraightCharAutoMode.h>

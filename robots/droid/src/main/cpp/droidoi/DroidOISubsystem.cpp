@@ -1,6 +1,6 @@
 #include "DroidOISubsystem.h"
 #include "DroidOIDevice.h"
-#include "droid.h"
+#include "Droid.h"
 #include "droidsubsystem/DroidSubsystem.h"
 #include <Robot.h>
 #include <SettingsParser.h>
