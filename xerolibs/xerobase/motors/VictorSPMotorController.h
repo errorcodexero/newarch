@@ -23,7 +23,14 @@ namespace xero {
             virtual void setNeutralMode(NeutralMode neutralMode);
             virtual void follow(std::shared_ptr<MotorController> motor, bool invert = false);
             virtual void reapplyInverted();
-
+            virtual std::string getType() {
+                std::string type("victorsp") ;
+                return type ;
+            }
+            
+            MotorPtr getVictorSPMotorPtr() {
+                return motor_ ;
+            }
         protected:
             void addAsFollower(VictorSPMotorController *motor) {
                 followers_.push_back(motor) ;

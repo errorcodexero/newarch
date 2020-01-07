@@ -32,6 +32,22 @@ namespace xero {
             virtual void follow(MotorPtr motor, bool invert = false) {
                 assert(0 == "MotorGroupController cannot follow");
             }
+            virtual std::string getType() {
+                std::string ret = "group" ;
+                return ret ;
+            }  
+
+            virtual bool hasPosition() {
+                if (motors_.size() == 0)
+                    return false ;
+
+                return motors_[0]->hasPosition() ;
+            }
+
+            virtual int getPosition() {
+                assert(motors_.size() > 0) ;
+                return motors_[0]->getPosition() ;
+            }
         private:
             std::vector<MotorPtr> motors_;
         };

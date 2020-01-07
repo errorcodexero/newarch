@@ -162,14 +162,39 @@ namespace xero {
             double angle = 0.0 ;
 
             if (left_enc_ != nullptr) {
+                //
+                // Option 1
+                // 
+                // We have explicitly put encoders on the robot, use the
+                // encoders we mounted.
+                //
                 assert(right_enc_ != nullptr) ;
 
                 ticks_left_ = left_enc_->Get() ;
                 ticks_right_ = right_enc_->Get() ;
+            } 
+            else if (left_motors_->hasPosition())
+            {
+                //
+                // Option 2
+                //
+                // If the motors have built in encoders, use them.
+                //
+                assert(right_motors_->hasPosition()) ;
 
-                dist_l_ = ticks_left_ * left_inches_per_tick_ ;
-                dist_r_ = ticks_right_ * right_inches_per_tick_ ;
+                ticks_left_ = left_motors_->getPosition() ;
+                ticks_right_ = right_motors_->getPosition() ;
             }
+            else
+            {
+                //
+                // We must have some way to get tank drive position.
+                //
+                assert(false) ;
+            }
+            
+            dist_l_ = ticks_left_ * left_inches_per_tick_ ;
+            dist_r_ = ticks_right_ * right_inches_per_tick_ ;
 
             if (navx_ != nullptr) {
                 angle = -navx_->GetYaw() ;

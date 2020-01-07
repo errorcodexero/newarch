@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include <cassert>
 
 /// \file
 
@@ -36,6 +38,22 @@ namespace xero {
             /// \param motor The motor to follow. Should assert if `motor` cannot be followed.
             /// \param invert Whether to invert the output of the leader.
             virtual void follow(std::shared_ptr<MotorController> motor, bool invert = false) = 0;
+
+            /// \brief return the underlying type of motor
+            /// \returns the underlying type of motor as a string
+            virtual std::string getType() = 0 ;
+
+            /// \brief returns true if the motor can track its own position
+            /// \returns true if the motor can track its own position
+            virtual bool hasPosition() {
+                return false ;
+            }
+
+            /// \brief returns the encoder count position of the motor
+            /// \returns encoder count position of the motor
+            virtual int getPosition() {
+                assert(0 == "this motor controller does not support getPosition()") ;
+            }
         };
 }
 }

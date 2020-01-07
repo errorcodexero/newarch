@@ -4,6 +4,7 @@
 #include <list>
 #include <memory>
 #include <rev/CANSparkMax.h>
+#include <rev/CANEncoder.h>
 
 namespace xero {
     namespace base {
@@ -23,9 +24,23 @@ namespace xero {
             virtual void setNeutralMode(NeutralMode neutralMode);
             virtual void follow(std::shared_ptr<MotorController> motor, bool invert = false);
             virtual void reapplyInverted();
+            virtual std::string getType() {
+                std::string type("sparkmax") ;
+                return type ;
+            }
+
+            virtual bool hasPosition() {
+                return true ;
+            }
+
+            virtual int getPosition() {
+                return static_cast<int>(encoder_->GetPosition()) ;
+            }
+
         private:
             MotorPtr motor_;
             bool isInverted_;
+            rev::CANEncoder *encoder_ ;
         };
     }
 }

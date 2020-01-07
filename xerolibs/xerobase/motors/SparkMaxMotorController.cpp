@@ -12,8 +12,12 @@ namespace xero {
                 motor_ = std::make_shared<rev::CANSparkMax>(id, type);
                 motor_->SetSmartCurrentLimit(40) ;
 
-                // TODO: is this correct? any other setup?
                 motor_->EnableVoltageCompensation(12.0) ;
+
+                // The internal encoder
+                encoder_ = new rev::CANEncoder(*motor_) ;
+                encoder_->SetPositionConversionFactor(1.0) ;
+                encoder_->SetVelocityConversionFactor(1.0) ;
             }
 
             void SparkMaxMotorController::follow(std::shared_ptr<MotorController> motor, bool invert) {
