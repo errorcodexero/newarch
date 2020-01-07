@@ -2,6 +2,7 @@
 
 #include <ctre/Phoenix.h>
 #include <rev/CANSparkMax.h>
+#include <rev/CANEncoder.h>
 #include "Encoder.h"
 #include "PowerDistributionPanel.h"
 #include "AnalogInput.h"
@@ -41,6 +42,9 @@ namespace xero {
             virtual void addDevice(rev::CANSparkMax *spark)  {                
             }            
 
+            virtual void addDevice(rev::CANEncoder *encoder) {
+            }
+
             virtual void addDevice(frc::Encoder *encoder) {                
             }
 
@@ -73,6 +77,7 @@ namespace xero {
 
             virtual void addDevice(frc::Relay *relay) {                
             }
+
 
             virtual bool processEvent(const std::string &name, int value) {          
                 return false ;      

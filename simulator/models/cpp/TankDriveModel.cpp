@@ -314,6 +314,12 @@ namespace xero {
             if (right_enc_ != nullptr)
                 right_enc_->SimulatorSetValue(right_enc_value_) ;
 
+            if (left_spark_encoder_ != nullptr)
+                left_spark_encoder_->SimulatorSetPosition(left_enc_value_);
+
+            if (right_spark_encoder_ != nullptr)
+                right_spark_encoder_->SimulatorSetPosition(right_enc_value_);
+
             if (navx_ != nullptr) {
                 double deg = normalizeAngleDegrees(-rad2deg(angle_ + navx_offset_)) ;
                 navx_->SimulatorSetYaw(deg) ;
@@ -414,6 +420,16 @@ namespace xero {
                 return ;
             }  
         }        
+
+        void TankDriveModel::addDevice(CANEncoder *encoder) {
+            auto itl = std::find_if(left_spark_motors_.begin(), left_spark_motors_.end(), [encoder](rev::CANSparkMax *motor) { return encoder->SimulatorGetMotor() == motor; });
+            if (itl != left_spark_motors_.end())
+                left_spark_encoder_ = encoder ;
+
+            auto itr = std::find_if(left_spark_motors_.begin(), left_spark_motors_.end(), [encoder](rev::CANSparkMax *motor) { return encoder->SimulatorGetMotor() == motor; });
+            if (itr != left_spark_motors_.end())
+                right_spark_encoder_ = encoder ;
+        }  
 
         void TankDriveModel::addDevice(Encoder *encoder) {
             int first, second ;

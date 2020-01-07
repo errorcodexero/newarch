@@ -2,7 +2,8 @@ TOPDIR=../..
 
 SOURCES = \
 	rev/CANSparkMax.cpp\
-	rev/CANSparkMaxLowLevel.cpp
+	rev/CANSparkMaxLowLevel.cpp\
+	rev/CANEncoder.cpp
 
 TARGET=revsim
 

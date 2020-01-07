@@ -192,7 +192,7 @@ namespace xero {
                 //
                 assert(false) ;
             }
-            
+
             dist_l_ = ticks_left_ * left_inches_per_tick_ ;
             dist_r_ = ticks_right_ * right_inches_per_tick_ ;
 
@@ -205,9 +205,14 @@ namespace xero {
             left_linear_.update(getRobot().getDeltaTime(), getLeftDistance()) ;
             right_linear_.update(getRobot().getDeltaTime(), getRightDistance()) ;
 
-            frc::SmartDashboard::PutNumber("dbleft", left_linear_.getDistance()) ;
-            frc::SmartDashboard::PutNumber("dbright", right_linear_.getDistance()) ;
-            frc::SmartDashboard::PutNumber("dbyaw", getAngle()) ;
+            if (getRobot().IsDisabled())
+            {
+                frc::SmartDashboard::PutNumber("DB:LeftTicks", ticks_left_);
+                frc::SmartDashboard::PutNumber("DB:RightTicks", ticks_right_);     
+                frc::SmartDashboard::PutNumber("dbleft", left_linear_.getDistance()) ;
+                frc::SmartDashboard::PutNumber("dbright", right_linear_.getDistance()) ;
+                frc::SmartDashboard::PutNumber("dbyaw", getAngle()) ;
+            }
 
             auto &logger = getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE_VERBOSE);

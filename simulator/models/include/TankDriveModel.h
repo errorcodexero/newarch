@@ -45,6 +45,7 @@ namespace xero
             virtual void addDevice(frc::Encoder *encoder);
             virtual void addDevice(AHRS *navx);
             virtual void addDevice(frc::Solenoid *sol) ;
+            virtual void addDevice(rev::CANEncoder *encoder);
 
             double getXPos() { 
                 return xpos_ ;
@@ -170,6 +171,9 @@ namespace xero
             // The left and right encoers for the robot
             frc::Encoder *left_enc_;
             frc::Encoder *right_enc_;
+
+            rev::CANEncoder *left_spark_encoder_;
+            rev::CANEncoder *right_spark_encoder_;
 
             // The solenoid that engages the shifer
             frc::Solenoid *shifter_ ;
