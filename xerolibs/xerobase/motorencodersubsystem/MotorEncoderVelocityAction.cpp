@@ -6,11 +6,11 @@ using namespace xero::misc ;
 
 namespace xero {
     namespace base {
-        MotorEncoderHoldAction::MotorEncoderHoldAction(MotorEncoderSubsystem &subsystem, double target):
+        MotorEncoderVelocityAction::MotorEncoderVelocityAction(MotorEncoderSubsystem &subsystem, double target):
             MotorEncoderSubsystemAction(subsystem), target_(target) {
         }
 
-        void MotorEncoderHoldAction::start() {
+        void MotorEncoderVelocityAction::start() {
             MotorEncoderSubsystemAction::start();
 
             auto &sub = getSubsystem();
@@ -24,7 +24,7 @@ namespace xero {
             pid_.reset();
         }
 
-        void MotorEncoderHoldAction::run() {
+        void MotorEncoderVelocityAction::run() {
             MotorEncoderSubsystemAction::run();
 
             auto &sub = getSubsystem();
@@ -42,7 +42,7 @@ namespace xero {
             logger.endMessage() ;
         }
 
-        void MotorEncoderHoldAction::cancel()
+        void MotorEncoderVelocityAction::cancel()
         {
             MotorEncoderSubsystemAction::cancel();
             setDone();

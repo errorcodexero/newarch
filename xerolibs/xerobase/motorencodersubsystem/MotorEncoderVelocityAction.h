@@ -10,10 +10,10 @@ namespace xero {
     namespace base {
         /// An action which holds a MotorEncoderSubsystem at a single velocity
         /// and actively corrects for variation. Runs indefinitely until canceled.
-        class MotorEncoderHoldAction: public MotorEncoderSubsystemAction {
+        class MotorEncoderVelocityAction: public MotorEncoderSubsystemAction {
         public:
             /// Creates a velocity action targeting the specified velocity.
-            MotorEncoderHoldAction(MotorEncoderSubsystem &subsystem, double target);
+            MotorEncoderVelocityAction(MotorEncoderSubsystem &subsystem, double target);
 
             virtual void start();
             virtual void run();

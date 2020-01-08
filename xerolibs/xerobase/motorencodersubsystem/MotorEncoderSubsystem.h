@@ -15,6 +15,7 @@ namespace xero {
         class MotorEncoderSubsystem : public SingleMotorSubsystem {
             friend class MotorEncoderGoToAction;
             friend class MotorEncoderHoldAction;
+            friend class MotorEncoderVelocityAction;
         public:
             /// \brief Create a new subsystem object
             /// \param parent a reference to the parent subsystem
