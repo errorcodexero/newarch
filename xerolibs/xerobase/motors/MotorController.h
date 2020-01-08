@@ -54,6 +54,11 @@ namespace xero {
             virtual int getPosition() {
                 assert(0 == "this motor controller does not support getPosition()") ;
             }
+
+            /// \brief resets the encoder count position of the motor
+            virtual void resetEncoder() {
+                assert(0 == "this motor controller does not support resetEncoder()") ;
+            }
         };
 }
 }

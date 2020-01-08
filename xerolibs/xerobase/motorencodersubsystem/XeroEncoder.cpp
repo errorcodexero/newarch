@@ -13,14 +13,20 @@ namespace xero {
             assert(0);
         }
 
-        XeroEncoder::XeroEncoder(Robot &robot, const std::string &configName, bool angular): robot_(robot) {
+        XeroEncoder::XeroEncoder(Robot &robot, const std::string &configName, 
+                                 bool angular, std::shared_ptr<MotorController> motor): robot_(robot) {
             auto &logger = robot.getMessageLogger();
             auto &parser = robot.getSettingsParser();
 
             angular_ = angular ;
             name_ = configName ;
             std::string quadName = configName + ":quad";
-            if (parser.isDefined(quadName + ":1") || parser.isDefined(quadName + ":2")) {
+            if (parser.isDefined(quadName + ":motor") && parser.getBoolean(quadName + ":motor")) {
+                // use an embedded quadrature encoder
+                assert(motor->hasPosition());
+                motor_ = motor;
+            }
+            else if (parser.isDefined(quadName + ":1") || parser.isDefined(quadName + ":2")) {
                 // parse a quadrature encoder
                 if (!parser.isDefined(quadName + ":1") || !parser.isDefined(quadName + ":2")) {
                     invalidEncoder(logger, quadName, "quadrature encoder requires both pins");
@@ -29,13 +35,15 @@ namespace xero {
                     parser.getInteger(quadName + ":1"),
                     parser.getInteger(quadName + ":2")
                 );
-                
+            } else quad_ = nullptr;
+
+            if (quad_ || motor_) {
                 if (parser.isDefined(quadName + ":m")) quadM_ = parser.getDouble(quadName + ":m");
                 else invalidEncoder(logger, quadName, "m parameter is required");
 
                 if (parser.isDefined(quadName + ":b")) quadB_ = parser.getDouble(quadName + ":b");
                 else invalidEncoder(logger, quadName, "b parameter is required");
-            } else quad_ = nullptr;
+            }
 
             std::string analogName = configName + ":analog";
             if (parser.isDefined(analogName)) {
@@ -91,9 +99,9 @@ namespace xero {
         double XeroEncoder::getPosition() {
             double result = 0.0 ;
 
-            if (quad_) 
+            if (motor_ || quad_) 
             {
-                result = quadM_ * quad_->Get() + quadB_;
+                result = quadM_ * (motor_ ? motor_->getPosition() : quad_->Get()) + quadB_;
                 if (angular_) 
                     result = xero::math::normalizeAngleDegrees(result);
             } 
@@ -126,20 +134,24 @@ namespace xero {
         }
 
         void XeroEncoder::reset() {
-            if (quad_) {
+            if (motor_)
+                motor_->resetEncoder();
+            else if (quad_)
                 quad_->Reset();
-                calibrate();
-            }
+            calibrate();
         }
 
         void XeroEncoder::calibrate() {
-            if (quad_ && (analog_ || pwm_)) {
+            if ((quad_ || motor_) && (analog_ || pwm_)) {
                 calibrate(getAbsolutePosition()) ;
             }
         }
 
         void XeroEncoder::calibrate(double pos) {
-            quad_->Reset();
+            if (motor_)
+                motor_->resetEncoder();
+            else if (quad_)
+                quad_->Reset();
             quadB_ = pos;
         }
     }

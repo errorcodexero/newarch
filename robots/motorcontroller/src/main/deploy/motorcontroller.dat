@@ -45,8 +45,7 @@ hw:testsubsystem:input                                          0               
 hw:testsubsystem:motor:canid                                    8
 hw:testsubsystem:motor:type                                     "sparkmax"
 hw:testsubsystem:motor:invert                                   false
-hw:testsubsystem:encoder:quad:1                                 4                      # Digital IO
-hw:testsubsystem:encoder:quad:2                                 5                      # Digital IO
+hw:testsubsystem:encoder:motor                                  true
 hw:testsubsystem:encoder:quad:m                                 0.08327                # Inches per tick (slope of conversion line)
 hw:testsubsystem:encoder:quad:b                                 11.0                   # Zero encoder value off floor
 

@@ -37,6 +37,10 @@ namespace xero {
                 return static_cast<int>(encoder_->GetPosition()) ;
             }
 
+            virtual void resetPosition() {
+                encoder_->SetPosition(0);
+            }
+
         private:
             MotorPtr motor_;
             bool isInverted_;

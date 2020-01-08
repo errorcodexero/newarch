@@ -128,7 +128,9 @@
     "forward_list": "cpp",
     "resumable": "cpp",
     "regex": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "strstream": "cpp",
+    "cfenv": "cpp"
   },
   "C_Cpp.configurationWarnings": "Disabled"
 }
