@@ -20,7 +20,7 @@ namespace xero {
         {
             auto &robot = getRobot(); 
             std::string encname = Subsystem::HWPrefix + name + ":encoder" ;
-            encoder_ = std::make_shared<XeroEncoder>(robot, encname, angular, getMotor()) ;
+            encoder_ = std::make_shared<XeroEncoder>(robot, encname, angular, getMotorController()) ;
         }
 
         void MotorEncoderSubsystem::postHWInit()

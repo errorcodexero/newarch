@@ -76,6 +76,8 @@ namespace xero {
             /// \param power the power to apply to the motor, between -1.0 and 1.0
             void setMotor(double power);
 
+            std::shared_ptr<MotorController> getMotorController() { return motor_; }
+
         private:
             // The TalonSRX motor controller is a talon is used
             std::shared_ptr<MotorController> motor_;
