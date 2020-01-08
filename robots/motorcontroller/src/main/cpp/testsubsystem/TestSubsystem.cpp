@@ -1,4 +1,5 @@
 #include "TestSubsystem.h"
+#include "VelocityAction.h"
 #include "motorcontrollerids.h"
 #include <Robot.h>
 
@@ -13,6 +14,8 @@ namespace xero {
 
             int ain = parent->getRobot().getSettingsParser().getInteger("hw:testsubsystem:input");
             ainput_ = std::make_shared<frc::AnalogInput>(ain);
+
+            setDefaultAction(VelocityAction(this));
         }
 
         TestSubsystem::~TestSubsystem() {
