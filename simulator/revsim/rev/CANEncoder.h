@@ -13,6 +13,7 @@ class CANSparkMaxLowLevel;
         virtual ~CANEncoder();
 
         double GetPosition();
+        void SetPosition(double pos) ;
         void SimulatorSetPosition(double pos);
 
         void SetPositionConversionFactor(double mult) {

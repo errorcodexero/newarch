@@ -27,4 +27,10 @@ namespace rev
         else
             pos_ = pos ;
     }
+
+    void CANEncoder::SetPosition(double pos)
+    {
+        std::lock_guard<std::mutex> lock(getLockMutex());
+        pos_ = pos ;        
+    }
 }

@@ -11,11 +11,7 @@ namespace xero {
       
         TestSubsystem::TestSubsystem(Subsystem *parent) : MotorEncoderSubsystem(parent, "testsubsystem", MSG_GROUP_TESTSUBSYSTEM, true) {
             setSmartDashboardName("testsubsystem") ;
-
-            int ain = parent->getRobot().getSettingsParser().getInteger("hw:testsubsystem:input");
-            ainput_ = std::make_shared<frc::AnalogInput>(ain);
-
-            setDefaultAction(VelocityAction(this));
+            setDefaultAction(std::make_shared<VelocityAction>(*this));
         }
 
         TestSubsystem::~TestSubsystem() {
@@ -23,7 +19,6 @@ namespace xero {
 
         void TestSubsystem::computeState() {
             MotorEncoderSubsystem::computeState();
-            avalue_ = ainput_->GetVoltage();
         }
     }
 }

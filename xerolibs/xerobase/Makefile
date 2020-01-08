@@ -56,6 +56,7 @@ SOURCES = \
 	motorencodersubsystem/MotorEncoderGoToAction.cpp\
     motorencodersubsystem/MotorEncoderHoldAction.cpp\
 	motorencodersubsystem/MotorEncoderPowerAction.cpp\
+	motorencodersubsystem/MotorEncoderVelocityAction.cpp\
     motorencodersubsystem/XeroEncoder.cpp\
 	$(SIMSOURCES)
 

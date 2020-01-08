@@ -1,17 +1,20 @@
+#pragma once
+
 #include <motorencodersubsystem/MotorEncoderVelocityAction.h>
 
 namespace xero {
     namespace motorcontroller {
-        class VelocityAction : public MotorEncoderVelocityAction {
-            VelocityAction(TestSubsystem &sub): MotorEncoderVelocityAction(sub, 0), sub_(sub) {}
+        class TestSubsystem ;
 
-            void run() override {
-                setTarget(frc::SmartDashboard::GetNumber("velocity", getTarget()));
-                MotorEncoderVelocityAction::run();
-            }
+        class VelocityAction : public xero::base::MotorEncoderVelocityAction {
+        public:
+            VelocityAction(TestSubsystem &sub) ;
+            virtual ~VelocityAction() ;
+
+            void run() override ;
+
         private:
-            TestSubsystem &sub_;
-            
-        }
+            TestSubsystem &sub_; 
+        } ;
     }
 }
