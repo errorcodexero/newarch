@@ -43,7 +43,7 @@ hw:driverstation:hid:oi                                         2               
 
 hw:testsubsystem:input                                          0                           # analog input 0
 hw:testsubsystem:motor:canid                                    8
-hw:testsubsystem:motor:type                                     "sparkmax"
+hw:testsubsystem:motor:type                                     "sparkmax_brushless"
 hw:testsubsystem:motor:invert                                   false
 hw:testsubsystem:encoder:motor                                  true
 hw:testsubsystem:encoder:quad:m                                 0.08327                # Inches per tick (slope of conversion line)

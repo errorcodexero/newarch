@@ -42,6 +42,8 @@ namespace xero {
 
             left_enc_ = nullptr ;
             right_enc_ = nullptr ;
+            left_spark_encoder_ = nullptr ;
+            right_spark_encoder_ = nullptr ;
             navx_ = nullptr ;
 
             left_power_ = 0.0 ;

@@ -100,7 +100,10 @@ namespace xero {
                 std::string message = "unsupported motor type '" + type + "' (supported types:";
                 constructor = motorConstructors_.begin();
                 while (constructor != motorConstructors_.end()) 
+                {
                     message += " '" + constructor->first + "'";
+                    constructor++ ;
+                }
                 handleError(configID, message + ")");
             }
 
