@@ -99,6 +99,9 @@ namespace xero {
             /// \brief run the disabled mode (doing nothing)
             virtual void DisabledPeriodic() ;
 
+            virtual void RobotPeriodic() {                
+            }
+
             /// \brief Return a reference to the one message logger
             /// \returns a reference to the one message logger
             /// \brief Return reference to the one message logger

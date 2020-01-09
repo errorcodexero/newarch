@@ -9,7 +9,7 @@ using namespace xero::misc ;
 namespace xero {
     namespace motorcontroller {
       
-        TestSubsystem::TestSubsystem(Subsystem *parent) : MotorEncoderSubsystem(parent, "testsubsystem", MSG_GROUP_TESTSUBSYSTEM, true) {
+        TestSubsystem::TestSubsystem(Subsystem *parent) : MotorEncoderSubsystem(parent, "testsubsystem", MSG_GROUP_TESTSUBSYSTEM) {
             setSmartDashboardName("testsubsystem") ;
             setDefaultAction(std::make_shared<VelocityAction>(*this));
         }

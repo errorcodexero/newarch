@@ -27,8 +27,9 @@ namespace xero {
 
         void VelocityAction::run()
         {
-            double target = frc::SmartDashboard::GetNumber("velocity", getTarget());
-            if (std::fabs(target - getTarget()) < 0.1)
+            double target = entry_.GetDouble(getTarget()) ;
+            target = 5 ;
+            if (std::fabs(target - getTarget()) < 100)
             {
                 auto &logger = getSubsystem().getRobot().getMessageLogger();
                 logger.startMessage(MessageLogger::MessageType::debug, getSubsystem().getMsgID());

@@ -101,6 +101,7 @@ namespace xero {
 
             if (motor_ || quad_) 
             {
+                
                 result = quadM_ * (motor_ ? motor_->getPosition() : quad_->Get()) + quadB_;
                 if (angular_) 
                     result = xero::math::normalizeAngleDegrees(result);

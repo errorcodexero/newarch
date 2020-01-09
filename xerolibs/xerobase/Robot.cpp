@@ -215,7 +215,8 @@ namespace xero {
             } else if (elapsed_time > target_loop_time_) {
                 message_logger_.startMessage(MessageLogger::MessageType::warning) ;
                 message_logger_ << "Robot loop exceeded target loop time\n";
-                message_logger_ << "Loop time: " << elapsed_time << "\n";
+                message_logger_ << "Loop time: " << elapsed_time ;
+                message_logger_ << ", Target time: " << target_loop_time_ ;
                 message_logger_.endMessage() ;
             }
 
@@ -550,7 +551,6 @@ namespace xero {
             updateAutoMode() ;
             robot_subsystem_->computeState() ;
             watcher_->update() ;
-            frc::Wait(target_loop_time_) ;              
             last_time_ = initial_time ;                
         }        
     }

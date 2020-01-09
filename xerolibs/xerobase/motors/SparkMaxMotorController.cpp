@@ -15,7 +15,7 @@ namespace xero {
                 motor_->EnableVoltageCompensation(12.0) ;
 
                 // The internal encoder
-                encoder_ = new rev::CANEncoder(*motor_) ;
+                encoder_ = new rev::CANEncoder(*motor_, rev::CANEncoder::EncoderType::kQuadrature) ;
                 encoder_->SetPositionConversionFactor(1.0) ;
                 encoder_->SetVelocityConversionFactor(1.0) ;
             }
