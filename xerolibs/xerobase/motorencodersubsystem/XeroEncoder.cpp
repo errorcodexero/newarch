@@ -37,7 +37,7 @@ namespace xero {
                 );
             } else quad_ = nullptr;
 
-            if (quad_ || motor_) {
+            if (quad_  != nullptr || motor_ != nullptr) {
                 if (parser.isDefined(quadName + ":m")) quadM_ = parser.getDouble(quadName + ":m");
                 else invalidEncoder(logger, quadName, "m parameter is required");
 
@@ -91,7 +91,7 @@ namespace xero {
 
             // validate configuration
             if (pwm_ && analog_) invalidEncoder(logger, configName, "cannot declare two absolute encoders");
-            if (!(quad_ || pwm_ || analog_)) {
+            if (!(quad_ != nullptr || pwm_ != nullptr || analog_ != nullptr || motor_ != nullptr)) {
                 invalidEncoder(logger, configName, "must declare :quad:(1,2), :analog, or :pwm");
             }
         }

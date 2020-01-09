@@ -45,9 +45,9 @@ hw:testsubsystem:input                                          0               
 hw:testsubsystem:motor:canid                                    8
 hw:testsubsystem:motor:type                                     "sparkmax_brushless"
 hw:testsubsystem:motor:invert                                   false
-hw:testsubsystem:encoder:motor                                  true
-hw:testsubsystem:encoder:quad:m                                 0.08327                # Inches per tick (slope of conversion line)
-hw:testsubsystem:encoder:quad:b                                 11.0                   # Zero encoder value off floor
+hw:testsubsystem:encoder:quad:motor                             true
+hw:testsubsystem:encoder:quad:m                                 0.0299199                  # Inches per tick (slope of conversion line)
+hw:testsubsystem:encoder:quad:b                                 0.0                        # Zero encoder value off floor
 
 ###################################################################
 #
@@ -80,6 +80,24 @@ tankdrive:follower:right:kd                                     0.0
 tankdrive:follower:turn_correction                              0
 tankdrive:follower:angle_correction                             0.06
 
+#
+# Test subsystem
+#
+testsubsystem:velocity:p                                       1.0
+testsubsystem:velocity:i                                       0.0
+testsubsystem:velocity:d                                       0.0
+testsubsystem:velocity:f                                       0.0
+testsubsystem:velocity:min                                     -1.0
+testsubsystem:velocity:max                                     1.0
+testsubsystem:velocity:imax                                    0.0
+
+testsubsystem:hold:p                                           1.0
+testsubsystem:hold:i                                           0.0
+testsubsystem:hold:d                                           0.0
+testsubsystem:hold:f                                           0.0
+testsubsystem:hold:min                                         -1.0
+testsubsystem:hold:max                                         1.0
+testsubsystem:hold:imax                                        0.0
 
 #
 # Variables for the driver gamepad

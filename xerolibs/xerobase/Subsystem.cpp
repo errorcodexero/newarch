@@ -167,7 +167,6 @@ namespace xero {
             return result;
         }
 
-
         bool Subsystem::cancelActionsAndChildActions(std::shared_ptr<Action> action) {
             bool canceled = false;
             if (isBusy()) {
@@ -214,7 +213,7 @@ namespace xero {
         }
 
         void Subsystem::reset() {
-            action_ = nullptr ;
+            setAction(nullptr);
 
             for(auto child: children_)
                 child->reset() ;

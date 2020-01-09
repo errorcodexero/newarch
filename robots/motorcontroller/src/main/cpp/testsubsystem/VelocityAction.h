@@ -1,6 +1,7 @@
 #pragma once
 
 #include <motorencodersubsystem/MotorEncoderVelocityAction.h>
+#include <networktables/NetworkTableEntry.h>
 
 namespace xero {
     namespace motorcontroller {
@@ -11,10 +12,11 @@ namespace xero {
             VelocityAction(TestSubsystem &sub) ;
             virtual ~VelocityAction() ;
 
-            void run() override ;
+            virtual void run() override ;
 
         private:
-            TestSubsystem &sub_; 
-        } ;
+            TestSubsystem &sub_;
+            nt::NetworkTableEntry entry_;
+        };
     }
 }

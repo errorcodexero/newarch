@@ -53,7 +53,8 @@ namespace xero {
             // logger.enableSubsystem(MSG_GROUP_ALL) ;         
             // logger.enableSubsystem(MSG_GROUP_PATHWATCHER); 
 
-            logger.enableSubsystem(MSG_GROUP_ACTIONS);               
+            logger.enableSubsystem(MSG_GROUP_ACTIONS);         
+            logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);                     
             logger.enableSubsystem(MSG_GROUP_OI) ;
             logger.enableSubsystem(MSG_GROUP_PATHWATCHER); 
 

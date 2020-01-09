@@ -46,6 +46,7 @@ namespace xero {
             void setSmartDashboardName(const std::string &name) { smartDashboardName_ = name ; }
 
             virtual void postHWInit() ;
+            virtual void run();
 
         private:
             std::shared_ptr<XeroEncoder> encoder_;

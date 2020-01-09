@@ -23,10 +23,16 @@ namespace xero {
             encoder_ = std::make_shared<XeroEncoder>(robot, encname, angular, getMotorController()) ;
         }
 
+        void MotorEncoderSubsystem::run()
+        {
+            SingleMotorSubsystem::run();
+        }
+
         void MotorEncoderSubsystem::postHWInit()
         {
             SingleMotorSubsystem::postHWInit() ;
-            setDefaultAction(std::make_shared<MotorEncoderHoldAction>(*this));
+            if (getDefaultAction() == nullptr)
+                setDefaultAction(std::make_shared<MotorEncoderHoldAction>(*this));
         }
 
         bool MotorEncoderSubsystem::canAcceptAction(xero::base::ActionPtr action) 

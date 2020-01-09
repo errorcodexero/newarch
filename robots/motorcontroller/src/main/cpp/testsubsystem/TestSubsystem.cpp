@@ -16,9 +16,5 @@ namespace xero {
 
         TestSubsystem::~TestSubsystem() {
         }
-
-        void TestSubsystem::computeState() {
-            MotorEncoderSubsystem::computeState();
-        }
     }
 }

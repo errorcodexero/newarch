@@ -28,6 +28,20 @@ SOURCES = \
 	cpp/VictorSP.cpp\
 	cpp/Relay.cpp
 
+SHUFFLEBOARD = \
+	cpp/shuffleboard/ComplexWidget.cpp\
+	cpp/shuffleboard/LayoutType.cpp\
+	cpp/shuffleboard/RecordingController.cpp\
+	cpp/shuffleboard/Shuffleboard.cpp\
+	cpp/shuffleboard/ShuffleboardComponentBase.cpp\
+	cpp/shuffleboard/ShuffleboardContainer.cpp\
+	cpp/shuffleboard/ShuffleboardInstance.cpp\
+	cpp/shuffleboard/ShuffleboardLayout.cpp\
+	cpp/shuffleboard/ShuffleboardTab.cpp\
+	cpp/shuffleboard/ShuffleboardWidget.cpp\
+	cpp/shuffleboard/SimpleWidget.cpp\
+	cpp/shuffleboard/WidgetType.cpp
+
 TARGET = wpilibsim
 
 NEED_XEROBASE=true
@@ -42,7 +56,9 @@ NEED_MODELS=true
 LOCAL_CFLAGS += \
 	-Iinclude\
 	-Icpp\
+	-DDYNAMIC_CAMERA_SERVER
 
 include $(TOPDIR)/makefiles/buildlib.mk
+
 
 

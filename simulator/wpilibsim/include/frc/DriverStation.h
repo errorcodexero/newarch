@@ -121,7 +121,7 @@ namespace frc
         bool GetStickButton(int which, int i) ;
         int GetStickPOVCount(int which) ;
         int GetStickPOV(int which, int i) ;
-        void ReportError(const char *msg) ;
+        static void ReportError(const char *msg) ;
         std::string GetGameSpecificMessage() const ;
 
         Stick &getStick(int which) {
