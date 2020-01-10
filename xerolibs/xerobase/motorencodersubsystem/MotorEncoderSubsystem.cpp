@@ -14,9 +14,10 @@ namespace xero {
         MotorEncoderSubsystem::MotorEncoderSubsystem(Subsystem *parent, 
                                                      const std::string &name,
                                                      uint64_t id,
+                                                     int samples,
                                                      bool angular)
                     : SingleMotorSubsystem(parent, name, id), 
-                      speedometer_(/*samples=*/2, angular), msg_id_(id) 
+                      speedometer_(samples, angular), msg_id_(id) 
         {
             auto &robot = getRobot(); 
             std::string encname = Subsystem::HWPrefix + name + ":encoder" ;

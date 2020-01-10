@@ -21,11 +21,12 @@ namespace xero {
             /// \param parent a reference to the parent subsystem
             /// \param name the name of this subsystem, must be unique across all subsystems
             /// \param id the message logger id to use for messages from this class     
+            /// \param samples the number of samples to use in the speedometer
             /// \param angular Whether the encoder is measuring an angle   
             /// \sa xero::base::MotorFactory
             /// \sa xero::base::XeroEncoder
             /// \sa xero::misc::SettingsParser
-            MotorEncoderSubsystem(Subsystem *parent, const std::string &name, uint64_t id, bool angular = false );
+            MotorEncoderSubsystem(Subsystem *parent, const std::string &name, uint64_t id, int samples = 2, bool angular = false );
 
             bool isAngular() const {
                 return encoder_->isAngular();
