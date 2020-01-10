@@ -46,7 +46,7 @@ hw:testsubsystem:motor:1:canid                                  1
 hw:testsubsystem:motor:1:type                                   "sparkmax_brushless"
 hw:testsubsystem:motor:1:invert                                 false
 hw:testsubsystem:encoder:quad:motor                             true
-hw:testsubsystem:encoder:quad:m                                 1                          # Inches per tick (slope of conversion line)
+hw:testsubsystem:encoder:quad:m                                 0.02380952381   # 1/42 (gives output in RPM)
 hw:testsubsystem:encoder:quad:b                                 0.0                        # Zero encoder value off floor
 
 ###################################################################
@@ -55,6 +55,17 @@ hw:testsubsystem:encoder:quad:b                                 0.0             
 # robot subsystems
 #
 ###################################################################
+
+###################################################################################################
+# misc
+###################################################################################################
+
+#
+# Enable plotting.  Plot data is stored in the network tables and display
+# programs read the data from the network tables
+#
+plotting:enabled                                               true
+
 
 ###################################################################################################
 # tankdrive
@@ -112,5 +123,3 @@ driver:power:nudge_straight                                     0.2
 driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
 driver:zerolevel                                                0.1
-
-

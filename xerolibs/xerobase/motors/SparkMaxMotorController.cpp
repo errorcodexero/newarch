@@ -16,8 +16,10 @@ namespace xero {
 
                 // The internal encoder
                 encoder_ = new rev::CANEncoder(*motor_) ;
-                encoder_->SetPositionConversionFactor(1.0) ;
-                encoder_->SetVelocityConversionFactor(1.0) ;
+                //encoder_->SetPositionConversionFactor(1.0) ;
+                //encoder_->SetVelocityConversionFactor(1.0) ;
+
+                resetPosition();
             }
 
             void SparkMaxMotorController::follow(std::shared_ptr<MotorController> motor, bool invert) {

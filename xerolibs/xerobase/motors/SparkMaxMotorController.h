@@ -34,7 +34,7 @@ namespace xero {
             }
 
             virtual int getPosition() {
-                return static_cast<int>(encoder_->GetPosition()) ;
+                return static_cast<int>(encoder_->GetPosition() * 42) ;
             }
 
             virtual void resetPosition() {

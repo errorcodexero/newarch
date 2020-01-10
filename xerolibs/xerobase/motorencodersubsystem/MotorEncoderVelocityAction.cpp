@@ -13,7 +13,13 @@ namespace xero {
 
         MotorEncoderVelocityAction::MotorEncoderVelocityAction(MotorEncoderSubsystem &subsystem, double target):
             MotorEncoderSubsystemAction(subsystem), target_(target) {
-            plotid_ = subsystem.initPlot(subsystem.getName() + "-" + toString()) ;
+
+            std::string plotName = subsystem.getName() + "-" + toString();
+            plotid_ = subsystem.initPlot(plotName) ;
+            auto &logger = subsystem.getRobot().getMessageLogger();
+            logger.startMessage(MessageLogger::MessageType::debug, subsystem.getMsgID()) ;
+            logger << "MotorEncoderVelocityAction: initing plot " << plotName << " " << plotid_;
+            logger.endMessage() ;
         }
 
         void MotorEncoderVelocityAction::start() {
