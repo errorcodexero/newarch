@@ -37,7 +37,7 @@ namespace xero {
                 logger.startMessage(MessageLogger::MessageType::debug, getSubsystem().getMsgID());
                 logger << "New Target " << target;
                 logger.endMessage();
-                //setTarget(target);
+                setTarget(target);
             }
             MotorEncoderVelocityAction::run();
         }

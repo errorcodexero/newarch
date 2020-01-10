@@ -52,7 +52,7 @@ namespace xero {
             logger.startMessage(MessageLogger::MessageType::debug, sub.getMsgID()) ;
             logger << "MotorEncoderVelocityAction (" << sub.getName() << "):" ;
             logger << " target " << target_ ;
-            logger << " actual " << sub.getPosition() ;
+            logger << " actual " << avel ;
             logger << " output " << out ;
             logger.endMessage() ;
 

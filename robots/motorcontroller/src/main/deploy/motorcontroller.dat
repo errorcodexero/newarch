@@ -42,11 +42,14 @@ hw:driverstation:hid:driver                                     0               
 hw:driverstation:hid:oi                                         2                           # HID Device Index
 
 hw:testsubsystem:input                                          0                           # analog input 0
-hw:testsubsystem:motor:1:canid                                  1
+hw:testsubsystem:motor:1:canid                                  2
 hw:testsubsystem:motor:1:type                                   "sparkmax_brushless"
 hw:testsubsystem:motor:1:invert                                 false
+hw:testsubsystem:motor:2:canid                                  3
+hw:testsubsystem:motor:2:type                                   "sparkmax_brushless"
+hw:testsubsystem:motor:2:invert                                 true
 hw:testsubsystem:encoder:quad:motor                             true
-hw:testsubsystem:encoder:quad:m                                 0.02380952381   # 1/42 (gives output in RPM)
+hw:testsubsystem:encoder:quad:m                                 1.4285714286   # 1/42/60 (gives output in RPM)
 hw:testsubsystem:encoder:quad:b                                 0.0                        # Zero encoder value off floor
 
 ###################################################################
@@ -97,7 +100,7 @@ tankdrive:follower:angle_correction                             0.06
 testsubsystem:velocity:p                                       1.0
 testsubsystem:velocity:i                                       0.0
 testsubsystem:velocity:d                                       0.0
-testsubsystem:velocity:f                                       0.0
+testsubsystem:velocity:f                                       0.0001786777844
 testsubsystem:velocity:min                                     -1.0
 testsubsystem:velocity:max                                     1.0
 testsubsystem:velocity:imax                                    0.0

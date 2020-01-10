@@ -14,7 +14,7 @@ namespace xero
             TestSubsystem(xero::base::Subsystem* parent) ;
             virtual ~TestSubsystem() ;
 
-            void postHWInit() override;
+            void init(xero::base::LoopType ltype) override;
 
             bool canAcceptAction(xero::base::ActionPtr act) override {
                 return std::dynamic_pointer_cast<VelocityAction>(act) != nullptr;
