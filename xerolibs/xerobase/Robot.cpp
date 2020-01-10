@@ -258,6 +258,16 @@ namespace xero {
             message_logger_.endMessage() ;            
             readParamsFile() ;
 
+            if (parser_->isDefined("plotting:enabled"))
+            {
+                //
+                // Turn on plotting if the key is in the settings file
+                //
+                Setting &s = parser_->get("plotting:enabled") ;
+                if (s.isBoolean() && s.getBoolean())
+                    plot_mgr_.enable(true) ;
+            }
+
             //
             // Reading required paths
             //
@@ -275,16 +285,6 @@ namespace xero {
             message_logger_ << ".... initializing hardware" ;
             message_logger_.endMessage() ;              
             RobotHardwareInit() ;
-
-            if (parser_->isDefined("plotting:enabled"))
-            {
-                //
-                // Turn on plotting if the key is in the settings file
-                //
-                Setting &s = parser_->get("plotting:enabled") ;
-                if (s.isBoolean() && s.getBoolean())
-                    plot_mgr_.enable(true) ;
-            }
 
             //
             // Perform a single compute state on the subsytems now that they are defined so their

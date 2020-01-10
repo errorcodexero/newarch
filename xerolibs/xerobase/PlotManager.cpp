@@ -33,8 +33,6 @@ namespace xero {
         {
             int id = -1;
 
-            std::cout << "enabled: " << enabled_;
-            std::cout << "fms: " << ds_.IsFMSAttached();
             if (enabled_ && !ds_.IsFMSAttached())
             {
                 for(auto &pair : active_plots_)

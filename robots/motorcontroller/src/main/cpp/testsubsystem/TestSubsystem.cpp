@@ -11,7 +11,11 @@ namespace xero {
       
         TestSubsystem::TestSubsystem(Subsystem *parent) : MotorEncoderSubsystem(parent, "testsubsystem", MSG_GROUP_TESTSUBSYSTEM) {
             setSmartDashboardName("testsubsystem") ;
+        }
+
+        void TestSubsystem::postHWInit() {
             setDefaultAction(std::make_shared<VelocityAction>(*this));
+            MotorEncoderSubsystem::postHWInit();
         }
 
         TestSubsystem::~TestSubsystem() {

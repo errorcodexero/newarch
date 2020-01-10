@@ -15,7 +15,7 @@ namespace xero {
         static frc::SimpleWidget makeWidget() {
             wpi::StringMap<std::shared_ptr<nt::Value>> propmap;
             propmap.insert(std::make_pair("min", nt::Value::MakeDouble(0.0)));
-            propmap.insert(std::make_pair("max", nt::Value::MakeDouble(150000.0)));
+            propmap.insert(std::make_pair("max", nt::Value::MakeDouble(6000.0)));
             return frc::Shuffleboard::GetTab("SmartDashboard").Add("Velocity", static_cast<double>(0.0)).WithWidget(frc::BuiltInWidgets::kNumberSlider).WithProperties(propmap);
         }
 
