@@ -19,7 +19,6 @@ namespace xero {
 
             virtual ~SparkMaxMotorController() { 
                 set(0); 
-                delete encoder_;
             }
 
             virtual void set(double percent);
@@ -37,17 +36,17 @@ namespace xero {
             }
 
             virtual int getPosition() {
-                return static_cast<int>(encoder_->GetPosition() * 42) ;
+                return static_cast<int>(encoder_.GetPosition() * 42) ;
             }
 
             virtual void resetPosition() {
-                encoder_->SetPosition(0);
+                encoder_.SetPosition(0);
             }
 
         private:
             MotorPtr motor_;
             bool isInverted_;
-            rev::CANEncoder *encoder_ ;
+            rev::CANEncoder encoder_ ;
         };
     }
 }

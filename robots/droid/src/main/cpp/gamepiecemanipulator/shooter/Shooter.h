@@ -8,10 +8,6 @@ namespace xero {
         public:
             Shooter(xero::base::Subsystem *parent);
             virtual ~Shooter() {}
-
-            std::shared_ptr<Turret> getTurret() { return turret_; }
-        private:
-            std::shared_ptr<Turret> turret_;
         };
     }
 }

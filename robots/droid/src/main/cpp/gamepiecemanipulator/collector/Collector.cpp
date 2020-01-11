@@ -1,4 +1,4 @@
-#include "collector/Collector.h"
+#include "Collector.h"
 #include "droidids.h"
 
 using namespace xero::misc;

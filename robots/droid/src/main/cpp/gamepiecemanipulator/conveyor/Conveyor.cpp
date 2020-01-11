@@ -1,4 +1,4 @@
-#include "conveyor/Conveyor.h"
+#include "Conveyor.h"
 #include "droidids.h"
 
 using namespace xero::misc;

@@ -4,18 +4,21 @@
 
 namespace xero {
     namespace base {
-            SparkMaxMotorController::SparkMaxMotorController(int id, bool brushless) {
+            static SparkMaxMotorController::MotorPtr createMotor(int id, bool brushless) {
                 rev::CANSparkMaxLowLevel::MotorType type;
                 if (brushless) type = rev::CANSparkMaxLowLevel::MotorType::kBrushless;
                 else type = rev::CANSparkMaxLowLevel::MotorType::kBrushed;
 
-                motor_ = std::make_shared<rev::CANSparkMax>(id, type);
+                return std::make_shared<rev::CANSparkMax>(id, type);
+            }
+
+            SparkMaxMotorController::SparkMaxMotorController(int id, bool brushless): 
+                motor_(createMotor(id, brushless)), encoder_(motor_->GetEncoder())
+            {
                 motor_->SetSmartCurrentLimit(40) ;
 
                 motor_->EnableVoltageCompensation(12.0) ;
 
-                // The internal encoder
-                encoder_ = new rev::CANEncoder(*motor_) ;
                 //encoder_->SetPositionConversionFactor(1.0) ;
                 //encoder_->SetVelocityConversionFactor(1.0) ;
 
