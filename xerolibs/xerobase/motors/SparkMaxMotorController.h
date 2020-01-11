@@ -17,7 +17,10 @@ namespace xero {
             /// \param brushless Whether this motor is brushless.
             SparkMaxMotorController(int canID, bool brushless);
 
-            virtual ~SparkMaxMotorController() { set(0); }
+            virtual ~SparkMaxMotorController() { 
+                set(0); 
+                delete encoder_;
+            }
 
             virtual void set(double percent);
             virtual void setInverted(bool inverted);
