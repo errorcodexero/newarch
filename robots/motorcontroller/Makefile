@@ -7,7 +7,8 @@ AUTOMODES = \
 SUBSYSTEMS = \
 	src/main/cpp/MotorControllersubsystem/MotorControllerSubsystem.cpp\
 	src/main/cpp/TestSubsystem/TestSubsystem.cpp\
-	src/main/cpp/TestSubsystem/VelocityAction.cpp
+	src/main/cpp/TestSubsystem/VelocityAction.cpp\
+	src/main/cpp/colorsensor/ColorSensorSubsystem.cpp
 
 SOURCES = \
 	src/main/cpp/main.cpp\

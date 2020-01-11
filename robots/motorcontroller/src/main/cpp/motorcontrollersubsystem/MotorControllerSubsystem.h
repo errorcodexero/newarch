@@ -2,6 +2,7 @@
 
 #include "motorcontrolleroi/MotorControllerOISubsystem.h"
 #include "testsubsystem/TestSubsystem.h"
+#include "colorsensor/ColorSensorSubsystem.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
 
@@ -30,6 +31,7 @@ namespace xero {
         private:
             std::shared_ptr<MotorControllerOISubsystem> oi_ ;
             std::shared_ptr<TestSubsystem> test_;
+            std::shared_ptr<ColorSensorSubsystem> sensor_ ;
         } ;
     }
 }

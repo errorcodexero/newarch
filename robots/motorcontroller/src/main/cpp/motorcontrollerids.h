@@ -11,3 +11,4 @@
 //
 
 #define MSG_GROUP_TESTSUBSYSTEM                    (1ull << 32)
+#define MSG_GROUP_COLORSENSOR                      (1ull << 33)
