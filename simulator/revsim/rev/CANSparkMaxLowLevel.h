@@ -1,9 +1,12 @@
 #pragma once
 
+#include "CANEncoder.h"
 #include <frc/SimulatedObject.h>
+
 
 namespace rev
 {
+    class CANEncoder ;
     class CANSparkMaxLowLevel : public xero::sim::SimulatedObject
     {
     public:
@@ -31,9 +34,15 @@ namespace rev
         CANSparkMaxLowLevel(int devid, MotorType type) {
             id_ = devid ;
             type_ = type ;
+            encoder_ = new CANEncoder(*this);
         }
 
-        virtual ~CANSparkMaxLowLevel() {            
+        virtual ~CANSparkMaxLowLevel() {
+            delete encoder_;
+        }
+
+        CANEncoder &GetEncoder() {
+            return *encoder_;
         }
 
         void Set(double value) {
@@ -80,5 +89,6 @@ namespace rev
         bool inverted_ ;        
         MotorType type_ ;
         double power_ ;
+        CANEncoder *encoder_;
     } ;
 }
