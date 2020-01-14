@@ -5,7 +5,7 @@
 COMPILERSETUP=
 
 ifeq ($(MYCOMPILER),PI)
-CXX = arm-linux-gnueabihf-g++
+CXX = arm-linux-gnueabihf-g++ -std=c++17
 AR = arm-linux-gnueabihf-ar
 CXXFLAGS=$(LOCAL_CFLAGS) -Wno-psabi
 COMPILERSETUP=true
@@ -21,7 +21,7 @@ endif
 
 ifeq ($(MYCOMPILER),GCC)
 CXX = g++
-CXXFLAGS = $(LOCAL_CFLAGS) -Wall
+CXXFLAGS = $(LOCAL_CFLAGS) -Wall  -std=c++17 -D_BSD_SOURCE
 COMPILERSETUP=true
 
 ifeq ($(MYOS),Windows)

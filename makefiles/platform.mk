@@ -11,3 +11,8 @@ endif
 ifeq ($(PLATFORM),SIMULATOR)
 CXXFLAGS += -DSIMULATOR
 endif
+
+ifeq ($(PLATFORM),SIM2)
+CXXFLAGS += -DSIM2
+endif
+

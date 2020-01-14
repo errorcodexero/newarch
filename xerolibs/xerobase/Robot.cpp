@@ -65,7 +65,7 @@ namespace xero {
         }
 
         void Robot::setupPaths() {
-#if defined(SIMULATOR)
+#if defined(SIMULATOR) || defined(SIM2)
             log_dir_ = "./logs/" ;
             deploy_dir_ = "./deploy/" + name_ + "/deploy" ; 
 #elif defined(GOPIGO)
@@ -78,7 +78,7 @@ namespace xero {
             deploy_dir_ = "/home/lvuser/deploy" ; 
             log_dir_ = "/u/" ;
 #else
-#error SIMULATOR, GOPIGO, or XEROROBORIO must be defined
+#error SIMULATOR, SIM2, GOPIGO, or XEROROBORIO must be defined
 #endif
         }
 
@@ -525,7 +525,6 @@ namespace xero {
 
             controller_ = createTestController() ;
             robot_subsystem_->init(LoopType::Test) ;
-
         }
 
         void Robot::TestPeriodic() {

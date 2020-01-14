@@ -1,0 +1,149 @@
+TOPDIR=../..
+
+PLATFORM=SIM2
+
+SOURCES = \
+	./cpp/AddressableLED.cpp\
+	./cpp/ADXL345_I2C.cpp\
+	./cpp/ADXL345_SPI.cpp\
+	./cpp/ADXL362.cpp\
+	./cpp/ADXRS450_Gyro.cpp\
+	./cpp/AnalogAccelerometer.cpp\
+	./cpp/AnalogEncoder.cpp\
+	./cpp/AnalogGyro.cpp\
+	./cpp/AnalogInput.cpp\
+	./cpp/AnalogOutput.cpp\
+	./cpp/AnalogPotentiometer.cpp\
+	./cpp/AnalogTrigger.cpp\
+	./cpp/AnalogTriggerOutput.cpp\
+	./cpp/BuiltInAccelerometer.cpp\
+	./cpp/CAN.cpp\
+	./cpp/Compressor.cpp\
+	./cpp/controller/PIDController.cpp\
+	./cpp/controller/RamseteController.cpp\
+	./cpp/Counter.cpp\
+	./cpp/DigitalGlitchFilter.cpp\
+	./cpp/DigitalInput.cpp\
+	./cpp/DigitalOutput.cpp\
+	./cpp/DMA.cpp\
+	./cpp/DMC60.cpp\
+	./cpp/DoubleSolenoid.cpp\
+	./cpp/drive/DifferentialDrive.cpp\
+	./cpp/drive/KilloughDrive.cpp\
+	./cpp/drive/MecanumDrive.cpp\
+	./cpp/drive/RobotDriveBase.cpp\
+	./cpp/drive/Vector2d.cpp\
+	./cpp/DriverStation.cpp\
+	./cpp/DutyCycle.cpp\
+	./cpp/DutyCycleEncoder.cpp\
+	./cpp/Encoder.cpp\
+	./cpp/Error.cpp\
+	./cpp/ErrorBase.cpp\
+	./cpp/Filesystem.cpp\
+	./cpp/filters/Filter.cpp\
+	./cpp/filters/LinearDigitalFilter.cpp\
+	./cpp/frc2/Timer.cpp\
+	./cpp/GearTooth.cpp\
+	./cpp/GenericHID.cpp\
+	./cpp/geometry/Pose2d.cpp\
+	./cpp/geometry/Rotation2d.cpp\
+	./cpp/geometry/Transform2d.cpp\
+	./cpp/geometry/Translation2d.cpp\
+	./cpp/GyroBase.cpp\
+	./cpp/I2C.cpp\
+	./cpp/interfaces/Potentiometer.cpp\
+	./cpp/InterruptableSensorBase.cpp\
+	./cpp/IterativeRobot.cpp\
+	./cpp/IterativeRobotBase.cpp\
+	./cpp/Jaguar.cpp\
+	./cpp/Joystick.cpp\
+	./cpp/kinematics/DifferentialDriveOdometry.cpp\
+	./cpp/kinematics/DifferentialDriveWheelSpeeds.cpp\
+	./cpp/kinematics/MecanumDriveKinematics.cpp\
+	./cpp/kinematics/MecanumDriveOdometry.cpp\
+	./cpp/kinematics/MecanumDriveWheelSpeeds.cpp\
+	./cpp/livewindow/LiveWindow.cpp\
+	./cpp/MotorSafety.cpp\
+	./cpp/NidecBrushless.cpp\
+	./cpp/Notifier.cpp\
+	./cpp/PIDBase.cpp\
+	./cpp/PIDController.cpp\
+	./cpp/PIDSource.cpp\
+	./cpp/PowerDistributionPanel.cpp\
+	./cpp/Preferences.cpp\
+	./cpp/PWM.cpp\
+	./cpp/PWMSparkMax.cpp\
+	./cpp/PWMSpeedController.cpp\
+	./cpp/PWMTalonSRX.cpp\
+	./cpp/PWMVictorSPX.cpp\
+	./cpp/Relay.cpp\
+	./cpp/Resource.cpp\
+	./cpp/RobotController.cpp\
+	./cpp/RobotDrive.cpp\
+	./cpp/RobotState.cpp\
+	./cpp/SD540.cpp\
+	./cpp/SensorUtil.cpp\
+	./cpp/SerialPort.cpp\
+	./cpp/Servo.cpp\
+	./cpp/shuffleboard/ComplexWidget.cpp\
+	./cpp/shuffleboard/LayoutType.cpp\
+	./cpp/shuffleboard/RecordingController.cpp\
+	./cpp/shuffleboard/SendableCameraWrapper.cpp\
+	./cpp/shuffleboard/Shuffleboard.cpp\
+	./cpp/shuffleboard/ShuffleboardComponentBase.cpp\
+	./cpp/shuffleboard/ShuffleboardContainer.cpp\
+	./cpp/shuffleboard/ShuffleboardInstance.cpp\
+	./cpp/shuffleboard/ShuffleboardLayout.cpp\
+	./cpp/shuffleboard/ShuffleboardTab.cpp\
+	./cpp/shuffleboard/ShuffleboardWidget.cpp\
+	./cpp/shuffleboard/SimpleWidget.cpp\
+	./cpp/shuffleboard/WidgetType.cpp\
+	./cpp/smartdashboard/ListenerExecutor.cpp\
+	./cpp/smartdashboard/SendableBase.cpp\
+	./cpp/smartdashboard/SendableBuilderImpl.cpp\
+	./cpp/smartdashboard/SendableChooserBase.cpp\
+	./cpp/smartdashboard/SendableRegistry.cpp\
+	./cpp/smartdashboard/SmartDashboard.cpp\
+	./cpp/Solenoid.cpp\
+	./cpp/SolenoidBase.cpp\
+	./cpp/Spark.cpp\
+	./cpp/SpeedController.cpp\
+	./cpp/SpeedControllerGroup.cpp\
+	./cpp/SPI.cpp\
+	./cpp/spline/CubicHermiteSpline.cpp\
+	./cpp/spline/QuinticHermiteSpline.cpp\
+	./cpp/spline/SplineHelper.cpp\
+	./cpp/spline/SplineParameterizer.cpp\
+	./cpp/Talon.cpp\
+	./cpp/Threads.cpp\
+	./cpp/TimedRobot.cpp\
+	./cpp/Timer.cpp\
+	./cpp/trajectory/constraint/CentripetalAccelerationConstraint.cpp\
+	./cpp/trajectory/constraint/DifferentialDriveKinematicsConstraint.cpp\
+	./cpp/trajectory/constraint/DifferentialDriveVoltageConstraint.cpp\
+	./cpp/trajectory/constraint/MecanumDriveKinematicsConstraint.cpp\
+	./cpp/trajectory/Trajectory.cpp\
+	./cpp/trajectory/TrajectoryGenerator.cpp\
+	./cpp/trajectory/TrajectoryParameterizer.cpp\
+	./cpp/trajectory/TrajectoryUtil.cpp\
+	./cpp/Ultrasonic.cpp\
+	./cpp/Utility.cpp\
+	./cpp/Victor.cpp\
+	./cpp/VictorSP.cpp\
+	./cpp/Watchdog.cpp\
+	./cpp/XboxController.cpp\
+	./cppcs/RobotBase.cpp
+
+TARGET=wpilib
+
+NEED_WPIUTIL_2=true
+NEED_NTCORE_2=true
+NEED_HAL_2=true
+NEED_CSCORE_2=true
+NEED_CAMERASERVER_2=true
+
+LOCAL_CFLAGS += -Iinclude
+
+include $(TOPDIR)/makefiles/buildlib.mk
+
+

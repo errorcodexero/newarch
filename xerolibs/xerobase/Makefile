@@ -62,6 +62,7 @@ SOURCES = \
 
 TARGET=xerobase
 
+ifeq ($(PLATFORM),SIMULATOR)
 NEED_WPIUTIL=true
 NEED_WPILIB=true
 NEED_NAVX=true
@@ -69,6 +70,19 @@ NEED_CTRE=true
 NEED_REV=true
 NEED_NETWORKTABLES=true
 NEED_XEROMISC=true
+endif
+
+ifeq ($(PLATFORM),SIM2)
+NEED_WPIUTIL_2=true
+NEED_WPILIB_2=true
+NEED_CSCORE_2=true
+NEED_NTCORE_2=true
+NEED_XEROMISC=true
+NEED_HAL_2=true
+NEED_NAVX_2=true
+NEED_CTRE_2=true
+NEED_REV_2=true
+endif
 
 LOCAL_CFLAGS = -I. -Itankdrive -Itankdrive/modes -Itankdrive/actions -DUSE_NAVX
 

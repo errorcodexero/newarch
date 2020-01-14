@@ -11,7 +11,8 @@ ifeq ($(CONFIG),Debug)
 else
 ifeq ($(CONFIG),Release)
 else
-$(error CONFIG must be set to 'Debug' or 'Release')
+$(info CONFIG not defined, assuming DEBUG)
+CONFIG=Debug
 endif
 endif
 
@@ -35,8 +36,15 @@ PLATFORMVALID=true
 MYCOMPILER=GCC
 endif
 
+ifeq ($(PLATFORM),SIM2)
+PLATFORMVALID=true
+MYCOMPILER=GCC
+endif
+
 ifneq ($(PLATFORMVALID),true)
-$(error PLATFORM must be set to 'PI' or 'GOPIGO' or 'SIMULATOR')
+$(info PLATFORM not defined, assuming SIMULATOR)
+PLATFORM=SIMULATOR
+MYCOMPILER=GCC
 endif
 
 UNAME := $(shell uname)
@@ -47,11 +55,12 @@ ifeq ($(UNAME),Linux)
 MYOS=Linux
 endif
 ifeq ($(UNAME),CYGWIN_NT-10.0)
-MYOS=Windows
+MYOS=Cygwin
 endif
 
 ifeq ($(MYOS),)
-$(error Could not detect operating system)
+$(info MYOS not defined, assuming Cygwin)
+MYOS=Cygwin
 endif
 
 

@@ -18,6 +18,9 @@ endif
 ifeq ($(MYOS),Windows)
 REALBUILDDIR=$(shell cygpath -m -a $(BUILDDIR))
 endif
+ifeq ($(MYOS),Cygwin)
+REALBUILDDIR=$(shell cygpath -m -a $(BUILDDIR))
+endif
 
 #
 # This is the home directory for the build tree
