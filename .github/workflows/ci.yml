@@ -1,6 +1,8 @@
 name: CI
-
 on: [push, pull_request]
+
+env:
+  MAX_LOAD: 3   # limit load average to avoid running out of memory
 
 jobs:
   roborio:
@@ -34,7 +36,7 @@ jobs:
     
     - name: Build robot code
       working-directory: robots/${{ matrix.robot }}
-      run: make CONFIG=${{ matrix.configuration }} PLATFORM=SIMULATOR
+      run: make CONFIG=${{ matrix.configuration }} PLATFORM=SIMULATOR --max-load $MAX_LOAD
       
     - name: Deploy resources
       working-directory: robots/${{ matrix.robot }}
@@ -56,11 +58,11 @@ jobs:
 
     - name: Build xeromisc
       working-directory: xerolibs/xeromisc
-      run: make CONFIG=Debug PLATFORM=SIMULATOR
+      run: make CONFIG=Debug PLATFORM=SIMULATOR --max-load $MAX_LOAD
 
     - name: Build xeromisctest
       working-directory: xerolibs/xeromisctest
-      run: make CONFIG=Debug
+      run: make CONFIG=Debug --max-load $MAX_LOAD
 
     - name: Run xeromisctest
       working-directory: xerolibs/xeromisctest
