@@ -20,6 +20,8 @@ namespace xero
                 return std::dynamic_pointer_cast<VelocityAction>(act) != nullptr;
             }
 
+            void computeState() override;
+
         private:
         };
     }

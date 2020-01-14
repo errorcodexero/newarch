@@ -3,6 +3,7 @@
 #include "motorcontrollerids.h"
 #include <Robot.h>
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::base ;
 using namespace xero::misc ;
@@ -16,10 +17,14 @@ namespace xero {
 
         void TestSubsystem::init(xero::base::LoopType ltype) {
             if (ltype == LoopType::OperatorControl) {
-                setDefaultAction(std::make_shared<SingleMotorPowerAction>(*this, 0.625));
-                //setDefaultAction(std::make_shared<VelocityAction>(*this));
+                //setDefaultAction(std::make_shared<SingleMotorPowerAction>(*this, 0.3));
+                setAction(std::make_shared<VelocityAction>(*this));
             }
             MotorEncoderSubsystem::init(ltype);
+        }
+
+        void TestSubsystem::computeState() {
+            //frc::SmartDashboard::PutNumber("avel", getSpeedometer().getVelocity());
         }
 
         TestSubsystem::~TestSubsystem() {

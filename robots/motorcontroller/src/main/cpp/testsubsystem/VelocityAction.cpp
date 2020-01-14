@@ -6,6 +6,7 @@
 #include <networktables/NetworkTableValue.h>
 #include <wpi/StringMap.h>
 #include <cmath>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::misc;
 using namespace xero::base;
@@ -39,6 +40,7 @@ namespace xero {
                 logger.endMessage();
                 setTarget(target);
             }
+            //frc::SmartDashboard::PutNumber("tvel", getTarget());
             MotorEncoderVelocityAction::run();
         }
     }

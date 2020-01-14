@@ -93,11 +93,11 @@ model {
 
             sources.cpp {
                 source {
-                    srcDir 'robots/droid/src/main/cpp'
+                    srcDir 'robots/motorcontroller/src/main/cpp'
                     include '**/*.cpp', '**/*.cc'
                 }
                 exportedHeaders {
-                    srcDir 'robots/droid/src/main/cpp'
+                    srcDir 'robots/motorcontroller/src/main/cpp'
                     if (includeSrcInIncludeRoot) {
                         srcDir 'src/main/cpp'
                     }
