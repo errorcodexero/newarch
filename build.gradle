@@ -26,7 +26,7 @@ deploy {
         // Built in artifact to deploy arbitrary files to the roboRIO.
         fileTreeArtifact('frcStaticFileDeploy') {
             // The directory below is the local directory to deploy
-            files = fileTree(dir: 'robots/motorcontroller/src/main/deploy')
+            files = fileTree(dir: 'robots/droid/src/main/deploy')
             // Deploy to RoboRIO target, into /home/lvuser/deploy
             targets << "roborio"
             directory = '/home/lvuser/deploy'
@@ -64,11 +64,11 @@ model {
 
         //     sources.cpp {
         //         source {
-        //             srcDir 'robots/motorcontroller/src/main/cpp'
+        //             srcDir 'robots/droid/src/main/cpp'
         //             include '**/*.cpp', '**/*.cc'
         //         }
         //         exportedHeaders {
-        //             srcDir 'robots/motorcontroller/src/main/cpp'
+        //             srcDir 'robots/droid/src/main/cpp'
         //             if (includeSrcInIncludeRoot) {
         //                 srcDir 'src/main/cpp'
         //             }
@@ -93,11 +93,11 @@ model {
 
             sources.cpp {
                 source {
-                    srcDir 'robots/motorcontroller/src/main/cpp'
+                    srcDir 'robots/droid/src/main/cpp'
                     include '**/*.cpp', '**/*.cc'
                 }
                 exportedHeaders {
-                    srcDir 'robots/motorcontroller/src/main/cpp'
+                    srcDir 'robots/droid/src/main/cpp'
                     if (includeSrcInIncludeRoot) {
                         srcDir 'src/main/cpp'
                     }
