@@ -40,7 +40,7 @@ namespace xero {
                 logger.endMessage();
                 setTarget(target);
             }
-            //frc::SmartDashboard::PutNumber("tvel", getTarget());
+            frc::SmartDashboard::PutNumber("tvel", getTarget());
             MotorEncoderVelocityAction::run();
         }
     }

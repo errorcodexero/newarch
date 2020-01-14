@@ -24,7 +24,8 @@ namespace xero {
         }
 
         void TestSubsystem::computeState() {
-            //frc::SmartDashboard::PutNumber("avel", getSpeedometer().getVelocity());
+            frc::SmartDashboard::PutNumber("avel", getSpeedometer().getVelocity());
+            MotorEncoderSubsystem::computeState();
         }
 
         TestSubsystem::~TestSubsystem() {

@@ -97,10 +97,10 @@ tankdrive:follower:angle_correction                             0.06
 #
 # Test subsystem
 #
-testsubsystem:velocity:p                                       0.0
+testsubsystem:velocity:p                                       0.0001184
 testsubsystem:velocity:i                                       0.0
 testsubsystem:velocity:d                                       0.0
-testsubsystem:velocity:f                                       0.000121
+testsubsystem:velocity:f                                       0.0001184
 testsubsystem:velocity:min                                     -1.0
 testsubsystem:velocity:max                                     1.0
 testsubsystem:velocity:imax                                    0.0
