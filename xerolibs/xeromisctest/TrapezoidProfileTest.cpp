@@ -122,4 +122,30 @@ TEST_CASE("Trapezoidal Speed Profile")
         REQUIRE_THAT(profile.getTimeDecel(), Catch::Matchers::Floating::WithinAbsMatcher(2.0, 1e-6));
         REQUIRE_THAT(profile.getActualMaxVelocity(), Catch::Matchers::Floating::WithinAbsMatcher(95.0, 1e-6));
     }
+
+    SECTION("Start Velocity > Max Velocity") {
+        TrapezoidalProfile profile(2, -1, 2);
+        profile.update(/*distance*/100, /*startVel*/5, /*endVel*/0);
+        REQUIRE_THAT(profile.getTimeAccel(), Catch::Matchers::Floating::WithinAbsMatcher(3, 1e-6));
+        REQUIRE_THAT(profile.getAccel(0), Catch::Matchers::Floating::WithinAbsMatcher(-1, 1e-6));
+        
+        REQUIRE_THAT(profile.getVelocity(0), Catch::Matchers::Floating::WithinAbsMatcher(5, 1e-6));
+        REQUIRE_THAT(profile.getVelocity(1), Catch::Matchers::Floating::WithinAbsMatcher(4, 1e-6));
+        REQUIRE_THAT(profile.getVelocity(2), Catch::Matchers::Floating::WithinAbsMatcher(3, 1e-6));
+        REQUIRE_THAT(profile.getVelocity(3), Catch::Matchers::Floating::WithinAbsMatcher(2, 1e-6));
+        
+        REQUIRE_THAT(profile.getAccel(3), Catch::Matchers::Floating::WithinAbsMatcher(0, 1e-6));
+        REQUIRE_THAT(profile.getDistance(3), Catch::Matchers::Floating::WithinAbsMatcher(10.5, 1e-6));
+
+        REQUIRE_THAT(profile.getTimeDecel(), Catch::Matchers::Floating::WithinAbsMatcher(2, 1e-6));
+        // accel dist = 10.5
+        // decel dist = 2
+        // cruise dist = 87.5
+
+        REQUIRE_THAT(profile.getTimeCruise(), Catch::Matchers::Floating::WithinAbsMatcher(43.75, 1e-6));
+        REQUIRE_THAT(profile.getTotalTime(), Catch::Matchers::Floating::WithinAbsMatcher(3 + 43.75 + 2, 1e-6));
+        REQUIRE_THAT(profile.getDistance(3 + 43.75), Catch::Matchers::Floating::WithinAbsMatcher(10.5 + 87.5, 1e-6));
+
+        REQUIRE_THAT(profile.getDistance(3 + 43.75 + 2), Catch::Matchers::Floating::WithinAbsMatcher(100, 1e-6));
+    }
 }

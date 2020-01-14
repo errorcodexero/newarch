@@ -22,9 +22,9 @@ namespace xero {
             double ret = 0.0 ;
 
             if (t < 0.0)
-                ret = max_accel_ ;
+                ret = start_accel_ ;
             else if (t < ta_)
-                ret = max_accel_ ;
+                ret = start_accel_ ;
             else if (t < ta_ + tc_)
                 ret = 0.0 ;
             else if (t < ta_ + tc_ + td_)
@@ -39,7 +39,7 @@ namespace xero {
                 ret = start_velocity_ ;
             }
             else if (t < ta_) {
-                ret = start_velocity_ + t * max_accel_ ;
+                ret = start_velocity_ + t * start_accel_ ;
             }   
             else if (t < ta_ + tc_) {
                 ret = actual_max_velocity_ ;
@@ -62,15 +62,15 @@ namespace xero {
                 ret = 0.0 ;
             }
             else if (t < ta_) {
-                ret = start_velocity_ * t + 0.5 * t * t * max_accel_ ;
+                ret = start_velocity_ * t + 0.5 * t * t * start_accel_ ;
             }   
             else if (t < ta_ + tc_) {
-                ret = start_velocity_ * ta_ + 0.5 * ta_ * ta_ * max_accel_ ;
+                ret = start_velocity_ * ta_ + 0.5 * ta_ * ta_ * start_accel_ ;
                 ret += (t - ta_) * actual_max_velocity_ ;
             }   
             else if (t < ta_ + tc_ + td_) {
                 double dt = t - ta_ - tc_ ;
-                ret = start_velocity_ * ta_ + 0.5 * ta_ * ta_ * max_accel_ ;
+                ret = start_velocity_ * ta_ + 0.5 * ta_ * ta_ * start_accel_ ;
                 ret += tc_ * actual_max_velocity_ ;
                 ret += actual_max_velocity_ * dt + 0.5 * dt * dt * max_decel_ ;
             }
@@ -105,7 +105,7 @@ namespace xero {
                 dist = -dist ;
 
             if (dist < sign * getDistance(ta_)) {
-                roots = QuadraticSolver::solve(0.5 * max_accel_, start_velocity_, -dist) ;
+                roots = QuadraticSolver::solve(0.5 * start_accel_, start_velocity_, -dist) ;
                 ret = pickRoot(roots) ;
             }
             else if (dist < sign * getDistance(ta_ + tc_)) {
@@ -130,9 +130,17 @@ namespace xero {
 
             isneg_ = (dist < 0) ;
             distance_ = std::fabs(dist) ;
-            ta_ = (max_velocity_ - start_velocity_) / max_accel_ ;
+
+            if (start_velocity < max_velocity_) {
+                start_accel_ = max_accel_;
+                ta_ = (max_velocity_ - start_velocity_) / max_accel_ ;
+            } else {
+                start_accel_ = max_decel_;
+                ta_ = -(start_velocity_ - max_velocity_) / max_decel_;
+            }
+
             td_ = (end_velocity_ - max_velocity_) / max_decel_ ;
-            double da = start_velocity * ta_ + 0.5 * max_accel_ * ta_ * ta_ ;
+            double da = start_velocity * ta_ + 0.5 * start_accel_ * ta_ * ta_ ;
             double dd = max_velocity_ * td_ + 0.5 * max_decel_ * td_ * td_ ;
             tc_ = (distance_ - da - dd) / max_velocity_ ;
             type_ = "trapezoid" ;
@@ -143,7 +151,7 @@ namespace xero {
                 //
                 double num = (2.0 * distance_ * max_accel_ * max_decel_ + max_decel_ * start_velocity_ * start_velocity_ - max_accel_ * end_velocity_ * end_velocity_) / (max_decel_ - max_accel_) ;
                 bool decel_only = false ;
-                if (num < 0)
+                if (num < 0 || start_accel_ < 0)
                     decel_only = true ;
                 else
                     actual_max_velocity_ = std::sqrt(num) ;

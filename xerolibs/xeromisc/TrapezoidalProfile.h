@@ -128,6 +128,10 @@ namespace xero {
             double start_velocity_ ;
             double end_velocity_ ;
 
+            // if start_velocity_ <= max_velocity_: start_accel_ = max_accel_
+            // else:                                start_accel_ = max_decel_
+            double start_accel_;
+
             double ta_ ;
             double td_ ;
             double tc_ ;
