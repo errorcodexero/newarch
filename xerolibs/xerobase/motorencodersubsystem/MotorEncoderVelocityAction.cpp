@@ -66,7 +66,7 @@ namespace xero {
         {
             MotorEncoderSubsystemAction::cancel();
             setDone();
-            sub.endPlot(plotid_);
+            getSubsystem().endPlot(plotid_);
             getSubsystem().setMotor(0.0);
         }
     }
