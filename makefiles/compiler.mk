@@ -29,8 +29,7 @@ EXEEXT=.exe
 CXXFLAGS += -DCYGWIN
 LINKPREFIX=-Wl,--start-group
 LINKPOSTFIX=-Wl,--end-group
-endif
-ifeq ($(MYOS),Darwin)
+else
 CXXFLAGS += -std=c++17
 EXEECT=
 LINKPREFIX=
