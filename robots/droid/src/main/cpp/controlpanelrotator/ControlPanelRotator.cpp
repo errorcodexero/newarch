@@ -33,7 +33,7 @@ namespace xero {
           else return static_cast<int>(Color::COUNT) - (first - second);
         }
 
-        std::optional<Color> ControlPanelRotator::sampleSensor() {
+        std::optional<ControlPanelRotator::Color> ControlPanelRotator::sampleSensor() {
           return std::nullopt; // TODO
         }
     }

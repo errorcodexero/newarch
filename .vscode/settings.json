@@ -130,7 +130,9 @@
     "regex": "cpp",
     "valarray": "cpp",
     "strstream": "cpp",
-    "cfenv": "cpp"
+    "cfenv": "cpp",
+    "*.ipp": "cpp",
+    "__functional_03": "cpp"
   },
   "C_Cpp.configurationWarnings": "Disabled"
 }

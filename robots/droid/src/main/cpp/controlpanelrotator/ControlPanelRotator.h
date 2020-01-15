@@ -1,3 +1,5 @@
+#pragma once
+
 #include <motorencodersubsystem/MotorEncoderSubsystem.h>
 #include <optional>
 
