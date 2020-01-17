@@ -16,13 +16,17 @@ namespace xero {
     namespace base {
         class MotorEncoderGoToAction : public MotorEncoderSubsystemAction {
         public:
-            MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target, bool addhold = true);
-            MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, const std::string &param, bool addhold = true) ;
+            MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target, 
+                                   const std::string &configName = "goto", bool addhold = true);
+            MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, const std::string &targetparam,
+                                   const std::string &configName = "goto", bool addhold = true);
 
             virtual void start();
             virtual void run();
             virtual void cancel();
             virtual std::string toString() ;
+
+            void setTarget(double target);
 
         private:
             double threshold_;

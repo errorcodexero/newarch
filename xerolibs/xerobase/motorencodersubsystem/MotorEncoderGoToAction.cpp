@@ -19,10 +19,11 @@ namespace xero {
             "tpos", "apos", "tvel", "avel", "out"
         } ;
 
-        MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target, bool addhold):
+        MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, double target, 
+                                                       const std::string &configName, bool addhold):
             MotorEncoderSubsystemAction(subsystem) {
             
-            std::string config = subsystem.getName() + ":goto";
+            std::string config = subsystem.getName() + ":" + configName;
             auto &settings = subsystem.getRobot().getSettingsParser();
             
             target_ = target;
@@ -38,10 +39,11 @@ namespace xero {
             addhold_ = addhold;
         }
 
-        MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, const std::string &targetparam, bool addhold):
+        MotorEncoderGoToAction::MotorEncoderGoToAction(MotorEncoderSubsystem &subsystem, const std::string &targetparam, 
+                                                       const std::string &configName, bool addhold):
             MotorEncoderSubsystemAction(subsystem) {
             
-            std::string config = subsystem.getName() + ":goto";
+            std::string config = subsystem.getName() + ":" + configName;
             auto &settings = subsystem.getRobot().getSettingsParser();
             
             target_ = subsystem.getRobot().getSettingsParser().getDouble(targetparam) ;
@@ -62,59 +64,7 @@ namespace xero {
 
             MotorEncoderSubsystem &subsystem = getSubsystem();
 
-            if (addhold_)
-                subsystem.setDefaultAction(std::make_shared<MotorEncoderHoldAction>(subsystem, target_));
-            else
-                subsystem.setDefaultAction(nullptr);
-
-            double dist = normalizePosition(target_ - subsystem.getPosition());
-            if (std::fabs(dist) < threshold_) {
-                setDone() ;
-                MessageLogger &logger = subsystem.getRobot().getMessageLogger();
-                logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
-                logger << "MotorEncoderGoToAction (" ;
-                logger << subsystem.getName() ;
-                logger << "): action completed sucessfully in start";
-                logger.endMessage();
-                return;
-            }
-
-            std::string config = subsystem.getName() + ":follower";
-            auto &settings = subsystem.getRobot().getSettingsParser();
-
-            if (dist < 0) {
-                ctrl_ = std::make_shared<PIDACtrl>(
-                    settings, 
-                    config + ":down:kv",
-                    config + ":down:ka",
-                    config + ":down:kp",
-                    config + ":down:kd"
-                );
-            } else {
-                ctrl_ = std::make_shared<PIDACtrl>(
-                    settings, 
-                    config + ":up:kv",
-                    config + ":up:ka",
-                    config + ":up:kp",
-                    config + ":up:kd"
-                );
-            }
-
-            profile_->update(dist, 0, 0);
-            startTime_ = subsystem.getRobot().getTime();
-            startPosition_ = subsystem.getPosition();
-            MessageLogger &logger = subsystem.getRobot().getMessageLogger() ;
-            logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
-            logger << "Motor/Encoder Target Distance (" ;
-            logger << subsystem.getName() ;
-            logger << "): " << dist;
-            logger.endMessage();
-
-            logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
-            logger << "Motor/Encoder Velocity Profile: ("  ;
-            logger << subsystem.getName() ;
-            logger << ") : " << profile_->toString() ;
-            logger.endMessage();
+            setTarget(target_);
 
             subsystem.startPlot(plotid_, plot_columns_) ;
         }
@@ -171,6 +121,70 @@ namespace xero {
             data.push_back(subsystem.getSpeedometer().getVelocity()) ;
             data.push_back(out) ;
             subsystem.addPlotData(plotid_, data) ;            
+        }
+        
+        void MotorEncoderGoToAction::setTarget(double target) {
+            target_ = target;
+            
+            auto &subsystem = getSubsystem();
+            MessageLogger &logger = subsystem.getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
+            logger << "MotorEncoderGoToAction(" << subsystem.getName() << "): ";
+            logger << "setTarget(" << target << ")";
+            logger.endMessage();
+
+            if (addhold_)
+                subsystem.setDefaultAction(std::make_shared<MotorEncoderHoldAction>(subsystem, target_));
+            else
+                subsystem.setDefaultAction(nullptr);
+
+            double dist = normalizePosition(target_ - subsystem.getPosition());
+            if (std::fabs(dist) < threshold_) {
+                setDone() ;
+                MessageLogger &logger = subsystem.getRobot().getMessageLogger();
+                logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
+                logger << "MotorEncoderGoToAction (" ;
+                logger << subsystem.getName() ;
+                logger << "): action completed sucessfully in setTarget";
+                logger.endMessage();
+                return;
+            }
+
+            std::string config = subsystem.getName() + ":follower";
+            auto &settings = subsystem.getRobot().getSettingsParser();
+
+            if (dist < 0) {
+                ctrl_ = std::make_shared<PIDACtrl>(
+                    settings, 
+                    config + ":down:kv",
+                    config + ":down:ka",
+                    config + ":down:kp",
+                    config + ":down:kd"
+                );
+            } else {
+                ctrl_ = std::make_shared<PIDACtrl>(
+                    settings, 
+                    config + ":up:kv",
+                    config + ":up:ka",
+                    config + ":up:kp",
+                    config + ":up:kd"
+                );
+            }
+
+            profile_->update(dist, 0, 0);
+            startTime_ = subsystem.getRobot().getTime();
+            startPosition_ = subsystem.getPosition();
+            logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
+            logger << "Motor/Encoder Target Distance (" ;
+            logger << subsystem.getName() ;
+            logger << "): " << dist;
+            logger.endMessage();
+
+            logger.startMessage(MessageLogger::MessageType::debug, subsystem.msg_id_);
+            logger << "Motor/Encoder Velocity Profile: ("  ;
+            logger << subsystem.getName() ;
+            logger << ") : " << profile_->toString() ;
+            logger.endMessage();
         }
 
         std::string MotorEncoderGoToAction::toString() {

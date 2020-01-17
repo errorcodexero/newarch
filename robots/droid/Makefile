@@ -14,6 +14,7 @@ SUBSYSTEMS = \
 	src/main/cpp/turret/Turret.cpp\
 	src/main/cpp/controlpanelrotator/ControlPanelRotator.cpp\
 	src/main/cpp/climber/Climber.cpp\
+    src/main/cpp/controlpanelrotator/RotateControlPanelAction.cpp
 
 SOURCES = \
 	src/main/cpp/main.cpp\
