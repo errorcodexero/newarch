@@ -103,7 +103,8 @@ SOURCES = \
 	./libuv/src/uv-common.cpp\
 	./libuv/src/uv-data-getter-setters.cpp\
 	./libuv/src/version.cpp\
-	./unix/Demangle.cpp
+	./unix/Demangle.cpp\
+	./cygwin/StackTrace.cpp
 
 
 TARGET=wpiutil

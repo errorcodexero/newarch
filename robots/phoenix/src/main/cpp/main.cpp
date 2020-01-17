@@ -2,12 +2,20 @@
 #include "Phoenix.h"
 
 #ifdef SIMULATOR
-#include <PhoenixSimulator.h>
-xero::sim::phoenix::PhoenixSimulator sim("robotsims/phoenixsim/sim.dat") ;
+#endif
+
+#ifdef SIM2
+#include <engine/SimulatorEngine.h>
 #endif
 
 int main(int ac, char **av)
 {
+#ifdef SIM2
+    xero::sim2::SimulatorEngine &engine = xero::sim2::SimulatorEngine::getEngine();
+    if (!engine.parseCommandLineArgs(ac, av))
+        return 1;
+#endif
+
 #ifdef SIMULATOR
     frc::StartRobot<xero::phoenix::Phoenix>(ac, av) ;
 #else

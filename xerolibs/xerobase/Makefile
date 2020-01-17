@@ -7,12 +7,6 @@ TOPDIR=../..
 #
 
 
-ifeq ($(PLATFORM),SIMULATOR)
-SIMSOURCES = \
-	singlemotorsubsystem/SingleMotorSubsystem.cpp\
-	singlemotorsubsystem/SingleMotorPowerAction.cpp\
-	cameratracker/LimeLight.cpp
-endif
 
 SOURCES = \
 	actions/Action.cpp\
@@ -58,7 +52,9 @@ SOURCES = \
 	motorencodersubsystem/MotorEncoderPowerAction.cpp\
 	motorencodersubsystem/MotorEncoderVelocityAction.cpp\
     motorencodersubsystem/XeroEncoder.cpp\
-	$(SIMSOURCES)
+	singlemotorsubsystem/SingleMotorSubsystem.cpp\
+	singlemotorsubsystem/SingleMotorPowerAction.cpp\
+	cameratracker/LimeLight.cpp
 
 TARGET=xerobase
 

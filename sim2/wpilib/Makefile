@@ -132,7 +132,8 @@ SOURCES = \
 	./cpp/VictorSP.cpp\
 	./cpp/Watchdog.cpp\
 	./cpp/XboxController.cpp\
-	./cppcs/RobotBase.cpp
+	./cppcs/RobotBase.cpp\
+	./build/WPILibVersion.cpp
 
 TARGET=wpilib
 
