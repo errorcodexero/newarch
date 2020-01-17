@@ -184,4 +184,9 @@ CXXFLAGS += -I$(TOPDIR)/sim2/hal/include -I$(TOPDIR)/sim2/hal/build
 LIBLIST += $(TOPDIR)/sim2/hal
 endif
 
+ifeq ($(NEED_MODELS),true)
+CXXFLAGS += -I$(TOPDIR)/sim2/models/include -I$(TOPDIR)/sim2/models/cpp
+LIBLIST += $(TOPDIR)/sim2/models
+endif
+
 endif
