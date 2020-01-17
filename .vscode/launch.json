@@ -92,7 +92,32 @@
                 "ignoreFailures": true
             }
         ]
-      },        
+      },  
+      {
+        "name": "CygWin Phoenix SIM2 Launch",
+        "type": "cppdbg",
+        "request": "launch",
+        "cwd": "${workspaceFolder}",
+        "program": "${workspaceFolder}/build/SIM2/Debug/phoenix/phoenix.exe",
+        "stopAtEntry": false,
+        "environment": [],
+        "args" : [
+          "--test","0.0",
+          "--start", "1.0",
+          "--auto", "0.0",
+          "--oper","15.0",
+        ],      
+        "externalConsole": true,
+        "MIMode": "gdb",
+        "miDebuggerPath": "C:/cygwin64/bin/gdb.exe",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            }
+        ]
+      },             
     {
       "name": "CygWin Unit Test Launch",
       "type": "cppdbg",

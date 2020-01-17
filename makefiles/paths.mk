@@ -3,7 +3,7 @@
 #
 
 ifndef BUILDDIR
-BUILDDIR=$(TOPDIR)/makebuild
+BUILDDIR=$(TOPDIR)/build
 endif
 
 #

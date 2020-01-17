@@ -1,5 +1,8 @@
 #pragma once
 
+#include <engine/SimulationProperties.h>
+#include <engine/EventsManager.h>
+#include <engine/SimValue.h>
 #include <vector>
 #include <string>
 #include <ostream>
@@ -14,7 +17,7 @@ namespace xero
     namespace sim2
     {
         class SimulationEvent;
-        class SimulatorModel;
+        class SimulationModel;
 
         class SimulatorEngine
         {
@@ -69,6 +72,12 @@ namespace xero
             static SimulatorEngine *theOne;
 
         private:
+            // The timing of the simulation
+            double start_delay_ ;
+            double auto_duration_ ;
+            double teleop_duration_ ;
+            double test_duration_ ;
+
             // The output stream for simulator output
             std::ostream *out_;
 
@@ -77,7 +86,6 @@ namespace xero
 
             // The simulator properties file
             std::string propfile_;
-
 
             // The simulator thread
             std::thread sim_thread_;
@@ -95,14 +103,17 @@ namespace xero
             // the robot loop time step, 2 ms feels right
             double sim_time_step_;
 
-            // The set of events for the simulation
-            std::list<std::shared_ptr<SimulationEvent>> events_;
-
             // The set of models for the simulator
             std::list<std::shared_ptr<SimulationModel>> models_;
 
             // The set of functions registered by HAL code
             std::list<std::function<void(SimulatorEngine &)>> hal_functions_;
+
+            // The properties for the simulation
+            SimulationProperties props_ ;
+
+            // The events for the simulation
+            EventsManager events_ ;
         };
     }
 }

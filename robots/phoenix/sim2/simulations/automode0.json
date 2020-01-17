@@ -1,0 +1,56 @@
+{
+    "durations" :
+    {
+        "start" : 1.0,
+        "auto" : 15.0,
+        "teleop" : 0.0,
+        "test" : 0.0
+    },
+    "events" :
+    [
+        {
+            "time" : 0.0,
+            "model" : "oi",
+            "instance" : "1",
+            "values" :
+            {
+                "automode" : -1.0
+            }
+        },
+        {
+            "time" : 0.0,
+            "model" : "tankdrive",
+            "instance" : "1",
+            "values" :
+            {
+                "xpos" : 16.1,
+                "ypos" : 42.4,
+                "angle" : 0.0
+            }
+        },
+        {
+            "time" : 0.0,
+            "model" : "collector",
+            "instance" : "1",
+            "values" : 
+            {
+                "cube" : true
+            }
+        }
+    ]
+}
+
+# Loaded with first cube
+#
+0.1,cubesensor,cube,1
+
+#
+# Collect second cube
+#
+6.0,cubesensor,cube,1
+
+#
+# Collect third cube
+#
+11.82,cubesensor,cube,1
+\

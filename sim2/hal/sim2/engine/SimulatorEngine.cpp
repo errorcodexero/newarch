@@ -23,7 +23,10 @@ namespace xero
         {
             assert(theOne == this);
             theOne = nullptr;
-        }
+                else if (arg == "--start")
+                {
+                    
+                }        }
 
         bool SimulatorEngine::parseCommandLineArgs(int ac, char **av)
         {
@@ -55,7 +58,7 @@ namespace xero
 
                     propfile_ = *av++;
                     ac--;
-                }                
+                }
             }
 
             return true;
@@ -64,11 +67,11 @@ namespace xero
         SimulatorEngine::ErrorCode SimulatorEngine::start()
         {
             // Read the properties file
-            if (!readPropertyFile())
+            if (props_.loadProperties(propfile_))
                 return ErrorCode::PropertyFileError;
 
             // Read the event file
-            if (!readEventFile())
+            if (!events_.loadEvents(simfile_))
                 return ErrorCode::EventFileError;
 
             if (!startThread())
@@ -121,10 +124,6 @@ namespace xero
 
         void SimulatorEngine::runEvents()
         {
-            for(auto ev : events_)
-            {
-                
-            }
         }
 
         void SimulatorEngine::runModels()

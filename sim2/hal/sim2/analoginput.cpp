@@ -3,7 +3,7 @@
 
 int32_t HAL_GetNumAnalogInputs()
 {
-    return 0;
+    return 8;
 }
 
 HAL_AnalogInputHandle HAL_InitializeAnalogInputPort(HAL_PortHandle portHandle, int32_t *status)
