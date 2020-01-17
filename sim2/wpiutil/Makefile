@@ -106,7 +106,6 @@ SOURCES = \
 	./unix/Demangle.cpp\
 	./cygwin/StackTrace.cpp
 
-
 TARGET=wpiutil
 
 LOCAL_CFLAGS += -Iinclude -Ilibuv/include -Ilibuv/src

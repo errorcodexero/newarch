@@ -27,7 +27,7 @@ SOURCES = \
 	./cpp/ConnectionNotifier.cpp
 
 TARGET=ntcore
-NEED_WPIUTIL_2=true
+NEED_WPIUTIL=true
 
 LOCAL_CFLAGS += -Iinclude
 

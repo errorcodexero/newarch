@@ -38,7 +38,7 @@ SOURCES = \
 
 TARGET=hal
 
-NEED_WPIUTIL_2=true
+NEED_WPIUTIL=true
 
 LOCAL_CFLAGS += -Iinclude -Ibuild -Isim2
 

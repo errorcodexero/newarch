@@ -42,36 +42,33 @@ NEED_MODELS=true
 endif
 
 ifeq ($(PLATFORM),SIM2)
+
 NEED_XEROMISC=true
 NEED_XEROBASE=true
-NEED_NAVX_2=true
-NEED_CTRE_2=true
-NEED_REV_2=true
-NEED_WPILIB_2=true
-NEED_CSCORE_2=true
-NEED_NTCORE_2=true
-NEED_WPIUTIL_2=true
-NEED_HAL_2=true
+NEED_NAVX=true
+NEED_CTRE=true
+NEED_REV=true
+NEED_WPILIB=true
+NEED_CAMERASERVER=true
+NEED_CSCORE=true
+NEED_NTCORE=true
+NEED_WPIUTIL=true
+NEED_HAL=true
 endif
 
 LOCAL_CFLAGS = -Isrc/main/cpp
 
 SUPPORTED_PLATFORMS=ROBORIO SIMULATOR
 
-ifeq ($(CONFIG),)
-$(info CONFIG is unspecified.  Setting it to default value (${DEFAULT_CONFIG}).)
-CONFIG := $(DEFAULT_CONFIG)
-endif
-
-ifeq ($(PLATFORM),)
-$(info PLATFORM is unspecified.  Setting it to default value (${DEFAULT_PLATFORM}).)
-PLATFORM := $(DEFAULT_PLATFORM)
-endif
-
 ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/phoenixsim
 	LOCAL_LIBS = $(TOPDIR)/robotsims/phoenixsim
 	LOCAL_EXTERNAL_LIBS=-lcurses
+endif
+
+ifeq ($(PLATFORM),SIM2)
+#	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/phoenixsim2
+#	LOCAL_LIBS = $(TOPDIR)/robotsims/phoenixsim2
 endif
 
 include $(TOPDIR)/makefiles/buildexe.mk

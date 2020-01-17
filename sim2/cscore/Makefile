@@ -25,8 +25,8 @@ SOURCES = \
 
 TARGET=cscore
 
-NEED_WPIUTIL_2=true
-NEED_NTCORE_2=true
+NEED_WPIUTIL=true
+NEED_NTCORE=true
 
 LOCAL_CFLAGS += -Iinclude -Icpp
 

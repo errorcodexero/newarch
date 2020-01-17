@@ -139,52 +139,49 @@ CXXFLAGS += -I$(TOPDIR)/xerolibs/xeromisc
 LIBLIST += $(TOPDIR)/xerolibs/xeromisc
 endif
 
-
-ifeq ($(NEED_NAVX_2),true)
+ifeq ($(NEED_NAVX),true)
 CXXFLAGS += -I$(TOPDIR)/sim2/navx/include
 LIBLIST += $(TOPDIR)/sim2/navx
 endif
 
-ifeq ($(NEED_CTRE_2),true)
+ifeq ($(NEED_CTRE),true)
 CXXFLAGS += -I$(TOPDIR)/sim2/ctre/include
 LIBLIST += $(TOPDIR)/sim2/ctre
 endif
 
-ifeq ($(NEED_REV_2),true)
+ifeq ($(NEED_REV),true)
 CXXFLAGS += -I$(TOPDIR)/sim2/rev/include
 LIBLIST += $(TOPDIR)/sim2/rev
 endif
 
-ifeq ($(NEED_WPILIB_2),true)
+ifeq ($(NEED_WPILIB),true)
 CXXFLAGS += -I$(TOPDIR)/sim2/wpilib/include
 LIBLIST += $(TOPDIR)/sim2/wpilib
 endif
 
-ifeq ($(NEED_CAMERASERVER_2),true)
+ifeq ($(NEED_CAMERASERVER),true)
 CXXFLAGS += -I$(TOPDIR)/sim2/cameraserver/include
-LIBLIST += $(TOPDIR)/sim2/camseraserver
+LIBLIST += $(TOPDIR)/sim2/cameraserver
 endif
 
-ifeq ($(NEED_NTCORE_2),true)
+ifeq ($(NEED_NTCORE),true)
 CXXFLAGS += -I$(TOPDIR)/sim2/ntcore/include
 LIBLIST += $(TOPDIR)/sim2/ntcore
 endif
 
-ifeq ($(NEED_CSCORE_2),true)
+ifeq ($(NEED_CSCORE),true)
 CXXFLAGS += -I$(TOPDIR)/sim2/cscore/include
-LIBLIST += 
+LIBLIST += $(TOPDIR)/sim2/cscore
 endif
 
-ifeq ($(NEED_WPIUTIL_2),true)
-CXXFLAGS += -I$(TOPDIR)/sim2/wpiutil/include -I$(TOPDIR)/sim2/wpiutil/eigeninclude
+ifeq ($(NEED_WPIUTIL),true)
+CXXFLAGS += -I$(TOPDIR)/sim2/wpiutil/include -I$(TOPDIR)/sim2/wpiutil/eigeninclude -I$(TOPDIR)/sim2/wpiutil/libuv/include
 LIBLIST += $(TOPDIR)/sim2/wpiutil
 endif
 
-ifeq ($(NEED_HAL_2),true)
+ifeq ($(NEED_HAL),true)
 CXXFLAGS += -I$(TOPDIR)/sim2/hal/include -I$(TOPDIR)/sim2/hal/build
 LIBLIST += $(TOPDIR)/sim2/hal
 endif
-
-
 
 endif
