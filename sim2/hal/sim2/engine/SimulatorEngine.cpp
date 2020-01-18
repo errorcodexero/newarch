@@ -81,10 +81,10 @@ namespace xero
         {
             // Read the HAL configuration file
             if (!readHalConfigFile(halconfig_))
-            return ErrorCode::HALConfigFileError ;
+                return ErrorCode::HALConfigFileError ;
 
             // Read the properties file
-            if (props_.loadProperties(propfile_))
+            if (!props_.loadProperties(propfile_))
                 return ErrorCode::PropertyFileError;
 
             // Read the event file
@@ -171,7 +171,7 @@ namespace xero
 
             try
             {
-                cnt = obj.value("count", -1) ;
+                cnt = devobj.value("count", -1) ;
             }
             catch(...)
             {

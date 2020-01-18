@@ -73,12 +73,6 @@ namespace xero
             static SimulatorEngine *theOne;
 
         private:
-            // The timing of the simulation
-            double start_delay_ ;
-            double auto_duration_ ;
-            double teleop_duration_ ;
-            double test_duration_ ;
-
             // The output stream for simulator output
             std::ostream *out_;
 

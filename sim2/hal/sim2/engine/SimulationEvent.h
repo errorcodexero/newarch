@@ -1,5 +1,6 @@
 #pragma once
 
+#include <engine/SimValue.h>
 #include <string>
 
 namespace xero
@@ -9,18 +10,24 @@ namespace xero
         class SimulationEvent
         {
         public:
-            enum class EventType
-            {
-                ModelEvent,
-                HALEvent,
-            };
 
         public:
-            SimulationEvent(const std::string &model);
+            SimulationEvent(double t) {
+                time_ = t;
+            }
+
+            virtual ~SimulationEvent() {
+            }
+
+            double time() const {
+                return time_;
+            }
+
+            virtual std::string toString() const = 0;
 
         private:
-            EventType type_;
-            std::string target_;
+            double time_;
+
         };
     }
 }

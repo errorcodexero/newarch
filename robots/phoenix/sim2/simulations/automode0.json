@@ -9,6 +9,20 @@
     "stimulus" :
     [
         {
+            "time" : 6.0,
+            "events" :
+            [
+                {
+                    "model" : "collector",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "cube" : true
+                    }
+                }
+            ]
+        },
+        {
             "time" : 0.0,
             "events" :
             [
@@ -30,20 +44,6 @@
                         "angle" : 0.0
                     }
                 },
-                {
-                    "model" : "collector",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "cube" : true
-                    }
-                }
-            ]
-        },
-        {
-            "time" : 6.0,
-            "events" :
-            [
                 {
                     "model" : "collector",
                     "instance" : "1",

@@ -1,5 +1,6 @@
 #include <engine/SimulationProperties.h>
 #include <fstream>
+#include <iostream>
 #include <cmath>
 
 namespace xero
@@ -15,17 +16,17 @@ namespace xero
 
         }
 
-        bool SimulationProperties::loadModels(nlohmann::json obj)
+        bool SimulationProperties::loadModels(nlohmann::json mobj)
         {
             std::string model;
             std::string inst;
 
-            if (!obj.is_array())
+            if (!mobj.is_array())
                 return false;
 
-            for (size_t i = 0; i < obj.size(); i++)
+            for (size_t i = 0; i < mobj.size(); i++)
             {
-                nlohmann::json elem = obj[i];
+                nlohmann::json elem = mobj[i];
                 nlohmann::json obj;
 
                 if (!elem.is_object())
@@ -61,30 +62,23 @@ namespace xero
 
                     if (value.is_boolean())
                     {
-                        bool bv = value.value(key, false);
-                        SimValue sv(bv);
-                        setValue(key, sv);
+                        SimValue sv(obj.value(key, false));
+                        setValue(fullkey, sv);
                     }
-                    else if (value.is_number())
+                    else if (value.is_number_integer())
                     {
-                        double ipart;
-                        double v = value.value(key, 0.0);
-
-                        if (std::modf(v, &ipart) < 1e-9)
-                        {
-                            SimValue sv(static_cast<int>(ipart));
-                            setValue(key, sv);
-                        }
-                        else
-                        {
-                            SimValue sv(v);
-                            setValue(key, sv);
-                        }
+                        SimValue sv(obj.value(key, static_cast<int>(0)));
+                        setValue(fullkey, sv);                        
+                    }
+                    else if (value.is_number_float())
+                    {
+                        SimValue sv(obj.value(key, static_cast<double>(0.0)));
+                        setValue(fullkey, sv);
                     }
                     else if (value.is_string())
                     {
-                        SimValue sv(value.value(key, ""));
-                        setValue(key, sv);
+                        SimValue sv(obj.value(key, ""));
+                        setValue(fullkey, sv);
                     }
                     else
                     {
@@ -102,30 +96,23 @@ namespace xero
 
                     if (value.is_boolean())
                     {
-                        bool bv = value.value(key, false);
-                        SimValue sv(bv);
-                        setValue(key, sv);
+                        SimValue sv(obj.value(key, false));
+                        setValue(fullkey, sv);
                     }
-                    else if (value.is_number())
+                    else if (value.is_number_integer())
                     {
-                        double ipart;
-                        double v = value.value(key, 0.0);
-
-                        if (std::modf(v, &ipart) < 1e-9)
-                        {
-                            SimValue sv(static_cast<int>(ipart));
-                            setValue(key, sv);
-                        }
-                        else
-                        {
-                            SimValue sv(v);
-                            setValue(key, sv);
-                        }
+                        SimValue sv(obj.value(key, static_cast<int>(0)));
+                        setValue(fullkey, sv);                        
+                    }
+                    else if (value.is_number_float())
+                    {
+                        SimValue sv(obj.value(key, static_cast<double>(0.0)));
+                        setValue(fullkey, sv);
                     }
                     else if (value.is_string())
                     {
-                        SimValue sv(value.value(key, ""));
-                        setValue(key, sv);
+                        SimValue sv(obj.value(key, ""));
+                        setValue(fullkey, sv);
                     }
                     else
                     {
@@ -151,8 +138,6 @@ namespace xero
 
             nlohmann::json obj = nlohmann::json::parse(strm);
             strm.close();
-
-            nlohmann::json model = obj.at("models");
 
             if (!loadModels(obj.at("models")))
                 return false;

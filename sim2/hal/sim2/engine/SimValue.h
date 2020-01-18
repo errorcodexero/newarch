@@ -71,6 +71,10 @@ namespace xero
                 return type_ == ValueType::Boolean ;
             }
 
+            bool isInvalid() const {
+                return type_ == ValueType::Invalid;
+            }
+
             int getInteger() const {
                 assert(isInteger()) ;
                 return integer_ ;
@@ -86,8 +90,27 @@ namespace xero
                 return string_ ;
             }
 
-            bool getBoolear() const {
+            bool getBoolean() const {
                 return boolean_ ;
+            }
+
+            std::string toString() const {
+                std::string ret ;
+
+                if (isInvalid())
+                    ret = "**INVALID**";
+                else if (isBoolean())
+                    ret = std::string("boolean[") + (getBoolean() ? "true" : "false") + std::string("]");
+                else if (isInteger())
+                    ret = std::string("integer[") + std::to_string(getInteger()) + std::string("]");
+                else if (isDouble())
+                    ret = std::string("double[") + std::to_string(getDouble()) + std::string("]");
+                else if (isString())
+                    ret = std::string("string[") + getString() + std::string("]");
+                else
+                    ret = "**CORRUPT**";
+
+                return ret;
             }
 
         private:
@@ -97,5 +120,11 @@ namespace xero
             std::string string_;
             bool boolean_ ;
         } ;
+
+        inline std::ostream &operator<<(std::ostream &strm, const SimValue &v)
+        {
+            strm << v.toString();
+            return strm;
+        }
     }
 }
