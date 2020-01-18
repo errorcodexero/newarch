@@ -1,5 +1,5 @@
 #pragma once
-
+#include <engine/json.h>
 #include <engine/SimValue.h>
 #include <map>
 
@@ -29,6 +29,10 @@ namespace xero
             const SimValue &getHALProperty(const std::string &name) {
                 return getModelProperty(HALModelName, name) ;
             }
+
+        private:
+            bool loadModels(nlohmann::json obj);
+            bool loadHAL(nlohmann::json obj);
 
         private:
             std::map<std::string, SimValue> values_ ;

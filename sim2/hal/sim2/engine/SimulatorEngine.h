@@ -31,9 +31,11 @@ namespace xero
                 SimulatorNotRunning
             };
 
-        public:
+        private:
             SimulatorEngine();
             virtual ~SimulatorEngine();
+
+        public:
 
             // Start the simulation thread in the background
             ErrorCode start();

@@ -180,7 +180,7 @@ LIBLIST += $(TOPDIR)/sim2/wpiutil
 endif
 
 ifeq ($(NEED_HAL),true)
-CXXFLAGS += -I$(TOPDIR)/sim2/hal/include -I$(TOPDIR)/sim2/hal/build -I$(TOPDIR)/sim2/hal/sim2/engine
+CXXFLAGS += -I$(TOPDIR)/sim2/hal/include -I$(TOPDIR)/sim2/hal/build -I$(TOPDIR)/sim2/hal/sim2
 LIBLIST += $(TOPDIR)/sim2/hal
 endif
 

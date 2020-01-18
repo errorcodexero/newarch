@@ -11,11 +11,14 @@ namespace xero
 
         SimulatorEngine *SimulatorEngine::theOne = nullptr;
 
+        SimulatorEngine &SimulatorEngine::getEngine() {
+            if (theOne == nullptr)
+                theOne = new SimulatorEngine();
+            return *theOne;
+        }
+
         SimulatorEngine::SimulatorEngine()
         {
-            assert(theOne == nullptr);
-            theOne = this;
-
             out_ = &std::cout;
         }
 
@@ -23,10 +26,7 @@ namespace xero
         {
             assert(theOne == this);
             theOne = nullptr;
-                else if (arg == "--start")
-                {
-                    
-                }        }
+        }
 
         bool SimulatorEngine::parseCommandLineArgs(int ac, char **av)
         {

@@ -30,7 +30,9 @@ HALAPIS = \
 	sim2/can.cpp
 
 SIMCLASSES = \
-	sim2/engine/SimulatorEngine.cpp
+	sim2/engine/SimulatorEngine.cpp\
+	sim2/engine/SimulationProperties.cpp\
+	sim2/engine/EventsManager.cpp
 
 SOURCES = \
 	$(HALAPIS)\

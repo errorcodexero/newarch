@@ -102,10 +102,6 @@
         "stopAtEntry": false,
         "environment": [],
         "args" : [
-          "--test","0.0",
-          "--start", "1.0",
-          "--auto", "0.0",
-          "--oper","15.0",
         ],      
         "externalConsole": true,
         "MIMode": "gdb",
