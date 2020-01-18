@@ -27,6 +27,7 @@ namespace xero
                 NoError,
                 PropertyFileError,
                 EventFileError,
+                HALConfigFileError,
                 NoSimulationThread,
                 SimulatorNotRunning
             };
@@ -52,11 +53,9 @@ namespace xero
         private:
             void simulationThread();
 
-            // Read the property file - called from the main thread
-            bool readPropertyFile();
-
-            // Read the event file - called from the main thread
-            bool readEventFile();
+            // Read the HAL configuration file
+            bool readHalConfigFile(const std::string &path) ;
+            bool getConfigFileCount(nlohmann::json obj, const char *name, int &cnt) ;
 
             // Start the simulation thread
             bool startThread();
@@ -88,6 +87,9 @@ namespace xero
 
             // The simulator properties file
             std::string propfile_;
+
+            // The HAL configuration file
+            std::string halconfig_ ;
 
             // The simulator thread
             std::thread sim_thread_;

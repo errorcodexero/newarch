@@ -102,8 +102,9 @@
         "stopAtEntry": false,
         "environment": [],
         "args" : [
-            "--props","robots/phoenix/sim2/robot.json",
-            "--events","robots/phoenix/sim2/simulations/automode0.json"
+          "--halconfig","sim2/roborio.json",          
+          "--props","robots/phoenix/sim2/robot.json",
+          "--events","robots/phoenix/sim2/simulations/automode0.json"
         ],      
         "externalConsole": true,
         "MIMode": "gdb",

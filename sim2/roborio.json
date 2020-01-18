@@ -1,0 +1,58 @@
+{
+    "accumulators" :
+    {
+        "count" : 0
+    },
+    "analog_triggers" :
+    {
+        "count" : 0
+    },
+    "analog_inputs" : 
+    {
+        "count" : 8
+    },
+    "analog_outputs" :
+    {
+        "count" : 8
+    },
+    "counters" :
+    {
+        "count" : 0
+    },
+    "digitalios" :
+    {
+        "count" : 0
+    },
+    "pwms":
+    {
+        "count" : 0
+    },
+    "encoders" :
+    {
+        "count" : 0
+    },
+    "interrupts" :
+    {
+        "count" : 0
+    },
+    "relays" :
+    {
+        "count" : 0
+    },
+    "pcms" : 
+    {
+        "count" : 1
+    },
+    "solenoids":
+    {
+        "count" : 8
+    },
+    "pdps" :
+    {
+        "count" : 1
+    },
+    "pdpchannels" :
+    {
+        "count" : 16
+    }
+}

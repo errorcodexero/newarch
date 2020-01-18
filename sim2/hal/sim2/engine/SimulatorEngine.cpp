@@ -1,8 +1,10 @@
 #include <engine/SimulatorEngine.h>
 #include <engine/SimulationEvent.h>
 #include <engine/SimulationModel.h>
+#include <engine/json.h>
 #include <cassert>
 #include <iostream>
+#include <fstream>
 
 namespace xero
 {
@@ -59,6 +61,17 @@ namespace xero
                     propfile_ = *av++;
                     ac--;
                 }
+                else if (arg == "--halconfig")
+                {
+                    if (ac == 0)
+                    {
+                        (*out_) << "error: command line option '--halconfig' requires an additional argument" << std::endl;
+                        return false;
+                    }
+
+                    halconfig_ = *av++;
+                    ac--;                    
+                }
             }
 
             return true;
@@ -66,6 +79,10 @@ namespace xero
 
         SimulatorEngine::ErrorCode SimulatorEngine::start()
         {
+            // Read the HAL configuration file
+            if (!readHalConfigFile(halconfig_))
+            return ErrorCode::HALConfigFileError ;
+
             // Read the properties file
             if (props_.loadProperties(propfile_))
                 return ErrorCode::PropertyFileError;
@@ -136,6 +153,94 @@ namespace xero
         {
             for(auto fun : hal_functions_)
                 fun(*this);
+        }
+
+        bool SimulatorEngine::getConfigFileCount(nlohmann::json obj, const char *name, int &cnt)
+        {
+            nlohmann::json devobj, cntobj ;
+            
+            try
+            {
+                devobj = obj.at(name);
+            }
+            catch(...)
+            {
+                (*out_) << "Error: hal config file - cannot find section '" << name << "'" << std::endl ;                
+                return false ;
+            }
+
+            try
+            {
+                cnt = obj.value("count", -1) ;
+            }
+            catch(...)
+            {
+                (*out_) << "Error: hal config file - cannot get property 'count' in section '" << name << "'" << std::endl ;                  
+                return false ;
+            }
+
+            if (cnt == -1)
+            {
+                (*out_) << "Warning: hal config file - property 'count' in section '" << name << "' does not exist, defaulting to 0" << std::endl ;                      
+            }           
+
+            return true ;
+        }
+
+        bool SimulatorEngine::readHalConfigFile(const std::string &path)
+        {
+            int cnt ;
+            std::ifstream strm(path) ;
+
+            if (!strm.is_open())
+                return false ;
+
+            nlohmann::json obj = nlohmann::json::parse(strm);
+            strm.close();
+
+            if (!getConfigFileCount(obj, "accumulators", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "analog_triggers", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "analog_inputs", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "analog_outputs", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "counters", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "digitalios", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "pwms", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "encoders", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "interrupts", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "relays", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "pcms", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "solenoids", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "pdps", cnt))
+                return false ;
+
+            if (!getConfigFileCount(obj, "pdpchannels", cnt))
+                return false ;
+
+            return true ;
         }
     }
 }
