@@ -1,6 +1,6 @@
 #include <engine/SimulationProperties.h>
-
 #include <fstream>
+#include <cmath>
 
 namespace xero
 {
@@ -40,7 +40,7 @@ namespace xero
                 if (!elem["hardware"].is_object())
                     return false;
 
-                if (!elem["behavior"].is_array())
+                if (!elem["behavior"].is_object())
                     return false;                    
 
                 model = elem.value("model", "");
@@ -52,29 +52,86 @@ namespace xero
                     return false;
 
                 obj = elem["hardware"];
-                for (size_t j = 0; j < obj.size() ; j++)
+                for(const auto &elem : obj.items())
                 {
-                    std::string key = obj[j];
-                    nlohmann::json value = obj[key];
+                    auto key = elem.key();
+                    auto value = elem.value();
+
+                    std::string fullkey = "hw:" + model + ":" + inst + ":" + key;
 
                     if (value.is_boolean())
                     {
-
+                        bool bv = value.value(key, false);
+                        SimValue sv(bv);
+                        setValue(key, sv);
                     }
                     else if (value.is_number())
                     {
+                        double ipart;
+                        double v = value.value(key, 0.0);
 
+                        if (std::modf(v, &ipart) < 1e-9)
+                        {
+                            SimValue sv(static_cast<int>(ipart));
+                            setValue(key, sv);
+                        }
+                        else
+                        {
+                            SimValue sv(v);
+                            setValue(key, sv);
+                        }
                     }
                     else if (value.is_string())
                     {
-
+                        SimValue sv(value.value(key, ""));
+                        setValue(key, sv);
                     }
                     else
                     {
                         return false;
                     }
-                    
                 }
+
+                obj = elem["behavior"];
+                for(const auto &elem : obj.items())
+                {
+                    auto key = elem.key();
+                    auto value = elem.value();
+
+                    std::string fullkey = model + ":" + inst + ":" + key;
+
+                    if (value.is_boolean())
+                    {
+                        bool bv = value.value(key, false);
+                        SimValue sv(bv);
+                        setValue(key, sv);
+                    }
+                    else if (value.is_number())
+                    {
+                        double ipart;
+                        double v = value.value(key, 0.0);
+
+                        if (std::modf(v, &ipart) < 1e-9)
+                        {
+                            SimValue sv(static_cast<int>(ipart));
+                            setValue(key, sv);
+                        }
+                        else
+                        {
+                            SimValue sv(v);
+                            setValue(key, sv);
+                        }
+                    }
+                    else if (value.is_string())
+                    {
+                        SimValue sv(value.value(key, ""));
+                        setValue(key, sv);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }                
             }
 
             return true;

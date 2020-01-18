@@ -30,6 +30,10 @@ namespace xero
                 return getModelProperty(HALModelName, name) ;
             }
 
+            void setValue(const std::string &name, const SimValue &v) {
+                values_[name] = v;
+            }
+
         private:
             bool loadModels(nlohmann::json obj);
             bool loadHAL(nlohmann::json obj);

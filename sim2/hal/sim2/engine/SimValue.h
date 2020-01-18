@@ -16,9 +16,22 @@ namespace xero
                 Double,
                 String,
                 Boolean,
+                Invalid
             };
 
         public:
+            SimValue() {
+                type_ = ValueType::Invalid;
+            }
+
+            SimValue(const SimValue &sv) {
+                type_ = sv.type_;
+                integer_ = sv.integer_;
+                double_ = sv.double_;
+                string_ = sv.string_;
+                boolean_ = sv.boolean_;
+            }
+
             SimValue(int v) {
                 type_ = ValueType::Integer;
                 integer_ = v;
@@ -37,6 +50,9 @@ namespace xero
             SimValue(bool v) {
                 type_ = ValueType::Boolean ;
                 boolean_ = v ;
+            }
+
+            virtual ~SimValue() {                
             }
 
             bool isInteger() const {
