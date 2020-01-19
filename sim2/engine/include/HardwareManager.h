@@ -1,10 +1,12 @@
 #pragma once
+
+#include <SimulatorEngine.h>
+#include <SimulatorMessages.h>
+
 namespace xero
 {
     namespace sim2
     {
-        class SimulatorEngine ;
-
         class HardwareManager
         {
         public:
@@ -18,14 +20,15 @@ namespace xero
 
             }
 
+
         protected:
             SimulatorEngine &getEngine() 
             {
                 return engine_;
-            }
+            }      
 
         private:
             SimulatorEngine &engine_;
-        }
+        };
     }
 }

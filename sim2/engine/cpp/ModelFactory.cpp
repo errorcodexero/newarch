@@ -1,4 +1,4 @@
-#include <engine/ModelFactory.h>
+#include <ModelFactory.h>
 
 namespace xero
 {

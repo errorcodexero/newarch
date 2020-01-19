@@ -1,9 +1,10 @@
-#include <engine/SimulatorEngine.h>
-#include <engine/SimulationEvent.h>
-#include <engine/SimulationModel.h>
-#include <engine/ModelFactory.h>
-#include <engine/json.h>
-#include <engine/SimulatorStreamMessageSink.h>
+#include <SimulatorEngine.h>
+#include <SimulationEvent.h>
+#include <SimulationModel.h>
+#include <ModelFactory.h>
+#include <SimulatorStreamMessageSink.h>
+#include <CTREManager.h>
+#include <json.h>
 #include <cassert>
 #include <iostream>
 #include <fstream>
@@ -27,6 +28,9 @@ namespace xero
 
             props_ = std::make_shared<SimulationProperties>(*this);
             events_ = std::make_shared<EventsManager>(*this);
+
+            // Create the hardware managers
+            ctre_mgr_ = std::make_shared<CTREManager>(*this);
         }
 
         SimulatorEngine::~SimulatorEngine()
@@ -92,6 +96,49 @@ namespace xero
                     halconfig_ = *av++;
                     ac--;                    
                 }
+                else if (arg == "--debug")
+                {
+                    size_t index;
+
+                    if (ac == 0)
+                    {
+                        msg_.startMessage(SimulatorMessages::MessageType::Error);
+                        msg_ << "error: command line option '--debug' requires an additional argument";
+                        msg_.endMessage(sim_time_);
+                        return false;
+                    }
+
+                    std::string vstr = *av++;
+                    ac--;
+                    int v;
+                    bool error = false;
+                    try
+                    {
+                        v = std::stoi(vstr, &index);
+                    }
+                    catch(const std::exception& e)
+                    {
+                        error = true;
+                    }
+
+                    if (error || index != vstr.length())
+                    {
+                        msg_.startMessage(SimulatorMessages::MessageType::Error);
+                        msg_ << "error: command line option '--debug' requires an additional integer argument, argument was not an integer";
+                        msg_.endMessage(sim_time_);
+                        return false;                        
+                    }
+
+                    msg_.setDebugLevel(v);
+                }
+                else
+                {
+                    msg_.startMessage(SimulatorMessages::MessageType::Error);
+                    msg_ << "error: unknown command line option '" << arg << "'";
+                    msg_.endMessage(sim_time_);
+                    return false;                       
+                }
+                
             }
 
             return true;
@@ -100,7 +147,7 @@ namespace xero
         SimulatorEngine::ErrorCode SimulatorEngine::start()
         {
             // Print information about models
-            msg_.startMessage(SimulatorMessages::MessageType::Debug);
+            msg_.startMessage(SimulatorMessages::MessageType::Debug, 1);
             msg_ << "Models Defined: ";
             for(const std::string &model : ModelFactoryBase::getModelList())
                 msg_ << " " << model;
@@ -217,7 +264,7 @@ namespace xero
                 msg_.endMessage(sim_time_);
             }           
            
-            msg_.startMessage(SimulatorMessages::MessageType::Debug);
+            msg_.startMessage(SimulatorMessages::MessageType::Debug, 5);
             msg_ << "  " << cnt << " " << name << " defined";
             msg_.endMessage(sim_time_);   
 
@@ -238,7 +285,7 @@ namespace xero
                 return false ;
             }
 
-            msg_.startMessage(SimulatorMessages::MessageType::Debug);
+            msg_.startMessage(SimulatorMessages::MessageType::Debug, 1);
             msg_ << "reading hal config file '" << path << "'";
             msg_.endMessage(sim_time_);                   
 
@@ -288,7 +335,7 @@ namespace xero
             if (!getConfigFileCount(obj, "pdpchannels", cnt))
                 return false ;
 
-            msg_.startMessage(SimulatorMessages::MessageType::Debug);
+            msg_.startMessage(SimulatorMessages::MessageType::Debug, 0);
             msg_ << "hal config file read sucessfully";
             msg_.endMessage(sim_time_);                
 

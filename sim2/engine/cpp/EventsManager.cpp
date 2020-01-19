@@ -1,8 +1,8 @@
-#include <engine/SimValue.h>
-#include <engine/EventsManager.h>
-#include <engine/SimulationModelEvent.h>
-#include <engine/SimulatorEngine.h>
-#include <engine/json.h>
+#include <SimValue.h>
+#include <EventsManager.h>
+#include <SimulationModelEvent.h>
+#include <SimulatorEngine.h>
+#include <json.h>
 #include <fstream>
 #include <iostream>
 
@@ -114,7 +114,7 @@ namespace xero
                 return false ;
             }
 
-            msg.startMessage(SimulatorMessages::MessageType::Debug);
+            msg.startMessage(SimulatorMessages::MessageType::Debug, 0);
             msg << "reading simulation event file '" << path << "'";
             msg.endMessage(engine_.getSimulationTime());                
 
@@ -129,7 +129,7 @@ namespace xero
 
             for(auto ev : events_)
             {
-                msg.startMessage(SimulatorMessages::MessageType::Debug);
+                msg.startMessage(SimulatorMessages::MessageType::Debug, 8);
                 msg << "  event defined '" << ev->toString() << "'";
                 msg.endMessage(engine_.getSimulationTime());
             }

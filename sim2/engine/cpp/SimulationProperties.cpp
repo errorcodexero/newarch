@@ -1,6 +1,6 @@
-#include <engine/SimulationProperties.h>
-#include <engine/SimulatorEngine.h>
-#include <engine/SimulationModel.h>
+#include <SimulationProperties.h>
+#include <SimulatorEngine.h>
+#include <SimulationModel.h>
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -64,7 +64,7 @@ namespace xero
                     return false;
                 }
 
-                msg.startMessage(SimulatorMessages::MessageType::Debug);
+                msg.startMessage(SimulatorMessages::MessageType::Debug, 2);
                 msg << "created model instance '" << inst << "' of type '" << model << "'";
                 msg.endMessage(engine_.getSimulationTime()); 
 
@@ -102,7 +102,7 @@ namespace xero
                         return false;
                     }
 
-                    msg.startMessage(SimulatorMessages::MessageType::Debug);
+                    msg.startMessage(SimulatorMessages::MessageType::Debug, 5);
                     msg << "  added hw property '" << key << "' with value '" << sv.toString();
                     msg.endMessage(engine_.getSimulationTime()); 
 
@@ -142,7 +142,7 @@ namespace xero
                         return false;
                     }
 
-                    msg.startMessage(SimulatorMessages::MessageType::Debug);
+                    msg.startMessage(SimulatorMessages::MessageType::Debug, 5);
                     msg << "  added model property '" << key << "' with value '" << sv.toString();
                     msg.endMessage(engine_.getSimulationTime()); 
 
@@ -168,7 +168,7 @@ namespace xero
                 return false ;
             }
 
-            msg.startMessage(SimulatorMessages::MessageType::Debug);
+            msg.startMessage(SimulatorMessages::MessageType::Debug, 1);
             msg << "reading robot properties file '" << path << "'";
             msg.endMessage(engine_.getSimulationTime());
 

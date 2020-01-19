@@ -1,5 +1,5 @@
-#include <engine/SimulatorMessages.h>
-#include <engine/SimulatorMessageSink.h>
+#include <SimulatorMessages.h>
+#include <SimulatorMessageSink.h>
 #include <cassert>
 
 namespace xero
@@ -8,6 +8,8 @@ namespace xero
     {
         SimulatorMessages::SimulatorMessages()
         {
+            // Everything less than or equal to 10 is going to print
+            debug_level_ = 10;
         }
 
         SimulatorMessages::~SimulatorMessages()
@@ -17,9 +19,21 @@ namespace xero
         void SimulatorMessages::startMessage(SimulatorMessages::MessageType mt)
         {
             assert(msg_.length() == 0);
+            assert(mt != MessageType::Debug);
+
             msg_.clear();
             mt_ = mt;
         }
+
+        void SimulatorMessages::startMessage(SimulatorMessages::MessageType mt, int level)
+        {
+            assert(msg_.length() == 0);
+            assert(mt == MessageType::Debug);
+            
+            msg_.clear();
+            mt_ = mt;
+            level_ = level;
+        }        
 
         SimulatorMessages &SimulatorMessages::operator<<(const std::string &msg)
         {
@@ -65,8 +79,11 @@ namespace xero
             outmsg += msg_;
             msg_.clear();
 
-            for(auto sink : sinks_)
-                sink->output(outmsg);
+            if (mt_ != MessageType::Debug || (level_ <= debug_level_))
+            {
+                for(auto sink : sinks_)
+                    sink->output(outmsg);
+            }
         }
     }
 }

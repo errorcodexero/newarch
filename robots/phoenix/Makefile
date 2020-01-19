@@ -39,10 +39,10 @@ NEED_NETWORKTABLES=true
 NEED_XEROMISC=true
 NEED_XEROBASE=true
 NEED_MODELS=true
+
 endif
 
 ifeq ($(PLATFORM),SIM2)
-
 NEED_XEROMISC=true
 NEED_XEROBASE=true
 NEED_NAVX=true
@@ -55,6 +55,7 @@ NEED_NTCORE=true
 NEED_WPIUTIL=true
 NEED_HAL=true
 NEED_MODELS=true
+NEED_ENGINE=true
 endif
 
 LOCAL_CFLAGS = -Isrc/main/cpp

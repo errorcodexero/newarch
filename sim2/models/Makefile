@@ -11,6 +11,7 @@ NEED_NAVX=true
 NEED_CTRE=true
 NEED_REV=true
 NEED_HAL=true
+NEED_ENGINE=true
 
 LOCAL_CFLAGS += -Iinclude
 

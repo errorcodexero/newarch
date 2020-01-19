@@ -9,6 +9,7 @@ int32_t HAL_GetNumAccumulators()
 
 HAL_Bool HAL_IsAccumulatorChannel(HAL_AnalogInputHandle analogPortHandle, int32_t* status)
 {
+    *status = HAL_SIM_NOT_SUPPORTED ;
     return false ;
 }
 

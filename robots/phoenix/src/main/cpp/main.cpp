@@ -2,9 +2,9 @@
 #include "Phoenix.h"
 
 #ifdef SIM2
-#include <engine/SimulatorEngine.h>
-#include <engine/ModelFactory.h>
-#include <WestCoastDrive.h>
+#include <SimulatorEngine.h>
+#include <ModelFactory.h>
+#include <BuiltInModels.h>
 
 using namespace xero::sim2;
 using namespace xero::models;

@@ -1,4 +1,8 @@
 #include <hal/Encoder.h>
+#include <engine/SimulatorEngine.h>
+#include <engine/EncoderManager.h>
+
+using namespace xero::sim2;
 
 HAL_EncoderHandle HAL_InitializeEncoder(
     HAL_Handle digitalSourceHandleA, HAL_AnalogTriggerType analogTriggerTypeA,
@@ -11,12 +15,11 @@ HAL_EncoderHandle HAL_InitializeEncoder(
 
 void HAL_FreeEncoder(HAL_EncoderHandle encoderHandle, int32_t* status)
 {
-
+    SimulatorEngine &engine = SimulatorEngine::getEngine();
 }
 
 void HAL_SetEncoderSimDevice(HAL_EncoderHandle handle, HAL_SimDeviceHandle device)
 {
-
 }
 
 int32_t HAL_GetEncoder(HAL_EncoderHandle encoderHandle, int32_t* status)

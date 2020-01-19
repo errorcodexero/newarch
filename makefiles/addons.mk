@@ -139,6 +139,11 @@ CXXFLAGS += -I$(TOPDIR)/xerolibs/xeromisc
 LIBLIST += $(TOPDIR)/xerolibs/xeromisc
 endif
 
+ifeq ($(NEED_ENGINE),true)
+CXXFLAGS += -I$(TOPDIR)/sim2/engine/include
+LIBLIST += $(TOPDIR)/sim2/engine
+endif
+
 ifeq ($(NEED_MODELS),true)
 CXXFLAGS += -I$(TOPDIR)/sim2/models/include -I$(TOPDIR)/sim2/models/cpp
 LIBLIST += $(TOPDIR)/sim2/models
@@ -185,9 +190,8 @@ LIBLIST += $(TOPDIR)/sim2/wpiutil
 endif
 
 ifeq ($(NEED_HAL),true)
-CXXFLAGS += -I$(TOPDIR)/sim2/hal/include -I$(TOPDIR)/sim2/hal/build -I$(TOPDIR)/sim2/hal/sim2
+CXXFLAGS += -I$(TOPDIR)/sim2/hal/include -I$(TOPDIR)/sim2/hal/build
 LIBLIST += $(TOPDIR)/sim2/hal
 endif
-
 
 endif

@@ -1,4 +1,4 @@
-#include <engine/SimulationModel.h>
+#include <SimulationModel.h>
 
 namespace xero
 {

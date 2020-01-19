@@ -1,6 +1,6 @@
 #include "ctre/phoenix/MotorControl/IMotorController.h"
-#include <engine/SimulatorEngine.h>
-#include <engine/CTREManager.h>
+#include <SimulatorEngine.h>
+#include <CTREManager.h>
 
 namespace ctre
 {
@@ -15,7 +15,7 @@ namespace ctre
 
                 xero::sim2::SimulatorEngine &engine = xero::sim2::SimulatorEngine::getEngine();
                 auto mgr = engine.getCTREManager();
-                mgr.create(index);
+                mgr->create(index);
             }
 
             IMotorController::~IMotorController()
@@ -36,7 +36,7 @@ namespace ctre
 
                 xero::sim2::SimulatorEngine &engine = xero::sim2::SimulatorEngine::getEngine();
                 auto mgr = engine.getCTREManager();
-                mgr.set(index_, v);
+                mgr->set(index_, v);
             }
 
             SensorCollection& IMotorController::GetSensorCollection() {

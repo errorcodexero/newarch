@@ -30,7 +30,12 @@ namespace xero
                 sinks_.push_back(sink);
             }
 
+            void setDebugLevel(int v) {
+                debug_level_ = v;
+            }
+
             void startMessage(MessageType mt);
+            void startMessage(MessageType mt, int level);
             SimulatorMessages &operator<<(const std::string &str);
             SimulatorMessages &operator<<(int);
             SimulatorMessages &operator<<(double);
@@ -39,7 +44,10 @@ namespace xero
         private:
             MessageType mt_;
             std::string msg_;
+            int level_;
+
             std::list<std::shared_ptr<SimulatorMessageSink>> sinks_;
+            int debug_level_;
         };
     }
 }

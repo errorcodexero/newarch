@@ -1,9 +1,9 @@
 #pragma once
 
-#include <engine/SimulationProperties.h>
-#include <engine/EventsManager.h>
-#include <engine/SimValue.h>
-#include <engine/SimulatorMessages.h>
+#include <SimulationProperties.h>
+#include <EventsManager.h>
+#include <SimValue.h>
+#include <SimulatorMessages.h>
 #include <vector>
 #include <string>
 #include <ostream>
@@ -20,6 +20,7 @@ namespace xero
         class SimulationEvent;
         class SimulationModel;
         class ModelFactoryBase;
+        class CTREManager;
 
         class SimulatorEngine
         {
@@ -69,6 +70,9 @@ namespace xero
             uint64_t getSimulationTime() const {
                 return sim_time_;
             }
+
+            // Get the hardware managers
+            std::shared_ptr<CTREManager> getCTREManager() { return ctre_mgr_; }
 
         private:
             void simulationThread();
@@ -135,6 +139,9 @@ namespace xero
 
             // Model factories
             std::map<std::string, ModelFactoryBase *> model_factories_;
+
+            // Hardware Managers
+            std::shared_ptr<CTREManager> ctre_mgr_;
         };
     }
 }

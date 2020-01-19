@@ -1,7 +1,7 @@
 #pragma once
 
-#include <engine/SimulationEvent.h>
-#include <engine/SimValue.h>
+#include <SimulationEvent.h>
+#include <SimValue.h>
 #include <string>
 
 namespace xero

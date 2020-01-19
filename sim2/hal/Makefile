@@ -1,45 +1,65 @@
 TOPDIR=../..
 
-HALAPIS = \
-	cpp/cpp/fpga_clock.cpp\
-	cpp/handles/HandlesInternal.cpp\
-	cpp/Main.cpp\
-	sim2/main.cpp\
-	sim2/ports.cpp\
-	sim2/report.cpp\
-	sim2/analoginput.cpp\
-	sim2/analogoutput.cpp\
-	sim2/analogtrigger.cpp\
-	sim2/error.cpp\
-	sim2/accum.cpp\
-	sim2/counter.cpp\
-	sim2/dio.cpp\
-	sim2/ds.cpp\
-	sim2/power.cpp\
-	sim2/init.cpp\
-	sim2/encoder.cpp\
-	sim2/i2c.cpp\
-	sim2/interrupts.cpp\
-	sim2/solenoid.cpp\
-	sim2/relay.cpp\
-	sim2/serial.cpp\
-	sim2/pwm.cpp\
-	sim2/spi.cpp\
-	sim2/pdp.cpp\
-	sim2/notifier.cpp\
-	sim2/can.cpp
-
-SIMCLASSES = \
-	sim2/engine/SimulatorEngine.cpp\
-	sim2/engine/SimulationProperties.cpp\
-	sim2/engine/EventsManager.cpp\
-	sim2/engine/SimulationModel.cpp\
-	sim2/engine/SimulatorMessages.cpp\
-	sim2/engine/ModelFactory.cpp
-
 SOURCES = \
-	$(HALAPIS)\
-	$(SIMCLASSES)
+	sim/Accelerometer.cpp\
+	sim/AddressableLED.cpp\
+	sim/AnalogAccumulator.cpp\
+	sim/AnalogGyro.cpp\
+	sim/AnalogInput.cpp\
+	sim/AnalogInternal.cpp\
+	sim/AnalogOutput.cpp\
+	sim/AnalogTrigger.cpp\
+	sim/CallbackStore.cpp\
+	sim/CAN.cpp\
+	sim/CANAPI.cpp\
+	sim/Compressor.cpp\
+	sim/Constants.cpp\
+	sim/Counter.cpp\
+	sim/DigitalInternal.cpp\
+	sim/DIO.cpp\
+	sim/DMA.cpp\
+	sim/DriverStation.cpp\
+	sim/DutyCycle.cpp\
+	sim/Encoder.cpp\
+	sim/Extensions.cpp\
+	sim/HAL.cpp\
+	sim/HALInitializer.cpp\
+	sim/I2C.cpp\
+	sim/Interrupts.cpp\
+	sim/mockdata/AccelerometerData.cpp\
+	sim/mockdata/AddressableLEDData.cpp\
+	sim/mockdata/AnalogGyroData.cpp\
+	sim/mockdata/AnalogInData.cpp\
+	sim/mockdata/AnalogOutData.cpp\
+	sim/mockdata/AnalogTriggerData.cpp\
+	sim/mockdata/CanDataInternal.cpp\
+	sim/mockdata/DigitalPWMData.cpp\
+	sim/mockdata/DIOData.cpp\
+	sim/mockdata/DriverStationData.cpp\
+	sim/mockdata/DutyCycleData.cpp\
+	sim/mockdata/EncoderData.cpp\
+	sim/mockdata/I2CData.cpp\
+	sim/mockdata/PCMData.cpp\
+	sim/mockdata/PDPData.cpp\
+	sim/mockdata/PWMData.cpp\
+	sim/mockdata/RelayData.cpp\
+	sim/mockdata/RoboRioData.cpp\
+	sim/mockdata/SimDeviceData.cpp\
+	sim/mockdata/SPIAccelerometerData.cpp\
+	sim/mockdata/SPIData.cpp\
+	sim/MockHooks.cpp\
+	sim/Notifier.cpp\
+	sim/PDP.cpp\
+	sim/Ports.cpp\
+	sim/Power.cpp\
+	sim/PWM.cpp\
+	sim/Relay.cpp\
+	sim/SerialPort.cpp\
+	sim/SimDevice.cpp\
+	sim/Solenoid.cpp\
+	sim/SPI.cpp\
+	sim/Threads.cpp
+
 
 TARGET=hal
 

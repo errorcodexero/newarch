@@ -1,7 +1,8 @@
 #pragma once
 
-#include <engine/HardwareManager.h>
+#include <HardwareManager.h>
 #include <map>
+#include <mutex>
 
 namespace xero
 {
@@ -15,7 +16,8 @@ namespace xero
 
             bool create(int index);
             bool destroy(int index);
-            void set(int index double value);
+            bool set(int index, double value);
+            bool get(int index, double &value);
 
         private:
             struct CTREStatus
@@ -25,6 +27,7 @@ namespace xero
 
         private:
             std::map<int, CTREStatus> status_;
+            std::mutex lock_;
         };
     }
 }
