@@ -6,6 +6,12 @@
 
 #ifdef SIM2
 #include <engine/SimulatorEngine.h>
+#include <WestCoastDriveFactory.h>
+
+//
+// Instantiate a factory for any models we are using
+//
+xero::models::WestCoastDriveFactory wcfactory;
 #endif
 
 int main(int ac, char **av)

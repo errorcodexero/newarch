@@ -54,6 +54,7 @@ NEED_CSCORE=true
 NEED_NTCORE=true
 NEED_WPIUTIL=true
 NEED_HAL=true
+NEED_MODELS=true
 endif
 
 LOCAL_CFLAGS = -Isrc/main/cpp

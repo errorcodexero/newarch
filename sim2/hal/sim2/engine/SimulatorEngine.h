@@ -3,6 +3,7 @@
 #include <engine/SimulationProperties.h>
 #include <engine/EventsManager.h>
 #include <engine/SimValue.h>
+#include <engine/SimulatorMessages.h>
 #include <vector>
 #include <string>
 #include <ostream>
@@ -18,6 +19,7 @@ namespace xero
     {
         class SimulationEvent;
         class SimulationModel;
+        class ModelFactory;
 
         class SimulatorEngine
         {
@@ -50,6 +52,14 @@ namespace xero
             // Get the only instance of the simulation engine
             static SimulatorEngine &getEngine();
 
+            // Create a new model instance
+            std::shared_ptr<SimulationModel> createModelInstance(const std::string &model, const std::string &inst);
+
+            // Register a new model factory
+            void registerModelFactory(const std::string &name, ModelFactory *factory) {
+                model_factories_[name] = factory;
+            }
+
         private:
             void simulationThread();
 
@@ -74,7 +84,7 @@ namespace xero
 
         private:
             // The output stream for simulator output
-            std::ostream *out_;
+            SimulatorMessages msg_;
 
             // The simulator event file for the simulation
             std::string simfile_;
@@ -108,10 +118,13 @@ namespace xero
             std::list<std::function<void(SimulatorEngine &)>> hal_functions_;
 
             // The properties for the simulation
-            SimulationProperties props_ ;
+            std::shared_ptr<SimulationProperties> props_ ;
 
             // The events for the simulation
             EventsManager events_ ;
+
+            // Model factories
+            std::map<std::string, ModelFactory *> model_factories_;
         };
     }
 }

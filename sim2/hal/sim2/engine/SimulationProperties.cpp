@@ -1,13 +1,15 @@
 #include <engine/SimulationProperties.h>
-#include <fstream>
+#include <engine/SimulatorEngine.h>
+#include <engine/SimulationModel.h>
 #include <iostream>
+#include <fstream>
 #include <cmath>
 
 namespace xero
 {
     namespace sim2
     {
-        SimulationProperties::SimulationProperties()
+        SimulationProperties::SimulationProperties(SimulatorEngine &engine) : engine_(engine)
         {            
         }
 
@@ -52,33 +54,37 @@ namespace xero
                 if (inst.length() == 0)
                     return false;
 
+                std::shared_ptr<SimulationModel> siminst = engine_.createModelInstance(model, inst);
+                if (siminst == nullptr)
+                    return false;
+
                 obj = elem["hardware"];
                 for(const auto &elem : obj.items())
                 {
                     auto key = elem.key();
                     auto value = elem.value();
 
-                    std::string fullkey = "hw:" + model + ":" + inst + ":" + key;
+                    std::string fullkey = "hw:" + key;
 
                     if (value.is_boolean())
                     {
                         SimValue sv(obj.value(key, false));
-                        setValue(fullkey, sv);
+                        siminst->setProperty(fullkey, sv);
                     }
                     else if (value.is_number_integer())
                     {
                         SimValue sv(obj.value(key, static_cast<int>(0)));
-                        setValue(fullkey, sv);                        
+                        siminst->setProperty(fullkey, sv);                     
                     }
                     else if (value.is_number_float())
                     {
                         SimValue sv(obj.value(key, static_cast<double>(0.0)));
-                        setValue(fullkey, sv);
+                        siminst->setProperty(fullkey, sv);
                     }
                     else if (value.is_string())
                     {
                         SimValue sv(obj.value(key, ""));
-                        setValue(fullkey, sv);
+                        siminst->setProperty(fullkey, sv);
                     }
                     else
                     {
@@ -92,27 +98,27 @@ namespace xero
                     auto key = elem.key();
                     auto value = elem.value();
 
-                    std::string fullkey = model + ":" + inst + ":" + key;
+                    std::string fullkey = key;
 
                     if (value.is_boolean())
                     {
                         SimValue sv(obj.value(key, false));
-                        setValue(fullkey, sv);
+                        siminst->setProperty(fullkey, sv);
                     }
                     else if (value.is_number_integer())
                     {
                         SimValue sv(obj.value(key, static_cast<int>(0)));
-                        setValue(fullkey, sv);                        
+                        siminst->setProperty(fullkey, sv);                      
                     }
                     else if (value.is_number_float())
                     {
                         SimValue sv(obj.value(key, static_cast<double>(0.0)));
-                        setValue(fullkey, sv);
+                        siminst->setProperty(fullkey, sv);
                     }
                     else if (value.is_string())
                     {
                         SimValue sv(obj.value(key, ""));
-                        setValue(fullkey, sv);
+                        siminst->setProperty(fullkey, sv);
                     }
                     else
                     {
@@ -121,11 +127,6 @@ namespace xero
                 }                
             }
 
-            return true;
-        }
-
-        bool SimulationProperties::loadHAL(nlohmann::json obj)
-        {
             return true;
         }
 
@@ -142,26 +143,7 @@ namespace xero
             if (!loadModels(obj.at("models")))
                 return false;
 
-            if (!loadHAL(obj.at("hal")))
-                return false;
-
             return true;
-        }
-
-        bool SimulationProperties::hasModelProperty(const std::string &model, const std::string &name)
-        {
-            std::string fullname = model + ":" + name ;
-            auto it = values_.find(fullname) ;
-            return it != values_.end() ;
-        }
-
-        const SimValue &SimulationProperties::getModelProperty(const std::string &model, const std::string &name)
-        {
-            std::string fullname = model + ":" + name ;
-            auto it = values_.find(fullname) ;
-
-            assert(it != values_.end()) ;
-            return it->second ;            
         }
     }
 }

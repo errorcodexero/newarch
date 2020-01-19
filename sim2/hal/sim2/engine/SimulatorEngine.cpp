@@ -1,7 +1,9 @@
 #include <engine/SimulatorEngine.h>
 #include <engine/SimulationEvent.h>
 #include <engine/SimulationModel.h>
+#include <engine/ModelFactory.h>
 #include <engine/json.h>
+#include <engine/SimulatorStreamMessageSink.h>
 #include <cassert>
 #include <iostream>
 #include <fstream>
@@ -10,7 +12,6 @@ namespace xero
 {
     namespace sim2
     {
-
         SimulatorEngine *SimulatorEngine::theOne = nullptr;
 
         SimulatorEngine &SimulatorEngine::getEngine() {
@@ -21,13 +22,25 @@ namespace xero
 
         SimulatorEngine::SimulatorEngine()
         {
-            out_ = &std::cout;
+            auto sink = std::make_shared<SimulatorStreamMessageSink>(std::cout);
+            msg_.addSink(sink);
+
+            props_ = std::make_shared<SimulationProperties>(*this);
         }
 
         SimulatorEngine::~SimulatorEngine()
         {
             assert(theOne == this);
             theOne = nullptr;
+        }
+
+        std::shared_ptr<SimulationModel> SimulatorEngine::createModelInstance(const std::string &model, const std::string &inst)
+        {
+            auto it = model_factories_.find(model);
+            if (it == model_factories_.end())
+                return nullptr;
+
+            return it->second->createModel();
         }
 
         bool SimulatorEngine::parseCommandLineArgs(int ac, char **av)
@@ -43,7 +56,9 @@ namespace xero
                 {
                     if (ac == 0)
                     {
-                        (*out_) << "error: command line option '--events' requires an additional argument" << std::endl;
+                        msg_.startMessage(SimulatorMessages::MessageType::Error);
+                        msg_ << "error: command line option '--events' requires an additional argument";
+                        msg_.endMessage(sim_time_);
                         return false;
                     }
 
@@ -54,7 +69,9 @@ namespace xero
                 {
                     if (ac == 0)
                     {
-                        (*out_) << "error: command line option '--props' requires an additional argument" << std::endl;
+                        msg_.startMessage(SimulatorMessages::MessageType::Error);
+                        msg_ << "error: command line option '--props' requires an additional argument";
+                        msg_.endMessage(sim_time_);
                         return false;
                     }
 
@@ -65,7 +82,9 @@ namespace xero
                 {
                     if (ac == 0)
                     {
-                        (*out_) << "error: command line option '--halconfig' requires an additional argument" << std::endl;
+                        msg_.startMessage(SimulatorMessages::MessageType::Error);
+                        msg_ << "error: command line option '--halconfig' requires an additional argument";
+                        msg_.endMessage(sim_time_);
                         return false;
                     }
 
@@ -84,7 +103,7 @@ namespace xero
                 return ErrorCode::HALConfigFileError ;
 
             // Read the properties file
-            if (!props_.loadProperties(propfile_))
+            if (!props_->loadProperties(propfile_))
                 return ErrorCode::PropertyFileError;
 
             // Read the event file
@@ -165,7 +184,9 @@ namespace xero
             }
             catch(...)
             {
-                (*out_) << "Error: hal config file - cannot find section '" << name << "'" << std::endl ;                
+                msg_.startMessage(SimulatorMessages::MessageType::Error);
+                msg_ << "Error: hal config file - cannot find section '" << name << "'";
+                msg_.endMessage(sim_time_);
                 return false ;
             }
 
@@ -175,13 +196,17 @@ namespace xero
             }
             catch(...)
             {
-                (*out_) << "Error: hal config file - cannot get property 'count' in section '" << name << "'" << std::endl ;                  
+                msg_.startMessage(SimulatorMessages::MessageType::Error);
+                msg_ << "Error: hal config file - cannot get property 'count' in section '" << name << "'";
+                msg_.endMessage(sim_time_);
                 return false ;
             }
 
             if (cnt == -1)
             {
-                (*out_) << "Warning: hal config file - property 'count' in section '" << name << "' does not exist, defaulting to 0" << std::endl ;                      
+                msg_.startMessage(SimulatorMessages::MessageType::Warning);
+                msg_ << "Warning: hal config file - property 'count' in section '" << name << "' does not exist, defaulting to 0";
+                msg_.endMessage(sim_time_);
             }           
 
             return true ;
