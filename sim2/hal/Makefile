@@ -32,7 +32,10 @@ HALAPIS = \
 SIMCLASSES = \
 	sim2/engine/SimulatorEngine.cpp\
 	sim2/engine/SimulationProperties.cpp\
-	sim2/engine/EventsManager.cpp
+	sim2/engine/EventsManager.cpp\
+	sim2/engine/SimulationModel.cpp\
+	sim2/engine/SimulatorMessages.cpp\
+	sim2/engine/ModelFactory.cpp
 
 SOURCES = \
 	$(HALAPIS)\

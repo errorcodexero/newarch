@@ -9,8 +9,11 @@ namespace xero
         class SimulatorMessageSink
         {
         public:
-            SimulatorMessageSink();
-            virtual ~SimulatorMessageSink();
+            SimulatorMessageSink() {                
+            }
+
+            virtual ~SimulatorMessageSink() {                
+            }
 
             virtual void output(const std::string &str) = 0 ;
 

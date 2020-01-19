@@ -139,6 +139,11 @@ CXXFLAGS += -I$(TOPDIR)/xerolibs/xeromisc
 LIBLIST += $(TOPDIR)/xerolibs/xeromisc
 endif
 
+ifeq ($(NEED_MODELS),true)
+CXXFLAGS += -I$(TOPDIR)/sim2/models/include -I$(TOPDIR)/sim2/models/cpp
+LIBLIST += $(TOPDIR)/sim2/models
+endif
+
 ifeq ($(NEED_NAVX),true)
 CXXFLAGS += -I$(TOPDIR)/sim2/navx/include
 LIBLIST += $(TOPDIR)/sim2/navx
@@ -184,9 +189,5 @@ CXXFLAGS += -I$(TOPDIR)/sim2/hal/include -I$(TOPDIR)/sim2/hal/build -I$(TOPDIR)/
 LIBLIST += $(TOPDIR)/sim2/hal
 endif
 
-ifeq ($(NEED_MODELS),true)
-CXXFLAGS += -I$(TOPDIR)/sim2/models/include -I$(TOPDIR)/sim2/models/cpp
-LIBLIST += $(TOPDIR)/sim2/models
-endif
 
 endif
