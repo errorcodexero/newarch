@@ -6,7 +6,8 @@ SOURCES = \
 	./cpp/SimulationModel.cpp\
 	./cpp/SimulationProperties.cpp\
 	./cpp/SimulatorEngine.cpp\
-	./cpp/SimulatorMessages.cpp
+	./cpp/SimulatorMessages.cpp\
+	./cpp/CTREManager.cpp
 
 
 TARGET=engine

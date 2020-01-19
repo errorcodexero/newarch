@@ -1,7 +1,7 @@
 #pragma once
 
 #include <ctre/phoenix/MotorControl/IMotorController.h>
-#include <engine/SimulatorEngine.h>
+#include <SimulatorEngine.h>
 
 namespace ctre {
     namespace phoenix {

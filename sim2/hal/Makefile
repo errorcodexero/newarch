@@ -1,6 +1,7 @@
 TOPDIR=../..
 
 SOURCES = \
+	cpp/Main.cpp\
 	sim/Accelerometer.cpp\
 	sim/AddressableLED.cpp\
 	sim/AnalogAccumulator.cpp\
@@ -58,7 +59,9 @@ SOURCES = \
 	sim/SimDevice.cpp\
 	sim/Solenoid.cpp\
 	sim/SPI.cpp\
-	sim/Threads.cpp
+	sim/Threads.cpp\
+	cpp/handles/HandlesInternal.cpp\
+	cpp/cpp/fpga_clock.cpp
 
 
 TARGET=hal
@@ -68,3 +71,4 @@ NEED_WPIUTIL=true
 LOCAL_CFLAGS += -Iinclude -Ibuild -Isim2
 
 include $(TOPDIR)/makefiles/buildlib.mk
+

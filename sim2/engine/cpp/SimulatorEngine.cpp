@@ -29,7 +29,7 @@ namespace xero
             props_ = std::make_shared<SimulationProperties>(*this);
             events_ = std::make_shared<EventsManager>(*this);
 
-            // Create the hardware managers
+            // Create the hardware managers for things not covered by the HAL
             ctre_mgr_ = std::make_shared<CTREManager>(*this);
         }
 
@@ -82,19 +82,6 @@ namespace xero
 
                     propfile_ = *av++;
                     ac--;
-                }
-                else if (arg == "--halconfig")
-                {
-                    if (ac == 0)
-                    {
-                        msg_.startMessage(SimulatorMessages::MessageType::Error);
-                        msg_ << "error: command line option '--halconfig' requires an additional argument";
-                        msg_.endMessage(sim_time_);
-                        return false;
-                    }
-
-                    halconfig_ = *av++;
-                    ac--;                    
                 }
                 else if (arg == "--debug")
                 {
@@ -153,10 +140,6 @@ namespace xero
                 msg_ << " " << model;
             msg_.endMessage(sim_time_);
 
-            // Read the HAL configuration file
-            if (!readHalConfigFile(halconfig_))
-                return ErrorCode::HALConfigFileError ;
-
             // Read the properties file
             if (!props_->loadProperties(propfile_))
                 return ErrorCode::PropertyFileError;
@@ -202,9 +185,6 @@ namespace xero
                 // Process events read into the events file
                 runEvents();
 
-                // Run HAL layer processes
-                runHAL();
-
                 // Run models
                 runModels();
 
@@ -221,125 +201,6 @@ namespace xero
         {
             for(auto model : models_)
                 model->run(*this);
-        }
-
-        void SimulatorEngine::runHAL()
-        {
-            for(auto fun : hal_functions_)
-                fun(*this);
-        }
-
-        bool SimulatorEngine::getConfigFileCount(nlohmann::json obj, const char *name, int &cnt)
-        {
-            nlohmann::json devobj, cntobj ;
-            
-            try
-            {
-                devobj = obj.at(name);
-            }
-            catch(...)
-            {
-                msg_.startMessage(SimulatorMessages::MessageType::Error);
-                msg_ << "hal config file - cannot find section '" << name << "'";
-                msg_.endMessage(sim_time_);
-                return false ;
-            }
-
-            try
-            {
-                cnt = devobj.value("count", -1) ;
-            }
-            catch(...)
-            {
-                msg_.startMessage(SimulatorMessages::MessageType::Error);
-                msg_ << "hal config file - cannot get property 'count' in section '" << name << "'";
-                msg_.endMessage(sim_time_);
-                return false ;
-            }
-
-            if (cnt == -1)
-            {
-                msg_.startMessage(SimulatorMessages::MessageType::Warning);
-                msg_ << "hal config file - property 'count' in section '" << name << "' does not exist, defaulting to 0";
-                msg_.endMessage(sim_time_);
-            }           
-           
-            msg_.startMessage(SimulatorMessages::MessageType::Debug, 5);
-            msg_ << "  " << cnt << " " << name << " defined";
-            msg_.endMessage(sim_time_);   
-
-            return true ;
-        }
-
-        bool SimulatorEngine::readHalConfigFile(const std::string &path)
-        {
-            int cnt ;
-            std::ifstream strm(path) ;
-
-            if (!strm.is_open())
-            {                
-                msg_.startMessage(SimulatorMessages::MessageType::Error);
-                msg_ << "could not open hal config file '" << path << "'";
-                msg_.endMessage(sim_time_);     
-
-                return false ;
-            }
-
-            msg_.startMessage(SimulatorMessages::MessageType::Debug, 1);
-            msg_ << "reading hal config file '" << path << "'";
-            msg_.endMessage(sim_time_);                   
-
-            nlohmann::json obj = nlohmann::json::parse(strm);
-            strm.close();
-
-            if (!getConfigFileCount(obj, "accumulators", cnt))
-                return false ;
-              
-
-            if (!getConfigFileCount(obj, "analog_triggers", cnt))
-                return false ;
-
-            if (!getConfigFileCount(obj, "analog_inputs", cnt))
-                return false ;
-
-            if (!getConfigFileCount(obj, "analog_outputs", cnt))
-                return false ;
-
-            if (!getConfigFileCount(obj, "counters", cnt))
-                return false ;
-
-            if (!getConfigFileCount(obj, "digitalios", cnt))
-                return false ;
-
-            if (!getConfigFileCount(obj, "pwms", cnt))
-                return false ;
-
-            if (!getConfigFileCount(obj, "encoders", cnt))
-                return false ;
-
-            if (!getConfigFileCount(obj, "interrupts", cnt))
-                return false ;
-
-            if (!getConfigFileCount(obj, "relays", cnt))
-                return false ;
-
-            if (!getConfigFileCount(obj, "pcms", cnt))
-                return false ;
-
-            if (!getConfigFileCount(obj, "solenoids", cnt))
-                return false ;
-
-            if (!getConfigFileCount(obj, "pdps", cnt))
-                return false ;
-
-            if (!getConfigFileCount(obj, "pdpchannels", cnt))
-                return false ;
-
-            msg_.startMessage(SimulatorMessages::MessageType::Debug, 0);
-            msg_ << "hal config file read sucessfully";
-            msg_.endMessage(sim_time_);                
-
-            return true ;
         }
     }
 }

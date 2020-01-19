@@ -30,7 +30,6 @@ namespace xero
                 NoError,
                 PropertyFileError,
                 EventFileError,
-                HALConfigFileError,
                 NoSimulationThread,
                 SimulatorNotRunning
             };
@@ -87,9 +86,6 @@ namespace xero
             // Process any events that are due
             void runEvents();
 
-            // Run any register HAL simulation functions
-            void runHAL();
-
             // Run any models
             void runModels();
 
@@ -105,9 +101,6 @@ namespace xero
 
             // The simulator properties file
             std::string propfile_;
-
-            // The HAL configuration file
-            std::string halconfig_ ;
 
             // The simulator thread
             std::thread sim_thread_;

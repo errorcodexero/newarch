@@ -74,6 +74,7 @@ NEED_HAL=true
 NEED_NAVX=true
 NEED_CTRE=true
 NEED_REV=true
+NEED_ENGINE=true
 endif
 
 LOCAL_CFLAGS = -I. -Itankdrive -Itankdrive/modes -Itankdrive/actions -DUSE_NAVX
