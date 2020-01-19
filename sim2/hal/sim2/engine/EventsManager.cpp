@@ -1,6 +1,7 @@
 #include <engine/SimValue.h>
 #include <engine/EventsManager.h>
 #include <engine/SimulationModelEvent.h>
+#include <engine/SimulatorEngine.h>
 #include <engine/json.h>
 #include <fstream>
 #include <iostream>
@@ -9,7 +10,7 @@ namespace xero
 {
     namespace sim2
     {
-        EventsManager::EventsManager()
+        EventsManager::EventsManager(SimulatorEngine &engine) : engine_(engine)
         {
 
         }
@@ -101,10 +102,21 @@ namespace xero
 
         bool EventsManager::loadEvents(const std::string &path)
         {
+            auto &msg = engine_.getMessageOutput();
             std::ifstream strm(path) ;
 
             if (!strm.is_open())
+            {
+                msg.startMessage(SimulatorMessages::MessageType::Error);
+                msg << "could not open simulation event file '" << path << "'";
+                msg.endMessage(engine_.getSimulationTime());  
+
                 return false ;
+            }
+
+            msg.startMessage(SimulatorMessages::MessageType::Debug);
+            msg << "reading simulation event file '" << path << "'";
+            msg.endMessage(engine_.getSimulationTime());                
 
             nlohmann::json obj = nlohmann::json::parse(strm);
             strm.close();
@@ -116,7 +128,11 @@ namespace xero
                 return false;
 
             for(auto ev : events_)
-                std::cout << ev->toString() << std::endl;
+            {
+                msg.startMessage(SimulatorMessages::MessageType::Debug);
+                msg << "  event defined '" << ev->toString() << "'";
+                msg.endMessage(engine_.getSimulationTime());
+            }
 
             return true;
         }     

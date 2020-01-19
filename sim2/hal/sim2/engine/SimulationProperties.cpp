@@ -22,6 +22,7 @@ namespace xero
         {
             std::string model;
             std::string inst;
+            auto &msg = engine_.getMessageOutput();
 
             if (!mobj.is_array())
                 return false;
@@ -56,40 +57,56 @@ namespace xero
 
                 std::shared_ptr<SimulationModel> siminst = engine_.createModelInstance(model, inst);
                 if (siminst == nullptr)
+                {
+                    msg.startMessage(SimulatorMessages::MessageType::Error);
+                    msg << "could not create model instance '" << inst << "' of type '" << model << "' - no such model type exists";
+                    msg.endMessage(engine_.getSimulationTime());  
                     return false;
+                }
+
+                msg.startMessage(SimulatorMessages::MessageType::Debug);
+                msg << "created model instance '" << inst << "' of type '" << model << "'";
+                msg.endMessage(engine_.getSimulationTime()); 
 
                 obj = elem["hardware"];
                 for(const auto &elem : obj.items())
                 {
                     auto key = elem.key();
                     auto value = elem.value();
+                    SimValue sv;
 
                     std::string fullkey = "hw:" + key;
 
                     if (value.is_boolean())
                     {
-                        SimValue sv(obj.value(key, false));
-                        siminst->setProperty(fullkey, sv);
+                        sv = SimValue(obj.value(key, false));
+
                     }
                     else if (value.is_number_integer())
                     {
-                        SimValue sv(obj.value(key, static_cast<int>(0)));
-                        siminst->setProperty(fullkey, sv);                     
+                        sv = SimValue(obj.value(key, static_cast<int>(0)));
                     }
                     else if (value.is_number_float())
                     {
-                        SimValue sv(obj.value(key, static_cast<double>(0.0)));
-                        siminst->setProperty(fullkey, sv);
+                        sv = SimValue(obj.value(key, static_cast<double>(0.0)));
                     }
                     else if (value.is_string())
                     {
-                        SimValue sv(obj.value(key, ""));
-                        siminst->setProperty(fullkey, sv);
+                        sv = SimValue(obj.value(key, ""));
                     }
                     else
                     {
+                        msg.startMessage(SimulatorMessages::MessageType::Error);
+                        msg << "invalid property '" << key << "' - on model instance '" << inst << "'";
+                        msg.endMessage(engine_.getSimulationTime());                         
                         return false;
                     }
+
+                    msg.startMessage(SimulatorMessages::MessageType::Debug);
+                    msg << "  added hw property '" << key << "' with value '" << sv.toString();
+                    msg.endMessage(engine_.getSimulationTime()); 
+
+                    siminst->setProperty(fullkey, sv);                    
                 }
 
                 obj = elem["behavior"];
@@ -97,33 +114,39 @@ namespace xero
                 {
                     auto key = elem.key();
                     auto value = elem.value();
+                    SimValue sv;
 
                     std::string fullkey = key;
 
                     if (value.is_boolean())
                     {
-                        SimValue sv(obj.value(key, false));
-                        siminst->setProperty(fullkey, sv);
+                        sv = SimValue(obj.value(key, false));
                     }
                     else if (value.is_number_integer())
                     {
-                        SimValue sv(obj.value(key, static_cast<int>(0)));
-                        siminst->setProperty(fullkey, sv);                      
+                        sv = SimValue(obj.value(key, static_cast<int>(0)));
                     }
                     else if (value.is_number_float())
                     {
-                        SimValue sv(obj.value(key, static_cast<double>(0.0)));
-                        siminst->setProperty(fullkey, sv);
+                        sv = SimValue(obj.value(key, static_cast<double>(0.0)));
                     }
                     else if (value.is_string())
                     {
-                        SimValue sv(obj.value(key, ""));
-                        siminst->setProperty(fullkey, sv);
+                        sv = SimValue(obj.value(key, ""));
                     }
                     else
                     {
+                        msg.startMessage(SimulatorMessages::MessageType::Error);
+                        msg << "invalid property '" << key << "' - on model instance '" << inst << "'";
+                        msg.endMessage(engine_.getSimulationTime());                         
                         return false;
                     }
+
+                    msg.startMessage(SimulatorMessages::MessageType::Debug);
+                    msg << "  added model property '" << key << "' with value '" << sv.toString();
+                    msg.endMessage(engine_.getSimulationTime()); 
+
+                    siminst->setProperty(fullkey, sv); 
                 }                
             }
 
@@ -132,10 +155,22 @@ namespace xero
 
         bool SimulationProperties::loadProperties(const std::string &path)
         {
+            auto &msg = engine_.getMessageOutput();
+
             std::ifstream strm(path) ;
 
             if (!strm.is_open())
+            {
+                msg.startMessage(SimulatorMessages::MessageType::Error);
+                msg << "could not open robot properties file '" << path << "'";
+                msg.endMessage(engine_.getSimulationTime());  
+
                 return false ;
+            }
+
+            msg.startMessage(SimulatorMessages::MessageType::Debug);
+            msg << "reading robot properties file '" << path << "'";
+            msg.endMessage(engine_.getSimulationTime());
 
             nlohmann::json obj = nlohmann::json::parse(strm);
             strm.close();

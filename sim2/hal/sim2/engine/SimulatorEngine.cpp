@@ -26,6 +26,7 @@ namespace xero
             msg_.addSink(sink);
 
             props_ = std::make_shared<SimulationProperties>(*this);
+            events_ = std::make_shared<EventsManager>(*this);
         }
 
         SimulatorEngine::~SimulatorEngine()
@@ -98,6 +99,13 @@ namespace xero
 
         SimulatorEngine::ErrorCode SimulatorEngine::start()
         {
+            // Print information about models
+            msg_.startMessage(SimulatorMessages::MessageType::Debug);
+            msg_ << "Models Defined: ";
+            for(const std::string &model : ModelFactoryBase::getModelList())
+                msg_ << " " << model;
+            msg_.endMessage(sim_time_);
+
             // Read the HAL configuration file
             if (!readHalConfigFile(halconfig_))
                 return ErrorCode::HALConfigFileError ;
@@ -107,7 +115,7 @@ namespace xero
                 return ErrorCode::PropertyFileError;
 
             // Read the event file
-            if (!events_.loadEvents(simfile_))
+            if (!events_->loadEvents(simfile_))
                 return ErrorCode::EventFileError;
 
             if (!startThread())
@@ -185,7 +193,7 @@ namespace xero
             catch(...)
             {
                 msg_.startMessage(SimulatorMessages::MessageType::Error);
-                msg_ << "Error: hal config file - cannot find section '" << name << "'";
+                msg_ << "hal config file - cannot find section '" << name << "'";
                 msg_.endMessage(sim_time_);
                 return false ;
             }
@@ -197,7 +205,7 @@ namespace xero
             catch(...)
             {
                 msg_.startMessage(SimulatorMessages::MessageType::Error);
-                msg_ << "Error: hal config file - cannot get property 'count' in section '" << name << "'";
+                msg_ << "hal config file - cannot get property 'count' in section '" << name << "'";
                 msg_.endMessage(sim_time_);
                 return false ;
             }
@@ -205,9 +213,13 @@ namespace xero
             if (cnt == -1)
             {
                 msg_.startMessage(SimulatorMessages::MessageType::Warning);
-                msg_ << "Warning: hal config file - property 'count' in section '" << name << "' does not exist, defaulting to 0";
+                msg_ << "hal config file - property 'count' in section '" << name << "' does not exist, defaulting to 0";
                 msg_.endMessage(sim_time_);
             }           
+           
+            msg_.startMessage(SimulatorMessages::MessageType::Debug);
+            msg_ << "  " << cnt << " " << name << " defined";
+            msg_.endMessage(sim_time_);   
 
             return true ;
         }
@@ -218,13 +230,24 @@ namespace xero
             std::ifstream strm(path) ;
 
             if (!strm.is_open())
+            {                
+                msg_.startMessage(SimulatorMessages::MessageType::Error);
+                msg_ << "could not open hal config file '" << path << "'";
+                msg_.endMessage(sim_time_);     
+
                 return false ;
+            }
+
+            msg_.startMessage(SimulatorMessages::MessageType::Debug);
+            msg_ << "reading hal config file '" << path << "'";
+            msg_.endMessage(sim_time_);                   
 
             nlohmann::json obj = nlohmann::json::parse(strm);
             strm.close();
 
             if (!getConfigFileCount(obj, "accumulators", cnt))
                 return false ;
+              
 
             if (!getConfigFileCount(obj, "analog_triggers", cnt))
                 return false ;
@@ -264,6 +287,10 @@ namespace xero
 
             if (!getConfigFileCount(obj, "pdpchannels", cnt))
                 return false ;
+
+            msg_.startMessage(SimulatorMessages::MessageType::Debug);
+            msg_ << "hal config file read sucessfully";
+            msg_.endMessage(sim_time_);                
 
             return true ;
         }

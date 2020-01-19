@@ -1,17 +1,19 @@
 #include <iostream>
 #include "Phoenix.h"
 
-#ifdef SIMULATOR
-#endif
-
 #ifdef SIM2
 #include <engine/SimulatorEngine.h>
-#include <WestCoastDriveFactory.h>
+#include <engine/ModelFactory.h>
+#include <WestCoastDrive.h>
+
+using namespace xero::sim2;
+using namespace xero::models;
 
 //
-// Instantiate a factory for any models we are using
+// Specify the simulation models needed by this robot.  These may be in the
+// models library or may be part of this code base
 //
-xero::models::WestCoastDriveFactory wcfactory;
+USE_SIMULATION_MODEL(WestCoastDrive, "westcoastdrive");
 #endif
 
 int main(int ac, char **av)

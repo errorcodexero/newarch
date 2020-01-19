@@ -1,0 +1,121 @@
+{
+    "models" :
+    [
+        {
+            "model" : "tankdrive",
+            "instance" : "1",
+            "hardware" :
+            {
+                "left:motor:1:id" : 1,
+                "left:motor:1:type" : "talon_srx",
+                "left:motor:2:id" : 2,
+                "left:motor:2:type" : "talon_srx",                
+                "left:motor:3:id" : 3,
+                "left:motor:3:type" : "talon_srx",                
+                "right:motor:1:id" : 4,
+                "right:motor:1:type" : "talon_srx",                
+                "right:motor:2:id" : 5,
+                "right:motor:2:type" : "talon_srx",                   
+                "right:motor:3:id" : 6,
+                "right:motor:3:type" : "talon_srx",                   
+                "right:motor:invert" : true,
+                "left:encoder:1" : 1,
+                "left:encoder:2" : 0,
+                "right:encoder:1" : 2,
+                "right:encoder:2" : 3,
+                "shifter" : 0
+            },
+            "behavior" :
+            {
+                "ticks_per_rev" : 200,
+                "diameter" : 4.0,
+                "scrub" : 1.0,
+                "width" : 28.0,
+                "length" : 28.0,
+                "maxvelocity" : 60.0,
+                "maxacceleration" : 60.0
+            }
+        },
+        {
+            "model" : "lifter",
+            "instance" : "1",
+            "hardware" :
+            {
+                "motor:1:id" : 0,
+                "motor:1:type" : "pwm",
+                "motor:2:id" : 1,
+                "motor:2:type" : "pwm",
+                "encoder:1" : 4,
+                "encoder:2" : 5,
+                "limit:top" : 8,
+                "limit:bottom" : 9,
+                "brake" : 3,
+                "shifter" : 1
+            },
+            "behavior" :
+            {
+                "bottom_limit" : 11.375,
+                "top_limit" : 85.0,
+                "inches_per_tick" : 0.08327,
+                "highgear:inches_per_sec_per_volt" : 36.0,
+                "lowgear:inches_per_sec_per_volt" : 12.0
+            }
+        },
+        {
+            "model" : "wings",
+            "instance" : "1",
+            "hardware" :
+            {
+                "solenoid" : 2
+            },
+            "behavior" :
+            {
+
+            }
+        },
+        {
+            "model" : "grabber",
+            "instance" : "1",
+            "hardware" :
+            {
+                "motor:id" : 2,
+                "motor:type" : "pwm",
+                "encoder:1" : 6,
+                "encoder:2" : 7
+            },
+            "behavior" :
+            {
+                "degrees_per_second_per_volt" : 90.0,
+                "degrees_per_tick" : 0.625,
+                "cubeangle" : 0.0
+            }
+        },
+        {
+            "model" : "collector",
+            "instance" : "1",
+            "hardware" :
+            {
+                "cubesensor" : 23
+            },
+            "behavior" :
+            {
+                "eject_duration" : 0.02
+            }
+        },
+        {
+            "model" : "intake",
+            "instance" : "1",
+            "hardware" :
+            {
+                "motor:1:id" : 3,
+                "motor:1:type" : "pwm",
+                "motor:2:id" : 4,
+                "motor:2:type" : "pwm"
+            },
+            "behavior" :
+            {
+
+            }
+        }            
+    ]
+}

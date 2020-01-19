@@ -39,10 +39,8 @@ namespace xero
             return *this;
         }                
 
-        void SimulatorMessages::endMessage(double t)
+        void SimulatorMessages::endMessage(int64_t t)
         {
-
-
             std::string outmsg = std::to_string(t);
 
             switch(mt_)

@@ -10,11 +10,12 @@ namespace xero
     namespace sim2
     {
         class SimulationEvent ;
+        class SimulatorEngine;
 
         class EventsManager
         {
         public:
-            EventsManager() ;
+            EventsManager(SimulatorEngine &engine) ;
             virtual ~EventsManager() ;
 
             double getStartDuration() const {
@@ -50,6 +51,8 @@ namespace xero
             double test_;
 
             std::list<std::shared_ptr<SimulationEvent>> events_;
+
+            SimulatorEngine &engine_;
         } ;
     }
 }

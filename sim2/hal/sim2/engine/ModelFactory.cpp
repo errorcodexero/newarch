@@ -4,6 +4,6 @@ namespace xero
 {
     namespace sim2
     {
-        std::list<std::string> ModelFactory::models_;
+        std::list<std::string> ModelFactoryBase::models_;
     }
 }
