@@ -51,7 +51,13 @@ namespace xero
         {
             msg_ += std::to_string(value);
             return *this;
-        }                
+        }            
+
+        SimulatorMessages &SimulatorMessages::operator<<(uint64_t value)
+        {
+            msg_ += std::to_string(value);
+            return *this;
+        }                  
 
         void SimulatorMessages::endMessage(int64_t t)
         {

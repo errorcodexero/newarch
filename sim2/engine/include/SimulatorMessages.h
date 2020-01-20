@@ -39,6 +39,7 @@ namespace xero
             SimulatorMessages &operator<<(const std::string &str);
             SimulatorMessages &operator<<(int);
             SimulatorMessages &operator<<(double);
+            SimulatorMessages &operator<<(uint64_t) ;
             void endMessage(int64_t t);
 
         private:

@@ -10,6 +10,11 @@
 #include <MessageDestDS.h>
 #include <frc/DriverStation.h>
 #include <frc/Filesystem.h>
+
+#ifdef SIM2
+#include <SimulatorEngine.h>
+#endif
+
 #include <iostream>
 #include <cassert>
 
@@ -487,19 +492,12 @@ namespace xero {
 
             controller_ = auto_controller_ ;
             robot_subsystem_->init(LoopType::Autonomous) ;
-
-#ifdef NOTYET
-            controller_ = nullptr ;
-
-            message_logger_.startMessage(MessageLogger::MessageType::info) ;
-            message_logger_ << "Leaving Autonomous mode" ;
-            message_logger_.endMessage() ;
-
-            robot_subsystem_->reset() ;
-#endif
         }        
 
         void Robot::AutonomousPeriodic() {
+#ifdef SIM2
+            xero::sim2::SimulatorEngine::getEngine().runSim() ;
+#endif            
             robotLoop(LoopType::Autonomous) ;
         }
 
@@ -510,19 +508,12 @@ namespace xero {
 
             controller_ = teleop_controller_ ;
             robot_subsystem_->init(LoopType::OperatorControl) ;
-
-#ifdef NOTYET
-            controller_ = nullptr ;
-
-            message_logger_.startMessage(MessageLogger::MessageType::info) ;
-            message_logger_ << "Leaving Teleop mode" ;
-            message_logger_.endMessage() ;  
-
-            robot_subsystem_->reset() ;
-#endif
         }
 
         void Robot::TeleopPeriodic() {
+#ifdef SIM2
+            xero::sim2::SimulatorEngine::getEngine().runSim() ;
+#endif            
             robotLoop(LoopType::OperatorControl) ;
         }        
 
@@ -536,6 +527,9 @@ namespace xero {
         }
 
         void Robot::TestPeriodic() {
+#ifdef SIM2
+            xero::sim2::SimulatorEngine::getEngine().runSim() ;
+#endif            
             robotLoop(LoopType::Test) ;
         }        
 
@@ -553,12 +547,17 @@ namespace xero {
         }
 
         void Robot::DisabledPeriodic() {
+#ifdef SIM2
+            xero::sim2::SimulatorEngine::getEngine().runSim() ;
+#endif
             double initial_time = getTime() ;
             delta_time_ = initial_time - last_time_ ;
             updateAutoMode() ;
             robot_subsystem_->computeState() ;
             watcher_->update() ;
-            last_time_ = initial_time ;                
+            last_time_ = initial_time ;
+
+
         }        
     }
 }

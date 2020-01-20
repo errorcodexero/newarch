@@ -4,8 +4,9 @@
 #include <ModelFactory.h>
 #include <SimulatorStreamMessageSink.h>
 #include <CTREManager.h>
-#include <mockdata/EncoderData.h>
 #include <json.h>
+#include <hal/HalBase.h>
+#include <mockdata/EncoderData.h>
 #include <cassert>
 #include <iostream>
 #include <fstream>
@@ -32,6 +33,8 @@ namespace xero
 
             // Create the hardware managers for things not covered by the HAL
             ctre_mgr_ = std::make_shared<CTREManager>(*this);
+
+            sim_time_step_ = 1000 ;
         }
 
         SimulatorEngine::~SimulatorEngine()
@@ -134,6 +137,10 @@ namespace xero
 
         SimulatorEngine::ErrorCode SimulatorEngine::start()
         {
+            int32_t status ;
+
+            HAL_Initialize(500, 0);            
+
             // Print information about models
             msg_.startMessage(SimulatorMessages::MessageType::Debug, 1);
             msg_ << "Models Defined: ";
@@ -153,8 +160,9 @@ namespace xero
             if (!registerForHALEvents())
                 return ErrorCode::HALError;
 
-            if (!startThread())
-                return ErrorCode::NoSimulationThread;
+            sim_time_ = HAL_GetFPGATime(&status) ;
+            if (status != 0)
+                return ErrorCode::HALError ;
 
             return ErrorCode::NoError;
         }
@@ -164,43 +172,31 @@ namespace xero
             return true;
         }
 
+        void SimulatorEngine::runSim()
+        {
+            int32_t status ;
+
+            uint64_t haltime = HAL_GetFPGATime(&status) ;
+            assert(status == 0) ;
+
+            msg_.startMessage(SimulatorMessages::MessageType::Debug, 1);
+            msg_ << "runSim:";
+            msg_ << " HALTime " << haltime ;
+            msg_ << " SIMTime " << sim_time_ ;
+            msg_.endMessage(sim_time_);
+
+            while (sim_time_ < haltime)
+            {
+                runEvents() ;
+                runModels() ;
+
+                sim_time_ += sim_time_step_ ;
+            }
+        }
+
         SimulatorEngine::ErrorCode SimulatorEngine::end()
         {
-            if (!sim_running_)
-                return ErrorCode::SimulatorNotRunning;
-
-            sim_running_ = false;
-            sim_thread_.join();
-
             return ErrorCode::NoError;
-        }
-
-        bool SimulatorEngine::startThread()
-        {
-            sim_running_ = true;
-            sim_time_ = 0.0;
-            sim_time_step_ = 0.002;
-            sim_thread_ = std::thread(&SimulatorEngine::simulationThread, this);
-
-            return true;
-        }
-
-        void SimulatorEngine::simulationThread()
-        {
-            while(sim_running_)
-            {
-                // Update the simulators running time
-                sim_time_ += sim_time_step_;
-
-                // Process events read into the events file
-                runEvents();
-
-                // Run models
-                runModels();
-
-                // Yield to give the robot thread time to run
-                std::this_thread::yield();
-            }
         }
 
         void SimulatorEngine::runEvents()
