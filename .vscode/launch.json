@@ -101,8 +101,7 @@
         "program": "${workspaceFolder}/build/SIM2/Debug/phoenix/phoenix.exe",
         "stopAtEntry": false,
         "environment": [],
-        "args" : [
-          "--halconfig","sim2/roborio.json",          
+        "args" : [      
           "--props","robots/phoenix/sim2/robot.json",
           "--events","robots/phoenix/sim2/simulations/automode0.json"
         ],      

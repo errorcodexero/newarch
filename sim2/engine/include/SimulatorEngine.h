@@ -31,7 +31,8 @@ namespace xero
                 PropertyFileError,
                 EventFileError,
                 NoSimulationThread,
-                SimulatorNotRunning
+                SimulatorNotRunning,
+                HALError
             };
 
         private:
@@ -88,6 +89,9 @@ namespace xero
 
             // Run any models
             void runModels();
+
+            // Register for events from the HAL
+            bool registerForHALEvents();
 
         private:
             static SimulatorEngine *theOne;

@@ -15,7 +15,7 @@ namespace ctre {
                         auto &engine = xero::sim2::SimulatorEngine::getEngine() ;
                         auto &msg = engine.getMessageOutput();
 
-                        msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Debug) ;
+                        msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Debug, 5) ;
                         msg << "TalonSRX: creating motor controller, index " << id;
                         msg.endMessage(engine.getSimulationTime());
                     }

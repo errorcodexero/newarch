@@ -4,6 +4,7 @@
 #include <ModelFactory.h>
 #include <SimulatorStreamMessageSink.h>
 #include <CTREManager.h>
+#include <mockdata/EncoderData.h>
 #include <json.h>
 #include <cassert>
 #include <iostream>
@@ -148,10 +149,19 @@ namespace xero
             if (!events_->loadEvents(simfile_))
                 return ErrorCode::EventFileError;
 
+            // Register to proces interesting hal events
+            if (!registerForHALEvents())
+                return ErrorCode::HALError;
+
             if (!startThread())
                 return ErrorCode::NoSimulationThread;
 
             return ErrorCode::NoError;
+        }
+
+        bool SimulatorEngine::registerForHALEvents()
+        {
+            return true;
         }
 
         SimulatorEngine::ErrorCode SimulatorEngine::end()

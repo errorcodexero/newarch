@@ -105,6 +105,9 @@ namespace xero {
                 dest_p = std::make_shared<MessageDestStream>(std::cout);
                 logger.addDestination(dest_p);
             }
+#elif defined(SIM2)
+            dest_p = std::make_shared<MessageDestStream>(std::cout);
+            logger.addDestination(dest_p);
 #else
             dest_p = std::make_shared<MessageDestDS>();
             logger.addDestination(dest_p);
@@ -265,7 +268,12 @@ namespace xero {
                 //
                 Setting &s = parser_->get("plotting:enabled") ;
                 if (s.isBoolean() && s.getBoolean())
+                {
                     plot_mgr_.enable(true) ;
+                    message_logger_.startMessage(MessageLogger::MessageType::info) ;
+                    message_logger_ << ".... enabled plotting" ;
+                    message_logger_.endMessage() ; 
+                }
             }
 
             //
@@ -298,7 +306,7 @@ namespace xero {
             // Perform post hardware subsystem initialization.  This is initialization
             // that needs to happen after all of the hierarchal subsystem in the robot
             // have been created and the parent child relationships have been put in
-            // place.
+            // place.  This initialization can also rely on the initial state of the subsystems.
             //
             robot_subsystem_->postHWInit() ;
 

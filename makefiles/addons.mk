@@ -154,6 +154,11 @@ CXXFLAGS += -I$(TOPDIR)/sim2/navx/include
 LIBLIST += $(TOPDIR)/sim2/navx
 endif
 
+ifeq ($(NEED_NAVXSIMPLE),true)
+CXXFLAGS += -I$(TOPDIR)/sim2/navxsimple/include
+LIBLIST += $(TOPDIR)/sim2/navxsimple
+endif
+
 ifeq ($(NEED_CTRE),true)
 CXXFLAGS += -I$(TOPDIR)/sim2/ctre/include
 LIBLIST += $(TOPDIR)/sim2/ctre

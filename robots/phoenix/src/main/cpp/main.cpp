@@ -22,6 +22,9 @@ int main(int ac, char **av)
     xero::sim2::SimulatorEngine &engine = xero::sim2::SimulatorEngine::getEngine();
     if (!engine.parseCommandLineArgs(ac, av))
         return 1;
+
+    if (engine.start() != xero::sim2::SimulatorEngine::ErrorCode::NoError)
+        return 1;
 #endif
 
 #ifdef SIMULATOR
