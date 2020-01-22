@@ -22,6 +22,15 @@ namespace xero {
                 }
             },
             { 
+                "talon_fx", 
+                {
+                    MotorType::CAN,
+                    [](int canID) {
+                        return std::make_shared<CTREMotorController>(canID, CTREMotorController::Type::TalonSRX);
+                    }
+                }
+            },
+            { 
                 "victor_spx", 
                 {
                     MotorType::CAN,

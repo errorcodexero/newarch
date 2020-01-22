@@ -10,6 +10,9 @@ namespace xero {
                 case Type::TalonSRX:
                     motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::TalonSRX>(id); 
                     break;
+                case Type::TalonFX:
+                    motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::TalonFX>(id);
+                    break;
                 case Type::VictorSPX:
                     motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::VictorSPX>(id);
                     break;
