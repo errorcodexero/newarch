@@ -11,7 +11,7 @@ namespace xero {
         public:
             typedef std::shared_ptr<ctre::phoenix::motorcontrol::IMotorController> MotorPtr;
 
-            enum class Type { TalonSRX, VictorSPX };
+            enum class Type { TalonSRX, TalonFX, VictorSPX };
         
             /// \brief Creates a new CTRE motor object
             /// \param canID The motor ID.
@@ -28,6 +28,17 @@ namespace xero {
             virtual std::string getType() {
                 std::string type("ctre") ;
                 return type ;
+            }
+
+            virtual bool hasPosition() {
+                return type_ == Type::TalonFX ;
+            }
+
+            // Units are 2048/revolution
+            virtual int getPosition() {
+                assert(type_ == Type::TalonFX);
+                auto talon = std::dynamic_pointer_cast<ctre::phoenix::motorcontrol::can::TalonFX>(motor_);
+                return static_cast<int>(talon->GetSensorCollection().GetIntegratedSensorPosition());
             }
             
         private:
