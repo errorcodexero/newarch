@@ -28,7 +28,7 @@ namespace xero
                 return inst_name_ ;
             }            
 
-            virtual void run() = 0;
+            virtual void run(double dt) = 0;
 
             void setProperty(const std::string &name, const SimValue &value) {
                 props_[name] = value;

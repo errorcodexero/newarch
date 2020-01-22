@@ -12,6 +12,7 @@ NEED_CTRE=true
 NEED_REV=true
 NEED_HAL=true
 NEED_ENGINE=true
+NEED_XEROMISC=true
 
 LOCAL_CFLAGS += -Iinclude
 
