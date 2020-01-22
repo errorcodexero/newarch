@@ -24,7 +24,8 @@ namespace xero
             if (!model.hasProperty(propname))
             {
                 msg.startMessage(SimulatorMessages::MessageType::Error) ;
-                msg << "model " << model.getName() << ": cannot create motor " << name << " - no 'type' field" ;
+                msg << "model " << model.getModelName() << " instance " << model.getInstanceName();
+                msg << ": cannot create motor " << name << " - no 'type' field";
                 msg.endMessage(model.getSimulationTime()) ;
 
                 std::runtime_error err("cannot create motor") ;
@@ -35,7 +36,8 @@ namespace xero
             if (!model.hasProperty(propname))
             {
                 msg.startMessage(SimulatorMessages::MessageType::Error) ;
-                msg << "model " << model.getName() << ": cannot create motor " << name << " - no 'index' field" ;
+                msg << "model " << model.getModelName() << " instance " << model.getInstanceName();
+                msg << ": cannot create motor " << name << " - no 'index' field";
                 msg.endMessage(model.getSimulationTime()) ;
 
                 std::runtime_error err("cannot create motor") ;
@@ -46,7 +48,8 @@ namespace xero
             if (!value.isInteger())
             {
                 msg.startMessage(SimulatorMessages::MessageType::Error) ;
-                msg << "model " << model.getName() << ": cannot create motor " << name << " - 'index' field is not an integer" ;
+                msg << "model " << model.getModelName() << " instance " << model.getInstanceName();
+                msg << ": cannot create motor " << name << " - 'index' field is not an integer";
                 msg.endMessage(model.getSimulationTime()) ;
 
                 std::runtime_error err("cannot create motor") ;
@@ -61,7 +64,8 @@ namespace xero
             if (!value.isString())
             {
                 msg.startMessage(SimulatorMessages::MessageType::Error) ;
-                msg << "model " << model.getName() << ": cannot create motor " << name << " - 'type' field is not a string" ;
+                msg << "model " << model.getModelName() << " instance " << model.getInstanceName();                
+                msg << ": cannot create motor " << name << " - 'type' field is not a string" ;
                 msg.endMessage(model.getSimulationTime()) ;
 
                 std::runtime_error err("cannot create motor") ;
@@ -81,15 +85,16 @@ namespace xero
             else
             {
                 msg.startMessage(SimulatorMessages::MessageType::Error) ;
-                msg << "model " << model.getName() << ": cannot create motor " << name << " - 'type' field does not specify a known motor type" ;
+                msg << "model " << model.getModelName() << " instance " << model.getInstanceName();                 
+                msg << ": cannot create motor " << name << " - 'type' field does not specify a known motor type" ;
                 msg.endMessage(model.getSimulationTime()) ;
 
                 msg.startMessage(SimulatorMessages::MessageType::Error) ;
-                msg << "model " << model.getName() << ": cannot create motor " << name << "   'type' field has value '" << value.getString() << "'" ;
+                msg << "    cannot create motor " << name << "   'type' field has value '" << value.getString() << "'" ;
                 msg.endMessage(model.getSimulationTime()) ;                
 
                 msg.startMessage(SimulatorMessages::MessageType::Error) ;
-                msg << "model " << model.getName() << ": cannot create motor " << name << "   expected 'talonsrx' or 'talonfx' or 'victorspx' or 'victorsp' or 'sparkmax'" ;
+                msg << "    cannot create motor " << name << "   expected 'talonsrx' or 'talonfx' or 'victorspx' or 'victorsp' or 'sparkmax'" ;
                 msg.endMessage(model.getSimulationTime()) ;                    
 
                 std::runtime_error err("cannot create motor") ;

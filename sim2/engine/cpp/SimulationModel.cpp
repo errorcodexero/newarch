@@ -28,7 +28,20 @@ namespace xero
                 throw err ;
             }
 
-            return true ;
+            SimValue v = getProperty(name);
+            if (!v.isInteger())
+            {
+                SimulatorMessages &msg = engine_.getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() << " - property exists but is not an integer" ;
+                msg << "'" << name << "'" ;
+                msg.endMessage(engine_.getSimulationTime()) ;
+
+                std::runtime_error err("could not create model") ;
+                throw err ;                
+            }
+
+            return v.getInteger();
         }
     }
 }

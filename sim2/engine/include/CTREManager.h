@@ -19,6 +19,10 @@ namespace xero
             bool set(int index, double value);
             bool get(int index, double &value);
 
+            double getEncoder(int index) {
+                return 0.0;
+            }
+
         private:
             struct CTREStatus
             {

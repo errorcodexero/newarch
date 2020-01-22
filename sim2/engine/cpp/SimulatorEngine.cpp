@@ -7,6 +7,7 @@
 #include <REVManager.h>
 #include <json.h>
 #include <hal/HalBase.h>
+#include <hal/Ports.h>
 #include <mockdata/EncoderData.h>
 #include <mockdata/PWMData.h>
 #include <cassert>
@@ -217,7 +218,14 @@ namespace xero
 
         void SimulatorEngine::setEncoder(int indexA, int indexB, int32_t value)
         {
-            // HALSIM_SetEncoderCount(index, value) ;
+            for (int i = 0; i < HAL_GetNumEncoders() ; i++)
+            {
+                if (HALSIM_GetEncoderDigitalChannelA(i) == indexA && HALSIM_GetEncoderDigitalChannelB(i) == indexB)
+                {
+                    HALSIM_SetEncoderCount(i, value);
+                    return;
+                }
+            }
         }
 
         double SimulatorEngine::getPWM(int index)

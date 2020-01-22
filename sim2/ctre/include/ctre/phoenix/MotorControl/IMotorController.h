@@ -57,6 +57,11 @@ namespace ctre {
 
                 void ConfigReverseLimitSwitchSource(RemoteLimitSwitchSource type, LimitSwitchNormal state, int deviceID, int to = 0) {                    
                 }
+
+            protected:
+                int getIndex() const {
+                    return index_;
+                }
                 
             private:
                 int index_ ;

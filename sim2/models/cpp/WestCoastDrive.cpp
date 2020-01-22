@@ -25,6 +25,9 @@ namespace xero
             }
 
             left_enc_[0] = getInteger("hw:left:encoder:1") ;
+            left_enc_[0] = getInteger("hw:left:encoder:2") ;
+            right_enc_[0] = getInteger("hw:right:encoder:1") ;
+            right_enc_[1] = getInteger("hw:right:encoder:2") ;
 
             return true ;
         }
