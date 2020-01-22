@@ -74,8 +74,8 @@ namespace xero
             //
             // Now, calculate distance each wheel moved based on the actual RPS
             //
-            double dleft = current_left_rps_* dt * diameter_ * PI;
-            double dright = current_right_rps_ * dt * diameter_ * PI;
+            double dleft = current_left_rps_* dt * diameter_ * xero::math::PI;
+            double dright = current_right_rps_ * dt * diameter_ * xero::math::PI;
 
             //
             // And add to the total distance so far
@@ -83,8 +83,8 @@ namespace xero
             left_ += dleft;
             right_ += dright;
 
-            double lrevs = left_ / (PI * diameter_);
-            double rrevs = right_ / (PI * diameter_) ;
+            double lrevs = left_ / (xero::math::PI * diameter_);
+            double rrevs = right_ / (xero::math::PI * diameter_);
 
             double dv = (dright - dleft) / 2 * scrub_;
             angle_ = xero::math::normalizeAngleRadians(angle_ + (dv * 2.0) / width_) ;
@@ -118,7 +118,6 @@ namespace xero
                 navx_->SimulatorSetTotalAngle(-rad2deg(total_angle_ + navx_offset_));
             }
 #endif
-
         }
 
         
