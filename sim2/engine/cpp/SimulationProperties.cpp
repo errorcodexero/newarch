@@ -147,7 +147,10 @@ namespace xero
                     msg.endMessage(engine_.getSimulationTime()); 
 
                     siminst->setProperty(fullkey, sv); 
-                }                
+                }
+
+                if (!siminst->create())
+                    return false ;
             }
 
             return true;

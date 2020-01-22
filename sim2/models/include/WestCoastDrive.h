@@ -1,6 +1,7 @@
 #pragma once
-
+#include <SimulatedMotor.h>
 #include <SimulationModel.h>
+#include <memory>
 
 namespace xero
 {
@@ -9,12 +10,17 @@ namespace xero
         class WestCoastDrive : public xero::sim2::SimulationModel
         {
         public:
-            WestCoastDrive();
+            WestCoastDrive(xero::sim2::SimulatorEngine &engine, const std::string &inst);
             virtual ~WestCoastDrive();
 
-            virtual void run(xero::sim2::SimulatorEngine &engine);
+            virtual bool create() ;
+            virtual void run();
 
         private:
+            std::shared_ptr<xero::sim2::SimulatedMotor> left_motor_ ;
+            std::shared_ptr<xero::sim2::SimulatedMotor> right_motor_ ;
+            int left_enc_[2] ;
+            int right_enc_[2] ;
         };
     }
 }

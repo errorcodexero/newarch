@@ -13,6 +13,7 @@ namespace xero
     namespace sim2
     {
         class SimulationModel ;
+        class SimulatorEngine ;
 
         class ModelFactoryBase
         {
@@ -33,7 +34,7 @@ namespace xero
             virtual ~ModelFactoryBase() {                
             }
 
-            virtual std::shared_ptr<SimulationModel> createModel() = 0;
+            virtual std::shared_ptr<SimulationModel> createModel(SimulatorEngine &engine, const std::string &inst) = 0;
 
             static std::list<std::string> &getModelList() {
                 return models_;
@@ -55,8 +56,8 @@ namespace xero
             virtual ~ModelFactory() {                
             }
 
-            virtual std::shared_ptr<SimulationModel> createModel() {
-                return std::make_shared<T>();
+            virtual std::shared_ptr<SimulationModel> createModel(SimulatorEngine &engine, const std::string &inst) {
+                return std::make_shared<T>(engine, inst);
             };        
         };
     }

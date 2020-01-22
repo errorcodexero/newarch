@@ -4,13 +4,31 @@ namespace xero
 {
     namespace sim2
     {
-        SimulationModel::SimulationModel(const std::string &name)
+        SimulationModel::SimulationModel(SimulatorEngine &engine, const std::string &modelname, const std::string &instname) : engine_(engine)
         {
-            name_ = name;
+            model_name_ = modelname;
+            inst_name_ = instname ;
         }
 
         SimulationModel::~SimulationModel()
         {            
+        }
+
+        int SimulationModel::getInteger(const std::string &name)
+        {
+            if (!hasProperty(name))
+            {
+                SimulatorMessages &msg = engine_.getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() << " - cannot find property" ;
+                msg << "'" << name << "'" ;
+                msg.endMessage(engine_.getSimulationTime()) ;
+
+                std::runtime_error err("could not create model") ;
+                throw err ;
+            }
+
+            return true ;
         }
     }
 }

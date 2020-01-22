@@ -4,9 +4,11 @@
 #include <ModelFactory.h>
 #include <SimulatorStreamMessageSink.h>
 #include <CTREManager.h>
+#include <REVManager.h>
 #include <json.h>
 #include <hal/HalBase.h>
 #include <mockdata/EncoderData.h>
+#include <mockdata/PWMData.h>
 #include <cassert>
 #include <iostream>
 #include <fstream>
@@ -33,6 +35,7 @@ namespace xero
 
             // Create the hardware managers for things not covered by the HAL
             ctre_mgr_ = std::make_shared<CTREManager>(*this);
+            rev_mgr_ = std::make_shared<REVManager>(*this);            
 
             sim_time_step_ = 1000 ;
         }
@@ -49,7 +52,7 @@ namespace xero
             if (it == model_factories_.end())
                 return nullptr;
 
-            return it->second->createModel();
+            return it->second->createModel(*this, inst);
         }
 
         bool SimulatorEngine::parseCommandLineArgs(int ac, char **av)
@@ -135,10 +138,14 @@ namespace xero
             return true;
         }
 
-        SimulatorEngine::ErrorCode SimulatorEngine::start()
+        SimulatorEngine::ErrorCode SimulatorEngine::start(int ac, char **av)
         {
-            int32_t status ;
+            int32_t status = 0 ;
 
+            if (!parseCommandLineArgs(ac, av))
+                return ErrorCode::BadCommandLine ;
+
+            // Initialize the HAL so our time base is setup
             HAL_Initialize(500, 0);            
 
             // Print information about models
@@ -164,6 +171,11 @@ namespace xero
             if (status != 0)
                 return ErrorCode::HALError ;
 
+            msg_.startMessage(SimulatorMessages::MessageType::Debug, 1);
+            msg_ << "SimulatorEngine: start ";
+            msg_ << " StarTime " << sim_time_ ;
+            msg_.endMessage(sim_time_);                
+
             return ErrorCode::NoError;
         }
 
@@ -174,16 +186,10 @@ namespace xero
 
         void SimulatorEngine::runSim()
         {
-            int32_t status ;
+            int32_t status  = 0 ;
 
             uint64_t haltime = HAL_GetFPGATime(&status) ;
             assert(status == 0) ;
-
-            msg_.startMessage(SimulatorMessages::MessageType::Debug, 1);
-            msg_ << "runSim:";
-            msg_ << " HALTime " << haltime ;
-            msg_ << " SIMTime " << sim_time_ ;
-            msg_.endMessage(sim_time_);
 
             while (sim_time_ < haltime)
             {
@@ -206,7 +212,17 @@ namespace xero
         void SimulatorEngine::runModels()
         {
             for(auto model : models_)
-                model->run(*this);
+                model->run();
+        }
+
+        void SimulatorEngine::setEncoder(int indexA, int indexB, int32_t value)
+        {
+            // HALSIM_SetEncoderCount(index, value) ;
+        }
+
+        double SimulatorEngine::getPWM(int index)
+        {
+            return HALSIM_GetPWMPosition(index) ;
         }
     }
 }

@@ -20,6 +20,7 @@ namespace xero
         class SimulationModel;
         class ModelFactoryBase;
         class CTREManager;
+        class REVManager ;
 
         class SimulatorEngine
         {
@@ -27,6 +28,7 @@ namespace xero
             enum class ErrorCode
             {
                 NoError,
+                BadCommandLine,
                 PropertyFileError,
                 EventFileError,
                 HALError
@@ -39,16 +41,13 @@ namespace xero
         public:
 
             // Initialize the simulation engine
-            ErrorCode start();
+            ErrorCode start(int ac, char **av);
 
             // Run the simulator to catch up with the robot time
             void runSim() ;
 
             // End the simulation engine
             ErrorCode end();
-
-            // Parse the command line arguments
-            bool parseCommandLineArgs(int ac, char **av);
 
             // Get the only instance of the simulation engine
             static SimulatorEngine &getEngine();
@@ -71,8 +70,17 @@ namespace xero
                 return sim_time_;
             }
 
+            SimulationProperties &getProps() {
+                return *props_ ;
+            }
+
             // Get the hardware managers
             std::shared_ptr<CTREManager> getCTREManager() { return ctre_mgr_; }
+            std::shared_ptr<REVManager> getREVManager() { return rev_mgr_; }            
+
+            // Access to the HAL mock data for models
+            void setEncoder(int indexA, int indexB, int32_t value) ;
+            double getPWM(int index) ;
 
         private:
             // Process any events that are due
@@ -83,6 +91,9 @@ namespace xero
 
             // Register for events from the HAL
             bool registerForHALEvents();
+            
+            // Parse the command line arguments
+            bool parseCommandLineArgs(int ac, char **av);
 
         private:
             static SimulatorEngine *theOne;
@@ -118,6 +129,7 @@ namespace xero
 
             // Hardware Managers
             std::shared_ptr<CTREManager> ctre_mgr_;
+            std::shared_ptr<REVManager> rev_mgr_;
         };
     }
 }

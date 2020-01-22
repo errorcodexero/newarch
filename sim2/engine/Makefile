@@ -7,7 +7,9 @@ SOURCES = \
 	./cpp/SimulationProperties.cpp\
 	./cpp/SimulatorEngine.cpp\
 	./cpp/SimulatorMessages.cpp\
-	./cpp/CTREManager.cpp
+	./cpp/CTREManager.cpp\
+	./cpp/REVManager.cpp\
+	./cpp/SimulatedMotor.cpp
 
 
 TARGET=engine
