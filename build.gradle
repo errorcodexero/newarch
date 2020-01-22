@@ -41,7 +41,7 @@ deploy {
 def includeSrcInIncludeRoot = false
 
 // Set this to true to enable desktop support.
-def includeDesktopSupport = true
+def includeDesktopSupport = false
 
 // Enable simulation gui support. Must check the box in vscode to enable support
 // upon debugging
@@ -53,12 +53,12 @@ model {
     components {
 
         frcUserProgram(NativeExecutableSpec) {
+            targetPlatform wpi.platforms.roborio
 			binaries.all {
 				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-
 				lib library: "xerobase", linkage: "static"
 				lib library: "xeromisc", linkage: "static"                
-			}
+			}            
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
             }
@@ -79,77 +79,13 @@ model {
             // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
             wpi.deps.wpilib(it)
             wpi.deps.vendor.cpp(it)
-        }
-
-        // frcUserProgram(NativeExecutableSpec) {
-        //     targetPlatform wpi.platforms.roborio
-		// 	binaries.all {
-		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-		// 		lib library: "xerobase", linkage: "static"
-		// 		lib library: "xeromisc", linkage: "static"                
-		// 	}            
-        //     if (includeDesktopSupport) {
-        //         targetPlatform wpi.platforms.desktop
-        //     }
-
-        //     sources.cpp {
-        //         source {
-        //             srcDir 'robots/motorcontroller/src/main/cpp'
-        //             include '**/*.cpp', '**/*.cc'
-        //         }
-        //         exportedHeaders {
-        //             srcDir 'robots/motorcontroller/src/main/cpp'
-        //             if (includeSrcInIncludeRoot) {
-        //                 srcDir 'src/main/cpp'
-        //             }
-        //         }
-        //     }
-
-        //     // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
-        //     wpi.deps.wpilib(it)
-        //     wpi.deps.vendor.cpp(it)
-        // }
-
-        // frcUserProgram(NativeExecutableSpec) {
-        //     targetPlatform wpi.platforms.roborio
-		// 	binaries.all {
-		// 		cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-		// 		lib library: "xerobase", linkage: "static"
-		// 		lib library: "xeromisc", linkage: "static"                
-		// 	}            
-        //     if (includeDesktopSupport) {
-        //         targetPlatform wpi.platforms.desktop
-        //     }
-
-        //     sources.cpp {
-        //         source {
-        //             srcDir 'robots/droid/src/main/cpp'
-        //             include '**/*.cpp', '**/*.cc'
-        //         }
-        //         exportedHeaders {
-        //             srcDir 'robots/droid/src/main/cpp'
-        //             if (includeSrcInIncludeRoot) {
-        //                 srcDir 'src/main/cpp'
-        //             }
-        //         }
-        //     }
-
-        //     // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
-        //     wpi.deps.wpilib(it)
-        //     wpi.deps.vendor.cpp(it)
-        // }        
+        }        
 
 		xeromisc(NativeLibrarySpec) {
             targetPlatform wpi.platforms.roborio
-            targetPlatform wpi.platforms.desktop
 
 			binaries.all {
-                if (targetPlatform.name == wpi.platforms.roborio) {
-                    cppCompiler.args
-                }
-                else {
-                    cppCompiler.args
-                }
+                cppCompiler.args "-DXEROROBORIO"
             }
 
 			binaries.withType(SharedLibraryBinarySpec) {
@@ -171,10 +107,9 @@ model {
 
 		xerobase(NativeLibrarySpec) {
             targetPlatform wpi.platforms.roborio
-            targetPlatform wpi.platforms.desktop
 
 			binaries.all {
-                
+                cppCompiler.args "-DXEROROBORIO"
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
