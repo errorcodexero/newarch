@@ -26,7 +26,7 @@ deploy {
         // Built in artifact to deploy arbitrary files to the roboRIO.
         fileTreeArtifact('frcStaticFileDeploy') {
             // The directory below is the local directory to deploy
-            files = fileTree(dir: 'robots/motorcontroller/src/main/deploy')
+            files = fileTree(dir: 'robots/droid/src/main/deploy')
             // Deploy to RoboRIO target, into /home/lvuser/deploy
             targets << "roborio"
             directory = '/home/lvuser/deploy'
@@ -53,14 +53,8 @@ model {
     components {
 
         frcUserProgram(NativeExecutableSpec) {
-            targetPlatform wpi.platforms.roborio
 			binaries.all {
-                if (targetPlatform.name == wpi.platforms.roborio) {
-				    cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-                }
-                else {
-				    cppCompiler.args "/DXEROROBORIO"
-                }
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
 
 				lib library: "xerobase", linkage: "static"
 				lib library: "xeromisc", linkage: "static"                
@@ -71,11 +65,11 @@ model {
 
             sources.cpp {
                 source {
-                    srcDir 'robots/phoenix/src/main/cpp'
+                    srcDir 'robots/droid/src/main/cpp'
                     include '**/*.cpp', '**/*.cc'
                 }
                 exportedHeaders {
-                    srcDir 'robots/phoenix/src/main/cpp'
+                    srcDir 'robots/droid/src/main/cpp'
                     if (includeSrcInIncludeRoot) {
                         srcDir 'src/main/cpp'
                     }
@@ -180,12 +174,7 @@ model {
             targetPlatform wpi.platforms.desktop
 
 			binaries.all {
-                if (targetPlatform.name == wpi.platforms.roborio) {
-				    cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
-                }
-                else {
-				    cppCompiler.args "/DXEROROBORIO"
-                }
+                
 			}
 			binaries.withType(SharedLibraryBinarySpec) {
 				buildable = false
