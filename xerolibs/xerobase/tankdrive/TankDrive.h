@@ -32,6 +32,21 @@ namespace xero {
             /// \brief destroy a tank drive object
             virtual ~TankDrive() ;
 
+            /// \brief set the default motor mode for auto mode
+            void setAutoNeutralMode(MotorController::NeutralMode m) {
+                automode_neutral_ = m ;
+            }
+
+            /// \brief set the default motor mode for auto mode
+            void setTeleopNeutralMode(MotorController::NeutralMode m) {
+                teleop_neutral_ = m ;
+            }        
+
+            /// \brief set the default motor mode for auto mode
+            void setResetNeutralMode(MotorController::NeutralMode m) {
+                reset_neutral_ = m ;
+            }                    
+
             /// \brief return the width of the robot
             /// \returns the width of the robot
             double getWidth() const {
@@ -199,6 +214,10 @@ namespace xero {
             void setMotorsToPercents(double left_percent, double right_percent);
 
         private:
+            MotorController::NeutralMode automode_neutral_ ;
+            MotorController::NeutralMode teleop_neutral_ ;
+            MotorController::NeutralMode reset_neutral_ ;
+
             std::shared_ptr<MotorController> left_motors_;
             std::shared_ptr<MotorController> right_motors_;
 

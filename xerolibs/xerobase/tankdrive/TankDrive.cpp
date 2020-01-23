@@ -43,6 +43,10 @@ namespace xero {
             double width = settings.getDouble("tankdrive:width") ;
             double scrub = settings.getDouble("tankdrive:scrub") ;
             kin_ = std::make_shared<xero::misc::Kinematics>(width, scrub) ;
+
+            automode_neutral_ = MotorController::NeutralMode::Brake ;
+            teleop_neutral_ = MotorController::NeutralMode::Coast ;
+            reset_neutral_ = MotorController::NeutralMode::Coast ;
         }
 
         TankDrive::~TankDrive() {   
@@ -66,8 +70,8 @@ namespace xero {
         void TankDrive::reset() {
             Subsystem::reset() ;
 
-            left_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
-            right_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
+            left_motors_->setNeutralMode(reset_neutral_);
+            right_motors_->setNeutralMode(reset_neutral_);
             setMotorsToPercents(0, 0);   // Turn motors off
         }
 
@@ -76,14 +80,19 @@ namespace xero {
 
             if (ltype == LoopType::Autonomous)
             {
-                left_motors_->setNeutralMode(MotorController::NeutralMode::Brake);
-                right_motors_->setNeutralMode(MotorController::NeutralMode::Brake);
+                left_motors_->setNeutralMode(automode_neutral_);
+                right_motors_->setNeutralMode(automode_neutral_);
             }
             else
             {
-                left_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
-                right_motors_->setNeutralMode(MotorController::NeutralMode::Coast);                
+                left_motors_->setNeutralMode(teleop_neutral_);
+                right_motors_->setNeutralMode(teleop_neutral_);                
             }
+
+            //
+            // This works around a problem seen in the SparkMax motor controllers
+            // that the inverted flag gets lost when transitioning between modes.
+            //
             left_motors_->reapplyInverted();
             right_motors_->reapplyInverted();
         }
