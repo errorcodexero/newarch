@@ -24,7 +24,8 @@ namespace xero
             SimulatedMotor(SimulationModel &model, const std::string &name) ;
             virtual ~SimulatedMotor() ;
 
-            double Get() ;
+            double get() ;
+            void setEncoder(int32_t value) ;
 
         private:
             MotorType mt_ ;

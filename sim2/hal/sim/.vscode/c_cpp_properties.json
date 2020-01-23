@@ -1,0 +1,104 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+	        ".", "./libs", "./libs/TARGET_CY8CKIT-062-WIFI-BT", "./libs/TARGET_CY8CKIT-062-WIFI-BT/COMPONENT_BSP_DESIGN_MODUS", "./libs/TARGET_CY8CKIT-062-WIFI-BT/COMPONENT_BSP_DESIGN_MODUS/GeneratedSource", "./libs/TARGET_CY8CKIT-062-WIFI-BT/startup", "./libs/capsense", "./libs/core-lib", "./libs/core-lib/include", "./libs/psoc6hal", "./libs/psoc6hal/include", "./libs/psoc6hal/include/pin_packages", "./libs/psoc6pdl", "./libs/psoc6pdl/cmsis", "./libs/psoc6pdl/cmsis/include", "./libs/psoc6pdl/devices", "./libs/psoc6pdl/devices/include", "./libs/psoc6pdl/devices/include/ip", "./libs/psoc6pdl/drivers", "./libs/psoc6pdl/drivers/include", "./libs/retarget-io",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/lib/gcc/arm-none-eabi/7.2.1/include",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/lib/gcc/arm-none-eabi/7.2.1/include-fixed",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1/arm-none-eabi/thumb/v7e-m/fpv4-sp/hard",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1/backward"
+            ],
+            "browse": {
+                "path": [
+	            ".", "./libs", "./libs/TARGET_CY8CKIT-062-WIFI-BT", "./libs/TARGET_CY8CKIT-062-WIFI-BT/COMPONENT_BSP_DESIGN_MODUS", "./libs/TARGET_CY8CKIT-062-WIFI-BT/COMPONENT_BSP_DESIGN_MODUS/GeneratedSource", "./libs/TARGET_CY8CKIT-062-WIFI-BT/startup", "./libs/capsense", "./libs/core-lib", "./libs/core-lib/include", "./libs/psoc6hal", "./libs/psoc6hal/include", "./libs/psoc6hal/include/pin_packages", "./libs/psoc6pdl", "./libs/psoc6pdl/cmsis", "./libs/psoc6pdl/cmsis/include", "./libs/psoc6pdl/devices", "./libs/psoc6pdl/devices/include", "./libs/psoc6pdl/devices/include/ip", "./libs/psoc6pdl/drivers", "./libs/psoc6pdl/drivers/include", "./libs/retarget-io",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/lib/gcc/arm-none-eabi/7.2.1/include",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/lib/gcc/arm-none-eabi/7.2.1/include-fixed",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1/arm-none-eabi/thumb/v7e-m/fpv4-sp/hard",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1/backward"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "defines": [
+	      "CY_USING_HAL", "CYHAL_UDB_SDIO", "CY_APPNAME_dualcore_cm4", "CY8C6247BZI_D54", "CY_TARGET_DEVICE=CY8C6247BZI_D54", "TARGET_CY8CKIT_062_WIFI_BT", "CY_TARGET_BOARD=CY8CKIT_062_WIFI_BT", "COMPONENT_BSP_DESIGN_MODUS", "COMPONENT_CM0P_SLEEP", "COMPONENT_CM4", "COMPONENT_SOFTFP", "DEBUG",
+		"EMPTY_ENTRY"
+            ],
+            "intelliSenseMode": "msvc-x64",
+            "compilerPath": "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/bin/arm-none-eabi-gcc.exe  -c -mcpu=cortex-m4 -Og -mfloat-abi=softfp -mfpu=fpv4-sp-d16 -mthumb -ffunction-sections -fdata-sections -ffat-lto-objects -g -Wall",
+            "cStandard": "c99",
+            "cppStandard": "c++11"
+        },
+        {
+            "name": "macOS",
+            "includePath": [
+	        ".", "./libs", "./libs/TARGET_CY8CKIT-062-WIFI-BT", "./libs/TARGET_CY8CKIT-062-WIFI-BT/COMPONENT_BSP_DESIGN_MODUS", "./libs/TARGET_CY8CKIT-062-WIFI-BT/COMPONENT_BSP_DESIGN_MODUS/GeneratedSource", "./libs/TARGET_CY8CKIT-062-WIFI-BT/startup", "./libs/capsense", "./libs/core-lib", "./libs/core-lib/include", "./libs/psoc6hal", "./libs/psoc6hal/include", "./libs/psoc6hal/include/pin_packages", "./libs/psoc6pdl", "./libs/psoc6pdl/cmsis", "./libs/psoc6pdl/cmsis/include", "./libs/psoc6pdl/devices", "./libs/psoc6pdl/devices/include", "./libs/psoc6pdl/devices/include/ip", "./libs/psoc6pdl/drivers", "./libs/psoc6pdl/drivers/include", "./libs/retarget-io",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/lib/gcc/arm-none-eabi/7.2.1/include",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/lib/gcc/arm-none-eabi/7.2.1/include-fixed",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1/arm-none-eabi/thumb/v7e-m/fpv4-sp/hard",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1/backward"
+            ],
+            "browse": {
+                "path": [
+	            ".", "./libs", "./libs/TARGET_CY8CKIT-062-WIFI-BT", "./libs/TARGET_CY8CKIT-062-WIFI-BT/COMPONENT_BSP_DESIGN_MODUS", "./libs/TARGET_CY8CKIT-062-WIFI-BT/COMPONENT_BSP_DESIGN_MODUS/GeneratedSource", "./libs/TARGET_CY8CKIT-062-WIFI-BT/startup", "./libs/capsense", "./libs/core-lib", "./libs/core-lib/include", "./libs/psoc6hal", "./libs/psoc6hal/include", "./libs/psoc6hal/include/pin_packages", "./libs/psoc6pdl", "./libs/psoc6pdl/cmsis", "./libs/psoc6pdl/cmsis/include", "./libs/psoc6pdl/devices", "./libs/psoc6pdl/devices/include", "./libs/psoc6pdl/devices/include/ip", "./libs/psoc6pdl/drivers", "./libs/psoc6pdl/drivers/include", "./libs/retarget-io",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/lib/gcc/arm-none-eabi/7.2.1/include",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/lib/gcc/arm-none-eabi/7.2.1/include-fixed",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1/arm-none-eabi/thumb/v7e-m/fpv4-sp/hard",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1/backward"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "defines": [
+	        "CY_USING_HAL", "CYHAL_UDB_SDIO", "CY_APPNAME_dualcore_cm4", "CY8C6247BZI_D54", "CY_TARGET_DEVICE=CY8C6247BZI_D54", "TARGET_CY8CKIT_062_WIFI_BT", "CY_TARGET_BOARD=CY8CKIT_062_WIFI_BT", "COMPONENT_BSP_DESIGN_MODUS", "COMPONENT_CM0P_SLEEP", "COMPONENT_CM4", "COMPONENT_SOFTFP", "DEBUG",
+		  "EMPTY_ENTRY"
+            ],
+            "intelliSenseMode": "clang-x64",
+            "compilerPath": "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/bin/arm-none-eabi-gcc  -c -mcpu=cortex-m4 -Og -mfloat-abi=softfp -mfpu=fpv4-sp-d16 -mthumb -ffunction-sections -fdata-sections -ffat-lto-objects -g -Wall",
+            "cStandard": "c99",
+            "cppStandard": "c++11"
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+	        ".", "./libs", "./libs/TARGET_CY8CKIT-062-WIFI-BT", "./libs/TARGET_CY8CKIT-062-WIFI-BT/COMPONENT_BSP_DESIGN_MODUS", "./libs/TARGET_CY8CKIT-062-WIFI-BT/COMPONENT_BSP_DESIGN_MODUS/GeneratedSource", "./libs/TARGET_CY8CKIT-062-WIFI-BT/startup", "./libs/capsense", "./libs/core-lib", "./libs/core-lib/include", "./libs/psoc6hal", "./libs/psoc6hal/include", "./libs/psoc6hal/include/pin_packages", "./libs/psoc6pdl", "./libs/psoc6pdl/cmsis", "./libs/psoc6pdl/cmsis/include", "./libs/psoc6pdl/devices", "./libs/psoc6pdl/devices/include", "./libs/psoc6pdl/devices/include/ip", "./libs/psoc6pdl/drivers", "./libs/psoc6pdl/drivers/include", "./libs/retarget-io",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/lib/gcc/arm-none-eabi/7.2.1/include",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/lib/gcc/arm-none-eabi/7.2.1/include-fixed",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1/arm-none-eabi/thumb/v7e-m/fpv4-sp/hard",
+                "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1/backward"
+            ],
+            "browse": {
+                "path": [
+	            ".", "./libs", "./libs/TARGET_CY8CKIT-062-WIFI-BT", "./libs/TARGET_CY8CKIT-062-WIFI-BT/COMPONENT_BSP_DESIGN_MODUS", "./libs/TARGET_CY8CKIT-062-WIFI-BT/COMPONENT_BSP_DESIGN_MODUS/GeneratedSource", "./libs/TARGET_CY8CKIT-062-WIFI-BT/startup", "./libs/capsense", "./libs/core-lib", "./libs/core-lib/include", "./libs/psoc6hal", "./libs/psoc6hal/include", "./libs/psoc6hal/include/pin_packages", "./libs/psoc6pdl", "./libs/psoc6pdl/cmsis", "./libs/psoc6pdl/cmsis/include", "./libs/psoc6pdl/devices", "./libs/psoc6pdl/devices/include", "./libs/psoc6pdl/devices/include/ip", "./libs/psoc6pdl/drivers", "./libs/psoc6pdl/drivers/include", "./libs/retarget-io",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/lib/gcc/arm-none-eabi/7.2.1/include",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/lib/gcc/arm-none-eabi/7.2.1/include-fixed",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1/arm-none-eabi/thumb/v7e-m/fpv4-sp/hard",
+                    "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/arm-none-eabi/include/c++/7.2.1/backward"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "defines": [
+	        "CY_USING_HAL", "CYHAL_UDB_SDIO", "CY_APPNAME_dualcore_cm4", "CY8C6247BZI_D54", "CY_TARGET_DEVICE=CY8C6247BZI_D54", "TARGET_CY8CKIT_062_WIFI_BT", "CY_TARGET_BOARD=CY8CKIT_062_WIFI_BT", "COMPONENT_BSP_DESIGN_MODUS", "COMPONENT_CM0P_SLEEP", "COMPONENT_CM4", "COMPONENT_SOFTFP", "DEBUG",
+		  "EMPTY_ENTRY"
+            ],
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "C:/Users/bwg/ModusToolbox/tools_2.0/gcc-7.2.1/bin/arm-none-eabi-gcc  -c -mcpu=cortex-m4 -Og -mfloat-abi=softfp -mfpu=fpv4-sp-d16 -mthumb -ffunction-sections -fdata-sections -ffat-lto-objects -g -Wall",
+            "cStandard": "c99",
+            "cppStandard": "c++11"
+        }            
+    ],
+    "version": 4
+}

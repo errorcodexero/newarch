@@ -19,10 +19,14 @@ namespace xero
             bool set(int index, double value);
             bool get(int index, double &value);
 
+            bool getEncoder(int index, double &value) ;
+            bool setEncoder(int index, double value) ;
+
         private:
             struct REVStatus
             {
                 double power_;
+                double encoder_ ;
             };
 
         private:

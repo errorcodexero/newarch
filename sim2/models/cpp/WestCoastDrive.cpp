@@ -15,6 +15,7 @@ namespace xero
 
         bool WestCoastDrive::create()
         {
+            use_motor_encoders_ = false ;
             try
             {
                 left_motor_ = std::make_shared<SimulatedMotor>(*this, "hw:left:motor") ;
@@ -25,10 +26,30 @@ namespace xero
                 return false;
             }
 
-            left_enc_[0] = getInteger("hw:left:encoder:1") ;
-            left_enc_[0] = getInteger("hw:left:encoder:2") ;
-            right_enc_[0] = getInteger("hw:right:encoder:1") ;
-            right_enc_[1] = getInteger("hw:right:encoder:2") ;
+            if (hasProperty("use_motor_encoders"))
+            {
+                SimValue v = getProperty("use_motor_encoders") ;
+                if (!v.isBoolean())
+                {
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                    msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - has property 'use_motor_encoders' but type is not boolean" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;
+                    return false ;
+                }
+
+                if (v.getBoolean())
+                    use_motor_encoders_ = true ;
+            }
+
+            if (!use_motor_encoders_)
+            {
+                left_enc_[0] = getInteger("hw:left:encoder:1") ;
+                left_enc_[1] = getInteger("hw:left:encoder:2") ;
+                right_enc_[0] = getInteger("hw:right:encoder:1") ;
+                right_enc_[1] = getInteger("hw:right:encoder:2") ;
+            }
 
             return true ;
         }
@@ -56,8 +77,9 @@ namespace xero
         }        
 
         void WestCoastDrive::run(uint64_t microdt) {
-            double leftpower = left_motor_->Get();
-            double rightpower = right_motor_->Get();
+            double timesec = static_cast<double>(microdt) / 1.0e6 ;
+            double leftpower = left_motor_->get();
+            double rightpower = right_motor_->get();
 
             //
             // Calculate the new desired revolutions per second (RPS)
@@ -74,8 +96,8 @@ namespace xero
             //
             // Now, calculate distance each wheel moved based on the actual RPS
             //
-            double dleft = current_left_rps_* microdt * diameter_ * xero::math::PI / 1e6 ;
-            double dright = current_right_rps_ * microdt * diameter_ * xero::math::PI / 1e6 ;
+            double dleft = current_left_rps_* timesec * diameter_ * xero::math::PI  ;
+            double dright = current_right_rps_ * timesec * diameter_ * xero::math::PI ;
 
             //
             // And add to the total distance so far
@@ -91,7 +113,7 @@ namespace xero
             updatePosition(dleft, dright, angle_) ;
 
             double dist = std::sqrt((xpos_ - last_xpos_) * (xpos_ - last_xpos_) + (ypos_ - last_ypos_) * (ypos_ - last_ypos_)) ;
-            speed_ = dist / (microdt / 1e6) ;
+            speed_ = dist / timesec ;
 
             last_xpos_ = xpos_ ;
             last_ypos_ = ypos_ ;
@@ -99,25 +121,24 @@ namespace xero
             left_enc_value_ = static_cast<int32_t>(lrevs * ticks_per_rev_ * left_encoder_mult_) ;
             right_enc_value_ = static_cast<int32_t>(rrevs * ticks_per_rev_ * right_encoder_mult_) ;
 
+            if (use_motor_encoders_)
+            {
+                left_motor_->setEncoder(left_enc_value_) ;
+                right_motor_->setEncoder(right_enc_value_) ;
+            }
+            else
+            {
+                getEngine().setEncoder(left_enc_[0], left_enc_[1], left_enc_value_) ;
+                getEngine().setEncoder(right_enc_[0], right_enc_[1], right_enc_value_) ;                
+            }
+
 #ifdef NOTYET
-            if (left_enc_ != nullptr)
-                left_enc_->SimulatorSetValue(left_enc_value_) ;
-
-            if (right_enc_ != nullptr)
-                right_enc_->SimulatorSetValue(right_enc_value_) ;
-
-            if (left_spark_encoder_ != nullptr)
-                left_spark_encoder_->SimulatorSetPosition(left_enc_value_);
-
-            if (right_spark_encoder_ != nullptr)
-                right_spark_encoder_->SimulatorSetPosition(right_enc_value_);
-
             if (navx_ != nullptr) {
-                double deg = normalizeAngleDegrees(-rad2deg(angle_ + navx_offset_)) ;
+                double deg = xero::math::normalizeAngleDegrees(-rad2deg(angle_ + navx_offset_)) ;
                 navx_->SimulatorSetYaw(deg) ;
                 navx_->SimulatorSetTotalAngle(-rad2deg(total_angle_ + navx_offset_));
             }
-#endif
+#endif            
         }
 
         

@@ -29,6 +29,7 @@ namespace xero
             std::shared_ptr<xero::sim2::SimulatedMotor> right_motor_ ;
             int left_enc_[2] ;
             int right_enc_[2] ;
+            bool use_motor_encoders_ ;
 
             double diameter_;
             double width_;

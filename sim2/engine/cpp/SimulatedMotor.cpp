@@ -108,7 +108,7 @@ namespace xero
         {
         }
 
-        double SimulatedMotor::Get()
+        double SimulatedMotor::get()
         {
             double ret = 0 ;
 
@@ -131,5 +131,34 @@ namespace xero
 
             return ret ;
         }
+
+        void SimulatedMotor::setEncoder(int32_t value)
+        {
+            switch(mt_)
+            {
+            case MotorType::SparkMax:
+                model_.getEngine().getREVManager()->setEncoder(index_, value) ;
+                break ;
+
+            case MotorType::TalonFX:
+                model_.getEngine().getCTREManager()->setEncoder(index_, value) ;
+                break ;               
+
+            case MotorType::VictorSP:
+            case MotorType::TalonSRX:
+            case MotorType::VictorSPX:
+                {
+                    SimulatorMessages &msg = model_.getEngine().getMessageOutput() ;
+                    msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                    msg << "model " << model_.getModelName() << " instance " << model_.getInstanceName() ;
+                    msg << " - trying to set encoder value on motor that does not have encoders" ;
+                    msg.endMessage(model_.getEngine().getSimulationTime()) ;
+
+                    std::runtime_error err("cannot set encoder values") ;
+                    throw err ;
+                }
+                break ;         
+            }
+        }        
     }
 }

@@ -14,7 +14,8 @@
                 "right:motor:1:type" : "talonfx",
                 "right:motor:2:index" : 4,
                 "right:motor:2:type" : "talonfx",
-                "right:motor:invert" : true
+                "right:motor:invert" : true,
+                "use_motor_encoders" : true
             },
             "behavior" :
             {
