@@ -213,7 +213,7 @@ namespace xero
         void SimulatorEngine::runModels()
         {
             for(auto model : models_)
-                model->run();
+                model->run(sim_time_step_);
         }
 
         void SimulatorEngine::setEncoder(int indexA, int indexB, int32_t value)

@@ -55,7 +55,7 @@ namespace xero
             total_angle_ += dangle;
         }        
 
-        void WestCoastDrive::run(double dt) {
+        void WestCoastDrive::run(uint64_t microdt) {
             double leftpower = left_motor_->Get();
             double rightpower = right_motor_->Get();
 
@@ -74,8 +74,8 @@ namespace xero
             //
             // Now, calculate distance each wheel moved based on the actual RPS
             //
-            double dleft = current_left_rps_* dt * diameter_ * xero::math::PI;
-            double dright = current_right_rps_ * dt * diameter_ * xero::math::PI;
+            double dleft = current_left_rps_* microdt * diameter_ * xero::math::PI / 1e6 ;
+            double dright = current_right_rps_ * microdt * diameter_ * xero::math::PI / 1e6 ;
 
             //
             // And add to the total distance so far
@@ -91,7 +91,7 @@ namespace xero
             updatePosition(dleft, dright, angle_) ;
 
             double dist = std::sqrt((xpos_ - last_xpos_) * (xpos_ - last_xpos_) + (ypos_ - last_ypos_) * (ypos_ - last_ypos_)) ;
-            speed_ = dist / dt ;
+            speed_ = dist / (microdt / 1e6) ;
 
             last_xpos_ = xpos_ ;
             last_ypos_ = ypos_ ;

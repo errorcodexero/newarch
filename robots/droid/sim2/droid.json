@@ -18,13 +18,13 @@
             },
             "behavior" :
             {
-                "ticks_per_rev" : ‭23235.5‬,
                 "diameter" : 6.0,
                 "scrub" : 1.0,
                 "width" : 34.5,
                 "length" : 37.5,
                 "maxvelocity" : 150.0,
-                "maxacceleration" : 150.0
+                "maxacceleration" : 150.0,
+                "ticks_per_rev" : 23235.5
             }
         }
     ]

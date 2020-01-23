@@ -1,7 +1,7 @@
 rootdir=$(git rev-parse --show-toplevel)
 cd $rootdir
 
-build/SIM2/Debug/phoenix/phoenix.exe\
+build/SIM2/Debug/$1/$1.exe\
 	--debug 20\
-	--props robots/phoenix/sim2/robot.json\
-	--events robots/phoenix/sim2/simulations/automode0.json 
+	--props robots/$1/sim2/$1.json\
+	--events robots/$1/sim2/simulations/$2.json 

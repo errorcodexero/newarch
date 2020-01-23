@@ -175,7 +175,19 @@ namespace xero
             msg << "reading robot properties file '" << path << "'";
             msg.endMessage(engine_.getSimulationTime());
 
-            nlohmann::json obj = nlohmann::json::parse(strm);
+            nlohmann::json obj ;
+            
+            try {
+                obj = nlohmann::json::parse(strm);
+            }
+            catch(const std::exception &ex)
+            {
+                msg.startMessage(SimulatorMessages::MessageType::Error);
+                msg << "error reading robot file '" << path << "' - " << ex.what() ;
+                msg.endMessage(engine_.getSimulationTime());
+
+                return false ;
+            }
             strm.close();
 
             if (!loadModels(obj.at("models")))

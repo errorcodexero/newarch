@@ -14,7 +14,7 @@ namespace xero
             virtual ~WestCoastDrive();
 
             virtual bool create() ;
-            virtual void run(double dt);
+            virtual void run(uint64_t microdt);
 
         private:
             double capValue(double prev, double target, double maxchange);
