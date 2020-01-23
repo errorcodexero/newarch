@@ -7,14 +7,6 @@ override CONFIG := Debug
 ASAN = true
 endif
 
-ifeq ($(CONFIG),Debug)
-else
-ifeq ($(CONFIG),Release)
-else
-$(info CONFIG not defined, assuming DEBUG)
-CONFIG=Debug
-endif
-endif
 
 #
 # Make sure the PLATFORM is valid
@@ -63,6 +55,14 @@ $(info MYOS not defined, assuming Cygwin)
 MYOS=Cygwin
 endif
 
+ifneq ($(SILENT),true)
+SPACE =
+SPACE += 
+$(info Build Configuration)
+$(info $(SPACE)$(SPACE)PLATFORM: $(PLATFORM))
+$(info $(SPACE)$(SPACE)CONFIG: $(CONFIG))
+$(info $(SPACE)$(SPACE)MYOS: $(MYOS))
+endif
 
 #
 # This macros proceeds any action in a make file that we might want to show

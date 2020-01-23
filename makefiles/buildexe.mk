@@ -58,6 +58,12 @@ LINKLIBS=$(foreach linklib,$(ALLFLATLIBLIST),$(BUILDHOME)/$(linklib)/$(linklib).
 # Create the complete list of libraries to link against
 #
 ALLLIBS=$(LINKLIBS) $(LOCAL_EXTERNAL_LIBS) $(PLATFORMLIBS)
+SHORTLIBS=$(foreach libname,$(ALLLIBLIST),$(notdir $(libname)))
+
+ifndef SILENT
+$(info $(SPACE)$(SPACE)Libraries: $(SHORTLIBS))
+$(info -------------------------------------------------)
+endif
 
 all: buildexe
 
@@ -71,8 +77,8 @@ help:
 # Target to build the library
 #
 buildexe:
-	make -j buildlibs
-	make -j apponly
+	@make -j --no-print-directory SILENT=true PLATFORM=$(PLATFORM) CONFIG=$(CONFIG) buildlibs
+	@make -j --no-print-directory SILENT=true PLATFORM=$(PLATFORM) CONFIG=$(CONFIG) apponly
 
 buildold: buildlibs apponly
 
@@ -98,13 +104,13 @@ clean: cleanlibs
 buildlibs:
 	$(QUIET)for libdir in $(ALLLIBLIST) ; do \
 		cd $$libdir ; \
-		make --no-print-directory PLATFORM=$(PLATFORM) CONFIG=$(CONFIG) NEED_GOPIGO3HW=$(NEED_GOPIGO3HW);\
+		make --no-print-directory SILENT=true PLATFORM=$(PLATFORM) CONFIG=$(CONFIG) NEED_GOPIGO3HW=$(NEED_GOPIGO3HW);\
 	done
 
 cleanlibs:
 	$(QUIET)for libdir in $(ALLLIBLIST) ; do \
 		cd $$libdir ; \
-		CONFIG=$(CONFIG) PLATFORM=$(PLATFORM) make --no-print-directory clean ;\
+		CONFIG=$(CONFIG) PLATFORM=$(PLATFORM) make SILENT=true --no-print-directory clean ;\
 	done
 
 UNAME := $(shell uname)

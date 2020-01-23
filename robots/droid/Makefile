@@ -1,5 +1,7 @@
 TOPDIR=../..
 
+include $(TOPDIR)/makefiles/defaults.mk
+
 AUTOMODES = \
 	src/main/cpp/automodes/DroidAutoModeController.cpp\
 	src/main/cpp/automodes/DroidAutoMode.cpp\
@@ -36,7 +38,6 @@ NEED_NETWORKTABLES=true
 NEED_XEROMISC=true
 NEED_XEROBASE=true
 NEED_MODELS=true
-
 endif
 
 ifeq ($(PLATFORM),SIM2)
@@ -58,16 +59,6 @@ endif
 LOCAL_CFLAGS = -Isrc/main/cpp
 
 SUPPORTED_PLATFORMS=ROBORIO SIMULATOR
-
-ifeq ($(CONFIG),)
-$(info CONFIG is unspecified.  Setting it to default value (${DEFAULT_CONFIG}).)
-CONFIG := $(DEFAULT_CONFIG)
-endif
-
-ifeq ($(PLATFORM),)
-$(info PLATFORM is unspecified.  Setting it to default value (${DEFAULT_PLATFORM}).)
-PLATFORM := $(DEFAULT_PLATFORM)
-endif
 
 ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/droidsim
