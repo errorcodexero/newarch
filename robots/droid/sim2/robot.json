@@ -1,0 +1,31 @@
+{
+    "models" :
+    [
+        {
+            "model" : "westcoastdrive",
+            "instance" : "1",
+            "hardware" :
+            {
+                "left:motor:1:index" : 1,
+                "left:motor:1:type" : "talonfx",
+                "left:motor:2:index" : 2,
+                "left:motor:2:type" : "talonfx",                
+                "right:motor:1:index" : 3,
+                "right:motor:1:type" : "talonfx",
+                "right:motor:2:index" : 4,
+                "right:motor:2:type" : "talonfx",
+                "right:motor:invert" : true
+            },
+            "behavior" :
+            {
+                "ticks_per_rev" : ‭23235.5‬,
+                "diameter" : 6.0,
+                "scrub" : 1.0,
+                "width" : 34.5,
+                "length" : 37.5,
+                "maxvelocity" : 150.0,
+                "maxacceleration" : 150.0
+            }
+        }
+    ]
+}
