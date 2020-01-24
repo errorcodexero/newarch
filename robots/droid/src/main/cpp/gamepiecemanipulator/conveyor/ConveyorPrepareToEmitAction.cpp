@@ -4,12 +4,13 @@
 namespace xero {
     namespace droid {
         void ConveyorPrepareToEmitAction::start() {
-            // set motor power to move balls to front
+            // set motor power to move balls towards shooter
+            getSubsystem().setMotor(1);
         }
 
         void ConveyorPrepareToEmitAction::run() {
             // if sensor detects {
-                getSubsystem().setMotor(1);
+                getSubsystem().setMotor(0); // stop
                 setDone();
             // }
         }
