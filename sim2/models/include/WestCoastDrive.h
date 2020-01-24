@@ -25,6 +25,14 @@ namespace xero
             void calcGearDependentParameters();
 
         private:
+            constexpr static const char *UseEncodersName = "hw:use_motor_encoders" ;
+            constexpr static const char *LeftMotorName = "hw:left:motor" ;
+            constexpr static const char *RightMotorName = "hw:right:motor" ;
+            constexpr static const char *LeftEncoderOneName = "hw:left:encoder:1" ;
+            constexpr static const char *LeftEncoderTwoName = "hw:left:encoder:2" ;
+            constexpr static const char *RightEncoderOneName = "hw:right:encoder:1" ;
+            constexpr static const char *RightEncoderTwoName = "hw:right:encoder:2" ;
+        private:
             std::shared_ptr<xero::sim2::SimulatedMotor> left_motor_ ;
             std::shared_ptr<xero::sim2::SimulatedMotor> right_motor_ ;
             int left_enc_[2] ;

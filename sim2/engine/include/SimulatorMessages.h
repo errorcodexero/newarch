@@ -40,6 +40,7 @@ namespace xero
             SimulatorMessages &operator<<(int);
             SimulatorMessages &operator<<(double);
             SimulatorMessages &operator<<(uint64_t) ;
+            SimulatorMessages &operator<<(unsigned int) ;
             void endMessage(int64_t t);
 
         private:

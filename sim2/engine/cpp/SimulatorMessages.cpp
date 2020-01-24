@@ -1,6 +1,7 @@
 #include <SimulatorMessages.h>
 #include <SimulatorMessageSink.h>
 #include <cassert>
+#include <iostream>
 
 namespace xero
 {
@@ -27,6 +28,10 @@ namespace xero
 
         void SimulatorMessages::startMessage(SimulatorMessages::MessageType mt, int level)
         {
+            if (msg_.length() != 0)
+            {
+                std::cout << msg_ << std::endl ;
+            }
             assert(msg_.length() == 0);
             assert(mt == MessageType::Debug);
             
@@ -57,7 +62,13 @@ namespace xero
         {
             msg_ += std::to_string(value);
             return *this;
-        }                  
+        }   
+
+        SimulatorMessages &SimulatorMessages::operator<<(unsigned int value)
+        {
+            msg_ += std::to_string(value);
+            return *this;
+        }                        
 
         void SimulatorMessages::endMessage(int64_t t)
         {

@@ -39,7 +39,7 @@ namespace xero
                 return it != props_.end() ;
             }
 
-            SimValue getProperty(const std::string &name) {
+            const SimValue &getProperty(const std::string &name) const {
                 auto it = props_.find(name) ;
                 return it->second ;
             }
@@ -55,6 +55,9 @@ namespace xero
             SimulatorEngine &getEngine() { return engine_ ;}
 
             int getInteger(const std::string &name) ;
+
+        protected:
+        void dumpProperties() ;
 
         private:
             SimulatorEngine &engine_ ;

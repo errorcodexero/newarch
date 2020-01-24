@@ -14,11 +14,9 @@ namespace xero {
     namespace droid {
         DroidSubsystem::DroidSubsystem(Robot &robot) : RobotSubsystem(robot, "droid") {
 
-            ////%% Start AddDriveBase
             addTankDrive() ;
-            ////%% End AddDriveBase
 
-            ////%% Start AddChildSubsystems
+#ifndef SIM2
             oi_ = std::make_shared<DroidOISubsystem>(this) ;
             addChild(oi_) ;
             
@@ -33,7 +31,7 @@ namespace xero {
 
             turret_ = std::make_shared<Turret>(this);
             addChild(turret_);
-            ////%% End AddChildSubsystems
+#endif            
         }
 
         DroidSubsystem::~DroidSubsystem() {

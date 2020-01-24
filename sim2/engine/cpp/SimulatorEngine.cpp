@@ -53,7 +53,10 @@ namespace xero
             if (it == model_factories_.end())
                 return nullptr;
 
-            return it->second->createModel(*this, inst);
+            auto mptr = it->second->createModel(*this, inst);
+            models_.push_back(mptr) ;
+
+            return mptr ;
         }
 
         bool SimulatorEngine::parseCommandLineArgs(int ac, char **av)

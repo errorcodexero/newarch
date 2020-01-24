@@ -68,10 +68,5 @@ ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_EXTERNAL_LIBS=-lcurses
 endif
 
-ifeq ($(PLATFORM),SIM2)
-#	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/phoenixsim2
-#	LOCAL_LIBS = $(TOPDIR)/robotsims/phoenixsim2
-endif
-
 include $(TOPDIR)/makefiles/buildexe.mk
 

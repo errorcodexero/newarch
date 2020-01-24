@@ -18,17 +18,19 @@ namespace xero
             use_motor_encoders_ = false ;
             try
             {
-                left_motor_ = std::make_shared<SimulatedMotor>(*this, "hw:left:motor") ;
-                right_motor_ = std::make_shared<SimulatedMotor>(*this, "hw:right:motor") ;                
+                left_motor_ = std::make_shared<SimulatedMotor>(*this, LeftMotorName) ;
+                right_motor_ = std::make_shared<SimulatedMotor>(*this, RightMotorName) ;                
             }
             catch(const std::runtime_error &e)
             {
                 return false;
             }
 
-            if (hasProperty("use_motor_encoders"))
+            dumpProperties() ;
+
+            if (hasProperty(UseEncodersName))
             {
-                SimValue v = getProperty("use_motor_encoders") ;
+                const SimValue &v = getProperty(UseEncodersName) ;
                 if (!v.isBoolean())
                 {
                     SimulatorMessages &msg = getEngine().getMessageOutput() ;
@@ -45,10 +47,10 @@ namespace xero
 
             if (!use_motor_encoders_)
             {
-                left_enc_[0] = getInteger("hw:left:encoder:1") ;
-                left_enc_[1] = getInteger("hw:left:encoder:2") ;
-                right_enc_[0] = getInteger("hw:right:encoder:1") ;
-                right_enc_[1] = getInteger("hw:right:encoder:2") ;
+                left_enc_[0] = getInteger(LeftEncoderOneName) ;
+                left_enc_[1] = getInteger(LeftEncoderTwoName) ;
+                right_enc_[0] = getInteger(RightEncoderOneName) ;
+                right_enc_[1] = getInteger(RightEncoderTwoName) ;
             }
 
             return true ;

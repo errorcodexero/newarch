@@ -3,7 +3,8 @@ TOPDIR=../..
 include $(TOPDIR)/makefiles/defaults.mk
 
 SOURCES = \
-	./cpp/WestCoastDrive.cpp
+	./cpp/WestCoastDrive.cpp\
+	./cpp/NavXSim.cpp
 
 
 TARGET=models

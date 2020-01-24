@@ -43,5 +43,16 @@ namespace xero
 
             return v.getInteger();
         }
+
+        void SimulationModel::dumpProperties()
+        {
+            for(auto it : props_)
+            {
+                SimulatorMessages &msg = engine_.getMessageOutput() ;   
+                msg.startMessage(SimulatorMessages::MessageType::Debug, 1) ;
+                msg << it.first << " = " << it.second.toString() ;
+                msg.endMessage(engine_.getSimulationTime()) ;
+            }
+        }
     }
 }

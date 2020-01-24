@@ -65,6 +65,8 @@ $(info $(SPACE)$(SPACE)Libraries: $(SHORTLIBS))
 $(info -------------------------------------------------)
 endif
 
+PARALLEL=-j
+
 all: buildexe
 
 help:
@@ -145,10 +147,20 @@ endif
 
 ifeq ($(PLATFORM),SIMULATOR)
 deploy:
-	if [ -d "src/main/deploy" ]; then \
+	$(QUIET)if [ -d "src/main/deploy" ]; then \
 		mkdir -p $(TOPDIR)/deploy/$(TARGET) ;\
 		cp -r src/main/deploy $(TOPDIR)/deploy/$(TARGET) ; \
 	fi
+	$(QUIET)echo Deploy complete	
+endif
+
+ifeq ($(PLATFORM),SIM2)
+deploy:
+	$(QUIET)if [ -d "src/main/deploy" ]; then \
+		mkdir -p $(TOPDIR)/deploy/$(TARGET) ;\
+		cp -r src/main/deploy $(TOPDIR)/deploy/$(TARGET) ; \
+	fi
+	$(QUIET)echo Deploy complete
 endif
 
 .PHONY: deploy run kill allrun

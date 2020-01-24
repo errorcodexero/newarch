@@ -27,6 +27,15 @@
                 "maxacceleration" : 150.0,
                 "ticks_per_rev" : 23235.5
             }
+        },
+        {
+            "model" : "navxsim",
+            "instance" : "1",
+            "hardware" : {
+                "index" : 4
+            },
+            "behavior" : {
+            }
         }
     ]
 }
