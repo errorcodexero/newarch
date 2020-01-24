@@ -3,7 +3,7 @@
 namespace xero {
     namespace droid {
         class Shooter;
-        class Collector;
+        class Intake;
         class Conveyor;
 
         class GamePieceManipulator : public xero::base::Subsystem {
@@ -15,17 +15,17 @@ namespace xero {
                 return shooter_ ;
             }
           
-            std::shared_ptr<Collector> getCollector() {
-                return collector_ ;
+            std::shared_ptr<Intake> getIntake() {
+                return intake_ ;
             }    
-          
+
             std::shared_ptr<Conveyor> getConveyor() {
                 return conveyor_ ;
             }    
 
         private:
             std::shared_ptr<Shooter> shooter_;
-            std::shared_ptr<Collector> collector_;
+            std::shared_ptr<Intake> intake_;
             std::shared_ptr<Conveyor> conveyor_;
         };
     }

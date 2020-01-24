@@ -24,8 +24,9 @@ hw:turret:encoder:quad:2                                        -1
 hw:turret:encoder:quad:m                                        1
 hw:turret:encoder:quad:b                                        0
 
-hw:collector:motor:type                                         "victor_spx"
-hw:collector:motor:canid                                        -3
+hw:intake:motor:type                                            "victor_spx"
+hw:intake:motor:canid                                           -3
+hw:intake:duration                                               0.0                                                        
 
 hw:conveyor:motor:type                                          "victor_spx"
 hw:conveyor:motor:canid                                         -4
