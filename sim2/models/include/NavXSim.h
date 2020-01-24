@@ -3,6 +3,7 @@
 #include <SimulationModel.h>
 #include <mockdata/SPIData.h>
 #include <memory>
+#include <mutex>
 
 namespace xero
 {
@@ -34,6 +35,7 @@ namespace xero
             int index_ ;
             bool active_ ;
             std::array<uint8_t, 256> registers_ ;
+            std::mutex lock_ ;
         };
     }
 }

@@ -30,6 +30,7 @@ namespace xero
 
             CTREStatus st;
             st.power_ = 0.0;
+            st.encoder_ = 0.0 ;
             status_[index] = st;
 
             msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Debug, 5);
@@ -91,10 +92,8 @@ namespace xero
             auto it = status_.find(index);
             if (it != status_.end())
             {
-                msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Warning);
-                msg << "failed to get CTRE motor controller - does not exist, index " << index ;
-                msg.endMessage(getEngine().getSimulationTime());
-                return false;
+                value = 0.0 ;
+                return true;
             }
 
             value = status_[index].power_;
@@ -114,10 +113,8 @@ namespace xero
             auto it = status_.find(index);
             if (it != status_.end())
             {
-                msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Warning);
-                msg << "failed to get CTRE motor controller - does not exist, index " << index ;
-                msg.endMessage(getEngine().getSimulationTime());
-                return false;
+                value = 0.0 ;
+                return true;
             }
 
             value = status_[index].encoder_;
@@ -137,10 +134,7 @@ namespace xero
             auto it = status_.find(index);
             if (it != status_.end())
             {
-                msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Warning);
-                msg << "failed to set CTRE motor controller - does not exist, index " << index ;
-                msg.endMessage(getEngine().getSimulationTime());                 
-                return false;
+                return true;
             }
 
             msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Debug, 9);

@@ -6,7 +6,6 @@ SOURCES = \
 	./cpp/WestCoastDrive.cpp\
 	./cpp/NavXSim.cpp
 
-
 TARGET=models
 NEED_WPIUTIL=true
 NEED_WPILIB=true

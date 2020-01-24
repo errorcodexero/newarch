@@ -2,6 +2,7 @@
 #include <SimulatorEngine.h>
 #include <SimulatedMotor.h>
 #include <mockdata/SPIData.h>
+#include <IMURegisters.h>
 
 using namespace xero::sim2;
 
@@ -37,10 +38,12 @@ namespace xero
             for(size_t i = 0 ; i < registers_.size() ; i++)
                 registers_[i] = 0 ;
 
-            registers_[0] = 0x32 ;          // Who AM I
-            registers_[1] = 0x42 ;          // Board revision
-            registers_[2] = 0x02 ;          // Firmware major revision
-            registers_[3] = 0x03 ;          // Firmware minor revision
+            registers_[NAVX_REG_WHOAMI] = 0x32 ;          // Who AM I
+            registers_[NAVX_REG_HW_REV] = 0x42 ;          // Board revision
+            registers_[NAVX_REG_FW_VER_MAJOR] = 0x02 ;          // Firmware major revision
+            registers_[NAVX_REG_FW_VER_MINOR] = 0x03 ;          // Firmware minor revision
+
+
         }
 
         NavXSim::~NavXSim()
@@ -60,6 +63,14 @@ namespace xero
 
         void NavXSim::run(uint64_t microdt) 
         {
+            std::lock_guard<std::mutex> lock(lock_);            
+
+            uint64_t ts = getEngine().getSimulationTime() / 1000 ;
+
+            registers_[NAVX_REG_TIMESTAMP_L_L] = static_cast<uint8_t>((ts >> 0) & 0xFF) ;
+            registers_[NAVX_REG_TIMESTAMP_L_H] = static_cast<uint8_t>((ts >> 8) & 0xFF) ;
+            registers_[NAVX_REG_TIMESTAMP_H_L] = static_cast<uint8_t>((ts >> 16) & 0xFF) ;
+            registers_[NAVX_REG_TIMESTAMP_H_H] = static_cast<uint8_t>((ts >> 24) & 0xFF) ;
         }
 
         void NavXSim::SPIInitialize(const std::string &name, const struct HAL_Value *value)
@@ -98,6 +109,8 @@ namespace xero
         {
             if (active_)
             {
+                std::lock_guard<std::mutex> lock(lock_);
+
                 SimulatorMessages &msg = getEngine().getMessageOutput() ;
                 msg.startMessage(SimulatorMessages::MessageType::Debug, 9) ;
                 msg << "model " << getModelName() << " instance " << getInstanceName() ;
@@ -120,6 +133,8 @@ namespace xero
         {
             if (active_ && (buffer[0] & 0x80) == 0x80)
             {
+                std::lock_guard<std::mutex> lock(lock_);
+                                
                 SimulatorMessages &msg = getEngine().getMessageOutput() ;
                 msg.startMessage(SimulatorMessages::MessageType::Debug, 9) ;
                 msg << "model " << getModelName() << " instance " << getInstanceName() ;
