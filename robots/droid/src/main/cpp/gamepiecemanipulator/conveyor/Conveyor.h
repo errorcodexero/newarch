@@ -10,6 +10,8 @@ namespace xero {
         public:
             Conveyor(xero::base::Subsystem *parent);
             virtual ~Conveyor() {}
+
+            void postHWInit() override;
         };
     }
 }
