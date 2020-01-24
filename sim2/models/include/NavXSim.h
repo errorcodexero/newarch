@@ -17,6 +17,9 @@ namespace xero
 
             virtual bool create() ;
             virtual void run(uint64_t microdt);
+            void setYaw(double angle) ;
+                        
+            static NavXSim *getNavXSim() ;
 
         private:
             constexpr static const char *IndexName = "hw:index" ;
@@ -31,11 +34,14 @@ namespace xero
 
             uint8_t getCRC(uint8_t message[], uint8_t length) ;
 
+
+
         private:
             int index_ ;
             bool active_ ;
             std::array<uint8_t, 256> registers_ ;
             std::mutex lock_ ;
+            static NavXSim *theOneNavX ;
         };
     }
 }

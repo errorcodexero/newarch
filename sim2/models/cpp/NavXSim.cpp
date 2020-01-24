@@ -3,6 +3,7 @@
 #include <SimulatedMotor.h>
 #include <mockdata/SPIData.h>
 #include <IMURegisters.h>
+#include <cassert>
 
 using namespace xero::sim2;
 
@@ -12,6 +13,13 @@ namespace xero
 {
     namespace models
     {
+        NavXSim *NavXSim::theOneNavX = nullptr ;
+
+        NavXSim *NavXSim::getNavXSim()
+        {
+            return theOneNavX ;
+        }
+
         void NavXSim::SPIInitialize(const char *name, void *param, const struct HAL_Value *value) 
         {
             NavXSim *obj = reinterpret_cast<NavXSim *>(param) ;
@@ -38,17 +46,35 @@ namespace xero
             for(size_t i = 0 ; i < registers_.size() ; i++)
                 registers_[i] = 0 ;
 
-            registers_[NAVX_REG_WHOAMI] = 0x32 ;          // Who AM I
-            registers_[NAVX_REG_HW_REV] = 0x42 ;          // Board revision
-            registers_[NAVX_REG_FW_VER_MAJOR] = 0x02 ;          // Firmware major revision
-            registers_[NAVX_REG_FW_VER_MINOR] = 0x03 ;          // Firmware minor revision
+            registers_[NAVX_REG_WHOAMI] = 0x32 ;                            // Who AM I
+            registers_[NAVX_REG_HW_REV] = 0x42 ;                            // Board revision
+            registers_[NAVX_REG_FW_VER_MAJOR] = 0x02 ;                      // Firmware major revision
+            registers_[NAVX_REG_FW_VER_MINOR] = 0x03 ;                      // Firmware minor revision
+            registers_[NAVX_REG_OP_STATUS] = NAVX_OP_STATUS_NORMAL ;        // Operational status
+            registers_[NAVX_REG_CAL_STATUS] =                               // Calibration status
+                    NAVX_CAL_STATUS_IMU_CAL_COMPLETE | 
+                    NAVX_CAL_STATUS_MAG_CAL_COMPLETE | 
+                    NAVX_CAL_STATUS_BARO_CAL_COMPLETE ;
+            registers_[NAVX_REG_SENSOR_STATUS_L] =                          // Sensor status
+                    NAVX_SENSOR_STATUS_MOVING | 
+                    NAVX_SENSOR_STATUS_YAW_STABLE | 
+                    NAVX_SENSOR_STATUS_FUSED_HEADING_VALID ;
+            registers_[NAVX_REG_SELFTEST_STATUS] =                          // Self test status
+                    NAVX_SELFTEST_STATUS_COMPLETE | 
+                    NAVX_SELFTEST_RESULT_BARO_PASSED | 
+                    NAVX_SELFTEST_RESULT_MAG_PASSED |
+                    NAVX_SELFTEST_RESULT_GYRO_PASSED | 
+                    NAVX_SELFTEST_RESULT_MAG_PASSED ;
 
-
+            assert(theOneNavX == nullptr) ;
+            theOneNavX = this ;
         }
 
         NavXSim::~NavXSim()
         {
-        }        
+            assert(theOneNavX == this) ;
+            theOneNavX = nullptr ;
+        }
 
         bool NavXSim::create()
         {
@@ -152,6 +178,14 @@ namespace xero
                     msg.endMessage(getEngine().getSimulationTime()) ;
                 } while (--count != 0) ;
             }
+        }
+
+        void NavXSim::setYaw(double angle)
+        {
+            int16_t v = static_cast<int16_t>(angle * 100.0) ;
+            uint8_t *p = reinterpret_cast<uint8_t *>(&v) ;
+            registers_[NAVX_REG_YAW_L] = p[0] ;
+            registers_[NAVX_REG_YAW_H] = p[1] ;            
         }
     }
 }
