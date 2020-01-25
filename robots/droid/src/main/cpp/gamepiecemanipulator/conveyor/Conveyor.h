@@ -3,7 +3,6 @@
 namespace xero {
     namespace droid {
         class Conveyor : public xero::base::SingleMotorSubsystem {
-            friend class ConveyorPrepareToReceiveAction;
             friend class ConveyorPrepareToEmitAction;
             friend class ConveyorReceiveAction;
             friend class ConveyorEmitAction;
@@ -12,6 +11,13 @@ namespace xero {
             virtual ~Conveyor() {}
 
             void postHWInit() override;
+
+            int getBallCount() { return ballCount_; }
+
+            static const int MAX_BALLS = 5;
+
+        private:
+            int ballCount_ = 0;
         };
     }
 }

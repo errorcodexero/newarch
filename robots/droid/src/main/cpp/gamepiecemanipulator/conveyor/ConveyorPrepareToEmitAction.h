@@ -2,9 +2,9 @@
 
 namespace xero {
     namespace droid {
-        class ConveyorEmitAction : public ConveyorAction {
+        class ConveyorPrepareToEmitAction : public ConveyorAction {
         public:
-            ConveyorEmitAction(Conveyor &subsystem): ConveyorAction(subsystem) {}
+            ConveyorPrepareToEmitAction(Conveyor &subsystem): ConveyorAction(subsystem) {}
 
             void start() override;
             void run() override;
