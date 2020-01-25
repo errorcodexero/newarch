@@ -11,9 +11,6 @@ namespace xero
         class SimulatorEngine;
         class SimulationProperties
         {
-        private:
-            static constexpr const char *HALModelName = "___HAL___" ;
-
         public:
             SimulationProperties(SimulatorEngine &engine) ;
             virtual ~SimulationProperties() ;

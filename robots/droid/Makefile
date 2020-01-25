@@ -10,7 +10,7 @@ AUTOMODES = \
 SUBSYSTEMS = \
 	src/main/cpp/droidsubsystem/DroidSubsystem.cpp\
 	src/main/cpp/gamepiecemanipulator/shooter/Shooter.cpp\
-	src/main/cpp/gamepiecemanipulator/collector/Collector.cpp\
+	src/main/cpp/gamepiecemanipulator/intake/Intake.cpp\
 	src/main/cpp/gamepiecemanipulator/conveyor/Conveyor.cpp\
 	src/main/cpp/gamepiecemanipulator/GamePieceManipulator.cpp\
 	src/main/cpp/turret/Turret.cpp\

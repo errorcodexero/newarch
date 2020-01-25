@@ -5,26 +5,27 @@ namespace xero {
     namespace base {
         void AutoController::run() 
         {
-            if (!started_)
+            if (actionptr_ != nullptr)
             {
-                actionptr_->start();
-                started_ = true;
-            }
-            
-            auto oi = getRobot().getOI() ;
-            auto gp = oi->getDriverGamepad() ;
+                if (!started_)
+                {
+                    actionptr_->start();
+                    started_ = true;
+                }
+                
+                auto oi = getRobot().getOI() ;
+                auto gp = oi->getDriverGamepad() ;
 
-            //
-            // See if we need to switch to teleop.  This is only valid in games where
-            // the player can run (via sandstorm like setup) in automode.
-            //
-            if (gamepad_interrupt_ && gp->isCancelPressed()) {
-                getRobot().switchToTeleop() ;
-                if (actionptr_ != nullptr)
+                //
+                // See if we need to switch to teleop.  This is only valid in games where
+                // the player can run (via sandstorm like setup) in automode.
+                //
+                if (gamepad_interrupt_ && gp->isCancelPressed()) {
+                    getRobot().switchToTeleop() ;
                     actionptr_->cancel() ;
-            }
+                    actionptr_ = nullptr ;
+                }
 
-            if (actionptr_ != nullptr) {
                 actionptr_ ->run();
                 if (actionptr_->isDone())
                     actionptr_ = nullptr ;

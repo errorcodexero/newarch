@@ -95,6 +95,8 @@ namespace xero
             // Parse the command line arguments
             bool parseCommandLineArgs(int ac, char **av);
 
+            std::shared_ptr<SimulationModel> findModelInstance(const std::string &model, const std::string &inst);            
+
         private:
             static SimulatorEngine *theOne;
 

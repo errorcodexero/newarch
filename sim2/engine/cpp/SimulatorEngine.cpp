@@ -1,6 +1,7 @@
 #include <SimulatorEngine.h>
 #include <SimulationEvent.h>
 #include <SimulationModel.h>
+#include <SimulationModelEvent.h>
 #include <ModelFactory.h>
 #include <SimulatorStreamMessageSink.h>
 #include <CTREManager.h>
@@ -57,6 +58,17 @@ namespace xero
             models_.push_back(mptr) ;
 
             return mptr ;
+        }
+
+        std::shared_ptr<SimulationModel> SimulatorEngine::findModelInstance(const std::string &model, const std::string &inst)
+        {
+            for(auto m : models_)
+            {
+                if (m->getModelName() == model && m->getInstanceName() == inst)
+                    return m ;
+            }
+
+            return nullptr ;
         }
 
         bool SimulatorEngine::parseCommandLineArgs(int ac, char **av)
@@ -177,7 +189,6 @@ namespace xero
 
             msg_.startMessage(SimulatorMessages::MessageType::Debug, 1);
             msg_ << "SimulatorEngine: start ";
-            msg_ << " StarTime " << sim_time_ ;
             msg_.endMessage(sim_time_);                
 
             return ErrorCode::NoError;
@@ -211,6 +222,63 @@ namespace xero
 
         void SimulatorEngine::runEvents()
         {
+            int status = 0 ;
+            double now = HAL_GetFPGATime(&status) / 1.0e6 ;
+            bool looping = true ;
+
+            while (looping)
+            {
+                auto ev = events_->front() ;
+                if (ev == nullptr)
+                    break ;
+
+                if (ev->time() <= now)
+                {
+                    //
+                    // We are going to process this event, remove it from the event queue
+                    //
+                    events_->pop_front() ;
+
+                    std::shared_ptr<SimulationModelEvent> simev = std::dynamic_pointer_cast<SimulationModelEvent>(ev) ;
+                    if (simev != nullptr)
+                    {
+                        auto inst = findModelInstance(simev->modelName(), simev->instance()) ;
+                        if (inst != nullptr)
+                        {
+                            msg_.startMessage(SimulatorMessages::MessageType::Debug, 8);
+                            msg_ << "model " << simev->modelName() << " instance " << simev->instance() ;
+                            msg_ << "processing event [" << simev->toString() << "]" ;
+                            msg_ << "at time " << now ;
+                            msg_.endMessage(sim_time_);     
+
+                            inst->processEvent(simev->name(), simev->value()) ;
+                        }
+                        else
+                        {
+                            msg_.startMessage(SimulatorMessages::MessageType::Warning);
+                            msg_ << "model " << simev->modelName() << " instance " << simev->instance() ;
+                            msg_ << "event [" << simev->toString() << "]" ;
+                            msg_ << "at time " << now << " with invalid target" ;
+                            msg_.endMessage(sim_time_);                            
+                        }
+                    }
+                    else
+                    {
+                            msg_.startMessage(SimulatorMessages::MessageType::Warning);
+                            msg_ << "model " << simev->modelName() << " instance " << simev->instance() ;
+                            msg_ << "event [" << simev->toString() << "]" ;
+                            msg_ << "at time " << now << " is ignored due to unknown event type" ;
+                            msg_.endMessage(sim_time_);
+                    }
+                }
+                else
+                {
+                    //
+                    // Processed all relevant events, break out of this loop
+                    //
+                    looping = false ;
+                }
+            }
         }
 
         void SimulatorEngine::runModels()

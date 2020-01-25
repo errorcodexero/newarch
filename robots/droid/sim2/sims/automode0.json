@@ -1,11 +1,4 @@
 {
-    "durations" :
-    {
-        "start" : 1.0,
-        "auto" : 15.0,
-        "teleop" : 0.0,
-        "test" : 0.0
-    },
     "stimulus" :
     [
         {
@@ -13,11 +6,14 @@
             "events" :
             [
                 {
-                    "model" : "oi",
+                    "model" : "fms",
                     "instance" : "1",
-                    "values" :
+                    "values" : 
                     {
-                        "automode" : -1.0
+                        "start" : 1.0,
+                        "automode" : 15.0,
+                        "between" : 2.0,
+                        "teleop" : 15.0
                     }
                 },
                 {

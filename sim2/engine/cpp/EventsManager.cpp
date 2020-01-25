@@ -20,30 +20,6 @@ namespace xero
             
         }   
 
-        bool EventsManager::loadDurations(nlohmann::json obj)
-        {
-            if (!obj.is_object())
-                return false;
-
-            if (!obj.at("start").is_number())
-                return false;
-            start_ = obj.value("start", 0.0);
-
-            if (!obj.at("auto").is_number())
-                return false;
-            auto_ = obj.value("auto", 0.0);
-
-            if (!obj.at("teleop").is_number())
-                return false;
-            teleop_ = obj.value("teleop", 0.0);
-
-            if (!obj.at("test").is_number())
-                return false;
-            test_ = obj.value("test", 0.0);
-
-            return true;
-        }      
-
         bool EventsManager::loadStimulus(nlohmann::json stobj)
         {
             if (!stobj.is_array())
@@ -120,9 +96,6 @@ namespace xero
 
             nlohmann::json obj = nlohmann::json::parse(strm);
             strm.close();
-
-            if (!loadDurations(obj.at("durations")))
-                return false;
 
             if (!loadStimulus(obj.at("stimulus")))
                 return false;

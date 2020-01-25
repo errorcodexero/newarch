@@ -29,6 +29,8 @@ namespace xero
             }            
 
             virtual void run(uint64_t microdt) = 0;
+            virtual void processEvent(const std::string &name, const SimValue &value) {                
+            }
 
             void setProperty(const std::string &name, const SimValue &value) {
                 props_[name] = value;

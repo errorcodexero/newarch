@@ -1,5 +1,7 @@
 TOPDIR=../..
 
+include $(TOPDIR)/makefiles/defaults.mk
+
 SOURCES = \
 	./src/AHRS.cpp\
 	./src/ContinuousAngleTracker.cpp\

@@ -3,6 +3,7 @@
 #include <SimulationModel.h>
 #include <mockdata/SPIData.h>
 #include <memory>
+#include <mutex>
 
 namespace xero
 {
@@ -16,6 +17,9 @@ namespace xero
 
             virtual bool create() ;
             virtual void run(uint64_t microdt);
+            void setYaw(double angle) ;
+                        
+            static NavXSim *getNavXSim() ;
 
         private:
             constexpr static const char *IndexName = "hw:index" ;
@@ -31,9 +35,15 @@ namespace xero
             uint8_t getCRC(uint8_t message[], uint8_t length) ;
 
         private:
+            uint64_t timestamp_ ;
+            bool read_transaction_ ;
             int index_ ;
+            int addr_ ;
+            int count_ ;
             bool active_ ;
             std::array<uint8_t, 256> registers_ ;
+            std::mutex lock_ ;
+            static NavXSim *theOneNavX ;
         };
     }
 }

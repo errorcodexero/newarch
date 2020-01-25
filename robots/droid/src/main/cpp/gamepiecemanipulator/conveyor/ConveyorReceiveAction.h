@@ -8,6 +8,15 @@ namespace xero {
 
             void start() override;
             void run() override;
+
+        private:
+            enum class State {
+                Preparing,
+                Ready,
+                StartingReceive,
+                FinishingReceive
+            };
+            State state_ = State::Preparing;
         } ;
     }
 }

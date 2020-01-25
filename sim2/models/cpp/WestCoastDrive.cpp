@@ -1,4 +1,5 @@
 #include <WestCoastDrive.h>
+#include <NavXSim.h>
 #include <SimulatorEngine.h>
 #include <SimulatedMotor.h>
 #include <xeromath.h>
@@ -134,19 +135,17 @@ namespace xero
                 getEngine().setEncoder(right_enc_[0], right_enc_[1], right_enc_value_) ;                
             }
 
-#ifdef NOTYET
-            if (navx_ != nullptr) {
-                double deg = xero::math::normalizeAngleDegrees(-rad2deg(angle_ + navx_offset_)) ;
-                navx_->SimulatorSetYaw(deg) ;
-                navx_->SimulatorSetTotalAngle(-rad2deg(total_angle_ + navx_offset_));
+            NavXSim *navx = NavXSim::getNavXSim() ;
+            if (navx != nullptr)
+            {
+                double deg = xero::math::normalizeAngleDegrees(-xero::math::rad2deg(angle_)) ;
+                navx->setYaw(deg) ;
             }
-#endif            
         }
 
         
         double WestCoastDrive::capValue(double prev, double target, double maxchange) {
             double ret ;
-
             if (target > prev) {
                 if (target > prev + maxchange)
                     ret = prev + maxchange ;
