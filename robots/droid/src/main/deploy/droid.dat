@@ -74,21 +74,6 @@ controlpanelrotator:hold:max                                    1
 controlpanelrotator:hold:imax                                   1
 
 #
-# Drivebase
-#
-
-
-
-# Drivebase encoders
-hw:tankdrive:encoders:left:1                                    0                           # Digital IO
-hw:tankdrive:encoders:left:2                                    1                           # Digital IO
-hw:tankdrive:encoders:right:1                                   2                           # Digital IO
-hw:tankdrive:encoders:right:2                                   3                           # Digital IO
-
-# Drivebase shifter
-hw:tankdrive:shifter                                            0                           # Solenoid to shift between high and low gear
-
-#
 # Driver station
 #
 hw:driverstation:hid:driver                                     0               # HID Device Index

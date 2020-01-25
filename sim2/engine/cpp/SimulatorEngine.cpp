@@ -224,9 +224,8 @@ namespace xero
         {
             int status = 0 ;
             double now = HAL_GetFPGATime(&status) / 1.0e6 ;
-            bool looping = true ;
 
-            while (looping)
+            while (events_->size() > 0)
             {
                 auto ev = events_->front() ;
                 if (ev == nullptr)
@@ -265,7 +264,6 @@ namespace xero
                     else
                     {
                             msg_.startMessage(SimulatorMessages::MessageType::Warning);
-                            msg_ << "model " << simev->modelName() << " instance " << simev->instance() ;
                             msg_ << "event [" << simev->toString() << "]" ;
                             msg_ << "at time " << now << " is ignored due to unknown event type" ;
                             msg_.endMessage(sim_time_);
@@ -273,10 +271,7 @@ namespace xero
                 }
                 else
                 {
-                    //
-                    // Processed all relevant events, break out of this loop
-                    //
-                    looping = false ;
+                    break ;
                 }
             }
         }

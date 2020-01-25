@@ -240,20 +240,6 @@ namespace xero {
 
             last_dist_l_ = dist_l_ ;
             last_dist_r_ = dist_r_ ;
-
-#ifdef USE_NAVX
-            if (navx_ != nullptr) {
-                double vx = navx_->GetVelocityX() ;
-                double vy = navx_->GetVelocityY() ;
-                double vz = navx_->GetVelocityZ() ;
-                xyz_velocity_ = std::sqrt(vx * vx + vy * vy + vz * vz) * 39.3701 ; 
-            }
-            else {
-                xyz_velocity_ = 0.0 ;
-            }
-#else
-            xyz_velocity_ = 0.0 ;
-#endif
         }
 
         void TankDrive::setMotorsToPercents(double left_percent, double right_percent) {

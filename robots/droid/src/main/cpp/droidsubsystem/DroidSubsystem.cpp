@@ -16,10 +16,11 @@ namespace xero {
 
             addTankDrive() ;
 
-#ifndef SIM2
             oi_ = std::make_shared<DroidOISubsystem>(this) ;
-            addChild(oi_) ;
-            
+            addChild(oi_) ;            
+
+#ifdef NOTYET
+#ifndef SIM2
             control_panel_rotator_ = std::make_shared<ControlPanelRotator>(this);
             addChild(control_panel_rotator_);
 
@@ -32,6 +33,7 @@ namespace xero {
             turret_ = std::make_shared<Turret>(this);
             addChild(turret_);
 #endif            
+#endif
         }
 
         DroidSubsystem::~DroidSubsystem() {
