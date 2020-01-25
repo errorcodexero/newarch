@@ -13,7 +13,9 @@
                         "start" : 1.0,
                         "automode" : 15.0,
                         "between" : 2.0,
-                        "teleop" : 15.0
+                        "teleop" : 15.0,
+                        "fms" : true,
+                        "station" : "blue1"
                     }
                 }
             ]
