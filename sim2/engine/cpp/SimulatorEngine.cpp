@@ -177,7 +177,6 @@ namespace xero
 
             msg_.startMessage(SimulatorMessages::MessageType::Debug, 1);
             msg_ << "SimulatorEngine: start ";
-            msg_ << " StarTime " << sim_time_ ;
             msg_.endMessage(sim_time_);                
 
             return ErrorCode::NoError;

@@ -7,8 +7,6 @@
 
 using namespace xero::sim2;
 
-xero::models::NavXSim *blah = nullptr ;
-
 namespace xero
 {
     namespace models
@@ -40,7 +38,6 @@ namespace xero
 
         NavXSim::NavXSim(SimulatorEngine &engine, const std::string &inst) : SimulationModel(engine, "NavXSim", inst)
         {
-            blah = this ;
             active_ = false ;
 
             for(size_t i = 0 ; i < registers_.size() ; i++)
@@ -68,6 +65,8 @@ namespace xero
 
             assert(theOneNavX == nullptr) ;
             theOneNavX = this ;
+            read_transaction_ = false ;
+            timestamp_ = 0 ;
         }
 
         NavXSim::~NavXSim()
@@ -91,7 +90,8 @@ namespace xero
         {
             std::lock_guard<std::mutex> lock(lock_);            
 
-            uint64_t ts = getEngine().getSimulationTime() / 1000 ;
+            timestamp_ += microdt ;
+            uint64_t ts = timestamp_ / 1000 ;
 
             registers_[NAVX_REG_TIMESTAMP_L_L] = static_cast<uint8_t>((ts >> 0) & 0xFF) ;
             registers_[NAVX_REG_TIMESTAMP_L_H] = static_cast<uint8_t>((ts >> 8) & 0xFF) ;
@@ -143,40 +143,66 @@ namespace xero
                 msg << " - simulated NAVX SPI bus read " << count << " bytes" ;
                 msg.endMessage(getEngine().getSimulationTime()) ;
 
-                int addr = buffer[0] ;
+                assert(count - 1 == static_cast<unsigned int>(count_)) ;
+
                 int index = 0 ;
-                count -= 2 ;
-                do
-                {
-                    buffer[index++] = registers_[addr++] ;
-                } while (--count != 0);
+                for(int i = 0 ; i < count_ ; i ++)
+                    buffer[index++] = registers_[addr_++] ;
                 
-                buffer[index] = getCRC(buffer, count) ;
+                buffer[index] = getCRC(buffer, count_) ;
             }
+
+            read_transaction_ = false ;
         }
 
         void NavXSim::SPIWrite(const std::string &name, const unsigned char *buffer, unsigned int count)
         {
-            if (active_ && (buffer[0] & 0x80) == 0x80)
+            if (active_)
             {
-                std::lock_guard<std::mutex> lock(lock_);
-                                
-                SimulatorMessages &msg = getEngine().getMessageOutput() ;
-                msg.startMessage(SimulatorMessages::MessageType::Debug, 9) ;
-                msg << "model " << getModelName() << " instance " << getInstanceName() ;
-                msg << " - simulated NAVX SPI bus write " << count << " bytes" ;
-                msg.endMessage(getEngine().getSimulationTime()) ;
-
-                int addr = buffer[0] & 0x7F ;
-                int index = 1 ;
-                count -= 2 ;
-                do {
-                    registers_[addr++] = buffer[index++] ;
+                if ((buffer[0] & 0x80) == 0x80)
+                {
+                    std::lock_guard<std::mutex> lock(lock_);
+                                    
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;
                     msg.startMessage(SimulatorMessages::MessageType::Debug, 9) ;
                     msg << "model " << getModelName() << " instance " << getInstanceName() ;
-                    msg << " - wrote register " << (buffer[0] & 0x7F) << " value " << buffer[1] ;
+                    msg << " - simulated NAVX SPI bus write " << count << " bytes" ;
                     msg.endMessage(getEngine().getSimulationTime()) ;
-                } while (--count != 0) ;
+
+                    int addr = buffer[0] & 0x7F ;
+                    int index = 1 ;
+                    count -= 2 ;
+                    do {
+                        registers_[addr++] = buffer[index++] ;
+                        msg.startMessage(SimulatorMessages::MessageType::Debug, 9) ;
+                        msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                        msg << " - wrote register " << (buffer[0] & 0x7F) << " value " << buffer[1] ;
+                        msg.endMessage(getEngine().getSimulationTime()) ;
+                    } while (--count != 0) ;
+                }
+                else if (!read_transaction_ && count == 3)
+                {
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;                     
+
+                    addr_ = buffer[0] ;
+                    count_ = buffer[1] ;
+
+                    if (static_cast<size_t>(addr_) < registers_.size() && static_cast<size_t>(addr_ + count_) <= registers_.size())
+                    {
+                        msg.startMessage(SimulatorMessages::MessageType::Debug, 9) ;
+                        msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                        msg << " - write portion of read request, addr " << addr_ << " count " << count_ ;
+                        msg.endMessage(getEngine().getSimulationTime()) ;
+                        read_transaction_ = true ;
+                    }
+                    else
+                    {                       
+                        msg.startMessage(SimulatorMessages::MessageType::Warning) ;
+                        msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                        msg << " - invalid read request, addr " << addr_ << " count " << count_ ;
+                        msg.endMessage(getEngine().getSimulationTime()) ;                        
+                    }
+                }
             }
         }
 

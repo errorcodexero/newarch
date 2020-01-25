@@ -15,6 +15,7 @@ using namespace xero::models;
 //
 USE_SIMULATION_MODEL(WestCoastDrive, "westcoastdrive");
 USE_SIMULATION_MODEL(NavXSim, "navxsim");
+USE_SIMULATION_MODEL(FMS, "fms") ;
 #endif
 
 int main(int ac, char **av)
