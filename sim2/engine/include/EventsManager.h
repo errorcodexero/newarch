@@ -30,9 +30,7 @@ namespace xero
             }
 
         private:
-            bool loadDurations(nlohmann::json obj);
             bool loadStimulus(nlohmann::json obj);
-
             void insertEvent(std::shared_ptr<SimulationEvent> ev);
 
         private:

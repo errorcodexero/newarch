@@ -17,6 +17,10 @@ namespace xero
 
             virtual bool create() ;
             virtual void run(uint64_t microdt);
+            virtual void processEvent(const std::string &name, const xero::sim2::SimValue &value) ;
+
+        private:
+            void setProperty(const std::string &name, const xero::sim2::SimValue &value, double &target) ;
 
         private:
             enum class FMSState
@@ -25,17 +29,18 @@ namespace xero
                 Auto,           // Automode for 15 seconds
                 Between,        // Disabled for 2 seconds
                 Teleop,         // Teleop for 135 seconds
+                MessageDone,    // Send a message that we are done
                 Done,           // Disabled
             } ;
 
         private:
             FMSState state_ ;
-            uint64_t period_start_time_ ;
+            double period_start_time_ ;
 
-            uint64_t start_time_ ;
-            uint64_t auto_time_ ;
-            uint64_t between_time_ ;
-            uint64_t teleop_time_ ;
+            double start_time_ ;
+            double auto_time_ ;
+            double between_time_ ;
+            double teleop_time_ ;
         };
     }
 }

@@ -36,7 +36,7 @@ namespace xero
             obj->SPIWrite(name, buffer, count) ;            
         }                
 
-        NavXSim::NavXSim(SimulatorEngine &engine, const std::string &inst) : SimulationModel(engine, "NavXSim", inst)
+        NavXSim::NavXSim(SimulatorEngine &engine, const std::string &inst) : SimulationModel(engine, "navxsim", inst)
         {
             active_ = false ;
 

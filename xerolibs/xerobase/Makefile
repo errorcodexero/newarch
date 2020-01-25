@@ -1,5 +1,7 @@
 TOPDIR=../..
 
+include $(TOPDIR)/makefiles/defaults.mk
+
 #
 # Note, the lifter, single motor subsystem, and camera tracker are excluded as 
 # they are not compatible with the GoPiGo3 robot.

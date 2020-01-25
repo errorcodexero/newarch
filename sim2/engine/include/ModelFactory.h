@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SimulatorEngine.h>
+#include <SimulationModel.h>
 #include <string>
 #include <memory>
 #include <list>
@@ -40,6 +41,11 @@ namespace xero
                 return models_;
             }
 
+        protected:
+            const std::string &getFactoryName() {
+                return name_ ;
+            }
+
         private:
             std::string name_;
 
@@ -57,7 +63,17 @@ namespace xero
             }
 
             virtual std::shared_ptr<SimulationModel> createModel(SimulatorEngine &engine, const std::string &inst) {
-                return std::make_shared<T>(engine, inst);
+                auto ret = std::make_shared<T>(engine, inst);
+
+                //
+                // The registered factor name must match the model name for the time being.  This may change in the
+                // future where a single factory can create models of a given type, but with different model names.  This
+                // is not true now so enforce that the model name (as in the SimulationModel constructor call) matches
+                // the factory name
+                //
+                assert(ret->getModelName() == getFactoryName()) ;
+
+                return ret ;
             };        
         };
     }

@@ -21,6 +21,8 @@ namespace xero {
         void DroidAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             AutoModePtr mode = nullptr ;
 
+            sel = 7 ;
+
             switch(sel) {
             case 0:
                 mode = std::make_shared<DroidAutoMode>(getRobot(), "Mode 0", "The one and only automode");

@@ -32,6 +32,7 @@
             "model" : "navxsim",
             "instance" : "1",
             "hardware" : {
+                "interface" : "SPI",
                 "index" : 4
             },
             "behavior" : {
@@ -43,6 +44,10 @@
             "hardware" : {
             },
             "behavior" : {
+                "start" : 1.0,
+                "automode" : 15.0,
+                "between" : 2.0,
+                "teleop" : 135.0
             }            
         }
     ]
