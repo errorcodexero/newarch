@@ -29,8 +29,7 @@ namespace xero
                 Auto,           // Automode for 15 seconds
                 Between,        // Disabled for 2 seconds
                 Teleop,         // Teleop for 135 seconds
-                MessageDone,    // Send a message that we are done
-                Done,           // Disabled
+                Done,           // Done and disabled
             } ;
 
         private:

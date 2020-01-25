@@ -224,9 +224,14 @@ namespace xero
         {
             int status = 0 ;
             double now = HAL_GetFPGATime(&status) / 1.0e6 ;
-            while (true)
+            bool looping = true ;
+
+            while (looping)
             {
                 auto ev = events_->front() ;
+                if (ev == nullptr)
+                    break ;
+                    
                 if (ev->time() <= now)
                 {
                     //
@@ -239,12 +244,21 @@ namespace xero
                     {
                         auto inst = findModelInstance(simev->modelName(), simev->instance()) ;
                         if (inst != nullptr)
+                        {
+                            msg_.startMessage(SimulatorMessages::MessageType::Debug, 8);
+                            msg_ << "mode " << simev->modelName() << " instance " << simev->instance() ;
+                            msg_ << "processing event [" << simev->toString() << "]" ;
+                            msg_ << "at time " << now ;
+                            msg_.endMessage(sim_time_);     
+
                             inst->processEvent(simev->name(), simev->value()) ;
+                        }
                         else
                         {
                             msg_.startMessage(SimulatorMessages::MessageType::Warning);
                             msg_ << "mode " << simev->modelName() << " instance " << simev->instance() ;
-                            msg_ << "event at time " << now << " with invalid target" ;
+                            msg_ << "event [" << simev->toString() << "]" ;
+                            msg_ << "at time " << now << " with invalid target" ;
                             msg_.endMessage(sim_time_);                            
                         }
                     }
@@ -254,7 +268,7 @@ namespace xero
                     //
                     // Processed all relevant events, break out of this loop
                     //
-                    break ;
+                    looping = false ;
                 }
             }
         }

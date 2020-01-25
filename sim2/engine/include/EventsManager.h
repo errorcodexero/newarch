@@ -21,6 +21,10 @@ namespace xero
             bool loadEvents(const std::string &simfile) ;
             void addEvent(double t, const std::string &model, const std::string &inst, const std::string &name, const SimValue &value);
 
+            size_t size() {
+                return events_.size() ;
+            }
+
             std::shared_ptr<SimulationEvent> front() {
                 return events_.front() ;
             }

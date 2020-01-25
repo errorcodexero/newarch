@@ -88,6 +88,11 @@ namespace xero
                     HALSIM_SetDriverStationEnabled(true) ;
                     state_ = FMSState::Auto ;
                     period_start_time_ = HAL_GetFPGATime(&status) ;
+
+                    msg.startMessage(SimulatorMessages::MessageType::Debug, 4) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - transitioning to AUTOMODE" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;                     
                 }
                 break ;
 
@@ -96,7 +101,12 @@ namespace xero
                 {
                     HALSIM_SetDriverStationEnabled(false) ;
                     state_ = FMSState::Between ;
-                    period_start_time_ = HAL_GetFPGATime(&status) ;                    
+                    period_start_time_ = HAL_GetFPGATime(&status) ;
+
+                    msg.startMessage(SimulatorMessages::MessageType::Debug, 4) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - transitioning to BETWEEN" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;                       
                 }            
                 break ;
 
@@ -106,7 +116,12 @@ namespace xero
                     HALSIM_SetDriverStationAutonomous(false) ;                     
                     HALSIM_SetDriverStationEnabled(true) ;
                     state_ = FMSState::Teleop ;
-                    period_start_time_ = HAL_GetFPGATime(&status) ;                    
+                    period_start_time_ = HAL_GetFPGATime(&status) ;     
+
+                    msg.startMessage(SimulatorMessages::MessageType::Debug, 4) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - transitioning to TELEOP" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;                                    
                 }              
                 break ;
 
@@ -115,18 +130,14 @@ namespace xero
                 {
                     HALSIM_SetDriverStationEnabled(false) ;
                     state_ = FMSState::Done ;
-                    period_start_time_ = HAL_GetFPGATime(&status) ;                    
+                    period_start_time_ = HAL_GetFPGATime(&status) ;
+
+                    msg.startMessage(SimulatorMessages::MessageType::Debug, 4) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - transitioning to DONE" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;                                          
                 }               
                 break ;
-
-            case FMSState::MessageDone:
-                msg.startMessage(SimulatorMessages::MessageType::Debug, 1) ;
-                msg << "model " << getModelName() << " instance " << getInstanceName() ;
-                msg << " - end of match" ;
-                msg.endMessage(getEngine().getSimulationTime()) ;            
-
-                state_ = FMSState::Done ;
-                break ;                  
 
             case FMSState::Done:
                 break ;                                              
