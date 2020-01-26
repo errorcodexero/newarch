@@ -13,8 +13,8 @@ namespace xero
         class IntakeModel : public xero::sim2::SimulationModel
         {
         public:
-            DroidOIModel(xero::sim2::SimulatorEngine &engine, const std::string &inst);
-            virtual ~DroidOIModel();
+            IntakeModel(xero::sim2::SimulatorEngine &engine, const std::string &inst);
+            virtual ~IntakeModel();
 
             virtual bool create() ;
             virtual void run(uint64_t microdt);
@@ -22,7 +22,7 @@ namespace xero
 
         private:
             std::shared_ptr<xero::sim2::SimulatedMotor> intake_up_down_ ;
-            std::shared_ptr<xero::sim2::SimulatedMotor> intake_on_off_ ;     
+            std::shared_ptr<xero::sim2::SimulatedMotor> intake_spin_ ;     
         };
     }
 }

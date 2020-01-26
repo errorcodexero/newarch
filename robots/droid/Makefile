@@ -8,43 +8,38 @@ AUTOMODES = \
 	src/main/cpp/automodes/DroidTestTuneMode.cpp
 
 SUBSYSTEMS = \
+	src/main/cpp/droidoi/DroidOIDevice.cpp\
+	src/main/cpp/droidoi/DroidOISubsystem.cpp\
 	src/main/cpp/droidsubsystem/DroidSubsystem.cpp\
-	src/main/cpp/gamepiecemanipulator/shooter/Shooter.cpp\
-	src/main/cpp/gamepiecemanipulator/intake/Intake.cpp\
 	src/main/cpp/gamepiecemanipulator/conveyor/Conveyor.cpp\
+	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorAction.cpp\
+	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorEmitAction.cpp\
+	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorPrepareToEmitAction.cpp\
+	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorReceiveAction.cpp\
+	src/main/cpp/gamepiecemanipulator/ShootAction.cpp\
+	src/main/cpp/gamepiecemanipulator/shooter/FireAction.cpp\
+	src/main/cpp/gamepiecemanipulator/shooter/Shooter.cpp\
+	src/main/cpp/gamepiecemanipulator/intake/arm/Arm.cpp\
+	src/main/cpp/gamepiecemanipulator/intake/Intake.cpp\
 	src/main/cpp/gamepiecemanipulator/GamePieceManipulator.cpp\
+	src/main/cpp/turret/FollowTargetAction.cpp\
 	src/main/cpp/turret/Turret.cpp\
-	src/main/cpp/controlpanelrotator/ControlPanelRotator.cpp\
 	src/main/cpp/climber/Climber.cpp\
+	src/main/cpp/controlpanelrotator/ControlPanelRotator.cpp\
     src/main/cpp/controlpanelrotator/RotateControlPanelAction.cpp
 
 MODELS = \
-	src/models/cpp/droidoimodel.cpp	
+	src/models/cpp/DroidOIModel.cpp\
+	src/models/cpp/IntakeModel.cpp
 
 SOURCES = \
 	src/main/cpp/main.cpp\
 	src/main/cpp/Droid.cpp\
-	src/main/cpp/droidoi/DroidOIDevice.cpp\
-	src/main/cpp/droidoi/DroidOISubsystem.cpp\
 	$(SUBSYSTEMS)\
 	$(AUTOMODES)\
 	$(MODELS)
 
-
-
 TARGET = droid
-
-ifeq ($(PLATFORM),SIMULATOR)
-NEED_WPILIB=true
-NEED_WPIUTIL=true
-NEED_CTRE=true
-NEED_REV=true
-NEED_NAVX=true
-NEED_NETWORKTABLES=true
-NEED_XEROMISC=true
-NEED_XEROBASE=true
-NEED_MODELS=true
-endif
 
 ifeq ($(PLATFORM),SIM2)
 NEED_XEROMISC=true
@@ -77,3 +72,4 @@ $(error This robot is not supported by the GOPIGO platform)
 endif
 
 include $(TOPDIR)/makefiles/buildexe.mk
+
