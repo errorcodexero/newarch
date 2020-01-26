@@ -29,6 +29,20 @@
             }
         },
         {
+            "model" : "drivergamepad",
+            "instance" : "1",
+            "hardware" : {
+                "index" : 0
+            },
+            "behavior" : {
+                "xbox" : true,
+                "name" : "Simulated XBox Controller",
+                "axes" : 6,
+                "buttons" : 10,
+                "povs" : 1
+            }
+        },        
+        {
             "model" : "navxsim",
             "instance" : "1",
             "hardware" : {

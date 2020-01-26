@@ -246,8 +246,8 @@ namespace xero
                         {
                             msg_.startMessage(SimulatorMessages::MessageType::Debug, 8);
                             msg_ << "model " << simev->modelName() << " instance " << simev->instance() ;
-                            msg_ << "processing event [" << simev->toString() << "]" ;
-                            msg_ << "at time " << now ;
+                            msg_ << " processing event [" << simev->toString() << "]" ;
+                            msg_ << " at time " << now ;
                             msg_.endMessage(sim_time_);     
 
                             inst->processEvent(simev->name(), simev->value()) ;
@@ -256,8 +256,8 @@ namespace xero
                         {
                             msg_.startMessage(SimulatorMessages::MessageType::Warning);
                             msg_ << "model " << simev->modelName() << " instance " << simev->instance() ;
-                            msg_ << "event [" << simev->toString() << "]" ;
-                            msg_ << "at time " << now << " with invalid target" ;
+                            msg_ << " event [" << simev->toString() << "]" ;
+                            msg_ << " at time " << now << " with invalid target" ;
                             msg_.endMessage(sim_time_);                            
                         }
                     }

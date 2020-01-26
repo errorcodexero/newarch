@@ -20,7 +20,7 @@ namespace xero
             virtual void processEvent(const std::string &name, const xero::sim2::SimValue &value) ;
 
         private:
-            void setProperty(const std::string &name, const xero::sim2::SimValue &value, double &target) ;
+            double setProperty(const std::string &name, const xero::sim2::SimValue &value, double target) ;
 
         private:
             enum class FMSState

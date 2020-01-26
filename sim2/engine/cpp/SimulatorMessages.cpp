@@ -72,7 +72,7 @@ namespace xero
 
         void SimulatorMessages::endMessage(int64_t t)
         {
-            std::string outmsg = std::to_string(t);
+            std::string outmsg = std::to_string(static_cast<double>(t/1e6));
 
             switch(mt_)
             {

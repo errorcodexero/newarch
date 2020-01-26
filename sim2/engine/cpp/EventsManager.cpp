@@ -94,8 +94,18 @@ namespace xero
             msg << "reading simulation event file '" << path << "'";
             msg.endMessage(engine_.getSimulationTime());                
 
-            nlohmann::json obj = nlohmann::json::parse(strm);
-            strm.close();
+            nlohmann::json obj ;
+            try {
+                obj = nlohmann::json::parse(strm);
+                strm.close();
+            }
+            catch(const std::exception &ex)
+            {
+                msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                msg << "error reading simulation event file '" << path << "'" ;
+                msg << " - " << ex.what() ;
+                msg.endMessage(engine_.getSimulationTime());                 
+            }
 
             if (!loadStimulus(obj.at("stimulus")))
                 return false;

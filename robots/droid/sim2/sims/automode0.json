@@ -19,6 +19,20 @@
                     }
                 }
             ]
+        },
+        {
+            "time" : 20.0,
+            "events" :
+            [
+                {
+                    "model" : "drivergamepad",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "axis1" : 1.0
+                    }
+                }
+            ]
         }
     ]
 }

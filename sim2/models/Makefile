@@ -5,7 +5,8 @@ include $(TOPDIR)/makefiles/defaults.mk
 SOURCES = \
 	./cpp/WestCoastDrive.cpp\
 	./cpp/NavXSim.cpp\
-	./cpp/FMS.cpp
+	./cpp/FMS.cpp\
+	./cpp/DriverGamePad.cpp
 
 TARGET=models
 NEED_WPIUTIL=true
