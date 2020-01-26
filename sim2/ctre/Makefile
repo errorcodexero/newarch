@@ -1,5 +1,7 @@
 TOPDIR=../..
 
+include $(TOPDIR)/makefiles/defaults.mk
+
 SOURCES = \
 	./src/ctre/phoenix/MotorControl/IMotorController.cpp
 

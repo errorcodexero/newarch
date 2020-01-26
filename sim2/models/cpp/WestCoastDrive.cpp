@@ -3,6 +3,7 @@
 #include <SimulatorEngine.h>
 #include <SimulatedMotor.h>
 #include <xeromath.h>
+#include <mockdata/PCMData.h>
 #include <iostream>
 
 using namespace xero::sim2;
@@ -20,6 +21,8 @@ namespace xero
 
         WestCoastDrive::WestCoastDrive(SimulatorEngine &engine, const std::string &inst) : SimulationModel(engine, "westcoastdrive", inst)
         {
+            shifter_ = -1 ;
+            shifter_inverted_ = false ;
         }
 
         WestCoastDrive::~WestCoastDrive()
@@ -114,9 +117,62 @@ namespace xero
                 return false ;
 
             left_motor_mult_ = 1.0 ;
-            right_motor_mult_ = -1.0 ;
+            right_motor_mult_ = 1.0 ;
 
-            highGear() ;
+            if (hasProperty(InvertLeftMotor))
+            {
+                const SimValue &v = getProperty(InvertLeftMotor) ;
+                if (!v.isBoolean())
+                {
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                    msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - has property '" << InvertLeftMotor << "' but type is not boolean" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;
+                    return false ;
+                }
+
+                if (v.getBoolean())
+                    left_motor_mult_ = -1 ;
+            }
+
+            if (hasProperty(InvertRightMotor))
+            {
+                const SimValue &v = getProperty(InvertRightMotor) ;
+                if (!v.isBoolean())
+                {
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                    msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - has property '" << InvertRightMotor << "' but type is not boolean" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;
+                    return false ;
+                }
+
+                if (v.getBoolean())
+                    right_motor_mult_ = -1 ;
+            }           
+
+            left_encoder_mult_ = 1.0 ;
+            right_encoder_mult_ = 1.0 ;
+
+            setGear() ;
+
+            if (hasProperty(ShifterName))
+            {
+                const SimValue &v = getProperty(ShifterName) ;
+                if (!v.isInteger())
+                {
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                    msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - has property 'shifter' but type is not an integer" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;
+                    return false ;
+                }
+
+                shifter_ = v.getInteger() ;
+            }
 
             registerDataFormat("drivebase", ValueNames) ;
             return true ;
@@ -141,15 +197,54 @@ namespace xero
             total_angle_ += dangle;
         }        
 
-        void WestCoastDrive::run(uint64_t microdt) {
+        void WestCoastDrive::setGear()
+        {
+            if (shifter_ == -1) 
+            {
+                highGear() ;
+            }
+            else
+            {
+                if (HALSIM_GetPCMSolenoidOutput(0, shifter_))
+                {
+                    //
+                    // Shifter is enabled
+                    //
+                    if (shifter_inverted_)
+                        lowGear() ;
+                    else
+                        highGear() ;
+                }
+                else
+                {
+                    //
+                    // Shifter is NOT enabled
+                    //
+                    if (shifter_inverted_)
+                        highGear() ;
+                    else
+                        lowGear() ;
+                }
+            }
+        }
+
+        void WestCoastDrive::run(uint64_t microdt) 
+        {
             double timesec = static_cast<double>(microdt) / 1.0e6 ;
 
-            // TODO check the shifter solenoid and change gears if required
+            setGear() ;
 
             double leftpower = left_motor_->get();
             double rightpower = right_motor_->get();
 
-            std::cout << "power " << leftpower << " " << rightpower << std::endl ;
+            if (std::fabs(leftpower) > 0.01 || std::fabs(rightpower) > 0.01)
+            {
+                SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Debug, 10) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                msg << " - is being actively powered" ;
+                msg.endMessage(getEngine().getSimulationTime()) ;                
+            }
 
             //
             // Calculate the new desired revolutions per second (RPS)
@@ -213,7 +308,6 @@ namespace xero
             data_.push_back(deg) ;
             presentDataValues(data_) ;
         }
-
         
         double WestCoastDrive::capValue(double prev, double target, double maxchange) {
             double ret ;
@@ -283,6 +377,10 @@ namespace xero
             if (!getDriveParameter("length", d))
                 return false ;
             length_ = d ;
+
+            if (!getDriveParameter("ticks_per_rev", d))
+                return false ;
+            ticks_per_rev_ = d ;
 
             if (!getDriveParameter("high:maxvelocity", maxhighvel))
                 return false ;

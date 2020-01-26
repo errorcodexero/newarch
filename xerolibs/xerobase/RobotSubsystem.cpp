@@ -24,6 +24,12 @@ namespace xero {
         }
 
         void RobotSubsystem::addTankDrive() {
+            //
+            // TODO - Most subsystems part the queries file themselves.  This is the
+            //        only place where a parent does the query.  Move this code down into
+            //        the TankDrive subsystem.
+            //
+
             auto &settings = getRobot().getSettingsParser() ;
             auto &logger = getRobot().getMessageLogger() ;
 

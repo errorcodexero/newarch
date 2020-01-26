@@ -79,6 +79,63 @@ namespace xero
         {
             index_ = getInteger(IndexName) ;
 
+            if (!hasProperty("hw:interface"))
+            {
+                SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                msg << " - the hardware interface 'interface' has not been specified, must be 'SPI', 'I2C', or 'UART'" ;
+                msg.endMessage(getEngine().getSimulationTime()) ;
+                return false ;
+            }
+
+            const SimValue &prop = getProperty("hw:interface") ;
+            if (!prop.isString())
+            {
+                SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                msg << " - the hardware interface 'interface' has been specified, but is not a string, must be 'SPI', 'I2C', or 'UART'" ;
+                msg.endMessage(getEngine().getSimulationTime()) ;  
+                return false ;              
+            }
+
+            if (prop.getString() == "SPI")
+            {
+                SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Debug, 5) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                msg << " - the hardware interface 'SPI' has been initialized" ;
+                msg.endMessage(getEngine().getSimulationTime()) ;                 
+            }
+            else if (prop.getString() == "I2C")
+            {
+                SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                msg << " - the hardware interface 'I2C' is valid, but is not supported by the model (yet)" ;
+                msg.endMessage(getEngine().getSimulationTime()) ; 
+                return false ;
+            }
+            else if (prop.getString() == "UART")
+            {
+                SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                msg << " - the hardware interface 'UART' is valid, but is not supported by the model (yet)" ;
+                msg.endMessage(getEngine().getSimulationTime()) ; 
+                return false ;                
+            }
+            else
+            {
+                SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                msg << " - the hardware interface '" << prop.getString() << "' is not a valid interface, must be 'SPI', 'I2C', or 'UART'" ;
+                msg.endMessage(getEngine().getSimulationTime()) ; 
+                return false ;
+            }
+
             HALSIM_RegisterSPIInitializedCallback(index_, SPIInitialize, this, true) ;
             HALSIM_RegisterSPIReadCallback(index_, SPIRead, this) ;
             HALSIM_RegisterSPIWriteCallback(index_, SPIWrite, this) ;

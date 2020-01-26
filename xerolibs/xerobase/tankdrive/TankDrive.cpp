@@ -47,6 +47,16 @@ namespace xero {
             automode_neutral_ = MotorController::NeutralMode::Brake ;
             teleop_neutral_ = MotorController::NeutralMode::Coast ;
             reset_neutral_ = MotorController::NeutralMode::Coast ;
+
+            SettingsParser &parser = getRobot().getSettingsParser() ;
+            if (parser.isDefined("tankdrive:inches_per_tick")) {
+                left_inches_per_tick_ = getRobot().getSettingsParser().getDouble("tankdrive:inches_per_tick") ;
+                right_inches_per_tick_ = left_inches_per_tick_ ;
+            }
+            else {
+                left_inches_per_tick_ = getRobot().getSettingsParser().getDouble("tankdrive:left_inches_per_tick") ;
+                right_inches_per_tick_ = getRobot().getSettingsParser().getDouble("tankdrive:right_inches_per_tick") ;                
+            }            
         }
 
         TankDrive::~TankDrive() {   
@@ -140,15 +150,6 @@ namespace xero {
             left_enc_ = std::make_shared<frc::Encoder>(l1, l2) ;
             right_enc_ = std::make_shared<frc::Encoder>(r1, r2) ;
 
-            SettingsParser &parser = getRobot().getSettingsParser() ;
-            if (parser.isDefined("tankdrive:inches_per_tick")) {
-                left_inches_per_tick_ = getRobot().getSettingsParser().getDouble("tankdrive:inches_per_tick") ;
-                right_inches_per_tick_ = left_inches_per_tick_ ;
-            }
-            else {
-                left_inches_per_tick_ = getRobot().getSettingsParser().getDouble("tankdrive:left_inches_per_tick") ;
-                right_inches_per_tick_ = getRobot().getSettingsParser().getDouble("tankdrive:right_inches_per_tick") ;                
-            }
 
             left_enc_->Reset() ;
             right_enc_->Reset() ;

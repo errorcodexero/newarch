@@ -30,6 +30,7 @@ namespace xero
 
             bool calcLowLevelParams();
 
+            void setGear() ;
             void highGear() ;
             void lowGear() ;
 
@@ -43,6 +44,10 @@ namespace xero
             constexpr static const char *LeftEncoderTwoName = "hw:left:encoder:2" ;
             constexpr static const char *RightEncoderOneName = "hw:right:encoder:1" ;
             constexpr static const char *RightEncoderTwoName = "hw:right:encoder:2" ;
+            constexpr static const char *ShifterName = "shifter" ;
+            constexpr static const char *ShifterInvertedName = "shifterinverted" ;
+            constexpr static const char *InvertLeftMotor = "invertleft" ;
+            constexpr static const char *InvertRightMotor = "invertright" ;
 
         private:
             std::shared_ptr<xero::sim2::SimulatedMotor> left_motor_ ;
@@ -50,6 +55,9 @@ namespace xero
             int left_enc_[2] ;
             int right_enc_[2] ;
             bool use_motor_encoders_ ;
+
+            int shifter_ ;
+            bool shifter_inverted_ ;
 
             double diameter_;
             double width_;

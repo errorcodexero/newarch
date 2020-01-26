@@ -80,12 +80,12 @@ hw:driverstation:hid:driver                                     0               
 hw:driverstation:hid:oi                                         2               # HID Device Index
 
 
-###################################################################
+###################################################################################################
 #
 # The sections below describe the software parameters for the various
 # robot subsystems
 #
-###################################################################
+###################################################################################################
 
 ###################################################################################################
 # tankdrive
@@ -127,3 +127,14 @@ driver:nudge_time                                               0.1
 driver:zerolevel                                                0.1
 
 
+###################################################################################################
+#
+# The sections below defines the bahavior of variour misc robot capabilities
+#
+###################################################################################################
+
+#
+# Enable plotting.  Plot data is stored in the network tables and display
+# programs read the data from the network tables
+#
+plotting:enabled                                               true

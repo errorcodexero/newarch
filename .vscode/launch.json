@@ -126,8 +126,8 @@
         "environment": [],
         "args" : [      
           "--props","robots/droid/sim2/droid.json",
-          "--events","robots/droid/sim2/sims/automode0.json",
-          "--debug","2"
+          "--events","robots/droid/sim2/sims/automode7.json",
+          "--debug","6"
         ],      
         "externalConsole": true,
         "MIMode": "gdb",

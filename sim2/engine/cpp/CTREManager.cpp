@@ -46,7 +46,7 @@ namespace xero
             auto &msg = getEngine().getMessageOutput();
 
             auto it = status_.find(index);
-            if (it != status_.end())
+            if (it == status_.end())
             {
                 msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Warning);
                 msg << "failed to destroy CTRE motor controller - does not exist, index " << index ;
@@ -62,13 +62,14 @@ namespace xero
             return true;
         }
 
+        bool flag = false ;
         bool CTREManager::set(int index, double value)
         {
             std::lock_guard<std::mutex> lock(lock_);
             auto &msg = getEngine().getMessageOutput();
 
             auto it = status_.find(index);
-            if (it != status_.end())
+            if (it == status_.end())
             {
                 msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Warning);
                 msg << "failed to set CTRE motor controller - does not exist, index " << index ;
@@ -76,9 +77,12 @@ namespace xero
                 return false;
             }
 
-            msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Debug, 9);
-            msg << "set CTRE motor controller, index " << index << " value " << value ;
-            msg.endMessage(getEngine().getSimulationTime());               
+            if (std::fabs(status_[index].power_ - value) > 1e-3)
+            {
+                msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Debug, 8);
+                msg << "set CTRE motor controller, index " << index << " value " << value ;
+                msg.endMessage(getEngine().getSimulationTime());               
+            }
 
             status_[index].power_ = value;
             return true;
@@ -90,7 +94,7 @@ namespace xero
             auto &msg = getEngine().getMessageOutput();
 
             auto it = status_.find(index);
-            if (it != status_.end())
+            if (it == status_.end())
             {
                 value = 0.0 ;
                 return true;
@@ -98,7 +102,7 @@ namespace xero
 
             value = status_[index].power_;
 
-            msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Debug, 9);
+            msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Debug, 8);
             msg << "get CTRE motor controller, index " << index << " value " << value ;
             msg.endMessage(getEngine().getSimulationTime());   
 
@@ -111,7 +115,7 @@ namespace xero
             auto &msg = getEngine().getMessageOutput();
 
             auto it = status_.find(index);
-            if (it != status_.end())
+            if (it == status_.end())
             {
                 value = 0.0 ;
                 return true;
@@ -119,8 +123,8 @@ namespace xero
 
             value = status_[index].encoder_;
 
-            msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Debug, 9);
-            msg << "get CTRE motor controller, index " << index << " value " << value ;
+            msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Debug, 8);
+            msg << "get CTRE motor controller encoder, index " << index << " value " << value ;
             msg.endMessage(getEngine().getSimulationTime());   
 
             return true;
@@ -132,14 +136,17 @@ namespace xero
             auto &msg = getEngine().getMessageOutput();
 
             auto it = status_.find(index);
-            if (it != status_.end())
+            if (it == status_.end())
             {
                 return true;
             }
 
-            msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Debug, 9);
-            msg << "set CTRE motor controller, index " << index << " value " << value ;
-            msg.endMessage(getEngine().getSimulationTime());               
+            if (std::abs(status_[index].encoder_ - value) != 0)
+            {
+                msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Debug,8);
+                msg << "set CTRE motor controller encoder, index " << index << " value " << value ;
+                msg.endMessage(getEngine().getSimulationTime());               
+            }
 
             status_[index].encoder_ = value;
             return true;

@@ -3,6 +3,8 @@
 #include <string>
 #include <list>
 #include <memory>
+#include <thread>
+#include <map>
 
 namespace xero
 {
@@ -20,7 +22,6 @@ namespace xero
                 Warning,
                 Error
             };
-
 
         public:
             SimulatorMessages();
@@ -44,10 +45,15 @@ namespace xero
             void endMessage(int64_t t);
 
         private:
-            MessageType mt_;
-            std::string msg_;
-            int level_;
+            struct MessageData
+            {
+                MessageType mt_ ;
+                std::string msg_ ;
+                int level_ ;
+            } ;
 
+        private:
+            std::map<std::thread::id, MessageData> per_thread_data_ ;
             std::list<std::shared_ptr<SimulatorMessageSink>> sinks_;
             int debug_level_;
         };

@@ -8,7 +8,7 @@ namespace ctre
     {
         namespace motorcontrol
         {
-            IMotorController::IMotorController(int index)
+            IMotorController::IMotorController(int index) : sensors_(index) 
             {
                 index_ = index;
                 inverted_ = false ;
@@ -36,7 +36,7 @@ namespace ctre
 
                 xero::sim2::SimulatorEngine &engine = xero::sim2::SimulatorEngine::getEngine();
                 auto mgr = engine.getCTREManager();
-                mgr->set(index_, v);
+                mgr->set(index_, value_);
             }
 
             SensorCollection& IMotorController::GetSensorCollection() {
