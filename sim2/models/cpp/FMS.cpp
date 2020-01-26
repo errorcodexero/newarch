@@ -1,10 +1,10 @@
 #include <FMS.h>
 #include <SimulatorEngine.h>
 #include <SimulatedMotor.h>
-
 #include <mockdata/DriverStationData.h>
 #include <hal/HALBase.h>
 #include <cassert>
+#include <iostream>
 
 using namespace xero::sim2;
 
@@ -79,6 +79,7 @@ namespace xero
             SimulatorMessages &msg = getEngine().getMessageOutput() ;            
 
             double elapsed = static_cast<double>(HAL_GetFPGATime(&status)) / 1e6 - period_start_time_ ;
+            std::cout << "elapsed " << elapsed << std::endl ;
             switch(state_)
             {
             case FMSState::Start:

@@ -265,8 +265,7 @@ namespace xero
                     else
                     {
                             msg_.startMessage(SimulatorMessages::MessageType::Warning);
-                            msg_ << "model " << simev->modelName() << " instance " << simev->instance() ;
-                            msg_ << "event [" << simev->toString() << "]" ;
+                            msg_ << "event [" << ev->toString() << "]" ;
                             msg_ << "at time " << now << " is ignored due to unknown event type" ;
                             msg_.endMessage(sim_time_);
                     }
