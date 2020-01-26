@@ -1,5 +1,7 @@
 TOPDIR=../..
 
+include $(TOPDIR)/makefiles/defaults.mk
+
 SOURCES = \
 	./cpp/Base64.cpp\
 	./cpp/EventLoopRunner.cpp\

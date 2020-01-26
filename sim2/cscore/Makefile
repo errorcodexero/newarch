@@ -1,5 +1,7 @@
 TOPDIR=../..
 
+include $(TOPDIR)/makefiles/defaults.mk
+
 SOURCES = \
 	./cpp/ConfigurableSourceImpl.cpp\
 	./cpp/cscore_c.cpp\

@@ -41,8 +41,8 @@ namespace xero
 
         void FMS::processEvent(const std::string &name, const SimValue &value)
         {
-            if (name == "automode")
-                auto_time_ = setProperty("automode", value, auto_time_) ;
+            if (name == "autonomous")
+                auto_time_ = setProperty("autonomous", value, auto_time_) ;
             else if (name == "start")
                 start_time_ = setProperty("start", value, start_time_) ;
             else if (name == "between")
@@ -122,8 +122,8 @@ namespace xero
             if (hasProperty("start"))
                 start_time_ = setProperty("start", getProperty("start"), start_time_) ;
 
-            if (hasProperty("automode"))
-                auto_time_ = setProperty("automode", getProperty("automode"), auto_time_) ;
+            if (hasProperty("autonomous"))
+                auto_time_ = setProperty("autonomous", getProperty("autonomous"), auto_time_) ;
 
             if (hasProperty("between"))
                 between_time_ = setProperty("between", getProperty("between"), between_time_) ;

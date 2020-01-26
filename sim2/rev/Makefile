@@ -1,5 +1,7 @@
 TOPDIR=../..
 
+include $(TOPDIR)/makefiles/defaults.mk
+
 SOURCES = \
 	./src/rev/CANEncoder.cpp\
 	./src/rev/CANSparkMax.cpp\

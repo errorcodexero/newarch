@@ -11,10 +11,10 @@
                     "values" : 
                     {
                         "start" : 1.0,
-                        "autonomous" : 15.0,
-                        "between" : 2.0,
-                        "teleop" : 0.0,
-                        "fms" : false,
+                        "autonomous" : 0.0,
+                        "between" : 0.0,
+                        "teleop" : 30.0,
+                        "fms" : true,
                         "station" : "blue1"
                     }
                 },
@@ -23,23 +23,13 @@
                     "instance" : "1",
                     "values" :
                     {
-                        "automode" : 7
+                        "automode" : 8
                     }
-                },
-                {
-                    "model" : "westcoastdrive",
-                    "instance" : "1",
-                    "values" :
-                    {
-                        "xpos" : 16.1,
-                        "ypos" : 42.4,
-                        "angle" : 0.0
-                    }
-                }                
+                }
             ]
         },
         {
-            "time" : 22.0,
+            "time" : 4.0,
             "events" :
             [
                 {

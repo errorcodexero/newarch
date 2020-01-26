@@ -1,5 +1,7 @@
 TOPDIR=../..
 
+include $(TOPDIR)/makefiles/defaults.mk
+
 SUBSYSTEMS = \
 	./src/main/cpp/phlifter/Lifter.cpp\
 	./src/main/cpp/phlifter/LifterCalibrateAction.cpp\

@@ -1,5 +1,7 @@
 TOPDIR=../..
 
+include $(TOPDIR)/makefiles/defaults.mk
+
 SOURCES = \
 	./cpp/Dispatcher.cpp\
 	./cpp/DsClient.cpp\
