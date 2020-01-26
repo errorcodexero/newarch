@@ -3,6 +3,7 @@
 #include "OIItem.h"
 #include <vector>
 #include <cstdlib>
+#include <iostream>
 
 /// \file
 

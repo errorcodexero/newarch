@@ -31,9 +31,8 @@ namespace xero {
             log << "OI: initializing button/axis mapping" ;
             log.endMessage() ;
 
-            ////%% OI_Device_Button_Mappings
-
-            ////%% End OI_Device_Button_Mappings
+            std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
+            automode_ = mapAxisScale(6, mapping) ;
         }
 
         void DroidOIDevice::generateActions(xero::base::SequenceAction &seq)

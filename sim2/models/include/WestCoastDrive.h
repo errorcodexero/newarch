@@ -15,14 +15,25 @@ namespace xero
 
             virtual bool create() ;
             virtual void run(uint64_t microdt);
+            virtual void processEvent(const std::string &name, const xero::sim2::SimValue &value) ;
+
+        private:
+            enum class Gear
+            {
+                HighGear,
+                LowGear
+            } ;
 
         private:
             double capValue(double prev, double target, double maxchange);
             void updatePosition(double dl, double dr, double angle);
 
-            void calcLowLevelParams();
-            void calcHighLevelParams();
-            void calcGearDependentParameters();
+            bool calcLowLevelParams();
+
+            void highGear() ;
+            void lowGear() ;
+
+            bool getDriveParameter(const std::string &name, double &value) ; 
 
         private:
             constexpr static const char *UseEncodersName = "hw:use_motor_encoders" ;
@@ -32,6 +43,7 @@ namespace xero
             constexpr static const char *LeftEncoderTwoName = "hw:left:encoder:2" ;
             constexpr static const char *RightEncoderOneName = "hw:right:encoder:1" ;
             constexpr static const char *RightEncoderTwoName = "hw:right:encoder:2" ;
+
         private:
             std::shared_ptr<xero::sim2::SimulatedMotor> left_motor_ ;
             std::shared_ptr<xero::sim2::SimulatedMotor> right_motor_ ;
@@ -41,8 +53,9 @@ namespace xero
 
             double diameter_;
             double width_;
+            double length_ ;
 
-            int gear_;
+            Gear gear_;
 
             double left_rps_per_power_per_time_;
             double right_rps_per_power_per_time_;
@@ -77,6 +90,15 @@ namespace xero
 
             int32_t left_enc_value_ ;
             int32_t right_enc_value_;
+
+            double high_rps_per_power_per_time_ ;
+            double low_rps_per_power_per_time_ ;            
+            double high_max_change_ ;
+            double low_max_change_ ;
+
+            std::vector<double> data_ ;
+
+            static std::vector<std::string> ValueNames ;
         };
     }
 }

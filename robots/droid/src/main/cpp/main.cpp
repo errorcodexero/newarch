@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Droid.h"
+#include "DroidOIModel.h"
 
 #ifdef SIM2
 #include <SimulatorEngine.h>
@@ -17,6 +18,7 @@ USE_SIMULATION_MODEL(WestCoastDrive, "westcoastdrive");
 USE_SIMULATION_MODEL(NavXSim, "navxsim");
 USE_SIMULATION_MODEL(FMS, "fms") ;
 USE_SIMULATION_MODEL(DriverGamePad, "drivergamepad") ;
+USE_SIMULATION_MODEL(DroidOIModel, "droidoi") ;
 #endif
 
 int main(int ac, char **av)

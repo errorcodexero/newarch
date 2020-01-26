@@ -1,4 +1,6 @@
 #include <SimulationModel.h>
+#include <networktables/NetworkTable.h>
+#include <networktables/NetworkTableInstance.h>
 
 namespace xero
 {
@@ -53,6 +55,24 @@ namespace xero
                 msg << it.first << " = " << it.second.toString() ;
                 msg.endMessage(engine_.getSimulationTime()) ;
             }
+        }
+
+
+        void SimulationModel::registerDataFormat(const std::string &format, const std::vector<std::string> &names)
+        {
+            nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
+            std::string name = "SIM2/" + model_name_ + "/" + inst_name_ ;
+            auto plottable = inst.GetTable(name) ;
+            plottable->PutStringArray("varnames", names) ;
+            plottable->PutString("format", format) ;
+        }
+
+        void SimulationModel::presentDataValues(std::vector<double> &values)
+        {
+            nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault() ;
+            std::string tname = "SIM2/" + model_name_ + "/" + inst_name_ ;
+            auto plottable = inst.GetTable(tname) ;
+            plottable->PutNumberArray("values", values) ;
         }
     }
 }

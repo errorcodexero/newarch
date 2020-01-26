@@ -1,0 +1,12 @@
+- create droid OI model
+  o basic device                                                Complete
+  o automode                                                    Complete
+- debug westcoast drive model  
+- connect simulation graphical visualizer to sim2 simulator
+- create model for intake
+- create model for turret
+- create model for conveyer
+- create model for climber
+- create model for wheel turner
+- create visualizer for turret
+

@@ -13,8 +13,8 @@
                         "start" : 1.0,
                         "automode" : 15.0,
                         "between" : 2.0,
-                        "teleop" : 15.0,
-                        "fms" : true,
+                        "teleop" : 0.0,
+                        "fms" : false,
                         "station" : "blue1"
                     }
                 },
@@ -23,23 +23,19 @@
                     "instance" : "1",
                     "values" :
                     {
-                        "automode" : 8
+                        "automode" : 7
                     }
-                }
-            ]
-        },
-        {
-            "time" : 20.0,
-            "events" :
-            [
+                },
                 {
-                    "model" : "drivergamepad",
+                    "model" : "westcoastdrive",
                     "instance" : "1",
-                    "values" : 
+                    "values" :
                     {
-                        "axis1" : 1.0
+                        "xpos" : 16.1,
+                        "ypos" : 42.4,
+                        "angle" : 0.0
                     }
-                }
+                }                
             ]
         }
     ]

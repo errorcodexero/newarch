@@ -23,9 +23,11 @@
                 "scrub" : 1.0,
                 "width" : 34.5,
                 "length" : 37.5,
-                "maxvelocity" : 150.0,
-                "maxacceleration" : 150.0,
-                "ticks_per_rev" : 23235.5
+                "ticks_per_rev" : 23235.5,
+                "high:maxvelocity" : 150.0,
+                "high:maxaccel" : 150.0,
+                "low:maxvelocity" : 50.0,
+                "low:maxaccel" : 50.0
             }
         },
         {
@@ -41,7 +43,22 @@
                 "buttons" : 10,
                 "povs" : 1
             }
-        },        
+        },  
+        {
+            "model" : "droidoi",
+            "instance" : "1",
+            "hardware" : {
+                "index" : 2
+            },
+            "behavior" : {
+                "xbox" : false,
+                "name" : "Error Code Xero Custom OI",
+                "axes" : 8,
+                "buttons" : 10,
+                "povs" : 1,
+                "automode" : 6
+            }
+        },              
         {
             "model" : "navxsim",
             "instance" : "1",

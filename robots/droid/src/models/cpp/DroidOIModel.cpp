@@ -1,4 +1,4 @@
-#include <DriverGamePad.h>
+#include <DroidOIModel.h>
 #include <SimulatorEngine.h>
 #include <SimulatedMotor.h>
 #include <mockdata/DriverStationData.h>
@@ -12,15 +12,17 @@ namespace xero
 {
     namespace models
     {
-        DriverGamePad::DriverGamePad(SimulatorEngine &engine, const std::string &inst) : SimulationModel(engine, "drivergamepad", inst)
+        std::array<double, 10> DroidOIModel::automode_axis_values_ = { -1.0, -0.8, -0.6, -0.4, -0.1, 0.1, 0.3, 0.5, 0.7, 0.9 } ;
+
+        DroidOIModel::DroidOIModel(SimulatorEngine &engine, const std::string &inst) : SimulationModel(engine, "droidoi", inst)
         {
         }
 
-        DriverGamePad::~DriverGamePad()
+        DroidOIModel::~DroidOIModel()
         {
         }
 
-        void DriverGamePad::processEvent(const std::string &name, const SimValue &value)
+        void DroidOIModel::processEvent(const std::string &name, const SimValue &value)
         {
             if (name.length() > 6 && name.substr(0, 6) == "button")
             {
@@ -181,10 +183,25 @@ namespace xero
                 
                 axis_.axes[which] = static_cast<float>(value.getDouble()) ;
                 HALSIM_SetJoystickAxes(index_, &axis_) ;
-            }            
+            }
+            else if (name == "automode")
+            {
+                if (!value.isInteger())
+                {
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                    msg.startMessage(SimulatorMessages::MessageType::Warning) ;
+                    msg << "event: model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - event '" << name << "' expected type integer" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;                        
+                    return ;
+                }
+
+                axis_.axes[automode_axis_] = static_cast<float>(automode_axis_values_[value.getInteger()]) ;
+                HALSIM_SetJoystickAxes(index_, &axis_) ;                
+            }
         }
 
-        bool DriverGamePad::create()
+        bool DroidOIModel::create()
         {
             memset(&desc_, 0, sizeof(desc_)) ;
             desc_.axisCount = 0 ;
@@ -215,6 +232,31 @@ namespace xero
                 msg << "model " << getModelName() << " instance " << getInstanceName() ;
                 msg << " - is missing required property 'index', an integer" ;
                 msg.endMessage(getEngine().getSimulationTime()) ;                
+            }
+
+            if (hasProperty("automode"))
+            {
+                const SimValue &value = getProperty("automode") ;
+                if (!value.isInteger())
+                {
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                    msg.startMessage(SimulatorMessages::MessageType::Warning) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - has property 'automode' but it is not an integer" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;
+
+                    return false ;
+                }
+
+                automode_axis_ = value.getInteger() ;
+            }
+            else
+            {
+                SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Warning) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                msg << " - is missing required property 'automode', an integer" ;
+                msg.endMessage(getEngine().getSimulationTime()) ;
             }
 
             if (hasProperty("xbox"))
@@ -314,7 +356,7 @@ namespace xero
             return true ;
         }
 
-        void DriverGamePad::run(uint64_t microdt) 
+        void DroidOIModel::run(uint64_t microdt) 
         {
         }
     }

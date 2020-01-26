@@ -115,17 +115,17 @@ namespace xero
             switch(mt_)
             {
             case MotorType::SparkMax:
-                ret = model_.getEngine().getREVManager()->get(index_, ret) ;            
+                model_.getEngine().getREVManager()->get(index_, ret) ;            
                 break ;
 
             case MotorType::TalonFX:
             case MotorType::TalonSRX:
             case MotorType::VictorSPX:
-                ret = model_.getEngine().getCTREManager()->get(index_, ret) ;
+                model_.getEngine().getCTREManager()->get(index_, ret) ;
                 break ;               
 
             case MotorType::VictorSP:
-                ret = model_.getEngine().getPWM(index_) ;
+                model_.getEngine().getPWM(index_) ;
                 break ;         
             }
 

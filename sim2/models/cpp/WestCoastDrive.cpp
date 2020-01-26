@@ -3,6 +3,7 @@
 #include <SimulatorEngine.h>
 #include <SimulatedMotor.h>
 #include <xeromath.h>
+#include <iostream>
 
 using namespace xero::sim2;
 
@@ -10,8 +11,65 @@ namespace xero
 {
     namespace models
     {
+        std::vector<std::string> WestCoastDrive::ValueNames = 
+        {
+            "X",
+            "Y",
+            "ANGLE"
+        } ;
+
         WestCoastDrive::WestCoastDrive(SimulatorEngine &engine, const std::string &inst) : SimulationModel(engine, "westcoastdrive", inst)
         {
+        }
+
+        WestCoastDrive::~WestCoastDrive()
+        {
+        }        
+
+        void WestCoastDrive::processEvent(const std::string &name, const SimValue &value)
+        {
+            if (name == "xpos")
+            {
+                if (!value.isDouble())
+                {
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                    msg.startMessage(SimulatorMessages::MessageType::Warning) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - event '" << name << "' is valid, but type must be double" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;
+                    return ;
+                }
+
+                xpos_ = value.getDouble() ;
+            }
+            else if (name == "ypos")
+            {
+                if (!value.isDouble())
+                {
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                    msg.startMessage(SimulatorMessages::MessageType::Warning) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - event '" << name << "' is valid, but type must be double" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;
+                    return ;
+                }
+
+                ypos_ = value.getDouble() ;
+            }     
+            else if (name == "angle")
+            {
+                if (!value.isDouble())
+                {
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                    msg.startMessage(SimulatorMessages::MessageType::Warning) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - event '" << name << "' is valid, but type must be double" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;
+                    return ;
+                }
+
+                angle_ = xero::math::deg2rad(value.getDouble()) ;
+            }                     
         }
 
         bool WestCoastDrive::create()
@@ -26,8 +84,6 @@ namespace xero
             {
                 return false;
             }
-
-            dumpProperties() ;
 
             if (hasProperty(UseEncodersName))
             {
@@ -54,12 +110,18 @@ namespace xero
                 right_enc_[1] = getInteger(RightEncoderTwoName) ;
             }
 
+            if (!calcLowLevelParams())
+                return false ;
+
+            left_motor_mult_ = 1.0 ;
+            right_motor_mult_ = -1.0 ;
+
+            highGear() ;
+
+            registerDataFormat("drivebase", ValueNames) ;
             return true ;
         }
 
-        WestCoastDrive::~WestCoastDrive()
-        {
-        }
 
         void WestCoastDrive::updatePosition(double dl, double dr, double angle) 
         {
@@ -81,8 +143,13 @@ namespace xero
 
         void WestCoastDrive::run(uint64_t microdt) {
             double timesec = static_cast<double>(microdt) / 1.0e6 ;
+
+            // TODO check the shifter solenoid and change gears if required
+
             double leftpower = left_motor_->get();
             double rightpower = right_motor_->get();
+
+            std::cout << "power " << leftpower << " " << rightpower << std::endl ;
 
             //
             // Calculate the new desired revolutions per second (RPS)
@@ -135,12 +202,16 @@ namespace xero
                 getEngine().setEncoder(right_enc_[0], right_enc_[1], right_enc_value_) ;                
             }
 
+            double deg = xero::math::normalizeAngleDegrees(-xero::math::rad2deg(angle_)) ;
             NavXSim *navx = NavXSim::getNavXSim() ;
             if (navx != nullptr)
-            {
-                double deg = xero::math::normalizeAngleDegrees(-xero::math::rad2deg(angle_)) ;
                 navx->setYaw(deg) ;
-            }
+
+            data_.clear() ;
+            data_.push_back(xpos_) ;
+            data_.push_back(ypos_) ;
+            data_.push_back(deg) ;
+            presentDataValues(data_) ;
         }
 
         
@@ -162,39 +233,91 @@ namespace xero
             return ret ;
         }
 
-        void WestCoastDrive::calcLowLevelParams() {
-#ifdef NOTYET            
-            double maxhighvel = simbase.getSettingsParser().getDouble("tankdrive:high:maxvelocity") ;
-            double maxhighaccel = simbase.getSettingsParser().getDouble("tankdrive:high:maxacceleration") ;
-            double maxlowvel = simbase.getSettingsParser().getDouble("tankdrive:low:maxvelocity") ;
-            double maxlowaccel = simbase.getSettingsParser().getDouble("tankdrive:low:maxacceleration") ;
+        bool WestCoastDrive::getDriveParameter(const std::string &name, double &value)
+        {
+            if (!hasProperty(name))
+            {
+                SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                msg << " - missing required property '" << name << "'" ;
+                msg.endMessage(getEngine().getSimulationTime()) ;
+                return false ;                
+            }
 
-            double circum = diameter_ * PI ;
+            const SimValue &prop = getProperty(name) ;
+            if (!prop.isDouble())
+            {
+                SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                msg << " - has required property '" << name << "' but it is not a double" ;
+                msg.endMessage(getEngine().getSimulationTime()) ;
+                return false ;                 
+            }
+
+            value = prop.getDouble() ;
+            return true ;
+        }
+
+        bool WestCoastDrive::calcLowLevelParams() 
+        {
+            double maxhighvel ;
+            double maxhighaccel ;
+            double maxlowvel ;
+            double maxlowaccel ;
+            double d;
+
+            if (!getDriveParameter("diameter", d))
+                return false ;
+            diameter_ = d ;
+
+            if (!getDriveParameter("scrub", d))
+                return false ;
+            scrub_ = d ;
+
+            if (!getDriveParameter("width", d))
+                return false ;
+            width_ = d ;
+
+            if (!getDriveParameter("length", d))
+                return false ;
+            length_ = d ;
+
+            if (!getDriveParameter("high:maxvelocity", maxhighvel))
+                return false ;
+
+            if (!getDriveParameter("high:maxaccel", maxhighaccel))
+                return false ;
+
+            if (!getDriveParameter("low:maxvelocity", maxlowvel))
+                return false ;
+
+            if (!getDriveParameter("low:maxaccel", maxlowaccel))
+                return false ;                                                
+
+            double circum = diameter_ * xero::math::PI ;
 
             high_rps_per_power_per_time_ = maxhighvel / circum ;
             low_rps_per_power_per_time_ = maxlowvel / circum ;
             high_max_change_ = maxhighaccel / circum ;
             low_max_change_ = maxlowaccel / circum ;
-#endif            
+
+            return true ;
         }
 
-        void WestCoastDrive::calcGearDependentParameters() {
-#ifdef NOTYET            
-            if (left_right_error_ > 1e-6) {
-                std::uniform_real_distribution<double> unif(0.95, 1.05) ;
-                std::default_random_engine re ;
-                right_rps_per_power_per_time_ = low_rps_per_power_per_time_ * unif(re) ;
-                left_rps_per_power_per_time_ = low_rps_per_power_per_time_ * unif(re) ;
-                current_max_change_ = low_max_change_ ;                
-            }
-            else {
-                right_rps_per_power_per_time_ = low_rps_per_power_per_time_  ;
-                left_rps_per_power_per_time_ = low_rps_per_power_per_time_ ;
-                current_max_change_ = low_max_change_ ;
-            }
-
+        void WestCoastDrive::lowGear() {
+            right_rps_per_power_per_time_ = low_rps_per_power_per_time_  ;
+            left_rps_per_power_per_time_ = low_rps_per_power_per_time_ ;
+            current_max_change_ = low_max_change_ ;
             gear_ = Gear::LowGear ;
-#endif
         }
+
+        void WestCoastDrive::highGear() {
+            right_rps_per_power_per_time_ = high_rps_per_power_per_time_  ;
+            left_rps_per_power_per_time_ = high_rps_per_power_per_time_ ;
+            current_max_change_ = high_max_change_ ;
+            gear_ = Gear::HighGear ;
+        }        
     }
 }

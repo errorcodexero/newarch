@@ -18,13 +18,19 @@ SUBSYSTEMS = \
 	src/main/cpp/climber/Climber.cpp\
     src/main/cpp/controlpanelrotator/RotateControlPanelAction.cpp
 
+MODELS = \
+	src/models/cpp/droidoimodel.cpp	
+
 SOURCES = \
 	src/main/cpp/main.cpp\
 	src/main/cpp/Droid.cpp\
 	src/main/cpp/droidoi/DroidOIDevice.cpp\
 	src/main/cpp/droidoi/DroidOISubsystem.cpp\
 	$(SUBSYSTEMS)\
-	$(AUTOMODES)
+	$(AUTOMODES)\
+	$(MODELS)
+
+
 
 TARGET = droid
 
@@ -56,7 +62,7 @@ NEED_MODELS=true
 NEED_ENGINE=true
 endif
 
-LOCAL_CFLAGS = -Isrc/main/cpp
+LOCAL_CFLAGS = -Isrc/main/cpp -Isrc/models/cpp -Isrc/models/include
 
 SUPPORTED_PLATFORMS=ROBORIO SIMULATOR
 

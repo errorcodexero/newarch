@@ -1,5 +1,4 @@
 #pragma once
-
 #include "SimulatorEngine.h"
 #include "SimValue.h"
 #include <string>
@@ -43,6 +42,7 @@ namespace xero
 
             const SimValue &getProperty(const std::string &name) const {
                 auto it = props_.find(name) ;
+                assert(it != props_.end()) ;
                 return it->second ;
             }
 
@@ -58,6 +58,9 @@ namespace xero
 
             int getInteger(const std::string &name) ;
 
+            void registerDataFormat(const std::string &format, const std::vector<std::string> &names)  ;
+            void presentDataValues(std::vector<double> &values) ;
+
         protected:
         void dumpProperties() ;
 
@@ -66,6 +69,8 @@ namespace xero
             std::map<std::string, SimValue> props_;
             std::string model_name_;
             std::string inst_name_ ;
+            bool presenting_ ;
+            size_t index ;
         };
     }
 }
