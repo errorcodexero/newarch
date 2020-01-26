@@ -20,6 +20,8 @@ namespace xero {
 
                 motor_->ConfigVoltageCompSaturation(12.0, 10) ;
                 motor_->EnableVoltageCompensation(true) ;
+
+                type_ = type ;
             }
 
             void CTREMotorController::follow(std::shared_ptr<MotorController> motor, bool invert) {

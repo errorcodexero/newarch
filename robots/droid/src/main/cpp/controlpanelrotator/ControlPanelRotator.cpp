@@ -54,12 +54,18 @@ namespace xero {
             else if (max == b)
                 hue = 60*(4 + (r-g)/(max-min));
             if (hue < 0) hue += 360;
-
-            if      (hue < 75)                  return Color::Red;
-            else if (hue > 115 && hue < 140)    return Color::Green;
-            else if (hue > 140)                 return Color::Blue;
-            else if (hue > 80 && hue < 110)     return Color::Yellow;
+            
+            Color result;
+            if      (hue < 75)                  result = Color::Red;
+            else if (hue > 115 && hue < 140)    result = Color::Green;
+            else if (hue > 140)                 result = Color::Blue;
+            else if (hue > 80 && hue < 110)     result = Color::Yellow;
             else                                return std::nullopt;
+
+            // Offset by 2 to compensate for the sensor position
+            result = static_cast<Color>((static_cast<int>(result) + 2) % static_cast<int>(Color::COUNT));
+
+            return result;
         }
     }
 }

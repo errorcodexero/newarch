@@ -13,9 +13,17 @@
                         "start" : 1.0,
                         "automode" : 15.0,
                         "between" : 2.0,
-                        "teleop" : 15.0,
-                        "fms" : true,
-                        "station" : "blue1"
+                        "teleop" : 15.0
+                    }
+                },
+                {
+                    "model" : "westcoastdrive",
+                    "instance" : "1",
+                    "values" :
+                    {
+                        "xpos" : 16.1,
+                        "ypos" : 42.4,
+                        "angle" : 0.0
                     }
                 }
             ]

@@ -19,34 +19,34 @@ jobs:
       run: ./gradlew build
       
       
-  simulator:
-    name: Simulator
-    runs-on: ubuntu-latest
+#   simulator:
+#     name: Simulator
+#     runs-on: ubuntu-latest
     
-    strategy: 
-      matrix: 
-        robot: [droid]
-        configuration: [Debug, ASan]
+#     strategy: 
+#       matrix: 
+#         robot: [droid]
+#         configuration: [Debug, ASan]
 
-    steps:
-    - uses: actions/checkout@v1
+#     steps:
+#     - uses: actions/checkout@v1
     
-    - name: Install dependencies
-      run: sudo apt-get install libncurses-dev
+#     - name: Install dependencies
+#       run: sudo apt-get install libncurses-dev
     
-    - name: Build robot code
-      working-directory: robots/${{ matrix.robot }}
-      run: make CONFIG=${{ matrix.configuration }} PLATFORM=SIMULATOR --max-load $MAX_LOAD
+#     - name: Build robot code
+#       working-directory: robots/${{ matrix.robot }}
+#       run: make CONFIG=${{ matrix.configuration }} PLATFORM=SIMULATOR --max-load $MAX_LOAD
       
-    - name: Deploy resources
-      working-directory: robots/${{ matrix.robot }}
-      run: make CONFIG=${{ matrix.configuration }} PLATFORM=SIMULATOR deploy
+#     - name: Deploy resources
+#       working-directory: robots/${{ matrix.robot }}
+#       run: make CONFIG=${{ matrix.configuration }} PLATFORM=SIMULATOR deploy
     
-    - name: Run simulator (auto)
-      run: ./runsim ${{ matrix.robot }} auto
+#     - name: Run simulator (auto)
+#       run: ./runsim ${{ matrix.robot }} auto
     
-    - name: Run simulator (teleop)
-      run: ./runsim ${{ matrix.robot }} teleop
+#     - name: Run simulator (teleop)
+#       run: ./runsim ${{ matrix.robot }} teleop
   
 
   test:

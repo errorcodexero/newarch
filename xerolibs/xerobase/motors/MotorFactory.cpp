@@ -26,7 +26,7 @@ namespace xero {
                 {
                     MotorType::CAN,
                     [](int canID) {
-                        return std::make_shared<CTREMotorController>(canID, CTREMotorController::Type::TalonSRX);
+                        return std::make_shared<CTREMotorController>(canID, CTREMotorController::Type::TalonFX);
                     }
                 }
             },

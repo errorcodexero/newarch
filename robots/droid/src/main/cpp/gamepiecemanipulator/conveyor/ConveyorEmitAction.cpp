@@ -1,35 +1,33 @@
 #include "ConveyorEmitAction.h"
 #include "Conveyor.h"
 
+using namespace xero::misc;
+
 namespace xero {
     namespace droid {
         void ConveyorEmitAction::start() {
-            if (/* is empty */false) {
+            if (getSubsystem().ballCount_ == 0) {
                 setDone();
             }
-            state_ = State::Preparing;
+            
+            if (/* sensor C is clear*/false) {
+                auto &logger = getMessageLogger();
+
+                logger.startMessage(MessageLogger::MessageType::warning, getSubsystem().getMsgID());
+                logger << "ConveyorEmitAction started when no ball is detected by shooter-side sensor";
+                logger << "Perhaps ConveyorPrepareToEmitAction didn't get run?";
+                logger.endMessage();
+
+                setDone();
+            }
         }
 
         void ConveyorEmitAction::run() {
-            State oldState;
-            do {
-                oldState = state_;
-                switch (state_) {
-                case State::Preparing:
-                    getSubsystem().setMotor(1);    // move balls toward shooter
-                    if (/* sensor C is tripped */true) {
-                        // balls are in position next to shooter
-                        state_ = State::Emitting;
-                    }
-                    break;
-                case State::Emitting:
-                    getSubsystem().setMotor(1); // emit
-                    if (/* sensor C is clear */true) {
-                        setDone();
-                    }
-                    break;
-                }
-            } while (state_ != oldState);   // if we changed state, we can run again
+            getSubsystem().setMotor(1); // emit
+            if (/* sensor C is clear */true) {
+                setDone();
+                getSubsystem().ballCount_ -= 1;
+            }
         }
     }
-}
+} 

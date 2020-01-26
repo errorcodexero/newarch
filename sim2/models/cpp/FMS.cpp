@@ -49,6 +49,67 @@ namespace xero
                 setProperty("between", value, between_time_) ;
             else if (name == "teleop")
                 setProperty("teleop", value, teleop_time_) ;
+            else if (name == "fms")
+            {
+                if (!value.isBoolean())
+                {
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                    msg.startMessage(SimulatorMessages::MessageType::Warning) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - has property 'fms' but it is not a boolean" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;                    
+                }
+                else
+                {
+                    HALSIM_SetDriverStationFmsAttached(value.getBoolean()) ;
+                }
+            }
+            else if (name == "station")
+            {
+                if (!value.isString())
+                {
+                    SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                    msg.startMessage(SimulatorMessages::MessageType::Warning) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - has property 'station' but it is not a string" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;
+                }
+                else
+                {
+                    if (value.getString() == "red1")
+                    {
+                        HALSIM_SetDriverStationAllianceStationId(HAL_AllianceStationID_kRed1) ;
+                    }
+                    else if (value.getString() == "red2")
+                    {
+                        HALSIM_SetDriverStationAllianceStationId(HAL_AllianceStationID_kRed2) ;
+                    }   
+                    else if (value.getString() == "red3")
+                    {
+                        HALSIM_SetDriverStationAllianceStationId(HAL_AllianceStationID_kRed3) ;
+                    }
+                    else if (value.getString() == "blue1")
+                    {
+                        HALSIM_SetDriverStationAllianceStationId(HAL_AllianceStationID_kBlue1) ;
+                    }
+                    else if (value.getString() == "blue2")
+                    {
+                        HALSIM_SetDriverStationAllianceStationId(HAL_AllianceStationID_kBlue2) ;
+                    }
+                    else if (value.getString() == "blue3")
+                    {
+                        HALSIM_SetDriverStationAllianceStationId(HAL_AllianceStationID_kBlue2) ;
+                    }
+                    else
+                    {
+                        SimulatorMessages &msg = getEngine().getMessageOutput() ;
+                        msg.startMessage(SimulatorMessages::MessageType::Warning) ;
+                        msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                        msg << " - has property 'station' is a string, but is not 'red1', 'red2', 'red3', 'blue1', 'blue2', or 'blue3'" ;
+                        msg.endMessage(getEngine().getSimulationTime()) ;                    
+                    }                                                                                                                     
+                }                
+            }
         }
 
         bool FMS::create()

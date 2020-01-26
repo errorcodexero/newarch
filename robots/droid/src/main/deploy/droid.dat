@@ -9,6 +9,17 @@
 #
 ###################################################################################################
 
+# Drivebase motors
+hw:tankdrive:motors:left:1:canid                                1                           # CAN ID
+hw:tankdrive:motors:left:1:type                                 "talon_fx"                  # Type of motor controller
+hw:tankdrive:motors:left:2:canid                                2                           # CAN ID
+hw:tankdrive:motors:left:2:type                                 "talon_fx"                  # Type of motor controller
+hw:tankdrive:motors:right:1:canid                               3                           # CAN ID
+hw:tankdrive:motors:right:1:type                                "talon_fx"                  # Type of motor controller
+hw:tankdrive:motors:right:2:canid                               4                           # CAN ID
+hw:tankdrive:motors:right:2:type                                "talon_fx"                  # Type of motor controller
+hw:tankdrive:invert:motors:right                                true                        # Invert the direction of the right motors
+
 # PLACEHOLDERS
 hw:shooter:motor:type                                           "victor_spx"
 hw:shooter:motor:canid                                          -1
@@ -61,34 +72,6 @@ controlpanelrotator:hold:f                                      0
 controlpanelrotator:hold:min                                    0
 controlpanelrotator:hold:max                                    1
 controlpanelrotator:hold:imax                                   1
-
-#
-# Drivebase
-#
-
-# Drivebase motors
-hw:tankdrive:motors:left:1:canid                                1                           # CAN ID
-hw:tankdrive:motors:left:1:type                                 "sparkmax_brushless"        # Type of motor controller
-hw:tankdrive:motors:left:2:canid                                2                           # CAN ID
-hw:tankdrive:motors:left:2:type                                 "sparkmax_brushless"        # Type of motor controller
-hw:tankdrive:motors:left:3:canid                                3                           # CAN ID
-hw:tankdrive:motors:left:3:type                                 "sparkmax_brushless"        # Type of motor controller
-hw:tankdrive:motors:right:1:canid                               4                           # CAN ID
-hw:tankdrive:motors:right:1:type                                "sparkmax_brushless"        # Type of motor controller
-hw:tankdrive:motors:right:2:canid                               5                           # CAN ID
-hw:tankdrive:motors:right:2:type                                "sparkmax_brushless"        # Type of motor controller
-hw:tankdrive:motors:right:3:canid                               6                           # CAN ID
-hw:tankdrive:motors:right:3:type                                "sparkmax_brushless"        # Type of motor controller
-hw:tankdrive:invert:motors:right                                true                        # Invert the direction of the right motors
-
-# Drivebase encoders
-hw:tankdrive:encoders:left:1                                    0                           # Digital IO
-hw:tankdrive:encoders:left:2                                    1                           # Digital IO
-hw:tankdrive:encoders:right:1                                   2                           # Digital IO
-hw:tankdrive:encoders:right:2                                   3                           # Digital IO
-
-# Drivebase shifter
-hw:tankdrive:shifter                                            0                           # Solenoid to shift between high and low gear
 
 #
 # Driver station
