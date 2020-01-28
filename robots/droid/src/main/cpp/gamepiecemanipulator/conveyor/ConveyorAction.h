@@ -40,10 +40,23 @@ namespace xero {
                 StateResult(std::variant<_Continue, _Next, std::string> value): value_(value) {}
             };
 
-            void setStates(std::vector<std::variant<
-                                                    std::function<StateResult(void)>,
-                                                    std::pair<std::string, std::function<StateResult(void)>>
-                                                    >> states);
+            // Helper struct to represent a state declaration.
+            struct _StateDecl {
+                friend class ConveyorAction;
+            public:
+                _StateDecl(std::function<StateResult(void)> state): 
+                    value_(state) {}
+
+                _StateDecl(std::string name, std::function<StateResult(void)> state):
+                    value_(std::pair(name, state)) {}
+            private:
+                // A state function, with or without a name.
+                std::variant<std::function<StateResult(void)>,
+                             std::pair<std::string, std::function<StateResult(void)>>
+                            > value_;
+            };
+
+            void setStates(std::vector<_StateDecl> states);
 
             void setMotor(std::optional<Conveyor::Direction> direction);
             std::function<StateResult(void)> setMotorState(std::optional<Conveyor::Direction> direction);

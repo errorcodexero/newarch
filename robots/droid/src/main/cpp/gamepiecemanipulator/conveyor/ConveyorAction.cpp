@@ -13,19 +13,15 @@ namespace xero {
         ConveyorAction::ConveyorAction(Conveyor &subsystem): 
             Action(subsystem.getRobot().getMessageLogger()), subsystem_(subsystem) {}
 
-        void ConveyorAction::setStates(std::vector<std::variant<
-                                                                std::function<StateResult(void)>,
-                                                                std::pair<  std::string,
-                                                                            std::function<StateResult(void)>>
-                                                                >> states) {
+        void ConveyorAction::setStates(std::vector<_StateDecl> states) {
             states_.clear();
             states_.reserve(states.size());
             namedStates_.clear();
             for (auto state : states) {
-                if (auto func = std::get_if<std::function<StateResult(void)>>(&state)) {
+                if (auto func = std::get_if<std::function<StateResult(void)>>(&state.value_)) {
                     states_.push_back(*func);
                 } else {
-                    auto pair = std::get<std::pair<std::string, std::function<StateResult(void)>>>(state);
+                    auto pair = std::get<std::pair<std::string, std::function<StateResult(void)>>>(state.value_);
                     namedStates_.insert({pair.first, states_.size()});
                     states_.push_back(pair.second);
                 }
