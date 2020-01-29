@@ -13,6 +13,7 @@ CXXFLAGS += -DSIMULATOR
 endif
 
 ifeq ($(PLATFORM),SIM2)
-CXXFLAGS += -DSIM2
+CXXFLAGS += -DSIM2 -pthread
+LINKPOSTFIX += -pthread -ldl
 endif
 
