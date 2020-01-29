@@ -7,7 +7,7 @@
 #include <CTREManager.h>
 #include <REVManager.h>
 #include <json.h>
-#include <hal/HalBase.h>
+#include <hal/HALBase.h>
 #include <hal/Ports.h>
 #include <mockdata/EncoderData.h>
 #include <mockdata/PWMData.h>
