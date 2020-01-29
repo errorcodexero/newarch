@@ -27,6 +27,14 @@ namespace xero {
 
             typedef std::shared_ptr<frc::DigitalInput> SensorPtr;
 
+            enum class Sensor {
+                A,  // The sensor closest to the intake.
+                B,
+                C   // The sensor closest to the shooter.
+            };
+            SensorPtr getSensor(Sensor sensor) { return sensors_[static_cast<int>(sensor)]; }
+            bool readSensor(Sensor sensor) { return getSensor(sensor)->Get(); }
+
         private:
             // Runs the motors in the specified direction, or stops them if direction is null.
             void setMotor(std::optional<Direction> direction);
@@ -36,6 +44,7 @@ namespace xero {
 
         private:
             int ballCount_ = 0;
+            std::array<SensorPtr, 3> sensors_;
         };
     }
 }

@@ -44,10 +44,12 @@ namespace xero {
         }
 
         std::function<ConveyorAction::StateResult(void)> 
-        ConveyorAction::waitForSensorState(Conveyor::SensorPtr sensor, bool value) {
+        ConveyorAction::waitForSensorState(Conveyor::Sensor sensor, bool value) {
             return [=]() {
-                if (sensor->Get() == value) return StateResult::Next;
-                else                        return StateResult::Continue;
+                if (getSubsystem().readSensor(sensor) == value)
+                    return StateResult::Next;
+                else
+                    return StateResult::Continue;
             };
         }
 

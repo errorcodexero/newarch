@@ -107,7 +107,7 @@ namespace xero {
             /// \param sensor The sensor to wait for.
             /// \param value The value to wait for.
             /// \param nextState The state to transition to, or -1 to indicate the next state.
-            std::function<StateResult(void)> waitForSensorState(Conveyor::SensorPtr sensor, bool value);
+            std::function<StateResult(void)> waitForSensorState(Conveyor::Sensor sensor, bool value);
 
             // Creates a state that immediately jumps to the given named state.
             std::function<StateResult(void)> gotoState(std::string name) {

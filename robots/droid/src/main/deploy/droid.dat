@@ -28,6 +28,10 @@ hw:shooter:encoder:quad:2                                       -1
 hw:shooter:encoder:quad:m                                       1
 hw:shooter:encoder:quad:b                                       0
 
+hw:conveyor:sensor:a                                            -1
+hw:conveyor:sensor:b                                            -1
+hw:conveyor:sensor:c                                            -1
+
 hw:turret:motor:type                                            "victor_spx"
 hw:turret:motor:canid                                           -2
 hw:turret:encoder:quad:1                                        -1

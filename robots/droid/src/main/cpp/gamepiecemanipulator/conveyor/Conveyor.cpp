@@ -1,6 +1,9 @@
 #include "Conveyor.h"
 #include "droidids.h"
 
+#include <utility>
+#include <vector>
+
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 #include <SettingsParser.h>
 
@@ -10,7 +13,16 @@ using namespace xero::base;
 namespace xero {
     namespace droid {
         Conveyor::Conveyor(Subsystem *parent): SingleMotorSubsystem(parent, "conveyor", MSG_GROUP_CONVEYOR) {
-            
+            std::vector<std::pair<Sensor, std::string>> sensorNames {
+                {Sensor::A, "a"},
+                {Sensor::B, "b"},
+                {Sensor::C, "c"},
+            };
+            auto &settings = getRobot().getSettingsParser();
+            for (unsigned i = 0; i < sensorNames.size(); i++) {
+                int sensorIndex = static_cast<int>(sensorNames[i].first);
+                sensors_[sensorIndex] = createSensor(settings, "hw:conveyor:sensor" + sensorNames[i].second);
+            }
         }
 
         void Conveyor::postHWInit() {
