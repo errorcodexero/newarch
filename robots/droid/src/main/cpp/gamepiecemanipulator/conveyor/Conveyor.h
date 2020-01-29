@@ -19,6 +19,8 @@ namespace xero {
             int getBallCount() { return ballCount_; }
 
             static const int MAX_BALLS = 5;
+            bool isEmpty() { return ballCount_ == 0; }
+            bool isFull() { return ballCount_ == MAX_BALLS; }
 
             enum class Direction {
                 TowardsShooter,
@@ -31,6 +33,15 @@ namespace xero {
                 A,  // The sensor closest to the intake.
                 B,
                 C   // The sensor closest to the shooter.
+
+                //                    (shooter)
+                //                      |   |
+                //                      |   < C
+                //                      |   |
+                //          *-----------/   |
+                // (intake) *              /
+                //          *-^---^------ /
+                //            A   B
             };
             SensorPtr getSensor(Sensor sensor) { return sensors_[static_cast<int>(sensor)]; }
             bool readSensor(Sensor sensor) { return getSensor(sensor)->Get(); }

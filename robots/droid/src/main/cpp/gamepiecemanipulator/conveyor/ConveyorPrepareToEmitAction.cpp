@@ -3,18 +3,20 @@
 
 namespace xero {
     namespace droid {
-        // void ConveyorPrepareToEmitAction::start() {
-        //     if (getSubsystem().ballCount_ == 0) {
-        //         setDone();
-        //     }
-        // }
+        ConveyorPrepareToEmitAction::ConveyorPrepareToEmitAction(Conveyor &subsystem):
+            ConveyorAction(subsystem, "ConveyorPrepareToEmitAction") {
+            
+            const std::string done = "done";
+            setStates({
+                // if empty, stop
+                branchState(done, std::bind(&Conveyor::isEmpty, getSubsystem())),
+                
+                // move balls in position towards shooter
+                setMotorState(Direction::TowardsShooter),
+                waitForSensorState(Sensor::C, true),
 
-        // void ConveyorPrepareToEmitAction::run() {
-        //     getSubsystem().setMotor(1);    // move balls toward shooter
-        //     if (/* sensor C is tripped */true) {
-        //         // balls are in position next to shooter
-        //         setDone();
-        //     }
-        // }
+                { done, setMotorState(std::nullopt) },
+            });
+        }
     }
 }

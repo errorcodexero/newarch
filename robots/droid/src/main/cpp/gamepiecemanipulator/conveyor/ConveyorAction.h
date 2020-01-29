@@ -38,6 +38,9 @@ namespace xero {
             /// Subclasses should call setStates from their constructor.
             ConveyorAction(Conveyor &subsystem, std::string actionName);
 
+            typedef Conveyor::Direction Direction;
+            typedef Conveyor::Sensor Sensor;
+
             /// The result of executing a single tick of a state.
             struct StateResult {
                 friend class ConveyorAction;
@@ -109,10 +112,28 @@ namespace xero {
             /// \param nextState The state to transition to, or -1 to indicate the next state.
             std::function<StateResult(void)> waitForSensorState(Conveyor::Sensor sensor, bool value);
 
-            // Creates a state that immediately jumps to the given named state.
+            /// A state that increments the number of collected balls.
+            std::function<StateResult(void)> incrementBallsState();
+
+            /// A state that decrements the number of collected balls.
+            std::function<StateResult(void)> decrementBallsState();
+
+            /// A state that jumps to \param target if \param condition evaluates to true.
+            std::function<StateResult(void)> branchState(std::string target, std::function<bool()> condition) {
+                return [=]() { 
+                    if(condition()) return StateResult::Goto(target);
+                    else            return StateResult::Next;
+                };
+            }
+
+            // A state that immediately jumps to the given named state.
             std::function<StateResult(void)> gotoState(std::string name) {
                 return [=]() { return StateResult::Goto(name); };
             }
+
+            /// A state that verifies a precondition. If the condition fails,
+            /// an error message is printed and the action is terminated.
+            std::function<StateResult(void)> assertState(std::function<bool()> condition, std::string message);
 
         private:
             Conveyor &subsystem_ ;

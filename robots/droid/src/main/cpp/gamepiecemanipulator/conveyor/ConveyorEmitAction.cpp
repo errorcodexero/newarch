@@ -5,29 +5,33 @@ using namespace xero::misc;
 
 namespace xero {
     namespace droid {
-        // void ConveyorEmitAction::start() {
-        //     if (getSubsystem().ballCount_ == 0) {
-        //         setDone();
-        //     }
+        ConveyorEmitAction::ConveyorEmitAction(Conveyor &subsystem):
+            ConveyorAction(subsystem, "ConveyorEmitAction") {
             
-        //     if (/* sensor C is clear*/false) {
-        //         auto &logger = getMessageLogger();
+            const std::string done = "done";
+            setStates({
+                // if empty, stop
+                branchState(done, std::bind(&Conveyor::isEmpty, getSubsystem())),
 
-        //         logger.startMessage(MessageLogger::MessageType::warning, getSubsystem().getMsgID());
-        //         logger << "ConveyorEmitAction started when no ball is detected by shooter-side sensor";
-        //         logger << "Perhaps ConveyorPrepareToEmitAction didn't get run?";
-        //         logger.endMessage();
+                assertState(std::bind(&Conveyor::readSensor, getSubsystem(), Sensor::C),
+                            "ConveyorEmitAction called with no ball in position; "
+                            "was ConveyorPrepareToEmitAction run?"
+                ),
+                
+                // move a ball towards the shooter
+                setMotorState(Direction::TowardsShooter),
+                waitForSensorState(Sensor::C, false),
+                
+                decrementBallsState(),
+                // if empty, stop
+                branchState(done, std::bind(&Conveyor::isEmpty, getSubsystem())),
 
-        //         setDone();
-        //     }
-        // }
+                // wait for the next ball to move into position
+                waitForSensorState(Sensor::C, true),
 
-        // void ConveyorEmitAction::run() {
-        //     getSubsystem().setMotor(1); // emit
-        //     if (/* sensor C is clear */true) {
-        //         setDone();
-        //         getSubsystem().ballCount_ -= 1;
-        //     }
-        // }
+                // we're done
+                { done, setMotorState(std::nullopt) },
+            });
+        }
     }
 } 

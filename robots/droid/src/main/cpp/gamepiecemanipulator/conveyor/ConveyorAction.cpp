@@ -61,6 +61,51 @@ namespace xero {
             };
         }
 
+        std::function<ConveyorAction::StateResult(void)> 
+        ConveyorAction::incrementBallsState() {
+            return [=]() {
+                if (getSubsystem().getBallCount() < Conveyor::MAX_BALLS) {
+                    getSubsystem().ballCount_++;
+                } else {
+                    auto &logger = getMessageLogger();
+                    logger.startMessage(MessageLogger::MessageType::error);
+                    logger << actionName_ << ": incrementBallsState: conveyor overflow";
+                    logger.endMessage();
+                }
+                return StateResult::Next;
+            };
+        }   
+
+        std::function<ConveyorAction::StateResult(void)> 
+        ConveyorAction::decrementBallsState() {
+            return [=]() {
+                if (getSubsystem().getBallCount() > 0) {
+                    getSubsystem().ballCount_--;
+                } else {
+                    auto &logger = getMessageLogger();
+                    logger.startMessage(MessageLogger::MessageType::error);
+                    logger << actionName_ << ": incrementBallsState: conveyor underflow";
+                    logger.endMessage();
+                }
+                return StateResult::Next;
+            };
+        }     
+
+        std::function<ConveyorAction::StateResult(void)> 
+        ConveyorAction::assertState(std::function<bool()> condition, std::string message) {
+                return [=]() {
+                    if (!condition()) {
+                        auto &logger = getMessageLogger();
+                        logger.startMessage(MessageLogger::MessageType::error);
+                        logger << actionName_ << ": assertion failed: " << message << "\n";
+                        logger << "Terminating action.";
+                        logger.endMessage();
+                        setDone();
+                    }
+                    return StateResult::Next;
+                };
+            }   
+
         void ConveyorAction::setStateIndex(int stateIndex)  { 
             assert(stateIndex >= 0 && stateIndex < (int)states_.size() && "state index out of range");
             stateIndex_ = stateIndex;
@@ -83,11 +128,13 @@ namespace xero {
         void ConveyorAction::run() {
             auto &logger = getMessageLogger();
 
-            while (true) {
+            bool updated = true;
+            while (updated && !isDone()) {
                 StateResult result = states_[stateIndex_]();
 
                 if (std::holds_alternative<StateResult::_Continue>(result.value_)) {
                     // the state didn't finish, run it again next tick
+                    updated = false;
                     break;
                 } else if (std::holds_alternative<StateResult::_Next>(result.value_)) {
                     // go to the next state
