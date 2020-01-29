@@ -28,12 +28,15 @@ namespace xero {
             void run() override;
 
             int getStateIndex() { return stateIndex_; }
+
+            std::string toString() override;
             
         protected:
             /// Creates a conveyor action.
             /// \param subsystem The conveyor.
+            /// \param actionName The name of this action (ex. ConveyorEmitAction).
             /// Subclasses should call setStates from their constructor.
-            ConveyorAction(Conveyor &subsystem);
+            ConveyorAction(Conveyor &subsystem, std::string actionName);
 
             /// The result of executing a single tick of a state.
             struct StateResult {
@@ -114,8 +117,13 @@ namespace xero {
         private:
             Conveyor &subsystem_ ;
 
+            std::string actionName_;
+
+            // Returns a debug description of the given state index.
+            std::string describeState(int stateIndex);
+
             std::vector<std::function<StateResult(void)>> states_;
-            std::map<std::string, int> namedStates_;
+            std::unordered_map<std::string, int> namedStates_;
 
             void setStateIndex(int stateIndex);
 
