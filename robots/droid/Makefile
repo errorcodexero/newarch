@@ -61,9 +61,10 @@ LOCAL_CFLAGS = -Isrc/main/cpp -Isrc/models/cpp -Isrc/models/include
 
 SUPPORTED_PLATFORMS=ROBORIO SIMULATOR
 
-ifeq ($(PLATFORM),$(filter $(PLATFORM),SIMULATOR,SIM2)
+ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/droidsim
 	LOCAL_LIBS = $(TOPDIR)/robotsims/droidsim
+	LOCAL_EXTERNAL_LIBS = -lcurses -lpthread
 endif
 
 ifeq ($(PLATFORM),GOPIGO)
