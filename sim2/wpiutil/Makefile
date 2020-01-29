@@ -79,7 +79,6 @@ SOURCES = \
 	./libuv/src/timer.cpp\
 	./libuv/src/unix/async.cpp\
 	./libuv/src/unix/core.cpp\
-	./libuv/src/unix/cygwin.cpp\
 	./libuv/src/unix/dl.cpp\
 	./libuv/src/unix/fs.cpp\
 	./libuv/src/unix/fsevents.cpp\
@@ -107,6 +106,19 @@ SOURCES = \
 	./libuv/src/version.cpp\
 	./unix/Demangle.cpp\
 	./cygwin/StackTrace.cpp
+	
+ifeq ($(MYOS),Cygwin)
+  SOURCES += 	./libuv/src/unix/cygwin.cpp
+endif
+ifeq ($(MYOS),Darwin)
+  SOURCES += 	./libuv/src/unix/darwin.cpp\
+  		./libuv/src/unix/darwin-proctitle.cpp
+endif
+ifeq ($(MYOS),Linux)
+  SOURCES += 	./libuv/src/unix/linux-core.cpp\
+  		./libuv/src/unix/linux-inotify.cpp\
+		./libuv/src/unix/linux-syscalls.cpp
+endif
 
 TARGET=wpiutil
 
