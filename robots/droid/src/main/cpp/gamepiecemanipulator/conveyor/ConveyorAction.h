@@ -62,15 +62,14 @@ namespace xero {
                 friend class ConveyorAction;
             public:
                 _StateDecl(std::function<StateResult(void)> state): 
-                    value_(state) {}
+                    value_({std::nullopt, state}) {}
 
                 _StateDecl(std::string name, std::function<StateResult(void)> state):
-                    value_(std::pair(name, state)) {}
+                    value_({name, state}) {}
             private:
                 // A state function, with or without a name.
-                std::variant<std::function<StateResult(void)>,
-                             std::pair<std::string, std::function<StateResult(void)>>
-                            > value_;
+                std::pair<  std::optional<std::string>, 
+                            std::function<StateResult(void)>> value_;
             };
             
             /// Initializes the state machine to the given states.

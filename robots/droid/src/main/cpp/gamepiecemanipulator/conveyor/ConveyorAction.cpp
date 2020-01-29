@@ -18,13 +18,12 @@ namespace xero {
             states_.reserve(states.size());
             namedStates_.clear();
             for (auto state : states) {
-                if (auto func = std::get_if<std::function<StateResult(void)>>(&state.value_)) {
-                    states_.push_back(*func);
-                } else {
-                    auto pair = std::get<std::pair<std::string, std::function<StateResult(void)>>>(state.value_);
-                    namedStates_.insert({pair.first, states_.size()});
-                    states_.push_back(pair.second);
+                std::optional<std::string> name = state.value_.first;
+                auto func = state.value_.second;
+                if (name) {
+                    namedStates_.insert({*name, states_.size()});
                 }
+                states_.push_back(state.value_.second);
             }
         }
 
