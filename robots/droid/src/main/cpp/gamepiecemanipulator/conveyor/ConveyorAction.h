@@ -12,6 +12,12 @@
 namespace xero {
     namespace droid {
         class Conveyor;
+        /// Because of the sequential nature of conveyor actions, ConveyorAction
+        /// implements a generic state-machine-based framework for controlling
+        /// conveyors. A conveyor action is modeled as a sequence of states,
+        /// such as "start motors" or "wait for sensor", each implemented by
+        /// a \c std::function returning a StateResult
+        /// \see ConveyorAction::setStates, ConveyorAction::StateResult 
         class ConveyorAction : public xero::base::Action {
         public:
             Conveyor &getSubsystem() {
@@ -24,13 +30,24 @@ namespace xero {
             int getStateIndex() { return stateIndex_; }
             
         protected:
+            /// Creates a conveyor action.
+            /// \param subsystem The conveyor.
+            /// Subclasses should call setStates from their constructor.
             ConveyorAction(Conveyor &subsystem);
 
+            /// The result of executing a single tick of a state.
             struct StateResult {
                 friend class ConveyorAction;
             public:
+
+                /// Keeps the state machine in the current state.
                 static const StateResult Continue;
+
+                /// Transitions the state machine to the next state.
                 static const StateResult Next;
+
+                /// Transitions the state machine to a specific named state.
+                /// \param name The name of the state to switch to. 
                 static StateResult Goto(std::string name) { return StateResult(name); }
             private:
                 struct _Continue {};
@@ -40,7 +57,7 @@ namespace xero {
                 StateResult(std::variant<_Continue, _Next, std::string> value): value_(value) {}
             };
 
-            // Helper struct to represent a state declaration.
+            /// Helper struct to represent a state declaration.
             struct _StateDecl {
                 friend class ConveyorAction;
             public:
@@ -55,10 +72,33 @@ namespace xero {
                              std::pair<std::string, std::function<StateResult(void)>>
                             > value_;
             };
-
+            
+            /// Initializes the state machine to the given states.
+            /// \param states The list of states. Each state optionally have a name.
+            /// Example:
+            ///
+            /// setStates({
+            ///     waitForSensorState(..., true),
+            ///     setMotorState(Conveyor::Direction::TowardShooter),
+            ///     { "named_state", waitForSensorState(..., false) },
+            ///     
+            ///     // custom state accepting a parameter
+            ///     { std::bind(&MyConveyorAction::myCustomState, this, someParam) },
+            ///     
+            ///     // same thing as above, but with a lambda
+            ///     { [=]() { return myCustomState(someParam); } },
+            ///
+            ///     { "named_custom_state", std::bind(&MyConveyorAction::otherCustomState, this) }
+            /// });
             void setStates(std::vector<_StateDecl> states);
 
-            void setMotor(std::optional<Conveyor::Direction> direction);
+            /// Sets the motor to run in the specified direction.
+            void setMotor(std::optional<Conveyor::Direction> direction){ 
+                getSubsystem().setMotor(direction);
+            }
+
+            /// Creates a state which starts running the motor in the specified direction.
+            /// The returned state calls setMotor and immediately returns ::Next.
             std::function<StateResult(void)> setMotorState(std::optional<Conveyor::Direction> direction);
 
             /// Creates a state that waits for a sensor to reach a specific value.

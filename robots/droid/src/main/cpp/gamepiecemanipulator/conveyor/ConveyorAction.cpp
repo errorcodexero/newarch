@@ -36,10 +36,6 @@ namespace xero {
             };
         }
 
-        void ConveyorAction::setMotor(std::optional<Conveyor::Direction> direction) { 
-            getSubsystem().setMotor(direction);
-        }
-
         std::function<ConveyorAction::StateResult(void)> 
         ConveyorAction::setMotorState(std::optional<Conveyor::Direction> direction) {
             return [=]() {
