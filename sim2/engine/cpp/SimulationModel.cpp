@@ -46,6 +46,36 @@ namespace xero
             return v.getInteger();
         }
 
+        double SimulationModel::getDouble(const std::string &name)
+        {
+            if (!hasProperty(name))
+            {
+                SimulatorMessages &msg = engine_.getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() << " - cannot find property" ;
+                msg << "'" << name << "'" ;
+                msg.endMessage(engine_.getSimulationTime()) ;
+
+                std::runtime_error err("could not create model") ;
+                throw err ;
+            }
+
+            SimValue v = getProperty(name);
+            if (!v.isDouble())
+            {
+                SimulatorMessages &msg = engine_.getMessageOutput() ;
+                msg.startMessage(SimulatorMessages::MessageType::Error) ;
+                msg << "model " << getModelName() << " instance " << getInstanceName() << " - property exists but is not a double" ;
+                msg << "'" << name << "'" ;
+                msg.endMessage(engine_.getSimulationTime()) ;
+
+                std::runtime_error err("could not create model") ;
+                throw err ;                
+            }
+
+            return v.getDouble();
+        }        
+
         void SimulationModel::dumpProperties()
         {
             for(auto it : props_)
@@ -56,7 +86,6 @@ namespace xero
                 msg.endMessage(engine_.getSimulationTime()) ;
             }
         }
-
 
         void SimulationModel::registerDataFormat(const std::string &format, const std::vector<std::string> &names)
         {

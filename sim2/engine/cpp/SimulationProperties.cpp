@@ -149,8 +149,21 @@ namespace xero
                     siminst->setProperty(fullkey, sv); 
                 }
 
-                if (!siminst->create())
+                try
+                {
+                    if (!siminst->create())
+                        return false ;
+                }
+                catch(const std::exception &ex)
+                {
+                    msg.startMessage(SimulatorMessages::MessageType::Error);
+                    msg << "model '" << siminst->getModelName() << "' instance '" << siminst->getInstanceName() << "'" ;
+                    msg << " - create failed - " << ex.what() ;
+                    msg.endMessage(engine_.getSimulationTime()); 
+
+                    engine_.removeModelInstance(siminst) ;
                     return false ;
+                }
             }
 
             return true;

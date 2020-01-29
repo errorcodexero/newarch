@@ -28,9 +28,11 @@ hw:shooter:encoder:quad:2                                       -1
 hw:shooter:encoder:quad:m                                       1
 hw:shooter:encoder:quad:b                                       0
 
-hw:conveyor:sensor:a                                            -1
-hw:conveyor:sensor:b                                            -1
-hw:conveyor:sensor:c                                            -1
+hw:conveyor:motor:type                                          "sparkmax_brushless"
+hw:conveyor:motor:canid                                         5
+hw:conveyor:sensor:a                                            1
+hw:conveyor:sensor:b                                            2
+hw:conveyor:sensor:c                                            3
 
 hw:turret:motor:type                                            "victor_spx"
 hw:turret:motor:canid                                           -2
@@ -43,8 +45,7 @@ hw:intake:motor:type                                            "victor_spx"
 hw:intake:motor:canid                                           -3
 hw:intake:duration                                               0.0                                                        
 
-hw:conveyor:motor:type                                          "victor_spx"
-hw:conveyor:motor:canid                                         -4
+
 
 hw:controlpanelrotator:motor:type                               "victor_spx"
 hw:controlpanelrotator:motor:canid                              -5

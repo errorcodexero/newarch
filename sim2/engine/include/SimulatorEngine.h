@@ -55,6 +55,9 @@ namespace xero
             // Create a new model instance
             std::shared_ptr<SimulationModel> createModelInstance(const std::string &model, const std::string &inst);
 
+            // Remove an existing model 
+            void removeModelInstance(std::shared_ptr<SimulationModel> inst) ;
+
             // Register a new model factory
             void registerModelFactory(const std::string &name, ModelFactoryBase *factory) {
                 model_factories_[name] = factory;

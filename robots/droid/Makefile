@@ -30,7 +30,8 @@ SUBSYSTEMS = \
 
 MODELS = \
 	src/models/cpp/DroidOIModel.cpp\
-	src/models/cpp/IntakeModel.cpp
+	src/models/cpp/IntakeModel.cpp\
+	src/models/cpp/ConveyorModel.cpp
 
 SOURCES = \
 	src/main/cpp/main.cpp\

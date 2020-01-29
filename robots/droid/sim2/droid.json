@@ -2,6 +2,28 @@
     "models" :
     [
         {
+            "model" : "navxsim",
+            "instance" : "1",
+            "hardware" : {
+                "interface" : "SPI",
+                "index" : 4
+            },
+            "behavior" : {
+            }
+        },
+        {
+            "model" : "fms",
+            "instance" : "1",
+            "hardware" : {
+            },
+            "behavior" : {
+                "start" : 1.0,
+                "autonomous" : 15.0,
+                "between" : 2.0,
+                "teleop" : 135.0
+            }            
+        },
+        {
             "model" : "westcoastdrive",
             "instance" : "1",
             "hardware" :
@@ -59,27 +81,18 @@
                 "povs" : 1,
                 "automode" : 6
             }
-        },              
-        {
-            "model" : "navxsim",
-            "instance" : "1",
-            "hardware" : {
-                "interface" : "SPI",
-                "index" : 4
-            },
-            "behavior" : {
-            }
         },
         {
-            "model" : "fms",
+            "model" : "conveyor",
             "instance" : "1",
             "hardware" : {
+                "motor" : 5,
+                "sensor1": 1,
+                "sensor2": 2,
+                "sensor3": 3
             },
             "behavior" : {
-                "start" : 1.0,
-                "autonomous" : 15.0,
-                "between" : 2.0,
-                "teleop" : 135.0
+                "distance_per_second_per_inch" : 12.0
             }            
         }
     ]

@@ -60,6 +60,13 @@ namespace xero
             return mptr ;
         }
 
+        void SimulatorEngine::removeModelInstance(std::shared_ptr<SimulationModel> inst)
+        {
+            auto it = std::find(models_.begin(), models_.end(), inst) ;
+            if (it != models_.end())
+                models_.erase(it) ;
+        }
+
         std::shared_ptr<SimulationModel> SimulatorEngine::findModelInstance(const std::string &model, const std::string &inst)
         {
             for(auto m : models_)
