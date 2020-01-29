@@ -1,16 +1,6 @@
 #include "ConveyorReceiveAction.h"
 #include "Conveyor.h"
 
-// Sensor names used in comments:
-//                    (shooter)
-//                      |   |
-//                      |   < C
-//                      |   |
-//          *-----------/   |
-// (intake) *              /
-//          *-^---^------ /
-//            A   B
-
 namespace xero {
     namespace droid {
         ConveyorReceiveAction::ConveyorReceiveAction(Conveyor &subsystem):
