@@ -32,7 +32,7 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Install dependencies
-      run: sudo apt-get install libncurses-dev libopencv-core-dev
+      run: sudo apt-get install libncurses-dev libopencv-highgui-dev
 
     - name: Build robot code
       working-directory: robots/${{ matrix.robot }}
