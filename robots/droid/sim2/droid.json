@@ -86,7 +86,8 @@
             "model" : "conveyor",
             "instance" : "1",
             "hardware" : {
-                "motor" : 5,
+                "motor:index" : 5,
+                "motor:type" : "sparkmax",
                 "sensor1": 1,
                 "sensor2": 2,
                 "sensor3": 3

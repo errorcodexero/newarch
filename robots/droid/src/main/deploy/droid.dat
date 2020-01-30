@@ -20,11 +20,10 @@ hw:tankdrive:motors:right:2:canid                               4               
 hw:tankdrive:motors:right:2:type                                "talon_fx"                  # Type of motor controller
 hw:tankdrive:invert:motors:right                                true                        # Invert the direction of the right motors
 
-# PLACEHOLDERS
-hw:shooter:motor:type                                           "victor_spx"
-hw:shooter:motor:canid                                          -1
-hw:shooter:encoder:quad:1                                       -1
-hw:shooter:encoder:quad:2                                       -1
+hw:shooter:motor:1:type                                         "sparkmax_brushless"
+hw:shooter:motor:1:canid                                        6
+hw:shooter:motor:2:type                                         "sparkmax_brushless"
+hw:shooter:motor:2:canid                                        7
 hw:shooter:encoder:quad:m                                       1
 hw:shooter:encoder:quad:b                                       0
 
