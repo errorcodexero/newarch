@@ -20,12 +20,13 @@ namespace xero
         {
         public:
             ModelFactoryBase(const std::string &name) {
-                auto it = std::find(models_.begin(), models_.end(), name);
+                auto &models = getModelList();
+                auto it = std::find(models.begin(), models.end(), name);
 
                 // If this fires, there are two model factories trying to register the name name
-                assert(it == models_.end());
+                assert(it == models.end());
 
-                models_.push_back(name);
+                models.push_back(name);
                 name_ = name;
 
                 SimulatorEngine &engine = SimulatorEngine::getEngine();
@@ -37,9 +38,7 @@ namespace xero
 
             virtual std::shared_ptr<SimulationModel> createModel(SimulatorEngine &engine, const std::string &inst) = 0;
 
-            static std::list<std::string> &getModelList() {
-                return models_;
-            }
+            static std::list<std::string> &getModelList();
 
         protected:
             const std::string &getFactoryName() {
@@ -48,8 +47,6 @@ namespace xero
 
         private:
             std::string name_;
-
-            static std::list<std::string> models_;
         };
 
         template <class T>
