@@ -21,7 +21,7 @@ namespace xero {
             auto &settings = getRobot().getSettingsParser();
             for (unsigned i = 0; i < sensorNames.size(); i++) {
                 int sensorIndex = static_cast<int>(sensorNames[i].first);
-                sensors_[sensorIndex] = createSensor(settings, "hw:conveyor:sensor" + sensorNames[i].second);
+                sensors_[sensorIndex] = createSensor(settings, "hw:conveyor:sensor:" + sensorNames[i].second);
             }
         }
 

@@ -25,6 +25,8 @@ hw:shooter:motor:1:canid                                        6
 hw:shooter:motor:2:type                                         "sparkmax_brushless"
 hw:shooter:motor:2:canid                                        7
 hw:shooter:motor:2:invert                                       true
+hw:shooter:encoder:quad:1                                       -1
+hw:shooter:encoder:quad:2                                       -1
 hw:shooter:encoder:quad:m                                       1
 hw:shooter:encoder:quad:b                                       0
 
