@@ -56,6 +56,19 @@ hw:controlpanelrotator:encoder:quad:2                           -1
 hw:controlpanelrotator:encoder:quad:m                           1
 hw:controlpanelrotator:encoder:quad:b                           0
 
+hw:climber:motor:1:type                                         "victor_spx"
+hw:climber:motor:1:canid                                        -1
+hw:climber:motor:2:type                                         "victor_spx"
+hw:climber:motor:2:canid                                        -1
+hw:climber:motor:2:invert                                        true
+hw:climber:encoder:quad:1                                       -1
+hw:climber:encoder:quad:2                                       -1
+hw:climber:encoder:quad:m                                       1
+hw:climber:encoder:quad:b                                       0
+
+hw:climber:servo:l:pwmid                                        -1
+hw:climber:servo:r:pwmid                                        -1
+
 shooter:hold:p                                                  1
 shooter:hold:i                                                  0
 shooter:hold:d                                                  0
@@ -133,6 +146,10 @@ driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
 driver:zerolevel                                                0.1
 
+climber:servo:l:angle_hold                                     -1
+climber:servo:l:angle_release                                  -1
+climber:servo:r:angle_hold                                     -1
+climber:servo:r:angle_release                                  -1
 
 ###################################################################################################
 #
