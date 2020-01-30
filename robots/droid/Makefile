@@ -65,7 +65,7 @@ SUPPORTED_PLATFORMS=ROBORIO SIMULATOR
 ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/droidsim
 	LOCAL_LIBS = $(TOPDIR)/robotsims/droidsim
-	LOCAL_EXTERNAL_LIBS=-lcurses -lpthread
+	LOCAL_EXTERNAL_LIBS = -lcurses -lpthread
 endif
 
 ifeq ($(PLATFORM),GOPIGO)
