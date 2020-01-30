@@ -40,7 +40,8 @@ namespace xero
 
         bool ConveyorModel::create()
         {
-            motor_ = std::make_shared<SimulatedMotor>(*this, "hw:motor") ;
+            belt_ = std::make_shared<SimulatedMotor>(*this, "hw:belt") ;
+            turret_ = std::make_shared<SimulatedMotor>(*this, "hw:turret") ;
 
             sensor1_ = getInteger("hw:sensor1") ;
             sensor2_ = getInteger("hw:sensor2") ;
@@ -61,7 +62,7 @@ namespace xero
         void ConveyorModel::run(uint64_t microdt) 
         {
             double tm = microdt / 1.0e6 ;
-            double dist = motor_->get() * dist_per_second_per_volt_ * tm ;
+            double dist = belt_->get() * dist_per_second_per_volt_ * tm ;
 
             if (dist > 0)
             {

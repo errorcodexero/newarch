@@ -86,8 +86,10 @@
             "model" : "conveyor",
             "instance" : "1",
             "hardware" : {
-                "motor:index" : 5,
-                "motor:type" : "sparkmax",
+                "belt:index" : 7,
+                "belt:type" : "sparkmax",
+                "turret:index" : 8,
+                "turret:type" : "sparkmax",
                 "sensor1": 1,
                 "sensor2": 2,
                 "sensor3": 3

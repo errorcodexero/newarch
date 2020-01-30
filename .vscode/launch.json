@@ -126,7 +126,7 @@
         "environment": [],
         "args" : [      
           "--props","robots/droid/sim2/droid.json",
-          "--events","robots/droid/sim2/sims/collect.json",
+          "--events","robots/droid/sim2/sims/automode0.json",
           "--debug","6"
         ],      
         "externalConsole": true,

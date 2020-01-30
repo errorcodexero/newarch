@@ -38,7 +38,8 @@ namespace xero
             void printBalls() ;
 
         private:
-            std::shared_ptr<xero::sim2::SimulatedMotor> motor_ ;
+            std::shared_ptr<xero::sim2::SimulatedMotor> belt_ ;
+            std::shared_ptr<xero::sim2::SimulatedMotor> turret_ ;            
             int number_of_balls_ ;
             int sensor1_ ;
             int sensor2_ ;

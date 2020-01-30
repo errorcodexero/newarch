@@ -20,6 +20,9 @@ namespace ctre
 
             IMotorController::~IMotorController()
             {
+                xero::sim2::SimulatorEngine &engine = xero::sim2::SimulatorEngine::getEngine();
+                auto mgr = engine.getCTREManager();
+                mgr->destroy(index_);                
             }
 
             void IMotorController::Set(ControlMode mode, double v)

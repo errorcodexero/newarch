@@ -10,64 +10,65 @@
 ###################################################################################################
 
 # Drivebase motors
-hw:tankdrive:motors:left:1:canid                                1                           # CAN ID
-hw:tankdrive:motors:left:1:type                                 "talon_fx"                  # Type of motor controller
-hw:tankdrive:motors:left:2:canid                                2                           # CAN ID
-hw:tankdrive:motors:left:2:type                                 "talon_fx"                  # Type of motor controller
-hw:tankdrive:motors:right:1:canid                               3                           # CAN ID
-hw:tankdrive:motors:right:1:type                                "talon_fx"                  # Type of motor controller
-hw:tankdrive:motors:right:2:canid                               4                           # CAN ID
-hw:tankdrive:motors:right:2:type                                "talon_fx"                  # Type of motor controller
+hw:tankdrive:motors:left:1:canid                                1                           # CAN 1
+hw:tankdrive:motors:left:1:type                                 "talon_fx"
+hw:tankdrive:motors:left:2:canid                                2                           # CAN 2
+hw:tankdrive:motors:left:2:type                                 "talon_fx"
+hw:tankdrive:motors:right:1:canid                               3                           # CAN 3
+hw:tankdrive:motors:right:1:type                                "talon_fx"
+hw:tankdrive:motors:right:2:canid                               4                           # CAN 3
+hw:tankdrive:motors:right:2:type                                "talon_fx"
 hw:tankdrive:invert:motors:right                                true                        # Invert the direction of the right motors
 
 hw:shooter:motor:1:type                                         "sparkmax_brushless"
-hw:shooter:motor:1:canid                                        6
+hw:shooter:motor:1:canid                                        5                           # CAN 5
 hw:shooter:motor:2:type                                         "sparkmax_brushless"
-hw:shooter:motor:2:canid                                        7
+hw:shooter:motor:2:canid                                        6                           # CAN 6
 hw:shooter:motor:2:invert                                       true
-hw:shooter:encoder:quad:1                                       -1
-hw:shooter:encoder:quad:2                                       -1
+hw:shooter:encoder:quad:motor                                   true                        # Encoder is in the motor
 hw:shooter:encoder:quad:m                                       1
 hw:shooter:encoder:quad:b                                       0
 
 hw:conveyor:motor:type                                          "sparkmax_brushless"
-hw:conveyor:motor:canid                                         5
+hw:conveyor:motor:canid                                         7                           # CAN 7
+hw:conveyor:turret:type                                         "sparkmax_brushless"
+hw:conveyor:turret:canid                                        8                           # CAN 8
 hw:conveyor:sensor:a                                            1
 hw:conveyor:sensor:b                                            2
 hw:conveyor:sensor:c                                            3
+hw:conveyor:sensor:d                                            4
 
-hw:turret:motor:type                                            "victor_spx"
-hw:turret:motor:canid                                           -2
-hw:turret:encoder:quad:1                                        -1
-hw:turret:encoder:quad:2                                        -1
-hw:turret:encoder:quad:m                                        1
-hw:turret:encoder:quad:b                                        0
+hw:turret:motor:type                                            "sparkmax_brushless"
+hw:turret:motor:canid                                           9                           # CAN 9
+hw:turret:encoder:analog                                        1
+hw:turret:encoder:analog:rmin                                   0.0
+hw:turret:encoder:analog:rmax                                   360.0
+hw:turret:encoder:analog:emin                                   0.0
+hw:turret:encoder:analog:emax                                   1.0
+hw:turret:encoder:analog:ec                                     0.0
+hw:turret:encoder:analog:rc                                     0.0
 
-hw:intake:motor:type                                            "victor_spx"
-hw:intake:motor:canid                                           -3
-hw:intake:duration                                               0.0                                                        
+hw:intake:motor:type                                            "sparkmax_brushless"
+hw:intake:motor:canid                                           10                          # CAN 10
+hw:intake:duration                                              0.0
+hw:intake:position:canid                                        11                          # CAN 11
 
-
-
-hw:controlpanelrotator:motor:type                               "victor_spx"
-hw:controlpanelrotator:motor:canid                              -5
-hw:controlpanelrotator:encoder:quad:1                           -1
-hw:controlpanelrotator:encoder:quad:2                           -1
+hw:controlpanelrotator:motor:type                               "sparkmax_brushless"
+hw:controlpanelrotator:motor:canid                              12                          # CAN 12
+hw:controlpanelrotator:encoder:quad:motor                       true
 hw:controlpanelrotator:encoder:quad:m                           1
 hw:controlpanelrotator:encoder:quad:b                           0
 
-hw:climber:motor:1:type                                         "victor_spx"
-hw:climber:motor:1:canid                                        -1
-hw:climber:motor:2:type                                         "victor_spx"
-hw:climber:motor:2:canid                                        -1
-hw:climber:motor:2:invert                                        true
-hw:climber:encoder:quad:1                                       -1
-hw:climber:encoder:quad:2                                       -1
+hw:climber:motor:1:type                                         "sparkmax_brushless"
+hw:climber:motor:1:canid                                        13                          # CAN 13
+hw:climber:motor:2:type                                         "sparkmax_brushless"
+hw:climber:motor:2:canid                                        14                          # CAN 14
+hw:climber:motor:2:invert                                       true
+hw:climber:encoder:quad:motor                                   true
 hw:climber:encoder:quad:m                                       1
 hw:climber:encoder:quad:b                                       0
-
-hw:climber:servo:l:pwmid                                        -1
-hw:climber:servo:r:pwmid                                        -1
+hw:climber:servo:l:pwmid                                        0                           # PWM 2
+hw:climber:servo:r:pwmid                                        1                           # PWM 1
 
 shooter:hold:p                                                  1
 shooter:hold:i                                                  0
