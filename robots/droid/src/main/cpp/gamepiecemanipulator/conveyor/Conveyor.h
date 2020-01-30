@@ -5,6 +5,7 @@
 #include <frc/DigitalInput.h>
 #include <SettingsParser.h>
 #include <singlemotorsubsystem/SingleMotorSubsystem.h>
+#include <motors/MotorFactory.h>
 
 namespace xero {
     namespace droid {
@@ -27,15 +28,39 @@ namespace xero {
 
             typedef std::shared_ptr<frc::DigitalInput> SensorPtr;
 
+            virtual void computeState() ;
+
+            bool getSensor1() {
+                return sensor1_state_ ;
+            }
+
+            bool getSensor2() {
+                return sensor2_state_ ;
+            }
+
+            bool getSensor3() {
+                return sensor3_state_ ;
+            }
+
         private:
             // Runs the motors in the specified direction, or stops them if direction is null.
-            void setMotor(std::optional<Direction> direction);
+            void setMotor(double v);
 
-            static SensorPtr createSensor(int channel);
-            static SensorPtr createSensor(xero::misc::SettingsParser &settings, std::string configName);
+            SensorPtr createSensor(std::string configName);
 
         private:
-            int ballCount_ = 0;
+            SensorPtr sensor1_ ;
+            SensorPtr sensor2_ ;
+            SensorPtr sensor3_ ;
+
+            bool sensor1_state_ ;
+            bool sensor2_state_ ;
+            bool sensor3_state_ ;
+
+            int ballCount_ ;
+
+            xero::base::MotorFactory::MotorPtr conveyor_belts_ ;
+            xero::base::MotorFactory::MotorPtr turret_conveyor_ ; 
         };
     }
 }

@@ -5,29 +5,57 @@ using namespace xero::misc;
 
 namespace xero {
     namespace droid {
-        // void ConveyorEmitAction::start() {
-        //     if (getSubsystem().ballCount_ == 0) {
-        //         setDone();
-        //     }
-            
-        //     if (/* sensor C is clear*/false) {
-        //         auto &logger = getMessageLogger();
+        ConveyorEmitAction::ConveyorEmitAction(Conveyor &sub) : ConveyorAction(sub)
+        {
+            to_shooter_ = 1.0 ;
+            to_collecter_ = -1.0 ;
+        }
 
-        //         logger.startMessage(MessageLogger::MessageType::warning, getSubsystem().getMsgID());
-        //         logger << "ConveyorEmitAction started when no ball is detected by shooter-side sensor";
-        //         logger << "Perhaps ConveyorPrepareToEmitAction didn't get run?";
-        //         logger.endMessage();
+        ConveyorEmitAction::~ConveyorEmitAction()
+        {
+        }
 
-        //         setDone();
-        //     }
-        // }
+        void ConveyorEmitAction::start()
+        {
+            state_ = State::WaitForBall ;
+        }
 
-        // void ConveyorEmitAction::run() {
-        //     getSubsystem().setMotor(1); // emit
-        //     if (/* sensor C is clear */true) {
-        //         setDone();
-        //         getSubsystem().ballCount_ -= 1;
-        //     }
-        // }
+        void ConveyorEmitAction::run()
+        {
+            auto &sub = getSubsystem() ;
+
+            switch(state_)
+            {
+            case State::WaitForBall:
+                if (sub.getSensor1())
+                {
+                    //
+                    // We have a ball, turn on the motor
+                    //
+                    setMotor(to_shooter_) ;
+                    if (sub.getBallCount())
+                    {
+                        state_ = State::WaitForSecondOff ;
+                    }
+                    else
+                    {
+                        state_ = State::WaitForSecondOn ;
+                    }
+                    
+                }
+                break ;
+
+            case State::WaitForSecondOff:
+                if (sub.getSensor2() == false)
+                {
+                    state_ = State::WaitForSecondOn ;
+                }
+                break ;
+
+            case State::WaitForSecondOn:
+                setMotor(0.0) ;
+                break ;
+            }
+        }
     }
 } 
