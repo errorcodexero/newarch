@@ -97,7 +97,7 @@ post: $(TARGETFILE)
 
 $(TARGETFILE): mkdirs $(OBJECTS) $(LINKLIBS)
 	@echo Linking ...
-	$(QUIET)$(CXX) -g -o $@ $(OBJECTS) $(LINKPREFIX) -Wl,--start-group $(ALLLIBS) -Wl,--end-group $(LINKPOSTFIX)
+	$(QUIET)$(CXX) -g -o $@ $(OBJECTS) $(LINKPREFIX) $(ALLLIBS) $(LINKPOSTFIX)
 
 clean: cleanlibs
 	@echo Cleaning executable target $(TARGET)$(EXEEXT)
@@ -106,13 +106,13 @@ clean: cleanlibs
 buildlibs:
 	$(QUIET)for libdir in $(ALLLIBLIST) ; do \
 		cd $$libdir ; \
-		make --no-print-directory SILENT=true PLATFORM=$(PLATFORM) CONFIG=$(CONFIG) NEED_GOPIGO3HW=$(NEED_GOPIGO3HW);\
+		make --no-print-directory SILENT=true PLATFORM=$(PLATFORM) CONFIG=$(CONFIG) NEED_GOPIGO3HW=$(NEED_GOPIGO3HW) OPENCV_BASE=$(OPENCV_BASE);\
 	done
 
 cleanlibs:
 	$(QUIET)for libdir in $(ALLLIBLIST) ; do \
 		cd $$libdir ; \
-		CONFIG=$(CONFIG) PLATFORM=$(PLATFORM) make SILENT=true --no-print-directory clean ;\
+		CONFIG=$(CONFIG) PLATFORM=$(PLATFORM) OPENCV_BASE=$(OPENCV_BASE) make SILENT=true --no-print-directory clean ;\
 	done
 
 UNAME := $(shell uname)

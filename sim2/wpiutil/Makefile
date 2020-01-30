@@ -97,7 +97,6 @@ SOURCES = \
 	./libuv/src/unix/pthread-fixes.cpp\
 	./libuv/src/unix/signal.cpp\
 	./libuv/src/unix/stream.cpp\
-	./libuv/src/unix/sysinfo-loadavg.cpp\
 	./libuv/src/unix/tcp.cpp\
 	./libuv/src/unix/thread.cpp\
 	./libuv/src/unix/udp.cpp\
@@ -108,16 +107,18 @@ SOURCES = \
 	./cygwin/StackTrace.cpp
 	
 ifeq ($(MYOS),Cygwin)
-  SOURCES += 	./libuv/src/unix/cygwin.cpp
+  SOURCES += 	./libuv/src/unix/cygwin.cpp\
+	            ./libuv/src/unix/sysinfo-loadavg.cpp
 endif
 ifeq ($(MYOS),Darwin)
   SOURCES += 	./libuv/src/unix/darwin.cpp\
-  		./libuv/src/unix/darwin-proctitle.cpp
+  		        ./libuv/src/unix/darwin-proctitle.cpp
 endif
 ifeq ($(MYOS),Linux)
   SOURCES += 	./libuv/src/unix/linux-core.cpp\
-  		./libuv/src/unix/linux-inotify.cpp\
-		./libuv/src/unix/linux-syscalls.cpp
+  		        ./libuv/src/unix/linux-inotify.cpp\
+		        ./libuv/src/unix/linux-syscalls.cpp\
+	            ./libuv/src/unix/sysinfo-loadavg.cpp
 endif
 
 TARGET=wpiutil
