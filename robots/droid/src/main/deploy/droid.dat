@@ -16,31 +16,30 @@ hw:tankdrive:motors:left:2:canid                                2               
 hw:tankdrive:motors:left:2:type                                 "talon_fx"
 hw:tankdrive:motors:right:1:canid                               3                           # CAN 3
 hw:tankdrive:motors:right:1:type                                "talon_fx"
-hw:tankdrive:motors:right:2:canid                               4                           # CAN 3
+hw:tankdrive:motors:right:2:canid                               4                           # CAN 4
 hw:tankdrive:motors:right:2:type                                "talon_fx"
 hw:tankdrive:invert:motors:right                                true                        # Invert the direction of the right motors
 
 hw:shooter:motor:1:type                                         "sparkmax_brushless"
-hw:shooter:motor:1:canid                                        5                           # CAN 5
+hw:shooter:motor:1:canid                                        5                          # CAN 5
 hw:shooter:motor:2:type                                         "sparkmax_brushless"
-hw:shooter:motor:2:canid                                        6                           # CAN 6
-hw:shooter:motor:2:invert                                       true
-hw:shooter:encoder:quad:motor                                   true                        # Encoder is in the motor
+hw:shooter:motor:2:canid                                        6                          # CAN 6
+hw:shooter:encoder:quad:motor                                   true                        # Use encoder in NEO motor
 hw:shooter:encoder:quad:m                                       1
 hw:shooter:encoder:quad:b                                       0
 
 hw:conveyor:motor:type                                          "sparkmax_brushless"
 hw:conveyor:motor:canid                                         7                           # CAN 7
 hw:conveyor:turret:type                                         "sparkmax_brushless"
-hw:conveyor:turret:canid                                        8                           # CAN 8
-hw:conveyor:sensor:a                                            1
-hw:conveyor:sensor:b                                            2
-hw:conveyor:sensor:c                                            3
-hw:conveyor:sensor:d                                            4
+hw:conveyor:turret:canid                                        8                          # CAN 8
+hw:conveyor:sensor:a                                            10
+hw:conveyor:sensor:b                                            11
+hw:conveyor:sensor:c                                            12
+hw:conveyor:sensor:d                                            13
 
 hw:turret:motor:type                                            "sparkmax_brushless"
-hw:turret:motor:canid                                           9                           # CAN 9
-hw:turret:encoder:analog                                        1
+hw:turret:motor:canid                                           9                          # CAN 9
+hw:turret:encoder:analog                                        1                          # Analog encoder
 hw:turret:encoder:analog:rmin                                   0.0
 hw:turret:encoder:analog:rmax                                   360.0
 hw:turret:encoder:analog:emin                                   0.0
@@ -50,11 +49,15 @@ hw:turret:encoder:analog:rc                                     0.0
 
 hw:intake:motor:type                                            "sparkmax_brushless"
 hw:intake:motor:canid                                           10                          # CAN 10
-hw:intake:duration                                              0.0
-hw:intake:position:canid                                        11                          # CAN 11
+hw:intake:duration                                              0.0                                                        
+hw:intake:lifter:type                                           "sparkmax_brushless"
+hw:intake:lifter:canid                                          11                           # CAN 11
+hw:intake:lifter:encoder:motor                                  true
+hw:intake:lifter:encoder:quad:m                                 1.0
+hw:intake:lifter:encoder:quad:b                                 0.0
 
 hw:controlpanelrotator:motor:type                               "sparkmax_brushless"
-hw:controlpanelrotator:motor:canid                              12                          # CAN 12
+hw:controlpanelrotator:motor:canid                              12                           # CAN 12
 hw:controlpanelrotator:encoder:quad:motor                       true
 hw:controlpanelrotator:encoder:quad:m                           1
 hw:controlpanelrotator:encoder:quad:b                           0
