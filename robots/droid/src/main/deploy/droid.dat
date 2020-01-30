@@ -20,32 +20,44 @@ hw:tankdrive:motors:right:2:canid                               4               
 hw:tankdrive:motors:right:2:type                                "talon_fx"                  # Type of motor controller
 hw:tankdrive:invert:motors:right                                true                        # Invert the direction of the right motors
 
-# PLACEHOLDERS
-hw:shooter:motor:type                                           "victor_spx"
-hw:shooter:motor:canid                                          -1
-hw:shooter:encoder:quad:1                                       -1
-hw:shooter:encoder:quad:2                                       -1
+hw:shooter:motor:1:type                                         "sparkmax_brushless"
+hw:shooter:motor:1:canid                                        11
+hw:shooter:motor:2:type                                         "sparkmax_brushless"
+hw:shooter:motor:2:canid                                        14
+hw:shooter:encoder:quad:1                                       1
+hw:shooter:encoder:quad:2                                       2
 hw:shooter:encoder:quad:m                                       1
 hw:shooter:encoder:quad:b                                       0
 
-hw:turret:motor:type                                            "victor_spx"
-hw:turret:motor:canid                                           -2
-hw:turret:encoder:quad:1                                        -1
-hw:turret:encoder:quad:2                                        -1
-hw:turret:encoder:quad:m                                        1
-hw:turret:encoder:quad:b                                        0
+hw:turret:motor:type                                            "sparkmax_brushless"
+hw:turret:motor:canid                                           13
+hw:turret:encoder:analog                                        1
+hw:turret:encoder:analog:rmin                                   0
+hw:turret:encoder:analog:rmax                                   360
+hw:turret:encoder:analog:emin                                   0.0
+hw:turret:encoder:analog:emax                                   1.0
+hw:turret:encoder:analog:rc                                     0.0
+hw:turret:encoder:analog:ec                                     0.0
 
-hw:intake:motor:type                                            "victor_spx"
-hw:intake:motor:canid                                           -3
-hw:intake:duration                                               0.0                                                        
+hw:intake:motor:type                                            "sparkmax_brushless"
+hw:intake:motor:canid                                           5
+hw:intake:duration                                              0.0                                                        
+hw:intake:lifter:type                                           "sparkmax_brushless"
+hw:intake:lifter:canid                                          6
 
-hw:conveyor:motor:type                                          "victor_spx"
-hw:conveyor:motor:canid                                         -4
+hw:conveyor:turret:type                                          "sparkmax_brushless"
+hw:conveyor:turret:canid                                        10
+hw:conveyor:belts:type                                          "sparkmax_brushless"
+hw:conveyor:belts:canid                                         7
+hw:conveyor:sensor1                                             13
+hw:conveyor:sensor2                                             12
+hw:conveyor:sensor3                                             11
+hw:conveyor:sensor4                                             10
 
-hw:controlpanelrotator:motor:type                               "victor_spx"
-hw:controlpanelrotator:motor:canid                              -5
-hw:controlpanelrotator:encoder:quad:1                           -1
-hw:controlpanelrotator:encoder:quad:2                           -1
+hw:controlpanelrotator:motor:type                               "sparkmax_brushless"
+hw:controlpanelrotator:motor:canid                              16
+hw:controlpanelrotator:encoder:quad:1                           19
+hw:controlpanelrotator:encoder:quad:2                           18
 hw:controlpanelrotator:encoder:quad:m                           1
 hw:controlpanelrotator:encoder:quad:b                           0
 
@@ -72,6 +84,9 @@ controlpanelrotator:hold:f                                      0
 controlpanelrotator:hold:min                                    0
 controlpanelrotator:hold:max                                    1
 controlpanelrotator:hold:imax                                   1
+
+intake:collecting                                               0.5
+intake:ejecting                                                -0.5
 
 #
 # Driver station
@@ -138,3 +153,9 @@ driver:zerolevel                                                0.1
 # programs read the data from the network tables
 #
 plotting:enabled                                               true
+
+
+auto:testmode:which                                            2
+auto:testmode:distance                                         0.0
+auto:testmode:duration                                         0.0
+auto:testmode:power                                            0.0

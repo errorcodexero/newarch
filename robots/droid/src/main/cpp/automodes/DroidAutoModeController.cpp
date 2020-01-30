@@ -1,5 +1,6 @@
 #include "automodes/DroidAutoModeController.h"
 #include "automodes/DroidAutoMode.h"
+#include "automodes/DroidTestTuneMode.h"
 #include "Droid.h"
 #include <tankdrive/modes/FollowPathAutomode.h>
 #include <tankdrive/modes/ScrubCharMode.h>
@@ -21,12 +22,15 @@ namespace xero {
         void DroidAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             AutoModePtr mode = nullptr ;
 
+            sel = 0 ;
+
             switch(sel) {
             case 0:
-                mode = std::make_shared<DroidAutoMode>(getRobot(), "Mode 0", "The one and only automode");
+                mode = std::make_shared<DroidTestTuneMode>(getRobot()) ;
                 break ;
 
             case 1:
+                mode = std::make_shared<DroidAutoMode>(getRobot(), "Mode 0", "The one and only automode");
                 break ;
 
             case 2:

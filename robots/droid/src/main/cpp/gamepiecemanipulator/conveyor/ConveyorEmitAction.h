@@ -12,19 +12,24 @@ namespace xero {
             virtual void start() ;
             virtual void run() ;
 
+            virtual std::string toString() {
+                return "emit" ;
+            }
+
         private:
             enum class State
             {
                 WaitForBall,
                 WaitForSecondOff,
-                WaitForSecondOn
+                WaitForSecondOn,
+                Done
             } ;
 
         private:
             State state_ ;
 
             double to_shooter_ ;
-            double to_collecter_ ; ;
+            double to_collecter_ ;
         } ;
     }
 }

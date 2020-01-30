@@ -9,7 +9,7 @@
 
 namespace xero {
     namespace droid {
-        class Conveyor : public xero::base::SingleMotorSubsystem {
+        class Conveyor : public xero::base::Subsystem {
             friend class ConveyorAction;
         public:
             Conveyor(xero::base::Subsystem *parent);
@@ -41,6 +41,8 @@ namespace xero {
             bool getSensor3() {
                 return sensor3_state_ ;
             }
+
+            virtual bool canAcceptAction(xero::base::ActionPtr action) ;
 
         private:
             // Runs the motors in the specified direction, or stops them if direction is null.
