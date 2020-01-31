@@ -11,7 +11,7 @@ namespace xero {
             setStates({
                 { waitForBall, setMotorState(MotorState::Stopped) },
                 // if full, stop
-                branchState(done, std::bind(&Conveyor::isFull, getSubsystem())),
+                branchState(done, [=] { return getSubsystem().isFull(); } ),
 
                 assertState([=]() { return getSubsystem().isEmpty() 
                                         || getSubsystem().readSensor(Sensor::B);

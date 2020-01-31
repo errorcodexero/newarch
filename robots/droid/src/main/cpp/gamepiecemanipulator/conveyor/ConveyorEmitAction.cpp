@@ -11,9 +11,9 @@ namespace xero {
             const std::string done = "done";
             setStates({
                 // if empty, stop
-                branchState(done, std::bind(&Conveyor::isEmpty, getSubsystem())),
+                branchState(done, [=] { return getSubsystem().isEmpty(); }),
 
-                assertState(std::bind(&Conveyor::readSensor, getSubsystem(), Sensor::C),
+                assertState([=] { return getSubsystem().readSensor(Sensor::C); },
                             "ConveyorEmitAction called with no ball in position; "
                             "was ConveyorPrepareToEmitAction run?"
                 ),
@@ -24,7 +24,7 @@ namespace xero {
                 
                 decrementBallsState(),
                 // if empty, stop
-                branchState(done, std::bind(&Conveyor::isEmpty, getSubsystem())),
+                branchState(done, [=] { return getSubsystem().isEmpty(); }),
 
                 // wait for the next ball to move into position
                 waitForSensorState(Sensor::C, true),

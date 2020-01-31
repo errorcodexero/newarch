@@ -90,9 +90,9 @@
                 "belt:type" : "sparkmax",
                 "turret:index" : 8,
                 "turret:type" : "sparkmax",
-                "sensor1": 1,
-                "sensor2": 2,
-                "sensor3": 3
+                "sensor1": 10,
+                "sensor2": 11,
+                "sensor3": 12
             },
             "behavior" : {
                 "distance_per_second_per_inch" : 12.0

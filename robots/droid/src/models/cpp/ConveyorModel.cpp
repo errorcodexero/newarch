@@ -40,7 +40,7 @@ namespace xero
 
         bool ConveyorModel::create()
         {
-            belt_ = std::make_shared<SimulatedMotor>(*this, "hw:belt") ;
+            belt_ = std::make_shared<SimulbatedMotor>(*this, "hw:belt") ;
             turret_ = std::make_shared<SimulatedMotor>(*this, "hw:turret") ;
 
             sensor1_ = getInteger("hw:sensor1") ;
@@ -75,7 +75,7 @@ namespace xero
                         if (i == MaxBalls - 1)
                         {
                             if (newloc > 31.5)
-                                newloc = 31.5 ;
+                                deleteBallFromShooter();
                         }
                         else
                         {
@@ -112,6 +112,24 @@ namespace xero
                         balls_[i].position_ = newloc ;
                     }
                 }
+            }
+
+            // Update sensors
+            HALSIM_SetDIOValue(sensor1_, false) ;
+            HALSIM_SetDIOValue(sensor2_, false) ;
+            HALSIM_SetDIOValue(sensor3_, false) ;
+            for (int i = 0; i < MaxBalls; i++) {
+                if (!balls_[i].present_) continue;
+                double pos = balls_[i].position_;
+
+                if (pos < -4.0)
+                    HALSIM_SetDIOValue(sensor1_, true) ;
+
+                if (pos > 4.0 && pos < 6.0)
+                    HALSIM_SetDIOValue(sensor2_, true) ;
+
+                if (pos > 29.0 && pos < 31.0)
+                    HALSIM_SetDIOValue(sensor3_, true) ;
             }
         }
 
@@ -159,7 +177,6 @@ namespace xero
 
         void ConveyorModel::insertBallFromIntake()
         {
-            HALSIM_SetDIOValue(sensor1_,true) ;
 
             if (countBalls() < MaxBalls)
             {
@@ -177,17 +194,19 @@ namespace xero
         void ConveyorModel::printBalls()
         {
             SimulatorMessages &msg = getEngine().getMessageOutput() ;
+            double beltSpeed = belt_->get();
             msg.startMessage(SimulatorMessages::MessageType::Info) ;
             msg << "Conveyor [" << countBalls() << "]:" ;
             for(int i = 0 ; i < MaxBalls - 1 ; i++)
             {
                 if (balls_[i].present_)
-                    msg << "(*) " ;
+                    msg << " (*)" ;
                 else
-                    msg << "( ) " ;
+                    msg << " ( )" ;
                     
                 msg << balls_[i].position_ ;
             }
+            msg << " belt: " << beltSpeed;
             msg.endMessage(getEngine().getSimulationTime()) ;   
         }
     }
