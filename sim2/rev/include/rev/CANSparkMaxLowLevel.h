@@ -45,14 +45,7 @@ namespace rev
             return *encoder_;
         }
 
-        void Set(double value) {
-            if (value > 1.0)
-                value = 1.0 ;
-            else if (value < -1.0)
-                value = -1.0 ;
-                
-            power_ = value ;
-        }
+        void Set(double value);
 
         double Get() const {
             return power_ ;
