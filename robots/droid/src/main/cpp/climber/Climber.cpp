@@ -24,8 +24,8 @@ namespace xero {
             servo_l_ = std::make_shared<Servo>(servo_l_id_) ;
 
             /// instantiate the 2 servos
-            /// read values from params for servos and assign to the servos... 
-            ///example for this is gamepiecemanipulator
+            /// read values from params/config file for servos and assign to the servos... 
+            /// example for this is gamepiecemanipulator    
 
         }
     }

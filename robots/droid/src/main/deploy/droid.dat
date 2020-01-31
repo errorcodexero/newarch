@@ -76,11 +76,17 @@ hw:climber:motor:1:canid                                        13              
 hw:climber:motor:2:type                                         "sparkmax_brushless"
 hw:climber:motor:2:canid                                        14                          # CAN 14
 hw:climber:motor:2:invert                                       true
+hw:climber:motor:release                                        -10
+hw:climber:motor:climb                                          10
 hw:climber:encoder:quad:motor                                   true
 hw:climber:encoder:quad:m                                       1
 hw:climber:encoder:quad:b                                       0
 hw:climber:servo:l:pwmid                                        0                           # PWM 2
 hw:climber:servo:r:pwmid                                        1                           # PWM 1
+hw:climber:servo:l:release                                      1.0
+hw:climber:servo:r:release                                      1.0
+hw:climber:servo:l:climb                                        0.0
+hw:climber:servo:r:climb                                        0.0
 
 shooter:hold:p                                                  1
 shooter:hold:i                                                  0

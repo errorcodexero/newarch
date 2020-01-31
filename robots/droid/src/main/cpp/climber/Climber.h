@@ -1,3 +1,4 @@
+#pragma once
 
 #include <Subsystem.h>
 #include <motorencodersubsystem/MotorEncoderSubsystem.h>
