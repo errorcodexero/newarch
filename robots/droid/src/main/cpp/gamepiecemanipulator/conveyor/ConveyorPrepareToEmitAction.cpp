@@ -12,10 +12,10 @@ namespace xero {
                 branchState(done, std::bind(&Conveyor::isEmpty, getSubsystem())),
                 
                 // move balls in position towards shooter
-                setMotorState(Direction::TowardsShooter),
+                setMotorState(MotorState::MoveTowardsShooter),
                 waitForSensorState(Sensor::C, true),
 
-                { done, setMotorState(std::nullopt) },
+                { done, setMotorState(MotorState::Stopped) },
             });
         }
     }

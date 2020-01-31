@@ -9,7 +9,7 @@ namespace xero {
             const std::string waitForBall = "waitForBall";
             const std::string done = "done";
             setStates({
-                { waitForBall, setMotorState(std::nullopt) },
+                { waitForBall, setMotorState(MotorState::Stopped) },
                 // if full, stop
                 branchState(done, std::bind(&Conveyor::isFull, getSubsystem())),
 
@@ -23,13 +23,13 @@ namespace xero {
                 
                 // we've got a ball
                 incrementBallsState(),
-                setMotorState(Direction::TowardsShooter),
+                setMotorState(MotorState::MoveTowardsShooter),
                 waitForSensorState(Sensor::B, true),
 
                 // ball collected, now collect another
                 gotoState(waitForBall),
 
-                { done, setMotorState(std::nullopt) },
+                { done, setMotorState(MotorState::Stopped) },
             });
         }
     }

@@ -28,8 +28,10 @@ hw:shooter:encoder:quad:motor                                   true            
 hw:shooter:encoder:quad:m                                       1
 hw:shooter:encoder:quad:b                                       0
 
-hw:conveyor:motor:type                                          "sparkmax_brushless"
-hw:conveyor:motor:canid                                         7                           # CAN 7
+hw:conveyor:motors:intake:type                                  "sparkmax_brushless"
+hw:conveyor:motors:intake:canid                                 7                          # CAN 7
+hw:conveyor:motors:shooter:type                                 "sparkmax_brushless"
+hw:conveyor:motors:shooter:canid                                17                         # CAN 17
 hw:conveyor:turret:type                                         "sparkmax_brushless"
 hw:conveyor:turret:canid                                        8                          # CAN 8
 hw:conveyor:sensor:a                                            10
@@ -111,6 +113,16 @@ controlpanelrotator:hold:f                                      0
 controlpanelrotator:hold:min                                    0
 controlpanelrotator:hold:max                                    1
 controlpanelrotator:hold:imax                                   1
+
+
+conveyor:motorstates:stopped:intake                             0
+conveyor:motorstates:stopped:shooter                            0
+
+conveyor:motorstates:move_towards_shooter:intake                1
+conveyor:motorstates:move_towards_shooter:shooter               1
+
+conveyor:motorstates:move_towards_intake:intake                 -1
+conveyor:motorstates:move_towards_intake:shooter                -1
 
 #
 # Driver station

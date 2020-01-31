@@ -54,9 +54,9 @@ namespace xero {
         }
 
         std::function<ConveyorAction::StateResult(void)> 
-        ConveyorAction::setMotorState(std::optional<Conveyor::Direction> direction) {
+        ConveyorAction::setMotorState(MotorState direction) {
             return [=]() {
-                setMotor(direction);
+                setMotors(direction);
                 return StateResult::Next;
             };
         }
@@ -90,6 +90,22 @@ namespace xero {
                 return StateResult::Next;
             };
         }     
+        
+        std::function<ConveyorAction::StateResult(void)> 
+        ConveyorAction::delayState(double time) {
+            return [=]() {
+                double currentTime = getSubsystem().getRobot().getTime();
+                if (delayEndTime_) {
+                    if (*delayEndTime_ > currentTime) {
+                        delayEndTime_ = std::nullopt;
+                        return StateResult::Next;
+                    }
+                } else {
+                    delayEndTime_ = currentTime + time;
+                }
+                return StateResult::Continue;
+            };
+        }
 
         std::function<ConveyorAction::StateResult(void)> 
         ConveyorAction::assertState(std::function<bool()> condition, std::string message) {

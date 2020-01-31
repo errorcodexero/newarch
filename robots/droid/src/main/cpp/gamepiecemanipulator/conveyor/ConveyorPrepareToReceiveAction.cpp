@@ -12,14 +12,14 @@ namespace xero {
                 branchState(done, std::bind(&Conveyor::isFull, getSubsystem())),
 
                 // Move balls to the ready-to-collect position
-                setMotorState(Direction::TowardsIntake),
+                setMotorState(MotorState::MoveTowardsIntake),
                 waitForSensorState(Sensor::A, true),
                 
-                setMotorState(Direction::TowardsShooter),
+                setMotorState(MotorState::MoveTowardsShooter),
                 waitForSensorState(Sensor::A, false),
                 waitForSensorState(Sensor::B, true),
 
-                { done, setMotorState(std::nullopt) },
+                { done, setMotorState(MotorState::Stopped) },
             });
         }
     }
