@@ -1,5 +1,6 @@
 #include "Conveyor.h"
 #include "droidids.h"
+#include "ConveyorAction.h"
 #include "ConveyorStopAction.h"
 
 #include <utility>
@@ -59,6 +60,14 @@ namespace xero {
 
         void Conveyor::postHWInit() {
             setDefaultAction(std::make_shared<ConveyorStopAction>(*this));
+        }
+
+        bool Conveyor::canAcceptAction(ActionPtr action) {
+            return std::dynamic_pointer_cast<ConveyorAction>(action) != nullptr;
+        }
+
+        bool Conveyor::canAcceptDefaultAction(ActionPtr action) {
+            return std::dynamic_pointer_cast<ConveyorStopAction>(action) != nullptr;
         }
 
 

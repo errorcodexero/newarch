@@ -17,6 +17,8 @@ namespace xero {
             virtual ~Conveyor() {}
 
             void postHWInit() override;
+            bool canAcceptAction(xero::base::ActionPtr) override;
+            bool canAcceptDefaultAction(xero::base::ActionPtr) override;
 
             int getBallCount() { return ballCount_; }
 

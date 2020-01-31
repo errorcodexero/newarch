@@ -28,8 +28,10 @@ hw:shooter:encoder:quad:motor                                   true            
 hw:shooter:encoder:quad:m                                       1
 hw:shooter:encoder:quad:b                                       0
 
-hw:conveyor:motor:type                                          "sparkmax_brushless"
-hw:conveyor:motor:canid                                         7                           # CAN 7
+hw:conveyor:motors:intake:type                                  "sparkmax_brushless"
+hw:conveyor:motors:intake:canid                                 7                          # CAN 7
+hw:conveyor:motors:shooter:type                                 "sparkmax_brushless"
+hw:conveyor:motors:shooter:canid                                17                         # CAN 17
 hw:conveyor:turret:type                                         "sparkmax_brushless"
 hw:conveyor:turret:canid                                        8                          # CAN 8
 hw:conveyor:sensor:a                                            10
