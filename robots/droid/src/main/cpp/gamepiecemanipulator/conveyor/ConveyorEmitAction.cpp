@@ -19,7 +19,7 @@ namespace xero {
                 ),
                 
                 // move a ball towards the shooter
-                setMotorState(Direction::TowardsShooter),
+                setMotorState(MotorState::MoveTowardsShooter),
                 waitForSensorState(Sensor::C, false),
                 
                 decrementBallsState(),
@@ -30,7 +30,7 @@ namespace xero {
                 waitForSensorState(Sensor::C, true),
 
                 // we're done
-                { done, setMotorState(std::nullopt) },
+                { done, setMotorState(MotorState::Stopped) },
             });
         }
     }

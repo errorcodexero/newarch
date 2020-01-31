@@ -1,10 +1,12 @@
 #include "Conveyor.h"
 #include "droidids.h"
+#include "ConveyorStopAction.h"
 
 #include <utility>
 #include <vector>
 
-#include <singlemotorsubsystem/SingleMotorPowerAction.h>
+#include <Robot.h>
+#include <motors/MotorFactory.h>
 #include <SettingsParser.h>
 
 using namespace xero::misc;
@@ -12,7 +14,11 @@ using namespace xero::base;
 
 namespace xero {
     namespace droid {
-        Conveyor::Conveyor(Subsystem *parent): SingleMotorSubsystem(parent, "conveyor", MSG_GROUP_CONVEYOR) {
+        Conveyor::Conveyor(Subsystem *parent): Subsystem(parent, "conveyor") {
+            auto motorFactory = getRobot().getMotorFactory();
+            intakeMotor_ = motorFactory->createMotor("hw:conveyor:motors:intake");
+            shooterMotor_ = motorFactory->createMotor("hw:conveyor:motors:shooter");
+
             std::vector<std::pair<Sensor, std::string>> sensorNames {
                 {Sensor::A, "a"},
                 {Sensor::B, "b"},
@@ -23,10 +29,36 @@ namespace xero {
                 int sensorIndex = static_cast<int>(sensorNames[i].first);
                 sensors_[sensorIndex] = createSensor(settings, "hw:conveyor:sensor:" + sensorNames[i].second);
             }
+
+            std::vector<std::pair<MotorState, std::string>> motorStates {
+                {MotorState::Stopped, "stopped"},
+                {MotorState::MoveTowardsShooter, "move_towards_shooter"},
+                {MotorState::MoveTowardsIntake, "move_towards_intake"},
+            };
+
+            for (auto state : motorStates) {
+                assert(static_cast<unsigned>(state.first) == motorStates_.size() &&
+                       "motor states must be in order");
+                std::string configBase = "conveyor:motorstates:" + state.second;
+                std::string intake = configBase + ":intake";
+                std::string shooter = configBase + ":shooter";
+                if (!settings.isDefined(intake) || !settings.isDefined(shooter)) {
+                    auto &logger = getRobot().getMessageLogger();
+                    logger.startMessage(MessageLogger::MessageType::error);
+                    logger << "Conveyor: motor state " << configBase << " invalid";
+                    logger << " (should declare :intake and :shooter)";
+                    logger.endMessage();
+                    assert(0);
+                }
+                motorStates_.push_back({
+                    settings.getDouble(intake),
+                    settings.getDouble(shooter)
+                });
+            }
         }
 
         void Conveyor::postHWInit() {
-            setDefaultAction(std::make_shared<SingleMotorPowerAction>(*this, 0.0));
+            setDefaultAction(std::make_shared<ConveyorStopAction>(*this));
         }
 
 
@@ -39,20 +71,13 @@ namespace xero {
             return createSensor(settings.getInteger(configName));
         }
 
-        void Conveyor::setMotor(std::optional<Direction> direction) {
-            if (direction) {
-                switch (*direction) {
-                case Direction::TowardsIntake:
-                    SingleMotorSubsystem::setMotor(-1);   // TODO: this should probably be read 
-                                                          // from the params file or something
-                    break;
-                case Direction::TowardsShooter:
-                    SingleMotorSubsystem::setMotor(1);    // "
-                    break;
-                }
-            } else {
-                SingleMotorSubsystem::setMotor(0);
-            }
+        void Conveyor::setMotors(MotorState state) {
+            unsigned index = static_cast<unsigned>(state);
+            assert(index < motorStates_.size() && "a motor state is missing");
+            auto speeds = motorStates_[index];
+
+            intakeMotor_->set(speeds.first);
+            shooterMotor_->set(speeds.second);
         }
     }
 }

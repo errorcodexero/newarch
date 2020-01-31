@@ -106,6 +106,16 @@ controlpanelrotator:hold:min                                    0
 controlpanelrotator:hold:max                                    1
 controlpanelrotator:hold:imax                                   1
 
+
+conveyor:motorstates:stopped:intake                             0
+conveyor:motorstates:stopped:shooter                            0
+
+conveyor:motorstates:move_towards_shooter:intake                1
+conveyor:motorstates:move_towards_shooter:shooter               1
+
+conveyor:motorstates:move_towards_intake:intake                 -1
+conveyor:motorstates:move_towards_intake:shooter                -1
+
 #
 # Driver station
 #

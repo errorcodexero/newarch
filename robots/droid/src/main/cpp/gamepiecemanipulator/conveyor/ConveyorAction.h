@@ -39,7 +39,7 @@ namespace xero {
             /// Subclasses should call setStates from their constructor.
             ConveyorAction(Conveyor &subsystem, std::string actionName);
 
-            typedef Conveyor::Direction Direction;
+            typedef Conveyor::MotorState MotorState;
             typedef Conveyor::Sensor Sensor;
 
             /// The result of executing a single tick of a state.
@@ -99,13 +99,13 @@ namespace xero {
             void setStates(std::vector<_StateDecl> states);
 
             /// Sets the motor to run in the specified direction.
-            void setMotor(std::optional<Conveyor::Direction> direction){ 
-                getSubsystem().setMotor(direction);
+            void setMotors(Conveyor::MotorState state){ 
+                getSubsystem().setMotors(state);
             }
 
             /// Creates a state which starts running the motor in the specified direction.
             /// The returned state calls setMotor and immediately returns ::Next.
-            std::function<StateResult(void)> setMotorState(std::optional<Conveyor::Direction> direction);
+            std::function<StateResult(void)> setMotorState(Conveyor::MotorState direction);
 
             /// Creates a state that waits for a sensor to reach a specific value.
             /// \param sensor The sensor to wait for.
@@ -118,6 +118,10 @@ namespace xero {
 
             /// A state that decrements the number of collected balls.
             std::function<StateResult(void)> decrementBallsState();
+
+            /// Creates a state which delays for a given amount of time.
+            /// \param time The time in seconds.
+            std::function<StateResult(void)> delayState(double time);
 
             /// A state that jumps to \param target if \param condition evaluates to true.
             std::function<StateResult(void)> branchState(std::string target, std::function<bool()> condition) {
@@ -150,6 +154,8 @@ namespace xero {
             void setStateIndex(int stateIndex);
 
             int stateIndex_;
+
+            std::optional<double> delayEndTime_;
         } ;
     }
 }
