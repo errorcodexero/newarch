@@ -51,10 +51,19 @@ hw:intake:motor:type                                            "sparkmax_brushl
 hw:intake:motor:canid                                           10                          # CAN 10
 hw:intake:duration                                              0.0                                                        
 hw:intake:lifter:type                                           "sparkmax_brushless"
-hw:intake:lifter:canid                                          11                           # CAN 11
+hw:intake:lifter:canid                                          11                          # CAN 11
 hw:intake:lifter:encoder:motor                                  true
 hw:intake:lifter:encoder:quad:m                                 1.0
 hw:intake:lifter:encoder:quad:b                                 0.0
+
+hw:intake:arm:motor:type                                        "sparkmax_brushless"
+hw:intake:arm:motor:canid                                       16                          #CAN 16
+hw:intake:arm:deploy                                            0.0          ## intake:arm values to be changed while testing
+hw:intake:arm:retract                                           1.0
+hw:intake:arm:threshold                                         0.1
+hw:intake:arm:maxa                                              1.0
+hw:intake:arm:maxd                                              0.0
+hw:intake:arm:maxv                                              1.0
 
 hw:controlpanelrotator:motor:type                               "sparkmax_brushless"
 hw:controlpanelrotator:motor:canid                              12                           # CAN 12
