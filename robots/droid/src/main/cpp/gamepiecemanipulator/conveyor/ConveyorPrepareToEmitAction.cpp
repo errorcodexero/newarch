@@ -9,11 +9,11 @@ namespace xero {
             const std::string done = "done";
             setStates({
                 // if empty, stop
-                branchState(done, std::bind(&Conveyor::isEmpty, getSubsystem())),
+                branchState(done, [=] { return getSubsystem().isEmpty(); }),
                 
                 // move balls in position towards shooter
                 setMotorState(MotorState::MoveTowardsShooter),
-                waitForSensorState(Sensor::C, true),
+                { "wait for ball to reach target sensor", waitForSensorState(Sensor::C, true) },
 
                 { done, setMotorState(MotorState::Stopped) },
             });

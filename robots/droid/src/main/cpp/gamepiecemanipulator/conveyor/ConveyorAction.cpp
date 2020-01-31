@@ -66,6 +66,12 @@ namespace xero {
             return [=]() {
                 if (getSubsystem().getBallCount() < Conveyor::MAX_BALLS) {
                     getSubsystem().ballCount_++;
+
+                    auto &logger = getMessageLogger();
+                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger << actionName_ << ": Collected a ball; count: ";
+                    logger << getSubsystem().ballCount_;
+                    logger.endMessage();
                 } else {
                     auto &logger = getMessageLogger();
                     logger.startMessage(MessageLogger::MessageType::error);
@@ -81,6 +87,12 @@ namespace xero {
             return [=]() {
                 if (getSubsystem().getBallCount() > 0) {
                     getSubsystem().ballCount_--;
+
+                    auto &logger = getMessageLogger();
+                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger << actionName_ << ": Released a ball; count: ";
+                    logger << getSubsystem().ballCount_;
+                    logger.endMessage();
                 } else {
                     auto &logger = getMessageLogger();
                     logger.startMessage(MessageLogger::MessageType::error);
@@ -96,7 +108,7 @@ namespace xero {
             return [=]() {
                 double currentTime = getSubsystem().getRobot().getTime();
                 if (delayEndTime_) {
-                    if (*delayEndTime_ > currentTime) {
+                    if (currentTime > *delayEndTime_) {
                         delayEndTime_ = std::nullopt;
                         return StateResult::Next;
                     }

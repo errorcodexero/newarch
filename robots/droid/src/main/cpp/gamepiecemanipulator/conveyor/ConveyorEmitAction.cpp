@@ -8,26 +8,29 @@ namespace xero {
         ConveyorEmitAction::ConveyorEmitAction(Conveyor &subsystem):
             ConveyorAction(subsystem, "ConveyorEmitAction") {
             
+            const std::string loop = "loop";
             const std::string done = "done";
             setStates({
                 // if empty, stop
-                branchState(done, std::bind(&Conveyor::isEmpty, getSubsystem())),
+                branchState(done, [=] { return getSubsystem().isEmpty(); }),
 
-                assertState(std::bind(&Conveyor::readSensor, getSubsystem(), Sensor::C),
+                assertState([=] { return getSubsystem().readSensor(Sensor::C); },
                             "ConveyorEmitAction called with no ball in position; "
                             "was ConveyorPrepareToEmitAction run?"
                 ),
                 
                 // move a ball towards the shooter
-                setMotorState(MotorState::MoveTowardsShooter),
-                waitForSensorState(Sensor::C, false),
+                { loop, setMotorState(MotorState::MoveTowardsShooter) },
+                { "wait for ball to clear sensor", waitForSensorState(Sensor::C, false) },
                 
                 decrementBallsState(),
                 // if empty, stop
-                branchState(done, std::bind(&Conveyor::isEmpty, getSubsystem())),
+                branchState(done, [=] { return getSubsystem().isEmpty(); }),
 
                 // wait for the next ball to move into position
-                waitForSensorState(Sensor::C, true),
+                { "wait for next ball to reach sensor", waitForSensorState(Sensor::C, true) },
+
+                gotoState(loop),
 
                 // we're done
                 { done, setMotorState(MotorState::Stopped) },

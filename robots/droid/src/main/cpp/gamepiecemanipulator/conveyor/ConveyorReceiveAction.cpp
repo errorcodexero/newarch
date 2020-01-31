@@ -6,12 +6,12 @@ namespace xero {
         ConveyorReceiveAction::ConveyorReceiveAction(Conveyor &subsystem):
             ConveyorAction(subsystem, "ConveyorReceiveAction") {
             
-            const std::string waitForBall = "waitForBall";
+            const std::string waitForBall = "loop";
             const std::string done = "done";
             setStates({
                 { waitForBall, setMotorState(MotorState::Stopped) },
                 // if full, stop
-                branchState(done, std::bind(&Conveyor::isFull, getSubsystem())),
+                branchState(done, [=] { return getSubsystem().isFull(); } ),
 
                 assertState([=]() { return getSubsystem().isEmpty() 
                                         || getSubsystem().readSensor(Sensor::B);
@@ -19,12 +19,14 @@ namespace xero {
                                 "was ConveyorPrepareToEmitAction run?"
                 ),
                 
-                waitForSensorState(Sensor::A, true),
+                { "wait for collect start sensor", waitForSensorState(Sensor::A, true) },
                 
                 // we've got a ball
                 incrementBallsState(),
                 setMotorState(MotorState::MoveTowardsShooter),
-                waitForSensorState(Sensor::B, true),
+
+                delayState(0.2),
+                { "wait for collect finish sensor", waitForSensorState(Sensor::B, true) },
 
                 // ball collected, now collect another
                 gotoState(waitForBall),

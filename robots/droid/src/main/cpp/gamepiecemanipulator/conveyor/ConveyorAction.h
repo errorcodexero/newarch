@@ -89,12 +89,9 @@ namespace xero {
             ///     { "named_state", waitForSensorState(..., false) },
             ///     
             ///     // custom state accepting a parameter
-            ///     { std::bind(&MyConveyorAction::myCustomState, this, someParam) },
-            ///     
-            ///     // same thing as above, but with a lambda
-            ///     { [=]() { return myCustomState(someParam); } },
+            ///     { [=] { return myCustomState(someParam); } },
             ///
-            ///     { "named_custom_state", std::bind(&MyConveyorAction::otherCustomState, this) }
+            ///     { "named_custom_state", [=] { return myOtherState(); } }
             /// });
             void setStates(std::vector<_StateDecl> states);
 
