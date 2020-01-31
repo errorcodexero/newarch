@@ -125,7 +125,7 @@ namespace xero
                 if (pos < -4.0)
                     HALSIM_SetDIOValue(sensor1_, true) ;
 
-                if (pos > 4.0 && pos < 6.0)
+                if (pos > 1.0 && pos < 3.0)
                     HALSIM_SetDIOValue(sensor2_, true) ;
 
                 if (pos > 29.0 && pos < 31.0)

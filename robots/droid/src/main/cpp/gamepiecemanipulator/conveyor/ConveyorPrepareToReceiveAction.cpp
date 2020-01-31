@@ -14,11 +14,11 @@ namespace xero {
 
                 // Move balls to the ready-to-collect position
                 setMotorState(MotorState::MoveTowardsIntake),
-                waitForSensorState(Sensor::A, true),
+                { "wait for balls to reach end", waitForSensorState(Sensor::A, true) },
                 
                 setMotorState(MotorState::MoveTowardsShooter),
-                waitForSensorState(Sensor::A, false),
-                waitForSensorState(Sensor::B, true),
+                { "wait for balls to clear end sensor", waitForSensorState(Sensor::A, false) },
+                { "wait for balls to reach target sensor", waitForSensorState(Sensor::B, true) },
 
                 { done, setMotorState(MotorState::Stopped) },
             });
