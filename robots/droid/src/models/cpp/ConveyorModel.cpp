@@ -40,7 +40,7 @@ namespace xero
 
         bool ConveyorModel::create()
         {
-            belt_ = std::make_shared<SimulbatedMotor>(*this, "hw:belt") ;
+            belt_ = std::make_shared<SimulatedMotor>(*this, "hw:belt") ;
             turret_ = std::make_shared<SimulatedMotor>(*this, "hw:turret") ;
 
             sensor1_ = getInteger("hw:sensor1") ;
