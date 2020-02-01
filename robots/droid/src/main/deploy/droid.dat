@@ -90,49 +90,6 @@ hw:climber:servo:r:release                                      1.0
 hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
-shooter:velocity:p                                              0.0001184
-shooter:velocity:i                                              0.0
-shooter:velocity:d                                              0.0
-shooter:velocity:f                                              0.0001184
-shooter:velocity:min                                            -1.0
-shooter:velocity:max                                            1.0
-shooter:velocity:imax                                           0.0
-
-shooter:hold:p                                                  0.0
-shooter:hold:i                                                  0.0
-shooter:hold:d                                                  0.0
-shooter:hold:f                                                  0.0
-shooter:hold:min                                                -1.0
-shooter:hold:max                                                1.0
-shooter:hold:imax                                               0.0
-
-turret:hold:p                                                   0
-turret:hold:i                                                   0
-turret:hold:d                                                   0
-turret:hold:f                                                   0
-turret:hold:min                                                 0
-turret:hold:max                                                 1
-turret:hold:imax                                                1
-turret:fire_threshold                                           0.5
-
-controlpanelrotator:hold:p                                      0
-controlpanelrotator:hold:i                                      0
-controlpanelrotator:hold:d                                      0
-controlpanelrotator:hold:f                                      0
-controlpanelrotator:hold:min                                    0
-controlpanelrotator:hold:max                                    1
-controlpanelrotator:hold:imax                                   1
-
-
-conveyor:motorstates:stopped:intake                             0
-conveyor:motorstates:stopped:shooter                            0
-
-conveyor:motorstates:move_towards_shooter:intake                1
-conveyor:motorstates:move_towards_shooter:shooter               1
-
-conveyor:motorstates:move_towards_intake:intake                 -1
-conveyor:motorstates:move_towards_intake:shooter                -1
-
 #
 # Driver station
 #
@@ -171,10 +128,68 @@ tankdrive:follower:right:kd                                     0.0
 tankdrive:follower:turn_correction                              0
 tankdrive:follower:angle_correction                             0.06
 
+###################################################################################################
+# shooter
+###################################################################################################
 
-#
+shooter:velocity:p                                              0.0001184
+shooter:velocity:i                                              0.0
+shooter:velocity:d                                              0.0
+shooter:velocity:f                                              0.0001184
+shooter:velocity:min                                            -1.0
+shooter:velocity:max                                            1.0
+shooter:velocity:imax                                           0.0
+
+shooter:hold:p                                                  0.0
+shooter:hold:i                                                  0.0
+shooter:hold:d                                                  0.0
+shooter:hold:f                                                  0.0
+shooter:hold:min                                                -1.0
+shooter:hold:max                                                1.0
+shooter:hold:imax                                               0.0
+
+###################################################################################################
+# turret
+###################################################################################################
+
+turret:hold:p                                                   0
+turret:hold:i                                                   0
+turret:hold:d                                                   0
+turret:hold:f                                                   0
+turret:hold:min                                                 0
+turret:hold:max                                                 1
+turret:hold:imax                                                1
+turret:fire_threshold                                           0.5
+
+###################################################################################################
+# controlpanelrotator
+###################################################################################################
+
+controlpanelrotator:hold:p                                      0
+controlpanelrotator:hold:i                                      0
+controlpanelrotator:hold:d                                      0
+controlpanelrotator:hold:f                                      0
+controlpanelrotator:hold:min                                    0
+controlpanelrotator:hold:max                                    1
+controlpanelrotator:hold:imax                                   1
+
+###################################################################################################
+# conveyor
+###################################################################################################
+
+conveyor:motorstates:stopped:intake                             0
+conveyor:motorstates:stopped:shooter                            0
+
+conveyor:motorstates:move_towards_shooter:intake                1
+conveyor:motorstates:move_towards_shooter:shooter               1
+
+conveyor:motorstates:move_towards_intake:intake                 -1
+conveyor:motorstates:move_towards_intake:shooter                -1
+
+###################################################################################################
 # Variables for the driver gamepad
-#
+###################################################################################################
+
 driver:power:max                                                1.0
 driver:power:default                                            0.6
 driver:turn:max                                                 0.8
@@ -186,10 +201,24 @@ driver:power:nudge_rotate                                       0.2
 driver:nudge_time                                               0.1
 driver:zerolevel                                                0.1
 
+###################################################################################################
+# climber
+###################################################################################################
+
 climber:servo:l:angle_hold                                     -1
 climber:servo:l:angle_release                                  -1
 climber:servo:r:angle_hold                                     -1
 climber:servo:r:angle_release                                  -1
+
+###################################################################################################
+# droidvision
+###################################################################################################
+
+droidvision:camera_height                                       20.0
+droidvision:camera_angle                                        64.67
+droidvision:camera_target_height                                17.75
+limelight:camera_latency                                        11.0
+limelight:network_latency                                       10.0
 
 ###################################################################################################
 #

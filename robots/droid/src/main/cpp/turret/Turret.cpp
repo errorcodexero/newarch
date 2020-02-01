@@ -9,7 +9,7 @@ using namespace xero::base;
 
 namespace xero {
     namespace droid {
-        Turret::Turret(Subsystem *parent): MotorEncoderSubsystem(parent, "turret", MSG_GROUP_TURRET, true) {
+        Turret::Turret(Subsystem *parent): MotorEncoderSubsystem(parent, "turret", MSG_GROUP_TURRET) {
 
         }
 
