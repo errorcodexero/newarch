@@ -106,15 +106,16 @@ shooter:hold:min                                                -1.0
 shooter:hold:max                                                1.0
 shooter:hold:imax                                               0.0
 
-turret:hold:p                                                   1
+turret:hold:p                                                   0
 turret:hold:i                                                   0
 turret:hold:d                                                   0
 turret:hold:f                                                   0
 turret:hold:min                                                 0
 turret:hold:max                                                 1
 turret:hold:imax                                                1
+turret:fire_threshold                                           0.5
 
-controlpanelrotator:hold:p                                      1
+controlpanelrotator:hold:p                                      0
 controlpanelrotator:hold:i                                      0
 controlpanelrotator:hold:d                                      0
 controlpanelrotator:hold:f                                      0

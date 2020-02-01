@@ -26,6 +26,11 @@ namespace xero {
             /// Returns the target of this hold action.
             double getTarget() { return target_; }
 
+            void setTarget(double target) {
+                target_ = target;
+                hasExplicitTarget_ = true;
+            }
+
             virtual std::string toString() { 
                 return "MotorEncoderHoldAction: " + 
                     ((hasExplicitTarget_ ? "explicit " : "implicit ") + std::to_string(target_));

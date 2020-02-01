@@ -1,20 +1,24 @@
 #pragma once
 
 #include <memory>
-#include <motorencodersubsystem/MotorEncoderGoToAction.h>
+#include <motorencodersubsystem/MotorEncoderHoldAction.h>
 
 #include "Turret.h"
 
 namespace xero {
     namespace droid {
-        class FollowTargetAction : public xero::base::MotorEncoderGoToAction {
+        class FollowTargetAction : public xero::base::MotorEncoderHoldAction {
         public:
-            
-            FollowTargetAction(Turret &subsystem): 
-                MotorEncoderGoToAction(subsystem, 0, "follow") {}
+            FollowTargetAction(Turret &subsystem);
            
             virtual void run() ;
 
+            Turret &getTurret() { 
+                return static_cast<Turret&>(getSubsystem());
+            }
+
+        private:
+            double threshold_;
         };
     }
 }
