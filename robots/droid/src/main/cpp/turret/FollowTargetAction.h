@@ -10,8 +10,8 @@ namespace xero {
         class FollowTargetAction : public xero::base::MotorEncoderGoToAction {
         public:
             
-            FollowTargetAction(Turret &subsystem, const std::string &configName): 
-                MotorEncoderGoToAction(subsystem, 0, configName) {}
+            FollowTargetAction(Turret &subsystem): 
+                MotorEncoderGoToAction(subsystem, 0, "follow") {}
            
             virtual void run() ;
 

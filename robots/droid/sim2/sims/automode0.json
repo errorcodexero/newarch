@@ -35,7 +35,7 @@
                 {
                     "model": "conveyor",
                     "instance": "1",
-                    "values": { "print": true, "ball": true }
+                    "values": { "print": true, "ball": false }
                 }
             ]
         },
@@ -79,7 +79,7 @@
                 {
                     "model": "conveyor",
                     "instance": "1",
-                    "values": { "print": true, "ball": true }
+                    "values": { "print": true, "ball": false }
                 }
             ]
         },
@@ -101,7 +101,7 @@
                 {
                     "model": "conveyor",
                     "instance": "1",
-                    "values": { "print": true, "ball": true }
+                    "values": { "print": true, "ball": false }
                 }
             ]
         },
@@ -123,7 +123,7 @@
                 {
                     "model": "conveyor",
                     "instance": "1",
-                    "values": { "print": true, "ball": true }
+                    "values": { "print": true, "ball": false }
                 }
             ]
         },
