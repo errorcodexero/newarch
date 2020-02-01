@@ -23,5 +23,12 @@ namespace xero {
         bool Turret::canAcceptDefaultAction(ActionPtr action) {
             return std::dynamic_pointer_cast<TurretStopAction>(action) != nullptr;
         }
+
+        void Turret::setMotorPower(double power) {
+            double pos = getPosition();
+            if (power < 0 && pos <= getMinSafeAngle()) setMotor(0);
+            else if (power > 0 && pos >= getMaxSafeAngle()) setMotor(0);
+            else setMotor(power);
+        }
     }
 }

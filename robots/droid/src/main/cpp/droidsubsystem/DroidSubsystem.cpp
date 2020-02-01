@@ -3,6 +3,8 @@
 #include "gamepiecemanipulator/GamePieceManipulator.h"
 #include "turret/Turret.h"
 #include "climber/Climber.h"
+#include "limelight/DroidLimeLight.h"
+#include "targettracker/TargetTracker.h"
 #include "droidids.h"
 #include <Robot.h>
 #include <list>
@@ -30,6 +32,12 @@ namespace xero {
 
             turret_ = std::make_shared<Turret>(this);
             addChild(turret_);
+
+            limelight_ = std::make_shared<DroidLimeLight>(this);
+            addChild(limelight_);
+
+            target_tracker_ = std::make_shared<TargetTracker>(this);
+            addChild(target_tracker_);
         }
 
         DroidSubsystem::~DroidSubsystem() {

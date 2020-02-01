@@ -154,14 +154,16 @@ shooter:hold:imax                                               0.0
 # turret
 ###################################################################################################
 
-turret:hold:p                                                   0
-turret:hold:i                                                   0
-turret:hold:d                                                   0
-turret:hold:f                                                   0
-turret:hold:min                                                 0
-turret:hold:max                                                 1
-turret:hold:imax                                                1
+turret:follow:p                                                 0
+turret:follow:i                                                 0
+turret:follow:d                                                 0
+turret:follow:f                                                 0
+turret:follow:min                                               -1
+turret:follow:max                                               1
+turret:follow:imax                                              1
 turret:fire_threshold                                           0.5
+turret:min                                                      -90 # The minimum safe angle.
+turret:max                                                      90  # The maximum safe angle.
 
 ###################################################################################################
 # controlpanelrotator
