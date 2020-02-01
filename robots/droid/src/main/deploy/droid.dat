@@ -140,6 +140,8 @@ shooter:velocity:min                                            -1.0
 shooter:velocity:max                                            1.0
 shooter:velocity:imax                                           0.0
 
+shooter:velocity:ready_margin_percent                           5.0      # If velocity is within % margin from target, consider it ready to shoot
+
 shooter:hold:p                                                  0.0
 shooter:hold:i                                                  0.0
 shooter:hold:d                                                  0.0
