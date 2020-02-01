@@ -19,17 +19,18 @@ namespace xero {
             oi_ = std::make_shared<DroidOISubsystem>(this) ;
             addChild(oi_) ;            
 
+#ifdef NOTYET
             control_panel_rotator_ = std::make_shared<ControlPanelRotator>(this);
             addChild(control_panel_rotator_);
 
             climber_ = std::make_shared<Climber>(this);
             addChild(climber_);
-
+#endif
             manip_ = std::make_shared<GamePieceManipulator>(this);
             addChild(manip_);
 
-            //turret_ = std::make_shared<Turret>(this);
-            //addChild(turret_);
+            turret_ = std::make_shared<Turret>(this);
+            addChild(turret_);
         }
 
         DroidSubsystem::~DroidSubsystem() {

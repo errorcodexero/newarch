@@ -1,5 +1,6 @@
 #include "ConveyorEmitAction.h"
 #include "Conveyor.h"
+#include <Robot.h>
 
 using namespace xero::misc;
 
@@ -7,8 +8,9 @@ namespace xero {
     namespace droid {
         ConveyorEmitAction::ConveyorEmitAction(Conveyor &sub) : ConveyorAction(sub)
         {
-            to_shooter_ = 1.0 ;
-            to_collecter_ = -1.0 ;
+            to_shooter_ = sub.getRobot().getSettingsParser().getDouble("conveyor:toshooter") ;
+            to_collecter_ = sub.getRobot().getSettingsParser().getDouble("conveyor:tocollector") ;
+            delay1_ = sub.getRobot().getSettingsParser().getDouble("conveyor:delay1") ;
         }
 
         ConveyorEmitAction::~ConveyorEmitAction()
@@ -17,10 +19,9 @@ namespace xero {
 
         void ConveyorEmitAction::start()
         {
-            // state_ = State::WaitForBall ;
-            setMotor(0.6) ;
-            setMotor2(0.2) ;
-            state_ = State::Done ;
+            state_ = State::WaitForBall ;
+            setMotor(0.0) ;
+            setMotor2(0.0) ;
         }
 
         void ConveyorEmitAction::run()
@@ -36,6 +37,7 @@ namespace xero {
                     // We have a ball, turn on the motor
                     //
                     setMotor(to_shooter_) ;
+                    setMotor2(to_shooter_) ;
                     if (sub.getBallCount())
                     {
                         state_ = State::WaitForSecondOff ;
@@ -56,8 +58,19 @@ namespace xero {
                 break ;
 
             case State::WaitForSecondOn:
-                setMotor(0.0) ;
+                if (sub.getSensor2() == true)
+                {
+                    state_ = State::WaitForSecondDelay ;
+                    start_ = getSubsystem().getRobot().getTime() ;
+                }
                 break ;
+
+            case State::WaitForSecondDelay:
+                if (getSubsystem().getRobot().getTime() - start_ > delay1_)
+                {
+                    setMotor(0.0) ;
+                    state_ = State::WaitForBall ;
+                }
 
             case State::Done:
                 break ;

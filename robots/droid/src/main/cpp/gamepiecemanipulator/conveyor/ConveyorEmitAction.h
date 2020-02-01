@@ -22,12 +22,15 @@ namespace xero {
                 WaitForBall,
                 WaitForSecondOff,
                 WaitForSecondOn,
+                WaitForSecondDelay,
                 Done
             } ;
 
         private:
             State state_ ;
 
+            double start_ ;
+            double delay1_ ;
             double to_shooter_ ;
             double to_collecter_ ;
         } ;

@@ -20,6 +20,9 @@ namespace xero {
 
             conveyor_belts_ = parent->getRobot().getMotorFactory()->createMotor("hw:conveyor:belts") ;
             turret_conveyor_ = parent->getRobot().getMotorFactory()->createMotor("hw:conveyor:turret") ;
+
+            conveyor_belts_->setNeutralMode(xero::base::MotorController::NeutralMode::Brake) ;
+            turret_conveyor_->setNeutralMode(xero::base::MotorController::NeutralMode::Brake) ;            
         }
 
         void Conveyor::computeState()
