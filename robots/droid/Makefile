@@ -27,7 +27,9 @@ SUBSYSTEMS = \
 	src/main/cpp/turret/Turret.cpp\
 	src/main/cpp/climber/Climber.cpp\
 	src/main/cpp/controlpanelrotator/ControlPanelRotator.cpp\
-    src/main/cpp/controlpanelrotator/RotateControlPanelAction.cpp
+    src/main/cpp/controlpanelrotator/RotateControlPanelAction.cpp\
+    src/main/cpp/limelight/DroidLimeLight.cpp\
+    src/main/cpp/targettracker/TargetTracker.cpp\
 
 MODELS = \
 	src/models/cpp/DroidOIModel.cpp\

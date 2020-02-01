@@ -10,6 +10,8 @@ namespace xero {
         class Climber;
         class GamePieceManipulator;
         class Turret;
+        class DroidLimeLight;
+        class TargetTracker;
 
         //
         // Add gamemanipulator
@@ -40,6 +42,14 @@ namespace xero {
                 return turret_;
             }
 
+            std::shared_ptr<DroidLimeLight> getLimeLight() {
+                return limelight_;
+            }
+
+            std::shared_ptr<TargetTracker> getTargetTracker() {
+                return target_tracker_;
+            }
+
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             
         private:
@@ -49,6 +59,8 @@ namespace xero {
             std::shared_ptr<Climber> climber_;
             std::shared_ptr<GamePieceManipulator> manip_;
             std::shared_ptr<Turret> turret_;
+            std::shared_ptr<DroidLimeLight> limelight_;
+            std::shared_ptr<TargetTracker> target_tracker_;
             ////%% End DefineChildSubsystems
         } ;
     }
