@@ -26,10 +26,7 @@ namespace xero {
         void FireAction::run()
         {
             double target = 0 ;                                  //TODO: calculate target velocity
-            if (std::fabs(target - getTarget()) > 100)
-            {
-                setTarget(target);
-            }
+            setTarget(target);
             frc::SmartDashboard::PutNumber("tvel", getTarget());
             MotorEncoderVelocityAction::run();
         }
