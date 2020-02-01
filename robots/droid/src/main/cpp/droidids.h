@@ -17,3 +17,4 @@
 #define MSG_GROUP_CONTROL_PANEL_ROTATOR             (1ull << 36)
 #define MSG_GROUP_CLIMBER                           (1ull << 37)
 #define MSG_GROUP_ARM                               (1ull << 37)
+#define MSG_GROUP_LIFTERS                           (1ull << 38)

@@ -10,7 +10,7 @@ namespace xero {
             // action to go to a certain angle... should be boolean for deployed/ not deployed.
            public :
             DeployAction(Arm &subsystem, bool isDeployed): 
-                MotorEncoderGoToAction(subsystem, isDeployed ? "deploy" : "retract", "Intake") {}
+                MotorEncoderGoToAction(subsystem, isDeployed ? "deploy" : "retract", "intake:arm") {}
 
         } ;
     }

@@ -23,9 +23,8 @@ hw:tankdrive:invert:motors:right                                true            
 hw:shooter:motor:1:type                                         "sparkmax_brushless"
 hw:shooter:motor:1:canid                                        5
 hw:shooter:motor:2:type                                         "sparkmax_brushless"
-hw:shooter:motor:2:canid                                        6
-hw:shooter:encoder:quad:1                                       1
-hw:shooter:encoder:quad:2                                       2
+hw:shooter:motor:2:canid                                        6                          # CAN 6
+hw:shooter:encoder:quad:motor                                   true                        # Use encoder in NEO motor
 hw:shooter:encoder:quad:m                                       1
 hw:shooter:encoder:quad:b                                       0
 
@@ -47,15 +46,25 @@ hw:turret:encoder:analog:emin                                   0.0
 hw:turret:encoder:analog:emax                                   1.0
 hw:turret:encoder:analog:rc                                     0.0
 hw:turret:encoder:analog:ec                                     0.0
+hw:turret:encoder:analog:rc                                     0.0
 
 hw:intake:motor:type                                            "sparkmax_brushless"
 hw:intake:motor:canid                                           10
 hw:intake:duration                                              0.0                                                        
-hw:intake:lifter:motor:type                                     "sparkmax_brushless"
-hw:intake:lifter:motor:canid                                    11                           # CAN 11
-hw:intake:lifter:encoder:quad:motor                             true
+hw:intake:lifter:type                                           "sparkmax_brushless"
+hw:intake:lifter:canid                                          11                          # CAN 11
+hw:intake:lifter:encoder:motor                                  true
 hw:intake:lifter:encoder:quad:m                                 1.0
 hw:intake:lifter:encoder:quad:b                                 0.0
+
+hw:intake:arm:motor:type                                        "sparkmax_brushless"
+hw:intake:arm:motor:canid                                       16                          #CAN 16
+hw:intake:arm:deploy                                            0.0          ## intake:arm values to be changed while testing
+hw:intake:arm:retract                                           1.0
+hw:intake:arm:threshold                                         0.1
+hw:intake:arm:maxa                                              1.0
+hw:intake:arm:maxd                                              0.0
+hw:intake:arm:maxv                                              1.0
 
 hw:controlpanelrotator:motor:type                               "sparkmax_brushless"
 hw:controlpanelrotator:motor:canid                              12                           # CAN 12
@@ -68,11 +77,17 @@ hw:climber:motor:1:canid                                        13              
 hw:climber:motor:2:type                                         "sparkmax_brushless"
 hw:climber:motor:2:canid                                        14                          # CAN 14
 hw:climber:motor:2:invert                                       true
+hw:climber:motor:release                                        -10
+hw:climber:motor:climb                                          10
 hw:climber:encoder:quad:motor                                   true
 hw:climber:encoder:quad:m                                       1
 hw:climber:encoder:quad:b                                       0
 hw:climber:servo:l:pwmid                                        0                           # PWM 2
 hw:climber:servo:r:pwmid                                        1                           # PWM 1
+hw:climber:servo:l:release                                      1.0
+hw:climber:servo:r:release                                      1.0
+hw:climber:servo:l:climb                                        0.0
+hw:climber:servo:r:climb                                        0.0
 
 shooter:hold:p                                                  1
 shooter:hold:i                                                  0
@@ -92,7 +107,6 @@ turret:hold:imax                                                1
 
 controlpanelrotator:hold:p                                      1
 controlpanelrotator:hold:i                                      0
-
 controlpanelrotator:hold:d                                      0
 controlpanelrotator:hold:f                                      0
 controlpanelrotator:hold:min                                    0

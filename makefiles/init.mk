@@ -4,7 +4,7 @@
 #
 ifeq ($(CONFIG),ASan)
 override CONFIG := Debug
-ASAN = true
+export ASAN = true
 endif
 
 

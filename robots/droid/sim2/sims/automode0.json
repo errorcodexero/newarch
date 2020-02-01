@@ -29,7 +29,117 @@
             ]
         },
         {
-            "time" : 20.0,
+            "time": 2.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true, "ball": true }
+                }
+            ]
+        },
+        {
+            "time": 3.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true }
+                }
+            ]
+        },
+        {
+            "time": 4.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true, "ball": true }
+                }
+            ]
+        },
+        {
+            "time": 5.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true }
+                }
+            ]
+        },
+        {
+            "time": 6.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true, "ball": true }
+                }
+            ]
+        },
+        {
+            "time": 7.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true }
+                }
+            ]
+        },
+        {
+            "time": 8.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true, "ball": true }
+                }
+            ]
+        },
+        {
+            "time": 9.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true }
+                }
+            ]
+        },
+        {
+            "time": 10.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true, "ball": true }
+                }
+            ]
+        },
+        {
+            "time": 11.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true }
+                }
+            ]
+        },
+        {
+            "time" : 12.0,
             "events" :
             [
                 {
