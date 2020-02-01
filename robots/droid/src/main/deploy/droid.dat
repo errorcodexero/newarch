@@ -49,14 +49,13 @@ hw:turret:encoder:analog:emax                                   1.0
 hw:turret:encoder:analog:ec                                     0.0
 hw:turret:encoder:analog:rc                                     0.0
 
-hw:intake:motor:type                                            "sparkmax_brushless"
-hw:intake:motor:canid                                           10                          # CAN 10
-hw:intake:duration                                              0.0                                                        
-hw:intake:lifter:type                                           "sparkmax_brushless"
-hw:intake:lifter:canid                                          11                          # CAN 11
-hw:intake:lifter:encoder:motor                                  true
-hw:intake:lifter:encoder:quad:m                                 1.0
-hw:intake:lifter:encoder:quad:b                                 0.0
+hw:intake:collect:motor:type                                     "sparkmax_brushless"
+hw:intake:collect:motor:canid                                    10                          # CAN 10
+hw:intake:type                                           "sparkmax_brushless"
+hw:intake:canid                                          11                          # CAN 11
+hw:intake:encoder:motor                                  true
+hw:intake:encoder:quad:m                                 1.0
+hw:intake:encoder:quad:b                                 0.0
 
 hw:intake:arm:motor:type                                        "sparkmax_brushless"
 hw:intake:arm:motor:canid                                       16                          #CAN 16
@@ -123,6 +122,13 @@ conveyor:motorstates:move_towards_shooter:shooter               1
 
 conveyor:motorstates:move_towards_intake:intake                 -1
 conveyor:motorstates:move_towards_intake:shooter                -1
+
+
+### need to fix all the below intake-param names ############################################################3
+
+intake:collector:motor:power                                    0.3
+intake:arm:collect:pos                                          -1
+
 
 #
 # Driver station
