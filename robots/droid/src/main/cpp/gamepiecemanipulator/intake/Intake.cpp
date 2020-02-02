@@ -1,7 +1,5 @@
 #include "Intake.h"
 #include "droidids.h"
-#include "CollectOnAction.h"
-#include "CollectOffAction.h"
 #include <motorencodersubsystem/MotorEncoderGoToAction.h>
 
 using namespace xero::misc;
@@ -14,7 +12,6 @@ namespace xero {
             std::string collectparam = ":intake:collect" ;
             std::string motorparam = HWPrefix + collectparam + ":motor" ;
             collector_ = getRobot().getMotorFactory()->createMotor(motorparam) ;
-
         }
     }
 }

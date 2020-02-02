@@ -1,23 +1,24 @@
 #pragma once
 
+#include "GamePieceManipulatorAction.h"
+
 #include "shooter/Shooter.h"
 #include "intake/Intake.h"
 #include "conveyor/Conveyor.h"
-#include "gamepiecemanipulator/GamePieceManipulatorAction.h"
 
 namespace xero {
     namespace droid {
-        class ShootAction : GamePieceManipulatorAction {
+        class StopCollectAction : GamePieceManipulatorAction {
         public:
-            ShootAction(GamePieceManipulator &subsystem);
-            virtual ~ShootAction();
+            StopCollectAction(GamePieceManipulator &subsystem);
+            virtual ~StopCollectAction();
 
             void start() override ;
             void run() override ;
 
             std::string toString() override {
-                return "ShootAction";
-            }
+                return "StopCollectAction";
+            }            
             
         private:
         };
