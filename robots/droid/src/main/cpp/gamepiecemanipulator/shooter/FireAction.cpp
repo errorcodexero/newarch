@@ -20,8 +20,9 @@ namespace xero {
             return (std::fabs(100.0 * (measured - target)/target) <= percentage);
         }
       
-        FireAction::FireAction(Shooter &sub): xero::base::MotorEncoderVelocityAction(sub, 0), subsystem_(sub)
+        FireAction::FireAction(Shooter &sub, double target): xero::base::MotorEncoderVelocityAction(sub, 0), subsystem_(sub)
         {
+            target_ = target;
             const std::string configName("shooter:velocity:ready_margin_percent");
             ready_margin_percent_ = getSubsystem().getRobot().getSettingsParser().getDouble(configName);
         }
@@ -32,11 +33,12 @@ namespace xero {
 
         void FireAction::run()
         {
-            double target = 0 ;                                  //TODO: calculate target velocity
-            setTarget(target);
-            frc::SmartDashboard::PutNumber("tvel", getTarget());
+            setTarget(target_);
+            frc::SmartDashboard::PutNumber("tvel", target_);
+
             MotorEncoderVelocityAction::run();
-            if (target != 0 && matchWithinPercentError(getTarget(), getSubsystem().getSpeedometer().getVelocity(), ready_margin_percent_)) {
+
+            if (target_ != 0 && matchWithinPercentError(getTarget(), getSubsystem().getSpeedometer().getVelocity(), ready_margin_percent_)) {
                 getSubsystem().setReadyToShoot(true);
             } else {
                 getSubsystem().setReadyToShoot(false);

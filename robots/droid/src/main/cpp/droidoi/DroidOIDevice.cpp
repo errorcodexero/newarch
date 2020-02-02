@@ -3,12 +3,12 @@
 #include "Droid.h"
 #include "turret/FollowTargetAction.h"
 #include "turret/Turret.h"
-#include "gamepiecemanipulator/GamePieceManipulator.h"
 #include "gamepiecemanipulator/StartCollectAction.h"
 #include "gamepiecemanipulator/StopCollectAction.h"
 #include "gamepiecemanipulator/ShootAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToEmitAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToReceiveAction.h"
+#include "gamepiecemanipulator/GamePieceManipulator.h"
 #include <Robot.h>
 #include <TeleopController.h>
 #include <SettingsParser.h>
@@ -39,17 +39,21 @@ namespace xero {
             log << "OI: initializing button/axis mapping" ;
             log.endMessage() ;
 
+            // Automode - ten position switch
             std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
             automode_ = mapAxisScale(6, mapping) ;
 
+            // Shoot/Collect mode - toggle switch
             size_t collect_shoot_mode_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:shoot_collect_mode") ;            
-            collect_shoot_mode_ = mapButton(collect_shoot_mode_b, OIButton::ButtonType::Level) ;                    // Toggle switch            
+            collect_shoot_mode_ = mapButton(collect_shoot_mode_b, OIButton::ButtonType::Level) ;       
 
+            // Shoot on/off - toggle switch
             size_t shoot_on_off_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:shoot_onoff") ;            
-            shoot_on_off_ = mapButton(shoot_on_off_b, OIButton::ButtonType::Level) ;                                // Toggle switch
+            shoot_on_off_ = mapButton(shoot_on_off_b, OIButton::ButtonType::Level) ;
 
+            // Collect - push button
             size_t collect_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:collect_onoff") ;
-            collect_on_off_ = mapButton(collect_b, OIButton::ButtonType::LowToHigh) ;                               // Push button
+            collect_on_off_ = mapButton(collect_b, OIButton::ButtonType::LowToHigh) ;
         }
 
         void DroidOIDevice::generateActions(xero::base::SequenceAction &seq)
@@ -59,12 +63,15 @@ namespace xero {
             auto game = droid.getDroidSubsystem()->getGamePieceManipulator() ;
             auto conveyor = game->getConveyor() ;            
 
+            //
+            // First check the mode
+            //
             if (getValue(collect_shoot_mode_) == 1 && mode_ != RobotMode::Shooting)
             {
                 //
                 // TODO: We need to be sure we are not in the middle of collecting a ball
                 //
-                if (/* !conveyor.isCollectingBall() */ true)
+                if (!game->isActive())
                 {
                     turret->setAction(follow_target_) ;
                     conveyor->setAction(prepare_to_emit_) ;
@@ -76,7 +83,7 @@ namespace xero {
                 //
                 // TODO: We need to be sure we are not in the middle of shooting a ball
                 //
-                if (/* !game.isShootingBall() */ true)
+                if (!game->isActive())
                 {
                     turret->setAction(nullptr) ;
                     conveyor->setAction(prepare_to_receive_) ;
@@ -84,16 +91,35 @@ namespace xero {
                 }
             }
 
+            //
+            // Now based on the mode, see if we need to start or stop the
+            // current action
+            //
             if (mode_ == RobotMode::Collecting)
             {
-                if (getValue(collect_on_off_))
+                if (getValue(collect_on_off_) == 1 && !collecting_ && !game->isActive())
                 {
                     game->setAction(start_collect_);
+                    collecting_ = true;
                 }
-                else
+                else if (getValue(collect_on_off_) == 0 && collecting_ && !game->isActive())
                 {
                     game->setAction(stop_collect_);
+                    collecting_ = false;
                 }
+            }
+            else if (mode_ == RobotMode::Shooting)
+            {
+                if (getValue(shoot_on_off_) == 1 && !shooting_)
+                {
+                    game->setAction(shoot_);
+                    shooting_ = true;
+                }
+                else if (getValue(shoot_on_off_) == 0 && shooting_ && !game->isActive())
+                {
+                    game->setAction(nullptr);
+                    shooting_ = false;
+                }                
             }
         }
 

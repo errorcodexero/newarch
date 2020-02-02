@@ -12,7 +12,7 @@ namespace xero {
 
         public:
 
-            FireAction(Shooter &sub) ;
+            FireAction(Shooter &sub, double target) ;
             virtual ~FireAction() ;
 
              Shooter &getSubsystem() {
@@ -24,8 +24,8 @@ namespace xero {
             virtual void cancel() override ;
 
         private:
-
             Shooter &subsystem_;
+            double target_;
             double ready_margin_percent_;
         };
     }

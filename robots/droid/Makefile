@@ -18,6 +18,8 @@ SUBSYSTEMS = \
 	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorReceiveAction.cpp\
 	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorPrepareToReceiveAction.cpp\
 	src/main/cpp/gamepiecemanipulator/ShootAction.cpp\
+	src/main/cpp/gamepiecemanipulator/StartCollectAction.cpp\
+	src/main/cpp/gamepiecemanipulator/StopCollectAction.cpp\
 	src/main/cpp/gamepiecemanipulator/shooter/FireAction.cpp\
 	src/main/cpp/gamepiecemanipulator/shooter/Shooter.cpp\
 	src/main/cpp/gamepiecemanipulator/intake/Intake.cpp\

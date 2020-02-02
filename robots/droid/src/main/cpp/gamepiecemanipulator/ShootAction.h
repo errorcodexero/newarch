@@ -1,13 +1,10 @@
 #pragma once
 
-#include "shooter/Shooter.h"
-#include "intake/Intake.h"
-#include "conveyor/Conveyor.h"
 #include "gamepiecemanipulator/GamePieceManipulatorAction.h"
 
 namespace xero {
     namespace droid {
-        class ShootAction : GamePieceManipulatorAction {
+        class ShootAction : public GamePieceManipulatorAction {
         public:
             ShootAction(GamePieceManipulator &subsystem);
             virtual ~ShootAction();
@@ -22,5 +19,4 @@ namespace xero {
         private:
         };
     }
-
 }

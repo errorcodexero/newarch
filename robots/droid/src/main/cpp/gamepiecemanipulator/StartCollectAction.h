@@ -2,13 +2,9 @@
 
 #include "GamePieceManipulatorAction.h"
 
-#include "shooter/Shooter.h"
-#include "intake/Intake.h"
-#include "conveyor/Conveyor.h"
-
 namespace xero {
     namespace droid {
-        class StartCollectAction : GamePieceManipulatorAction {
+        class StartCollectAction : public GamePieceManipulatorAction {
         public:
             StartCollectAction(GamePieceManipulator &subsystem);
             virtual ~StartCollectAction();

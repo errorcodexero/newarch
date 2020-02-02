@@ -1,4 +1,4 @@
-#include "CollectAction.h"
+#include "StartCollectAction.h"
 #include "shooter/FireAction.h"
 #include <gamepiecemanipulator/GamePieceManipulator.h>
 

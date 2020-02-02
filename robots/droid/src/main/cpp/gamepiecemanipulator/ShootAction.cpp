@@ -1,5 +1,6 @@
 #include "ShootAction.h"
 #include "shooter/FireAction.h"
+#include <gamepiecemanipulator/shooter/Shooter.h>
 #include <gamepiecemanipulator/GamePieceManipulator.h>
 
 namespace xero {
@@ -14,12 +15,12 @@ namespace xero {
 
         }
 
-        void ShootAction::start() {
-            auto &manip = getSubsystem() ;
-            manip.getShooter()->setAction(std::make_shared<FireAction>(*manip.getShooter()), /*allowParentBusy=*/true) ;
+        void ShootAction::start() 
+        {
         }
 
-        void ShootAction::run() {
+        void ShootAction::run() 
+        {
         }
     }
 }

@@ -34,7 +34,8 @@ namespace xero {
         private:
             RobotMode mode_ ;
             bool collecting_ ;
-            
+            bool shooting_;
+
             size_t automode_ ;
             size_t collect_shoot_mode_ ;
             size_t shoot_on_off_ ;
