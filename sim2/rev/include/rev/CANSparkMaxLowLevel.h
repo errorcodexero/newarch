@@ -76,6 +76,9 @@ namespace rev
                 return power_ ;
         }
 
+        void RestoreFactoryDefaults(bool) {
+        }
+
     private:
         int id_ ;
         bool inverted_ ;        

@@ -15,8 +15,8 @@ namespace xero {
             SparkMaxMotorController::SparkMaxMotorController(int id, bool brushless): 
                 motor_(createMotor(id, brushless)), encoder_(motor_->GetEncoder())
             {
+                motor_->RestoreFactoryDefaults(false) ;
                 motor_->SetSmartCurrentLimit(40) ;
-
                 motor_->EnableVoltageCompensation(12.0) ;
 
                 //encoder_->SetPositionConversionFactor(1.0) ;

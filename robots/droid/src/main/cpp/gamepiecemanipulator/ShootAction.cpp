@@ -7,8 +7,8 @@ namespace xero {
             auto &manip = getSubsystem() ;
             manip.getShooter()->setAction(std::make_shared<FireAction>(*manip.getShooter()), /*allowParentBusy=*/true) ;
         }
-        void ShootAction::run() {
 
+        void ShootAction::run() {
         }
     }
 }

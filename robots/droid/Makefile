@@ -20,7 +20,6 @@ SUBSYSTEMS = \
 	src/main/cpp/gamepiecemanipulator/ShootAction.cpp\
 	src/main/cpp/gamepiecemanipulator/shooter/FireAction.cpp\
 	src/main/cpp/gamepiecemanipulator/shooter/Shooter.cpp\
-	src/main/cpp/gamepiecemanipulator/intake/arm/Arm.cpp\
 	src/main/cpp/gamepiecemanipulator/intake/Intake.cpp\
 	src/main/cpp/gamepiecemanipulator/GamePieceManipulator.cpp\
 	src/main/cpp/turret/FollowTargetAction.cpp\
