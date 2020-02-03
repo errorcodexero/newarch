@@ -52,12 +52,14 @@ namespace xero {
             SensorPtr getSensor(Sensor sensor) { return sensors_[static_cast<int>(sensor)]; }
             bool readSensor(Sensor sensor) { return getSensor(sensor)->Get(); }
 
-        private:
+
             /// Runs the motors in the specified direction, or stops them if direction is Stopped.
             /// \param MotorState The direction to run the motors.
             /// \param speedConfig The name of the speed at which the motors should be run.
             ///     This is used to look up the params file at conveyor:speed:<speedID>.
             void setMotors(MotorState state);
+            
+        private:
 
             static SensorPtr createSensor(int channel);
             static SensorPtr createSensor(xero::misc::SettingsParser &settings, std::string configName);
