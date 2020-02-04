@@ -1,30 +1,27 @@
 #pragma once
 
+#include "Conveyor.h"
+#include "ConveyorAction.h"
+
+#include <actions/Action.h>
+#include <SettingsParser.h>
+
 #include <unordered_map>
 #include <utility>
 #include <variant>
 #include <vector>
 
-#include <actions/Action.h>
-#include <SettingsParser.h>
-
-#include "Conveyor.h"
-
 namespace xero {
     namespace droid {
         class Conveyor;
-        /// Because of the sequential nature of conveyor actions, ConveyorAction
+        /// Because of the sequential nature of conveyor actions, ConveyorStateAction
         /// implements a generic state-machine-based framework for controlling
         /// conveyors. A conveyor action is modeled as a sequence of states,
         /// such as "start motors" or "wait for sensor", each implemented by
         /// a \c std::function returning a StateResult
-        /// \see ConveyorAction::setStates, ConveyorAction::StateResult 
-        class ConveyorAction : public xero::base::Action {
+        /// \see ConveyorStateAction::setStates, ConveyorStateAction::StateResult 
+        class ConveyorStateAction : public ConveyorAction {
         public:
-            Conveyor &getSubsystem() {
-                return subsystem_ ;
-            }
-            
             void start() override;
             void run() override;
             void cancel() override { Action::cancel(); setDone(); }
@@ -38,14 +35,14 @@ namespace xero {
             /// \param subsystem The conveyor.
             /// \param actionName The name of this action (ex. ConveyorEmitAction).
             /// Subclasses should call setStates from their constructor.
-            ConveyorAction(Conveyor &subsystem, std::string actionName);
+            ConveyorStateAction(Conveyor &subsystem, std::string actionName);
 
             typedef Conveyor::MotorState MotorState;
             typedef Conveyor::Sensor Sensor;
 
             /// The result of executing a single tick of a state.
             struct StateResult {
-                friend class ConveyorAction;
+                friend class ConveyorStateAction;
             public:
 
                 /// Keeps the state machine in the current state.
@@ -67,7 +64,7 @@ namespace xero {
 
             /// Helper struct to represent a state declaration.
             struct _StateDecl {
-                friend class ConveyorAction;
+                friend class ConveyorStateAction;
             public:
                 _StateDecl(std::function<StateResult(void)> state): 
                     value_({std::nullopt, state}) {}
@@ -139,8 +136,6 @@ namespace xero {
             std::function<StateResult(void)> assertState(std::function<bool()> condition, std::string message);
 
         private:
-            Conveyor &subsystem_ ;
-
             std::string actionName_;
 
             // Returns a debug description of the given state index.

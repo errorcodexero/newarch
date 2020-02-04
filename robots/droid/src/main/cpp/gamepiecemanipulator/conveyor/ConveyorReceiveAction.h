@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ConveyorAction.h"
+#include "ConveyorStateAction.h"
 
 namespace xero {
     namespace droid {
         /// An action which collects balls until full.
-        class ConveyorReceiveAction : public ConveyorAction {
+        class ConveyorReceiveAction : public ConveyorStateAction {
         public:
             ConveyorReceiveAction(Conveyor &subsystem);
         } ;

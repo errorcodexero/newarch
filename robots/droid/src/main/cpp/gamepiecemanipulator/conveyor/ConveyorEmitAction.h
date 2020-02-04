@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ConveyorAction.h"
+#include "ConveyorStateAction.h"
 
 namespace xero {
     namespace droid {
         /// An action which emits a single ball.
-        class ConveyorEmitAction : public ConveyorAction {
+        class ConveyorEmitAction : public ConveyorStateAction {
         public:
             ConveyorEmitAction(Conveyor &subsystem);
 

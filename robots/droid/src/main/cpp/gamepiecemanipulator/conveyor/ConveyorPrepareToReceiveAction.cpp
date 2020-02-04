@@ -4,7 +4,7 @@
 namespace xero {
     namespace droid {
         ConveyorPrepareToReceiveAction::ConveyorPrepareToReceiveAction(Conveyor &subsystem):
-            ConveyorAction(subsystem, "ConveyorPrepareToReceiveAction") {
+            ConveyorStateAction(subsystem, "ConveyorPrepareToReceiveAction") {
             
             const std::string done = "done";
             setStates({

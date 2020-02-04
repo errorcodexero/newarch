@@ -4,7 +4,7 @@
 namespace xero {
     namespace droid {
         ConveyorReceiveAction::ConveyorReceiveAction(Conveyor &subsystem):
-            ConveyorAction(subsystem, "ConveyorReceiveAction") {
+            ConveyorStateAction(subsystem, "ConveyorReceiveAction") {
             
             const std::string waitForBall = "loop";
             const std::string done = "done";

@@ -17,10 +17,20 @@ namespace xero {
             std::string toString() override {
                 return "ShootTestingAction";
             }            
+
+        private:
+            enum class FireState
+            {
+                WaitPrepareReceive,
+                WaitReceive,
+                WaitPrepareShoot,
+                WaitShoot,
+            } ;
             
         private:
             std::shared_ptr<ShooterVelocityAction> fire_;
-            frc::SimpleWidget widget_;            
+            frc::SimpleWidget widget_;     
+            FireState state_ ;       
         };
     }
 

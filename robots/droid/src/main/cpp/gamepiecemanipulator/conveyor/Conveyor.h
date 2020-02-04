@@ -10,7 +10,7 @@
 namespace xero {
     namespace droid {
         class Conveyor : public xero::base::Subsystem {
-            friend class ConveyorAction;
+            friend class ConveyorStateAction;
             friend class ConveyorStopAction;
             friend class ConveyorOnAction ;
         public:

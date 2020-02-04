@@ -10,7 +10,7 @@ namespace xero {
         }
 
         ConveyorEmitAction::ConveyorEmitAction(Conveyor &subsystem):
-            ConveyorAction(subsystem, "ConveyorEmitAction") {
+            ConveyorStateAction(subsystem, "ConveyorEmitAction") {
             
             const std::string loop = "loop";
             const std::string done = "done";

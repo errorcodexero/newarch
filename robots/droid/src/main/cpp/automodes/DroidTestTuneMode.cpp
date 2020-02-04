@@ -127,7 +127,7 @@ namespace xero
                 //
                 //////////////////////////////////////////////////////////////////////////////////////////                
             case 40:
-                pushSubActionPair(turret, std::make_shared<SingleMotorPowerAction>(*turret, power, duration));
+                pushSubActionPair(turret, std::make_shared<MotorEncoderPowerAction>(*turret, power, duration));
                 break;
 
             case 41:

@@ -1,4 +1,4 @@
-#include "ConveyorAction.h"
+#include "ConveyorStateAction.h"
 #include "Conveyor.h"
 
 #include <Robot.h>
@@ -7,14 +7,15 @@ using namespace xero::misc;
 
 namespace xero {
     namespace droid {
-        const ConveyorAction::StateResult ConveyorAction::StateResult::Continue = StateResult(_Continue());
-        const ConveyorAction::StateResult ConveyorAction::StateResult::Next = StateResult(_Next());
+        const ConveyorStateAction::StateResult ConveyorStateAction::StateResult::Continue = StateResult(_Continue());
+        const ConveyorStateAction::StateResult ConveyorStateAction::StateResult::Next = StateResult(_Next());
 
-        ConveyorAction::ConveyorAction(Conveyor &subsystem, std::string actionName): 
-            Action(subsystem.getRobot().getMessageLogger()), 
-            subsystem_(subsystem), actionName_(actionName) {}
+        ConveyorStateAction::ConveyorStateAction(Conveyor &subsystem, std::string actionName): 
+            ConveyorAction(subsystem), actionName_(actionName) 
+        {
+        }
 
-        std::string ConveyorAction::describeState(int index) {
+        std::string ConveyorStateAction::describeState(int index) {
             std::string stateNameStr = "";
             // See if this state has a name
             for (std::pair<std::string, int> namedState : namedStates_) {
@@ -25,11 +26,11 @@ namespace xero {
             return std::to_string(index) + stateNameStr;
         }
 
-        std::string ConveyorAction::toString() {
+        std::string ConveyorStateAction::toString() {
             return actionName_ + ": current state " + describeState(stateIndex_);
         }
 
-        void ConveyorAction::setStates(std::vector<_StateDecl> states) {
+        void ConveyorStateAction::setStates(std::vector<_StateDecl> states) {
             states_.clear();
             states_.reserve(states.size());
             namedStates_.clear();
@@ -43,8 +44,8 @@ namespace xero {
             }
         }
 
-        std::function<ConveyorAction::StateResult(void)> 
-        ConveyorAction::waitForSensorState(Conveyor::Sensor sensor, bool value) {
+        std::function<ConveyorStateAction::StateResult(void)> 
+        ConveyorStateAction::waitForSensorState(Conveyor::Sensor sensor, bool value) {
             return [=]() {
                 if (getSubsystem().readSensor(sensor) == value)
                     return StateResult::Next;
@@ -53,16 +54,16 @@ namespace xero {
             };
         }
 
-        std::function<ConveyorAction::StateResult(void)> 
-        ConveyorAction::setMotorState(MotorState direction) {
+        std::function<ConveyorStateAction::StateResult(void)> 
+        ConveyorStateAction::setMotorState(MotorState direction) {
             return [=]() {
                 setMotors(direction);
                 return StateResult::Next;
             };
         }
 
-        std::function<ConveyorAction::StateResult(void)> 
-        ConveyorAction::incrementBallsState() {
+        std::function<ConveyorStateAction::StateResult(void)> 
+        ConveyorStateAction::incrementBallsState() {
             return [=]() {
                 if (getSubsystem().getBallCount() < Conveyor::MAX_BALLS) {
                     getSubsystem().ballCount_++;
@@ -82,8 +83,8 @@ namespace xero {
             };
         }   
 
-        std::function<ConveyorAction::StateResult(void)> 
-        ConveyorAction::decrementBallsState() {
+        std::function<ConveyorStateAction::StateResult(void)> 
+        ConveyorStateAction::decrementBallsState() {
             return [=]() {
                 if (getSubsystem().getBallCount() > 0) {
                     getSubsystem().ballCount_--;
@@ -103,8 +104,8 @@ namespace xero {
             };
         }     
         
-        std::function<ConveyorAction::StateResult(void)> 
-        ConveyorAction::delayState(double time) {
+        std::function<ConveyorStateAction::StateResult(void)> 
+        ConveyorStateAction::delayState(double time) {
             return [=]() {
                 double currentTime = getSubsystem().getRobot().getTime();
                 if (delayEndTime_) {
@@ -119,8 +120,8 @@ namespace xero {
             };
         }
 
-        std::function<ConveyorAction::StateResult(void)> 
-        ConveyorAction::assertState(std::function<bool()> condition, std::string message) {
+        std::function<ConveyorStateAction::StateResult(void)> 
+        ConveyorStateAction::assertState(std::function<bool()> condition, std::string message) {
                 return [=]() {
                     if (!condition()) {
                         auto &logger = getMessageLogger();
@@ -134,12 +135,12 @@ namespace xero {
                 };
             }   
 
-        void ConveyorAction::setStateIndex(int stateIndex)  { 
+        void ConveyorStateAction::setStateIndex(int stateIndex)  { 
             assert(stateIndex >= 0 && stateIndex < (int)states_.size() && "state index out of range");
             stateIndex_ = stateIndex;
         }
 
-        void ConveyorAction::start() {
+        void ConveyorStateAction::start() {
             assert(!states_.empty() && "state machine doesn't have any states; call setStates in constructor");
             stateIndex_ = 0;
             delayEndTime_ = std::nullopt;
@@ -154,7 +155,7 @@ namespace xero {
             logger.endMessage();
         }
 
-        void ConveyorAction::run() {
+        void ConveyorStateAction::run() {
             auto &logger = getMessageLogger();
 
             bool updated = true;

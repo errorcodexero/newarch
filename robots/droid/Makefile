@@ -12,7 +12,7 @@ SUBSYSTEMS = \
 	src/main/cpp/droidoi/DroidOISubsystem.cpp\
 	src/main/cpp/droidsubsystem/DroidSubsystem.cpp\
 	src/main/cpp/gamepiecemanipulator/conveyor/Conveyor.cpp\
-	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorAction.cpp\
+	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorStateAction.cpp\
 	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorEmitAction.cpp\
 	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorPrepareToEmitAction.cpp\
 	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorReceiveAction.cpp\
