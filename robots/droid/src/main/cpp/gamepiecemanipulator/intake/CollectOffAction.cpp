@@ -5,48 +5,48 @@
 #include <motors/MotorController.h>
 #include <actions/Action.h>
 #include "Subsystem.h"
-#include "CollectOnAction.h"
+#include "CollectOffAction.h"
 #include "Intake.h"
 
 namespace xero {
     namespace droid {
-        std::string CollectOnAction::action_name("CollectOnAction");
-        CollectOnAction::CollectOnAction(Intake &subsystem) : xero::base::MotorEncoderGoToAction(subsystem, "hw:collect:motor:on"), 
+        std::string CollectOffAction::action_name("CollectOffAction");
+        CollectOffAction::CollectOffAction(Intake &subsystem) : xero::base::MotorEncoderGoToAction(subsystem, "hw:collect:motor:on"), 
                                                               sequence_(subsystem.getRobot().getMessageLogger()) {
    
-            collector_power_ = getSubsystem().getRobot().getSettingsParser().getDouble("intake:collector:motor:power") ;
+            collector_power_ = 0.0;    //collector "off""
 
             double pos ;
             ActionPtr act ;
      
-            // Intake arm down //
-            pos = subsystem.getRobot().getSettingsParser().getDouble("intake:arm:collecton:pos") ;
+            // Intake arm up //
+            pos = subsystem.getRobot().getSettingsParser().getDouble("intake:arm:collectoff:pos") ;
             act = std::make_shared<MotorEncoderGoToAction>(getSubsystem(), pos) ;
             sequence_.pushAction(act) ;
 
-            // hold arm down //
+            // hold arm up //
             act = std::make_shared<MotorEncoderHoldAction>(getSubsystem(), pos) ;
             sequence_.pushAction(act) ;
         }
         
-        void CollectOnAction::start() {
+        void CollectOffAction::start() {
             xero::base::MotorEncoderGoToAction::start();
             sequence_.start() ;
         }
 
-        void CollectOnAction::run() {
-            // set collector motors on //
-            getSubsystem().collector_.get()->set(collector_power_) ;
+        void CollectOffAction::run() {
+            // set collector motors off //
+            getSubsystem().collector_.get()->set(collector_power_) ;                 //collector "off"
 
             xero::base::MotorEncoderGoToAction::run();
-            // arm - down and hold sequence //
+            // arm - up and hold sequence //
             sequence_.run() ;
             if (sequence_.isDone())
                 setDone() ;
         }
 
-        void CollectOnAction::cancel() {
-            getSubsystem().collector_.get()->set(0) ;                  //collector "off"
+        void CollectOffAction::cancel() {
+            getSubsystem().collector_.get()->set(collector_power_) ;                  //collector "off"
             
             xero::base::MotorEncoderGoToAction::cancel();
             sequence_.cancel() ;

@@ -90,7 +90,8 @@ hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
 intake:collector:motor:power                                    0.3
-intake:arm:collect:pos                                          -1
+intake:arm:collecton:pos                                        -1
+intake:arm:collectoff:pos                                       -2
 
 
 #
