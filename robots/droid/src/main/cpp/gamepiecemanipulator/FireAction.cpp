@@ -61,7 +61,10 @@ namespace xero {
 
             if (isFiring_) {
                 // If we're out of balls, stop firing
-                if (conveyor->isEmpty()) setDone();
+                if (conveyor->isEmpty()) {
+                    setDone();
+                    stopChildActions();
+                }
 
                 // If we lose the taret, stop firing
                 // Don't check the shooter because we expect some variance in speed as we
@@ -73,7 +76,10 @@ namespace xero {
                 }
             } else { // We're not currently firing.
                 // If we're out of balls, stop trying to fire
-                if (conveyor->isEmpty()) setDone();
+                if (conveyor->isEmpty()) {
+                    setDone();
+                    stopChildActions();
+                }
                 else if (readyToFire && !conveyor->isBusy()) {
                     // fire!
                     conveyor->setAction(conveyorEmitAction_);

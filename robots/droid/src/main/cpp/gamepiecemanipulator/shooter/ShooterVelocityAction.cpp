@@ -33,7 +33,9 @@ namespace xero {
         }
 
         void ShooterVelocityAction::cancel() {
+            MotorEncoderSubsystemAction::cancel();
             getSubsystem().setReadyToFire(false);
+            setDone();
         }
 
         void ShooterVelocityAction::setTarget(double target) {

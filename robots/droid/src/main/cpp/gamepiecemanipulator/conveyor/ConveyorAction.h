@@ -27,6 +27,7 @@ namespace xero {
             
             void start() override;
             void run() override;
+            void cancel() override { Action::cancel(); setDone(); }
 
             int getStateIndex() { return stateIndex_; }
 
