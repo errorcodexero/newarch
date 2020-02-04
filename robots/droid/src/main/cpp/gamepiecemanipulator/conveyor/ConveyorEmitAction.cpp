@@ -5,6 +5,10 @@ using namespace xero::misc;
 
 namespace xero {
     namespace droid {
+        void ConveyorEmitAction::start() {
+            shouldStopFiring_ = false;
+        }
+
         ConveyorEmitAction::ConveyorEmitAction(Conveyor &subsystem):
             ConveyorAction(subsystem, "ConveyorEmitAction") {
             
@@ -29,6 +33,9 @@ namespace xero {
 
                 // wait for the next ball to move into position
                 { "wait for next ball to reach sensor", waitForSensorState(Sensor::C, true) },
+
+                // if we've been asked to stop firing, we're done
+                branchState(done, [=] { return shouldStopFiring_; }),
 
                 gotoState(loop),
 

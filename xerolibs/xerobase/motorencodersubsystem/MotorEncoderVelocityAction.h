@@ -22,7 +22,7 @@ namespace xero {
             /// Returns the target of this velocity action.
             double getTarget() { return target_; }
 
-            void setTarget(double target) { target_ = target; }
+            virtual void setTarget(double target) { target_ = target; }
 
             virtual std::string toString() { 
                 return "VelocityAction: " + std::to_string(target_);

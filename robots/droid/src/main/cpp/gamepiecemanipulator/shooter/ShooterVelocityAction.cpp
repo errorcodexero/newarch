@@ -27,19 +27,26 @@ namespace xero {
 
         void ShooterVelocityAction::run()
         {
-            double target = 0 ;                                  //TODO: calculate target velocity
-            setTarget(target);
             frc::SmartDashboard::PutNumber("tvel", getTarget());
             MotorEncoderVelocityAction::run();
-            if (target != 0 && xero::math::equalWithinPercentMargin(getTarget(), getSubsystem().getSpeedometer().getVelocity(), ready_margin_percent_)) {
-                getSubsystem().setReadyToShoot(true);
-            } else {
-                getSubsystem().setReadyToShoot(false);
-            }
+            updateReadyToFire();
         }
 
         void ShooterVelocityAction::cancel() {
-            getSubsystem().setReadyToShoot(false);
+            getSubsystem().setReadyToFire(false);
+        }
+
+        void ShooterVelocityAction::setTarget(double target) {
+            MotorEncoderVelocityAction::setTarget(target);
+            updateReadyToFire();
+        }
+
+        void ShooterVelocityAction::updateReadyToFire() {
+            if (getTarget() != 0 && xero::math::equalWithinPercentMargin(getTarget(), getSubsystem().getSpeedometer().getVelocity(), ready_margin_percent_)) {
+                getSubsystem().setReadyToFire(true);
+            } else {
+                getSubsystem().setReadyToFire(false);
+            }
         }
     }
 }

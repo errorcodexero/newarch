@@ -23,10 +23,14 @@ namespace xero {
 
             virtual void cancel() override ;
 
+            virtual void setTarget(double target) override;
+
         private:
 
             Shooter &subsystem_;
             double ready_margin_percent_;
+
+            void updateReadyToFire();
         };
     }
 }

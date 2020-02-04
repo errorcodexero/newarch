@@ -1,3 +1,5 @@
+#pragma once
+
 #include <motorencodersubsystem/MotorEncoderSubsystem.h>
 
 namespace xero {
@@ -11,17 +13,17 @@ namespace xero {
             Shooter(xero::base::Subsystem *parent);
             virtual ~Shooter() {}
 
-            void setReadyToShoot(bool ready_to_shoot) {
-                ready_to_shoot_ = ready_to_shoot;
+            void setReadyToFire(bool ready_to_fire) {
+                ready_to_fire_ = ready_to_fire;
             }
 
-            bool isReadyToShoot() const {
-                return ready_to_shoot_;
+            bool isReadyToFire() const {
+                return ready_to_fire_;
             }
 
         private:
 
-            bool ready_to_shoot_ ;      // Set to true when shooter at the required shooting velocity
+            bool ready_to_fire_ ;      // Set to true when shooter at the required shooting velocity
         };
     }
 }

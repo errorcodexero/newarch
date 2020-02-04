@@ -8,6 +8,13 @@ namespace xero {
         class ConveyorEmitAction : public ConveyorAction {
         public:
             ConveyorEmitAction(Conveyor &subsystem);
+
+            void start() override;
+            
+            // Stops the action after the current shot completes.
+            void stopFiring() { shouldStopFiring_ = true; }
+        private:
+            bool shouldStopFiring_;
         } ;
     }
 }
