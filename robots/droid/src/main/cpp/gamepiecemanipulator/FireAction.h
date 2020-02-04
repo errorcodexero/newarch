@@ -8,9 +8,9 @@
 
 namespace xero {
     namespace droid {
-        class ShootAction : public xero::base::Action {
+        class FireAction : public xero::base::Action {
         public:
-            ShootAction(GamePieceManipulator &subsystem);
+            FireAction(GamePieceManipulator &subsystem);
 
             GamePieceManipulator &getSubsystem() {
                 return subsystem_ ;
