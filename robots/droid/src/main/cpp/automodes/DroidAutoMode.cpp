@@ -8,7 +8,7 @@
 #include "gamepiecemanipulator/conveyor/ConveyorEmitAction.h"
 
 #include "gamepiecemanipulator/shooter/Shooter.h"
-#include "gamepiecemanipulator/shooter/FireAction.h"
+#include "gamepiecemanipulator/shooter/ShooterVelocityAction.h"
 
 #include "turret/FollowTargetAction.h"
 
@@ -31,7 +31,7 @@ namespace xero
             pushSubActionPair(conveyor, std::make_shared<ConveyorReceiveAction>(*conveyor));
 
             // spin up the shooter, prepare to fire
-            pushSubActionPair(shooter, std::make_shared<FireAction>(*shooter), false);
+            pushSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter), false);
             pushSubActionPair(conveyor, std::make_shared<ConveyorPrepareToEmitAction>(*conveyor));
             
             // fire
