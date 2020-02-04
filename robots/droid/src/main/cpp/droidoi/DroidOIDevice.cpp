@@ -5,7 +5,7 @@
 #include "turret/Turret.h"
 #include "gamepiecemanipulator/StartCollectAction.h"
 #include "gamepiecemanipulator/StopCollectAction.h"
-#include "gamepiecemanipulator/ShootAction.h"
+#include "gamepiecemanipulator/FireAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToEmitAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToReceiveAction.h"
 #include "gamepiecemanipulator/GamePieceManipulator.h"
@@ -143,7 +143,7 @@ namespace xero {
             prepare_to_receive_ = std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor) ;
             start_collect_ = std::make_shared<StartCollectAction>(*game);
             stop_collect_ = std::make_shared<StopCollectAction>(*game);
-            shoot_ = std::make_shared<ShootAction>(*game);
+            shoot_ = std::make_shared<FireAction>(*game);
         }
     }
 }

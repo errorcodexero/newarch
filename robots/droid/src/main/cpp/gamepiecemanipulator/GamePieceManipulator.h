@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Subsystem.h>
 
 namespace xero {
@@ -21,7 +23,11 @@ namespace xero {
 
             std::shared_ptr<Conveyor> getConveyor() {
                 return conveyor_ ;
-            }    
+            }
+
+            bool isActive() {
+                return false ;
+            }
 
         private:
             std::shared_ptr<Shooter> shooter_;

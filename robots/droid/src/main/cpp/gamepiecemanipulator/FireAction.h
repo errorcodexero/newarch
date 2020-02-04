@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GamePieceManipulator.h"
-
+#include "GamePieceManipulatorAction.h"
 #include "shooter/Shooter.h"
 #include "intake/Intake.h"
 #include "conveyor/Conveyor.h"
@@ -11,20 +11,19 @@ namespace xero {
         class ShooterVelocityAction;
         class ConveyorEmitAction;
         class DroidSubsystem;
-        class FireAction : public xero::base::Action {
+        class FireAction : public GamePieceManipulatorAction {
         public:
             FireAction(GamePieceManipulator &subsystem);
-
-            GamePieceManipulator &getSubsystem() {
-                return subsystem_ ;
-            }
 
             void start() override ;
             void run() override ;
             void cancel() override;
+
+            std::string toString() override {
+                return "FireAction" ;
+            }
             
         private:
-            GamePieceManipulator &subsystem_ ;
             DroidSubsystem &droidSubsystem_;
 
             void stopChildActions();

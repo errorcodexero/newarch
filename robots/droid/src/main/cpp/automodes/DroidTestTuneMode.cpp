@@ -15,7 +15,7 @@
 
 #include <gamepiecemanipulator/GamePieceManipulator.h>
 #include <gamepiecemanipulator/ShootTestingAction.h>
-#include <gamepiecemanipulator/ShootAction.h>
+#include <gamepiecemanipulator/FireAction.h>
 
 #include <gamepiecemanipulator/intake/Intake.h>
 #include <gamepiecemanipulator/intake/CollectOnAction.h>
@@ -164,7 +164,7 @@ namespace xero
 
             case 100:       // Complete shooting action
                 pushSubActionPair(turret, std::make_shared<FollowTargetAction>(*turret));
-                pushSubActionPair(game, std::make_shared<ShootAction>(*game));
+                pushSubActionPair(game, std::make_shared<FireAction>(*game));
                 break;
             }
         }

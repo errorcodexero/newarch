@@ -12,7 +12,7 @@ namespace xero {
 
         public:
 
-            ShooterVelocityAction(Shooter &sub) ;
+            ShooterVelocityAction(Shooter &sub, double target) ;
             virtual ~ShooterVelocityAction() ;
 
              Shooter &getSubsystem() {

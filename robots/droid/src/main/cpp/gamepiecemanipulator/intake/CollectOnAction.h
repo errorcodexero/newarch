@@ -2,7 +2,7 @@
 
 #include "droidids.h"
 #include "Intake.h"
-#include "motorencodersubsystem/MotorEncoderGoToAction.h"
+#include "IntakeAction.h"
 #include <actions/SequenceAction.h>
 
 using namespace xero::misc;
@@ -10,7 +10,7 @@ using namespace xero::base;
 
 namespace xero {
     namespace droid {
-        class CollectOnAction : public xero::base::Action {   
+        class CollectOnAction : public IntakeAction {   
            
         public :
             CollectOnAction(Intake &subsystem) ;
@@ -27,8 +27,6 @@ namespace xero {
             static std::string action_name ;
             xero::base::SequenceAction sequence_ ;
             double collector_power_;
-
-            Intake &sub_ ;
         } ;
     }
 }

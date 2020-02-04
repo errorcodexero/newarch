@@ -15,10 +15,11 @@ using namespace xero::base;
 namespace xero {
     namespace droid {
       
-        ShooterVelocityAction::ShooterVelocityAction(Shooter &sub): xero::base::MotorEncoderVelocityAction(sub, 0), subsystem_(sub)
+        ShooterVelocityAction::ShooterVelocityAction(Shooter &sub, double target): xero::base::MotorEncoderVelocityAction(sub, 0), subsystem_(sub)
         {
             const std::string configName("shooter:velocity:ready_margin_percent");
             ready_margin_percent_ = getSubsystem().getRobot().getSettingsParser().getDouble(configName);
+            setTarget(target) ;
         }
 
         ShooterVelocityAction::~ShooterVelocityAction()

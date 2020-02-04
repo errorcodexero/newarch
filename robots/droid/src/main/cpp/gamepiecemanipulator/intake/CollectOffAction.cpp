@@ -11,10 +11,9 @@
 namespace xero {
     namespace droid {
         std::string CollectOffAction::action_name("CollectOffAction");
-        CollectOffAction::CollectOffAction(Intake &subsystem) : xero::base::Action(subsystem.getRobot().getMessageLogger()), 
-                                                              sequence_(subsystem.getRobot().getMessageLogger()),
-                                                              sub_(subsystem) {
-   
+        CollectOffAction::CollectOffAction(Intake &subsystem) : IntakeAction(subsystem), 
+                                                              sequence_(subsystem.getRobot().getMessageLogger())
+        {
             collector_power_ = 0.0;    //collector "off""
 
             double pos ;
@@ -22,11 +21,11 @@ namespace xero {
      
             // Intake arm up //
             pos = subsystem.getRobot().getSettingsParser().getDouble("intake:arm:collectoff:pos") ;
-            act = std::make_shared<MotorEncoderGoToAction>(sub_, pos) ;
+            act = std::make_shared<MotorEncoderGoToAction>(getSubsystem(), pos) ;
             sequence_.pushAction(act) ;
 
             // hold arm up //
-            act = std::make_shared<MotorEncoderHoldAction>(sub_, pos) ;
+            act = std::make_shared<MotorEncoderHoldAction>(getSubsystem(), pos) ;
             sequence_.pushAction(act) ;
         }
         
@@ -37,7 +36,7 @@ namespace xero {
 
         void CollectOffAction::run() {
             // set collector motors off //
-            sub_.collector_.get()->set(collector_power_) ;                 //collector "off"
+            getSubsystem().collector_.get()->set(collector_power_) ;                 //collector "off"
 
             xero::base::Action::run();
             // arm - up and hold sequence //
@@ -47,7 +46,7 @@ namespace xero {
         }
 
         void CollectOffAction::cancel() {
-            sub_.collector_.get()->set(collector_power_) ;                  //collector "off"
+            getSubsystem().collector_.get()->set(collector_power_) ;                  //collector "off"
             
             xero::base::Action::cancel();
             sequence_.cancel() ;

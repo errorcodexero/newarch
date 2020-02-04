@@ -42,7 +42,7 @@ namespace xero {
             if (std::fabs(current - target) > 10)
                 fire_->setTarget(target);
 
-            frc::SmartDashboard::PutBoolean("ReadyShoot", shooter->isReadyToShoot());
+            frc::SmartDashboard::PutBoolean("ReadyShoot", shooter->isReadyToFire()) ;
         }
     }
 }

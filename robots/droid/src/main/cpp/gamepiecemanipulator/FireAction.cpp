@@ -16,8 +16,7 @@ using namespace xero::misc;
 namespace xero {
     namespace droid {
         FireAction::FireAction(GamePieceManipulator &manip): 
-            Action(manip.getRobot().getMessageLogger()),
-            subsystem_(manip),
+            GamePieceManipulatorAction(manip),
             droidSubsystem_(*static_cast<Droid&>(manip.getRobot()).getDroidSubsystem()) {
             
             auto &settings = manip.getRobot().getSettingsParser();

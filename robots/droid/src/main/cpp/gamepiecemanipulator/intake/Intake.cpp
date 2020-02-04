@@ -1,4 +1,5 @@
 #include "Intake.h"
+#include "IntakeAction.h"
 #include "droidids.h"
 #include <motorencodersubsystem/MotorEncoderGoToAction.h>
 
@@ -14,6 +15,16 @@ namespace xero {
             collector_ = getRobot().getMotorFactory()->createMotor(motorparam) ;
 
             setSmartDashboardName("intake") ;
+        }
+
+        Intake::~Intake()
+        {
+        }
+
+        bool Intake::canAcceptAction(ActionPtr act)
+        {
+            auto inact = std::dynamic_pointer_cast<IntakeAction>(act) ;
+            return inact != nullptr ;
         }
     }
 }

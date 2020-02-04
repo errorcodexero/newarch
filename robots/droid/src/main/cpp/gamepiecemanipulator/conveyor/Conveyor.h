@@ -12,6 +12,7 @@ namespace xero {
         class Conveyor : public xero::base::Subsystem {
             friend class ConveyorAction;
             friend class ConveyorStopAction;
+            friend class ConveyorOnAction ;
         public:
             Conveyor(xero::base::Subsystem *parent);
             virtual ~Conveyor() {}
