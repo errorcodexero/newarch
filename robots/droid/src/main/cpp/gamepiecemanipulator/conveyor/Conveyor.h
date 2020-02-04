@@ -58,6 +58,8 @@ namespace xero {
             /// \param speedConfig The name of the speed at which the motors should be run.
             ///     This is used to look up the params file at conveyor:speed:<speedID>.
             void setMotors(MotorState state);
+            
+        private:
 
             static SensorPtr createSensor(int channel);
             static SensorPtr createSensor(xero::misc::SettingsParser &settings, std::string configName);

@@ -10,15 +10,11 @@ using namespace xero::base;
 
 namespace xero {
     namespace droid {
-        class CollectOnAction : public xero::base::MotorEncoderGoToAction {   
+        class CollectOnAction : public xero::base::Action {   
            
         public :
             CollectOnAction(Intake &subsystem) ;
             virtual ~CollectOnAction() {}
-
-            Intake &getSubsystem() {
-                return dynamic_cast<Intake&>(xero::base::MotorEncoderGoToAction::getSubsystem()) ;
-            }
 
             virtual void start() ;
             virtual void run() ;
@@ -32,6 +28,7 @@ namespace xero {
             xero::base::SequenceAction sequence_ ;
             double collector_power_;
 
+            Intake &sub_ ;
         } ;
     }
 }

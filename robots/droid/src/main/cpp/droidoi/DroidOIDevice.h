@@ -22,10 +22,31 @@ namespace xero {
             virtual void init() ;
 
         private:
+            enum class RobotMode
+            {
+                Shooting,
+                Collecting
+            } ;
+
+        private:
             void bindOI() ;
             
         private:
+            RobotMode mode_ ;
+            bool collecting_ ;
+            bool shooting_;
+
             size_t automode_ ;
+            size_t collect_shoot_mode_ ;
+            size_t shoot_on_off_ ;
+            size_t collect_on_off_ ;
+
+            xero::base::ActionPtr follow_target_ ;
+            xero::base::ActionPtr prepare_to_emit_ ;
+            xero::base::ActionPtr prepare_to_receive_ ;
+            xero::base::ActionPtr start_collect_ ;
+            xero::base::ActionPtr stop_collect_;
+            xero::base::ActionPtr shoot_;
         } ;
     }
 }

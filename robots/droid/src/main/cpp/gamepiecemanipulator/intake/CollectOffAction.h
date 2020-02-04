@@ -10,15 +10,11 @@ using namespace xero::base;
 
 namespace xero {
     namespace droid {
-        class CollectOffAction : public xero::base::MotorEncoderGoToAction {   
+        class CollectOffAction : public xero::base::Action {   
            
         public :
             CollectOffAction(Intake &subsystem) ;
             virtual ~CollectOffAction() {}
-
-            Intake &getSubsystem() {
-                return dynamic_cast<Intake&>(xero::base::MotorEncoderGoToAction::getSubsystem()) ;
-            }
 
             virtual void start() ;
             virtual void run() ;
@@ -31,6 +27,8 @@ namespace xero {
             static std::string action_name ;
             xero::base::SequenceAction sequence_ ;
             double collector_power_;
+
+            Intake &sub_ ;
 
         } ;
     }

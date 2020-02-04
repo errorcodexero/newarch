@@ -31,9 +31,7 @@ hw:shooter:encoder:quad:b                                       0
 hw:conveyor:motors:intake:type                                  "sparkmax_brushless"
 hw:conveyor:motors:intake:canid                                 7                          # CAN 7
 hw:conveyor:motors:shooter:type                                 "sparkmax_brushless"
-hw:conveyor:motors:shooter:canid                                17                         # CAN 17
-hw:conveyor:turret:type                                         "sparkmax_brushless"
-hw:conveyor:turret:canid                                        8                          # CAN 8
+hw:conveyor:motors:shooter:canid                                8                          # CAN 8
 hw:conveyor:sensor:a                                            10
 hw:conveyor:sensor:b                                            11
 hw:conveyor:sensor:c                                            12
@@ -49,22 +47,13 @@ hw:turret:encoder:analog:emax                                   1.0
 hw:turret:encoder:analog:ec                                     0.0
 hw:turret:encoder:analog:rc                                     0.0
 
-hw:intake:collect:motor:type                                     "sparkmax_brushless"
-hw:intake:collect:motor:canid                                    10                          # CAN 10
-hw:intake:type                                           "sparkmax_brushless"
-hw:intake:canid                                          11                          # CAN 11
-hw:intake:encoder:motor                                  true
-hw:intake:encoder:quad:m                                 1.0
-hw:intake:encoder:quad:b                                 0.0
-
-hw:intake:arm:motor:type                                        "sparkmax_brushless"
-hw:intake:arm:motor:canid                                       16                          #CAN 16
-hw:intake:arm:deploy                                            0.0          ## intake:arm values to be changed while testing
-hw:intake:arm:retract                                           1.0
-hw:intake:arm:threshold                                         0.1
-hw:intake:arm:maxa                                              1.0
-hw:intake:arm:maxd                                              0.0
-hw:intake:arm:maxv                                              1.0
+hw:intake:collect:motor:type                                   "sparkmax_brushless"
+hw:intake:collect:motor:canid                                  10                          # CAN 10
+hw:intake:motor:type                                           "sparkmax_brushless"
+hw:intake:motor:canid                                          11                          # CAN 11
+hw:intake:encoder:quad:motor                                   true
+hw:intake:encoder:quad:m                                       1.0
+hw:intake:encoder:quad:b                                       0.0
 
 hw:controlpanelrotator:motor:type                               "sparkmax_brushless"
 hw:controlpanelrotator:motor:canid                              12                           # CAN 12
@@ -90,9 +79,27 @@ hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
 intake:collector:motor:power                                    0.3
-intake:arm:collecton:pos                                        -1
-intake:arm:collectoff:pos                                       -2
-
+intake:arm:collecton:pos                                        1350
+intake:arm:collectoff:pos                                       0
+intake:hold:p                                                   0
+intake:hold:i                                                   0
+intake:hold:d                                                   0
+intake:hold:f                                                   0
+intake:hold:min                                                 0
+intake:hold:max                                                 0
+intake:hold:imax                                                0
+intake:follower:down:kp                                       0.0
+intake:follower:down:kd                                       0.0
+intake:follower:down:kv                                       0.000125628
+intake:follower:down:ka                                       0.0
+intake:follower:up:kp                                         0.0
+intake:follower:up:kd                                         0.0
+intake:follower:up:kv                                         0.000138026
+intake:follower:up:ka                                         0.0
+intake:goto:threshold                                       10.0       # Within three degrees
+intake:goto:maxd                                            -21000.0     # maximum deceleration
+intake:goto:maxa                                            21000.0     # maximum acceleration
+intake:goto:maxv                                            14000.0     # maximum velocity
 
 #
 # Driver station
@@ -227,6 +234,14 @@ droidvision:camera_angle                                        64.67
 droidvision:camera_target_height                                17.75
 limelight:camera_latency                                        11.0
 limelight:network_latency                                       10.0
+
+###################################################################################################
+# oi
+###################################################################################################
+
+oi:shoot_collect_mode                                           1
+oi:shoot_onoff                                                  2
+oi:collect_onoff                                                3
 
 ###################################################################################################
 #

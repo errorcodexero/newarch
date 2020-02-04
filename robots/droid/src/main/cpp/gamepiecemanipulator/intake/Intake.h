@@ -12,6 +12,10 @@ namespace xero {
 
             double current_power_ = 0.0 ;
             std::shared_ptr<xero::base::MotorController> collector_ ;
+
+            bool canAcceptAction(xero::base::ActionPtr action) {
+                return true ;
+            }
   
         };
     }
