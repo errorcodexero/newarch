@@ -24,8 +24,6 @@ namespace rev
         }
 
     private:
-
-
         IdleMode idle_mode_ ;
     } ;
 }

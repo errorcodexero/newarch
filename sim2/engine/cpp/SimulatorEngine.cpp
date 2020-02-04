@@ -7,7 +7,7 @@
 #include <CTREManager.h>
 #include <REVManager.h>
 #include <json.h>
-#include <hal/HalBase.h>
+#include <hal/HALBase.h>
 #include <hal/Ports.h>
 #include <mockdata/EncoderData.h>
 #include <mockdata/PWMData.h>
@@ -58,6 +58,13 @@ namespace xero
             models_.push_back(mptr) ;
 
             return mptr ;
+        }
+
+        void SimulatorEngine::removeModelInstance(std::shared_ptr<SimulationModel> inst)
+        {
+            auto it = std::find(models_.begin(), models_.end(), inst) ;
+            if (it != models_.end())
+                models_.erase(it) ;
         }
 
         std::shared_ptr<SimulationModel> SimulatorEngine::findModelInstance(const std::string &model, const std::string &inst)

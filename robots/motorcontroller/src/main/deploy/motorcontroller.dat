@@ -13,27 +13,16 @@
 #
 # Drivebase
 #
-
 # Drivebase motors
-hw:tankdrive:motors:left:1:canid                                10                           # CAN ID
-hw:tankdrive:motors:left:1:type                                 "sparkmax_brushless"        # Type of motor controller
-hw:tankdrive:motors:left:2:canid                                11                           # CAN ID
-hw:tankdrive:motors:left:2:type                                 "sparkmax_brushless"        # Type of motor controller
-hw:tankdrive:motors:left:3:canid                                12                           # CAN ID
-hw:tankdrive:motors:left:3:type                                 "sparkmax_brushless"        # Type of motor controller
-hw:tankdrive:motors:right:1:canid                               13                           # CAN ID
-hw:tankdrive:motors:right:1:type                                "sparkmax_brushless"        # Type of motor controller
-hw:tankdrive:motors:right:2:canid                               14                           # CAN ID
-hw:tankdrive:motors:right:2:type                                "sparkmax_brushless"        # Type of motor controller
-hw:tankdrive:motors:right:3:canid                               15                           # CAN ID
-hw:tankdrive:motors:right:3:type                                "sparkmax_brushless"        # Type of motor controller
+hw:tankdrive:motors:left:1:canid                                1                           # CAN 1
+hw:tankdrive:motors:left:1:type                                 "talon_fx"
+hw:tankdrive:motors:left:2:canid                                2                           # CAN 2
+hw:tankdrive:motors:left:2:type                                 "talon_fx"
+hw:tankdrive:motors:right:1:canid                               3                           # CAN 3
+hw:tankdrive:motors:right:1:type                                "talon_fx"
+hw:tankdrive:motors:right:2:canid                               4                           # CAN 4
+hw:tankdrive:motors:right:2:type                                "talon_fx"
 hw:tankdrive:invert:motors:right                                true                        # Invert the direction of the right motors
-
-# Drivebase encoders
-hw:tankdrive:encoders:left:1                                    0                           # Digital IO
-hw:tankdrive:encoders:left:2                                    1                           # Digital IO
-hw:tankdrive:encoders:right:1                                   2                           # Digital IO
-hw:tankdrive:encoders:right:2                                   3                           # Digital IO
 
 #
 # Driver station
@@ -42,10 +31,10 @@ hw:driverstation:hid:driver                                     0               
 hw:driverstation:hid:oi                                         2                           # HID Device Index
 
 hw:testsubsystem:input                                          0                           # analog input 0
-hw:testsubsystem:motor:1:canid                                  2
+hw:testsubsystem:motor:1:canid                                  5
 hw:testsubsystem:motor:1:type                                   "sparkmax_brushless"
 hw:testsubsystem:motor:1:invert                                 false
-hw:testsubsystem:motor:2:canid                                  3
+hw:testsubsystem:motor:2:canid                                  6
 hw:testsubsystem:motor:2:type                                   "sparkmax_brushless"
 hw:testsubsystem:motor:2:invert                                 true
 hw:testsubsystem:encoder:quad:motor                             true

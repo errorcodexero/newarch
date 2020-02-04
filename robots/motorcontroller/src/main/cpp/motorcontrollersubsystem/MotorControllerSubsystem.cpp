@@ -15,8 +15,8 @@ namespace xero {
             oi_ = std::make_shared<MotorControllerOISubsystem>(this) ;
             addChild(oi_) ;
 
-            //test_ = std::make_shared<TestSubsystem>(this);
-            //addChild(test_);
+            test_ = std::make_shared<TestSubsystem>(this);
+            addChild(test_);
 
             sensor_ = std::make_shared<ColorSensorSubsystem>(this) ;
             addChild(sensor_) ;

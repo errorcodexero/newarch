@@ -99,6 +99,7 @@ namespace xero {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
                 logger << "Actions: subsystem '" << getName() << "' rejected default action '" << action->toString() << "'" ;
+                logger << "; did you remember to override canAcceptDefaultAction?";
                 logger.endMessage() ;
                 return false ;
             }
@@ -120,7 +121,7 @@ namespace xero {
             // Don't replace a null action with another null
             if (action_ == nullptr && action == nullptr) return SetActionResult::Accepted;
 
-            if (action != nullptr && !_canAcceptAction(action)) {
+            if (action != nullptr && !_canAcceptAction(action, isRunningDefaultAction_)) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
                 logger << "Actions: subsystem '" << getName() << "' rejected action '" << action->toString() << "'" ;

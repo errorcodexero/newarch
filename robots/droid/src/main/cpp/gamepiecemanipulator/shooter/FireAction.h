@@ -17,6 +17,7 @@ namespace xero {
 
         private:
             Shooter &sub_;
+            frc::SimpleWidget widget_ ;          
         };
     }
 }

@@ -5,6 +5,8 @@
 #include "gamepiecemanipulator/conveyor/Conveyor.h"
 #include "gamepiecemanipulator/intake/CollectAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorEmitAction.h"
+#include "gamepiecemanipulator/shooter/FireAction.h"
+#include "gamepiecemanipulator/shooter/Shooter.h"
 #include <actions/Action.h>
 #include <actions/DelayAction.h>
 #include <tankdrive/actions/TankDriveCharAction.h>
@@ -30,6 +32,7 @@ namespace xero
             auto tankdrive = droid.getDroidSubsystem()->getTankDrive() ;
             auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+            auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter() ;
 
             int mode = robot.getSettingsParser().getInteger("auto:testmode:which");
             double dist = robot.getSettingsParser().getDouble("auto:testmode:distance");
@@ -49,8 +52,9 @@ namespace xero
                 break;
 
             case 2:
-                pushSubActionPair(intake, std::make_shared<CollectAction>(*intake, true)) ;
-                pushSubActionPair(conveyor, std::make_shared<ConveyorEmitAction>(*conveyor)) ;
+                pushSubActionPair(intake, std::make_shared<CollectAction>(*intake, true), false) ;
+                pushSubActionPair(conveyor, std::make_shared<ConveyorEmitAction>(*conveyor), false) ;
+                pushSubActionPair(shooter, std::make_shared<FireAction>(*shooter)) ;
                 break ;
 
             case 3:

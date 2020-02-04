@@ -79,7 +79,11 @@
                 {
                     "model": "conveyor",
                     "instance": "1",
+<<<<<<< HEAD
                     "values": { "print": true, "ball": true }
+=======
+                    "values": { "print": true, "ball": false }
+>>>>>>> master
                 }
             ]
         },
@@ -101,7 +105,11 @@
                 {
                     "model": "conveyor",
                     "instance": "1",
+<<<<<<< HEAD
                     "values": { "print": true, "ball": true }
+=======
+                    "values": { "print": true, "ball": false }
+>>>>>>> master
                 }
             ]
         },
@@ -123,7 +131,11 @@
                 {
                     "model": "conveyor",
                     "instance": "1",
+<<<<<<< HEAD
                     "values": { "print": true, "ball": true }
+=======
+                    "values": { "print": true, "ball": false }
+>>>>>>> master
                 }
             ]
         },
@@ -149,6 +161,44 @@
                     {
                         "axis1" : 1.0
                     }
+                },
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true }
+                }
+            ]
+        },
+        {
+            "time": 13.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true }
+                }
+            ]
+        },
+        {
+            "time": 14.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true }
+                }
+            ]
+        },
+        {
+            "time": 15.0,
+            "events":
+            [
+                {
+                    "model": "conveyor",
+                    "instance": "1",
+                    "values": { "print": true }
                 }
             ]
         }

@@ -16,6 +16,7 @@ SUBSYSTEMS = \
 	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorEmitAction.cpp\
 	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorPrepareToEmitAction.cpp\
 	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorReceiveAction.cpp\
+	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorPrepareToReceiveAction.cpp\
 	src/main/cpp/gamepiecemanipulator/ShootAction.cpp\
 	src/main/cpp/gamepiecemanipulator/shooter/FireAction.cpp\
 	src/main/cpp/gamepiecemanipulator/shooter/Shooter.cpp\
@@ -30,7 +31,8 @@ SUBSYSTEMS = \
 
 MODELS = \
 	src/models/cpp/DroidOIModel.cpp\
-	src/models/cpp/IntakeModel.cpp
+	src/models/cpp/IntakeModel.cpp\
+	src/models/cpp/ConveyorModel.cpp
 
 SOURCES = \
 	src/main/cpp/main.cpp\
@@ -64,7 +66,7 @@ SUPPORTED_PLATFORMS=ROBORIO SIMULATOR
 ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/droidsim
 	LOCAL_LIBS = $(TOPDIR)/robotsims/droidsim
-	LOCAL_EXTERNAL_LIBS=-lcurses -lpthread
+	LOCAL_EXTERNAL_LIBS = -lcurses -lpthread
 endif
 
 ifeq ($(PLATFORM),GOPIGO)

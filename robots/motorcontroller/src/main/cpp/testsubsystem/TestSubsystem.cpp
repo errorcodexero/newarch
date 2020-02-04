@@ -17,8 +17,8 @@ namespace xero {
 
         void TestSubsystem::init(xero::base::LoopType ltype) {
             if (ltype == LoopType::OperatorControl) {
-                //setDefaultAction(std::make_shared<SingleMotorPowerAction>(*this, 0.3));
-                setAction(std::make_shared<VelocityAction>(*this));
+                setDefaultAction(std::make_shared<SingleMotorPowerAction>(*this, 0.3));
+                //setAction(std::make_shared<VelocityAction>(*this));
             }
             MotorEncoderSubsystem::init(ltype);
         }

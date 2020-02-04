@@ -60,5 +60,7 @@ namespace xero {
                 assert(0 == "this motor controller does not support resetEncoder()") ;
             }
         };
+        
+        typedef std::shared_ptr<xero::base::MotorController> MotorPtr;
 }
 }

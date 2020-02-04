@@ -7,7 +7,6 @@ using namespace xero::base;
 namespace xero {
     namespace droid {
         Shooter::Shooter(Subsystem *parent): MotorEncoderSubsystem(parent, "shooter", MSG_GROUP_SHOOTER) {
-            
         }
     }
 }

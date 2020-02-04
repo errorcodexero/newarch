@@ -57,12 +57,13 @@ namespace xero
             SimulatorEngine &getEngine() { return engine_ ;}
 
             int getInteger(const std::string &name) ;
+            double getDouble(const std::string &name) ;
 
             void registerDataFormat(const std::string &format, const std::vector<std::string> &names)  ;
             void presentDataValues(std::vector<double> &values) ;
 
         protected:
-        void dumpProperties() ;
+            void dumpProperties() ;
 
         private:
             SimulatorEngine &engine_ ;

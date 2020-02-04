@@ -11,19 +11,23 @@ namespace xero {
     namespace droid {
         class Conveyor : public xero::base::Subsystem {
             friend class ConveyorAction;
+            friend class ConveyorStopAction;
         public:
             Conveyor(xero::base::Subsystem *parent);
             virtual ~Conveyor() {}
 
             void postHWInit() override;
-
             int getBallCount() { return ballCount_; }
 
-            static const int MAX_BALLS = 5;
+            static const int MAX_BALLS = 1;
+            bool isEmpty() { return ballCount_ == 0; }
+            bool isFull() { return ballCount_ == MAX_BALLS; }
 
-            enum class Direction {
-                TowardsShooter,
-                TowardsIntake,
+            // A reference to a motor state defined in the config file.
+            enum class MotorState {
+                Stopped,
+                MoveTowardsShooter,
+                MoveTowardsIntake,
             };
 
             typedef std::shared_ptr<frc::DigitalInput> SensorPtr;

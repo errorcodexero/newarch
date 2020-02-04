@@ -45,7 +45,7 @@ namespace xero
             auto &msg = getEngine().getMessageOutput();
 
             auto it = status_.find(index);
-            if (it != status_.end())
+            if (it == status_.end())
             {
                 msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Warning);
                 msg << "failed to destroy REV motor controller - does not exist, index " << index ;
@@ -67,7 +67,7 @@ namespace xero
             auto &msg = getEngine().getMessageOutput();
 
             auto it = status_.find(index);
-            if (it != status_.end())
+            if (it == status_.end())
             {
                 msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Warning);
                 msg << "failed to set REV motor controller - does not exist, index " << index ;
@@ -89,7 +89,7 @@ namespace xero
             auto &msg = getEngine().getMessageOutput();
 
             auto it = status_.find(index);
-            if (it != status_.end())
+            if (it == status_.end())
             {
                 msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Warning);
                 msg << "failed to get REV motor controller - does not exist, index " << index ;
@@ -113,7 +113,7 @@ namespace xero
             auto &msg = getEngine().getMessageOutput();
 
             auto it = status_.find(index);
-            if (it != status_.end())
+            if (it == status_.end())
             {
                 msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Warning);
                 msg << "failed to set REV motor controller - does not exist, index " << index ;
@@ -135,7 +135,7 @@ namespace xero
             auto &msg = getEngine().getMessageOutput();
 
             auto it = status_.find(index);
-            if (it != status_.end())
+            if (it == status_.end())
             {
                 msg.startMessage(xero::sim2::SimulatorMessages::MessageType::Warning);
                 msg << "failed to get REV motor controller - does not exist, index " << index ;

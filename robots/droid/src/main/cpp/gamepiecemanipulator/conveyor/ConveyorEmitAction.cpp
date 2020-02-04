@@ -19,9 +19,9 @@ namespace xero {
 
         void ConveyorEmitAction::start()
         {
-            state_ = State::WaitForBall ;
-            setMotor(0.0) ;
-            setMotor2(0.0) ;
+            state_ = State::Done ;
+            setMotor(1.0) ;
+            setMotor2(1.0) ;
         }
 
         void ConveyorEmitAction::run()

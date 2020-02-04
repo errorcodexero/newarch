@@ -97,7 +97,7 @@ post: $(TARGETFILE)
 
 $(TARGETFILE): mkdirs $(OBJECTS) $(LINKLIBS)
 	@echo Linking ...
-	$(QUIET)$(CXX) -g -o $@ $(OBJECTS) $(LINKPREFIX) -Wl,--start-group $(ALLLIBS) -Wl,--end-group $(LINKPOSTFIX)
+	$(QUIET)$(CXX) -g -o $@ $(OBJECTS) $(LINKPREFIX) $(ALLLIBS) $(LINKPOSTFIX)
 
 clean: cleanlibs
 	@echo Cleaning executable target $(TARGET)$(EXEEXT)

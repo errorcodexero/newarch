@@ -1,5 +1,6 @@
 #pragma once
 
+#include <unordered_map>
 #include <utility>
 #include <variant>
 #include <vector>
@@ -13,6 +14,12 @@
 namespace xero {
     namespace droid {
         class Conveyor;
+        /// Because of the sequential nature of conveyor actions, ConveyorAction
+        /// implements a generic state-machine-based framework for controlling
+        /// conveyors. A conveyor action is modeled as a sequence of states,
+        /// such as "start motors" or "wait for sensor", each implemented by
+        /// a \c std::function returning a StateResult
+        /// \see ConveyorAction::setStates, ConveyorAction::StateResult 
         class ConveyorAction : public xero::base::Action {
         public:
             ConveyorAction(Conveyor &subsystem);

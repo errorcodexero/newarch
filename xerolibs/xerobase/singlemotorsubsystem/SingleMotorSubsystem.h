@@ -70,11 +70,12 @@ namespace xero {
             double getMotor() const {
                 return current_power_;
             }
-
+            void setMotor(double power);
+            
         protected:
             /// \brief set the power (PWM) percentage for the motor.
             /// \param power the power to apply to the motor, between -1.0 and 1.0
-            void setMotor(double power);
+
 
             std::shared_ptr<MotorController> getMotorController() { return motor_; }
 

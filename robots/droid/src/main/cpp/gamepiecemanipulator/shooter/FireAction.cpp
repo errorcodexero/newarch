@@ -14,9 +14,15 @@ using namespace xero::base;
 namespace xero {
     namespace droid {
       
-        FireAction::FireAction(Shooter &sub): xero::base::MotorEncoderVelocityAction(sub, 0), sub_(sub)
+        static frc::SimpleWidget makeWidget() {
+            wpi::StringMap<std::shared_ptr<nt::Value>> propmap;
+            propmap.insert(std::make_pair("min", nt::Value::MakeDouble(0.0)));
+            propmap.insert(std::make_pair("max", nt::Value::MakeDouble(10000.0)));
+            return frc::Shuffleboard::GetTab("SmartDashboard").Add("Velocity", static_cast<double>(0.0)).WithWidget(frc::BuiltInWidgets::kNumberSlider).WithProperties(propmap);
+        }
+
+        FireAction::FireAction(Shooter &sub): xero::base::MotorEncoderVelocityAction(sub, 0), sub_(sub), widget_(makeWidget())
         {
-            
         }
 
         FireAction::~FireAction()
@@ -25,13 +31,25 @@ namespace xero {
 
         void FireAction::run()
         {
-            double target = 0 ;                                  //TODO: calculate target velocity
+#ifdef NOTYET
+            auto &logger = getSubsystem().getRobot().getMessageLogger();            
+            double target = 0 ;
+
+            target = widget_.GetEntry().GetDouble(getTarget()) ;
+            
             if (std::fabs(target - getTarget()) > 100)
             {
-                setTarget(target);
+                logger.startMessage(MessageLogger::MessageType::debug, getSubsystem().getMsgID());
+                logger << "New Target " << target;
+                logger.endMessage();
             }
+
+            setTarget(target);
             frc::SmartDashboard::PutNumber("tvel", getTarget());
             MotorEncoderVelocityAction::run();
+#endif
+
+            sub_.setMotor(0.3) ;
         }
     }
 }
