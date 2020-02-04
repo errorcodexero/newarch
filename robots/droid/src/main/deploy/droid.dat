@@ -238,3 +238,14 @@ limelight:network_latency                                       10.0
 # programs read the data from the network tables
 #
 plotting:enabled                                               true
+
+
+#
+# These control test modes for the robot.  They are used by the DroidTestTuneMode automode.  Note
+# this active value below is ignored if we are connected to the field.
+#
+auto:testmode:active                                          true
+auto:testmode:which                                           10
+auto:testmode:distance                                        42
+auto:testmode:power                                           0.2
+auto:testmode:duration                                        0.25

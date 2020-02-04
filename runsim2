@@ -3,7 +3,13 @@
 rootdir=$(git rev-parse --show-toplevel)
 cd $rootdir
 
-build/SIM2/Debug/$1/$1\
+EXT=
+
+if [ $OS == "Windows_NT" ]; then
+    EXT=".exe"
+fi
+
+build/SIM2/Debug/$1/$1$EXT\
 	--debug -5\
 	--props robots/$1/sim2/$1.json\
 	--events robots/$1/sim2/sims/$2.json 

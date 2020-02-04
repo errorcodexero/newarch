@@ -10,8 +10,12 @@
 #include <singlemotorsubsystem/SingleMotorSubsystem.h>
 #include <singlemotorsubsystem/SingleMotorPowerAction.h>
 
+#include <turret/Turret.h>
+#include <turret/FollowTargetAction.h>
+
 #include <gamepiecemanipulator/GamePieceManipulator.h>
 #include <gamepiecemanipulator/ShootTestingAction.h>
+#include <gamepiecemanipulator/ShootAction.h>
 
 #include <gamepiecemanipulator/intake/Intake.h>
 #include <gamepiecemanipulator/intake/CollectOnAction.h>
@@ -48,8 +52,6 @@ namespace xero
             double dist = robot.getSettingsParser().getDouble("auto:testmode:distance");
             double power = robot.getSettingsParser().getDouble("auto:testmode:power");
             double duration = robot.getSettingsParser().getDouble("auto:testmode:duration");
-
-            (void)dist ;
 
             switch(mode)
             {
@@ -121,21 +123,49 @@ namespace xero
 
                 //////////////////////////////////////////////////////////////////////////////////////////
                 //
-                // 40 - 49 control panel spinner related
-                //
-                //////////////////////////////////////////////////////////////////////////////////////////
-
-                //////////////////////////////////////////////////////////////////////////////////////////
-                //
-                // 50 - 59 climber related
-                //
-                //////////////////////////////////////////////////////////////////////////////////////////
-
-                //////////////////////////////////////////////////////////////////////////////////////////
-                //
-                // 60 - 69 buddy climber related
+                // 40 - 49 turret related
                 //
                 //////////////////////////////////////////////////////////////////////////////////////////                
+            case 40:
+                pushSubActionPair(turret, std::make_shared<SingleMotorPowerAction>(*turret, power, duration));
+                break;
+
+            case 41:
+                pushSubActionPair(turret, std::make_shared<MotorEncoderGoToAction>(*turret, dist));
+                break;
+
+            case 42:
+                pushSubActionPair(turret, std::make_shared<FollowTargetAction>(*turret));
+                break;
+
+                //////////////////////////////////////////////////////////////////////////////////////////
+                //
+                // 50 - 59 control panel spinner related
+                //
+                //////////////////////////////////////////////////////////////////////////////////////////
+
+                //////////////////////////////////////////////////////////////////////////////////////////
+                //
+                // 60 - 69 climber related
+                //
+                //////////////////////////////////////////////////////////////////////////////////////////
+
+                //////////////////////////////////////////////////////////////////////////////////////////
+                //
+                // 70 - 79 buddy climber related
+                //
+                //////////////////////////////////////////////////////////////////////////////////////////            
+
+                //////////////////////////////////////////////////////////////////////////////////////////
+                //
+                // 100+ robot level system tests
+                //
+                //////////////////////////////////////////////////////////////////////////////////////////
+
+            case 100:       // Complete shooting action
+                pushSubActionPair(turret, std::make_shared<FollowTargetAction>(*turret));
+                pushSubActionPair(game, std::make_shared<ShootAction>(*game));
+                break;
             }
         }
 
