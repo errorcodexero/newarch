@@ -8,6 +8,7 @@
 
 namespace xero {
     namespace droid {
+        class ShooterVelocityAction;
         class FireAction : public xero::base::Action {
         public:
             FireAction(GamePieceManipulator &subsystem);
@@ -22,6 +23,7 @@ namespace xero {
         private:
             GamePieceManipulator &subsystem_ ;
 
+            std::shared_ptr<ShooterVelocityAction> shooterVelocityAction_;
         };
     }
 

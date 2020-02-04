@@ -5,7 +5,7 @@ namespace xero {
     namespace droid {
         void FireAction::start() {
             auto &manip = getSubsystem() ;
-            manip.getShooter()->setAction(std::make_shared<ShooterVelocityAction>(*manip.getShooter()), /*allowParentBusy=*/true) ;
+            shooterVelocityAction_ = std::make_shared<ShooterVelocityAction>(*manip.getShooter());
         }
 
         void FireAction::run() {
