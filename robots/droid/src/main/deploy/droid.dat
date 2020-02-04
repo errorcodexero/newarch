@@ -49,13 +49,13 @@ hw:turret:encoder:analog:emax                                   1.0
 hw:turret:encoder:analog:ec                                     0.0
 hw:turret:encoder:analog:rc                                     0.0
 
-hw:intake:collect:motor:type                                     "sparkmax_brushless"
-hw:intake:collect:motor:canid                                    10                          # CAN 10
-hw:intake:type                                           "sparkmax_brushless"
-hw:intake:canid                                          11                          # CAN 11
-hw:intake:encoder:motor                                  true
-hw:intake:encoder:quad:m                                 1.0
-hw:intake:encoder:quad:b                                 0.0
+hw:intake:collect:motor:type                                   "sparkmax_brushless"
+hw:intake:collect:motor:canid                                  10                          # CAN 10
+hw:intake:motor:type                                           "sparkmax_brushless"
+hw:intake:motor:canid                                          11                          # CAN 11
+hw:intake:encoder:quad:motor                                   true
+hw:intake:encoder:quad:m                                       1.0
+hw:intake:encoder:quad:b                                       0.0
 
 hw:intake:arm:motor:type                                        "sparkmax_brushless"
 hw:intake:arm:motor:canid                                       16                          #CAN 16
@@ -89,8 +89,8 @@ hw:climber:servo:r:release                                      1.0
 hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
-intake:collector:motor:power                                    0.3
-intake:arm:collect:pos                                          -1
+#intake:collector:motor:power                                    0.3
+#intake:arm:collect:pos                                          -1
 
 
 #
@@ -226,6 +226,14 @@ droidvision:camera_angle                                        64.67
 droidvision:camera_target_height                                17.75
 limelight:camera_latency                                        11.0
 limelight:network_latency                                       10.0
+
+###################################################################################################
+# oi
+###################################################################################################
+
+oi:shoot_collect_mode                                           1
+oi:shoot_onoff                                                  2
+oi:collect_onoff                                                3
 
 ###################################################################################################
 #
