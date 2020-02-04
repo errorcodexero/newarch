@@ -1,5 +1,4 @@
 #include "StopCollectAction.h"
-#include "shooter/FireAction.h"
 #include <gamepiecemanipulator/GamePieceManipulator.h>
 
 namespace xero {

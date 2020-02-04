@@ -10,11 +10,11 @@ using namespace xero::base;
 
 namespace xero {
     namespace droid {
-        class CollectOnAction : public xero::base::Action {   
+        class CollectOffAction : public xero::base::Action {   
            
         public :
-            CollectOnAction(Intake &subsystem) ;
-            virtual ~CollectOnAction() {}
+            CollectOffAction(Intake &subsystem) ;
+            virtual ~CollectOffAction() {}
 
             virtual void start() ;
             virtual void run() ;
@@ -29,6 +29,7 @@ namespace xero {
             double collector_power_;
 
             Intake &sub_ ;
+
         } ;
     }
 }

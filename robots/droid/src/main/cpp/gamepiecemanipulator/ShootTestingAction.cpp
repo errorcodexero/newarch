@@ -1,5 +1,5 @@
 #include "ShootTestingAction.h"
-#include "shooter/FireAction.h"
+#include "shooter/ShooterVelocityAction.h"
 #include "conveyor/ConveyorOnAction.h"
 #include <gamepiecemanipulator/shooter/Shooter.h>
 #include <gamepiecemanipulator/GamePieceManipulator.h>
@@ -17,7 +17,7 @@ namespace xero {
 
         ShootTestingAction::ShootTestingAction(GamePieceManipulator &subsystem) : GamePieceManipulatorAction(subsystem), widget_(makeWidget())
         {
-            fire_ = std::make_shared<FireAction>(*getSubsystem().getShooter(), 0.0);            
+            fire_ = std::make_shared<ShooterVelocityAction>(*getSubsystem().getShooter(), 0.0);            
         }
 
         ShootTestingAction::~ShootTestingAction()

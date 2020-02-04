@@ -8,12 +8,12 @@ namespace xero {
     namespace droid {
         class Shooter ;
 
-        class FireAction : public xero::base::MotorEncoderVelocityAction {
+        class ShooterVelocityAction : public xero::base::MotorEncoderVelocityAction {
 
         public:
 
-            FireAction(Shooter &sub, double target) ;
-            virtual ~FireAction() ;
+            ShooterVelocityAction(Shooter &sub, double rpm) ;
+            virtual ~ShooterVelocityAction() ;
 
              Shooter &getSubsystem() {
                 return subsystem_ ;

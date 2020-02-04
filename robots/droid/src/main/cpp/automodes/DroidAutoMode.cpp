@@ -8,7 +8,7 @@
 #include "gamepiecemanipulator/conveyor/ConveyorEmitAction.h"
 
 #include "gamepiecemanipulator/shooter/Shooter.h"
-#include "gamepiecemanipulator/shooter/FireAction.h"
+#include "gamepiecemanipulator/shooter/ShooterVelocityAction.h"
 
 #include "turret/FollowTargetAction.h"
 

@@ -1,4 +1,4 @@
-#include "FireAction.h"
+#include "ShooterVelocityAction.h"
 #include "Shooter.h"
 #include <MessageLogger.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -20,18 +20,18 @@ namespace xero {
             return (std::fabs(100.0 * (measured - target)/target) <= percentage);
         }
       
-        FireAction::FireAction(Shooter &sub, double target): xero::base::MotorEncoderVelocityAction(sub, 0), subsystem_(sub)
+        ShooterVelocityAction::ShooterVelocityAction(Shooter &sub, double target): xero::base::MotorEncoderVelocityAction(sub, 0), subsystem_(sub)
         {
-            target_ = target;
+            target_ = target ;
             const std::string configName("shooter:velocity:ready_margin_percent");
             ready_margin_percent_ = getSubsystem().getRobot().getSettingsParser().getDouble(configName);
         }
 
-        FireAction::~FireAction()
+        ShooterVelocityAction::~ShooterVelocityAction()
         {
         }
 
-        void FireAction::run()
+        void ShooterVelocityAction::run()
         {
             setTarget(target_);
             frc::SmartDashboard::PutNumber("tvel", target_);
@@ -45,7 +45,7 @@ namespace xero {
             }
         }
 
-        void FireAction::cancel() {
+        void ShooterVelocityAction::cancel() {
             getSubsystem().setReadyToShoot(false);
         }
     }

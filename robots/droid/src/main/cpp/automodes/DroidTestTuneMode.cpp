@@ -19,7 +19,7 @@
 
 #include <gamepiecemanipulator/intake/Intake.h>
 #include <gamepiecemanipulator/intake/CollectOnAction.h>
-//#include <gamepiecemanipulator/intake/CollectOffAction.h>
+#include <gamepiecemanipulator/intake/CollectOffAction.h>
 
 #include <gamepiecemanipulator/conveyor/Conveyor.h>
 #include <gamepiecemanipulator/conveyor/ConveyorEmitAction.h>
@@ -30,7 +30,7 @@
 #include <gamepiecemanipulator/conveyor/ConveyorOnAction.h>
 
 #include <gamepiecemanipulator/shooter/Shooter.h>
-#include <gamepiecemanipulator/shooter/FireAction.h>
+#include <gamepiecemanipulator/shooter/ShooterVelocityAction.h>
 
 using namespace xero::base;
 using namespace xero::misc;
@@ -74,13 +74,13 @@ namespace xero
                 //
                 //////////////////////////////////////////////////////////////////////////////////////////
             case 10:
-                pushSubActionPair(game->getIntake(), std::make_shared<SingleMotorPowerAction>(*game->getIntake(), power, duration));
+                pushSubActionPair(game->getIntake(), std::make_shared<MotorEncoderPowerAction>(*game->getIntake(), power, duration));
                 break;
 
             case 11:     // Test the collector
-                pushSubActionPair(game->getIntake(), std::make_shared<CollectOnAction>(*game->getIntake()));
+                pushSubActionPair(game->getIntake(), std::make_shared<CollectOnAction>(*game->getIntake()), false) ;
                 pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 3.0));
-                // pushSubActionPair(game->getIntake(), std::make_shared<CollectOffAction>(*game->getIntake()));                
+                pushSubActionPair(game->getIntake(), std::make_shared<CollectOffAction>(*game->getIntake()));                
                 break;
 
                 //////////////////////////////////////////////////////////////////////////////////////////
@@ -112,9 +112,9 @@ namespace xero
                 //
                 //////////////////////////////////////////////////////////////////////////////////////////
             case 30:     // Test the shooter
-                pushSubActionPair(game->getShooter(), std::make_shared<FireAction>(*game->getShooter(), 7000.0));
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 7000.0));
                 pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 5.0)); 
-                pushSubActionPair(game->getShooter(), std::make_shared<FireAction>(*game->getShooter(), 0.0));                                
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0));                                
                 break;
 
             case 31:     // Shoot balls

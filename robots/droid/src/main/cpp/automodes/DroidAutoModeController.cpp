@@ -25,7 +25,7 @@ namespace xero {
             auto &ds = frc::DriverStation::GetInstance();
             AutoModePtr mode = nullptr;
 
-            if (!ds.IsFMSAttached() && !testmode_)
+            if (!ds.IsFMSAttached() && testmode_)
             {
                 //
                 // If enabled in the params file and if we are not attached to the field

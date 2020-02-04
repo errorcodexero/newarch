@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GamePieceManipulatorAction.h"
-#include <gamepiecemanipulator/shooter/FireAction.h>
+#include <gamepiecemanipulator/shooter/ShooterVelocityAction.h>
 #include <memory>
 
 namespace xero {
@@ -19,7 +19,7 @@ namespace xero {
             }            
             
         private:
-            std::shared_ptr<FireAction> fire_;
+            std::shared_ptr<ShooterVelocityAction> fire_;
             frc::SimpleWidget widget_;            
         };
     }
