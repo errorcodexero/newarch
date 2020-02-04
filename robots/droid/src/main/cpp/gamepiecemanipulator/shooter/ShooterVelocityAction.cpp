@@ -5,20 +5,15 @@
 #include <frc/shuffleboard/Shuffleboard.h>
 #include <networktables/NetworkTableValue.h>
 #include <wpi/StringMap.h>
-#include <cmath>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <string>
+#include <xeromath.h>
 
 using namespace xero::misc;
 using namespace xero::base;
 
 namespace xero {
     namespace droid {
-
-        static bool matchWithinPercentError(double target, double measured, double percentage) {
-            assert(target != 0);
-            return (std::fabs(100.0 * (measured - target)/target) <= percentage);
-        }
       
         ShooterVelocityAction::ShooterVelocityAction(Shooter &sub): xero::base::MotorEncoderVelocityAction(sub, 0), subsystem_(sub)
         {
@@ -36,7 +31,7 @@ namespace xero {
             setTarget(target);
             frc::SmartDashboard::PutNumber("tvel", getTarget());
             MotorEncoderVelocityAction::run();
-            if (target != 0 && matchWithinPercentError(getTarget(), getSubsystem().getSpeedometer().getVelocity(), ready_margin_percent_)) {
+            if (target != 0 && xero::math::equalWithinPercentMargin(getTarget(), getSubsystem().getSpeedometer().getVelocity(), ready_margin_percent_)) {
                 getSubsystem().setReadyToShoot(true);
             } else {
                 getSubsystem().setReadyToShoot(false);
