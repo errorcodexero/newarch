@@ -21,15 +21,19 @@ SUBSYSTEMS = \
 	src/main/cpp/gamepiecemanipulator/shooter/ShooterVelocityAction.cpp\
 	src/main/cpp/gamepiecemanipulator/shooter/Shooter.cpp\
 	src/main/cpp/gamepiecemanipulator/intake/Intake.cpp\
-    src/main/cpp/gamepiecemanipulator/intake/CollectOnAction.cpp\
+        src/main/cpp/gamepiecemanipulator/intake/CollectOnAction.cpp\
+        src/main/cpp/gamepiecemanipulator/intake/CollectOffAction.cpp\
 	src/main/cpp/gamepiecemanipulator/GamePieceManipulator.cpp\
+	src/main/cpp/gamepiecemanipulator/StartCollectAction.cpp\
+	src/main/cpp/gamepiecemanipulator/StopCollectAction.cpp\
+	src/main/cpp/gamepiecemanipulator/ShootTestingAction.cpp\
 	src/main/cpp/turret/FollowTargetAction.cpp\
 	src/main/cpp/turret/Turret.cpp\
 	src/main/cpp/climber/Climber.cpp\
 	src/main/cpp/controlpanelrotator/ControlPanelRotator.cpp\
-    src/main/cpp/controlpanelrotator/RotateControlPanelAction.cpp\
-    src/main/cpp/limelight/DroidLimeLight.cpp\
-    src/main/cpp/targettracker/TargetTracker.cpp\
+        src/main/cpp/controlpanelrotator/RotateControlPanelAction.cpp\
+        src/main/cpp/limelight/DroidLimeLight.cpp\
+        src/main/cpp/targettracker/TargetTracker.cpp\
 
 MODELS = \
 	src/models/cpp/DroidOIModel.cpp\
