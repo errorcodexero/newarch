@@ -20,7 +20,8 @@ namespace xero {
 
         ShootTestingAction::ShootTestingAction(GamePieceManipulator &subsystem) : GamePieceManipulatorAction(subsystem), widget_(makeWidget())
         {
-            fire_ = std::make_shared<ShooterVelocityAction>(*getSubsystem().getShooter(), 0.0);            
+            fire_ = std::make_shared<ShooterVelocityAction>(*getSubsystem().getShooter(), 0.0);
+            shoot_delay_ = subsystem.getRobot().getSettingsParser().getDouble("shoottest:shoot_delay") ;
         }
 
         ShootTestingAction::~ShootTestingAction()
@@ -69,6 +70,14 @@ namespace xero {
 
             case FireState::WaitPrepareShoot:
                 if (!conveyor->isBusy())
+                {
+                    state_ = FireState::WaitShootDelay ;
+                    start_ = getSubsystem().getRobot().getTime() ;
+                }
+                break ;
+
+            case FireState::WaitShootDelay:
+                if (getSubsystem().getRobot().getTime() - start_ > shoot_delay_)
                 {
                     state_ = FireState::WaitShoot ;
                     conveyor->setAction(std::make_shared<ConveyorEmitAction>(*conveyor), true) ;

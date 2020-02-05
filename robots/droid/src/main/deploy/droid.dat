@@ -270,3 +270,9 @@ auto:testmode:which                                           31
 auto:testmode:distance                                        42
 auto:testmode:power                                           -0.4
 auto:testmode:duration                                        0.4
+
+#
+# Shoot test parameters
+#
+shoottest:shoot_delay                                         0.3
+

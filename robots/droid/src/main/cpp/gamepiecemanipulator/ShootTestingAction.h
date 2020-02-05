@@ -24,6 +24,7 @@ namespace xero {
                 WaitPrepareReceive,
                 WaitReceive,
                 WaitPrepareShoot,
+                WaitShootDelay,
                 WaitShoot,
             } ;
             
@@ -31,6 +32,8 @@ namespace xero {
             std::shared_ptr<ShooterVelocityAction> fire_;
             frc::SimpleWidget widget_;     
             FireState state_ ;       
+            double shoot_delay_ ;
+            double start_ ;
         };
     }
 
