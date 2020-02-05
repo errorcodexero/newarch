@@ -1,6 +1,7 @@
 #include "DroidOIDevice.h"
 #include "DroidOISubsystem.h"
 #include "Droid.h"
+#include "droidids.h"
 #include "turret/FollowTargetAction.h"
 #include "turret/Turret.h"
 #include "gamepiecemanipulator/StartCollectAction.h"
@@ -8,6 +9,9 @@
 #include "gamepiecemanipulator/FireAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToEmitAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToReceiveAction.h"
+#include "gamepiecemanipulator/intake/Intake.h"
+#include "gamepiecemanipulator/intake/CollectOnAction.h"
+#include "gamepiecemanipulator/intake/CollectOffAction.h"
 #include "gamepiecemanipulator/GamePieceManipulator.h"
 #include <Robot.h>
 #include <TeleopController.h>
@@ -20,130 +24,120 @@ using namespace xero::misc ;
 namespace xero {
     namespace droid {
 
-        DroidOIDevice::DroidOIDevice(DroidOISubsystem &sub, int index) : OIDevice(sub, index) {
-            //
-            // Bind keys joystick buttons and axis to meaningful OI items
-            //
-            bindOI() ;
+/*
+Intake, Conveyor, Turret, and Shooter
+One button for collecting
+ - Push and hold to collect
+ - If in shoot queue, flash a light on the drivers station
+One two position switch for queuing to shoot or queuing to collect
+One two position switch for shooting mode
+ - Switch up to start scanning, switch down to stop
+ - When limelight finds the target, aims, and the drive base is stopped, automatically start shooting
+*/
+
+        DroidOIDevice::DroidOIDevice(DroidOISubsystem &sub, int index) : OIDevice(sub, index) 
+        {
+            initialize() ;
         }
 
-        DroidOIDevice::~DroidOIDevice() {
+        DroidOIDevice::~DroidOIDevice() 
+        {
         }
 
-        //
-        // Map buttons, switches, joysticks, axis, etc. to things meaningful to the OI
-        //
-        void DroidOIDevice::bindOI() {
+        void DroidOIDevice::initialize() 
+        {
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
-            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_OI) ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_DROID_OI) ;
             log << "OI: initializing button/axis mapping" ;
             log.endMessage() ;
 
-            // Automode - ten position switch
-            std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
-            automode_ = mapAxisScale(6, mapping) ;
-
-            // Shoot/Collect mode - toggle switch
-            size_t collect_shoot_mode_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:shoot_collect_mode") ;            
-            collect_shoot_mode_ = mapButton(collect_shoot_mode_b, OIButton::ButtonType::Level) ;       
-
-            // Shoot on/off - toggle switch
-            size_t shoot_on_off_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:shoot_onoff") ;            
-            shoot_on_off_ = mapButton(shoot_on_off_b, OIButton::ButtonType::Level) ;
-
-            // Collect - push button
-            size_t collect_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:collect_onoff") ;
-            collect_on_off_ = mapButton(collect_b, OIButton::ButtonType::LowToHigh) ;
+            //
+            // Get button numbers
+            //
+            size_t intake_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:collecting") ;      //intake on/off
+            size_t queue_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:queue") ;            //queue for shoot/collect
+            size_t shoot_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:shoot") ;            //shoot/no-shoot 
+            
+            //
+            // Actions
+            //
+            intake_ = mapButton(intake_b, OIButton::ButtonType::LowToHigh) ;                // Push button
+            queue_ = mapButton(queue_b, OIButton::ButtonType::Level) ;                      // Toggle switch
+            shoot_ = mapButton(shoot_b, OIButton::ButtonType::Level) ;                      // Toggle switch
+        
+        }
+        
+        int DroidOIDevice::getAutoModeSelector() 
+        {
+            automode_ = 0 ;
+            return getValue(automode_) ;    
         }
 
         void DroidOIDevice::generateActions(xero::base::SequenceAction &seq)
         {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
+            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+            auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter() ;
             auto turret = droid.getDroidSubsystem()->getTurret() ;
-            auto game = droid.getDroidSubsystem()->getGamePieceManipulator() ;
-            auto conveyor = game->getConveyor() ;            
+            auto limelight = droid.getDroidSubsystem()->getLimeLight() ;
+            auto target_tracker = droid.getDroidSubsystem()->getTargetTracker() ;
+            auto game_piece_manipulator = droid.getDroidSubsystem()->getGamePieceManipulator() ;
+            auto droid_robot_subsystem = droid.getDroidSubsystem() ;
 
-            //
-            // First check the mode
-            //
-            if (getValue(collect_shoot_mode_) == 1 && mode_ != RobotMode::Shooting)
-            {
-                //
-                // TODO: We need to be sure we are not in the middle of collecting a ball
-                //
-                if (!game->isActive())
-                {
-                    turret->setAction(follow_target_) ;
-                    conveyor->setAction(prepare_to_emit_) ;
-                    mode_ = RobotMode::Shooting ;
-                }
-            }
-            else if (getValue(collect_shoot_mode_) == 0 && mode_ != RobotMode::Collecting)
-            {
-                //
-                // TODO: We need to be sure we are not in the middle of shooting a ball
-                //
-                if (!game->isActive())
-                {
-                    turret->setAction(nullptr) ;
-                    conveyor->setAction(prepare_to_receive_) ;
-                    mode_ = RobotMode::Collecting ;
-                }
-            }
+            //actions and buttons corresponding with the actions
+            //actions found on wiki under droidoi (robot)
 
-            //
-            // Now based on the mode, see if we need to start or stop the
-            // current action
-            //
-            if (mode_ == RobotMode::Collecting)
-            {
-                if (getValue(collect_on_off_) == 1 && !collecting_ && !game->isActive())
-                {
-                    game->setAction(start_collect_);
-                    collecting_ = true;
-                }
-                else if (getValue(collect_on_off_) == 0 && collecting_ && !game->isActive())
-                {
-                    game->setAction(stop_collect_);
-                    collecting_ = false;
-                }
-            }
-            else if (mode_ == RobotMode::Shooting)
-            {
-                if (getValue(shoot_on_off_) == 1 && !shooting_)
-                {
-                    game->setAction(shoot_);
-                    shooting_ = true;
-                }
-                else if (getValue(shoot_on_off_) == 0 && shooting_ && !game->isActive())
-                {
-                    game->setAction(nullptr);
-                    shooting_ = false;
-                }                
-            }
+        /////// Actioning! ///////
+            
+            ///Intake///
+            if (getValue(intake_)) {    //true = collect, set conveyor to collect
+                seq.pushSubActionPair(intake, intake_collect_, false) ;
+                seq.pushSubActionPair(conveyor, queue_collect_, false) ;   
+            }   
+            else                          //false = no collect
+                seq.pushSubActionPair(intake, intake_retract_, false) ;
+
+            ///Conveyor///
+            if (getValue(queue_))         //true = collect
+                seq.pushSubActionPair(conveyor, queue_collect_, false) ;
+            else                          //false = shoot
+                seq.pushSubActionPair(conveyor, queue_shoot_, false) ;
+
+            ///Shooter///
+            if (getValue(shoot_))         //true = shoot
+                seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false) ;
+        
         }
 
-        //
-        // Create static actions we for the OI
-        //
-        void DroidOIDevice::init() {
-            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
-            auto turret = droid.getDroidSubsystem()->getTurret() ;
-            auto db = droid.getDroidSubsystem()->getTankDrive() ; 
-            auto game = droid.getDroidSubsystem()->getGamePieceManipulator() ;                       
-            auto conveyor = game->getConveyor() ;
-
+        void DroidOIDevice::init() 
+        {
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
-            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_OI) ;
+            log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_DROID_OI) ;
             log << "OI: creating static actions" ;
             log.endMessage() ;
+ 
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
+            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;   
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+            auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter() ;
+            auto turret = droid.getDroidSubsystem()->getTurret() ;
+            auto limelight = droid.getDroidSubsystem()->getLimeLight() ;
+            auto target_tracker = droid.getDroidSubsystem()->getTargetTracker() ;
+            auto game_piece_manipulator = droid.getDroidSubsystem()->getGamePieceManipulator() ;
+            auto droid_robot_subsystem = droid.getDroidSubsystem() ;
 
-            follow_target_ = std::make_shared<FollowTargetAction>(*turret) ;
-            prepare_to_emit_ = std::make_shared<ConveyorPrepareToEmitAction>(*conveyor) ;
-            prepare_to_receive_ = std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor) ;
-            start_collect_ = std::make_shared<StartCollectAction>(*game);
-            stop_collect_ = std::make_shared<StopCollectAction>(*game);
-            shoot_ = std::make_shared<FireAction>(*game);
+            intake_collect_   = std::make_shared<CollectOnAction>(*intake) ;
+            intake_retract_   = std::make_shared<CollectOffAction>(*intake) ;            
+            queue_collect_    = std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor) ;
+            queue_shoot_      = std::make_shared<ConveyorPrepareToEmitAction>(*conveyor) ;
+            fire_yes_         = std::make_shared<FireAction>(*game_piece_manipulator) ;
+
+            //TBD list : 
+            //finish this by looking @ Ranseur OI device for example
+            //Stop/Start collecting actions in GPM
+
         }
+
     }
 }

@@ -18,3 +18,4 @@
 #define MSG_GROUP_CLIMBER                           (1ull << 37)
 #define MSG_GROUP_ARM                               (1ull << 37)
 #define MSG_GROUP_LIFTERS                           (1ull << 38)
+#define MSG_GROUP_DROID_OI                          (1ull << 39)

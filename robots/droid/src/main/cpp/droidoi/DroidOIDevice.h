@@ -13,40 +13,29 @@ namespace xero {
             DroidOIDevice(DroidOISubsystem &sub, int index) ;
             virtual ~DroidOIDevice() ;
 
-            virtual int getAutoModeSelector() {
-                return getValue(automode_) ;
-            }
-
-            virtual void generateActions(xero::base::SequenceAction &seq) ;
-
             virtual void init() ;
 
+            virtual int getAutoModeSelector() ;
+
+            virtual void generateActions(xero::base::SequenceAction &seq) ;
+        
         private:
-            enum class RobotMode
-            {
-                Shooting,
-                Collecting
-            } ;
+            void initialize() ;
 
         private:
-            void bindOI() ;
-            
-        private:
-            RobotMode mode_ ;
-            bool collecting_ ;
-            bool shooting_;
-
             size_t automode_ ;
-            size_t collect_shoot_mode_ ;
-            size_t shoot_on_off_ ;
-            size_t collect_on_off_ ;
 
-            xero::base::ActionPtr follow_target_ ;
-            xero::base::ActionPtr prepare_to_emit_ ;
-            xero::base::ActionPtr prepare_to_receive_ ;
-            xero::base::ActionPtr start_collect_ ;
-            xero::base::ActionPtr stop_collect_;
-            xero::base::ActionPtr shoot_;
+            size_t intake_ ;
+            size_t queue_ ;
+            size_t shoot_ ;
+
+            xero::base::ActionPtr intake_collect_ ;
+            xero::base::ActionPtr intake_retract_ ;
+            xero::base::ActionPtr queue_collect_ ;
+            xero::base::ActionPtr queue_shoot_ ;
+            xero::base::ActionPtr fire_yes_ ;
+            //xero::base::ActionPtr fire_no_ ;
+
         } ;
     }
 }
