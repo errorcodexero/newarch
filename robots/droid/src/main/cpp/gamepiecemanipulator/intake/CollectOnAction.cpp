@@ -24,22 +24,17 @@ namespace xero {
             pos = subsystem.getRobot().getSettingsParser().getDouble("intake:arm:collecton:pos") ;
             act = std::make_shared<MotorEncoderGoToAction>(subsystem, pos) ;
             sequence_.pushAction(act) ;
-
-            // hold arm down //
-            act = std::make_shared<MotorEncoderHoldAction>(subsystem, pos) ;
-            sequence_.pushAction(act) ;
         }
         
         void CollectOnAction::start() {
             xero::base::Action::start();
             sequence_.start() ;
+            getSubsystem().collector_.get()->set(collector_power_) ;            
         }
 
         void CollectOnAction::run() {
-            // set collector motors on //
-            getSubsystem().collector_.get()->set(collector_power_) ;
-
             xero::base::Action::run();
+            
             // arm - down and hold sequence //
             sequence_.run() ;
             if (sequence_.isDone())

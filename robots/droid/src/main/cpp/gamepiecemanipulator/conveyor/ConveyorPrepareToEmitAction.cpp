@@ -13,7 +13,9 @@ namespace xero {
                 
                 // move balls in position towards shooter
                 setMotorState(MotorState::MoveTowardsShooter),
-                { "wait for ball to reach target sensor", waitForSensorState(Sensor::C, true) },
+                { "wait for ball to reach target sensor", waitForSensorState(Sensor::D, true) },
+
+                { "delay for fine-tuning", delayState(0.05) },
 
                 { done, setMotorState(MotorState::Stopped) },
             });

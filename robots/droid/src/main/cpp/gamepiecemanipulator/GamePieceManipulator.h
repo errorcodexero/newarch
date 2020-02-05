@@ -29,6 +29,8 @@ namespace xero {
                 return false ;
             }
 
+            bool canAcceptAction(xero::base::ActionPtr action) override;
+
         private:
             std::shared_ptr<Shooter> shooter_;
             std::shared_ptr<Intake> intake_;

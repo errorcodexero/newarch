@@ -84,6 +84,17 @@ namespace xero {
             return settingsParser_.isDefined(invertID) && settingsParser_.getBoolean(invertID);
         }
 
+        std::optional<MotorController::NeutralMode> MotorFactory::getNeutralMode(std::string configID) {
+            std::string config = configID + ":neutral_mode";
+            if (!settingsParser_.isDefined(config)) return std::nullopt;
+
+            std::string value = settingsParser_.getString(config);
+            if (value == "brake") return MotorController::NeutralMode::Brake;
+            else if (value == "coast") return MotorController::NeutralMode::Coast;
+            else handleError(configID, "neutral_mode must be either 'brake' or 'coast'");
+            assert(0);  // we should never get here
+        }
+
         MotorFactory::MotorPtr MotorFactory::createSingleMotor(std::string configID) {
             bool hasType = settingsParser_.isDefined(configID + ":type");
             bool hasCanID = settingsParser_.isDefined(configID + ":canid");
@@ -152,6 +163,9 @@ namespace xero {
             }
 
             motor->setInverted(isInverted(configID)) ;
+            if (auto neutralMode = getNeutralMode(configID)) {
+                motor->setNeutralMode(*neutralMode);
+            }
             return motor;
         }
 
@@ -164,6 +178,7 @@ namespace xero {
             MotorGroupController motors;
             int currentIndex = 0;
             bool groupInverted = isInverted(configID);  // True if the group invert flag is set
+            std::optional<MotorController::NeutralMode> groupNeutralMode = getNeutralMode(configID);
             bool leaderInverted = false;                // True if the leader's invert flag is set
             while (true) {
                 // Try to create the next motor.
@@ -177,6 +192,10 @@ namespace xero {
                         motor->setInverted(v) ;
                     } else if (leaderInverted) v = !v;  // If the leader is inverted, invert all other motors
                                                         // so that they follow the direction of the group
+                    if (groupNeutralMode && !getNeutralMode(motorConfigID)) {   // allow individual motors to override
+                                                                                // group neutral mode
+                        motor->setNeutralMode(*groupNeutralMode);
+                    }
                     motors.add(motor, v);
                     currentIndex += 1;
                 } else {

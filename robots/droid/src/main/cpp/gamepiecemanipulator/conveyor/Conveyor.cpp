@@ -9,26 +9,29 @@
 #include <Robot.h>
 #include <motors/MotorFactory.h>
 #include <SettingsParser.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace xero::misc;
 using namespace xero::base;
 
 namespace xero {
     namespace droid {
+        std::map<Conveyor::Sensor, std::string> Conveyor::sensorNames_ {
+            {Sensor::A, "a"},
+            {Sensor::B, "b"},
+            {Sensor::C, "c"},
+            {Sensor::D, "d"}
+        };
+
         Conveyor::Conveyor(Subsystem *parent): Subsystem(parent, "conveyor") {
             auto motorFactory = getRobot().getMotorFactory();
             intakeMotor_ = motorFactory->createMotor("hw:conveyor:motors:intake");
             shooterMotor_ = motorFactory->createMotor("hw:conveyor:motors:shooter");
 
-            std::vector<std::pair<Sensor, std::string>> sensorNames {
-                {Sensor::A, "a"},
-                {Sensor::B, "b"},
-                {Sensor::C, "c"},
-            };
             auto &settings = getRobot().getSettingsParser();
-            for (unsigned i = 0; i < sensorNames.size(); i++) {
-                int sensorIndex = static_cast<int>(sensorNames[i].first);
-                sensors_[sensorIndex] = createSensor(settings, "hw:conveyor:sensor:" + sensorNames[i].second);
+            for (auto pair : sensorNames_) {
+                int sensorIndex = static_cast<int>(pair.first);
+                sensors_[sensorIndex] = {createSensor(settings, "hw:conveyor:sensor:" + pair.second), false};
             }
 
             std::vector<std::pair<MotorState, std::string>> motorStates {
@@ -70,6 +73,15 @@ namespace xero {
             return std::dynamic_pointer_cast<ConveyorStopAction>(action) != nullptr;
         }
 
+        void Conveyor::computeState() {
+            for (auto pair : sensorNames_) {
+                Sensor sensor = pair.first;
+                int index = static_cast<int>(pair.first);
+                bool value = !getSensor(sensor)->Get();
+                sensors_[index].second = value;
+                frc::SmartDashboard::PutBoolean("sensors:" + pair.second, value);
+            }
+        }
 
         Conveyor::SensorPtr Conveyor::createSensor(int channel) {
             return std::make_shared<frc::DigitalInput>(channel);

@@ -129,6 +129,7 @@ namespace xero {
                         logger << actionName_ << ": assertion failed: " << message << "\n";
                         logger << "Terminating action.";
                         logger.endMessage();
+                        getSubsystem().setMotors(MotorState::Stopped);
                         setDone();
                     }
                     return StateResult::Next;
