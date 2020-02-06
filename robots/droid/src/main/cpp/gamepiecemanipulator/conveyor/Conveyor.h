@@ -21,6 +21,8 @@ namespace xero {
             bool canAcceptAction(xero::base::ActionPtr) override;
             bool canAcceptDefaultAction(xero::base::ActionPtr) override;
 
+            void computeState() override;
+
             int getBallCount() { return ballCount_; }
 
             static const int MAX_BALLS = 1;
@@ -39,19 +41,21 @@ namespace xero {
             enum class Sensor {
                 A,  // The sensor closest to the intake.
                 B,
-                C   // The sensor closest to the shooter.
+
+                C,
+                D   // The sensor closest to the shooter.
 
                 //                    (shooter)
                 //                      |   |
-                //                      |   < C
+                //                      |   < D
                 //                      |   |
                 //          *-----------/   |
                 // (intake) *              /
-                //          *-^---^------ /
-                //            A   B
+                //          *-^---^------^/
+                //            A   B      C
             };
-            SensorPtr getSensor(Sensor sensor) { return sensors_[static_cast<int>(sensor)]; }
-            bool readSensor(Sensor sensor) { return getSensor(sensor)->Get(); }
+            SensorPtr getSensor(Sensor sensor) { return sensors_[static_cast<int>(sensor)].first; }
+            bool readSensor(Sensor sensor) { return sensors_[static_cast<int>(sensor)].second; }
 
         private:
             /// Runs the motors in the specified direction, or stops them if direction is Stopped.
@@ -67,7 +71,8 @@ namespace xero {
 
         private:
             int ballCount_ = 0;
-            std::array<SensorPtr, 3> sensors_;
+            std::array<std::pair<SensorPtr, bool>, 4> sensors_;
+            static std::map<Sensor, std::string> sensorNames_;
 
             xero::base::MotorPtr intakeMotor_;
             xero::base::MotorPtr shooterMotor_;

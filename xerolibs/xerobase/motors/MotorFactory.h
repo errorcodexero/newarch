@@ -5,8 +5,10 @@
 #include <set>
 #include <vector>
 #include <functional>
+#include <optional>
 
 #include "MessageLogger.h"
+#include "MotorController.h"
 #include "SettingsParser.h"
 
 namespace xero {
@@ -65,6 +67,7 @@ namespace xero {
             MotorPtr createSingleMotor(std::string configID);
             
             bool isInverted(std::string configID);
+            std::optional<MotorController::NeutralMode> getNeutralMode(std::string configID);
         };
     }
 }

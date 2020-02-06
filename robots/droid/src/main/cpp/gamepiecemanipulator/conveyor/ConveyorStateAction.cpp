@@ -129,6 +129,7 @@ namespace xero {
                         logger << actionName_ << ": assertion failed: " << message << "\n";
                         logger << "Terminating action.";
                         logger.endMessage();
+                        getSubsystem().setMotors(MotorState::Stopped);
                         setDone();
                     }
                     return StateResult::Next;
@@ -153,6 +154,8 @@ namespace xero {
             }
             logger << "}";
             logger.endMessage();
+
+            conveyorActionStarted() ;
         }
 
         void ConveyorStateAction::run() {
@@ -203,6 +206,9 @@ namespace xero {
                 }
                 // If we changed states, loop again
             }
+
+            if (isDone())
+                conveyorActionFinished() ;
         }
         
     }

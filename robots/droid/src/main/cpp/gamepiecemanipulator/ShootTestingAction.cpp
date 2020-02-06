@@ -20,7 +20,8 @@ namespace xero {
 
         ShootTestingAction::ShootTestingAction(GamePieceManipulator &subsystem) : GamePieceManipulatorAction(subsystem), widget_(makeWidget())
         {
-            fire_ = std::make_shared<ShooterVelocityAction>(*getSubsystem().getShooter(), 0.0);            
+            fire_ = std::make_shared<ShooterVelocityAction>(*getSubsystem().getShooter(), 0.0);
+            shoot_delay_ = subsystem.getRobot().getSettingsParser().getDouble("shoottest:shoot_delay") ;
         }
 
         ShootTestingAction::~ShootTestingAction()
@@ -34,8 +35,8 @@ namespace xero {
 
             state_ = FireState::WaitPrepareReceive ;
             fire_->setTarget(0.0);
-            shooter->setAction(fire_);
-            conveyor->setAction(std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor)) ;            
+            shooter->setAction(fire_, true);
+            conveyor->setAction(std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor), true) ;            
         }
 
         void ShootTestingAction::run() 
@@ -55,7 +56,7 @@ namespace xero {
                 if (!conveyor->isBusy())
                 {
                     state_ = FireState::WaitReceive ;
-                    conveyor->setAction(std::make_shared<ConveyorReceiveAction>(*conveyor)) ;
+                    conveyor->setAction(std::make_shared<ConveyorReceiveAction>(*conveyor), true) ;
                 }
                 break ;
 
@@ -63,15 +64,23 @@ namespace xero {
                 if (!conveyor->isBusy())
                 {
                     state_ = FireState::WaitPrepareShoot ;
-                    conveyor->setAction(std::make_shared<ConveyorPrepareToEmitAction>(*conveyor)) ;
+                    conveyor->setAction(std::make_shared<ConveyorPrepareToEmitAction>(*conveyor), true) ;
                 }
                 break ;
 
             case FireState::WaitPrepareShoot:
                 if (!conveyor->isBusy())
                 {
+                    state_ = FireState::WaitShootDelay ;
+                    start_ = getSubsystem().getRobot().getTime() ;
+                }
+                break ;
+
+            case FireState::WaitShootDelay:
+                if (getSubsystem().getRobot().getTime() - start_ > shoot_delay_)
+                {
                     state_ = FireState::WaitShoot ;
-                    conveyor->setAction(std::make_shared<ConveyorEmitAction>(*conveyor)) ;
+                    conveyor->setAction(std::make_shared<ConveyorEmitAction>(*conveyor), true) ;
                 }
                 break ;
 
@@ -79,7 +88,7 @@ namespace xero {
                 if (!conveyor->isBusy())
                 {
                     state_ = FireState::WaitPrepareReceive ;
-                    conveyor->setAction(std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor)) ;
+                    conveyor->setAction(std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor), true) ;
                 }
                 break ;
             }

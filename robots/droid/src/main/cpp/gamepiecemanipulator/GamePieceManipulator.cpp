@@ -1,5 +1,6 @@
 #include "GamePieceManipulator.h"
 
+#include "GamePieceManipulatorAction.h"
 #include "shooter/Shooter.h"
 #include "intake/Intake.h"
 #include "conveyor/Conveyor.h"
@@ -17,6 +18,10 @@ namespace xero {
 
             conveyor_ = std::make_shared<Conveyor>(this);
             addChild(conveyor_);
+        }
+    
+        bool GamePieceManipulator::canAcceptAction(xero::base::ActionPtr action) {
+            return std::dynamic_pointer_cast<GamePieceManipulatorAction>(action) != nullptr;
         }
     }
 }

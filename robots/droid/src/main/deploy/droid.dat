@@ -24,18 +24,21 @@ hw:shooter:motor:1:type                                         "sparkmax_brushl
 hw:shooter:motor:1:canid                                        5                          # CAN 5
 hw:shooter:motor:2:type                                         "sparkmax_brushless"
 hw:shooter:motor:2:canid                                        6                          # CAN 6
+hw:shooter:motor:2:invert                                       true
 hw:shooter:encoder:quad:motor                                   true                        # Use encoder in NEO motor
 hw:shooter:encoder:quad:m                                       2.1428571429   # 1/42 * 3/2 * 60 (gives output in RPM)
 hw:shooter:encoder:quad:b                                       0
 
 hw:conveyor:motors:intake:type                                  "sparkmax_brushless"
 hw:conveyor:motors:intake:canid                                 7                          # CAN 7
+hw:conveyor:motors:intake:neutral_mode                          "brake"
 hw:conveyor:motors:shooter:type                                 "sparkmax_brushless"
 hw:conveyor:motors:shooter:canid                                8                          # CAN 8
-hw:conveyor:sensor:a                                            10
-hw:conveyor:sensor:b                                            11
-hw:conveyor:sensor:c                                            12
-hw:conveyor:sensor:d                                            13
+hw:conveyor:motors:shooter:neutral_mode                         "brake"
+hw:conveyor:sensor:a                                            13
+hw:conveyor:sensor:b                                            12
+hw:conveyor:sensor:c                                            11
+hw:conveyor:sensor:d                                            10
 
 hw:turret:motor:type                                            "sparkmax_brushless"
 hw:turret:motor:canid                                           9                          # CAN 9
@@ -81,7 +84,7 @@ hw:climber:servo:r:climb                                        0.0
 intake:collector:motor:power                                    0.3
 intake:arm:collecton:pos                                        1350
 intake:arm:collectoff:pos                                       0
-intake:hold:p                                                   0
+intake:hold:p                                                   0.002
 intake:hold:i                                                   0
 intake:hold:d                                                   0
 intake:hold:f                                                   0
@@ -235,6 +238,9 @@ droidvision:camera_target_height                                17.75
 limelight:camera_latency                                        11.0
 limelight:network_latency                                       10.0
 
+gamepiecemanipulator:fire:max_drivebase_velocity                0.0
+gamepiecemanipulator:fire:max_camera_sample_age                 5.0
+
 ###################################################################################################
 # oi
 ###################################################################################################
@@ -254,3 +260,19 @@ oi:collect_onoff                                                3
 # programs read the data from the network tables
 #
 plotting:enabled                                               true
+
+#
+# These control test modes for the robot.  They are used by the DroidTestTuneMode automode.  Note
+# this active value below is ignored if we are connected to the field.
+#
+auto:testmode:active                                          true
+auto:testmode:which                                           31
+auto:testmode:distance                                        42
+auto:testmode:power                                           -0.4
+auto:testmode:duration                                        0.4
+
+#
+# Shoot test parameters
+#
+shoottest:shoot_delay                                         0.3
+
