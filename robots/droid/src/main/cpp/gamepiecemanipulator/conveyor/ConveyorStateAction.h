@@ -135,6 +135,15 @@ namespace xero {
             /// an error message is printed and the action is terminated.
             std::function<StateResult(void)> assertState(std::function<bool()> condition, std::string message);
 
+            virtual void conveyorActionStarted() {
+            }
+
+            virtual void conveyorActionFinished() {                
+            }
+
+            virtual void conveyorActionRun() {                
+            }
+
         private:
             std::string actionName_;
 

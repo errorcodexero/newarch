@@ -1,5 +1,8 @@
 #include "ConveyorEmitAction.h"
 #include "Conveyor.h"
+#include "Droid.h"
+#include <gamepiecemanipulator/GamePieceManipulator.h>
+#include <gamepiecemanipulator/shooter/Shooter.h>
 
 using namespace xero::misc;
 
@@ -9,6 +12,13 @@ namespace xero {
             ConveyorStateAction::start();
             shouldStopFiring_ = false;
         }
+
+        std::vector<std::string> ConveyorEmitAction::columns_ =
+        {
+            "time",
+            "velocity",
+            "out"
+        } ;
 
         ConveyorEmitAction::ConveyorEmitAction(Conveyor &subsystem):
             ConveyorStateAction(subsystem, "ConveyorEmitAction") {
@@ -46,6 +56,30 @@ namespace xero {
                 // we're done
                 { done, setMotorState(MotorState::Stopped) },
             });
+
+            plot_id_ = subsystem.initPlot("shooting") ;
+        }
+
+        void ConveyorEmitAction::conveyorActionStarted()
+        {
+            getSubsystem().startPlot(plot_id_, columns_) ;
+        }
+
+        void ConveyorEmitAction::conveyorActionRun()
+        {
+            std::vector<double> data ;
+            auto &droid = static_cast<Droid &>(getSubsystem().getRobot()) ;
+            auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter() ;
+
+            data.push_back(droid.getTime()) ;
+            data.push_back(shooter->getSpeedometer().getVelocity()) ;
+            data.push_back(shooter->getMotor()) ;
+            getSubsystem().addPlotData(plot_id_, data) ;
+        }
+
+        void ConveyorEmitAction::conveyorActionFinished()
+        {
+            getSubsystem().endPlot(plot_id_) ;
         }
     }
 } 

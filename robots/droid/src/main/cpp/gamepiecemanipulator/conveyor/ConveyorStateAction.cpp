@@ -154,6 +154,8 @@ namespace xero {
             }
             logger << "}";
             logger.endMessage();
+
+            conveyorActionStarted() ;
         }
 
         void ConveyorStateAction::run() {
@@ -204,6 +206,9 @@ namespace xero {
                 }
                 // If we changed states, loop again
             }
+
+            if (isDone())
+                conveyorActionFinished() ;
         }
         
     }
