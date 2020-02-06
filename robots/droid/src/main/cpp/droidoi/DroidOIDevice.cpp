@@ -9,6 +9,8 @@
 #include "gamepiecemanipulator/FireAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToEmitAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToReceiveAction.h"
+#include "gamepiecemanipulator/conveyor/ConveyorReceiveAction.h"
+#include "gamepiecemanipulator/conveyor/ConveyorEmitAction.h"
 #include "gamepiecemanipulator/intake/Intake.h"
 #include "gamepiecemanipulator/intake/CollectOnAction.h"
 #include "gamepiecemanipulator/intake/CollectOffAction.h"
@@ -54,16 +56,16 @@ One two position switch for shooting mode
             //
             // Get button numbers
             //
-            size_t intake_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:collecting") ;      //intake on/off
-            size_t queue_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:queue") ;            //queue for shoot/collect
+            size_t coll_v_shoot_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:collvshoot") ;      //collect or shoot mode
+            size_t collect_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:collect") ;            //collect/no collect
             size_t shoot_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:shoot") ;            //shoot/no-shoot 
             
             //
             // Actions
             //
-            intake_ = mapButton(intake_b, OIButton::ButtonType::LowToHigh) ;                // Push button
-            queue_ = mapButton(queue_b, OIButton::ButtonType::Level) ;                      // Toggle switch
-            shoot_ = mapButton(shoot_b, OIButton::ButtonType::Level) ;                      // Toggle switch
+            coll_v_shoot_ = mapButton(coll_v_shoot_b, OIButton::ButtonType::Level) ;                // Toggle switch
+            collect_ = mapButton(collect_b, OIButton::ButtonType::LowToHigh) ;                      // push button
+            shoot_ = mapButton(shoot_b, OIButton::ButtonType::LowToHigh) ;                      // push button
         
         }
         
@@ -90,24 +92,42 @@ One two position switch for shooting mode
 
         /////// Actioning! ///////
             
-            ///Intake///
-            if (getValue(intake_)) {    //true = collect, set conveyor to collect
-                seq.pushSubActionPair(intake, intake_collect_, false) ;
-                seq.pushSubActionPair(conveyor, queue_collect_, false) ;   
-            }   
-            else                          //false = no collect
-                seq.pushSubActionPair(intake, intake_retract_, false) ;
+            
 
-            ///Conveyor///
-            if (getValue(queue_))         //true = collect
-                seq.pushSubActionPair(conveyor, queue_collect_, false) ;
-            else                          //false = shoot
-                seq.pushSubActionPair(conveyor, queue_shoot_, false) ;
+            if (getValue(coll_v_shoot_)) {
+                if (flag_coll_v_shoot_ == false || (flag_collect_ == true && getValue(collect_) == false)) {
+                    clearQueue() ;
+                    conveyorActionQueue.push(queue_prep_collect_) ;
+                }
+                else if (flag_coll_v_shoot_ == true && (flag_collect_ == false && getValue(collect_) == true)) {
+                    conveyorActionQueue.push(queue_collect_) ;
+                    conveyorActionQueue.push(intake_collect_) ;
+                }
+            }
+            else if (getValue(coll_v_shoot_) == false) {
+                if (flag_coll_v_shoot_ == true || (flag_shoot_ == true && getValue(shoot_) == false)) {
+                    clearQueue() ;
+                    conveyorActionQueue.push(queue_prep_shoot_) ;  
+                    if (flag_coll_v_shoot_ == true)
+                        conveyorActionQueue.push(intake_retract_) ;
+                }
+                else if (flag_coll_v_shoot_ == false && (flag_shoot_ == false && getValue(shoot_) == true)) {
+                    conveyorActionQueue.push(queue_shoot_) ;
+                    conveyorActionQueue.push(fire_yes_) ;
+                }
+            }
+            
+            if (!conveyorActionQueue.empty()) {
+                seq.pushSubActionPair(game_piece_manipulator, conveyorActionQueue.front(), false) ;
+                conveyorActionQueue.pop() ;
+            }
 
-            ///Shooter///
-            if (getValue(shoot_))         //true = shoot
-                seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false) ;
-        
+            flag_coll_v_shoot_ = getValue(coll_v_shoot_) ; //true = collect, false = shoot
+            flag_collect_ = getValue(collect_) ;           //true = collect, false = no collect
+            flag_shoot_ = getValue(shoot_) ;               //true = shoot, false = no shoot
+
+         //       seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false) ;
+
         }
 
         void DroidOIDevice::init() 
@@ -127,11 +147,13 @@ One two position switch for shooting mode
             auto game_piece_manipulator = droid.getDroidSubsystem()->getGamePieceManipulator() ;
             auto droid_robot_subsystem = droid.getDroidSubsystem() ;
 
-            intake_collect_   = std::make_shared<CollectOnAction>(*intake) ;
-            intake_retract_   = std::make_shared<CollectOffAction>(*intake) ;            
-            queue_collect_    = std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor) ;
-            queue_shoot_      = std::make_shared<ConveyorPrepareToEmitAction>(*conveyor) ;
-            fire_yes_         = std::make_shared<FireAction>(*game_piece_manipulator) ;
+            intake_collect_ = std::make_shared<CollectOnAction>(*intake) ;
+            intake_retract_ = std::make_shared<CollectOffAction>(*intake) ;          
+            queue_collect_ = std::make_shared<ConveyorReceiveAction>(*conveyor) ;
+            queue_shoot_ = std::make_shared<ConveyorEmitAction>(*conveyor) ;
+            queue_prep_collect_ = std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor) ;
+            queue_prep_shoot_ = std::make_shared<ConveyorPrepareToEmitAction>(*conveyor) ;
+            fire_yes_ = std::make_shared<FireAction>(*game_piece_manipulator) ;
 
             //TBD list : 
             //finish this by looking @ Ranseur OI device for example

@@ -111,6 +111,7 @@ hw:driverstation:hid:driver                                     0               
 hw:driverstation:hid:oi                                         2               # HID Device Index
 
 
+
 ###################################################################################################
 #
 # The sections below describe the software parameters for the various
@@ -248,6 +249,10 @@ gamepiecemanipulator:fire:max_camera_sample_age                 5.0
 oi:shoot_collect_mode                                           1
 oi:shoot_onoff                                                  2
 oi:collect_onoff                                                3
+
+oi:collvshoot                                                   4
+oi:collect                                                        5 
+oi:shoot                                                        6
 
 ###################################################################################################
 #
