@@ -147,10 +147,10 @@ tankdrive:follower:angle_correction                             0.06
 # shooter
 ###################################################################################################
 
-shooter:velocity:p                                              0.0001184
+shooter:velocity:p                                              0
 shooter:velocity:i                                              0.0
 shooter:velocity:d                                              0.0
-shooter:velocity:f                                              0.0001184
+shooter:velocity:f                                              0.0001145
 shooter:velocity:min                                            -1.0
 shooter:velocity:max                                            1.0
 shooter:velocity:imax                                           0.0
@@ -278,6 +278,6 @@ auto:testmode:duration                                        0.4
 #
 # Shoot test parameters
 #
-shoottest:shoot_delay                                         0.3
+shoottest:shoot_delay                                         0.1
 shoottest:velocity                                            4000
 

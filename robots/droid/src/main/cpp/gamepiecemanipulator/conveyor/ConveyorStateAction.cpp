@@ -209,6 +209,8 @@ namespace xero {
 
             if (isDone())
                 conveyorActionFinished() ;
+            else
+                conveyorActionRun();
         }
         
     }

@@ -14,12 +14,12 @@ namespace xero {
         MotorEncoderVelocityAction::MotorEncoderVelocityAction(MotorEncoderSubsystem &subsystem, double target):
             MotorEncoderSubsystemAction(subsystem), target_(target) {
 
-            std::string plotName = subsystem.getName() + "-" + toString();
-            plotid_ = subsystem.initPlot(plotName) ;
-            auto &logger = subsystem.getRobot().getMessageLogger();
-            logger.startMessage(MessageLogger::MessageType::debug, subsystem.getMsgID()) ;
-            logger << "MotorEncoderVelocityAction: initing plot " << plotName << " " << plotid_;
-            logger.endMessage() ;
+            //std::string plotName = subsystem.getName() + "-" + toString();
+            //plotid_ = subsystem.initPlot(plotName) ;
+            //auto &logger = subsystem.getRobot().getMessageLogger();
+            //logger.startMessage(MessageLogger::MessageType::debug, subsystem.getMsgID()) ;
+            //logger << "MotorEncoderVelocityAction: initing plot " << plotName << " " << plotid_;
+            //logger.endMessage() ;
         }
 
         void MotorEncoderVelocityAction::start() {
@@ -34,7 +34,7 @@ namespace xero {
             );
 
             pid_.reset();
-            sub.startPlot(plotid_, plot_columns_) ;
+            //sub.startPlot(plotid_, plot_columns_) ;
         }
 
         void MotorEncoderVelocityAction::run() {
@@ -56,17 +56,17 @@ namespace xero {
             logger << " output " << out ;
             logger.endMessage() ;
 
-            sub.addPlotData(plotid_, {
-                sub.getRobot().getTime(),
-                target_, avel, out
-            });
+            // sub.addPlotData(plotid_, {
+            //     sub.getRobot().getTime(),
+            //     target_, avel, out
+            // });
         }
 
         void MotorEncoderVelocityAction::cancel()
         {
             MotorEncoderSubsystemAction::cancel();
             setDone();
-            getSubsystem().endPlot(plotid_);
+            // getSubsystem().endPlot(plotid_);
             getSubsystem().setMotor(0.0);
         }
     }

@@ -39,7 +39,7 @@ namespace xero {
                 { loop, setMotorState(MotorState::MoveTowardsShooter) },
                 { "wait for ball to clear sensor", waitForSensorState(Sensor::D, false) },
 
-                { "delay for ball to fire", delayState(0.5) },
+                { "delay for ball to fire", delayState(0.1) },
                 
                 decrementBallsState(),
                 // if empty, stop
