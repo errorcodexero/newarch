@@ -3,6 +3,7 @@
 #include "GamePieceManipulatorAction.h"
 #include <gamepiecemanipulator/shooter/ShooterVelocityAction.h>
 #include <memory>
+#include <optional>
 
 namespace xero {
     namespace droid {

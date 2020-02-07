@@ -280,4 +280,5 @@ auto:testmode:duration                                        0.4
 # Shoot test parameters
 #
 shoottest:shoot_delay                                         0.3
+shoottest:velocity                                            4000
 

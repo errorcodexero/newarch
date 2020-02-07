@@ -54,6 +54,11 @@ namespace xero
             double power = robot.getSettingsParser().getDouble("auto:testmode:power");
             double duration = robot.getSettingsParser().getDouble("auto:testmode:duration");
 
+            auto &logger = droid.getMessageLogger();
+            logger.startMessage(MessageLogger::MessageType::debug);
+            logger << "TestTuneMode init";
+            logger.endMessage();
+
             switch(mode)
             {
                 //////////////////////////////////////////////////////////////////////////////////////////

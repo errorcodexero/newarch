@@ -11,15 +11,15 @@
 namespace xero {
     namespace droid {
 
-        static frc::SimpleWidget makeWidget() {
+        static frc::SimpleWidget makeWidget(GamePieceManipulator &subsystem) {
             wpi::StringMap<std::shared_ptr<nt::Value>> propmap;
             propmap.insert(std::make_pair("min", nt::Value::MakeDouble(0.0)));
-            propmap.insert(std::make_pair("max", nt::Value::MakeDouble(6000.0)));
-            return frc::Shuffleboard::GetTab("SmartDashboard").Add("Velocity", static_cast<double>(0.0)).WithWidget(frc::BuiltInWidgets::kNumberSlider).WithProperties(propmap);
+            propmap.insert(std::make_pair("max", nt::Value::MakeDouble(10000.0)));
+            double defaultValue = subsystem.getRobot().getSettingsParser().getDouble("shoottest:velocity");
+            return frc::Shuffleboard::GetTab("SmartDashboard").Add("Velocity", static_cast<double>(defaultValue)).WithWidget(frc::BuiltInWidgets::kNumberSlider).WithProperties(propmap);
         }
 
-        ShootTestingAction::ShootTestingAction(GamePieceManipulator &subsystem) : GamePieceManipulatorAction(subsystem), widget_(makeWidget())
-        {
+        ShootTestingAction::ShootTestingAction(GamePieceManipulator &subsystem) : GamePieceManipulatorAction(subsystem), widget_(makeWidget(subsystem)) {
             fire_ = std::make_shared<ShooterVelocityAction>(*getSubsystem().getShooter(), 0.0);
             shoot_delay_ = subsystem.getRobot().getSettingsParser().getDouble("shoottest:shoot_delay") ;
         }
