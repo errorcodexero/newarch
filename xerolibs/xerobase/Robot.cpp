@@ -491,6 +491,7 @@ namespace xero {
             logAutoModeState() ;
 
             controller_ = auto_controller_ ;
+            if (controller_) controller_->init();
             robot_subsystem_->init(LoopType::Autonomous) ;
         }        
 
@@ -507,6 +508,7 @@ namespace xero {
             message_logger_.endMessage() ;           
 
             controller_ = teleop_controller_ ;
+            if (controller_) controller_->init();
             robot_subsystem_->init(LoopType::OperatorControl) ;
         }
 
@@ -523,6 +525,7 @@ namespace xero {
             message_logger_.endMessage() ;
 
             controller_ = createTestController() ;
+            controller_->init();
             robot_subsystem_->init(LoopType::Test) ;
         }
 

@@ -20,6 +20,11 @@ namespace xero {
             /// \brief destroy the robot controller
             virtual ~ControllerBase() ;
 
+            /// \brief set up the controller, called before the robot is enabled.
+            /// This method is abstract and will be defined by a derived controller
+            /// class.
+            virtual void init() {}
+
             /// \brief run the controller, called once per robot loop.
             /// This method is abstract and will be defined by a derived controller
             /// class.

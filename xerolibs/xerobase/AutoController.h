@@ -29,6 +29,8 @@ namespace xero {
                 gamepad_interrupt_ = padintr;
             }
 
+            void init() override { started_ = false; }
+
             /// \brief This method is called once per robot loop by the main robot class
             /// For the AutoController class this method calls the action that is the current
             /// automode that is running.
