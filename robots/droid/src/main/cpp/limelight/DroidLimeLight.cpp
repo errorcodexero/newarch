@@ -48,7 +48,7 @@ namespace xero {
                 // Valid target, use the angle method for computing distance based on the
                 // limelight documentation
                 //
-                distance_ = camera_height_ * std::tan(xero::math::deg2rad(camera_angle_ + getTY())) ;
+                distance_ = camera_height_ / std::tan(xero::math::deg2rad(camera_angle_ + getTY())) ;
                 yaw_ = getTX() ;
                 sample_time_ = getRobot().getTime() - getLatency();
             }

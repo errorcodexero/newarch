@@ -11,7 +11,7 @@ namespace xero {
         LimeLight::LimeLight(Subsystem *parent) : Subsystem(parent, "LimeLight")
         {
             led_mode_ = ledMode::Invalid ;
-            cam_mode_ = camMode::Invalid ;
+            cam_mode_ = camMode::VisionProcessor ;
 
             table_ = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
 

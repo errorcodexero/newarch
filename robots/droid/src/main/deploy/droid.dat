@@ -233,9 +233,8 @@ climber:servo:r:angle_release                                  -1
 # droidvision
 ###################################################################################################
 
-droidvision:camera_height                                       20.0
-droidvision:camera_angle                                        64.67
-droidvision:camera_target_height                                17.75
+droidvision:camera_angle                                        21.73
+droidvision:camera_target_height                                68.0
 limelight:camera_latency                                        11.0
 limelight:network_latency                                       10.0
 
