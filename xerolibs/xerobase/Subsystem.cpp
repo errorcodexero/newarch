@@ -91,12 +91,19 @@ namespace xero {
         }
         
         bool Subsystem::setDefaultAction(ActionPtr action) {
-            if (_canAcceptAction(action, /*isDefault=*/true)) {
+            MessageLogger &logger = getRobot().getMessageLogger() ;
+            if (action == nullptr) {
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS);
+                logger << "Actions: subsystem '" << getName() << "' setting null default action";
+                logger.endMessage();
+                defaultAction_ = nullptr;
+                if (!isBusy()) setAction(nullptr, /*allowParentBusy=*/true);
+                return true;
+            } else if (_canAcceptAction(action, /*isDefault=*/true)) {
                 defaultAction_ = action;
                 if (!isBusy()) setAction(nullptr, /*allowParentBusy=*/true);
                 return true;
             } else {
-                MessageLogger &logger = getRobot().getMessageLogger() ;
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS) ;
                 logger << "Actions: subsystem '" << getName() << "' rejected default action '" << action->toString() << "'" ;
                 logger << "; did you remember to override canAcceptDefaultAction?";

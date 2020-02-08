@@ -11,6 +11,9 @@ namespace xero {
     namespace droid {
         Turret::Turret(Subsystem *parent): MotorEncoderSubsystem(parent, "turret", MSG_GROUP_TURRET) {
             setSmartDashboardName("turret") ;
+            auto &settings = getRobot().getSettingsParser();
+            minSafeAngle_ = settings.getDouble("turret:min");
+            maxSafeAngle_ = settings.getDouble("turret:max");
         }
 
         void Turret::postHWInit() {

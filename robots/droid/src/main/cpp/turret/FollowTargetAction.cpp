@@ -35,7 +35,7 @@ namespace xero {
             double error = tracker->getRelativeAngle();
             
             // Check for limits.
-            double absTarget = turret.getPosition() + error;
+            double absTarget = turret.getPosition() - error;
             if (absTarget < turret.getMinSafeAngle()) {
                 error = turret.getMinSafeAngle() - absTarget;
             } else if (absTarget > turret.getMaxSafeAngle()) {
@@ -47,7 +47,9 @@ namespace xero {
 
             logger.startMessage(MessageLogger::MessageType::debug, turret.getMsgID()) ;
             logger << "FollowTargetAction (" << turret.getName() << "):" ;
-            logger << " error " << tracker->getRelativeAngle() ;
+            logger << " abscurrent " << turret.getPosition();
+            logger << " abstarget " << absTarget;
+            logger << " error " << error;
             logger << " output " << out ;
             logger.endMessage() ;
 

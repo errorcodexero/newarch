@@ -73,7 +73,8 @@ namespace xero {
             MotorEncoderSubsystemAction::cancel() ;
 
             setDone() ;
-            getSubsystem().setDefaultAction(std::make_shared<MotorEncoderHoldAction>(getSubsystem()));
+            if (addhold_)
+                getSubsystem().setDefaultAction(std::make_shared<MotorEncoderHoldAction>(getSubsystem()));
         }
 
         void MotorEncoderGoToAction::run() {
@@ -135,8 +136,6 @@ namespace xero {
 
             if (addhold_)
                 subsystem.setDefaultAction(std::make_shared<MotorEncoderHoldAction>(subsystem, target_));
-            else
-                subsystem.setDefaultAction(nullptr);
 
             double dist = normalizePosition(target_ - subsystem.getPosition());
             if (std::fabs(dist) < threshold_) {

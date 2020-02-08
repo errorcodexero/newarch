@@ -48,7 +48,7 @@ hw:turret:encoder:analog:rmin                                   -180.0
 hw:turret:encoder:analog:rmax                                   180.0
 hw:turret:encoder:analog:emin                                   5.0
 hw:turret:encoder:analog:emax                                   0.0
-hw:turret:encoder:analog:ec                                     0.89
+hw:turret:encoder:analog:ec                                     1.06
 hw:turret:encoder:analog:rc                                     0.0
 
 hw:intake:collect:motor:type                                   "sparkmax_brushless"
@@ -175,10 +175,10 @@ turret:goto:maxa                                                70
 turret:goto:maxd                                                -70
 turret:goto:maxv                                                70
 
-turret:follow:p                                                 0
+turret:follow:p                                                 -0.056338032
 turret:follow:i                                                 0
-turret:follow:d                                                 0
-turret:follow:f                                                 0.003521127
+turret:follow:d                                                 0.01
+turret:follow:f                                                 0
 turret:follow:min                                               -1
 turret:follow:max                                               1
 turret:follow:imax                                              0
@@ -295,10 +295,10 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           41
-auto:testmode:distance                                        0
-auto:testmode:power                                           0.5
-auto:testmode:duration                                        1.0
+auto:testmode:which                                           42
+auto:testmode:distance                                        60
+auto:testmode:power                                           0.05
+auto:testmode:duration                                        5.0
 
 #
 # Shoot test parameters
