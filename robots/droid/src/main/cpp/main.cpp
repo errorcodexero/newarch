@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Droid.h"
 
-
 #ifdef SIM2
 #include "DroidOIModel.h"
 #include "IntakeModel.h"
@@ -24,6 +23,7 @@ USE_SIMULATION_MODEL(DriverGamePad, "drivergamepad") ;
 USE_SIMULATION_MODEL(DroidOIModel, "droidoi") ;
 USE_SIMULATION_MODEL(IntakeModel, "intake") ;
 USE_SIMULATION_MODEL(ConveyorModel, "conveyor") ;
+USE_SIMULATION_MODEL(LimeLightModel, "limelight") ;
 #endif
 
 int main(int ac, char **av)

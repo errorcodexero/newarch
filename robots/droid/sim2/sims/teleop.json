@@ -29,6 +29,22 @@
             ]
         },
         {
+            "time" : 1000.0,
+            "events" :
+            [
+                {
+                    "model" : "limelight",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "tv" : 1.0,
+                        "tx" : 30.0,
+                        "ty" : 8.0
+                    }
+                }
+            ]
+        },
+        {
             "time" : 4.0,
             "events" :
             [

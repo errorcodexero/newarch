@@ -32,7 +32,7 @@ namespace xero {
             bool flag_collect_ ;
             bool flag_shoot_ ;
             
-            std::queue<xero::base::ActionPtr>(conveyorActionQueue) ;
+            std::queue<xero::base::ActionPtr> conveyorActionQueue ;
 
             size_t automode_ ;
 

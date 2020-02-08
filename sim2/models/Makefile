@@ -6,7 +6,8 @@ SOURCES = \
 	./cpp/WestCoastDrive.cpp\
 	./cpp/NavXSim.cpp\
 	./cpp/FMS.cpp\
-	./cpp/DriverGamePad.cpp
+	./cpp/DriverGamePad.cpp\
+	./cpp/LimeLightModel.cpp\
 
 TARGET=models
 NEED_WPIUTIL=true
@@ -17,6 +18,7 @@ NEED_REV=true
 NEED_HAL=true
 NEED_ENGINE=true
 NEED_XEROMISC=true
+NEED_NTCORE=true
 
 LOCAL_CFLAGS += -Iinclude
 

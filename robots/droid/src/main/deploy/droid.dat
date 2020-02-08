@@ -250,7 +250,7 @@ oi:shoot_onoff                                                  2
 oi:collect_onoff                                                3
 
 oi:collvshoot                                                   4
-oi:collect                                                        5 
+oi:collect                                                      5 
 oi:shoot                                                        6
 
 ###################################################################################################

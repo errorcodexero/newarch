@@ -1,6 +1,8 @@
 #include "automodes/DroidAutoModeController.h"
-#include "automodes/DroidAutoMode.h"
 #include "automodes/DroidTestTuneMode.h"
+#include "automodes/DroidEightBallAutomode.h"
+#include "automodes/DroidFiveBallAutomode.h"
+#include "automodes/DroidThreeBallAutomode.h"
 #include "Droid.h"
 #include <tankdrive/modes/FollowPathAutomode.h>
 #include <MessageLogger.h>
@@ -38,14 +40,17 @@ namespace xero {
                 {
                 case 0:
                     // Start side nearest port, ollect eight automode
+                    mode = std::make_shared<DroidThreeBallAutomode>(getRobot());
                     break ;
 
                 case 1:
                     // Start side fartherest from port, collect five automode
+                    mode = std::make_shared<DroidFiveBallAutomode>(getRobot());                    
                     break ;
 
                 case 2:
                     // Start center, score three in robot and move off line
+                    mode = std::make_shared<DroidEightBallAutomode>(getRobot());                    
                     break ;
 
                 case 3:

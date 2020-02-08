@@ -12,6 +12,14 @@
             }
         },
         {
+            "model" : "limelight",
+            "instance" : "1",
+            "hardware" : {
+            },
+            "behavior" : {
+            }
+        },
+        {
             "model" : "fms",
             "instance" : "1",
             "hardware" : {

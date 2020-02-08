@@ -4,3 +4,4 @@
 #include <NavXSim.h>
 #include <FMS.h>
 #include <DriverGamePad.h>
+#include <LimeLightModel.h>

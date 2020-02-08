@@ -22,6 +22,8 @@ namespace xero
 
         bool EventsManager::loadStimulus(nlohmann::json stobj)
         {
+            auto &msg = engine_.getMessageOutput();
+
             if (!stobj.is_array())
                 return false;
 
@@ -33,6 +35,13 @@ namespace xero
                     return false;
 
                 double t = timept.value("time", 0.0);
+
+                if (!timept.contains("events"))
+                {
+                    msg.startMessage(SimulatorMessages::MessageType::Error);
+                    msg << "loading stimulus file - timepoint missing 'events' array" ;
+                    msg.endMessage(engine_.getSimulationTime());  
+                }
 
                 nlohmann::json evs = timept.at("events");
                 if (!evs.is_array())

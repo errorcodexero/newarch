@@ -5,7 +5,10 @@ include $(TOPDIR)/makefiles/defaults.mk
 AUTOMODES = \
 	src/main/cpp/automodes/DroidAutoModeController.cpp\
 	src/main/cpp/automodes/DroidAutoMode.cpp\
-	src/main/cpp/automodes/DroidTestTuneMode.cpp
+	src/main/cpp/automodes/DroidTestTuneMode.cpp\
+	src/main/cpp/automodes/DroidEightBallAutomode.cpp\
+	src/main/cpp/automodes/DroidFiveBallAutomode.cpp\
+	src/main/cpp/automodes/DroidThreeBallAutomode.cpp
 
 SUBSYSTEMS = \
 	src/main/cpp/droidoi/DroidOIDevice.cpp\
