@@ -42,12 +42,13 @@ hw:conveyor:sensor:d                                            10
 
 hw:turret:motor:type                                            "sparkmax_brushless"
 hw:turret:motor:canid                                           9                          # CAN 9
-hw:turret:encoder:analog                                        1                          # Analog encoder
-hw:turret:encoder:analog:rmin                                   0.0
-hw:turret:encoder:analog:rmax                                   360.0
-hw:turret:encoder:analog:emin                                   0.0
-hw:turret:encoder:analog:emax                                   1.0
-hw:turret:encoder:analog:ec                                     0.0
+hw:turret:motor:invert                                          true
+hw:turret:encoder:analog                                        3                          # Analog encoder
+hw:turret:encoder:analog:rmin                                   -180.0
+hw:turret:encoder:analog:rmax                                   180.0
+hw:turret:encoder:analog:emin                                   5.0
+hw:turret:encoder:analog:emax                                   0.0
+hw:turret:encoder:analog:ec                                     0.89
 hw:turret:encoder:analog:rc                                     0.0
 
 hw:intake:collect:motor:type                                   "sparkmax_brushless"
@@ -169,13 +170,33 @@ shooter:hold:imax                                               0.0
 # turret
 ###################################################################################################
 
+turret:goto:threshold                                           3.0
+turret:goto:maxa                                                70
+turret:goto:maxd                                                -70
+turret:goto:maxv                                                70
+
 turret:follow:p                                                 0
 turret:follow:i                                                 0
 turret:follow:d                                                 0
-turret:follow:f                                                 0
+turret:follow:f                                                 0.003521127
 turret:follow:min                                               -1
 turret:follow:max                                               1
-turret:follow:imax                                              1
+turret:follow:imax                                              0
+
+turret:follower:up:p                                                 0
+turret:follower:up:i                                                 0
+turret:follower:up:d                                                 0
+turret:follower:up:f                                                 0.003521127
+turret:follower:up:min                                               -1
+turret:follower:up:max                                               1
+turret:follower:up:imax                                              0
+turret:follower:down:p                                                 0
+turret:follower:down:i                                                 0
+turret:follower:down:d                                                 0
+turret:follower:down:f                                                 0.003521127
+turret:follower:down:min                                               -1
+turret:follower:down:max                                               1
+turret:follower:down:imax                                              0
 turret:fire_threshold                                           0.5
 turret:min                                                      -90 # The minimum safe angle.
 turret:max                                                      90  # The maximum safe angle.
@@ -270,10 +291,10 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           31
-auto:testmode:distance                                        42
-auto:testmode:power                                           -0.4
-auto:testmode:duration                                        0.4
+auto:testmode:which                                           41
+auto:testmode:distance                                        20
+auto:testmode:power                                           0.5
+auto:testmode:duration                                        1.0
 
 #
 # Shoot test parameters

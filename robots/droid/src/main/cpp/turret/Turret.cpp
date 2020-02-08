@@ -10,10 +10,9 @@ using namespace xero::base;
 namespace xero {
     namespace droid {
         Turret::Turret(Subsystem *parent): MotorEncoderSubsystem(parent, "turret", MSG_GROUP_TURRET) {
-
+            setSmartDashboardName("turret") ;
         }
 
-        
         void Turret::postHWInit() {
             setDefaultAction(std::make_shared<FollowTargetAction>(*this));
         }
