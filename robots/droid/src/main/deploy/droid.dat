@@ -183,23 +183,27 @@ turret:follow:min                                               -1
 turret:follow:max                                               1
 turret:follow:imax                                              0
 
-turret:follower:up:p                                                 0
-turret:follower:up:i                                                 0
-turret:follower:up:d                                                 0
-turret:follower:up:f                                                 0.003521127
+turret:follower:up:kp                                                 0
+turret:follower:up:ki                                                 0
+turret:follower:up:kd                                                 0
+turret:follower:up:kv                                                 0.003521127
+turret:follower:up:ka                                                 0
 turret:follower:up:min                                               -1
 turret:follower:up:max                                               1
 turret:follower:up:imax                                              0
-turret:follower:down:p                                                 0
-turret:follower:down:i                                                 0
-turret:follower:down:d                                                 0
-turret:follower:down:f                                                 0.003521127
+turret:follower:down:kp                                                 0
+turret:follower:down:ki                                                 0
+turret:follower:down:kd                                                 0
+turret:follower:down:kv                                                 0.003521127
+turret:follower:down:ka                                                 0
 turret:follower:down:min                                               -1
 turret:follower:down:max                                               1
 turret:follower:down:imax                                              0
 turret:fire_threshold                                           0.5
 turret:min                                                      -90 # The minimum safe angle.
 turret:max                                                      90  # The maximum safe angle.
+
+
 
 ###################################################################################################
 # controlpanelrotator
@@ -292,7 +296,7 @@ plotting:enabled                                               true
 #
 auto:testmode:active                                          true
 auto:testmode:which                                           41
-auto:testmode:distance                                        20
+auto:testmode:distance                                        0
 auto:testmode:power                                           0.5
 auto:testmode:duration                                        1.0
 

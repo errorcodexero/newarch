@@ -22,6 +22,9 @@ namespace xero {
             plotid_ = initPlot("LimeLight") ;
             distance_ = 0 ;
             sample_time_ = 0;
+
+            // TODO: temporary
+            setCamMode(LimeLight::camMode::VisionProcessor);
         }
 
         DroidLimeLight::~DroidLimeLight() {            

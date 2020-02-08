@@ -139,7 +139,7 @@ namespace xero
                 break;
 
             case 41:
-                pushSubActionPair(turret, std::make_shared<MotorEncoderGoToAction>(*turret, dist));
+                pushSubActionPair(turret, std::make_shared<MotorEncoderGoToAction>(*turret, dist, "goto", false));
                 break;
 
             case 42:
