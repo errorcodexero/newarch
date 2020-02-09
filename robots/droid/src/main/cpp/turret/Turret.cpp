@@ -17,7 +17,7 @@ namespace xero {
         }
 
         void Turret::postHWInit() {
-            setDefaultAction(std::make_shared<FollowTargetAction>(*this));
+            // setDefaultAction(std::make_shared<FollowTargetAction>(*this));
         }
         bool Turret::canAcceptAction(ActionPtr action) {
             return std::dynamic_pointer_cast<FollowTargetAction>(action) != nullptr;

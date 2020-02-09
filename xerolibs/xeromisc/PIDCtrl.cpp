@@ -16,7 +16,7 @@ PIDCtrl::PIDCtrl(bool is_angle):PIDCtrl(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, is_an
 PIDCtrl::PIDCtrl(double p, double i, double d, double f, double floor, double ceil, double integralCeil, bool is_angle)
 {
     init(p, i, d, f, floor, ceil, integralCeil, is_angle);
-    current_ = 0;
+    has_last_error_ = false;
 }
 
 void PIDCtrl::init(double p, double i, double d, double f, double floor, double ceil, double integralCeil, bool is_angle)
@@ -43,6 +43,7 @@ void PIDCtrl::init(double p, double i, double d, double f, bool is_angle)
     pid_consts_.integralCeil = std::numeric_limits<double>::max() ;
     is_angle_ = is_angle ;
     integral_ = 0;
+    has_last_error_ = false;
 }
 
 void PIDCtrl::initFromSettings(SettingsParser &parser, const std::string &prefix, bool is_angle) {
@@ -55,6 +56,7 @@ void PIDCtrl::initFromSettings(SettingsParser &parser, const std::string &prefix
     pid_consts_.integralCeil = std::numeric_limits<double>::max() ;
     is_angle_ = is_angle ;
     integral_ = 0;
+    has_last_error_ = false;
 }
 
 void PIDCtrl::initFromSettingsExtended(SettingsParser &parser, const std::string &prefix, bool is_angle) {
@@ -69,7 +71,12 @@ double PIDCtrl::getOutput(double target, double current, double timeDifference)
 {
     double error = calcError(target, current) ;
     double pOut = pid_consts_.p*error;
-    double derivative = (current - current_) / timeDifference;
+    double derivative = 0;
+    if (has_last_error_) {
+        derivative = (error - last_error_) / timeDifference;
+    }
+    last_error_ = error;
+    has_last_error_ = true;
     double dOut = pid_consts_.d*derivative;
     
     integral_ += error*timeDifference;
@@ -115,7 +122,7 @@ std::string PIDCtrl::toString() {
     ss << ",imax: " << pid_consts_.integralCeil;
     ss << ",is_angle: " << is_angle_;
     ss << ",target: " << target_;
-    ss << ",current: " << current_;
+    ss << ",last_error: " << has_last_error_ ? (std::to_string(last_error_) : "unknown");
     ss << ",integral: " << integral_;
     return ss.str();
 }

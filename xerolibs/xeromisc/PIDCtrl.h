@@ -75,6 +75,7 @@ public:
 
     /// \brief reset a stored state, specifically the accumulated integral
     void reset() {
+        has_last_error_ = false;
         integral_ = 0.0 ;
     }
     
@@ -91,7 +92,10 @@ private:
 
     bool is_angle_;
     double target_;
-    double current_;
+
+    bool has_last_error_;
+    double last_error_;
+
     double integral_;
 };
 

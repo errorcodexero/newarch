@@ -175,9 +175,9 @@ turret:goto:maxa                                                70
 turret:goto:maxd                                                -70
 turret:goto:maxv                                                70
 
-turret:follow:p                                                 -0.056338032
+turret:follow:p                                                 -0.014084508
 turret:follow:i                                                 0
-turret:follow:d                                                 0.01
+turret:follow:d                                                 0.0
 turret:follow:f                                                 0
 turret:follow:min                                               -1
 turret:follow:max                                               1
@@ -298,7 +298,7 @@ auto:testmode:active                                          true
 auto:testmode:which                                           42
 auto:testmode:distance                                        60
 auto:testmode:power                                           0.05
-auto:testmode:duration                                        5.0
+auto:testmode:duration                                        0.04
 
 #
 # Shoot test parameters
