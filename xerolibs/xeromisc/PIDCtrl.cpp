@@ -122,7 +122,7 @@ std::string PIDCtrl::toString() {
     ss << ",imax: " << pid_consts_.integralCeil;
     ss << ",is_angle: " << is_angle_;
     ss << ",target: " << target_;
-    ss << ",last_error: " << has_last_error_ ? (std::to_string(last_error_) : "unknown");
+    ss << ",last_error: " << (has_last_error_ ? std::to_string(last_error_) : "unknown");
     ss << ",integral: " << integral_;
     return ss.str();
 }
