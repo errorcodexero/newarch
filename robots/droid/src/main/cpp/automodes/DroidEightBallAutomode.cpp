@@ -30,17 +30,24 @@ namespace xero
             pushSubActionPair(manip, std::make_shared<FireAction>(*manip));
 
             // Then, in parallel...
-            auto parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
-            pushAction(parallel);
+            auto collectPar = std::make_shared<ParallelAction>(robot.getMessageLogger());
+            pushAction(collectPar);
 
             //     Drive to collect five balls
-            parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "five_ball_auto_collect"));
+            parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "eight_ball_auto_collect"));
 
-            //     Collect balls until full and prepare to fire
-            auto collectSeq = std::make_shared<SequenceAction>(robot.getMessageLogger());
-            collectSeq->pushAction(std::make_shared<StartCollectAction>(*manip));
-            collectSeq->pushAction(std::make_shared<StopCollectAction>(*manip));
-            pushSubActionPair(manip, collectSeq);
+            //     Collect all five balls
+            parallel->addSubActionPair(manip, std::make_shared<StartCollectAction>(*manip));
+
+            // Then, in parallel...
+            auto prepareFirePar = std::make_shared<ParallelAction>(robot.getMessageLogger());
+            pushAction(prepareFirePar);
+            
+            //     Drive to the target
+            prepareFirePar->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "eight_ball_auto_fire"));
+
+            //     Stop collecting and prepare to fire
+            prepareFirePar->addSubActionPair(manip, std::make_shared<StopCollectAction>(*manip));
 
             // Then, fire all five balls
             pushSubActionPair(manip, std::make_shared<FireAction>(*manip));
