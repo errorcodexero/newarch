@@ -40,7 +40,7 @@ namespace xero
     namespace droid
     {
         DroidTestTuneMode::DroidTestTuneMode(xero::base::Robot &robot)
-            : DroidAutoMode(robot, "TestMode", "Runs various tests based on the params file")
+            : DroidAutoMode(robot, "TestMode", "Runs various tests based on the params file", "testmode")
         {
             ActionPtr act ;
             auto &droid = dynamic_cast<Droid &>(getRobot()) ;

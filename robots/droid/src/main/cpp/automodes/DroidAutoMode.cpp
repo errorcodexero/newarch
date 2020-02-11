@@ -16,12 +16,24 @@ namespace xero
 {
     namespace droid
     {
-        DroidAutoMode::DroidAutoMode(xero::base::Robot &robot, const std::string &name, const std::string &desc) : AutoMode(robot, name, desc)
+        DroidAutoMode::DroidAutoMode(xero::base::Robot &robot, const std::string &name, const std::string &desc, 
+                                     const std::string &configName) : AutoMode(robot, name, desc)
         {
+            auto &settings = robot.getSettingsParser();
+            std::string configBase = "auto:" + configName + "initial_pose:";
+            startX_ = settings.getDouble(configBase + "x");
+            startY_ = settings.getDouble(configBase + "y");
+            startAngle_ = settings.getDouble(configBase + "angle");
         }
 
         DroidAutoMode::~DroidAutoMode()
         {            
+        }
+
+        void DroidAutoMode::start() {
+            auto db = getDroidSubsystem()->getTankDrive();
+            db->getKinematics()->set(startX_, startY_, startAngle_);
+            db->setAngle(startAngle_);
         }
 
         std::shared_ptr<DroidSubsystem> DroidAutoMode::getDroidSubsystem() {

@@ -14,7 +14,7 @@ namespace xero
     namespace droid
     {
         DroidEightBallAutomode::DroidEightBallAutomode(xero::base::Robot &robot) : 
-            DroidAutoMode(robot, "NearSideEight", "Start on near side, score three, collect five, score five")
+            DroidAutoMode(robot, "NearSideEight", "Start on near side, score three, collect five, score five", "eight_ball")
         {
             // Turret will track target as its default action
             // TODO: assign initial position to kinematic model?
@@ -34,10 +34,10 @@ namespace xero
             pushAction(collectPar);
 
             //     Drive to collect five balls
-            parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "eight_ball_auto_collect"));
+            collectPar->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "eight_ball_auto_collect"));
 
             //     Collect all five balls
-            parallel->addSubActionPair(manip, std::make_shared<StartCollectAction>(*manip));
+            collectPar->addSubActionPair(manip, std::make_shared<StartCollectAction>(*manip));
 
             // Then, in parallel...
             auto prepareFirePar = std::make_shared<ParallelAction>(robot.getMessageLogger());
