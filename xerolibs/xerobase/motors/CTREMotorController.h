@@ -36,8 +36,14 @@ namespace xero {
 
             // Units are 2048/revolution
             virtual int getPosition() {
+                auto talon = std::dynamic_pointer_cast<ctre::phoenix::motorcontrol::can::TalonFX>(motor_);                
+                if (!rate_updated_)
+                {
+                    talon->SetStatusFramePeriod(Status_3_Quadrature, 10) ;
+                    rate_updated_ = true ;
+                }
                 assert(type_ == Type::TalonFX);
-                auto talon = std::dynamic_pointer_cast<ctre::phoenix::motorcontrol::can::TalonFX>(motor_);
+
                 return static_cast<int>(talon->GetSensorCollection().GetIntegratedSensorPosition());
             }
             
@@ -45,6 +51,7 @@ namespace xero {
             MotorPtr motor_;
             Type type_;
             bool isInverted_;
+            bool rate_updated_ ;
         };
     }
 }
