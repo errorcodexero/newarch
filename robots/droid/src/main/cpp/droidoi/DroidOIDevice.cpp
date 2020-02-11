@@ -97,7 +97,7 @@ namespace xero {
                     // Setup the game piece manipulator to collect
                     if (!game_piece_manipulator->isBusy()) {
                         seq.pushSubActionPair(conveyor, queue_prep_collect_, false) ;
-                        flag_coll_v_shoot_ true ;
+                        flag_coll_v_shoot_ = true ;
                     }
                 }
                 else
