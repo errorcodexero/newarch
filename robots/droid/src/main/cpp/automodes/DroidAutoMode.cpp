@@ -23,5 +23,9 @@ namespace xero
         DroidAutoMode::~DroidAutoMode()
         {            
         }
+
+        std::shared_ptr<DroidSubsystem> DroidAutoMode::getDroidSubsystem() {
+            return static_cast<Droid&>(getRobot()).getDroidSubsystem();
+        }
     }
 }
