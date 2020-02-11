@@ -27,16 +27,17 @@ using namespace xero::misc ;
 namespace xero {
     namespace droid {
 
-/* From the wiki
-Intake, Conveyor, Turret, and Shooter
-One button for collecting
- - Push and hold to collect
- - If in shoot queue, flash a light on the drivers station
-One two position switch for queuing to shoot or queuing to collect
-One two position switch for shooting mode
- - Switch up to start scanning, switch down to stop
- - When limelight finds the target, aims, and the drive base is stopped, automatically start shooting
-*/
+        /* From the wiki
+         * Intake, Conveyor, Turret, and Shooter
+         * One button for collecting
+         * - Push and hold to collect
+         * - If in shoot queue, flash a light on the drivers station
+         * One two position switch for queuing to shoot or queuing to collect
+         * One two position switch for shooting mode
+         * - Switch up to start scanning, switch down to stop
+         * - When limelight finds the target, aims, and the drive base is stopped, automatically start shooting
+         */
+
 
         DroidOIDevice::DroidOIDevice(DroidOISubsystem &sub, int index) : OIDevice(sub, index) 
         {
@@ -78,7 +79,6 @@ One two position switch for shooting mode
 
         void DroidOIDevice::generateActions(xero::base::SequenceAction &seq)
         {
-        
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
             auto turret = droid.getDroidSubsystem()->getTurret() ;
@@ -90,43 +90,75 @@ One two position switch for shooting mode
             //actions and buttons corresponding with the actions
             //actions found on wiki under droidoi (robot)
 
-        /////// Actioning! ///////
+            /////// Actioning! ///////
             
-            if (getValue(coll_v_shoot_) != (flag_collect_)) {
-                seq.cancel() ;
-                if (!game_piece_manipulator -> isDone()) {
-                    if(coll_v_shoot_) {
-                        turret -> cancelAction() ;
-                    } else {
-                        seq.pushSubActionPair(turret, turret_follow_, false) ;
-                    }
-                    if (coll_v_shoot_) {
+            if (getValue(coll_v_shoot_) != flag_coll_v_shoot_) {
+                if(getValue(coll_v_shoot_)) {
+                    // Setup the game piece manipulator to collect
+                    if (!game_piece_manipulator->isBusy()) {
                         seq.pushSubActionPair(conveyor, queue_prep_collect_, false) ;
-                    } else {
-                        //seq.pushSubActionPair(game_piece_manipulator, stop_collect_action_, false) ;
-                        seq.pushSubActionPair(conveyor, queue_prep_shoot_, false) ;
+                        flag_coll_v_shoot_ true ;
                     }
-                    flag_coll_v_shoot_ = getValue(coll_v_shoot_) ; //true = collect, false = shoot
+                }
+                else
+                {
+                    seq.pushSubActionPair(conveyor, queue_prep_shoot_, false) ;
+                    flag_coll_v_shoot_ = false ;
                 }
             }
-            if (game_piece_manipulator -> isDone()) {
-                if (getValue(coll_v_shoot_) && getValue(collect_) != (flag_collect_)) { 
-                    if (getValue(collect_)) {
-                        seq.pushSubActionPair(game_piece_manipulator, start_collect_action_, false) ;
-                    } 
-                    else {
-                        seq.pushSubActionPair(game_piece_manipulator, stop_collect_action_, false) ;
+            else
+            {
+                //
+                // If the mode is not setup, but we want a different mode, we should never
+                // actually shoot or collect, so this is in an else clause
+                //
+
+                //
+                // Check to see that the game piece manipulator can actually accept new actions
+                //
+                if (game_piece_manipulator->isDone()) {
+
+                    //
+                    // Check to see if we are in collect or shoot mode
+                    // 
+                    if (flag_coll_v_shoot_ == true)
+                    {
+                        //
+                        // We are in collect mode, check the collect button
+                        //
+                        if (getValue(collect_) && flag_collect_ == false)
+                        {
+                            //
+                            // Button is down, but we are not collecting, assign start collect action
+                            //
+                            seq.pushSubActionPair(game_piece_manipulator, start_collect_action_, false) ;
+                            flag_collect_ = true ;
+                        }
+                        else if (getValue(collect_) == false && flag_collect_ == true) 
+                        {
+                            //
+                            // Button is up and we are collecting, assign stop collect action
+                            //
+                            seq.pushSubActionPair(game_piece_manipulator, stop_collect_action_, false) ;
+                            flag_collect_ = false ;
+                        }
                     }
-                    flag_collect_ = getValue(collect_) ;           //true = collect, false = no collect
-                } 
-                else if (!getValue(coll_v_shoot_) && getValue(shoot_) != (flag_shoot_)) {
-                    if (getValue(shoot_)) {
-                        seq.pushSubActionPair(game_piece_manipulator, start_shoot_action_, false) ;
+                    else
+                    {
+                        //
+                        // We are in shoot mode, check the shoot button
+                        //
+                        if (getValue(shoot_) && flag_shoot_ == false)
+                        {
+                            seq.pushSubActionPair(game_piece_manipulator, start_shoot_action_, false) ;
+                            flag_shoot_ = true ;
+                        }
+                        else if (getValue(shoot_) == false && flag_shoot_ == true)
+                        {
+                            seq.pushSubActionPair(game_piece_manipulator, stop_shoot_action_, false) ;
+                            flag_shoot_ = false ;
+                        }
                     }
-                    else {
-                        seq.pushSubActionPair(game_piece_manipulator, stop_shoot_action_, false) ;
-                    }
-                    flag_shoot_ = getValue(shoot_) ;               //true = shoot, false = no shoot    
                 }
             }
         }

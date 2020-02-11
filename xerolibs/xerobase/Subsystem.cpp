@@ -63,7 +63,7 @@ namespace xero {
 
         void Subsystem::cancelAction() {
             if (action_ != nullptr)
-                action_->cancel() ;
+                setAction(nullptr) ;
         }
 
         bool Subsystem::_canAcceptAction(ActionPtr action, bool isDefault) {
