@@ -15,6 +15,7 @@
 #include "gamepiecemanipulator/intake/CollectOnAction.h"
 #include "gamepiecemanipulator/intake/CollectOffAction.h"
 #include "gamepiecemanipulator/GamePieceManipulator.h"
+#include <Subsystem.h>
 #include <Robot.h>
 #include <TeleopController.h>
 #include <SettingsParser.h>
@@ -26,7 +27,7 @@ using namespace xero::misc ;
 namespace xero {
     namespace droid {
 
-/*
+/* From the wiki
 Intake, Conveyor, Turret, and Shooter
 One button for collecting
  - Push and hold to collect
@@ -77,10 +78,9 @@ One two position switch for shooting mode
 
         void DroidOIDevice::generateActions(xero::base::SequenceAction &seq)
         {
+        
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
-            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
-            auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter() ;
             auto turret = droid.getDroidSubsystem()->getTurret() ;
             auto limelight = droid.getDroidSubsystem()->getLimeLight() ;
             auto target_tracker = droid.getDroidSubsystem()->getTargetTracker() ;
@@ -92,42 +92,43 @@ One two position switch for shooting mode
 
         /////// Actioning! ///////
             
-            
-
-            if (getValue(coll_v_shoot_)) {
-                if (flag_coll_v_shoot_ == false || (flag_collect_ == true && getValue(collect_) == false)) {
-                    clearQueue() ;
-                    conveyorActionQueue.push(queue_prep_collect_) ;
-                }
-                else if (flag_coll_v_shoot_ == true && (flag_collect_ == false && getValue(collect_) == true)) {
-                    conveyorActionQueue.push(queue_collect_) ;
-                    conveyorActionQueue.push(intake_collect_) ;
-                }
-            }
-            else if (getValue(coll_v_shoot_) == false) {
-                if (flag_coll_v_shoot_ == true || (flag_shoot_ == true && getValue(shoot_) == false)) {
-                    clearQueue() ;
-                    conveyorActionQueue.push(queue_prep_shoot_) ;  
-                    if (flag_coll_v_shoot_ == true)
-                        conveyorActionQueue.push(intake_retract_) ;
-                }
-                else if (flag_coll_v_shoot_ == false && (flag_shoot_ == false && getValue(shoot_) == true)) {
-                    conveyorActionQueue.push(queue_shoot_) ;
-                    conveyorActionQueue.push(fire_yes_) ;
+            if (getValue(coll_v_shoot_) != (flag_collect_)) {
+                seq.cancel() ;
+                if (!game_piece_manipulator -> isDone()) {
+                    if(coll_v_shoot_) {
+                        turret -> cancelAction() ;
+                    } else {
+                        seq.pushSubActionPair(turret, turret_follow_, false) ;
+                    }
+                    if (coll_v_shoot_) {
+                        seq.pushSubActionPair(conveyor, queue_prep_collect_, false) ;
+                    } else {
+                        //seq.pushSubActionPair(game_piece_manipulator, stop_collect_action_, false) ;
+                        seq.pushSubActionPair(conveyor, queue_prep_shoot_, false) ;
+                    }
+                    flag_coll_v_shoot_ = getValue(coll_v_shoot_) ; //true = collect, false = shoot
                 }
             }
-            
-            if (!conveyorActionQueue.empty()) {
-                seq.pushSubActionPair(game_piece_manipulator, conveyorActionQueue.front(), false) ;
-                conveyorActionQueue.pop() ;
+            if (game_piece_manipulator -> isDone()) {
+                if (getValue(coll_v_shoot_) && getValue(collect_) != (flag_collect_)) { 
+                    if (getValue(collect_)) {
+                        seq.pushSubActionPair(game_piece_manipulator, start_collect_action_, false) ;
+                    } 
+                    else {
+                        seq.pushSubActionPair(game_piece_manipulator, stop_collect_action_, false) ;
+                    }
+                    flag_collect_ = getValue(collect_) ;           //true = collect, false = no collect
+                } 
+                else if (!getValue(coll_v_shoot_) && getValue(shoot_) != (flag_shoot_)) {
+                    if (getValue(shoot_)) {
+                        seq.pushSubActionPair(game_piece_manipulator, start_shoot_action_, false) ;
+                    }
+                    else {
+                        seq.pushSubActionPair(game_piece_manipulator, stop_shoot_action_, false) ;
+                    }
+                    flag_shoot_ = getValue(shoot_) ;               //true = shoot, false = no shoot    
+                }
             }
-
-            flag_coll_v_shoot_ = getValue(coll_v_shoot_) ; //true = collect, false = shoot
-            flag_collect_ = getValue(collect_) ;           //true = collect, false = no collect
-            flag_shoot_ = getValue(shoot_) ;               //true = shoot, false = no shoot
-
-         //       seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false) ;
-
         }
 
         void DroidOIDevice::init() 
@@ -136,7 +137,7 @@ One two position switch for shooting mode
             log.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_DROID_OI) ;
             log << "OI: creating static actions" ;
             log.endMessage() ;
- 
+
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
             auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;   
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
@@ -154,11 +155,13 @@ One two position switch for shooting mode
             queue_prep_collect_ = std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor) ;
             queue_prep_shoot_ = std::make_shared<ConveyorPrepareToEmitAction>(*conveyor) ;
             fire_yes_ = std::make_shared<FireAction>(*game_piece_manipulator) ;
+            turret_follow_ = std::make_shared<FollowTargetAction>(*turret) ;
+            start_collect_action_ = std::make_shared<StartCollectAction>(*game_piece_manipulator) ;
+            stop_collect_action_ = std::make_shared<StopCollectAction>(*game_piece_manipulator) ;
+            start_shoot_action_ = std::make_shared<StartCollectAction>(*game_piece_manipulator) ;
+            stop_shoot_action_ = std::make_shared<StopCollectAction>(*game_piece_manipulator) ;
 
-            //TBD list : 
-            //finish this by looking @ Ranseur OI device for example
-            //Stop/Start collecting actions in GPM
-
+            sequence_ = std::make_shared<SequenceAction>(log) ;
         }
 
     }
