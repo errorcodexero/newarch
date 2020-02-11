@@ -226,7 +226,7 @@ namespace xero {
                 
                 if (std::fabs(left - left_) > tolerance_ || std::fabs(right - right_) > tolerance_) {
                     auto dir = std::make_shared<TankDrivePowerAction>(*db_, left, right, high_gear_) ;
-                    seq.pushSubActionPair(db_, dir) ;
+                    seq.pushSubActionPair(db_, dir, false) ;
                     left_ = left ;
                     right_ = right ;
                 }

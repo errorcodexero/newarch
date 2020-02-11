@@ -11,7 +11,12 @@ namespace xero {
                     motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::TalonSRX>(id); 
                     break;
                 case Type::TalonFX:
-                    motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::TalonFX>(id);
+                    {
+                        SupplyCurrentLimitConfiguration limit(true, 30, 30, 5) ;
+                        auto m = std::make_shared<ctre::phoenix::motorcontrol::can::TalonFX>(id);
+                        m->ConfigSupplyCurrentLimit(limit) ;
+                        motor_ = m ;
+                    }
                     break;
                 case Type::VictorSPX:
                     motor_ = std::make_shared<ctre::phoenix::motorcontrol::can::VictorSPX>(id);

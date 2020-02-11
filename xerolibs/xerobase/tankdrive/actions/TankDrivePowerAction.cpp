@@ -38,6 +38,7 @@ namespace xero {
 
         void TankDrivePowerAction::cancel()  {
             TankDriveAction::cancel();
+            setDone() ;
         }
 
         std::string TankDrivePowerAction::toString() {
