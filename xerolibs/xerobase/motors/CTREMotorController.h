@@ -5,6 +5,8 @@
 #include <memory>
 #include <ctre/Phoenix.h>
 
+using namespace ctre::phoenix::motorcontrol ;
+
 namespace xero {
     namespace base {
         class CTREMotorController: public MotorController {
