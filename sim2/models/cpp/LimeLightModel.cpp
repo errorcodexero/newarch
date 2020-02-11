@@ -1,6 +1,8 @@
 #include <LimeLightModel.h>
 #include <SimulatorEngine.h>
 #include <SimulatedMotor.h>
+#include <networktables/NetworkTableInstance.h>
+#include <networktables/NetworkTable.h>
 #include <hal/HALBase.h>
 #include <cassert>
 #include <iostream>
@@ -13,6 +15,7 @@ namespace xero
     {
         LimeLightModel::LimeLightModel(SimulatorEngine &engine, const std::string &inst) : SimulationModel(engine, "limelight", inst)
         {
+            table_ = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
         }
 
         LimeLightModel::~LimeLightModel()
