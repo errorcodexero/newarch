@@ -24,6 +24,13 @@ namespace ctre {
 
                     return ret ;
                 }
+                
+                void SetIntegratedSensorPosition(double position) {
+                    xero::sim2::SimulatorEngine &engine = xero::sim2::SimulatorEngine::getEngine();
+                    auto mgr = engine.getCTREManager();
+
+                    mgr->setEncoder(index_, position) ;
+                }
 
             private:
                 int index_ ;
