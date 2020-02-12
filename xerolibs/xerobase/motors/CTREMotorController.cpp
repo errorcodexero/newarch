@@ -15,6 +15,7 @@ namespace xero {
                         SupplyCurrentLimitConfiguration limit(true, 30, 30, 5) ;
                         auto m = std::make_shared<ctre::phoenix::motorcontrol::can::TalonFX>(id);
                         m->ConfigSupplyCurrentLimit(limit) ;
+                        m->GetSensorCollection().SetIntegratedSensorPosition(0.0) ;
                         motor_ = m ;
                     }
                     break;

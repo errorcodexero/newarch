@@ -191,7 +191,7 @@ namespace xero {
                 assert(right_motors_->hasPosition()) ;
 
                 ticks_left_ = left_motors_->getPosition() ;
-                ticks_right_ = right_motors_->getPosition() ;
+                ticks_right_ = -right_motors_->getPosition() ;
             }
             else
             {
@@ -213,10 +213,11 @@ namespace xero {
             left_linear_.update(getRobot().getDeltaTime(), getLeftDistance()) ;
             right_linear_.update(getRobot().getDeltaTime(), getRightDistance()) ;
 
-            if (getRobot().IsDisabled())
+            // if (getRobot().IsDisabled())
+            
             {
-                frc::SmartDashboard::PutNumber("DB:LeftTicks", ticks_left_);
-                frc::SmartDashboard::PutNumber("DB:RightTicks", ticks_right_);     
+                frc::SmartDashboard::PutNumber("DBLeftTicks", ticks_left_);
+                frc::SmartDashboard::PutNumber("DBRightTicks", ticks_right_);     
                 frc::SmartDashboard::PutNumber("dbleft", left_linear_.getDistance()) ;
                 frc::SmartDashboard::PutNumber("dbright", right_linear_.getDistance()) ;
                 frc::SmartDashboard::PutNumber("dbyaw", getAngle()) ;

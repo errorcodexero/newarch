@@ -4,6 +4,7 @@
 #include <list>
 #include <memory>
 #include <ctre/Phoenix.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 namespace xero {
     namespace base {
@@ -38,7 +39,9 @@ namespace xero {
             virtual int getPosition() {
                 assert(type_ == Type::TalonFX);
                 auto talon = std::dynamic_pointer_cast<ctre::phoenix::motorcontrol::can::TalonFX>(motor_);
-                return static_cast<int>(talon->GetSensorCollection().GetIntegratedSensorPosition());
+                double v = talon->GetSensorCollection().GetIntegratedSensorPosition() ;
+                int ret = static_cast<int>(v) ;
+                return ret ;
             }
             
         private:
