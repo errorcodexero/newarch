@@ -14,7 +14,7 @@ namespace xero
     namespace droid
     {
         DroidFiveBallAutomode::DroidFiveBallAutomode(xero::base::Robot &robot) : 
-            DroidAutoMode(robot, "FarSideFive", "Start on far side, collect two, score five", "five_ball")
+            DroidAutoMode(robot, "FarSideFive", "Start on far side, collect two, score five")
         {
             // Turret will track target as its default action
             // TODO: assign initial position to kinematic model?

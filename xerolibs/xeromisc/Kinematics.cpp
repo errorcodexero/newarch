@@ -22,6 +22,7 @@ namespace xero {
             x_ = x ;
             y_ = y ;
             angle_ = angle ;
+            set_ = true;
         }
 
         void Kinematics::move(double right, double left) {

@@ -56,6 +56,11 @@ namespace xero {
             /// \param angle the current angle for the robot
             void set(double x, double y, double angle) ;
 
+            /// \brief Returns true if set has been called on this model.
+            /// Intended for determining whether we have been calibrated
+            /// to an absolute position on the field.
+            bool hasBeenSet() { return set_; }
+
             /// \brief called to tell the object the robot has moved
             /// This form of the move call does not include IMU data and therefore angle change is
             /// calculated based on the difference in left and right wheel movement and the scrub
@@ -80,6 +85,8 @@ namespace xero {
             double angle_ ;
             double scrub_ ;
             double width_ ;
+
+            bool set_;
         } ;
     }
 }

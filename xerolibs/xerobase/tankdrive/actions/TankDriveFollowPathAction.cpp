@@ -62,6 +62,20 @@ namespace xero {
             if (getTankDrive().hasGearShifter())
                 getTankDrive().highGear() ;
 
+            if (!getTankDrive().getKinematics()->hasBeenSet()) {
+                // The kinematics model has not been calibrated; this must be
+                // the first path run during auto.
+
+                // Calibrate the kinematics model using our known initial position.
+                double startX = (path_->getLeftSegment(0).getX() + path_->getRightSegment(0).getX())/2;
+                double startY = (path_->getLeftSegment(0).getY() + path_->getRightSegment(0).getY())/2;
+                start_angle_ = target_start_angle_ = path_->getLeftSegment(0).getHeading();
+                getTankDrive().getKinematics()->set(startX, startY, start_angle_);
+                getTankDrive().setAngle(start_angle_);
+
+                // Assume we've been set up
+            }
+
             getTankDrive().startPlot(plot_id_, plot_columns_) ;
             getTankDrive().startTrip(TripName) ;
         }
