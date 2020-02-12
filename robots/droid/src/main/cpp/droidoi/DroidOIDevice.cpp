@@ -171,19 +171,17 @@ namespace xero {
             log.endMessage() ;
 
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
-            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;   
-            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
-            auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter() ;
             auto turret = droid.getDroidSubsystem()->getTurret() ;
-            auto limelight = droid.getDroidSubsystem()->getLimeLight() ;
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+            //auto limelight = droid.getDroidSubsystem()->getLimeLight() ;
             auto target_tracker = droid.getDroidSubsystem()->getTargetTracker() ;
             auto game_piece_manipulator = droid.getDroidSubsystem()->getGamePieceManipulator() ;
             auto droid_robot_subsystem = droid.getDroidSubsystem() ;
 
-            intake_collect_ = std::make_shared<CollectOnAction>(*intake) ;
-            intake_retract_ = std::make_shared<CollectOffAction>(*intake) ;          
-            queue_collect_ = std::make_shared<ConveyorReceiveAction>(*conveyor) ;
-            queue_shoot_ = std::make_shared<ConveyorEmitAction>(*conveyor) ;
+            //intake_collect_ = std::make_shared<CollectOnAction>(*intake) ;
+            //intake_retract_ = std::make_shared<CollectOffAction>(*intake) ;          
+            //queue_collect_ = std::make_shared<ConveyorReceiveAction>(*conveyor) ;
+            //queue_shoot_ = std::make_shared<ConveyorEmitAction>(*conveyor) ;
             queue_prep_collect_ = std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor) ;
             queue_prep_shoot_ = std::make_shared<ConveyorPrepareToEmitAction>(*conveyor) ;
             fire_yes_ = std::make_shared<FireAction>(*game_piece_manipulator) ;
