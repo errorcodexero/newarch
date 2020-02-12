@@ -16,6 +16,7 @@ namespace xero {
                         auto m = std::make_shared<ctre::phoenix::motorcontrol::can::TalonFX>(id);
                         m->ConfigSupplyCurrentLimit(limit) ;
                         m->GetSensorCollection().SetIntegratedSensorPosition(0.0) ;
+                        m->SetStatusFramePeriod(Status_2_Feedback0_, 10) ;
                         motor_ = m ;
                     }
                     break;
@@ -28,7 +29,6 @@ namespace xero {
                 motor_->EnableVoltageCompensation(true) ;
 
                 type_ = type ;
-                rate_updated_ = false ;                
             }
 
             void CTREMotorController::follow(std::shared_ptr<MotorController> motor, bool invert) {
