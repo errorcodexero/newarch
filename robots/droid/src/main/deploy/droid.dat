@@ -279,6 +279,17 @@ oi:collect                                                      5
 oi:shoot                                                        6
 
 ###################################################################################################
+# targettracker
+###################################################################################################
+# The location of the target on the field.
+targettracker:target:x                                          0
+targettracker:target:y                                          30  # placeholder
+
+# In order to attempt camera tracking, db-estimated angle to target must be less than this value
+# This helps prevent us from trying to track the wrong target
+targettracker:camera_targetting_max_angle                       45
+
+###################################################################################################
 #
 # The sections below defines the bahavior of variour misc robot capabilities
 #
@@ -299,6 +310,24 @@ auto:testmode:which                                           0
 auto:testmode:distance                                        60
 auto:testmode:power                                           0.5
 auto:testmode:duration                                        3.0
+
+# Initial positions for automodes
+# These are made up numbers right now.
+auto:three_ball:initial_pose:x                                100
+auto:three_ball:initial_pose:y                                10
+auto:three_ball:initial_pose:angle                            90
+
+auto:five_ball:initial_pose:x                                 100
+auto:five_ball:initial_pose:y                                 20
+auto:five_ball:initial_pose:angle                             180
+
+auto:eight_ball:initial_pose:x                                100
+auto:eight_ball:initial_pose:y                                30
+auto:eight_ball:initial_pose:angle                            180
+
+auto:test_mode:initial_pose:x                                0
+auto:test_mode:initial_pose:y                                0
+auto:test_mode:initial_pose:angle                            0
 
 #
 # Shoot test parameters

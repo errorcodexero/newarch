@@ -6,6 +6,8 @@
 #include <ctre/Phoenix.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
+using namespace ctre::phoenix::motorcontrol ;
+
 namespace xero {
     namespace base {
         class CTREMotorController: public MotorController {
@@ -37,17 +39,21 @@ namespace xero {
 
             // Units are 2048/revolution
             virtual int getPosition() {
-                assert(type_ == Type::TalonFX);
-                auto talon = std::dynamic_pointer_cast<ctre::phoenix::motorcontrol::can::TalonFX>(motor_);
-                double v = talon->GetSensorCollection().GetIntegratedSensorPosition() ;
-                int ret = static_cast<int>(v) ;
-                return ret ;
+                assert(type_ == Type::TalonFX);                
+                auto talon = std::dynamic_pointer_cast<ctre::phoenix::motorcontrol::can::TalonFX>(motor_);                
+                if (!rate_updated_)
+                {
+                    talon->SetStatusFramePeriod(Status_2_Feedback0_, 10) ;
+                    rate_updated_ = true ;
+                }
+                return static_cast<int>(talon->GetSensorCollection().GetIntegratedSensorPosition());
             }
             
         private:
             MotorPtr motor_;
             Type type_;
             bool isInverted_;
+            bool rate_updated_ ;
         };
     }
 }

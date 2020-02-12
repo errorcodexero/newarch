@@ -3,7 +3,7 @@
 #include <oi/OIDevice.h> 
 #include <actions/Action.h>
 #include <actions/SequenceAction.h>
-#include <queue>
+//#include <queue>
 
 namespace xero {
     namespace droid {
@@ -23,16 +23,16 @@ namespace xero {
         private:
             void initialize() ;
 
-            void clearQueue() {
+           /* void clearQueue() {
                 while(conveyorActionQueue.empty())
                     conveyorActionQueue.pop() ;
-            }
+            }*/
         private:
             bool flag_coll_v_shoot_ ;
             bool flag_collect_ ;
             bool flag_shoot_ ;
             
-            std::queue<xero::base::ActionPtr> conveyorActionQueue ;
+            //std::queue<xero::base::ActionPtr> conveyorActionQueue ;
 
             size_t automode_ ;
 
@@ -47,6 +47,13 @@ namespace xero {
             xero::base::ActionPtr queue_prep_collect_ ;
             xero::base::ActionPtr queue_prep_shoot_ ;
             xero::base::ActionPtr fire_yes_ ;
+            xero::base::ActionPtr turret_follow_ ;
+            xero::base::ActionPtr start_collect_action_ ; 
+            xero::base::ActionPtr stop_collect_action_ ;
+            xero::base::ActionPtr start_shoot_action_ ;
+            xero::base::ActionPtr stop_shoot_action_ ;
+            
+            xero::base::SequenceActionPtr sequence_ ;
             //xero::base::ActionPtr fire_no_ ;
 
         } ;

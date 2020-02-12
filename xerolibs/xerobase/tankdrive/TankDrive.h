@@ -73,8 +73,15 @@ namespace xero {
             /// \brief Return the current angle of the robot relative to its starting angle
             /// \returns The current angle of the robot
             virtual double getAngle() const {
-                return angular_.getDistance() ;
-            }           
+                return angular_.getDistance() - angle_offset_;
+            }
+
+            /// \brief Resets the current angle of the robot.
+            /// This can be used e.g. at the start of an automode when our starting angle is known.
+            virtual void setAngle(double angle) {
+                angle_offset_ = angular_.getDistance() - angle;
+                kin_->set(kin_->getX(), kin_->getY(), angle);
+            }
 
             /// \brief Return the net distance travelled in inches by the left side of the drivebase.
             /// If the robot travels forward and then back by the same distance, the net distance
@@ -206,6 +213,10 @@ namespace xero {
             /// \param name name of the trip timer
             double getTripDistance(const std::string &name) ;
 
+            std::shared_ptr<xero::misc::Kinematics> getKinematics() const {
+                return kin_;
+            }
+
 
         private:
             /// \brief Set the motors to output at the given percentages
@@ -232,6 +243,7 @@ namespace xero {
             std::shared_ptr<AHRS> navx_ ;
             double total_angle_ ;
 
+            double angle_offset_;
             xero::misc::Speedometer angular_ ;
             xero::misc::Speedometer left_linear_ ;
             xero::misc::Speedometer right_linear_ ;
