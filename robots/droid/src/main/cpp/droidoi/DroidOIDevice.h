@@ -40,10 +40,6 @@ namespace xero {
             size_t collect_ ;
             size_t shoot_ ;
 
-            xero::base::ActionPtr intake_collect_ ;
-            xero::base::ActionPtr intake_retract_ ;
-            xero::base::ActionPtr queue_collect_ ;
-            xero::base::ActionPtr queue_shoot_ ;
             xero::base::ActionPtr queue_prep_collect_ ;
             xero::base::ActionPtr queue_prep_shoot_ ;
             xero::base::ActionPtr fire_yes_ ;

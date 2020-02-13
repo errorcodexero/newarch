@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GamePieceManipulatorAction.h"
+#include "actions/ParallelAction.h"
 
 namespace xero {
     namespace droid {
@@ -17,7 +18,14 @@ namespace xero {
             }
 
         private:
+            //xero::base::SequenceActionPtr sequence_ ;
+            xero::base::ActionPtr collect_off_action_ ;
+            xero::base::ActionPtr fire_action_ ;
+            
+            xero::base::ParallelAction parallel_ ;
+
         };
+
     }
 
 }
