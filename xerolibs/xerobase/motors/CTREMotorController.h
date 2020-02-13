@@ -41,7 +41,7 @@ namespace xero {
             virtual int getPosition() {
                 assert(type_ == Type::TalonFX);                
                 auto talon = std::dynamic_pointer_cast<ctre::phoenix::motorcontrol::can::TalonFX>(motor_);                
-                return static_cast<int>(talon->GetSensorCollection().GetIntegratedSensorPosition());
+                return talon->GetSelectedSensorPosition() ;
             }
             
         private:

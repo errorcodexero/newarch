@@ -309,10 +309,10 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           21
+auto:testmode:which                                           0
 auto:testmode:distance                                        60
-auto:testmode:power                                           0.5
-auto:testmode:duration                                        3.0
+auto:testmode:power                                           0.3
+auto:testmode:duration                                        2.0
 
 #
 # Shoot test parameters

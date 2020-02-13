@@ -26,6 +26,7 @@ namespace xero {
             dist_r_ = 0.0 ;
             last_dist_l_ = 0.0 ;
             last_dist_r_ = 0.0 ;
+            angle_offset_ = 0.0 ;
 
             navx_ = std::make_shared<AHRS>(frc::SPI::Port::kMXP) ; 
             if (!navx_->IsConnected()) {  
@@ -191,7 +192,7 @@ namespace xero {
                 assert(right_motors_->hasPosition()) ;
 
                 ticks_left_ = left_motors_->getPosition() ;
-                ticks_right_ = -right_motors_->getPosition() ;
+                ticks_right_ = right_motors_->getPosition() ;
             }
             else
             {
