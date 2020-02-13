@@ -1,0 +1,171 @@
+{
+    "_version": "1",
+    "groups": [
+        {
+            "name": "eight_ball_auto",
+            "paths": [
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 150,
+                    "maxjerk": 1500,
+                    "maxvelocity": 150,
+                    "name": "fire",
+                    "points": [
+                        {
+                            "heading": 90,
+                            "x": 503.11655405405406,
+                            "y": 19.841216216216196
+                        },
+                        {
+                            "heading": 26.565051177078043,
+                            "x": 528.9,
+                            "y": 60.6
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 150,
+                    "maxjerk": 1500,
+                    "maxvelocity": 150,
+                    "name": "collect",
+                    "points": [
+                        {
+                            "heading": -153.4,
+                            "x": 528.9347826086956,
+                            "y": 60.57996894409942
+                        },
+                        {
+                            "heading": 178.93908830973578,
+                            "x": 390.8385093167701,
+                            "y": 23.450310559006255
+                        },
+                        {
+                            "heading": -180,
+                            "x": 263.81599378881987,
+                            "y": 25.404503105590095
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 150,
+                    "maxjerk": 1500,
+                    "maxvelocity": 150,
+                    "name": "fire2",
+                    "points": [
+                        {
+                            "heading": 0,
+                            "x": 263.8,
+                            "y": 25.404503105590095
+                        },
+                        {
+                            "heading": 0,
+                            "x": 399.9580745341614,
+                            "y": 24.753105590062148
+                        },
+                        {
+                            "heading": 26.565051177078068,
+                            "x": 530.2375776397515,
+                            "y": 49.50621118012424
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                }
+            ]
+        },
+        {
+            "name": "five_ball_auto",
+            "paths": [
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 150,
+                    "maxjerk": 1500,
+                    "maxvelocity": 150,
+                    "name": "NewPath",
+                    "points": [
+                        {
+                            "heading": 0,
+                            "x": 0,
+                            "y": 0
+                        },
+                        {
+                            "heading": 0,
+                            "x": 100,
+                            "y": 0
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 150,
+                    "maxjerk": 1500,
+                    "maxvelocity": 150,
+                    "name": "NewPath_2",
+                    "points": [
+                        {
+                            "heading": 0,
+                            "x": 0,
+                            "y": 0
+                        },
+                        {
+                            "heading": 0,
+                            "x": 100,
+                            "y": 0
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                }
+            ]
+        },
+        {
+            "name": "three_ball_auto",
+            "paths": [
+            ]
+        }
+    ],
+    "outdir": ""
+}
