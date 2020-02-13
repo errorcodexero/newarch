@@ -31,6 +31,7 @@ namespace xero {
             manip_ = std::make_shared<GamePieceManipulator>(this);
             addChild(manip_);
 
+#ifdef NOTYET
             turret_ = std::make_shared<Turret>(this);
             addChild(turret_);
 
@@ -39,6 +40,7 @@ namespace xero {
 
             target_tracker_ = std::make_shared<TargetTracker>(this);
             addChild(target_tracker_);
+#endif
         }
 
         DroidSubsystem::~DroidSubsystem() {

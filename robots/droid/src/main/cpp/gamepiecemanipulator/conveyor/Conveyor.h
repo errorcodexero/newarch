@@ -25,13 +25,14 @@ namespace xero {
 
             int getBallCount() { return ballCount_; }
 
-            static const int MAX_BALLS = 1;
+            static const int MAX_BALLS = 5;
             bool isEmpty() { return ballCount_ == 0; }
             bool isFull() { return ballCount_ == MAX_BALLS; }
 
             // A reference to a motor state defined in the config file.
             enum class MotorState {
                 Stopped,
+                Collect2nd5th,
                 MoveTowardsShooter,
                 MoveTowardsIntake,
             };

@@ -10,8 +10,11 @@ using namespace xero::base;
 namespace xero {
     namespace droid {
         GamePieceManipulator::GamePieceManipulator(Subsystem *parent): Subsystem(parent, "gamepiecemanipulator") {
+            
+#ifdef NOTYET
             shooter_ = std::make_shared<Shooter>(this);
             addChild(shooter_);
+#endif
             
             intake_ = std::make_shared<Intake>(this);
             addChild(intake_);

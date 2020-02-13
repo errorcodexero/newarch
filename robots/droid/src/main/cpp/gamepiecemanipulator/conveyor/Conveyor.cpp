@@ -36,6 +36,7 @@ namespace xero {
 
             std::vector<std::pair<MotorState, std::string>> motorStates {
                 {MotorState::Stopped, "stopped"},
+                {MotorState::Collect2nd5th, "collect_2nd_5th"},
                 {MotorState::MoveTowardsShooter, "move_towards_shooter"},
                 {MotorState::MoveTowardsIntake, "move_towards_intake"},
             };
@@ -78,6 +79,12 @@ namespace xero {
                 Sensor sensor = pair.first;
                 int index = static_cast<int>(pair.first);
                 bool value = !getSensor(sensor)->Get();
+                if (value != sensors_[index].second) {
+                    auto &logger = getRobot().getMessageLogger();
+                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger << "sensor " << pair.second << " transitioned: " << value;
+                    logger.endMessage();
+                }
                 sensors_[index].second = value;
                 frc::SmartDashboard::PutBoolean("sensors:" + pair.second, value);
             }

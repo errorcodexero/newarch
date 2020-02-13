@@ -186,8 +186,8 @@ namespace xero {
             queue_shoot_ = std::make_shared<ConveyorEmitAction>(*conveyor) ;
             queue_prep_collect_ = std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor) ;
             queue_prep_shoot_ = std::make_shared<ConveyorPrepareToEmitAction>(*conveyor) ;
-            fire_yes_ = std::make_shared<FireAction>(*game_piece_manipulator) ;
-            turret_follow_ = std::make_shared<FollowTargetAction>(*turret) ;
+            //fire_yes_ = std::make_shared<FireAction>(*game_piece_manipulator) ;
+            //turret_follow_ = std::make_shared<FollowTargetAction>(*turret) ;
             start_collect_action_ = std::make_shared<StartCollectAction>(*game_piece_manipulator) ;
             stop_collect_action_ = std::make_shared<StopCollectAction>(*game_piece_manipulator) ;
             start_shoot_action_ = std::make_shared<StartCollectAction>(*game_piece_manipulator) ;

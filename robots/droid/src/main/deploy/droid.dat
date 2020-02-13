@@ -35,10 +35,10 @@ hw:conveyor:motors:intake:neutral_mode                          "brake"
 hw:conveyor:motors:shooter:type                                 "sparkmax_brushless"
 hw:conveyor:motors:shooter:canid                                8                          # CAN 8
 hw:conveyor:motors:shooter:neutral_mode                         "brake"
-hw:conveyor:sensor:a                                            13
-hw:conveyor:sensor:b                                            12
+hw:conveyor:sensor:a                                            12
+hw:conveyor:sensor:b                                            10
 hw:conveyor:sensor:c                                            11
-hw:conveyor:sensor:d                                            10
+hw:conveyor:sensor:d                                            13
 
 hw:turret:motor:type                                            "sparkmax_brushless"
 hw:turret:motor:canid                                           9                          # CAN 9
@@ -224,6 +224,9 @@ controlpanelrotator:hold:imax                                   1
 conveyor:motorstates:stopped:intake                             0
 conveyor:motorstates:stopped:shooter                            0
 
+conveyor:motorstates:collect_2nd_5th:intake                     1
+conveyor:motorstates:collect_2nd_5th:shooter                    0
+
 conveyor:motorstates:move_towards_shooter:intake                1
 conveyor:motorstates:move_towards_shooter:shooter               1
 
@@ -306,7 +309,7 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           0
+auto:testmode:which                                           21
 auto:testmode:distance                                        60
 auto:testmode:power                                           0.5
 auto:testmode:duration                                        3.0
