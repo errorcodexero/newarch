@@ -249,13 +249,41 @@ driver:nudge_time                                               0.1
 driver:zerolevel                                                0.1
 
 ###################################################################################################
-# climber
+# Climber
 ###################################################################################################
 
 climber:servo:l:angle_hold                                     -1
 climber:servo:l:angle_release                                  -1
 climber:servo:r:angle_hold                                     -1
 climber:servo:r:angle_release                                  -1
+climber:servo:r:climb                                          0
+climber:servo:l:climb                                          0
+climber:servo:r:release                                        0
+climber:servo:l:release                                        0
+
+climber:motor:follower:up:maxkp                                0
+climber:motor:follower:up:maxki                                0
+climber:motor:follower:up:maxkd                                0
+climber:motor:follower:up:maxkv                                0.003521127
+climber:motor:follower:up:maxka                                0
+climber:motor:follower:up:min                                  -1
+climber:motor:follower:up:max                                  1
+cilmber:motor:follower:up:imax                                 0
+
+climber:motor:follower:down:maxkp                              0
+climber:motor:follower:down:maxki                              0
+climber:motor:follower:down:maxkd                              0
+climber:motor:follower:down:maxkv                              0.003521127
+climber:motor:follower:down:maxka                              0
+climber:motor:follower:down:min                                -1
+climber:motor:follower:down:max                                1
+cilmber:motor:follower:down:imax                               0
+
+climber:motor:goto:threshold                                   3.0
+climber:motor:goto:maxa                                        70
+climber:motor:goto:maxd                                        -70
+climber:motor:goto:maxv                                        70
+
 
 ###################################################################################################
 # droidvision
