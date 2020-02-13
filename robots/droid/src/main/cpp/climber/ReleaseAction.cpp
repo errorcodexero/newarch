@@ -12,20 +12,17 @@ namespace xero {
         }   
 
         void ReleaseAction::run() {
-            getClimber().getLifter()->setAction(std::make_shared<MotorEncoderGoToAction>(*getClimber().getLifter(), "climber:motor:release")) ;
-            getClimber().getServoR()->Set(1.0) ;               //("climber:servo:r:release") ;
-            getClimber().getServoL()->Set(1.0) ;               //("climber:servo:l:release") ;
-        }
+            double r_release_ = getClimber().getRobot().getSettingsParser().getDouble("climber:servo:r:release") ;
+            double l_release_ = getClimber().getRobot().getSettingsParser().getDouble("climber:servo:l:release") ;
 
+            getClimber().getLifter()->setAction(std::make_shared<MotorEncoderGoToAction>(*getClimber().getLifter(), "climber:motor:follower:down")) ;
+            // climber motor(s) = trapezoidal speed profile w/ velocity and acceleration in .dat file
+            getClimber().getServoR()->Set(r_release_) ;
+            getClimber().getServoL()->Set(l_release_) ;
+        }
         std::string ReleaseAction::toString() {     
             return "ReleaseAction" ;
         }
 
     }
 }
-
-//open the 2 servos (run forward)
-//release with 2 motors (run backward)
-
-//single motor + add a servo
-//servo : hitec hs-422

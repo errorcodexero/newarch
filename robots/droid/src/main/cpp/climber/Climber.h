@@ -33,3 +33,5 @@ namespace xero {
         };
     }
 }
+
+//servo : hitec hs-422
