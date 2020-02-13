@@ -1,6 +1,7 @@
 #include "DroidTestTuneMode.h"
 #include "Droid.h"
 #include <actions/Action.h>
+#include <actions/ParallelAction.h>
 #include <actions/DelayAction.h>
 #include <tankdrive/actions/TankDriveCharAction.h>
 #include <tankdrive/actions/TankDriveScrubCharAction.h>
@@ -99,13 +100,22 @@ namespace xero
                 break;
 
             case 21:     // Test the conveyor - collect path
-                pushSubActionPair(game->getConveyor(), std::make_shared<ConveyorPrepareToReceiveAction>(*game->getConveyor()));            
-                pushSubActionPair(game->getConveyor(), std::make_shared<ConveyorReceiveAction>(*game->getConveyor()));
-                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 5.0));;            
-                pushSubActionPair(game->getConveyor(), std::make_shared<ConveyorPrepareToEmitAction>(*game->getConveyor()));
-                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 5.0));;            
-                pushSubActionPair(game->getConveyor(), std::make_shared<ConveyorPrepareToReceiveAction>(*game->getConveyor()));
+            {
+                auto parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
+                pushAction(parallel);
+
+                parallel->addSubActionPair(game->getIntake(), std::make_shared<CollectOnAction>(*game->getIntake()));
+
+                auto seq = std::make_shared<SequenceAction>(robot.getMessageLogger());
+                parallel->addSubActionPair(game->getConveyor(), seq);
+                //seq->pushAction(std::make_shared<ConveyorPrepareToReceiveAction>(*game->getConveyor()));            
+                seq->pushAction(std::make_shared<ConveyorReceiveAction>(*game->getConveyor()));
+                //seq->pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 5.0));;            
+                //seq->pushAction(std::make_shared<ConveyorPrepareToEmitAction>(*game->getConveyor()));
+                //seq->pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 5.0));;            
+                //seq->pushAction(std::make_shared<ConveyorPrepareToReceiveAction>(*game->getConveyor()));
                 break;
+            }
 
             case 22:     // Test the conveyor - shoot path
                 pushSubActionPair(game->getConveyor(), std::make_shared<ConveyorPrepareToEmitAction>(*game->getConveyor()));            
