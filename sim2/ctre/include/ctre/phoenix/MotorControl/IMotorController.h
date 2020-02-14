@@ -34,6 +34,8 @@ namespace ctre {
 
                 ctre::phoenix::motorcontrol::SensorCollection& GetSensorCollection() ;
 
+                int GetSelectedSensorPosition();
+
                 void Follow(IMotorController& master) {                    
                 }
 

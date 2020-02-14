@@ -13,9 +13,8 @@
                         "start" : 1.0,
                         "autonomous" : 15.0,
                         "between" : 2.0,
-                        "teleop" : 15.0,
-                        "fms" : true,
-                        "station" : "blue1"
+                        "teleop" : 0.0,
+                        "fms" : false
                     }
                 },
                 {

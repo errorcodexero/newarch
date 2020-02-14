@@ -24,14 +24,7 @@ namespace xero {
         }
 
         void RobotSubsystem::addTankDrive() {
-            //
-            // TODO - Most subsystems part the queries file themselves.  This is the
-            //        only place where a parent does the query.  Move this code down into
-            //        the TankDrive subsystem.
-            //
-
             auto &settings = getRobot().getSettingsParser() ;
-            auto &logger = getRobot().getMessageLogger() ;
 
             const char *l1str = "hw:tankdrive:encoders:left:1" ;
             const char *l2str = "hw:tankdrive:encoders:left:2" ;
@@ -46,13 +39,7 @@ namespace xero {
                 int r1 = settings.getInteger(r1str) ;
                 int r2 = settings.getInteger(r2str) ;
 
-                tank->setEncoders(l1, l2, r1, r2) ;
-                
-            } else {
-                logger.startMessage(MessageLogger::MessageType::error) ;
-                logger << "encoders not found in robot data file" ;
-                logger.endMessage() ;
-                db_ = nullptr ;         
+                tank->setEncoders(l1, l2, r1, r2) ;                
             }
 
             //
