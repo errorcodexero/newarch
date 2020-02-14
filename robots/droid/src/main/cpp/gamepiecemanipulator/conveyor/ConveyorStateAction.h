@@ -40,6 +40,9 @@ namespace xero {
             typedef Conveyor::MotorState MotorState;
             typedef Conveyor::Sensor Sensor;
 
+            void setStagedForCollect(bool staged) { getSubsystem().setStagedForCollect(staged); }
+            void setStagedForFire(bool staged) { getSubsystem().setStagedForFire(staged); }
+
             /// The result of executing a single tick of a state.
             struct StateResult {
                 friend class ConveyorStateAction;
@@ -105,8 +108,14 @@ namespace xero {
             /// Creates a state that waits for a sensor to reach a specific value.
             /// \param sensor The sensor to wait for.
             /// \param value The value to wait for.
-            /// \param nextState The state to transition to, or -1 to indicate the next state.
             std::function<StateResult(void)> waitForSensorState(Conveyor::Sensor sensor, bool value);
+
+            /// Creates a state that waits for a rising or falling edge on a sensor.
+            /// \param sensor The sensor to wait for.
+            /// \param value The edge to wait for (true for rising, false for falling)
+            /// Equivalent to waitForSensorState(sensor, !value)
+            ///  followed by  waitForSensorState(sensor, value)
+            std::function<StateResult(void)> waitForSensorEdgeState(Conveyor::Sensor sensor, bool value);
 
             /// A state that increments the number of collected balls.
             std::function<StateResult(void)> incrementBallsState();
@@ -156,6 +165,10 @@ namespace xero {
             void setStateIndex(int stateIndex);
 
             int stateIndex_;
+
+            // When waiting for a rising edge, this is set
+            // once the sensor has gone low (and vice-versa)
+            bool readyForSensorEdge_;
 
             std::optional<double> delayEndTime_;
         } ;

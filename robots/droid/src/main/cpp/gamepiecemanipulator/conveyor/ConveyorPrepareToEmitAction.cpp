@@ -8,14 +8,20 @@ namespace xero {
             
             const std::string done = "done";
             setStates({
-                // if empty, stop
+                // if empty or already staged for fire, stop
                 branchState(done, [=] { return getSubsystem().isEmpty(); }),
+                branchState(done, [=] { return getSubsystem().isStagedForFire(); }),
+
                 
                 // move balls in position towards shooter
                 setMotorState(MotorState::MoveTowardsShooter),
-                { "wait for ball to reach target sensor", waitForSensorState(Sensor::D, true) },
-
-                { "delay for fine-tuning", delayState(0.05) },
+                { "wait for ball to reach target sensor", waitForSensorEdgeState(Sensor::D, false) },
+                
+                { [=]{ 
+                    setStagedForCollect(false); 
+                    setStagedForFire(true);
+                    return StateResult::Next; 
+                }},
 
                 { done, setMotorState(MotorState::Stopped) },
             });

@@ -224,8 +224,8 @@ controlpanelrotator:hold:imax                                   1
 conveyor:motorstates:stopped:intake                             0
 conveyor:motorstates:stopped:shooter                            0
 
-conveyor:motorstates:collect_2nd_5th:intake                     1
-conveyor:motorstates:collect_2nd_5th:shooter                    0
+conveyor:motorstates:collect_motor_only:intake                  1
+conveyor:motorstates:collect_motor_only:shooter                 0
 
 conveyor:motorstates:move_towards_shooter:intake                1
 conveyor:motorstates:move_towards_shooter:shooter               1

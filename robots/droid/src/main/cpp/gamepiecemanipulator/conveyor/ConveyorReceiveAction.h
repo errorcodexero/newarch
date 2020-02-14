@@ -8,6 +8,12 @@ namespace xero {
         class ConveyorReceiveAction : public ConveyorStateAction {
         public:
             ConveyorReceiveAction(Conveyor &subsystem);
+
+            void conveyorActionStarted() override;
+            void conveyorActionRun() override;
+        private:
+            bool collecting_;
+            bool reachedShooterSensor_;
         } ;
     }
 }

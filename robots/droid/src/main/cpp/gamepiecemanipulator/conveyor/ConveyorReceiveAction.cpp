@@ -12,15 +12,14 @@ namespace xero {
             const std::string secondThroughFifth = "2nd-5th collect sequence";
             const std::string fifth = "5th collect sequence";
             setStates({
-                { waitForBall, setMotorState(MotorState::Stopped) },
+                { waitForBall, [=]{ collecting_ = false; return StateResult::Next; } },
                 // if full, stop
                 branchState(done, [=] { return getSubsystem().isFull(); } ),
 
-                //assertState([=]() { return getSubsystem().isEmpty() 
-                //                        || getSubsystem().readSensor(Sensor::B);
-                //            },  "ConveyorReceiveAction called with balls out of position; "
-                //                "was ConveyorPrepareToEmitAction run?"
-                //),
+                assertState([=]() { return getSubsystem().isStagedForCollect(); },
+                                "ConveyorReceiveAction called with balls out of position; "
+                                "was ConveyorPrepareToEmitAction run?"
+                ),
                 
                 { "wait for collect start sensor", waitForSensorState(Sensor::A, true) },
                 
@@ -28,22 +27,8 @@ namespace xero {
                 
                 // we've got a ball
                 incrementBallsState(),
-
-                // Pick a collect sequence
-                branchState(secondThroughFifth, [=]{ return getSubsystem().getBallCount() != 1; }),
-
-                // 1st
-                { first, setMotorState(MotorState::MoveTowardsShooter) },
-
-                // wait for rising edge then falling edge on shooter sensor
-                { "1st-ball: wait for ball to reach shooter (rising)", waitForSensorState(Sensor::D, true) },
-                { "1st-ball: wait for ball to reach shooter (falling)", waitForSensorState(Sensor::D, false) },
-
-                // ball collected, now collect another
-                gotoState(waitForBall),
-
-                // 2nd-5th
-                { secondThroughFifth, setMotorState(MotorState::Collect2nd5th) },
+                // run the motors to collect
+                { [=]{ collecting_ = true; return StateResult::Next; } },
 
                 { "wait for old ball to move out of collect finish sensor", waitForSensorState(Sensor::B, false) },
 
@@ -57,6 +42,36 @@ namespace xero {
 
                 { done, setMotorState(MotorState::Stopped) },
             });
+        }
+
+        void ConveyorReceiveAction::conveyorActionStarted() {
+            reachedShooterSensor_ = false;
+            collecting_ = false;
+            setMotors(MotorState::Stopped);
+        }
+
+        void ConveyorReceiveAction::conveyorActionRun() {
+            // Once a ball passes the shooter sensor,
+            // it's in position to fire
+            if (!reachedShooterSensor_) {
+                if (getSubsystem().readSensor(Sensor::D))
+                    reachedShooterSensor_ = true;
+            } else if (!getSubsystem().readSensor(Sensor::D)) {
+                reachedShooterSensor_ = false;
+                setStagedForFire(true);
+            }
+
+            if (collecting_) {
+                if (getSubsystem().isStagedForFire()) {
+                    // If a ball is in position to fire, don't
+                    // run it any further
+                    setMotors(MotorState::MoveCollectMotorOnly);
+                } else {
+                    setMotors(MotorState::MoveTowardsShooter);
+                }
+            } else {
+                setMotors(MotorState::Stopped);
+            }
         }
     }
 }

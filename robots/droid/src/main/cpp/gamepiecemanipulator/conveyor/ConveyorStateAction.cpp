@@ -55,6 +55,25 @@ namespace xero {
         }
 
         std::function<ConveyorStateAction::StateResult(void)> 
+        ConveyorStateAction::waitForSensorEdgeState(Conveyor::Sensor sensor, bool value) {
+            return [=]() {
+                if (!readyForSensorEdge_) {
+                    // Waiting for opposite edge
+                    if (getSubsystem().readSensor(sensor) != value) {
+                        readyForSensorEdge_ = true;
+                    }
+                } else {
+                    // Waiting for edge
+                    if (getSubsystem().readSensor(sensor) == value) {
+                        readyForSensorEdge_ = false;
+                        return StateResult::Next;
+                    }
+                }
+                return StateResult::Continue;
+            };
+        }
+
+        std::function<ConveyorStateAction::StateResult(void)> 
         ConveyorStateAction::setMotorState(MotorState direction) {
             return [=]() {
                 setMotors(direction);
@@ -145,6 +164,7 @@ namespace xero {
             assert(!states_.empty() && "state machine doesn't have any states; call setStates in constructor");
             stateIndex_ = 0;
             delayEndTime_ = std::nullopt;
+            readyForSensorEdge_ = false;
 
             auto &logger = getMessageLogger();
             logger.startMessage(MessageLogger::MessageType::debug);

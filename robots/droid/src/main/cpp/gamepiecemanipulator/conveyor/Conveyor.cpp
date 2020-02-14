@@ -36,9 +36,9 @@ namespace xero {
 
             std::vector<std::pair<MotorState, std::string>> motorStates {
                 {MotorState::Stopped, "stopped"},
-                {MotorState::Collect2nd5th, "collect_2nd_5th"},
                 {MotorState::MoveTowardsShooter, "move_towards_shooter"},
                 {MotorState::MoveTowardsIntake, "move_towards_intake"},
+                {MotorState::MoveCollectMotorOnly, "collect_motor_only"},
             };
 
             for (auto state : motorStates) {

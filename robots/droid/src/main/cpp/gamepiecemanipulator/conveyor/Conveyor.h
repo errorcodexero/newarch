@@ -29,12 +29,15 @@ namespace xero {
             bool isEmpty() { return ballCount_ == 0; }
             bool isFull() { return ballCount_ == MAX_BALLS; }
 
+            bool isStagedForCollect() { return stagedForCollect_; }
+            bool isStagedForFire() { return stagedForFire_; }
+
             // A reference to a motor state defined in the config file.
             enum class MotorState {
                 Stopped,
-                Collect2nd5th,
                 MoveTowardsShooter,
                 MoveTowardsIntake,
+                MoveCollectMotorOnly,
             };
 
             typedef std::shared_ptr<frc::DigitalInput> SensorPtr;
@@ -58,12 +61,15 @@ namespace xero {
             SensorPtr getSensor(Sensor sensor) { return sensors_[static_cast<int>(sensor)].first; }
             bool readSensor(Sensor sensor) { return sensors_[static_cast<int>(sensor)].second; }
 
-        private:
+        protected:
             /// Runs the motors in the specified direction, or stops them if direction is Stopped.
             /// \param MotorState The direction to run the motors.
             /// \param speedConfig The name of the speed at which the motors should be run.
             ///     This is used to look up the params file at conveyor:speed:<speedID>.
             void setMotors(MotorState state);
+
+            void setStagedForCollect(bool staged) { stagedForCollect_ = staged; }
+            void setStagedForFire(bool staged) { stagedForFire_ = staged; }
             
         private:
 
@@ -78,6 +84,9 @@ namespace xero {
             xero::base::MotorPtr intakeMotor_;
             xero::base::MotorPtr shooterMotor_;
             std::vector<std::pair<double, double>> motorStates_;
+
+            bool stagedForCollect_;
+            bool stagedForFire_;
         };
     }
 }
