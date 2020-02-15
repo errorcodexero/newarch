@@ -30,7 +30,7 @@ namespace xero {
                 // if empty, stop
                 { loop, branchState(done, [=] { return getSubsystem().isEmpty(); }) },
                 
-                assertState([=] { return getSubsystem().isStagedForCollect(); },
+                assertState([=] { return getSubsystem().isStagedForFire(); },
                             "ConveyorEmitAction called with no ball in position; "
                             "was ConveyorPrepareToEmitAction run?"
                 ),

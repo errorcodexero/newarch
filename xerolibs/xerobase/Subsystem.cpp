@@ -161,10 +161,13 @@ namespace xero {
 
             // Cancel any currently-running actions
             SetActionResult result;
+            bool isDefault = isRunningDefaultAction_ ;
             if (action_ != nullptr && cancelActionsAndChildActions(action)) 
                 result = SetActionResult::PreviousCanceled;
             else 
                 result = SetActionResult::Accepted;
+                
+            isRunningDefaultAction_ = isDefault ;
 
             // And now start the Action
             //

@@ -108,12 +108,8 @@ namespace xero
 
                 auto seq = std::make_shared<SequenceAction>(robot.getMessageLogger());
                 parallel->addSubActionPair(game->getConveyor(), seq);
-                //seq->pushAction(std::make_shared<ConveyorPrepareToReceiveAction>(*game->getConveyor()));            
+                seq->pushAction(std::make_shared<ConveyorPrepareToReceiveAction>(*game->getConveyor()));            
                 seq->pushAction(std::make_shared<ConveyorReceiveAction>(*game->getConveyor()));
-                //seq->pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 5.0));;            
-                //seq->pushAction(std::make_shared<ConveyorPrepareToEmitAction>(*game->getConveyor()));
-                //seq->pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 5.0));;            
-                //seq->pushAction(std::make_shared<ConveyorPrepareToReceiveAction>(*game->getConveyor()));
                 break;
             }
 
@@ -147,6 +143,10 @@ namespace xero
                 pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, false));
                 break;
 
+            case 34:
+                pushSubActionPair(game->getShooter(), std::make_shared<MotorEncoderPowerAction>(*game->getShooter(), power, duration));
+                break ;
+                
                 //////////////////////////////////////////////////////////////////////////////////////////
                 //
                 // 40 - 49 turret related
