@@ -28,7 +28,7 @@ hw:shooter:motor:2:invert                                       true
 hw:shooter:encoder:quad:motor                                   true                        # Use encoder in NEO motor
 hw:shooter:encoder:quad:m                                       2.1428571429   # 1/42 * 3/2 * 60 (gives output in RPM)
 hw:shooter:encoder:quad:b                                       0
-hw:shooter:hood                                                 3
+hw:shooter:hood                                                 0
 
 hw:conveyor:motors:intake:type                                  "sparkmax_brushless"
 hw:conveyor:motors:intake:canid                                 7                          # CAN 7
@@ -167,7 +167,7 @@ shooter:hold:min                                                -1.0
 shooter:hold:max                                                1.0
 shooter:hold:imax                                               0.0
 
-shooter:hood:down                                               0.5
+shooter:hood:down                                               1
 shooter:hood:up                                                 0.5
 
 ###################################################################################################
@@ -341,14 +341,14 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           32
+auto:testmode:which                                           10
 auto:testmode:distance                                        60
-auto:testmode:power                                           0.3
-auto:testmode:duration                                        2.0
+auto:testmode:power                                           0.2
+auto:testmode:duration                                        0.5
 
 #
 # Shoot test parameters
 #
 shoottest:shoot_delay                                         0.1
 shoottest:velocity                                            4000
-
+shoottest:hold                                                true
