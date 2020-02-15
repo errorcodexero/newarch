@@ -28,6 +28,7 @@ hw:shooter:motor:2:invert                                       true
 hw:shooter:encoder:quad:motor                                   true                        # Use encoder in NEO motor
 hw:shooter:encoder:quad:m                                       2.1428571429   # 1/42 * 3/2 * 60 (gives output in RPM)
 hw:shooter:encoder:quad:b                                       0
+hw:shooter:hood                                                 3
 
 hw:conveyor:motors:intake:type                                  "sparkmax_brushless"
 hw:conveyor:motors:intake:canid                                 7                          # CAN 7
@@ -36,9 +37,9 @@ hw:conveyor:motors:shooter:type                                 "sparkmax_brushl
 hw:conveyor:motors:shooter:canid                                8                          # CAN 8
 hw:conveyor:motors:shooter:neutral_mode                         "brake"
 hw:conveyor:sensor:a                                            12
-hw:conveyor:sensor:b                                            10
-hw:conveyor:sensor:c                                            11
-hw:conveyor:sensor:d                                            13
+hw:conveyor:sensor:b                                            11
+hw:conveyor:sensor:c                                            13
+hw:conveyor:sensor:d                                            10
 
 hw:turret:motor:type                                            "sparkmax_brushless"
 hw:turret:motor:canid                                           9                          # CAN 9
@@ -165,6 +166,9 @@ shooter:hold:f                                                  0.0
 shooter:hold:min                                                -1.0
 shooter:hold:max                                                1.0
 shooter:hold:imax                                               0.0
+
+shooter:hood:down                                               0.5
+shooter:hood:up                                                 0.5
 
 ###################################################################################################
 # turret
@@ -337,7 +341,7 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           31
+auto:testmode:which                                           32
 auto:testmode:distance                                        60
 auto:testmode:power                                           0.3
 auto:testmode:duration                                        2.0

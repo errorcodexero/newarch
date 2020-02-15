@@ -1,6 +1,7 @@
 #pragma once
 
 #include <motorencodersubsystem/MotorEncoderSubsystem.h>
+#include <frc/Servo.h>
 
 namespace xero {
     namespace droid {
@@ -21,7 +22,13 @@ namespace xero {
                 return ready_to_fire_;
             }
 
+            void setHood(bool hood);
+
         private:
+            std::shared_ptr<frc::Servo> hoodServo_;
+
+            double hoodUpPos_;
+            double hoodDownPos_;
 
             bool ready_to_fire_ ;      // Set to true when shooter at the required shooting velocity
         };

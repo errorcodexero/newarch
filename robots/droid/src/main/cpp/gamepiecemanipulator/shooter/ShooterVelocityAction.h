@@ -12,7 +12,7 @@ namespace xero {
 
         public:
 
-            ShooterVelocityAction(Shooter &sub, double target) ;
+            ShooterVelocityAction(Shooter &sub, double target, bool hood) ;
             virtual ~ShooterVelocityAction() ;
 
              Shooter &getSubsystem() {
@@ -25,10 +25,15 @@ namespace xero {
 
             virtual void setTarget(double target) override;
 
+            bool getHood() { return hood_; }
+            void setHood(bool hood) { hood_ = hood; }
+
         private:
 
             Shooter &subsystem_;
             double ready_margin_percent_;
+
+            bool hood_;
 
             void updateReadyToFire();
         };
