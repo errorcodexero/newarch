@@ -21,14 +21,18 @@ namespace xero {
             virtual void generateActions(xero::base::SequenceAction &seq) ;
 
         private:
-            void initialize() ;
+            enum class CollectShootMode
+            {
+                CollectMode,
+                ShootMode,
+                InvalidMode
+            } ;
 
-           /* void clearQueue() {
-                while(conveyorActionQueue.empty())
-                    conveyorActionQueue.pop() ;
-            }*/
+            void initialize() ;
+            CollectShootMode getSwitchMode() ;
+
         private:
-            bool flag_coll_v_shoot_ ;
+            CollectShootMode flag_coll_v_shoot_ ;
             bool flag_collect_ ;
             bool flag_shoot_ ;
             
@@ -44,14 +48,13 @@ namespace xero {
             xero::base::ActionPtr queue_prep_shoot_ ;
             xero::base::ActionPtr fire_yes_ ;
             xero::base::ActionPtr turret_follow_ ;
-            xero::base::ActionPtr start_collect_action_ ; 
+            xero::base::ActionPtr intake_on_ ;
+            xero::base::ActionPtr conveyor_receive_ ; 
+            xero::base::ActionPtr start_collect_action_ ;
             xero::base::ActionPtr stop_collect_action_ ;
             xero::base::ActionPtr start_shoot_action_ ;
             xero::base::ActionPtr stop_shoot_action_ ;
-            
-            xero::base::SequenceActionPtr sequence_ ;
-            //xero::base::ActionPtr fire_no_ ;
-
+    
         } ;
     }
 }

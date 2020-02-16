@@ -19,10 +19,7 @@ namespace xero {
             }            
 
         private:
-            xero::base::ActionPtr collect_off_action_ ;
             xero::base::ActionPtr conveyor_stop_action_ ;
-            
-            xero::base::ParallelAction parallel_ ;
         };
     }
 

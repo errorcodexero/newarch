@@ -156,7 +156,10 @@ namespace xero {
                 logger << "Actions: subsystem '" << getName() << "' was assigned NULL action" ;
             else
                 logger << "Actions: subsystem '" << getName() << "' was assigned action '" << action->toString() << "'" ;    
-            if (isRunningDefaultAction_) logger << " (default)";
+            if (isRunningDefaultAction_) 
+            {
+                logger << " (default)";
+            }
             logger.endMessage() ;
 
             // Cancel any currently-running actions

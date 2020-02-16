@@ -42,6 +42,10 @@ namespace xero {
         DroidOIDevice::DroidOIDevice(DroidOISubsystem &sub, int index) : OIDevice(sub, index) 
         {
             initialize() ;
+
+            flag_coll_v_shoot_ = CollectShootMode::InvalidMode ;
+            flag_shoot_ = false ;
+            flag_collect_ = false ;
         }
 
         DroidOIDevice::~DroidOIDevice() 
@@ -76,10 +80,16 @@ namespace xero {
             return getValue(automode_) ;    
         }
 
+        DroidOIDevice::CollectShootMode DroidOIDevice::getSwitchMode()
+        {
+            return getValue(coll_v_shoot_) ? CollectShootMode::CollectMode : CollectShootMode::ShootMode ;
+        }
+
         void DroidOIDevice::generateActions(xero::base::SequenceAction &seq)
         {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;
             auto turret = droid.getDroidSubsystem()->getTurret() ;
             auto limelight = droid.getDroidSubsystem()->getLimeLight() ;
             auto target_tracker = droid.getDroidSubsystem()->getTargetTracker() ;
@@ -91,18 +101,18 @@ namespace xero {
 
             /////// Actioning! ///////
             
-            if (getValue(coll_v_shoot_) != flag_coll_v_shoot_) {
-                if(getValue(coll_v_shoot_)) {
+            if (flag_coll_v_shoot_ == CollectShootMode::InvalidMode || getSwitchMode() != flag_coll_v_shoot_) {
+                if(getSwitchMode() == CollectShootMode::CollectMode) {
                     // Setup the game piece manipulator to collect
                     if (!game_piece_manipulator->isBusy()) {
                         seq.pushSubActionPair(conveyor, queue_prep_collect_, false) ;
-                        flag_coll_v_shoot_ = true ;
+                        flag_coll_v_shoot_ = CollectShootMode::CollectMode ;
                     }
                 }
                 else
                 {
                     seq.pushSubActionPair(conveyor, queue_prep_shoot_, false) ;
-                    flag_coll_v_shoot_ = false ;
+                    flag_coll_v_shoot_ = CollectShootMode::ShootMode ;
                 }
             }
             else
@@ -120,7 +130,7 @@ namespace xero {
                     //
                     // Check to see if we are in collect or shoot mode
                     // 
-                    if (flag_coll_v_shoot_ == true)
+                    if (flag_coll_v_shoot_ == CollectShootMode::CollectMode)
                     {
                         //
                         // We are in collect mode, check the collect button
@@ -172,19 +182,22 @@ namespace xero {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
             auto turret = droid.getDroidSubsystem()->getTurret() ;
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;
             auto target_tracker = droid.getDroidSubsystem()->getTargetTracker() ;
             auto game_piece_manipulator = droid.getDroidSubsystem()->getGamePieceManipulator() ;
             auto droid_robot_subsystem = droid.getDroidSubsystem() ;
 
             queue_prep_collect_ = std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor) ;
             queue_prep_shoot_ = std::make_shared<ConveyorPrepareToEmitAction>(*conveyor) ;
+
+            conveyor_receive_ = std::make_shared<ConveyorReceiveAction>(*conveyor) ;
+            intake_on_ = std::make_shared<CollectOnAction>(*intake) ;
+
+
             start_collect_action_ = std::make_shared<StartCollectAction>(*game_piece_manipulator) ;
             stop_collect_action_ = std::make_shared<StopCollectAction>(*game_piece_manipulator) ;
             start_shoot_action_ = std::make_shared<StartCollectAction>(*game_piece_manipulator) ;
             stop_shoot_action_ = std::make_shared<StopCollectAction>(*game_piece_manipulator) ;
-
-            sequence_ = std::make_shared<SequenceAction>(log) ;
         }
-
     }
 }

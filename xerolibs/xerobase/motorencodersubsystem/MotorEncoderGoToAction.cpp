@@ -73,8 +73,6 @@ namespace xero {
             MotorEncoderSubsystemAction::cancel() ;
 
             setDone() ;
-            if (addhold_)
-                getSubsystem().setDefaultAction(std::make_shared<MotorEncoderHoldAction>(getSubsystem()));
         }
 
         void MotorEncoderGoToAction::run() {
@@ -189,7 +187,7 @@ namespace xero {
         std::string MotorEncoderGoToAction::toString() {
             std::string str ;
 
-            str = "MotorEncoderGoToAction " + std::to_string(target_) ;
+            str = "MotorEncoderGoToAction (" + getSubsystem().getName() + ") " + std::to_string(target_) ;
             return str ;
         }
     }

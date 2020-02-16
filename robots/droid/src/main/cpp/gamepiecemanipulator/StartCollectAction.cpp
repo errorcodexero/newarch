@@ -10,41 +10,54 @@
 namespace xero {
     namespace droid {
 
-        StartCollectAction::StartCollectAction(GamePieceManipulator &subsystem) : GamePieceManipulatorAction(subsystem), parallel_(getMessageLogger())
+        StartCollectAction::StartCollectAction(GamePieceManipulator &subsystem) : GamePieceManipulatorAction(subsystem)
         {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;            
             auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;   
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
 
-            collect_on_action_ = std::make_shared<CollectOnAction>(*intake) ;
+
             conveyor_receive_action_ = std::make_shared<ConveyorReceiveAction>(*conveyor) ;
-            
-            parallel_.addAction(collect_on_action_) ;
-            parallel_.addAction(conveyor_receive_action_) ;            
         }
 
         StartCollectAction::~StartCollectAction()
         {
+            
         }
 
         void StartCollectAction::start() 
         {
             xero::base::Action::start() ;
-            parallel_.start() ;
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;            
+            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;   
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+
+            auto collect_on_action = std::make_shared<CollectOnAction>(*intake) ;
+            intake->setAction(collect_on_action, true) ;
+            conveyor->setAction(conveyor_receive_action_, true) ;            
         }
 
         void StartCollectAction::run() 
         {
-            xero::base::Action::run() ;
-            parallel_.run() ;
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;            
+            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;
 
-            if (parallel_.isDone())
+            if (!intake->isBusy())
                 setDone() ;
         }
 
         void StartCollectAction::cancel()
         {
-            parallel_.cancel() ;
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;            
+            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;   
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+
+            if (intake->isBusy())
+                intake->cancelAction() ;
+
+            if (conveyor->isBusy())
+                conveyor->cancelAction() ;
+
             setDone() ;
         }
     }

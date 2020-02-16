@@ -4,13 +4,14 @@
 #include "Intake.h"
 #include "IntakeAction.h"
 #include <actions/SequenceAction.h>
+#include <motorencodersubsystem/MotorEncoderGoToAction.h>
 
 using namespace xero::misc;
 using namespace xero::base;
 
 namespace xero {
     namespace droid {
-        class CollectOnAction : public IntakeAction {   
+        class CollectOnAction : public xero::base::MotorEncoderGoToAction {   
            
         public :
             CollectOnAction(Intake &subsystem) ;
@@ -22,10 +23,11 @@ namespace xero {
             virtual std::string toString() {
                 return action_name ;
             }
+
+            static constexpr const char *Target = "intake:arm:collecton:pos" ;
                          
         private :
             static std::string action_name ;
-            xero::base::SequenceAction sequence_ ;
             double collector_power_;
         } ;
     }

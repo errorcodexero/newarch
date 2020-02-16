@@ -8,50 +8,33 @@
 #include "CollectOffAction.h"
 #include "Intake.h"
 
+using namespace xero::base ;
+
 namespace xero {
     namespace droid {
         std::string CollectOffAction::action_name("CollectOffAction");
-        CollectOffAction::CollectOffAction(Intake &subsystem) : IntakeAction(subsystem), 
-                                                              sequence_(subsystem.getRobot().getMessageLogger())
+        CollectOffAction::CollectOffAction(Intake &subsystem) : 
+                    MotorEncoderGoToAction(subsystem, CollectOffAction::Target)
         {
-            collector_power_ = 0.0;    //collector "off""
-
-            double pos ;
-            ActionPtr act ;
-     
-            // Intake arm up //
-            pos = subsystem.getRobot().getSettingsParser().getDouble("intake:arm:collectoff:pos") ;
-            act = std::make_shared<MotorEncoderGoToAction>(getSubsystem(), pos) ;
-            sequence_.pushAction(act) ;
-
-            // hold arm up //
-            act = std::make_shared<MotorEncoderHoldAction>(getSubsystem(), pos) ;
-            sequence_.pushAction(act) ;
         }
         
-        void CollectOffAction::start() {
-            xero::base::Action::start();
-            sequence_.start() ;
+        void CollectOffAction::start() 
+        {
+            Intake &intake = dynamic_cast<Intake &>(getSubsystem()) ;            
+            MotorEncoderGoToAction::start() ;
+            intake.collector_->set(0.0) ;
         }
 
-        void CollectOffAction::run() {
-            // set collector motors off //
-            getSubsystem().collector_.get()->set(collector_power_) ;                 //collector "off"
-
-            xero::base::Action::run();
-            // arm - up and hold sequence //
-            sequence_.run() ;
-            if (sequence_.isDone())
-                setDone() ;
+        void CollectOffAction::run() 
+        {
+            MotorEncoderGoToAction::run() ;
         }
 
         void CollectOffAction::cancel() {
-            getSubsystem().collector_.get()->set(collector_power_) ;                  //collector "off"
-            
-            xero::base::Action::cancel();
-            sequence_.cancel() ;
+            Intake &intake = dynamic_cast<Intake &>(getSubsystem()) ;             
+            MotorEncoderGoToAction::cancel() ;
+            intake.collector_.get()->set(0.0) ;                  //collector "off"
             setDone() ;
         }
-
     }
 }

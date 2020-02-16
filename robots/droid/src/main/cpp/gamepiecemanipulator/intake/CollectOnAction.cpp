@@ -8,44 +8,31 @@
 #include "CollectOnAction.h"
 #include "Intake.h"
 
+using namespace xero::base ;
+
 namespace xero {
     namespace droid {
         std::string CollectOnAction::action_name("CollectOnAction");
-        CollectOnAction::CollectOnAction(Intake &subsystem) : IntakeAction(subsystem),
-                                                              sequence_(subsystem.getRobot().getMessageLogger())
+        CollectOnAction::CollectOnAction(Intake &subsystem) : 
+                MotorEncoderGoToAction(subsystem, CollectOnAction::Target)
         {
-   
             collector_power_ = subsystem.getRobot().getSettingsParser().getDouble("intake:collector:motor:power") ;
-
-            double pos ;
-            ActionPtr act ;
-     
-            // Intake arm down //
-            pos = subsystem.getRobot().getSettingsParser().getDouble("intake:arm:collecton:pos") ;
-            act = std::make_shared<MotorEncoderGoToAction>(subsystem, pos) ;
-            sequence_.pushAction(act) ;
-        }
+        }     
         
         void CollectOnAction::start() {
-            xero::base::Action::start();
-            sequence_.start() ;
-            getSubsystem().collector_.get()->set(collector_power_) ;            
+            Intake &intake = dynamic_cast<Intake &>(getSubsystem()) ;
+            MotorEncoderGoToAction::start() ;
+            intake.collector_.get()->set(collector_power_) ;            
         }
 
         void CollectOnAction::run() {
-            xero::base::Action::run();
-            
-            // arm - down and hold sequence //
-            sequence_.run() ;
-            if (sequence_.isDone())
-                setDone() ;
+            MotorEncoderGoToAction::run();
         }
 
         void CollectOnAction::cancel() {
-            getSubsystem().collector_.get()->set(0) ;                  //collector "off"
-            
-            xero::base::Action::cancel();
-            sequence_.cancel() ;
+            Intake &intake = dynamic_cast<Intake &>(getSubsystem()) ;            
+            MotorEncoderGoToAction::cancel() ;
+            intake.collector_.get()->set(0.0) ;              
             setDone() ;
         }
 
