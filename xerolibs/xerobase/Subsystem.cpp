@@ -174,6 +174,14 @@ namespace xero {
             action_ = action ;
             if (action_ != nullptr) {
                 action_->start() ;
+
+                if (action_->isDone()) {
+                    auto &logger = getRobot().getMessageLogger();
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_ACTIONS_VERBOSE);
+                    logger << "Actions: subsystem '" << getName() << "': action '" << action_->toString();
+                    logger << "' completed immediately in start()";
+                    logger.endMessage();
+                }
             }
             return result;
         }

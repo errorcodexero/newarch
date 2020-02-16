@@ -39,7 +39,7 @@ namespace xero {
             cameraSampleAgeThreshold_ = settings.getDouble(cameraThresholdKey);
             
             std::string hoodDown = "shooter:aim:hood_down:";
-            std::string hoodUp = "shooter:aim:hood_down:";
+            std::string hoodUp = "shooter:aim:hood_up:";
             hoodDown_a_ = settings.getDouble(hoodDown + "a");
             hoodDown_b_ = settings.getDouble(hoodDown + "b");
             hoodDown_c_ = settings.getDouble(hoodDown + "c");
@@ -63,8 +63,8 @@ namespace xero {
             auto tracker = droidSubsystem_.getTargetTracker();
             double dist = tracker->getDistance();
 
-            if (dist < maxHoodUpDistance_) hoodIsDown_ = true;
-            else if (dist > minHoodDownDistance_) hoodIsDown_ = false;
+            if (dist > maxHoodUpDistance_) hoodIsDown_ = true;
+            else if (dist < minHoodDownDistance_) hoodIsDown_ = false;
 
             double a, b, c;
             if (hoodIsDown_) {
@@ -150,16 +150,17 @@ namespace xero {
             // Print a debug message
             logger.startMessage(MessageLogger::MessageType::debug);
             logger << "FireAction: isFiring: " << isFiring_ << "; ";
-            if (readyToFire) logger << "ready to fire";
+            if (readyToFire) logger << "ready to fire; ";
             else { 
                 logger << "not ready to fire [";
                 logger << "camera: " << (trackerReady ? "ready" : "waiting") << ", ";
                 logger << "turret: " << (turretReady ? "ready" : "waiting") << ", ";
                 logger << "shooter: " << (shooterReady ? "ready" : "waiting") << ", ";
                 logger << "drivebase: " << (drivebaseReady ? "ready" : "waiting") << ", ";
-                logger << "]";
+                logger << "]; ";
                 
             }
+            logger << "hood: " << (hoodIsDown_ ? "down" : "up");
             logger.endMessage();
         }
 

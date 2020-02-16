@@ -53,10 +53,6 @@ namespace xero {
                 { notFiringLastBall, waitForSensorEdgeState(Sensor::D, false) },
                 
                 decrementBallsState(),
-                // if empty, stop
-
-                // wait for the next ball to move into position
-                { "wait for next ball to reach sensor", waitForSensorState(Sensor::D, true) },
 
                 // if we've been asked to stop firing, we're done
                 branchState(done, [=] { return shouldStopFiring_; }),

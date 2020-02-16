@@ -161,6 +161,7 @@ namespace xero {
         }
 
         void ConveyorStateAction::start() {
+            ConveyorAction::start();
             assert(!states_.empty() && "state machine doesn't have any states; call setStates in constructor");
             stateIndex_ = 0;
             delayEndTime_ = std::nullopt;

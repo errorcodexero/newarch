@@ -42,7 +42,7 @@ namespace xero {
 
                 // if we're full, wait for the last ball to break sensor C
                 { fifth, waitForSensorState(Sensor::C, false) },
-                { fifth, waitForSensorState(Sensor::C, true) },
+                waitForSensorState(Sensor::C, true),
 
                 { done, setMotorState(MotorState::Stopped) },
             });
