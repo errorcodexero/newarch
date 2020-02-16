@@ -11,7 +11,7 @@ namespace xero {
             setStates({
                 // if full or already staged for collection, stop
                 branchState(done, [=] { return getSubsystem().isFull(); }),
-                branchState(done, [=] { return getSubsystem().isStagedForCollect(); }),
+                branchState(setStaged, [=] { return getSubsystem().isStagedForCollect(); }),
                 branchState(setStaged, [=] { return getSubsystem().isEmpty(); }),
 
                 // Move balls to the ready-to-collect position

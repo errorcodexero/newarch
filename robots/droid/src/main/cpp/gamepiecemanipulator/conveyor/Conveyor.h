@@ -13,6 +13,7 @@ namespace xero {
             friend class ConveyorStateAction;
             friend class ConveyorStopAction;
             friend class ConveyorOnAction ;
+            friend class ConveyorEjectAction;
         public:
             Conveyor(xero::base::Subsystem *parent);
             virtual ~Conveyor() {}
@@ -68,8 +69,8 @@ namespace xero {
             ///     This is used to look up the params file at conveyor:speed:<speedID>.
             void setMotors(MotorState state);
 
-            void setStagedForCollect(bool staged) { stagedForCollect_ = staged; }
-            void setStagedForFire(bool staged) { stagedForFire_ = staged; }
+            void setStagedForCollect(bool staged);
+            void setStagedForFire(bool staged);
             
         private:
 

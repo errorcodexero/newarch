@@ -28,6 +28,9 @@ namespace xero {
             intakeMotor_ = motorFactory->createMotor("hw:conveyor:motors:intake");
             shooterMotor_ = motorFactory->createMotor("hw:conveyor:motors:shooter");
 
+            stagedForFire_ = false;
+            stagedForCollect_ = false;
+
             auto &settings = getRobot().getSettingsParser();
             for (auto pair : sensorNames_) {
                 int sensorIndex = static_cast<int>(pair.first);
@@ -61,6 +64,21 @@ namespace xero {
                 });
             }
         }
+        void Conveyor::setStagedForCollect(bool staged) { 
+            auto &logger = getRobot().getMessageLogger();
+            logger.startMessage(MessageLogger::MessageType::debug);
+            logger << "Conveyor: setStagedForCollect(" << staged << ")";
+            logger.endMessage();
+            stagedForCollect_ = staged; 
+        }
+
+        void Conveyor::setStagedForFire(bool staged) { 
+            auto &logger = getRobot().getMessageLogger();
+            logger.startMessage(MessageLogger::MessageType::debug);
+            logger << "Conveyor: setStagedForFire(" << staged << ")";
+            logger.endMessage();
+            stagedForFire_ = staged; 
+        }
 
         void Conveyor::postHWInit() {
             setDefaultAction(std::make_shared<ConveyorStopAction>(*this));
@@ -90,6 +108,8 @@ namespace xero {
             }
 
             frc::SmartDashboard::PutNumber("conveyor:balls", getBallCount());
+            frc::SmartDashboard::PutBoolean("conveyor:staged:fire", isStagedForFire());
+            frc::SmartDashboard::PutBoolean("conveyor:staged:collect", isStagedForCollect());
         }
 
         Conveyor::SensorPtr Conveyor::createSensor(int channel) {

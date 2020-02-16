@@ -36,18 +36,13 @@ namespace xero {
             
             // Check for limits.
             double absTarget = turret.getPosition() - error;
-            if (absTarget < turret.getMinSafeAngle()) {
-                error = turret.getMinSafeAngle() - absTarget;
-            } else if (absTarget > turret.getMaxSafeAngle()) {
-                error = turret.getMaxSafeAngle() - absTarget;
-            }
 
             double out = pid_.getOutput(error, 0, turret.getRobot().getDeltaTime()) ; 
             if (abs(out) > 0.007 && abs(out) < 0.05) {
                 if (out > 0) out = 0.05;
                 else out = -0.05;
             }
-            turret.setMotor(out) ;
+            turret.setMotorPower(out) ;
 
             logger.startMessage(MessageLogger::MessageType::debug, turret.getMsgID()) ;
             logger << "FollowTargetAction (" << turret.getName() << "):" ;

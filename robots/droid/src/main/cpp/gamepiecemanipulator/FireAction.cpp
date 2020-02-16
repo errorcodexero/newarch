@@ -53,6 +53,7 @@ namespace xero {
         }
 
         void FireAction::start() {
+            GamePieceManipulatorAction::start();
             auto shooter = getSubsystem().getShooter();
             isFiring_ = false;
             shooterVelocityAction_->setTarget(0);               // just set it to a known value,
@@ -82,6 +83,7 @@ namespace xero {
         }
 
         void FireAction::run() {
+            GamePieceManipulatorAction::run();
             auto tracker = droidSubsystem_.getTargetTracker();
             auto turret = droidSubsystem_.getTurret();
             auto drivebase = droidSubsystem_.getTankDrive();

@@ -101,14 +101,20 @@ namespace xero {
             if (flag_coll_v_shoot_ == CollectShootMode::InvalidMode || getSwitchMode() != flag_coll_v_shoot_) {
                 if(getSwitchMode() == CollectShootMode::CollectMode) {
                     // Setup the game piece manipulator to collect
-                    if (!game_piece_manipulator->isBusy()) {
+                    if (game_piece_manipulator->isDone()  ||
+                            game_piece_manipulator->getAction() == start_collect_action_ || 
+                            game_piece_manipulator->getAction() == stop_collect_action_ ||
+                            game_piece_manipulator->getAction() == fire_yes_ ||
+                            game_piece_manipulator->getAction() == stop_shoot_action_) {
                         seq.pushSubActionPair(conveyor, queue_prep_collect_, false) ;
                         flag_coll_v_shoot_ = CollectShootMode::CollectMode ;
                     }
+                    seq.pushSubActionPair(turret, nullptr, false);
                 }
                 else
                 {
                     seq.pushSubActionPair(conveyor, queue_prep_shoot_, false) ;
+                    seq.pushSubActionPair(turret, turret_follow_, false) ;
                     flag_coll_v_shoot_ = CollectShootMode::ShootMode ;
                 }
             }
@@ -121,18 +127,13 @@ namespace xero {
 
                 //
                 // Check to see that the game piece manipulator can actually accept new actions
-                //
+                //           
                 if (game_piece_manipulator->isDone() || 
                             game_piece_manipulator->getAction() == start_collect_action_ || 
                             game_piece_manipulator->getAction() == stop_collect_action_ ||
                             game_piece_manipulator->getAction() == fire_yes_ ||
                             game_piece_manipulator->getAction() == stop_shoot_action_)                                                        
                 {
-                    auto &logger = getSubsystem().getRobot().getMessageLogger() ;
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_OI) ;
-                    logger << "Checking for shooting or collecting" ;
-                    logger.endMessage() ;
-
                     //
                     // Check to see if we are in collect or shoot mode
                     // 
@@ -160,9 +161,6 @@ namespace xero {
                     }
                     else
                     {
-                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_OI) ;
-                        logger << "Checking for shooting or collecting" ;
-                        logger.endMessage() ;
 
                         //
                         // We are in shoot mode, check the shoot button
@@ -170,7 +168,6 @@ namespace xero {
                         if (getValue(shoot_) && flag_shoot_ == false)
                         {
                             seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false) ;
-                            seq.pushSubActionPair(turret, turret_follow_, false) ;
                             flag_shoot_ = true ;
                         }
                         else if (getValue(shoot_) == false && flag_shoot_ == true)

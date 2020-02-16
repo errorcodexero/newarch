@@ -54,7 +54,7 @@ namespace xero {
             frc::SmartDashboard::PutNumber("DBTRelAngle", dbRelAngleToTarget);
             frc::SmartDashboard::PutNumber("DBTDist", dbDistanceToTarget);
 
-            if (cameraTrackingEnabled_ && abs(dbRelAngleToTarget) < maxCameraTrackingAngle_ &&
+            if (cameraTrackingEnabled_ && /*abs(dbRelAngleToTarget) < maxCameraTrackingAngle_ &&*/
                 limelight->getSampleTime() > lastCameraSampleTime_) {
 
                 // We have a new sample from the camera.
