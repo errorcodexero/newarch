@@ -14,13 +14,19 @@ namespace xero {
             auto &settings = getRobot().getSettingsParser();
             minSafeAngle_ = settings.getDouble("turret:min");
             maxSafeAngle_ = settings.getDouble("turret:max");
+            emergencyStop_ = false;
+        }
+
+        void Turret::computeState() {
+            MotorEncoderSubsystem::computeState();
+            
         }
 
         void Turret::postHWInit() {
             // setDefaultAction(std::make_shared<FollowTargetAction>(*this));
         }
         bool Turret::canAcceptAction(ActionPtr action) {
-            return std::dynamic_pointer_cast<FollowTargetAction>(action) != nullptr;
+            return !emergencyStop_ && std::dynamic_pointer_cast<FollowTargetAction>(action) != nullptr;
         }
         bool Turret::canAcceptDefaultAction(ActionPtr action) {
             return std::dynamic_pointer_cast<TurretStopAction>(action) != nullptr;

@@ -20,6 +20,8 @@ namespace xero {
             // Returns true if the turret is aligned for a shot.
             bool isReadyToFire() { return readyToFire_; }
 
+            void computeState() override;
+
         protected:
             // Sets the motor power, unless doing so would take us
             // into the keepout region.
@@ -30,6 +32,14 @@ namespace xero {
 
             double minSafeAngle_;
             double maxSafeAngle_;
+
+            bool emergencyStop_;
+
+            double safetyThresholdTime_;
+            double safetyThresholdDist_;
+            double safetyThresholdPower_;
+            
+            double safetyThresholdStartTime_;
         };
     }
 }

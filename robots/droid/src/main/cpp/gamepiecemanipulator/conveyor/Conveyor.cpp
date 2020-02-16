@@ -88,6 +88,8 @@ namespace xero {
                 sensors_[index].second = value;
                 frc::SmartDashboard::PutBoolean("sensors:" + pair.second, value);
             }
+
+            frc::SmartDashboard::PutNumber("conveyor:balls", getBallCount());
         }
 
         Conveyor::SensorPtr Conveyor::createSensor(int channel) {

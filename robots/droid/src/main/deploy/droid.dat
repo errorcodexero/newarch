@@ -44,7 +44,7 @@ hw:conveyor:sensor:d                                            10
 hw:turret:motor:type                                            "sparkmax_brushless"
 hw:turret:motor:canid                                           9                          # CAN 9
 hw:turret:motor:invert                                          true
-hw:turret:encoder:analog                                        0                          # Analog encoder
+hw:turret:encoder:analog                                        1                          # Analog encoder
 hw:turret:encoder:analog:rmin                                   -180.0
 hw:turret:encoder:analog:rmax                                   180.0
 hw:turret:encoder:analog:emin                                   5.0
@@ -84,7 +84,8 @@ hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
 intake:collector:motor:power                                    0.2
-intake:arm:collecton:pos                                        1225
+#intake:arm:collecton:pos                                        1225
+intake:arm:collecton:pos                                        0
 intake:arm:collectoff:pos                                       0
 intake:hold:p                                                   0.002
 intake:hold:i                                                   0
@@ -172,13 +173,13 @@ shooter:hood:up                                                 0.5
 
 shooter:aim:hood_up:a                                           0
 shooter:aim:hood_up:b                                           0
-shooter:aim:hood_up:c                                           1000
-shooter:aim:hood_down:a                                         0
-shooter:aim:hood_down:b                                         0
-shooter:aim:hood_down:c                                         1000
+shooter:aim:hood_up:c                                           4150
+shooter:aim:hood_down:a                                         0.0195
+shooter:aim:hood_down:b                                         -7.0724
+shooter:aim:hood_down:c                                         5495.8
 
-shooter:aim:max_hood_up                                         0
-shooter:aim:max_hood_up                                         0
+shooter:aim:max_hood_up                                         150
+shooter:aim:min_hood_down                                       140
 
 ###################################################################################################
 # turret
@@ -216,6 +217,13 @@ turret:follower:down:imax                                              0
 turret:fire_threshold                                           0.5
 turret:min                                                      -90 # The minimum safe angle.
 turret:max                                                      90  # The maximum safe angle.
+
+# If we apply more than safety_threshold_power for longer than safety_threshold_time
+# and the turret doesn't move more than safety_threshold_dist degrees, the turret
+# will enter an emergency stop state (until the robot code is restarted).
+turret:safety_threshold_time                                    1
+turret:safety_threshold_power                                   0.1
+turret:safety_threshold_dist                                    2
 
 
 
@@ -308,7 +316,7 @@ droidvision:camera_target_height                                68.0
 limelight:camera_latency                                        11.0
 limelight:network_latency                                       10.0
 
-gamepiecemanipulator:fire:max_drivebase_velocity                0.0
+gamepiecemanipulator:fire:max_drivebase_velocity                0.1
 gamepiecemanipulator:fire:max_camera_sample_age                 5.0
 
 ###################################################################################################

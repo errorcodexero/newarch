@@ -19,6 +19,13 @@ namespace xero {
         FireAction::FireAction(GamePieceManipulator &manip): 
             GamePieceManipulatorAction(manip),
             droidSubsystem_(*static_cast<Droid&>(manip.getRobot()).getDroidSubsystem()) {
+
+            auto conveyor = getSubsystem().getConveyor();
+            auto shooter = getSubsystem().getShooter();
+            shooterVelocityAction_ = std::make_shared<ShooterVelocityAction>(*shooter, 0, false);
+            conveyorEmitAction_ = std::make_shared<ConveyorEmitAction>(*conveyor);
+
+            hoodIsDown_ = false;
             
             auto &settings = manip.getRobot().getSettingsParser();
             std::string drivebaseThresholdKey = "gamepiecemanipulator:fire:max_drivebase_velocity";
@@ -42,12 +49,36 @@ namespace xero {
             hoodUp_c_ = settings.getDouble(hoodUp + "c");
 
             maxHoodUpDistance_ = settings.getDouble("shooter:aim:max_hood_up");
+            minHoodDownDistance_ = settings.getDouble("shooter:aim:min_hood_down");
         }
 
         void FireAction::start() {
+            auto shooter = getSubsystem().getShooter();
             isFiring_ = false;
-            shooterVelocityAction_->setTarget(0);   // just set it to a known value,
-            shooterVelocityAction_->start();        // we'll update it every tick
+            shooterVelocityAction_->setTarget(0);               // just set it to a known value,
+            shooter->setAction(shooterVelocityAction_, true);   // we'll update it every tick
+        }
+
+        void FireAction::setTargetVelocity() {
+            auto tracker = droidSubsystem_.getTargetTracker();
+            double dist = tracker->getDistance();
+
+            if (dist < maxHoodUpDistance_) hoodIsDown_ = true;
+            else if (dist > minHoodDownDistance_) hoodIsDown_ = false;
+
+            double a, b, c;
+            if (hoodIsDown_) {
+                a = hoodDown_a_;
+                b = hoodDown_b_;
+                c = hoodDown_c_;
+            } else {
+                a = hoodUp_a_;
+                b = hoodUp_b_;
+                c = hoodUp_c_;
+            }
+
+            shooterVelocityAction_->setHood(hoodIsDown_);
+            shooterVelocityAction_->setTarget(a*dist*dist + b*dist + c);
         }
 
         void FireAction::run() {
@@ -57,9 +88,7 @@ namespace xero {
             auto conveyor = getSubsystem().getConveyor();
             auto shooter = getSubsystem().getShooter();
 
-            // TODO: Compute the target velocity for the shooter.
-            double targetRPMs = 1000;
-            shooterVelocityAction_->setTarget(targetRPMs);
+            setTargetVelocity();
             
             double sampleAge = getSubsystem().getRobot().getTime() - tracker->getLastCameraSampleTime();
 
@@ -68,9 +97,10 @@ namespace xero {
             bool shooterReady = shooter->isReadyToFire();
             bool drivebaseReady = abs(drivebase->getVelocity()) < drivebaseVelocityThreshold_;
 
-            frc::SmartDashboard::PutBoolean("ShooterReady", shooter->isReadyToFire()) ;
-            frc::SmartDashboard::PutBoolean("TurretReady", shooter->isReadyToFire()) ;
-            frc::SmartDashboard::PutBoolean("DrivebaseReady", shooter->isReadyToFire()) ;
+            frc::SmartDashboard::PutBoolean("ShooterReady", shooterReady) ;
+            frc::SmartDashboard::PutBoolean("TurretReady", turretReady) ;
+            frc::SmartDashboard::PutBoolean("DrivebaseReady", drivebaseReady) ;
+            frc::SmartDashboard::PutBoolean("trackerReady", trackerReady) ;
 
             bool readyToFireExceptShooter = trackerReady && turretReady && drivebaseReady;
             bool readyToFire = readyToFireExceptShooter && shooterReady;
@@ -112,7 +142,7 @@ namespace xero {
                     logger.startMessage(MessageLogger::MessageType::debug);
                     logger << "Firing!";
                     logger.endMessage();
-                    conveyor->setAction(conveyorEmitAction_);
+                    conveyor->setAction(conveyorEmitAction_, true);
                     isFiring_ = true;
                 }
             }

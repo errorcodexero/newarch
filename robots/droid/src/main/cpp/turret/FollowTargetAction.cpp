@@ -43,7 +43,7 @@ namespace xero {
             }
 
             double out = pid_.getOutput(error, 0, turret.getRobot().getDeltaTime()) ; 
-            if (abs(out) > 0.01 && abs(out) < 0.05) {
+            if (abs(out) > 0.007 && abs(out) < 0.05) {
                 if (out > 0) out = 0.05;
                 else out = -0.05;
             }
