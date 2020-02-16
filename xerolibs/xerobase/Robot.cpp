@@ -37,6 +37,7 @@ namespace xero {
             name_ = name ;
 
             target_loop_time_ = looptime ;
+            fms_connection_ = false ;
 
             last_time_ = frc::Timer::GetFPGATimestamp() ;
 
@@ -504,11 +505,12 @@ namespace xero {
                 //
                 int sel = getAutoModeSelection() ;
 
-                if (sel != automode_ || msg != gamedata_) {
+                if (sel != automode_ || msg != gamedata_ || fms_connection_ != ds.IsFMSAttached()) {
                     automode_ = sel ;
                     gamedata_ = msg ;
                     auto_controller_->updateAutoMode(sel, gamedata_);
                     displayAutoModeState() ;
+                    fms_connection_ = ds.IsFMSAttached() ;
                 }
             }           
         }

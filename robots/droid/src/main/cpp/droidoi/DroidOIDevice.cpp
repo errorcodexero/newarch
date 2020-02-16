@@ -58,17 +58,16 @@ namespace xero {
             //
             // Get button numbers
             //
-            size_t coll_v_shoot_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:collvshoot") ;      //collect or shoot mode
-            size_t collect_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:collect") ;            //collect/no collect
-            size_t shoot_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:shoot") ;            //shoot/no-shoot 
+            size_t coll_v_shoot_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:shoot_collect_mode") ;      //collect or shoot mode
+            size_t collect_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:collect_onoff") ;            //collect/no collect
+            size_t shoot_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:shoot_onoff") ;            //shoot/no-shoot 
             
             //
             // Actions
             //
             coll_v_shoot_ = mapButton(coll_v_shoot_b, OIButton::ButtonType::Level) ;                // Toggle switch
-            collect_ = mapButton(collect_b, OIButton::ButtonType::LowToHigh) ;                      // push button
-            shoot_ = mapButton(shoot_b, OIButton::ButtonType::LowToHigh) ;                      // push button
-        
+            collect_ = mapButton(collect_b, OIButton::ButtonType::Level) ;                          // Push button
+            shoot_ = mapButton(shoot_b, OIButton::ButtonType::Level) ;                              // Toggle switch
         }
         
         int DroidOIDevice::getAutoModeSelector() 

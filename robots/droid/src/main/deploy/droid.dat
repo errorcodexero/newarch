@@ -322,13 +322,9 @@ gamepiecemanipulator:fire:max_camera_sample_age                 5.0
 # oi
 ###################################################################################################
 
-oi:shoot_collect_mode                                           1
-oi:shoot_onoff                                                  2
-oi:collect_onoff                                                3
-
-oi:collvshoot                                                   4
-oi:collect                                                      5 
-oi:shoot                                                        6
+oi:shoot_collect_mode                                           9
+oi:shoot_onoff                                                  6
+oi:collect_onoff                                                7
 
 ###################################################################################################
 # targettracker

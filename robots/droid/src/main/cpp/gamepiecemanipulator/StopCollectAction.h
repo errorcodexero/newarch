@@ -12,6 +12,7 @@ namespace xero {
 
             void start() override ;
             void run() override ;
+            void cancel() override ;
             
             std::string toString() override {
                 return "StopCollectAction";

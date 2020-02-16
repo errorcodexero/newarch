@@ -12,14 +12,6 @@ namespace xero {
 
         StopCollectAction::StopCollectAction(GamePieceManipulator &subsystem) : GamePieceManipulatorAction(subsystem), parallel_(getMessageLogger())
         {
-        }
-
-        StopCollectAction::~StopCollectAction()
-        {
-        }
-
-        void StopCollectAction::start() 
-        {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;            
             auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;   
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
@@ -28,12 +20,30 @@ namespace xero {
             conveyor_stop_action_ = std::make_shared<ConveyorStopAction>(*conveyor) ;
     
             parallel_.addAction(collect_off_action_) ;
-            parallel_.addAction(conveyor_stop_action_) ;
+            parallel_.addAction(conveyor_stop_action_) ;            
+        }
+
+        StopCollectAction::~StopCollectAction()
+        {
+        }
+
+        void StopCollectAction::start() 
+        {
+            xero::base::Action::start() ;
+            parallel_.start() ;
         }
 
         void StopCollectAction::run() 
         {
             parallel_.run() ;
+            if (parallel_.isDone())
+                setDone() ;
+        }
+
+        void StopCollectAction::cancel()
+        {
+            parallel_.cancel() ;
+            setDone() ;
         }
     }
 }

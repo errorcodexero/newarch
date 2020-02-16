@@ -342,6 +342,9 @@ namespace xero {
 
             // The plot manager
             PlotManager plot_mgr_ ;
+
+            // If true, we are connected to the FMS
+            bool fms_connection_ ;
         } ;
     }
 }
