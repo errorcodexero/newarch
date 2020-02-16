@@ -62,7 +62,7 @@ namespace xero {
                 source_ = Source::Camera;
                 distance_ = limelight->getDistance();
                 relativeAngle_ = limelight->getYaw();
-            } else {
+            }/* else {
                 // Use a sample from the drivebase
                 // TODO: we might not want to switch back and forth
                 // between sample sources instantly like this
@@ -74,7 +74,7 @@ namespace xero {
                 source_ = Source::DriveBase;
                 distance_ = dbDistanceToTarget;
                 relativeAngle_ = dbRelAngleToTarget;
-            }
+            }*/
         }
     }
 }

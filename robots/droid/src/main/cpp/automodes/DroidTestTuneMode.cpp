@@ -189,7 +189,13 @@ namespace xero
                 //////////////////////////////////////////////////////////////////////////////////////////
 
             case 100:       // Complete shooting action
-                pushSubActionPair(turret, std::make_shared<FollowTargetAction>(*turret));
+                pushSubActionPair(turret, std::make_shared<FollowTargetAction>(*turret), false);
+
+                pushSubActionPair(game->getIntake(), std::make_shared<CollectOnAction>(*game->getIntake()));
+                pushSubActionPair(conveyor, std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor));
+                pushSubActionPair(conveyor, std::make_shared<ConveyorReceiveAction>(*conveyor));
+                pushSubActionPair(game->getIntake(), std::make_shared<CollectOffAction>(*game->getIntake()), false);
+                pushSubActionPair(conveyor, std::make_shared<ConveyorPrepareToEmitAction>(*conveyor));
                 pushSubActionPair(game, std::make_shared<FireAction>(*game));
                 break;
             }

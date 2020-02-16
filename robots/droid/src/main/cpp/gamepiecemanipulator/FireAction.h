@@ -34,6 +34,17 @@ namespace xero {
             std::shared_ptr<ShooterVelocityAction> shooterVelocityAction_;
             std::shared_ptr<ConveyorEmitAction> conveyorEmitAction_;
             bool isFiring_;
+
+            double hoodDown_a_;
+            double hoodDown_b_;
+            double hoodDown_c_;
+
+            double hoodUp_a_;
+            double hoodUp_b_;
+            double hoodUp_c_;
+
+            double maxHoodUpDistance_;
+
         };
     }
 

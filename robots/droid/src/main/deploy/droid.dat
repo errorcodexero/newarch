@@ -44,12 +44,12 @@ hw:conveyor:sensor:d                                            10
 hw:turret:motor:type                                            "sparkmax_brushless"
 hw:turret:motor:canid                                           9                          # CAN 9
 hw:turret:motor:invert                                          true
-hw:turret:encoder:analog                                        3                          # Analog encoder
+hw:turret:encoder:analog                                        0                          # Analog encoder
 hw:turret:encoder:analog:rmin                                   -180.0
 hw:turret:encoder:analog:rmax                                   180.0
 hw:turret:encoder:analog:emin                                   5.0
 hw:turret:encoder:analog:emax                                   0.0
-hw:turret:encoder:analog:ec                                     1.06
+hw:turret:encoder:analog:ec                                     1.33
 hw:turret:encoder:analog:rc                                     0.0
 
 hw:intake:collect:motor:type                                   "sparkmax_brushless"
@@ -83,7 +83,7 @@ hw:climber:servo:r:release                                      1.0
 hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
-intake:collector:motor:power                                    0.3
+intake:collector:motor:power                                    0.2
 intake:arm:collecton:pos                                        1225
 intake:arm:collectoff:pos                                       0
 intake:hold:p                                                   0.002
@@ -169,6 +169,16 @@ shooter:hold:imax                                               0.0
 
 shooter:hood:down                                               1
 shooter:hood:up                                                 0.5
+
+shooter:aim:hood_up:a                                           0
+shooter:aim:hood_up:b                                           0
+shooter:aim:hood_up:c                                           1000
+shooter:aim:hood_down:a                                         0
+shooter:aim:hood_down:b                                         0
+shooter:aim:hood_down:c                                         1000
+
+shooter:aim:max_hood_up                                         0
+shooter:aim:max_hood_up                                         0
 
 ###################################################################################################
 # turret
@@ -341,7 +351,7 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           21
+auto:testmode:which                                           100
 auto:testmode:distance                                        60
 auto:testmode:power                                           0.75
 auto:testmode:duration                                        15

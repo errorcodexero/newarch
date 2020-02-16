@@ -1,6 +1,7 @@
 #include "FireAction.h"
 
 #include <SettingsParser.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Droid.h"
 #include "droidsubsystem/DroidSubsystem.h"
@@ -29,6 +30,18 @@ namespace xero {
             assert(settings.isDefined(cameraThresholdKey) &&
                    "gamepiecemanipulator:fire:max_camera_sample_age must be defined");
             cameraSampleAgeThreshold_ = settings.getDouble(cameraThresholdKey);
+            
+            std::string hoodDown = "shooter:aim:hood_down:";
+            std::string hoodUp = "shooter:aim:hood_down:";
+            hoodDown_a_ = settings.getDouble(hoodDown + "a");
+            hoodDown_b_ = settings.getDouble(hoodDown + "b");
+            hoodDown_c_ = settings.getDouble(hoodDown + "c");
+            
+            hoodUp_a_ = settings.getDouble(hoodUp + "a");
+            hoodUp_b_ = settings.getDouble(hoodUp + "b");
+            hoodUp_c_ = settings.getDouble(hoodUp + "c");
+
+            maxHoodUpDistance_ = settings.getDouble("shooter:aim:max_hood_up");
         }
 
         void FireAction::start() {
@@ -45,7 +58,7 @@ namespace xero {
             auto shooter = getSubsystem().getShooter();
 
             // TODO: Compute the target velocity for the shooter.
-            double targetRPMs = 0;
+            double targetRPMs = 1000;
             shooterVelocityAction_->setTarget(targetRPMs);
             
             double sampleAge = getSubsystem().getRobot().getTime() - tracker->getLastCameraSampleTime();
@@ -55,12 +68,21 @@ namespace xero {
             bool shooterReady = shooter->isReadyToFire();
             bool drivebaseReady = abs(drivebase->getVelocity()) < drivebaseVelocityThreshold_;
 
+            frc::SmartDashboard::PutBoolean("ShooterReady", shooter->isReadyToFire()) ;
+            frc::SmartDashboard::PutBoolean("TurretReady", shooter->isReadyToFire()) ;
+            frc::SmartDashboard::PutBoolean("DrivebaseReady", shooter->isReadyToFire()) ;
+
             bool readyToFireExceptShooter = trackerReady && turretReady && drivebaseReady;
             bool readyToFire = readyToFireExceptShooter && shooterReady;
+
+            auto &logger = getMessageLogger();
 
             if (isFiring_) {
                 // If we're out of balls, stop firing
                 if (conveyor->isEmpty()) {
+                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger << "Out of balls; done firing.";
+                    logger.endMessage();
                     setDone();
                     stopChildActions();
                 }
@@ -70,24 +92,32 @@ namespace xero {
                 // fire. The shooter should stabalize between shots. If it doesn't, then
                 // we should add a delay between shots in ConveyorEmitAction.
                 if (!readyToFireExceptShooter) {
+                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger << "Lost target; waiting.";
+                    logger.endMessage();
                     conveyorEmitAction_->stopFiring();
                     isFiring_ = false;
                 }
             } else { // We're not currently firing.
                 // If we're out of balls, stop trying to fire
                 if (conveyor->isEmpty()) {
+                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger << "Out of balls; done trying to fire.";
+                    logger.endMessage();
                     setDone();
                     stopChildActions();
                 }
                 else if (readyToFire && !conveyor->isBusy()) {
                     // fire!
+                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger << "Firing!";
+                    logger.endMessage();
                     conveyor->setAction(conveyorEmitAction_);
                     isFiring_ = true;
                 }
             }
 
             // Print a debug message
-            auto &logger = getMessageLogger();
             logger.startMessage(MessageLogger::MessageType::debug);
             logger << "FireAction: isFiring: " << isFiring_ << "; ";
             if (readyToFire) logger << "ready to fire";
