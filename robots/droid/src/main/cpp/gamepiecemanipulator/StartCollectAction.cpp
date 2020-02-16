@@ -41,8 +41,9 @@ namespace xero {
         {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;            
             auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
 
-            if (!intake->isBusy())
+            if (!intake->isBusy() && !conveyor->isBusy())
                 setDone() ;
         }
 

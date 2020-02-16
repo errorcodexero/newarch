@@ -21,9 +21,6 @@ namespace xero {
             //xero::base::SequenceActionPtr sequence_ ;
             xero::base::ActionPtr collect_off_action_ ;
             xero::base::ActionPtr fire_action_ ;
-            
-            xero::base::ParallelAction parallel_ ;
-
         };
 
     }

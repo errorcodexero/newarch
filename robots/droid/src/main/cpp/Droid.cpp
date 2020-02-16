@@ -60,7 +60,6 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_ACTIONS);  
             logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);    
             logger.enableSubsystem(MSG_GROUP_OI) ;
-            logger.enableSubsystem(MSG_GROUP_INTAKE);     
 
             //
             // This should stay on.  It will have no effect on the real robot

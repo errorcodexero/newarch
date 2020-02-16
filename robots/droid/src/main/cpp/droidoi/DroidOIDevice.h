@@ -52,7 +52,6 @@ namespace xero {
             xero::base::ActionPtr conveyor_receive_ ; 
             xero::base::ActionPtr start_collect_action_ ;
             xero::base::ActionPtr stop_collect_action_ ;
-            xero::base::ActionPtr start_shoot_action_ ;
             xero::base::ActionPtr stop_shoot_action_ ;
     
         } ;

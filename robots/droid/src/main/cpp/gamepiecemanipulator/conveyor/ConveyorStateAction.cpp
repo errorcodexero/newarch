@@ -13,6 +13,7 @@ namespace xero {
         ConveyorStateAction::ConveyorStateAction(Conveyor &subsystem, std::string actionName): 
             ConveyorAction(subsystem), actionName_(actionName) 
         {
+            stateIndex_ = 0 ;
         }
 
         std::string ConveyorStateAction::describeState(int index) {
@@ -206,6 +207,7 @@ namespace xero {
 
                         // if we finished the last state, we're done
                         setDone();
+                        stateIndex_ = 0 ;
                         break;
                     } else {
                         logger.startMessage(MessageLogger::MessageType::debug);

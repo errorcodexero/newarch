@@ -6,6 +6,8 @@
 #include "turret/Turret.h"
 #include "gamepiecemanipulator/StartCollectAction.h"
 #include "gamepiecemanipulator/StopCollectAction.h"
+#include "gamepiecemanipulator/StartShootAction.h"
+#include "gamepiecemanipulator/StopShootAction.h"
 #include "gamepiecemanipulator/FireAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToEmitAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToReceiveAction.h"
@@ -96,11 +98,6 @@ namespace xero {
             auto game_piece_manipulator = droid.getDroidSubsystem()->getGamePieceManipulator() ;
             auto droid_robot_subsystem = droid.getDroidSubsystem() ;
 
-            //actions and buttons corresponding with the actions
-            //actions found on wiki under droidoi (robot)
-
-            /////// Actioning! ///////
-            
             if (flag_coll_v_shoot_ == CollectShootMode::InvalidMode || getSwitchMode() != flag_coll_v_shoot_) {
                 if(getSwitchMode() == CollectShootMode::CollectMode) {
                     // Setup the game piece manipulator to collect
@@ -125,7 +122,16 @@ namespace xero {
                 //
                 // Check to see that the game piece manipulator can actually accept new actions
                 //
-                if (game_piece_manipulator->isDone()) {
+                if (game_piece_manipulator->isDone() || 
+                            game_piece_manipulator->getAction() == start_collect_action_ || 
+                            game_piece_manipulator->getAction() == stop_collect_action_ ||
+                            game_piece_manipulator->getAction() == fire_yes_ ||
+                            game_piece_manipulator->getAction() == stop_shoot_action_)                                                        
+                {
+                    auto &logger = getSubsystem().getRobot().getMessageLogger() ;
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_OI) ;
+                    logger << "Checking for shooting or collecting" ;
+                    logger.endMessage() ;
 
                     //
                     // Check to see if we are in collect or shoot mode
@@ -154,12 +160,17 @@ namespace xero {
                     }
                     else
                     {
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_OI) ;
+                        logger << "Checking for shooting or collecting" ;
+                        logger.endMessage() ;
+
                         //
                         // We are in shoot mode, check the shoot button
                         //
                         if (getValue(shoot_) && flag_shoot_ == false)
                         {
-                            seq.pushSubActionPair(game_piece_manipulator, start_shoot_action_, false) ;
+                            seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false) ;
+                            seq.pushSubActionPair(turret, turret_follow_, false) ;
                             flag_shoot_ = true ;
                         }
                         else if (getValue(shoot_) == false && flag_shoot_ == true)
@@ -193,11 +204,12 @@ namespace xero {
             conveyor_receive_ = std::make_shared<ConveyorReceiveAction>(*conveyor) ;
             intake_on_ = std::make_shared<CollectOnAction>(*intake) ;
 
+            turret_follow_ = std::make_shared<FollowTargetAction>(*turret) ;
+            fire_yes_ = std::make_shared<FireAction>(*game_piece_manipulator) ;
 
             start_collect_action_ = std::make_shared<StartCollectAction>(*game_piece_manipulator) ;
             stop_collect_action_ = std::make_shared<StopCollectAction>(*game_piece_manipulator) ;
-            start_shoot_action_ = std::make_shared<StartCollectAction>(*game_piece_manipulator) ;
-            stop_shoot_action_ = std::make_shared<StopCollectAction>(*game_piece_manipulator) ;
+            stop_shoot_action_ = std::make_shared<StopShootAction>(*game_piece_manipulator) ;
         }
     }
 }

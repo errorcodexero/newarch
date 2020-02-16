@@ -83,7 +83,7 @@ hw:climber:servo:r:release                                      1.0
 hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
-intake:collector:motor:power                                    0.4
+intake:collector:motor:power                                    0.3
 intake:arm:collecton:pos                                        1225
 intake:arm:collectoff:pos                                       0
 intake:hold:p                                                   0.002
@@ -323,7 +323,7 @@ gamepiecemanipulator:fire:max_camera_sample_age                 5.0
 ###################################################################################################
 
 oi:shoot_collect_mode                                           9
-oi:shoot_onoff                                                  6
+oi:shoot_onoff                                                  10
 oi:collect_onoff                                                7
 
 ###################################################################################################
