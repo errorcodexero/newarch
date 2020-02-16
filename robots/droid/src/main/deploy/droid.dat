@@ -84,8 +84,7 @@ hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
 intake:collector:motor:power                                    0.2
-#intake:arm:collecton:pos                                        1225
-intake:arm:collecton:pos                                        0
+intake:arm:collecton:pos                                        1225
 intake:arm:collectoff:pos                                       0
 intake:hold:p                                                   0.002
 intake:hold:i                                                   0

@@ -111,7 +111,7 @@ namespace xero {
                 // If we're out of balls, stop firing
                 if (conveyor->isEmpty()) {
                     logger.startMessage(MessageLogger::MessageType::debug);
-                    logger << "Out of balls; done firing.";
+                    logger << "FireAction: Out of balls; done firing.";
                     logger.endMessage();
                     setDone();
                     stopChildActions();
@@ -123,7 +123,7 @@ namespace xero {
                 // we should add a delay between shots in ConveyorEmitAction.
                 if (!readyToFireExceptShooter) {
                     logger.startMessage(MessageLogger::MessageType::debug);
-                    logger << "Lost target; waiting.";
+                    logger << "FireAction: Lost target; waiting.";
                     logger.endMessage();
                     conveyorEmitAction_->stopFiring();
                     isFiring_ = false;
@@ -132,7 +132,7 @@ namespace xero {
                 // If we're out of balls, stop trying to fire
                 if (conveyor->isEmpty()) {
                     logger.startMessage(MessageLogger::MessageType::debug);
-                    logger << "Out of balls; done trying to fire.";
+                    logger << "FireAction: Out of balls; done trying to fire.";
                     logger.endMessage();
                     setDone();
                     stopChildActions();
@@ -140,7 +140,7 @@ namespace xero {
                 else if (readyToFire && !conveyor->isBusy()) {
                     // fire!
                     logger.startMessage(MessageLogger::MessageType::debug);
-                    logger << "Firing!";
+                    logger << "FireAction: Firing!";
                     logger.endMessage();
                     conveyor->setAction(conveyorEmitAction_, true);
                     isFiring_ = true;

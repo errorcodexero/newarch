@@ -179,10 +179,16 @@ namespace xero {
         }
 
         void ConveyorStateAction::run() {
+            ConveyorAction::run();
             auto &logger = getMessageLogger();
 
             bool updated = true;
             while (updated && !isDone()) {
+                logger.startMessage(MessageLogger::MessageType::debug);
+                logger << actionName_ << ": running state ";
+                logger << describeState(stateIndex_);
+                logger.endMessage();
+
                 StateResult result = states_[stateIndex_]();
 
                 if (std::holds_alternative<StateResult::_Continue>(result.value_)) {

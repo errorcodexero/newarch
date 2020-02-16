@@ -92,9 +92,9 @@ namespace xero
                         if (static_cast<size_t>(index_) == actions_.size())
                             break;
                     };
-                    actions_[index_]->run();
                     if (!actions_[index_]->isDone())
                     {
+                        actions_[index_]->run();
                         break;
                     }
                 }
