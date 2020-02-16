@@ -114,17 +114,17 @@
                     "maxacceleration": 150,
                     "maxjerk": 1500,
                     "maxvelocity": 150,
-                    "name": "NewPath",
+                    "name": "collect",
                     "points": [
                         {
-                            "heading": 0,
-                            "x": 0,
-                            "y": 0
+                            "heading": -180,
+                            "x": 504.1816770186335,
+                            "y": 295.73447204968943
                         },
                         {
-                            "heading": 0,
-                            "x": 100,
-                            "y": 0
+                            "heading": -180,
+                            "x": 390.8385093167701,
+                            "y": 285.96350931677017
                         }
                     ],
                     "startangle": 0,
@@ -142,17 +142,17 @@
                     "maxacceleration": 150,
                     "maxjerk": 1500,
                     "maxvelocity": 150,
-                    "name": "NewPath_2",
+                    "name": "fire",
                     "points": [
                         {
                             "heading": 0,
-                            "x": 0,
-                            "y": 0
+                            "x": 390.8,
+                            "y": 286
                         },
                         {
-                            "heading": 0,
-                            "x": 100,
-                            "y": 0
+                            "heading": -22.03622694014544,
+                            "x": 503.53027950310553,
+                            "y": 138.09627329192548
                         }
                     ],
                     "startangle": 0,
@@ -164,8 +164,69 @@
         {
             "name": "three_ball_auto",
             "paths": [
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 150,
+                    "maxjerk": 1500,
+                    "maxvelocity": 150,
+                    "name": "fire",
+                    "points": [
+                        {
+                            "heading": 0,
+                            "x": 502.8788819875776,
+                            "y": 88.59006211180127
+                        },
+                        {
+                            "heading": 0,
+                            "x": 560.2018633540372,
+                            "y": 88.6
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 150,
+                    "maxjerk": 1500,
+                    "maxvelocity": 150,
+                    "name": "backUp",
+                    "points": [
+                        {
+                            "heading": -180,
+                            "x": 560.2,
+                            "y": 88.6
+                        },
+                        {
+                            "heading": -179.53040452713222,
+                            "x": 408.4262422360248,
+                            "y": 83.37888198757767
+                        },
+                        {
+                            "heading": -180,
+                            "x": 259.2562111801242,
+                            "y": 95.10403726708077
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                }
             ]
         }
     ],
-    "outdir": ""
+    "outdir": "C:/cygwin64/home/meg/newarch/robots/droid/src/main/deploy/output"
 }
