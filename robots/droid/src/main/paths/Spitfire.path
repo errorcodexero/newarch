@@ -38,7 +38,7 @@
                             "after": 140,
                             "before": 200,
                             "type": "distance_velocity",
-                            "velocity": 45
+                            "velocity": 30
                         }
                     ],
                     "endangle": 0,
@@ -48,7 +48,7 @@
                     ],
                     "maxacceleration": 150,
                     "maxjerk": 1500,
-                    "maxvelocity": 70,
+                    "maxvelocity": 90,
                     "name": "collect",
                     "points": [
                         {
