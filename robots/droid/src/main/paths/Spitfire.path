@@ -38,7 +38,7 @@
                             "after": 140,
                             "before": 200,
                             "type": "distance_velocity",
-                            "velocity": 30
+                            "velocity": 15
                         }
                     ],
                     "endangle": 0,
@@ -63,7 +63,7 @@
                         },
                         {
                             "heading": -180,
-                            "x": 231.0660569105691,
+                            "x": 237.03455284552845,
                             "y": 31.54776422764229
                         }
                     ],
