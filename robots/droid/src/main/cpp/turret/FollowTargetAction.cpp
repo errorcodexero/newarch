@@ -2,15 +2,16 @@
 #include "Droid.h"
 #include "droidsubsystem/DroidSubsystem.h"
 #include "targettracker/TargetTracker.h"
+#include "limelight/DroidLimeLight.h"
 
 using namespace xero::base;
 using namespace xero::misc;
 
 namespace xero {
     namespace droid {
-        FollowTargetAction::FollowTargetAction(Turret &sub, LimeLight &ll):
-            MotorEncoderSubsystemAction(sub), ll_(ll) {
-            
+        FollowTargetAction::FollowTargetAction(Turret &sub):
+            MotorEncoderSubsystemAction(sub), 
+            ll_(static_cast<Droid&>(sub.getRobot()).getDroidSubsystem()->getLimeLight()) {
             std::string thresholdConfig = "turret:fire_threshold";
             auto &settings = sub.getRobot().getSettingsParser();
             assert(settings.isDefined(thresholdConfig) && "turret:fire_threshold must be defined");
@@ -26,7 +27,7 @@ namespace xero {
                 sub.isAngular()
             );
 
-            ll_.setLedMode(LimeLight::ledMode::ForceOn) ;
+            ll_->setLedMode(LimeLight::ledMode::ForceOn) ;
         }
 
         void FollowTargetAction::run() {
@@ -62,7 +63,7 @@ namespace xero {
             MotorEncoderSubsystemAction::cancel();
             setDone();
             getTurret().setMotor(0.0);
-            ll_.setLedMode(LimeLight::ledMode::ForceOff) ;            
+            ll_->setLedMode(LimeLight::ledMode::ForceOff) ;            
         }
     }
 }

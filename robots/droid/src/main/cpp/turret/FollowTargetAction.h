@@ -7,9 +7,10 @@
 
 namespace xero {
     namespace droid {
+        class DroidLimeLight;
         class FollowTargetAction : public xero::base::MotorEncoderSubsystemAction {
         public:
-            FollowTargetAction(Turret &subsystem, xero::base::LimeLight &ll);
+            FollowTargetAction(Turret &subsystem);
            
             void start() override;
             void run() override;
@@ -24,7 +25,7 @@ namespace xero {
         private:
             double threshold_;
             xero::misc::PIDCtrl pid_ ;
-            xero::base::LimeLight &ll_ ;
+            std::shared_ptr<DroidLimeLight> ll_ ;
         };
     }
 }
