@@ -60,7 +60,7 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_ACTIONS);  
             logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);    
             logger.enableSubsystem(MSG_GROUP_OI) ;
-            logger.enableSubsystem(MSG_GROUP_TURRET); 
+            logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
 
             //
             // This should stay on.  It will have no effect on the real robot
@@ -76,7 +76,7 @@ namespace xero {
 
             paths->setExtensions("_left.csv", "_right.csv") ;
 
-            // paths->loadPath("PATH_NAME_HERE") ;
+            paths->loadPath("test_test") ;
         }
         
         void Droid::RobotHardwareInit() {

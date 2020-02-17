@@ -109,7 +109,7 @@ namespace xero {
                         seq.pushSubActionPair(conveyor, queue_prep_collect_, false) ;
                         flag_coll_v_shoot_ = CollectShootMode::CollectMode ;
                     }
-                    seq.pushSubActionPair(turret, nullptr, false);
+                    turret->setAction(nullptr, true);
                 }
                 else
                 {

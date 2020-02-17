@@ -5,6 +5,7 @@
 #include <actions/DelayAction.h>
 #include <tankdrive/actions/TankDriveCharAction.h>
 #include <tankdrive/actions/TankDriveScrubCharAction.h>
+#include <tankdrive/actions/TankDriveFollowPathAction.h>
 #include <tankdrive/actions/TankDriveAngleAction.h>
 #include <motorencodersubsystem/MotorEncoderPowerAction.h>
 #include <motorencodersubsystem/MotorEncoderGoToAction.h>
@@ -73,6 +74,10 @@ namespace xero
 
             case 1:     // Drive base rotate characterization (note duration is total angle)
                 pushSubActionPair(tankdrive, std::make_shared<TankDriveScrubCharAction>(*tankdrive, power, duration, true));
+                break;
+
+            case 2:     // Drive base rotate characterization (note duration is total angle)
+                pushSubActionPair(tankdrive, std::make_shared<TankDriveFollowPathAction>(*tankdrive, "test_test"));
                 break;
 
                 //////////////////////////////////////////////////////////////////////////////////////////

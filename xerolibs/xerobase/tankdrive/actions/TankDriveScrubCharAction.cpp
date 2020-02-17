@@ -73,9 +73,11 @@ namespace xero {
                 logger << ", left " << distl;
                 logger << ", right " << distr;
                 logger << "effective Width " << effr * 2.0;
+                logger.endMessage();
             }
             else
             {
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TANKDRIVE);
                 logger << elapsed ;
                 logger << "," << angle ;
                 logger<<  "," << distl ;
