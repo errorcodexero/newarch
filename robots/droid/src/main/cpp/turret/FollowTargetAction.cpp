@@ -5,10 +5,11 @@
 
 using namespace xero::base;
 using namespace xero::misc;
+
 namespace xero {
     namespace droid {
-        FollowTargetAction::FollowTargetAction(Turret &sub):
-            MotorEncoderSubsystemAction(sub) {
+        FollowTargetAction::FollowTargetAction(Turret &sub, LimeLight &ll):
+            MotorEncoderSubsystemAction(sub), ll_(ll) {
             
             std::string thresholdConfig = "turret:fire_threshold";
             auto &settings = sub.getRobot().getSettingsParser();
@@ -24,6 +25,8 @@ namespace xero {
                 "turret:follow",
                 sub.isAngular()
             );
+
+            ll_.setLedMode(LimeLight::ledMode::ForceOn) ;
         }
 
         void FollowTargetAction::run() {
@@ -59,6 +62,7 @@ namespace xero {
             MotorEncoderSubsystemAction::cancel();
             setDone();
             getTurret().setMotor(0.0);
+            ll_.setLedMode(LimeLight::ledMode::ForceOff) ;            
         }
     }
 }

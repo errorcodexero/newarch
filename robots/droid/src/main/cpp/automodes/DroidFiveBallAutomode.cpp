@@ -7,6 +7,7 @@
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToEmitAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToReceiveAction.h"
 #include "gamepiecemanipulator/shooter/ShooterVelocityAction.h"
+#include "motorencodersubsystem/MotorEncoderGotoAction.h"
 #include "turret/FollowTargetAction.h"
 #include <actions/ParallelAction.h>
 #include <actions/DelayAction.h>
@@ -33,7 +34,7 @@ namespace xero
             pushSubActionPair(conveyor, std::make_shared<ConveyorSetBallAction>(*conveyor, 3), false) ;
 
             // Get the balls ready
-            parallel->addSubActionPair(conveyor, std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor));        
+            pushSubActionPair(conveyor, std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor));        
 
             // Collect all five balls
             parallel->addSubActionPair(manip, std::make_shared<StartCollectAction>(*manip), false);
@@ -41,12 +42,14 @@ namespace xero
             // Drive to the get other two balls
             parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "five_ball_auto_collect"));
 
-            pushAction(parallel) ;
+            // Move the motgor
+            parallel->addSubActionPair(turret, std::make_shared<MotorEncoderGoToAction>(*turret, 0.0, "goto", false), true);
 
-            pushAction(std::make_shared<DelayAction>(robot.getMessageLogger(), 1.0)); 
+            pushAction(parallel) ;
 
             // Stop collecting
             pushSubActionPair(manip, std::make_shared<StopCollectAction>(*manip)); 
+            pushSubActionPair(turret, std::make_shared<FollowTargetAction>(*turret), false);
 
             parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
             pushAction(parallel) ;

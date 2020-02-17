@@ -18,7 +18,7 @@ namespace xero {
 
                 assertState([=]() { return getSubsystem().isStagedForCollect(); },
                                 "ConveyorReceiveAction called with balls out of position; "
-                                "was ConveyorPrepareToEmitAction run?"
+                                "was ConveyorPrepareToReceiveAction run?"
                 ),
                 
                 { "wait for collect start sensor", waitForSensorState(Sensor::A, true) },

@@ -84,7 +84,8 @@ namespace xero {
 
         DroidOIDevice::CollectShootMode DroidOIDevice::getSwitchMode()
         {
-            return getValue(coll_v_shoot_) ? CollectShootMode::CollectMode : CollectShootMode::ShootMode ;
+            int sw = getValue(coll_v_shoot_) ;
+            return sw ? CollectShootMode::CollectMode : CollectShootMode::ShootMode ;
         }
 
         void DroidOIDevice::generateActions(xero::base::SequenceAction &seq)
@@ -107,15 +108,17 @@ namespace xero {
                             game_piece_manipulator->getAction() == fire_yes_ ||
                             game_piece_manipulator->getAction() == stop_shoot_action_) {
                         seq.pushSubActionPair(conveyor, queue_prep_collect_, false) ;
-                        flag_coll_v_shoot_ = CollectShootMode::CollectMode ;
+                        seq.pushSubActionPair(turret, turret_goto_zero_, false) ;    
+                        flag_coll_v_shoot_ = CollectShootMode::CollectMode ;                                            
+                        frc::SmartDashboard::PutString("Mode", "Collect") ;
                     }
-                    turret->setAction(nullptr, true);
                 }
                 else
                 {
                     seq.pushSubActionPair(conveyor, queue_prep_shoot_, false) ;
                     seq.pushSubActionPair(turret, turret_follow_, false) ;
                     flag_coll_v_shoot_ = CollectShootMode::ShootMode ;
+                    frc::SmartDashboard::PutString("Mode", "Shoot") ;                    
                 }
             }
             else
@@ -207,6 +210,8 @@ namespace xero {
             start_collect_action_ = std::make_shared<StartCollectAction>(*game_piece_manipulator) ;
             stop_collect_action_ = std::make_shared<StopCollectAction>(*game_piece_manipulator) ;
             stop_shoot_action_ = std::make_shared<StopShootAction>(*game_piece_manipulator) ;
+
+            turret_goto_zero_ = std::make_shared<MotorEncoderGoToAction>(*turret, 0.0) ;
 
             flag_coll_v_shoot_ = CollectShootMode::InvalidMode;
         }

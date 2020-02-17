@@ -53,6 +53,7 @@ namespace xero {
             xero::base::ActionPtr start_collect_action_ ;
             xero::base::ActionPtr stop_collect_action_ ;
             xero::base::ActionPtr stop_shoot_action_ ;
+            xero::base::ActionPtr turret_goto_zero_ ;
     
         } ;
     }

@@ -189,6 +189,14 @@ turret:goto:maxa                                                250
 turret:goto:maxd                                                -250
 turret:goto:maxv                                                250
 
+turret:hold:p                                                   0.001
+turret:hold:i                                                   0
+turret:hold:d                                                   0
+turret:hold:f                                                   0
+turret:hold:min                                                 -0.3
+turret:hold:max                                                 0.3
+turret:hold:imax                                                0.0
+
 turret:follow:p                                                 -0.014084508
 turret:follow:i                                                 0
 turret:follow:d                                                 0.0

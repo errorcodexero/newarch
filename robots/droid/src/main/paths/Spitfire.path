@@ -188,6 +188,12 @@
             "paths": [
                 {
                     "constraints": [
+                        {
+                            "after": 90,
+                            "before": 200,
+                            "type": "distance_velocity",
+                            "velocity": 15
+                        }
                     ],
                     "endangle": 0,
                     "endangledelay": 0,
@@ -206,8 +212,8 @@
                         },
                         {
                             "heading": -180,
-                            "x": 390.8385093167701,
-                            "y": 285.96350931677017
+                            "x": 388.8048780487805,
+                            "y": 283.9298780487805
                         }
                     ],
                     "startangle": 0,

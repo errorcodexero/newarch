@@ -21,7 +21,6 @@ namespace xero
             DroidAutoMode(robot, "CenterThree", "Start in center and score the three balls")
         {
             // Turret will track target as its default action
-            // TODO: assign initial position to kinematic model?
 
             auto droid = getDroidSubsystem();
             auto db = droid->getTankDrive();
