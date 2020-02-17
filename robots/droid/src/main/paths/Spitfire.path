@@ -34,6 +34,12 @@
                 },
                 {
                     "constraints": [
+                        {
+                            "after": 140,
+                            "before": 200,
+                            "type": "distance_velocity",
+                            "velocity": 15
+                        }
                     ],
                     "endangle": 0,
                     "endangledelay": 0,
