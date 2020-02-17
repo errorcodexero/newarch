@@ -207,6 +207,8 @@ namespace xero {
             start_collect_action_ = std::make_shared<StartCollectAction>(*game_piece_manipulator) ;
             stop_collect_action_ = std::make_shared<StopCollectAction>(*game_piece_manipulator) ;
             stop_shoot_action_ = std::make_shared<StopShootAction>(*game_piece_manipulator) ;
+
+            flag_coll_v_shoot_ = CollectShootMode::InvalidMode;
         }
     }
 }

@@ -24,6 +24,8 @@ namespace xero {
 
             void setHood(bool hood);
 
+            bool canAcceptAction(xero::base::ActionPtr action);
+
         private:
             std::shared_ptr<frc::Servo> hoodServo_;
 

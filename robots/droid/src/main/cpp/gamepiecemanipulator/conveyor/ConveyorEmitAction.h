@@ -23,9 +23,6 @@ namespace xero {
 
         private:
             bool shouldStopFiring_;
-            int plot_id_ ;
-
-            static std::vector<std::string> columns_ ;
         } ;
     }
 }

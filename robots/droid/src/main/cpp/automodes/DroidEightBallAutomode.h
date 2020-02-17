@@ -9,7 +9,7 @@ namespace xero
         class DroidEightBallAutomode: public DroidAutoMode
         {
         public:
-            DroidEightBallAutomode(xero::base::Robot &robot) ;
+            DroidEightBallAutomode(xero::base::Robot &robot, int variation) ;
             virtual ~DroidEightBallAutomode() ;
         } ;
     }

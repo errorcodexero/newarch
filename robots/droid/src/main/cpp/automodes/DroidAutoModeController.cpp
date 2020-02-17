@@ -26,6 +26,7 @@ namespace xero {
         void DroidAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             auto &ds = frc::DriverStation::GetInstance();
             AutoModePtr mode = nullptr;
+            sel = 0;
 
             if (!ds.IsFMSAttached() && testmode_)
             {
@@ -45,7 +46,7 @@ namespace xero {
                 {
                 case 0:
                     // Start side nearest port, ollect eight automode
-                    //mode = std::make_shared<DroidThreeBallAutomode>(getRobot());
+                    mode = std::make_shared<DroidThreeBallAutomode>(getRobot());
                     break ;
 
                 case 1:
@@ -55,7 +56,7 @@ namespace xero {
 
                 case 2:
                     // Start center, score three in robot and move off line
-                    // mode = std::make_shared<DroidEightBallAutomode>(getRobot());                    
+                    mode = std::make_shared<DroidEightBallAutomode>(getRobot(), 0);                    
                     break ;
 
                 case 3:
@@ -65,6 +66,8 @@ namespace xero {
                     break ;
 
                 case 5:
+                    // Start center, score three in robot and move off line
+                    mode = std::make_shared<DroidEightBallAutomode>(getRobot(), 1);                    
                     break ;
 
                 case 6:
@@ -74,6 +77,8 @@ namespace xero {
                     break ;
 
                 case 8:
+                    // Start center, score three in robot and move off line
+                    mode = std::make_shared<DroidEightBallAutomode>(getRobot(), 2);                    
                     break ;
 
                 case 9:

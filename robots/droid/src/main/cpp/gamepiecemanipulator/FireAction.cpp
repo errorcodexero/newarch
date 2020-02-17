@@ -16,6 +16,24 @@ using namespace xero::base;
 using namespace xero::misc;
 namespace xero {
     namespace droid {
+        std::vector<std::string> FireAction::columns_ =
+        {
+            "time",
+
+            "is_firing",
+            "ready",
+            "ready_except_shooter",
+
+            "limelight_ready",
+            "turret_ready",
+            "shooter_ready",
+            "drivebase_ready",
+            
+            "conveyor_state",
+            "turret_error",
+            "shooter_velocity",
+        } ;
+
         FireAction::FireAction(GamePieceManipulator &manip): 
             GamePieceManipulatorAction(manip),
             droidSubsystem_(*static_cast<Droid&>(manip.getRobot()).getDroidSubsystem()) {
@@ -50,6 +68,8 @@ namespace xero {
 
             maxHoodUpDistance_ = settings.getDouble("shooter:aim:max_hood_up");
             minHoodDownDistance_ = settings.getDouble("shooter:aim:min_hood_down");
+
+            plotid_ = getSubsystem().initPlot("FireAction") ;
         }
 
         void FireAction::start() {
@@ -58,6 +78,9 @@ namespace xero {
             isFiring_ = false;
             shooterVelocityAction_->setTarget(0);               // just set it to a known value,
             shooter->setAction(shooterVelocityAction_, true);   // we'll update it every tick
+
+            startTime_ = getSubsystem().getRobot().getTime();
+            getSubsystem().getRobot().getPlotManager().startPlot(plotid_, columns_);
         }
 
         void FireAction::setTargetVelocity() {
@@ -80,6 +103,7 @@ namespace xero {
 
             shooterVelocityAction_->setHood(hoodIsDown_);
             shooterVelocityAction_->setTarget(a*dist*dist + b*dist + c);
+        
         }
 
         void FireAction::run() {
@@ -104,8 +128,8 @@ namespace xero {
             frc::SmartDashboard::PutBoolean("DrivebaseReady", drivebaseReady) ;
             frc::SmartDashboard::PutBoolean("trackerReady", trackerReady) ;
 
-            bool readyToFireExceptShooter = trackerReady && turretReady && drivebaseReady;
-            bool readyToFire = readyToFireExceptShooter && shooterReady;
+            bool readyToFireExceptShooter = trackerReady && drivebaseReady;
+            bool readyToFire = trackerReady && drivebaseReady && turretReady && shooterReady;
 
             auto &logger = getMessageLogger();
 
@@ -115,6 +139,7 @@ namespace xero {
                     logger.startMessage(MessageLogger::MessageType::debug);
                     logger << "FireAction: Out of balls; done firing.";
                     logger.endMessage();
+                    getSubsystem().getRobot().getPlotManager().endPlot(plotid_);
                     setDone();
                     stopChildActions();
                 }
@@ -136,6 +161,7 @@ namespace xero {
                     logger.startMessage(MessageLogger::MessageType::debug);
                     logger << "FireAction: Out of balls; done trying to fire.";
                     logger.endMessage();
+                    getSubsystem().getRobot().getPlotManager().endPlot(plotid_);
                     setDone();
                     stopChildActions();
                 }
@@ -164,10 +190,28 @@ namespace xero {
             }
             logger << "hood: " << (hoodIsDown_ ? "down" : "up");
             logger.endMessage();
+
+            getSubsystem().getRobot().getPlotManager().addPlotData(plotid_, {
+                getSubsystem().getRobot().getTime() - startTime_,
+
+                (double)isFiring_,
+                (double)readyToFire,
+                (double)readyToFireExceptShooter,
+                
+                (double)trackerReady,
+                (double)turretReady,
+                (double)shooterReady,
+                (double)drivebaseReady,
+
+                (double)conveyorEmitAction_->getStateIndex(),
+                tracker->getRelativeAngle(),
+                shooter->getSpeedometer().getVelocity()
+            });
         }
 
         void FireAction::cancel() {
             Action::cancel();
+            getSubsystem().getRobot().getPlotManager().endPlot(plotid_);
             stopChildActions();
             setDone();
         }

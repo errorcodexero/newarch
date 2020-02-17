@@ -13,13 +13,6 @@ namespace xero {
             shouldStopFiring_ = false;
         }
 
-        std::vector<std::string> ConveyorEmitAction::columns_ =
-        {
-            "time",
-            "velocity",
-            "out"
-        } ;
-
         ConveyorEmitAction::ConveyorEmitAction(Conveyor &subsystem):
             ConveyorStateAction(subsystem, "ConveyorEmitAction") {
             
@@ -42,7 +35,7 @@ namespace xero {
                 
                 // ----------------------------
                 // We're firing the last ball.
-                { "delay for last ball to clear shooter", delayState(0.3) },
+                { "delay for last ball to clear shooter", delayState(0.5) },
                 decrementBallsState(),
                 { [=] { setStagedForFire(false); return StateResult::Next; } },
                 gotoState(done),
@@ -50,7 +43,8 @@ namespace xero {
 
                 // We're not firing the last ball.
                 // Wait for the next ball to get into position.
-                { notFiringLastBall, waitForSensorEdgeState(Sensor::D, false) },
+                { notFiringLastBall, waitForSensorState(Sensor::D, true) },
+                waitForSensorState(Sensor::D, false),
                 
                 decrementBallsState(),
 
@@ -62,30 +56,18 @@ namespace xero {
                 // we're done
                 { done, setMotorState(MotorState::Stopped) },
             });
-
-            plot_id_ = subsystem.initPlot("shooting") ;
         }
 
         void ConveyorEmitAction::conveyorActionStarted()
         {
-            getSubsystem().startPlot(plot_id_, columns_) ;
         }
 
         void ConveyorEmitAction::conveyorActionRun()
         {
-            std::vector<double> data ;
-            auto &droid = static_cast<Droid &>(getSubsystem().getRobot()) ;
-            auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter() ;
-
-            data.push_back(droid.getTime()) ;
-            data.push_back(shooter->getSpeedometer().getVelocity()) ;
-            data.push_back(shooter->getMotor()) ;
-            getSubsystem().addPlotData(plot_id_, data) ;
         }
 
         void ConveyorEmitAction::conveyorActionFinished()
         {
-            getSubsystem().endPlot(plot_id_) ;
         }
     }
 } 

@@ -1,5 +1,6 @@
 #include "Shooter.h"
 #include "droidids.h"
+#include "ShooterAction.h"
 
 using namespace xero::misc;
 using namespace xero::base;
@@ -15,6 +16,11 @@ namespace xero {
             std::string hoodConfig = "shooter:hood:";
             hoodUpPos_ = settings.getDouble(hoodConfig + "up");
             hoodDownPos_ = settings.getDouble(hoodConfig + "down");
+        }
+
+        bool Shooter::canAcceptAction(xero::base::ActionPtr action) {
+            return MotorEncoderSubsystem::canAcceptAction(action) || 
+                std::dynamic_pointer_cast<ShooterAction>(action) != nullptr;
         }
 
         void Shooter::setHood(bool hood) {

@@ -61,6 +61,7 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);    
             logger.enableSubsystem(MSG_GROUP_OI) ;
             logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
+            logger.enableSubsystem(MSG_GROUP_TURRET); 
 
             //
             // This should stay on.  It will have no effect on the real robot
@@ -78,8 +79,10 @@ namespace xero {
             paths->loadPath("test_test") ;
             paths->loadPath("test_curve") ;
             paths->loadPath("eight_ball_auto_collect") ;
+            paths->loadPath("eight_ball_auto_collect2") ;
             paths->loadPath("eight_ball_auto_fire") ;    
             paths->loadPath("eight_ball_auto_fire2") ;   
+            paths->loadPath("eight_ball_auto_fire3") ;   
             paths->loadPath("five_ball_auto_collect") ;  
             paths->loadPath("five_ball_auto_fire") ;  
             paths->loadPath("three_ball_auto_backup") ;    

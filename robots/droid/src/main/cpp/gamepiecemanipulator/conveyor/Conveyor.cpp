@@ -30,6 +30,7 @@ namespace xero {
 
             stagedForFire_ = false;
             stagedForCollect_ = false;
+            ballCount_ = 0;
 
             auto &settings = getRobot().getSettingsParser();
             for (auto pair : sensorNames_) {

@@ -49,6 +49,11 @@ namespace xero {
             double maxHoodUpDistance_;
             double minHoodDownDistance_;
 
+            double startTime_;
+
+            static std::vector<std::string> columns_;
+            uint64_t plotid_;
+
         };
     }
 

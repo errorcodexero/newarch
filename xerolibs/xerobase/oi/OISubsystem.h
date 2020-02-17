@@ -45,6 +45,8 @@ namespace xero {
             /// \returns the value of the automodel selection
             int getAutoModeSelector() ;
 
+            void init(xero::base::LoopType ltype) override;
+
             /// \brief return the driver gamepad
             std::shared_ptr<DriverGamepad> getDriverGamepad() {
                 return driver_ ;

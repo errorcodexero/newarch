@@ -31,6 +31,13 @@ namespace xero {
                 dev->init() ;            
         }
 
+        void OISubsystem::init(xero::base::LoopType ltype) {
+            if (ltype == LoopType::OperatorControl) {
+                for(auto dev: hiddevices_)
+                    dev->init() ;
+            }
+        }
+
         int OISubsystem::getAutoModeSelector() {
             for(auto dev: hiddevices_) {
                 int automode = dev->getAutoModeSelector() ;
