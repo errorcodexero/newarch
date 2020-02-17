@@ -143,7 +143,7 @@ tankdrive:follower:right:kp                                     0.032           
 tankdrive:follower:right:kd                                     0.0
 
 tankdrive:follower:turn_correction                              0
-tankdrive:follower:angle_correction                             -0.06
+tankdrive:follower:angle_correction                             -0.03
 
 ###################################################################################################
 # shooter
@@ -354,7 +354,7 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           2
+auto:testmode:which                                           100
 auto:testmode:distance                                        60
 auto:testmode:power                                           -0.4
 auto:testmode:duration                                        1800

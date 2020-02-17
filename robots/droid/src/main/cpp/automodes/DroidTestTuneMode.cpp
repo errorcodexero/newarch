@@ -77,8 +77,16 @@ namespace xero
                 break;
 
             case 2:     // Drive base rotate characterization (note duration is total angle)
-                pushSubActionPair(tankdrive, std::make_shared<TankDriveFollowPathAction>(*tankdrive, "test_test"));
+                pushSubActionPair(tankdrive, std::make_shared<TankDriveFollowPathAction>(*tankdrive, "test_curve"));
                 break;
+
+            case 3:     // Drive base rotate characterization (note duration is total angle)
+                pushSubActionPair(tankdrive, std::make_shared<TankDriveFollowPathAction>(*tankdrive, "eight_ball_auto_fire", true));
+                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 3.0));
+                pushSubActionPair(tankdrive, std::make_shared<TankDriveFollowPathAction>(*tankdrive, "eight_ball_auto_collect"));
+                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 3.0));                
+                pushSubActionPair(tankdrive, std::make_shared<TankDriveFollowPathAction>(*tankdrive, "eight_ball_auto_fire2", true));                                
+                break;                
 
                 //////////////////////////////////////////////////////////////////////////////////////////
                 //
@@ -91,8 +99,8 @@ namespace xero
 
             case 11:     // Test the collector
                 pushSubActionPair(game->getIntake(), std::make_shared<CollectOnAction>(*game->getIntake())) ;
-                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 3.0));
-                pushSubActionPair(game->getIntake(), std::make_shared<CollectOffAction>(*game->getIntake()));                
+                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 60.0));
+                //pushSubActionPair(game->getIntake(), std::make_shared<CollectOffAction>(*game->getIntake()));                
                 break;
 
                 //////////////////////////////////////////////////////////////////////////////////////////

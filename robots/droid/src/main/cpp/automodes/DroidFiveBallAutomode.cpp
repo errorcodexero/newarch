@@ -3,8 +3,13 @@
 #include "gamepiecemanipulator/FireAction.h"
 #include "gamepiecemanipulator/StartCollectAction.h"
 #include "gamepiecemanipulator/StopCollectAction.h"
-
+#include "gamepiecemanipulator/conveyor/ConveyorSetBallCountAction.h"
+#include "gamepiecemanipulator/conveyor/ConveyorPrepareToEmitAction.h"
+#include "gamepiecemanipulator/conveyor/ConveyorPrepareToReceiveAction.h"
+#include "gamepiecemanipulator/shooter/ShooterVelocityAction.h"
+#include "turret/FollowTargetAction.h"
 #include <actions/ParallelAction.h>
+#include <actions/DelayAction.h>
 #include <tankdrive/actions/TankDriveFollowPathAction.h>
 
 using namespace xero::base;
@@ -16,32 +21,42 @@ namespace xero
         DroidFiveBallAutomode::DroidFiveBallAutomode(xero::base::Robot &robot) : 
             DroidAutoMode(robot, "FarSideFive", "Start on far side, collect two, score five")
         {
-            // Turret will track target as its default action
-            // TODO: assign initial position to kinematic model?
-
             auto droid = getDroidSubsystem();
             auto db = droid->getTankDrive();
             auto manip = droid->getGamePieceManipulator();
+            auto conveyor = manip->getConveyor() ;
+            auto turret = droid->getTurret() ;
+            auto shooter = manip->getShooter() ;
+            auto parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
 
-            // In parallel...
-            auto collectPar = std::make_shared<ParallelAction>(robot.getMessageLogger());
-            pushAction(collectPar);
+             // Set the initial ball count to 3
+            pushSubActionPair(conveyor, std::make_shared<ConveyorSetBallAction>(*conveyor, 3), false) ;
 
-            //     Drive to collect five balls
-            collectPar->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "five_ball_auto_collect"));
+            // Get the balls ready
+            parallel->addSubActionPair(conveyor, std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor));        
 
-            //     Collect all five balls
-            collectPar->addSubActionPair(manip, std::make_shared<StartCollectAction>(*manip));
+            // Collect all five balls
+            parallel->addSubActionPair(manip, std::make_shared<StartCollectAction>(*manip), false);
 
-            // Then, in parallel...
-            auto prepareFirePar = std::make_shared<ParallelAction>(robot.getMessageLogger());
-            pushAction(prepareFirePar);
+            // Drive to the get other two balls
+            parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "five_ball_auto_collect"));
+
+            pushAction(parallel) ;
+
+            pushAction(std::make_shared<DelayAction>(robot.getMessageLogger(), 1.0)); 
+
+            // Stop collecting
+            pushSubActionPair(manip, std::make_shared<StopCollectAction>(*manip)); 
+
+            parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
+            pushAction(parallel) ;
+
+            parallel->addSubActionPair(conveyor, std::make_shared<ConveyorPrepareToEmitAction>(*conveyor));   
             
             //     Drive to the target
-            prepareFirePar->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "five_ball_auto_fire"));
+            parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "five_ball_auto_fire", true));
 
-            //     Stop collecting and prepare to fire
-            prepareFirePar->addSubActionPair(manip, std::make_shared<StopCollectAction>(*manip));
+            parallel->addSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4150, true), false) ;
 
             // Then, fire all five balls
             pushSubActionPair(manip, std::make_shared<FireAction>(*manip));

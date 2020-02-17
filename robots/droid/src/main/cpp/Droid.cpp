@@ -75,8 +75,15 @@ namespace xero {
 
 
             paths->setExtensions("_left.csv", "_right.csv") ;
-
             paths->loadPath("test_test") ;
+            paths->loadPath("test_curve") ;
+            paths->loadPath("eight_ball_auto_collect") ;
+            paths->loadPath("eight_ball_auto_fire") ;    
+            paths->loadPath("eight_ball_auto_fire2") ;   
+            paths->loadPath("five_ball_auto_collect") ;  
+            paths->loadPath("five_ball_auto_fire") ;  
+            paths->loadPath("three_ball_auto_backup") ;    
+            paths->loadPath("three_ball_auto_fire") ;                                                                     
         }
         
         void Droid::RobotHardwareInit() {

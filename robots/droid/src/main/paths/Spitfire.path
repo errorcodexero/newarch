@@ -12,20 +12,20 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 150,
+                    "maxacceleration": 100,
                     "maxjerk": 1500,
-                    "maxvelocity": 150,
+                    "maxvelocity": 100,
                     "name": "fire",
                     "points": [
                         {
-                            "heading": 90,
-                            "x": 503.11655405405406,
-                            "y": 19.841216216216196
+                            "heading": 179.81799368871677,
+                            "x": 503.0589430894309,
+                            "y": 17.052845528455293
                         },
                         {
-                            "heading": 26.565051177078043,
-                            "x": 528.9,
-                            "y": 60.6
+                            "heading": 180,
+                            "x": 425.4684959349594,
+                            "y": 25.57926829268291
                         }
                     ],
                     "startangle": 0,
@@ -42,23 +42,23 @@
                     ],
                     "maxacceleration": 150,
                     "maxjerk": 1500,
-                    "maxvelocity": 150,
+                    "maxvelocity": 50,
                     "name": "collect",
                     "points": [
                         {
-                            "heading": -153.4,
-                            "x": 528.9347826086956,
-                            "y": 60.57996894409942
+                            "heading": 180,
+                            "x": 425.4684959349594,
+                            "y": 26.431910569105696
                         },
                         {
                             "heading": 178.93908830973578,
-                            "x": 390.8385093167701,
-                            "y": 23.450310559006255
+                            "x": 377.7205284552846,
+                            "y": 27.284552845528424
                         },
                         {
                             "heading": -180,
-                            "x": 263.81599378881987,
-                            "y": 25.404503105590095
+                            "x": 234.47662601626016,
+                            "y": 28.13719512195121
                         }
                     ],
                     "startangle": 0,
@@ -80,18 +80,18 @@
                     "points": [
                         {
                             "heading": 0,
-                            "x": 263.8,
-                            "y": 25.404503105590095
+                            "x": 265.1717479674797,
+                            "y": 28.13719512195121
                         },
                         {
                             "heading": 0,
-                            "x": 399.9580745341614,
-                            "y": 24.753105590062148
+                            "x": 396.4786585365854,
+                            "y": 33.2530487804878
                         },
                         {
-                            "heading": 26.565051177078068,
-                            "x": 530.2375776397515,
-                            "y": 49.50621118012424
+                            "heading": 18.434948822922085,
+                            "x": 453.6056910569106,
+                            "y": 40.92682926829269
                         }
                     ],
                     "startangle": 0,
@@ -113,7 +113,7 @@
                     ],
                     "maxacceleration": 150,
                     "maxjerk": 1500,
-                    "maxvelocity": 150,
+                    "maxvelocity": 40,
                     "name": "collect",
                     "points": [
                         {
@@ -141,7 +141,7 @@
                     ],
                     "maxacceleration": 150,
                     "maxjerk": 1500,
-                    "maxvelocity": 150,
+                    "maxvelocity": 80,
                     "name": "fire",
                     "points": [
                         {
@@ -207,8 +207,8 @@
                     "points": [
                         {
                             "heading": -180,
-                            "x": 560.2,
-                            "y": 88.6
+                            "x": 505.6168699186992,
+                            "y": 86.1168699186992
                         },
                         {
                             "heading": -179.53040452713222,
@@ -257,9 +257,37 @@
                     "startangle": 0,
                     "startangledelay": 0,
                     "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 150,
+                    "maxjerk": 1500,
+                    "maxvelocity": 80,
+                    "name": "curve",
+                    "points": [
+                        {
+                            "heading": 0,
+                            "x": 20,
+                            "y": 70
+                        },
+                        {
+                            "heading": 90,
+                            "x": 140,
+                            "y": 190
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
                 }
             ]
         }
     ],
-    "outdir": "C:/cygwin64/home/meg/newarch/robots/droid/src/main/deploy/output"
+    "outdir": "C:/cygwin64/home/bwg/rtools/master/robots/droid/src/main/deploy/output"
 }

@@ -14,6 +14,8 @@ namespace xero {
             friend class ConveyorStopAction;
             friend class ConveyorOnAction ;
             friend class ConveyorEjectAction;
+            friend class ConveyorSetBallAction ;
+            
         public:
             Conveyor(xero::base::Subsystem *parent);
             virtual ~Conveyor() {}
@@ -62,6 +64,9 @@ namespace xero {
             SensorPtr getSensor(Sensor sensor) { return sensors_[static_cast<int>(sensor)].first; }
             bool readSensor(Sensor sensor) { return sensors_[static_cast<int>(sensor)].second; }
 
+
+
+
         protected:
             /// Runs the motors in the specified direction, or stops them if direction is Stopped.
             /// \param MotorState The direction to run the motors.
@@ -77,8 +82,12 @@ namespace xero {
             static SensorPtr createSensor(int channel);
             static SensorPtr createSensor(xero::misc::SettingsParser &settings, std::string configName);
 
+            void setBallCount(int n) {
+                ballCount_ = n ;
+            }
+
         private:
-            int ballCount_ = 0;
+            int ballCount_ ;
             std::array<std::pair<SensorPtr, bool>, 4> sensors_;
             static std::map<Sensor, std::string> sensorNames_;
 
