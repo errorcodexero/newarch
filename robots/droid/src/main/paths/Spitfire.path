@@ -192,7 +192,7 @@
                             "after": 90,
                             "before": 200,
                             "type": "distance_velocity",
-                            "velocity": 25
+                            "velocity": 40
                         }
                     ],
                     "endangle": 0,
