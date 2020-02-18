@@ -68,6 +68,7 @@ namespace xero {
             size_t coll_v_shoot_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:shoot_collect_mode") ;      //collect or shoot mode
             size_t collect_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:collect_onoff") ;            //collect/no collect
             size_t eject_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:eject");
+            size_t automode_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:automode") ;
             
             //
             // Actions
