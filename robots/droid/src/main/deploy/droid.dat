@@ -177,8 +177,8 @@ shooter:aim:hood_down:a                                         0.0195
 shooter:aim:hood_down:b                                         -7.0724
 shooter:aim:hood_down:c                                         5495.8
 
-shooter:aim:max_hood_up                                         150
-shooter:aim:min_hood_down                                       140
+shooter:aim:max_hood_up                                         120
+shooter:aim:min_hood_down                                       110
 
 ###################################################################################################
 # turret
@@ -323,16 +323,16 @@ droidvision:camera_target_height                                68.0
 limelight:camera_latency                                        11.0
 limelight:network_latency                                       10.0
 
-gamepiecemanipulator:fire:max_drivebase_velocity                0.1
+gamepiecemanipulator:fire:max_drivebase_velocity                0.2
 gamepiecemanipulator:fire:max_camera_sample_age                 5.0
 
 ###################################################################################################
 # oi
 ###################################################################################################
 
-oi:shoot_collect_mode                                           9
-oi:shoot_onoff                                                  10
-oi:collect_onoff                                                7
+oi:shoot_collect_mode                                           11
+oi:eject                                                        8
+oi:collect_onoff                                                14
 
 ###################################################################################################
 # targettracker

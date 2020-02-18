@@ -32,6 +32,7 @@ namespace xero {
             "conveyor_state",
             "turret_error",
             "shooter_velocity",
+            "target_velocity",
         } ;
 
         FireAction::FireAction(GamePieceManipulator &manip): 
@@ -126,7 +127,7 @@ namespace xero {
             frc::SmartDashboard::PutBoolean("ShooterReady", shooterReady) ;
             frc::SmartDashboard::PutBoolean("TurretReady", turretReady) ;
             frc::SmartDashboard::PutBoolean("DrivebaseReady", drivebaseReady) ;
-            frc::SmartDashboard::PutBoolean("trackerReady", trackerReady) ;
+            frc::SmartDashboard::PutBoolean("TrackerReady", trackerReady) ;
 
             bool readyToFireExceptShooter = trackerReady && drivebaseReady;
             bool readyToFire = trackerReady && drivebaseReady && turretReady && shooterReady;
@@ -205,7 +206,8 @@ namespace xero {
 
                 (double)conveyorEmitAction_->getStateIndex(),
                 tracker->getRelativeAngle(),
-                shooter->getSpeedometer().getVelocity()
+                shooter->getSpeedometer().getVelocity(),
+                shooterVelocityAction_->getTarget(),
             });
         }
 

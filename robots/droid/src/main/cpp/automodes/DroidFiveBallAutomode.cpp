@@ -47,19 +47,22 @@ namespace xero
 
             pushAction(parallel) ;
 
-            // Stop collecting
-            pushSubActionPair(manip, std::make_shared<StopCollectAction>(*manip)); 
-            pushSubActionPair(turret, std::make_shared<FollowTargetAction>(*turret), false);
+            // Stop collecting after 2 seconds into the next path
+            auto series = std::make_shared<SequenceAction>(robot.getMessageLogger());
+            series->pushAction(std::make_shared<DelayAction>(getRobot().getMessageLogger(), 2));
+            series->pushSubActionPair(turret, std::make_shared<FollowTargetAction>(*turret), false);
+            series->pushSubActionPair(manip, std::make_shared<StopCollectAction>(*manip)); 
+            series->pushSubActionPair(conveyor, std::make_shared<ConveyorPrepareToEmitAction>(*conveyor)); 
 
             parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
             pushAction(parallel) ;
-
-            parallel->addSubActionPair(conveyor, std::make_shared<ConveyorPrepareToEmitAction>(*conveyor));   
             
             //     Drive to the target
             parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "five_ball_auto_fire", true));
 
             parallel->addSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4150, true), false) ;
+
+            parallel->addAction(series);
 
             // Then, fire all five balls
             pushSubActionPair(manip, std::make_shared<FireAction>(*manip));

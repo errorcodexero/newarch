@@ -34,7 +34,7 @@ namespace xero {
         private:
             CollectShootMode flag_coll_v_shoot_ ;
             bool flag_collect_ ;
-            bool flag_shoot_ ;
+            bool flag_eject_;
             
             //std::queue<xero::base::ActionPtr> conveyorActionQueue ;
 
@@ -42,7 +42,7 @@ namespace xero {
 
             size_t coll_v_shoot_ ;
             size_t collect_ ;
-            size_t shoot_ ;
+            size_t eject_;
 
             xero::base::ActionPtr queue_prep_collect_ ;
             xero::base::ActionPtr queue_prep_shoot_ ;
@@ -54,6 +54,8 @@ namespace xero {
             xero::base::ActionPtr stop_collect_action_ ;
             xero::base::ActionPtr stop_shoot_action_ ;
             xero::base::ActionPtr turret_goto_zero_ ;
+            xero::base::ActionPtr hood_down_;
+            xero::base::ActionPtr eject_action_;
     
         } ;
     }

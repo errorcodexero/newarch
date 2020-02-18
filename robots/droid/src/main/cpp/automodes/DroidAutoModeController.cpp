@@ -45,6 +45,7 @@ namespace xero {
                 switch(sel) 
                 {
                 case 0:
+                    // Start center, score three in robot and move off line
                     // Start side nearest port, ollect eight automode
                     mode = std::make_shared<DroidThreeBallAutomode>(getRobot());
                     break ;
@@ -55,7 +56,6 @@ namespace xero {
                     break ;
 
                 case 2:
-                    // Start center, score three in robot and move off line
                     mode = std::make_shared<DroidEightBallAutomode>(getRobot(), 0);                    
                     break ;
 
