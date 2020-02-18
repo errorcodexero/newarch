@@ -141,7 +141,7 @@ namespace xero {
 
         bool DriverGamepad::isCancelPressed() {
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
-            return ds.GetStickButton(getIndex(), ButtonNumber::A) ;
+            return ds.GetStickAxis(getIndex(), AxisNumber::RTRIGGER) > 0.5 ;
         }
 
         void DriverGamepad::generateActions(SequenceAction &seq) {

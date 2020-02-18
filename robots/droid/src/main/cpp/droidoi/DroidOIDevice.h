@@ -31,6 +31,8 @@ namespace xero {
             void initialize() ;
             CollectShootMode getSwitchMode() ;
 
+            bool isCollectButtonPressed() ;
+
         private:
             CollectShootMode flag_coll_v_shoot_ ;
             bool flag_collect_ ;

@@ -89,6 +89,19 @@ namespace xero {
             return sw ? CollectShootMode::ShootMode : CollectShootMode::CollectMode ;
         }
 
+        bool DroidOIDevice::isCollectButtonPressed()
+        {
+            if (getValue(collect_))
+                return true ;
+
+            OISubsystem &sub = getSubsystem() ;
+            auto gpad = sub.getDriverGamepad() ;
+            if (gpad->isCancelPressed())
+                return true ;
+
+            return false ;
+        }
+
         void DroidOIDevice::generateActions(xero::base::SequenceAction &seq)
         {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
@@ -165,7 +178,7 @@ namespace xero {
                         //
                         // We are in collect mode, check the collect button
                         //
-                        if (getValue(collect_) && flag_collect_ == false)
+                        if (isCollectButtonPressed() && flag_collect_ == false)
                         {
                             //
                             // Button is down, but we are not collecting, assign start collect action
@@ -173,7 +186,7 @@ namespace xero {
                             seq.pushSubActionPair(game_piece_manipulator, start_collect_action_, false) ;
                             flag_collect_ = true ;
                         }
-                        else if (getValue(collect_) == false && flag_collect_ == true) 
+                        else if (!isCollectButtonPressed() && flag_collect_ == true) 
                         {
                             //
                             // Button is up and we are collecting, assign stop collect action
