@@ -59,6 +59,10 @@ namespace xero {
             virtual void resetEncoder() {
                 assert(0 == "this motor controller does not support resetEncoder()") ;
             }
+
+            virtual void setCurrentLimit(double limit) {
+                assert(0 == "this motor controller does not support setCurrentLimit()") ;                
+            }
         };
         
         typedef std::shared_ptr<xero::base::MotorController> MotorPtr;

@@ -31,6 +31,13 @@ namespace xero {
                 type_ = type ;
             }
 
+            void CTREMotorController::setCurrentLimit(double curlim)
+            {
+                auto m = std::dynamic_pointer_cast<ctre::phoenix::motorcontrol::can::TalonFX>(motor_) ;
+                SupplyCurrentLimitConfiguration limit(true, curlim, curlim, 1) ;
+                m->ConfigSupplyCurrentLimit(limit) ;
+            }
+
             void CTREMotorController::follow(std::shared_ptr<MotorController> motor, bool invert) {
                 if (auto m = std::dynamic_pointer_cast<CTREMotorController>(motor)) {
                     motor_->Follow(*m->motor_);

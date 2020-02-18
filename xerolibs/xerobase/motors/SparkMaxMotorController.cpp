@@ -16,13 +16,15 @@ namespace xero {
                 motor_(createMotor(id, brushless)), encoder_(motor_->GetEncoder())
             {
                 motor_->RestoreFactoryDefaults(false) ;
-                motor_->SetSmartCurrentLimit(40) ;
+                motor_->SetSmartCurrentLimit(30) ;
                 motor_->EnableVoltageCompensation(12.0) ;
 
-                //encoder_->SetPositionConversionFactor(1.0) ;
-                //encoder_->SetVelocityConversionFactor(1.0) ;
-
                 resetPosition();
+            }
+
+            void SparkMaxMotorController::setCurrentLimit(double curlim)
+            {
+                motor_->SetSmartCurrentLimit(curlim) ;                
             }
 
             void SparkMaxMotorController::follow(std::shared_ptr<MotorController> motor, bool invert) {

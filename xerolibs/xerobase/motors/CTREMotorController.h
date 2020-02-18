@@ -43,6 +43,8 @@ namespace xero {
                 auto talon = std::dynamic_pointer_cast<ctre::phoenix::motorcontrol::can::TalonFX>(motor_);                
                 return talon->GetSelectedSensorPosition() ;
             }
+
+            virtual void setCurrentLimit(double limit) ;            
             
         private:
             MotorPtr motor_;

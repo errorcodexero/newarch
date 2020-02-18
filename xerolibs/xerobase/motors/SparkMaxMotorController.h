@@ -43,6 +43,8 @@ namespace xero {
                 encoder_.SetPosition(0);
             }
 
+            virtual void setCurrentLimit(double limit) ;                
+
         private:
             MotorPtr motor_;
             bool isInverted_;

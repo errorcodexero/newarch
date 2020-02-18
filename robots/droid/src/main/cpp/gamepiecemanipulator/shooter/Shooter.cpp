@@ -16,6 +16,8 @@ namespace xero {
             std::string hoodConfig = "shooter:hood:";
             hoodUpPos_ = settings.getDouble(hoodConfig + "up");
             hoodDownPos_ = settings.getDouble(hoodConfig + "down");
+
+            getMotorController()->setCurrentLimit(40) ;
         }
 
         bool Shooter::canAcceptAction(xero::base::ActionPtr action) {

@@ -48,6 +48,9 @@ namespace xero {
                 assert(motors_.size() > 0) ;
                 return motors_[0]->getPosition() ;
             }
+
+            virtual void setCurrentLimit(double limit) ;
+
         private:
             std::vector<MotorPtr> motors_;
         };
