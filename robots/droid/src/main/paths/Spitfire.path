@@ -202,13 +202,13 @@
                     ],
                     "maxacceleration": 150,
                     "maxjerk": 1500,
-                    "maxvelocity": 40,
+                    "maxvelocity": 60,
                     "name": "collect",
                     "points": [
                         {
                             "heading": -180,
-                            "x": 502.2063008130081,
-                            "y": 289.8983739837398
+                            "x": 514.1432926829268,
+                            "y": 288.1930894308943
                         },
                         {
                             "heading": 131.00908690157019,
