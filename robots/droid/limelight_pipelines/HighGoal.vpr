@@ -35,7 +35,7 @@ pipeline_led_enabled:1
 pipeline_led_power:100
 pipeline_res:0
 pipeline_type:0
-red_balance:500
+red_balance:1010
 sat_max:255
 sat_min:44
 send_corners:0
