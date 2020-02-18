@@ -26,7 +26,7 @@ namespace xero {
         void DroidAutoModeController::updateAutoMode(int sel, const std::string &gamedata) {
             auto &ds = frc::DriverStation::GetInstance();
             AutoModePtr mode = nullptr;
-            sel = 1 ;
+            sel = 2;
 
             if (!ds.IsFMSAttached() && testmode_)
             {

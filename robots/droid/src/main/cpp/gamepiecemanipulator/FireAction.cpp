@@ -129,7 +129,7 @@ namespace xero {
             frc::SmartDashboard::PutBoolean("DrivebaseReady", drivebaseReady) ;
             frc::SmartDashboard::PutBoolean("TrackerReady", trackerReady) ;
 
-            bool readyToFireExceptShooter = trackerReady && drivebaseReady;
+            bool readyToFireExceptShooter = trackerReady && drivebaseReady && turretReady;
             bool readyToFire = trackerReady && drivebaseReady && turretReady && shooterReady;
 
             auto &logger = getMessageLogger();
