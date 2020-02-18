@@ -72,7 +72,13 @@ namespace xero {
 
             void rumble(bool left, double value, double duration) ;
 
-            bool isCancelPressed() ;
+            bool isRTriggerPressed() ;
+            bool isAPressed() ;
+            bool isBPressed() ;
+            bool isXPressed() ;
+            bool isYPressed() ;
+            bool isLJoyButtonPressed() ;
+            bool isRJoyButtonPressed() ;
 
         private:
             double scalePower(double axis, double boost, bool slow) ;

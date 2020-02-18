@@ -48,7 +48,7 @@ namespace xero {
             auto oi = getRobot().getOI() ;
 
             if (running_detector_ != nullptr) {
-                if (oi->getDriverGamepad()->isCancelPressed()) {
+                if (oi->getDriverGamepad()->isAPressed()) {
                     running_detector_->getSequence()->cancel() ;
                     removeDetector(running_detector_) ;
                     running_detector_ = nullptr ;

@@ -97,7 +97,7 @@ namespace xero {
 
             OISubsystem &sub = getSubsystem() ;
             auto gpad = sub.getDriverGamepad() ;
-            if (gpad->isCancelPressed())
+            if (gpad->isRTriggerPressed())
                 return true ;
 
             return false ;

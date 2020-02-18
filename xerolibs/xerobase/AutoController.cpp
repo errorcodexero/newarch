@@ -20,7 +20,7 @@ namespace xero {
                 // See if we need to switch to teleop.  This is only valid in games where
                 // the player can run (via sandstorm like setup) in automode.
                 //
-                if (gamepad_interrupt_ && gp->isCancelPressed()) {
+                if (gamepad_interrupt_ && gp->isAPressed()) {
                     getRobot().switchToTeleop() ;
                     actionptr_->cancel() ;
                     actionptr_ = nullptr ;

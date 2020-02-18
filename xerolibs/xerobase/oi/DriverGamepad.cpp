@@ -139,10 +139,45 @@ namespace xero {
             }
         }
 
-        bool DriverGamepad::isCancelPressed() {
+        bool DriverGamepad::isRTriggerPressed() {
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
             return ds.GetStickAxis(getIndex(), AxisNumber::RTRIGGER) > 0.5 ;
         }
+
+        bool DriverGamepad::isAPressed() {
+            frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
+            return ds.GetStickButton(getIndex(), ButtonNumber::A) ;
+        }
+
+
+        bool DriverGamepad::isBPressed() {
+            frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
+            return ds.GetStickButton(getIndex(), ButtonNumber::B) ;
+        }
+
+
+        bool DriverGamepad::isXPressed() {
+            frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
+            return ds.GetStickButton(getIndex(), ButtonNumber::X) ;
+        }
+
+
+        bool DriverGamepad::isYPressed() {
+            frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
+            return ds.GetStickButton(getIndex(), ButtonNumber::Y) ;
+        }
+
+
+        bool DriverGamepad::isLJoyButtonPressed() {
+            frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
+            return ds.GetStickButton(getIndex(), ButtonNumber::L_JOY) ;
+        }
+
+
+        bool DriverGamepad::isRJoyButtonPressed() {
+            frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
+            return ds.GetStickButton(getIndex(), ButtonNumber::R_JOY) ;
+        }                                                
 
         void DriverGamepad::generateActions(SequenceAction &seq) {
             int pov ;
@@ -166,12 +201,14 @@ namespace xero {
             else
                 pov = POVAngle::NONE ;
 
+#ifdef SHIFTING_DRIVEBASE
             if (ds.GetStickButton(getIndex(), ButtonNumber::LB)) {
                 high_gear_ = false ;
             }
             else if (ds.GetStickButton(getIndex(), ButtonNumber::RB)) {
                 high_gear_ = true ;
             }
+#endif
 
             double ly = ds.GetStickAxis(getIndex(),AxisNumber::LEFTY) ;
             double rx = ds.GetStickAxis(getIndex(),AxisNumber::RIGHTX) ;
