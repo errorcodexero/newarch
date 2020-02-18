@@ -66,16 +66,25 @@ hw:controlpanelrotator:encoder:quad:motor                       true
 hw:controlpanelrotator:encoder:quad:m                           1
 hw:controlpanelrotator:encoder:quad:b                           0
 
-hw:climber:motor:1:type                                         "sparkmax_brushless"
-hw:climber:motor:1:canid                                        13                          # CAN 13
-hw:climber:motor:2:type                                         "sparkmax_brushless"
-hw:climber:motor:2:canid                                        14                          # CAN 14
-hw:climber:motor:2:invert                                       true
-hw:climber:motor:release                                        -10
-hw:climber:motor:climb                                          10
-hw:climber:encoder:quad:motor                                   true
-hw:climber:encoder:quad:m                                       1
-hw:climber:encoder:quad:b                                       0
+hw:climber:lifter:motor:1:type                                  "sparkmax_brushless"
+hw:climber:lifter:motor:1:canid                                 13                          # CAN 13
+hw:climber:lifter:motor:2:type                                  "sparkmax_brushless"
+hw:climber:lifter:motor:2:canid                                 14                          # CAN 14
+hw:climber:lifter:motor:2:invert                                true
+hw:climber:lifter:motor:release                                 -10
+hw:climber:lifter:motor:climb                                   10
+hw:climber:lifter:encoder:quad:motor                            true
+hw:climber:lifter:encoder:quad:m                                1
+hw:climber:lifter:encoder:quad:b                                0
+
+hw:climber:traverser:motor:type                                  "sparkmax_brushless"
+hw:climber:traverser:motor:canid                                 15                          # CAN 13
+hw:climber:traverser:motor:release                               -10
+hw:climber:traverser:motor:climb                                 10
+hw:climber:traverser:encoder:quad:motor                          true
+hw:climber:traverser:encoder:quad:m                              1
+hw:climber:traverser:encoder:quad:b                              0
+
 hw:climber:servo:l:pwmid                                        0                           # PWM 2
 hw:climber:servo:r:pwmid                                        1                           # PWM 1
 hw:climber:servo:l:release                                      1.0
@@ -290,28 +299,53 @@ climber:servo:l:climb                                          0
 climber:servo:r:release                                        0
 climber:servo:l:release                                        0
 
-climber:motor:follower:up:maxkp                                0
-climber:motor:follower:up:maxki                                0
-climber:motor:follower:up:maxkd                                0
-climber:motor:follower:up:maxkv                                0.003521127
-climber:motor:follower:up:maxka                                0
-climber:motor:follower:up:min                                  -1
-climber:motor:follower:up:max                                  1
-cilmber:motor:follower:up:imax                                 0
+climber:lifter:motor:follower:up:maxkp                                0
+climber:lifter:motor:follower:up:maxki                                0
+climber:lifter:motor:follower:up:maxkd                                0
+climber:lifter:motor:follower:up:maxkv                                0.003521127
+climber:lifter:motor:follower:up:maxka                                0
+climber:lifter:motor:follower:up:min                                  -1
+climber:lifter:motor:follower:up:max                                  1
+climber:lifter:motor:follower:up:imax                                 0
 
-climber:motor:follower:down:maxkp                              0
-climber:motor:follower:down:maxki                              0
-climber:motor:follower:down:maxkd                              0
-climber:motor:follower:down:maxkv                              0.003521127
-climber:motor:follower:down:maxka                              0
-climber:motor:follower:down:min                                -1
-climber:motor:follower:down:max                                1
-cilmber:motor:follower:down:imax                               0
+climber:lifter:motor:follower:down:maxkp                              0
+climber:lifter:motor:follower:down:maxki                              0
+climber:lifter:motor:follower:down:maxkd                              0
+climber:lifter:motor:follower:down:maxkv                              0.003521127
+climber:lifter:motor:follower:down:maxka                              0
+climber:lifter:motor:follower:down:min                                -1
+climber:lifter:motor:follower:down:max                                1
+cilmber:lifter:motor:follower:down:imax                               0
 
-climber:motor:goto:threshold                                   3.0
-climber:motor:goto:maxa                                        70
-climber:motor:goto:maxd                                        -70
-climber:motor:goto:maxv                                        70
+climber:lifter:motor:goto:threshold                                   3.0
+climber:lifter:motor:goto:maxa                                        70
+climber:lifter:motor:goto:maxd                                        -70
+climber:lifter:motor:goto:maxv                                        70
+
+##----------------------
+
+climber:traverser:motor:follower:up:maxkp                                0
+climber:traverser:motor:follower:up:maxki                                0
+climber:traverser:motor:follower:up:maxkd                                0
+climber:traverser:motor:follower:up:maxkv                                0.003521127
+climber:traverser:motor:follower:up:maxka                                0
+climber:traverser:motor:follower:up:min                                  -1
+climber:traverser:motor:follower:up:max                                  1
+cilmber:traverser:motor:follower:up:imax                                 0
+
+climber:traverser:motor:follower:down:maxkp                              0
+climber:traverser:motor:follower:down:maxki                              0
+climber:traverser:motor:follower:down:maxkd                              0
+climber:traverser:motor:follower:down:maxkv                              0.003521127
+climber:traverser:motor:follower:down:maxka                              0
+climber:traverser:motor:follower:down:min                                -1
+climber:traverser:motor:follower:down:max                                1
+climber:traverser:follower:down:imax                               0
+
+climber:traverser:motor:goto:threshold                                   3.0
+climber:traverser:motor:goto:maxa                                        70
+climber:traverser:motor:goto:maxd                                        -70
+climber:traverser:motor:goto:maxv                                        70
 
 
 ###################################################################################################

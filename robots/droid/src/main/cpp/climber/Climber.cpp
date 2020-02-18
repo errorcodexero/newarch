@@ -11,9 +11,11 @@ namespace xero {
         Climber::Climber(Subsystem *parent): Subsystem(parent, "climber") {
             msg_id_ = MSG_GROUP_CLIMBER;
 
-            lifter_ = std::make_shared<MotorEncoderSubsystem>(this, "climber", MSG_GROUP_CLIMBER) ; 
-            //getRobot().getMotorFactory()->createMotor("hw:climber:motor:1") ;
-            //getRobot().getMotorFactory()->createMotor("hw:climber:motor:2") ;
+            lifter_ = std::make_shared<MotorEncoderSubsystem>(this, "climber:lifter", MSG_GROUP_CLIMBER) ; 
+            lifter_->getMotorController()->setCurrentLimit(40) ;
+
+            traverser_ = std::make_shared<MotorEncoderSubsystem>(this, "climber:traverser", MSG_GROUP_CLIMBER) ;
+            traverser_->getMotorController()->setCurrentLimit(10) ;
 
             // for servos put param value in "this"// 
             //TODO change param in .dat file & pull the value into this file : pwmid

@@ -21,10 +21,12 @@ namespace xero {
             oi_ = std::make_shared<DroidOISubsystem>(this) ;
             addChild(oi_) ;            
 
- #ifdef NOTYET
+#ifdef ADD_PANEL_SPINNER
             control_panel_rotator_ = std::make_shared<ControlPanelRotator>(this);
             addChild(control_panel_rotator_);
+#endif
 
+#ifdef ADD_CLIMBER
             climber_ = std::make_shared<Climber>(this);
             addChild(climber_);
 #endif

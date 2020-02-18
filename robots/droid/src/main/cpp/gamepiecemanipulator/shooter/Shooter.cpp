@@ -17,7 +17,11 @@ namespace xero {
             hoodUpPos_ = settings.getDouble(hoodConfig + "up");
             hoodDownPos_ = settings.getDouble(hoodConfig + "down");
 
-            getMotorController()->setCurrentLimit(40) ;
+            //
+            // Currently the motors are current limited at 30 amps
+            //
+            
+            // getMotorController()->setCurrentLimit(40) ;
         }
 
         bool Shooter::canAcceptAction(xero::base::ActionPtr action) {

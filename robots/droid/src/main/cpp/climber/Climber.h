@@ -23,9 +23,9 @@ namespace xero {
 
         private:
             std::shared_ptr<xero::base::MotorEncoderSubsystem> lifter_;
+            std::shared_ptr<xero::base::MotorEncoderSubsystem> traverser_;            
             std::shared_ptr<frc::Servo> servo_r_ ;
             std::shared_ptr<frc::Servo> servo_l_ ;
-            //include "subsystem"...?
 
         private:
             uint64_t msg_id_;

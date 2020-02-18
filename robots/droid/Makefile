@@ -20,23 +20,25 @@ SUBSYSTEMS = \
 	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorPrepareToEmitAction.cpp\
 	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorReceiveAction.cpp\
 	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorPrepareToReceiveAction.cpp\
+	src/main/cpp/gamepiecemanipulator/conveyor/ConveyorEjectAction.cpp\
 	src/main/cpp/gamepiecemanipulator/FireAction.cpp\
 	src/main/cpp/gamepiecemanipulator/shooter/ShooterVelocityAction.cpp\
 	src/main/cpp/gamepiecemanipulator/shooter/Shooter.cpp\
 	src/main/cpp/gamepiecemanipulator/intake/Intake.cpp\
-        src/main/cpp/gamepiecemanipulator/intake/CollectOnAction.cpp\
-        src/main/cpp/gamepiecemanipulator/intake/CollectOffAction.cpp\
+    src/main/cpp/gamepiecemanipulator/intake/CollectOnAction.cpp\
+    src/main/cpp/gamepiecemanipulator/intake/CollectOffAction.cpp\
 	src/main/cpp/gamepiecemanipulator/GamePieceManipulator.cpp\
 	src/main/cpp/gamepiecemanipulator/StartCollectAction.cpp\
 	src/main/cpp/gamepiecemanipulator/StopCollectAction.cpp\
 	src/main/cpp/gamepiecemanipulator/ShootTestingAction.cpp\
+	src/main/cpp/gamepiecemanipulator/StopShootAction.cpp\
 	src/main/cpp/turret/FollowTargetAction.cpp\
 	src/main/cpp/turret/Turret.cpp\
 	src/main/cpp/climber/Climber.cpp\
 	src/main/cpp/controlpanelrotator/ControlPanelRotator.cpp\
-        src/main/cpp/controlpanelrotator/RotateControlPanelAction.cpp\
-        src/main/cpp/limelight/DroidLimeLight.cpp\
-        src/main/cpp/targettracker/TargetTracker.cpp\
+    src/main/cpp/controlpanelrotator/RotateControlPanelAction.cpp\
+    src/main/cpp/limelight/DroidLimeLight.cpp\
+    src/main/cpp/targettracker/TargetTracker.cpp\
 
 MODELS = \
 	src/models/cpp/DroidOIModel.cpp\
@@ -68,9 +70,9 @@ NEED_MODELS=true
 NEED_ENGINE=true
 endif
 
-LOCAL_CFLAGS = -Isrc/main/cpp -Isrc/models/cpp -Isrc/models/include
+LOCAL_CFLAGS = -Isrc/main/cpp -Isrc/models/cpp -Isrc/models/include -DADD_PANEL_SPINNER -DADD_CLIMBER
 
-SUPPORTED_PLATFORMS=ROBORIO SIMULATOR
+SUPPORTED_PLATFORMS=ROBORIO SIMULATOR SIM2
 
 ifeq ($(PLATFORM),SIMULATOR)
 	LOCAL_CFLAGS += -I$(TOPDIR)/robotsims/droidsim
