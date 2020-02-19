@@ -10,8 +10,10 @@ namespace xero
         class ClimberUpDownAction : public ClimberAction
         {
         public:
-            ClimberUpDownAction(Climber &subsystem, double p) ;        
-            ClimberUpDownAction(Climber &subsystem, const std::string &name) ;
+            ClimberUpDownAction(Climber &subsystem, double liftp, double travp) ;
+            ClimberUpDownAction(Climber &subsystem, const std::string &lift, const std::string &trav) ;
+            ClimberUpDownAction(Climber &subsystem, const std::string &lift, double trav) ;
+            ClimberUpDownAction(Climber &subsystem, double lift, const std::string &trav) ;                        
             virtual ~ClimberUpDownAction() ;
 
             virtual void start() ;
@@ -22,6 +24,7 @@ namespace xero
 
         private:
             std::shared_ptr<xero::base::SingleMotorPowerAction> action_ ;
+            double traverse_ ;
         } ;
     }
 }

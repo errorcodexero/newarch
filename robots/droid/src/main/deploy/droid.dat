@@ -284,17 +284,17 @@ driver:zerolevel                                                0.1
 # Climber
 ###################################################################################################
 
-#climber:servo:l:angle_hold                                     -1
-#climber:servo:l:angle_release                                  -1
-#climber:servo:r:angle_hold                                     -1
-#climber:servo:r:angle_release                                  -1
-climber:servo:r:climb                                          0
-climber:servo:l:climb                                          0
-climber:servo:r:release                                        0
-climber:servo:l:release                                        0
-climber:servo:delay                                            1.0
-climber:climb_height                                           1000
-climber:max_height                                             1200
+climber:servo:r:climb                                                 0
+climber:servo:l:climb                                                 0
+climber:servo:r:release                                               0
+climber:servo:l:release                                               0
+climber:servo:delay                                                   1.0
+climber:climb_height                                                  1000
+climber:max_height                                                    1200
+climber:power:up                                                      0.4
+climber:power:down                                                    1.0
+climber:power:left                                                    -1.0
+climber:power:right                                                   1.0
 
 climber:lifter:motor:follower:up:maxkp                                0
 climber:lifter:motor:follower:up:maxki                                0
@@ -364,6 +364,14 @@ gamepiecemanipulator:fire:max_camera_sample_age                 5.0
 oi:shoot_collect_mode                                           11
 oi:eject                                                        8
 oi:collect_onoff                                                14
+
+oi:climb_lock                                                   0               # Toggle switch
+oi:climb_deploy                                                 0               # Push button
+oi:climb_secure                                                 0               # Push button
+oi:climb_up                                                     1               # Joystick axis
+oi:climb_down                                                   2               # Joystick axis
+oi:traverse_left                                                3               # Joystick axis
+oi:traverse_right                                               4               # Joystick axis
 
 ###################################################################################################
 # targettracker

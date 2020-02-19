@@ -7,15 +7,29 @@ namespace xero
 {
     namespace droid
     {
-        ClimberUpDownAction::ClimberUpDownAction(Climber &subsystem, double p) : ClimberAction(subsystem)
+        ClimberUpDownAction::ClimberUpDownAction(Climber &subsystem, double lift, double trav) : ClimberAction(subsystem)
         {
-            action_ = std::make_shared<SingleMotorPowerAction>(*subsystem.getLifter(), p) ;
+            action_ = std::make_shared<SingleMotorPowerAction>(*subsystem.getLifter(), lift) ;
+            traverse_ = trav ;
         }
 
-        ClimberUpDownAction::ClimberUpDownAction(Climber &subsystem, const std::string &name) : ClimberAction(subsystem)
+        ClimberUpDownAction::ClimberUpDownAction(Climber &subsystem, const std::string &lift, const std::string &trav) : ClimberAction(subsystem)
         {
-            action_ = std::make_shared<SingleMotorPowerAction>(*subsystem.getLifter(), name) ;
+            action_ = std::make_shared<SingleMotorPowerAction>(*subsystem.getLifter(), lift) ;
+            traverse_ = subsystem.getRobot().getSettingsParser().getDouble(trav) ;
         }
+
+        ClimberUpDownAction::ClimberUpDownAction(Climber &subsystem, const std::string &lift, double trav) : ClimberAction(subsystem)
+        {
+            action_ = std::make_shared<SingleMotorPowerAction>(*subsystem.getLifter(), lift) ;
+            traverse_ = trav;
+        }
+
+        ClimberUpDownAction::ClimberUpDownAction(Climber &subsystem, double lift, const std::string &trav) : ClimberAction(subsystem)
+        {
+            action_ = std::make_shared<SingleMotorPowerAction>(*subsystem.getLifter(), lift) ;
+            traverse_ = subsystem.getRobot().getSettingsParser().getDouble(trav) ;
+        }                
 
         ClimberUpDownAction::~ClimberUpDownAction()
         {            
@@ -24,6 +38,7 @@ namespace xero
         void ClimberUpDownAction::start()
         {
             getSubsystem().getLifter()->setAction(action_) ;
+            getSubsystem().setTraverserPower(traverse_) ;
         }
 
         void ClimberUpDownAction::run()
