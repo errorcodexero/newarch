@@ -23,10 +23,13 @@ namespace xero {
             {Sensor::D, "d"}
         };
 
-        Conveyor::Conveyor(Subsystem *parent): Subsystem(parent, "conveyor") {
+        Conveyor::Conveyor(Subsystem *parent): 
+            Subsystem(parent, "conveyor") {
             auto motorFactory = getRobot().getMotorFactory();
             intakeMotor_ = motorFactory->createMotor("hw:conveyor:motors:intake");
-            shooterMotor_ = motorFactory->createMotor("hw:conveyor:motors:shooter");
+            shooterMotor_ = std::make_shared<MotorEncoderSubsystem>(this, "conveyor:motors:shooter", MSG_GROUP_CONVEYOR);
+            shooterMotor_->setSmartDashboardName("conveyor:shooter_motor");
+            addChild(shooterMotor_);
 
             stagedForFire_ = false;
             stagedForCollect_ = false;
@@ -65,6 +68,7 @@ namespace xero {
                 });
             }
         }
+        
         void Conveyor::setStagedForCollect(bool staged) { 
             auto &logger = getRobot().getMessageLogger();
             logger.startMessage(MessageLogger::MessageType::debug);
@@ -83,6 +87,7 @@ namespace xero {
 
         void Conveyor::postHWInit() {
             setDefaultAction(std::make_shared<ConveyorStopAction>(*this));
+            shooterMotorHold_ = std::make_shared<MotorEncoderHoldAction>(*shooterMotor_);
         }
 
         bool Conveyor::canAcceptAction(ActionPtr action) {
@@ -94,6 +99,7 @@ namespace xero {
         }
 
         void Conveyor::computeState() {
+            Subsystem::computeState();
             for (auto pair : sensorNames_) {
                 Sensor sensor = pair.first;
                 int index = static_cast<int>(pair.first);
@@ -128,7 +134,12 @@ namespace xero {
             auto speeds = motorStates_[index];
 
             intakeMotor_->set(speeds.first);
-            shooterMotor_->set(speeds.second);
+
+            //if (abs(speeds.second) > 0.02) {
+            shooterMotor_->setAction(std::make_shared<SingleMotorPowerAction>(*shooterMotor_, speeds.second), true);
+            //} else if (shooterMotor_->getAction() != shooterMotorHold_) {
+            //    shooterMotor_->setAction(shooterMotorHold_, true);
+            //}
         }
     }
 }

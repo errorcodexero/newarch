@@ -6,6 +6,9 @@
 #include <SettingsParser.h>
 #include <Subsystem.h>
 #include <motors/MotorController.h>
+#include <motorencodersubsystem/MotorEncoderSubsystem.h>
+#include <motorencodersubsystem/MotorEncoderHoldAction.h>
+#include <singlemotorsubsystem/SingleMotorPowerAction.h>
 
 namespace xero {
     namespace droid {
@@ -92,8 +95,12 @@ namespace xero {
             static std::map<Sensor, std::string> sensorNames_;
 
             xero::base::MotorPtr intakeMotor_;
-            xero::base::MotorPtr shooterMotor_;
+            //xero::base::MotorPtr shooterMotor_;
+            std::shared_ptr<xero::base::MotorEncoderSubsystem> shooterMotor_;
             std::vector<std::pair<double, double>> motorStates_;
+
+            std::shared_ptr<xero::base::MotorEncoderHoldAction> shooterMotorHold_;
+            
 
             bool stagedForCollect_;
             bool stagedForFire_;
