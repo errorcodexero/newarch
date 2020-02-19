@@ -26,10 +26,8 @@ namespace xero {
             addChild(control_panel_rotator_);
 #endif
 
-#ifdef ADD_CLIMBER
             climber_ = std::make_shared<Climber>(this);
             addChild(climber_);
-#endif
 
             manip_ = std::make_shared<GamePieceManipulator>(this);
             addChild(manip_);
@@ -37,11 +35,11 @@ namespace xero {
             turret_ = std::make_shared<Turret>(this);
             addChild(turret_);
 
-            limelight_ = std::make_shared<DroidLimeLight>(this);
-            addChild(limelight_);
+            //limelight_ = std::make_shared<DroidLimeLight>(this);
+            //addChild(limelight_);
 
-            target_tracker_ = std::make_shared<TargetTracker>(this);
-            addChild(target_tracker_);
+            //target_tracker_ = std::make_shared<TargetTracker>(this);
+            //addChild(target_tracker_);
         }
 
         DroidSubsystem::~DroidSubsystem() {

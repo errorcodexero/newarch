@@ -13,9 +13,11 @@ namespace xero {
 
             lifter_ = std::make_shared<MotorEncoderSubsystem>(this, "climber:lifter", MSG_GROUP_CLIMBER) ; 
             lifter_->getMotorController()->setCurrentLimit(40) ;
+            lifter_->getMotorController()->setNeutralMode(MotorController::NeutralMode::Brake) ;
+            lifter_->setSmartDashboardName("lifter") ;
 
-            traverser_ = std::make_shared<MotorEncoderSubsystem>(this, "climber:traverser", MSG_GROUP_CLIMBER) ;
-            traverser_->getMotorController()->setCurrentLimit(10) ;
+            //traverser_ = std::make_shared<MotorEncoderSubsystem>(this, "climber:traverser", MSG_GROUP_CLIMBER) ;
+            //traverser_->getMotorController()->setCurrentLimit(10) ;
 
             // for servos put param value in "this"// 
             //TODO change param in .dat file & pull the value into this file : pwmid

@@ -14,6 +14,7 @@
 
 #include <turret/Turret.h>
 #include <turret/FollowTargetAction.h>
+#include <climber/Climber.h>
 
 #include <gamepiecemanipulator/GamePieceManipulator.h>
 #include <gamepiecemanipulator/ShootTestingAction.h>
@@ -50,6 +51,7 @@ namespace xero
             auto turret = droid.getDroidSubsystem()->getTurret();
             auto game = droid.getDroidSubsystem()->getGamePieceManipulator();
             auto conveyor = game->getConveyor() ;
+            auto climber = droid.getDroidSubsystem()->getClimber() ;
 
             int mode = robot.getSettingsParser().getInteger("auto:testmode:which");
             double dist = robot.getSettingsParser().getDouble("auto:testmode:distance");
@@ -188,6 +190,14 @@ namespace xero
                 // 60 - 69 climber related
                 //
                 //////////////////////////////////////////////////////////////////////////////////////////
+
+            case 60:
+                pushSubActionPair(climber->getLifter(), std::make_shared<MotorEncoderPowerAction>(*climber->getLifter(), power, duration));
+                break ;
+
+            case 61:
+                pushSubActionPair(climber->getLifter(), std::make_shared<MotorEncoderPowerAction>(*climber->getLifter(), power, duration));
+                break ;                
 
                 //////////////////////////////////////////////////////////////////////////////////////////
                 //

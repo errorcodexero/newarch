@@ -50,6 +50,10 @@ namespace xero {
                 return target_tracker_;
             }
 
+            std::shared_ptr<Climber> getClimber() {
+                return climber_ ;
+            }
+
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             
         private:

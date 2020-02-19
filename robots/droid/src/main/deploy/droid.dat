@@ -70,20 +70,12 @@ hw:climber:lifter:motor:1:type                                  "sparkmax_brushl
 hw:climber:lifter:motor:1:canid                                 13                          # CAN 13
 hw:climber:lifter:motor:2:type                                  "sparkmax_brushless"
 hw:climber:lifter:motor:2:canid                                 14                          # CAN 14
-hw:climber:lifter:motor:2:invert                                true
+hw:climber:lifter:motor:1:invert                                true
 hw:climber:lifter:motor:release                                 -10
 hw:climber:lifter:motor:climb                                   10
 hw:climber:lifter:encoder:quad:motor                            true
 hw:climber:lifter:encoder:quad:m                                1
 hw:climber:lifter:encoder:quad:b                                0
-
-hw:climber:traverser:motor:type                                  "sparkmax_brushless"
-hw:climber:traverser:motor:canid                                 15                          # CAN 13
-hw:climber:traverser:motor:release                               -10
-hw:climber:traverser:motor:climb                                 10
-hw:climber:traverser:encoder:quad:motor                          true
-hw:climber:traverser:encoder:quad:m                              1
-hw:climber:traverser:encoder:quad:b                              0
 
 hw:climber:servo:l:pwmid                                        0                           # PWM 2
 hw:climber:servo:r:pwmid                                        1                           # PWM 1
@@ -398,11 +390,11 @@ plotting:enabled                                               true
 # These control test modes for the robot.  They are used by the DroidTestTuneMode automode.  Note
 # this active value below is ignored if we are connected to the field.
 #
-auto:testmode:active                                          false
-auto:testmode:which                                           100
+auto:testmode:active                                          true
+auto:testmode:which                                           60
 auto:testmode:distance                                        60
-auto:testmode:power                                           -0.4
-auto:testmode:duration                                        1800
+auto:testmode:power                                          -0.2
+auto:testmode:duration                                        1.0
 
 #
 # Shoot test parameters
