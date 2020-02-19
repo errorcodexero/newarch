@@ -22,6 +22,7 @@ namespace xero {
             targetAbsX_ = settings.getDouble("targettracker:target:x");
             targetAbsY_ = settings.getDouble("targettracker:target:y");
             maxCameraTrackingAngle_ = settings.getDouble("targettracker:camera_targetting_max_angle");
+            cameraOffsetAngle_ = settings.getDouble("targettracker:camera_offset_angle");
         }
 
         void TargetTracker::setCameraTrackingEnabled(bool enabled) {
@@ -61,7 +62,7 @@ namespace xero {
                 lastCameraSampleTime_ = limelight->getSampleTime();
                 source_ = Source::Camera;
                 distance_ = limelight->getDistance();
-                relativeAngle_ = limelight->getYaw();
+                relativeAngle_ = limelight->getYaw() - cameraOffsetAngle_;
             }/* else {
                 // Use a sample from the drivebase
                 // TODO: we might not want to switch back and forth

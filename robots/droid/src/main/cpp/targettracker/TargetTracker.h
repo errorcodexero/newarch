@@ -54,6 +54,9 @@ namespace xero {
 
             // The maxmimum angle to attempt camera tracking.
             double maxCameraTrackingAngle_;
+            
+            // This angle is subtracted from the LimeLight yaw.
+            double cameraOffsetAngle_;
 
             bool cameraTrackingEnabled_;
         };

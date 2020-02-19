@@ -58,6 +58,7 @@ namespace xero {
             xero::base::ActionPtr turret_goto_zero_ ;
             xero::base::ActionPtr hood_down_;
             xero::base::ActionPtr eject_action_;
+            xero::base::ActionPtr shooter_eject_action_;
     
         } ;
     }

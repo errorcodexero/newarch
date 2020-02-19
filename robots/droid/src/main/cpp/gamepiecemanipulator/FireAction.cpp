@@ -4,6 +4,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Droid.h"
+#include "limelight/DroidLimeLight.h"
 #include "droidsubsystem/DroidSubsystem.h"
 #include "conveyor/Conveyor.h"
 #include "conveyor/ConveyorEmitAction.h"
@@ -31,6 +32,7 @@ namespace xero {
             
             "conveyor_state",
             "turret_error",
+            "tv",
             "shooter_velocity",
             "target_velocity",
         } ;
@@ -206,6 +208,7 @@ namespace xero {
 
                 (double)conveyorEmitAction_->getStateIndex(),
                 tracker->getRelativeAngle(),
+                (double)droidSubsystem_.getLimeLight()->isTargetPresent(),
                 shooter->getSpeedometer().getVelocity(),
                 shooterVelocityAction_->getTarget(),
             });

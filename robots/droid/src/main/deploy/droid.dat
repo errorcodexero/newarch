@@ -357,7 +357,7 @@ droidvision:camera_target_height                                68.0
 limelight:camera_latency                                        11.0
 limelight:network_latency                                       10.0
 
-gamepiecemanipulator:fire:max_drivebase_velocity                0.2
+gamepiecemanipulator:fire:max_drivebase_velocity                15
 gamepiecemanipulator:fire:max_camera_sample_age                 5.0
 
 ###################################################################################################
@@ -378,6 +378,9 @@ targettracker:target:y                                          30  # placeholde
 # In order to attempt camera tracking, db-estimated angle to target must be less than this value
 # This helps prevent us from trying to track the wrong target
 targettracker:camera_targetting_max_angle                       45
+
+# Compensate for camera mounting variance by subtracting this value from the limelight yaw value.
+targettracker:camera_offset_angle                               2.5
 
 ###################################################################################################
 #

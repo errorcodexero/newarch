@@ -19,6 +19,7 @@
 #include "gamepiecemanipulator/intake/CollectOffAction.h"
 #include "gamepiecemanipulator/GamePieceManipulator.h"
 #include "gamepiecemanipulator/shooter/SetHoodAction.h"
+#include <motorencodersubsystem/MotorEncoderVelocityAction.h>
 #include <Subsystem.h>
 #include <Robot.h>
 #include <TeleopController.h>
@@ -119,6 +120,7 @@ namespace xero {
                 if (!getValue(eject_)) {
                     flag_eject_ = false;   
                     flag_coll_v_shoot_ = CollectShootMode::InvalidMode;
+                    shooter->setAction(nullptr);
                 }
             } else if (getValue(eject_)) {
                 flag_eject_ = true;
@@ -126,6 +128,7 @@ namespace xero {
                 seq.pushSubActionPair(shooter, hood_down_, false);
                 seq.pushSubActionPair(turret, turret_goto_zero_, false);
                 seq.pushSubActionPair(conveyor, eject_action_, false);
+                seq.pushSubActionPair(shooter, shooter_eject_action_, false);
             }
 
             if (flag_eject_) return;
@@ -142,6 +145,7 @@ namespace xero {
                         seq.pushSubActionPair(conveyor, queue_prep_collect_, false) ;
                         seq.pushSubActionPair(turret, turret_goto_zero_, false) ;    
                         seq.pushSubActionPair(shooter, hood_down_, false);
+                        flag_collect_ = false;
                         flag_coll_v_shoot_ = CollectShootMode::CollectMode ;                                            
                         frc::SmartDashboard::PutString("Mode", "Collect") ;
                     }
@@ -151,6 +155,7 @@ namespace xero {
                     seq.pushSubActionPair(conveyor, queue_prep_shoot_, false) ;
                     seq.pushSubActionPair(turret, turret_follow_, false) ;
                     seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false) ;
+                    seq.pushSubActionPair(intake,  std::make_shared<CollectOffAction>(*intake), false);
                     flag_coll_v_shoot_ = CollectShootMode::ShootMode ;
                     frc::SmartDashboard::PutString("Mode", "Shoot") ;                    
                 }
@@ -236,6 +241,7 @@ namespace xero {
 
             hood_down_ = std::make_shared<SetHoodAction>(*shooter, true);
             eject_action_ = std::make_shared<ConveyorEjectAction>(*conveyor);
+            shooter_eject_action_ = std::make_shared<MotorEncoderVelocityAction>(*shooter, -3000);
         }
     }
 }

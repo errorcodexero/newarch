@@ -21,6 +21,8 @@ namespace xero {
             auto motorFactory = robot.getMotorFactory();
             left_motors_ = motorFactory->createMotor(motorConfigBase + ":left");
             right_motors_ = motorFactory->createMotor(motorConfigBase + ":right");
+            left_motors_->setCurrentLimit(40);
+            right_motors_->setCurrentLimit(40);
 
             dist_l_ = 0.0 ;
             dist_r_ = 0.0 ;
