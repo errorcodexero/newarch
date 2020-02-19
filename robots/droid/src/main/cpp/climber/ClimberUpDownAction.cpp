@@ -1,5 +1,5 @@
 #include "ClimberUpDownAction.h"
-#include <singlemotorsubsystem/SingleMotorPowerAction.h>
+
 
 using namespace xero::base ;
 
@@ -28,6 +28,11 @@ namespace xero
 
         void ClimberUpDownAction::run()
         {
+            auto &climber = getSubsystem() ;
+            if (action_->getPower() > 0 && climber.getLifter()->getPosition() > climber.getMaxHeight())
+                climber.getLifter()->cancelAction() ;
+            else if (action_->getPower() < 0 && climber.getLifter()->getPosition() <= 0.0)
+                climber.getLifter()->cancelAction() ;
         }
 
         std::string ClimberUpDownAction::toString()

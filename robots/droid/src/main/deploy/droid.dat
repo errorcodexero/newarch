@@ -294,6 +294,7 @@ climber:servo:r:release                                        0
 climber:servo:l:release                                        0
 climber:servo:delay                                            1.0
 climber:climb_height                                           1000
+climber:max_height                                             1200
 
 climber:lifter:motor:follower:up:maxkp                                0
 climber:lifter:motor:follower:up:maxki                                0

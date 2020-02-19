@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ClimberAction.h"
+#include <singlemotorsubsystem/SingleMotorPowerAction.h>
 
 namespace xero
 {
@@ -20,7 +21,7 @@ namespace xero
             virtual std::string toString() ;
 
         private:
-            xero::base::ActionPtr action_ ;
+            std::shared_ptr<xero::base::SingleMotorPowerAction> action_ ;
         } ;
     }
 }
