@@ -16,8 +16,8 @@ namespace xero {
             lifter_->getMotorController()->setNeutralMode(MotorController::NeutralMode::Brake) ;
             lifter_->setSmartDashboardName("lifter") ;
 
-            //traverser_ = std::make_shared<MotorEncoderSubsystem>(this, "climber:traverser", MSG_GROUP_CLIMBER) ;
-            //traverser_->getMotorController()->setCurrentLimit(10) ;
+            int travid = parent->getRobot().getSettingsParser().getInteger("hw:climber:traverser:pwmid") ;
+            traverser_ = std::make_shared<frc::PWMSparkMax>(travid) ;
 
             // for servos put param value in "this"// 
             //TODO change param in .dat file & pull the value into this file : pwmid
@@ -30,7 +30,6 @@ namespace xero {
             /// instantiate the 2 servos
             /// read values from params/config file for servos and assign to the servos... 
             /// example for this is gamepiecemanipulator    
-
         }
     }
 }

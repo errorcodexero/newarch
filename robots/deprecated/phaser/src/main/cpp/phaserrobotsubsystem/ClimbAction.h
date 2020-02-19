@@ -6,10 +6,10 @@
 
 namespace xero{
     namespace phaser{
-        class ClimbAction : public xero::base::Action {
+        class ExtendClimberAction : public xero::base::Action {
         public:
-            ClimbAction(PhaserRobotSubsystem &subsystem, bool complete) ;
-            virtual ~ClimbAction() ;
+            ExtendClimberAction(PhaserRobotSubsystem &subsystem, bool complete) ;
+            virtual ~ExtendClimberAction() ;
 
             virtual void start() ;
             virtual void run() ;

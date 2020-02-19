@@ -20,7 +20,7 @@
 #include "lifter/LifterGoToHeightAction.h"
 #include "lightsensor/LineFollowAction.h"
 #include "phaserrobotsubsystem/PhaserRobotSubsystem.h"
-#include "phaserrobotsubsystem/ClimbAction.h"
+#include "phaserrobotsubsystem/ExtendClimberAction.h"
 #include "phaserrobotsubsystem/StrafeAction.h"
 #include "climber/ClimberDeployAction.h"
 #include <oi/DriverGamepadRumbleAction.h>
@@ -379,7 +379,7 @@ namespace xero {
 
             set_collect_cargo_floor_  = std::make_shared<FloorCollectCargoAction>(*game) ;
             reset_intakes_ = std::make_shared<ResetIntakeAction>(*game) ;
-            climb_action_ = std::make_shared<ClimbAction>(*ph.getPhaserRobotSubsystem(), true) ;
+            climb_action_ = std::make_shared<ExtendClimberAction>(*ph.getPhaserRobotSubsystem(), true) ;
 
             deploy_climber_ = std::make_shared<ClimberDeployAction>(*climber) ;
 

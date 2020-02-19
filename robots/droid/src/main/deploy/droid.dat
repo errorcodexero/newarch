@@ -77,6 +77,8 @@ hw:climber:lifter:encoder:quad:motor                            true
 hw:climber:lifter:encoder:quad:m                                1
 hw:climber:lifter:encoder:quad:b                                0
 
+hw:climber:traverser:pwmid                                      4
+
 hw:climber:servo:l:pwmid                                        0                           # PWM 2
 hw:climber:servo:r:pwmid                                        1                           # PWM 1
 hw:climber:servo:l:release                                      1.0
@@ -282,14 +284,16 @@ driver:zerolevel                                                0.1
 # Climber
 ###################################################################################################
 
-climber:servo:l:angle_hold                                     -1
-climber:servo:l:angle_release                                  -1
-climber:servo:r:angle_hold                                     -1
-climber:servo:r:angle_release                                  -1
+#climber:servo:l:angle_hold                                     -1
+#climber:servo:l:angle_release                                  -1
+#climber:servo:r:angle_hold                                     -1
+#climber:servo:r:angle_release                                  -1
 climber:servo:r:climb                                          0
 climber:servo:l:climb                                          0
 climber:servo:r:release                                        0
 climber:servo:l:release                                        0
+climber:servo:delay                                            1.0
+climber:climb_height                                           1000
 
 climber:lifter:motor:follower:up:maxkp                                0
 climber:lifter:motor:follower:up:maxki                                0

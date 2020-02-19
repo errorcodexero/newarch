@@ -11,7 +11,7 @@ namespace xero {
             virtual ~ClimberAction() {                
             }
 
-            Climber &getClimber() {
+            Climber &getSubsystem() {
                 return climber_ ;
             }
 
