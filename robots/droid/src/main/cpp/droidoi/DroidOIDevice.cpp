@@ -128,6 +128,12 @@ namespace xero {
                 seq.pushSubActionPair(shooter, hood_down_, false);
                 seq.pushSubActionPair(turret, turret_goto_zero_, false);
                 seq.pushSubActionPair(conveyor, eject_action_, false);
+
+                //
+                // NOTE: You previously put a dispatch action against the the shooter above.
+                //       Since these are dispatch actions, they get assigned to the subsystem and complete.
+                //       This assignment below is goign to override (replace) the hood_down_ one above.
+                //
                 seq.pushSubActionPair(shooter, shooter_eject_action_, false);
             }
 
@@ -140,8 +146,8 @@ namespace xero {
                             game_piece_manipulator->getAction() == start_collect_action_ || 
                             game_piece_manipulator->getAction() == stop_collect_action_ ||
                             game_piece_manipulator->getAction() == fire_yes_ ||
-                            game_piece_manipulator->getAction() == stop_shoot_action_) {
-                        
+                            game_piece_manipulator->getAction() == stop_shoot_action_) 
+                    {
                         seq.pushSubActionPair(conveyor, queue_prep_collect_, false) ;
                         seq.pushSubActionPair(turret, turret_goto_zero_, false) ;    
                         seq.pushSubActionPair(shooter, hood_down_, false);
@@ -152,6 +158,13 @@ namespace xero {
                 }
                 else
                 {
+                    //
+                    // NOTE: we are assigning the conveyor the queue_prep_shoot which is basically the
+                    //       prepart to emit action.  We also assign the game_piece_manipulator the fire_yes
+                    //       action.  Therefore if you get ready to fire before the prepare to emit action is
+                    //       complete, then the fire will assign an emit action, which will cancel the ongoing
+                    //       prepare to emit action and then cause an assert.
+                    //
                     seq.pushSubActionPair(conveyor, queue_prep_shoot_, false) ;
                     seq.pushSubActionPair(turret, turret_follow_, false) ;
                     seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false) ;
