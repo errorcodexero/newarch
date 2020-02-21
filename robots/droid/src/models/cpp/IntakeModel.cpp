@@ -26,8 +26,8 @@ namespace xero
 
         bool IntakeModel::create()
         {
-            intake_up_down_ = std::make_shared<SimulatedMotor>(*this, "updown") ;
-            intake_spin_ = std::make_shared<SimulatedMotor>(*this, "spin") ;   
+            intake_up_down_ = std::make_shared<SimulatedMotor>(*this, "hw:updown:motor") ;
+            intake_spin_ = std::make_shared<SimulatedMotor>(*this, "hw:spin:motor") ;   
 
             return true ;
         }

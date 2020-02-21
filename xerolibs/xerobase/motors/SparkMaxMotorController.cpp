@@ -20,7 +20,7 @@ namespace xero {
                 motor_->EnableVoltageCompensation(12.0) ;
                 motor_->BurnFlash() ;
 
-                resetPosition();
+                resetEncoder();
             }
 
             void SparkMaxMotorController::setCurrentLimit(double curlim)

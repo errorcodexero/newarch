@@ -141,7 +141,7 @@ namespace xero
                 //
                 //////////////////////////////////////////////////////////////////////////////////////////
             case 30:     // Test the shooter
-                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 7000.0, false));
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), power, false));
                 pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 5.0)); 
                 pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, false));                                
                 break;

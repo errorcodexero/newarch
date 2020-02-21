@@ -5,6 +5,7 @@
 #include "DroidOIModel.h"
 #include "IntakeModel.h"
 #include "ConveyorModel.h"
+#include "ShooterModel.h"
 #include <SimulatorEngine.h>
 #include <ModelFactory.h>
 #include <BuiltInModels.h>
@@ -24,6 +25,7 @@ USE_SIMULATION_MODEL(DroidOIModel, "droidoi") ;
 USE_SIMULATION_MODEL(IntakeModel, "intake") ;
 USE_SIMULATION_MODEL(ConveyorModel, "conveyor") ;
 USE_SIMULATION_MODEL(LimeLightModel, "limelight") ;
+USE_SIMULATION_MODEL(ShooterModel, "shooter") ;
 #endif
 
 int main(int ac, char **av)

@@ -4,6 +4,6 @@ rootdir=$(git rev-parse --show-toplevel)
 cd $rootdir
 
 build/SIM2/Debug/$1/$1\
-	--debug -5\
+	--debug 10\
 	--props robots/$1/sim2/$1.json\
 	--events robots/$1/sim2/sims/$2.json 

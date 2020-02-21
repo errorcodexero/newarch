@@ -44,6 +44,8 @@ namespace xero {
                 return talon->GetSelectedSensorPosition() ;
             }
 
+            virtual void resetEncoder() ;
+
             virtual void setCurrentLimit(double limit) ;            
             
         private:

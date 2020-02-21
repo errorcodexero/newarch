@@ -57,6 +57,13 @@ namespace ctre
                 return static_cast<int>(ret);
             }
 
+            void IMotorController::SetSelectedSensorPosition(int pos) {
+                xero::sim2::SimulatorEngine &engine = xero::sim2::SimulatorEngine::getEngine();
+                auto mgr = engine.getCTREManager();
+
+                mgr->setEncoder(index_, pos) ;
+            }            
+
         } // namespace motorcontrol
     } // namespace phoenix
 } // namespace ctre

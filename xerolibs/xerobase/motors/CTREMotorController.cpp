@@ -31,6 +31,13 @@ namespace xero {
                 type_ = type ;
             }
 
+            void CTREMotorController::resetEncoder()
+            {
+                assert(type_ == Type::TalonFX); 
+                auto m = std::dynamic_pointer_cast<ctre::phoenix::motorcontrol::can::TalonFX>(motor_) ;
+                m->SetSelectedSensorPosition(0) ;                
+            }
+
             void CTREMotorController::setCurrentLimit(double curlim)
             {
                 auto m = std::dynamic_pointer_cast<ctre::phoenix::motorcontrol::can::TalonFX>(motor_) ;

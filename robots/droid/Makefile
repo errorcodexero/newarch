@@ -35,6 +35,9 @@ SUBSYSTEMS = \
 	src/main/cpp/turret/FollowTargetAction.cpp\
 	src/main/cpp/turret/Turret.cpp\
 	src/main/cpp/climber/Climber.cpp\
+	src/main/cpp/climber/ClimberUpDownAction.cpp\
+	src/main/cpp/climber/ExtendClimberAction.cpp\
+	src/main/cpp/climber/LockClimberAction.cpp\
 	src/main/cpp/controlpanelrotator/ControlPanelRotator.cpp\
     src/main/cpp/controlpanelrotator/RotateControlPanelAction.cpp\
     src/main/cpp/limelight/DroidLimeLight.cpp\
@@ -43,7 +46,8 @@ SUBSYSTEMS = \
 MODELS = \
 	src/models/cpp/DroidOIModel.cpp\
 	src/models/cpp/IntakeModel.cpp\
-	src/models/cpp/ConveyorModel.cpp
+	src/models/cpp/ConveyorModel.cpp\
+	src/models/cpp/ShooterModel.cpp
 
 SOURCES = \
 	src/main/cpp/main.cpp\

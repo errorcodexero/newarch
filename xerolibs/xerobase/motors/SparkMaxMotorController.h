@@ -39,7 +39,7 @@ namespace xero {
                 return static_cast<int>(encoder_.GetPosition() * 42) ;
             }
 
-            virtual void resetPosition() {
+            virtual void resetEncoder() {
                 encoder_.SetPosition(0);
             }
 

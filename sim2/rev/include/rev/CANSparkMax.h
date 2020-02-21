@@ -23,6 +23,9 @@ namespace rev
             idle_mode_ = mode ;
         }
 
+        void BurnFlash() {
+        }
+
     private:
         IdleMode idle_mode_ ;
     } ;

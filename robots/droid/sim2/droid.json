@@ -105,6 +105,33 @@
             "behavior" : {
                 "distance_per_second_per_inch" : 12.0
             }            
-        }
+        },
+        {
+            "model" : "shooter",
+            "instance" : "1",
+            "hardware" : {
+                "shooter:motor:1:index" : 5,
+                "shooter:motor:1:type" : "sparkmax",
+                "shooter:motor:2:index" : 6,
+                "shooter:motor:2:type" : "sparkmax"
+            },
+            "behavior" : {
+                "kv" : 0.000130571,
+                "change" : 10000.0
+            }
+        },
+        {
+            "model" : "intake",
+            "instance" : "1",
+            "hardware" : {
+                "updown:motor:index" : 11,
+                "updown:motor:type" : "sparkmax",
+                "spin:motor:index" : 10,
+                "spin:motor:type" : "sparkmax"
+            },
+            "behavior" : {
+                "kv" : 0.000130571
+            }
+        }        
     ]
 }

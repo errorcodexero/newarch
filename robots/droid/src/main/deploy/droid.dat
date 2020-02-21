@@ -361,6 +361,8 @@ gamepiecemanipulator:fire:max_camera_sample_age                 5.0
 # oi
 ###################################################################################################
 
+oi:automode                                                     0
+
 oi:shoot_collect_mode                                           11
 oi:eject                                                        8
 oi:collect_onoff                                                14
@@ -404,9 +406,9 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           60
+auto:testmode:which                                           30
 auto:testmode:distance                                        60
-auto:testmode:power                                          -0.2
+auto:testmode:power                                           4000
 auto:testmode:duration                                        1.0
 
 #
