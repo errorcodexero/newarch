@@ -94,6 +94,7 @@ namespace xero
             current_speed_rpm_ += delta ;
             double revs = current_speed_rpm_ * microdt / 1e6 / 60 ;
             encoder_count_ += revs * shooter_->ticksPerRev() ;
+            shooter_->setEncoder(static_cast<int32_t>(encoder_count_)) ;
         }
     }
 }

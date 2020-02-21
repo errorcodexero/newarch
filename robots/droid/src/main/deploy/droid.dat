@@ -314,10 +314,10 @@ climber:lifter:motor:follower:down:min                                -1
 climber:lifter:motor:follower:down:max                                1
 cilmber:lifter:motor:follower:down:imax                               0
 
-climber:lifter:motor:goto:threshold                                   3.0
-climber:lifter:motor:goto:maxa                                        70
-climber:lifter:motor:goto:maxd                                        -70
-climber:lifter:motor:goto:maxv                                        70
+climber:lifter:goto:threshold                                   3.0
+climber:lifter:goto:maxa                                        70
+climber:lifter:goto:maxd                                        -70
+climber:lifter:goto:maxv                                        70
 
 ##----------------------
 
@@ -339,7 +339,7 @@ climber:traverser:motor:follower:down:min                                -1
 climber:traverser:motor:follower:down:max                                1
 climber:traverser:follower:down:imax                               0
 
-climber:traverser:motor:goto:threshold                                   3.0
+climber:traverser:motgoto:threshold                                   3.0
 climber:traverser:motor:goto:maxa                                        70
 climber:traverser:motor:goto:maxd                                        -70
 climber:traverser:motor:goto:maxv                                        70

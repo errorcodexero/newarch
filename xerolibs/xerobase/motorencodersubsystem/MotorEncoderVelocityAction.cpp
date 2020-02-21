@@ -34,7 +34,6 @@ namespace xero {
             );
 
             pid_.reset();
-            //sub.startPlot(plotid_, plot_columns_) ;
         }
 
         void MotorEncoderVelocityAction::run() {
@@ -55,18 +54,12 @@ namespace xero {
             logger << " actual " << avel ;
             logger << " output " << out ;
             logger.endMessage() ;
-
-            // sub.addPlotData(plotid_, {
-            //     sub.getRobot().getTime(),
-            //     target_, avel, out
-            // });
         }
 
         void MotorEncoderVelocityAction::cancel()
         {
             MotorEncoderSubsystemAction::cancel();
             setDone();
-            // getSubsystem().endPlot(plotid_);
             getSubsystem().setMotor(0.0);
         }
     }

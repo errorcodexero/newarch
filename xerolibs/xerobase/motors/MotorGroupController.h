@@ -51,6 +51,10 @@ namespace xero {
 
             virtual void setCurrentLimit(double limit) ;
 
+            virtual void resetEncoder() {
+                motors_[0]->resetEncoder() ;
+            }
+
         private:
             std::vector<MotorPtr> motors_;
         };
