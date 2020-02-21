@@ -1,5 +1,5 @@
-area_max:100
-area_min:0.14757890560000003
+area_max:76.42693506250002
+area_min:0.06718982410000002
 area_similarity:0
 aspect_max:9.042435199999998
 aspect_min:1.2007450124999999
@@ -26,7 +26,7 @@ erosion_steps:0
 exposure:2
 force_convex:1
 hue_max:104
-hue_min:32
+hue_min:41
 image_flip:0
 image_source:0
 img_to_show:1
