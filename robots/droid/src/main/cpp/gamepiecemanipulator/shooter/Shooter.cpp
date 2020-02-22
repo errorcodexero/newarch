@@ -1,6 +1,7 @@
 #include "Shooter.h"
 #include "droidids.h"
 #include "ShooterAction.h"
+#include <motors/MotorGroupController.h>
 
 using namespace xero::misc;
 using namespace xero::base;
@@ -17,8 +18,8 @@ namespace xero {
             std::string hoodConfig = "shooter:hood:";
             hoodUpPos_ = settings.getDouble(hoodConfig + "up");
             hoodDownPos_ = settings.getDouble(hoodConfig + "down");
-
             getMotorController()->setCurrentLimit(40) ;
+            getMotorController()->setNeutralMode(MotorController::NeutralMode::Coast) ;
         }
 
         bool Shooter::canAcceptAction(xero::base::ActionPtr action) {

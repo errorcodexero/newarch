@@ -18,7 +18,7 @@ namespace xero {
                 motor_->RestoreFactoryDefaults(false) ;
                 motor_->SetSmartCurrentLimit(30) ;
                 motor_->EnableVoltageCompensation(12.0) ;
-                motor_->BurnFlash() ;
+                // motor_->BurnFlash() ;
 
                 resetEncoder();
             }
