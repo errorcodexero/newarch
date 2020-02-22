@@ -96,10 +96,13 @@ namespace xero {
                 left_motors_->setNeutralMode(automode_neutral_);
                 right_motors_->setNeutralMode(automode_neutral_);
             }
-            else
+            else if (ltype == LoopType::OperatorControl)
             {
                 left_motors_->setNeutralMode(teleop_neutral_);
                 right_motors_->setNeutralMode(teleop_neutral_);                
+            } else {
+                left_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
+                right_motors_->setNeutralMode(MotorController::NeutralMode::Coast);
             }
 
             //
