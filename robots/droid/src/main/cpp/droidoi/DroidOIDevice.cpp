@@ -19,7 +19,7 @@
 #include "gamepiecemanipulator/intake/CollectOffAction.h"
 #include "gamepiecemanipulator/GamePieceManipulator.h"
 #include "gamepiecemanipulator/shooter/SetHoodAction.h"
-#include <motorencodersubsystem/MotorEncoderVelocityAction.h>
+#include "gamepiecemanipulator/shooter/ShooterVelocityAction.h"
 #include <Subsystem.h>
 #include <Robot.h>
 #include <TeleopController.h>
@@ -119,21 +119,16 @@ namespace xero {
             if (flag_eject_) {
                 if (!getValue(eject_)) {
                     flag_eject_ = false;   
+                    waitingForConveyorPrepShoot_ = false;
                     flag_coll_v_shoot_ = CollectShootMode::InvalidMode;
                     shooter->setAction(nullptr);
                 }
             } else if (getValue(eject_)) {
                 flag_eject_ = true;
-                seq.pushSubActionPair(intake,  std::make_shared<CollectOffAction>(*intake), false);
-                seq.pushSubActionPair(shooter, hood_down_, false);
+                seq.pushSubActionPair(intake,  intake_off_, false);
                 seq.pushSubActionPair(turret, turret_goto_zero_, false);
                 seq.pushSubActionPair(conveyor, eject_action_, false);
-
-                //
-                // NOTE: You previously put a dispatch action against the the shooter above.
-                //       Since these are dispatch actions, they get assigned to the subsystem and complete.
-                //       This assignment below is goign to override (replace) the hood_down_ one above.
-                //
+                seq.pushSubActionPair(intake, intake_off_, false);
                 seq.pushSubActionPair(shooter, shooter_eject_action_, false);
             }
 
@@ -142,7 +137,7 @@ namespace xero {
             if (flag_coll_v_shoot_ == CollectShootMode::InvalidMode || getSwitchMode() != flag_coll_v_shoot_) {
                 if(getSwitchMode() == CollectShootMode::CollectMode) {
                     // Setup the game piece manipulator to collect
-                    if (game_piece_manipulator->isDone()  ||
+                    if (game_piece_manipulator->isDone()  || waitingForConveyorPrepShoot_ ||
                             game_piece_manipulator->getAction() == start_collect_action_ || 
                             game_piece_manipulator->getAction() == stop_collect_action_ ||
                             game_piece_manipulator->getAction() == fire_yes_ ||
@@ -152,24 +147,18 @@ namespace xero {
                         seq.pushSubActionPair(turret, turret_goto_zero_, false) ;    
                         seq.pushSubActionPair(shooter, hood_down_, false);
                         flag_collect_ = false;
-                        flag_coll_v_shoot_ = CollectShootMode::CollectMode ;                                            
+                        flag_coll_v_shoot_ = CollectShootMode::CollectMode ;                                   
                         frc::SmartDashboard::PutString("Mode", "Collect") ;
                     }
                 }
-                else
-                {
-                    //
-                    // NOTE: we are assigning the conveyor the queue_prep_shoot which is basically the
-                    //       prepart to emit action.  We also assign the game_piece_manipulator the fire_yes
-                    //       action.  Therefore if you get ready to fire before the prepare to emit action is
-                    //       complete, then the fire will assign an emit action, which will cancel the ongoing
-                    //       prepare to emit action and then cause an assert.
-                    //
-                    seq.pushSubActionPair(conveyor, queue_prep_shoot_, false) ;
+                else {
+                    // Queue the conveyor to prepare to fire.
                     seq.pushSubActionPair(turret, turret_follow_, false) ;
-                    seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false) ;
-                    seq.pushSubActionPair(intake,  std::make_shared<CollectOffAction>(*intake), false);
-                    flag_coll_v_shoot_ = CollectShootMode::ShootMode ;
+                    seq.pushSubActionPair(conveyor, queue_prep_shoot_, false);
+                    seq.pushSubActionPair(shooter, shooter_spinup_, false) ;
+                    seq.pushSubActionPair(intake,  intake_off_, false);
+                    flag_coll_v_shoot_ = CollectShootMode::ShootMode ;      
+                    waitingForConveyorPrepShoot_ = true;
                     frc::SmartDashboard::PutString("Mode", "Shoot") ;                    
                 }
             }
@@ -183,7 +172,7 @@ namespace xero {
                 //
                 // Check to see that the game piece manipulator can actually accept new actions
                 //           
-                if (game_piece_manipulator->isDone() || 
+                if (game_piece_manipulator->isDone() || waitingForConveyorPrepShoot_ ||
                             game_piece_manipulator->getAction() == start_collect_action_ || 
                             game_piece_manipulator->getAction() == stop_collect_action_ ||
                             game_piece_manipulator->getAction() == fire_yes_ ||
@@ -213,6 +202,11 @@ namespace xero {
                             seq.pushSubActionPair(game_piece_manipulator, stop_collect_action_, false) ;
                             flag_collect_ = false ;
                         }
+                    } else if (waitingForConveyorPrepShoot_ 
+                               && queue_prep_shoot_->isDone()
+                               && intake_off_->isDone()) {
+                        seq.pushSubActionPair(game_piece_manipulator, fire_yes_);
+                        waitingForConveyorPrepShoot_ = false;
                     }
                 }
             }
@@ -236,12 +230,15 @@ namespace xero {
 
             queue_prep_collect_ = std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor) ;
             queue_prep_shoot_ = std::make_shared<ConveyorPrepareToEmitAction>(*conveyor) ;
+            shooter_spinup_ = std::make_shared<ShooterVelocityAction>(*shooter, 4500, true);
+            fire_yes_ = std::make_shared<FireAction>(*game_piece_manipulator);
+            waitingForConveyorPrepShoot_ = false;
 
             conveyor_receive_ = std::make_shared<ConveyorReceiveAction>(*conveyor) ;
             intake_on_ = std::make_shared<CollectOnAction>(*intake) ;
+            intake_off_ = std::make_shared<CollectOffAction>(*intake);
 
             turret_follow_ = std::make_shared<FollowTargetAction>(*turret) ;
-            fire_yes_ = std::make_shared<FireAction>(*game_piece_manipulator) ;
 
             start_collect_action_ = std::make_shared<StartCollectAction>(*game_piece_manipulator) ;
             stop_collect_action_ = std::make_shared<StopCollectAction>(*game_piece_manipulator) ;
@@ -254,7 +251,7 @@ namespace xero {
 
             hood_down_ = std::make_shared<SetHoodAction>(*shooter, true);
             eject_action_ = std::make_shared<ConveyorEjectAction>(*conveyor);
-            shooter_eject_action_ = std::make_shared<MotorEncoderVelocityAction>(*shooter, -3000);
+            shooter_eject_action_ = std::make_shared<ShooterVelocityAction>(*shooter, -3000, true);
         }
     }
 }
