@@ -34,12 +34,9 @@ hw:shooter:hood                                                 0
 hw:conveyor:motors:intake:type                                  "sparkmax_brushless"
 hw:conveyor:motors:intake:canid                                 7                          # CAN 7
 hw:conveyor:motors:intake:neutral_mode                          "brake"
-hw:conveyor:motors:shooter:motor:type                           "sparkmax_brushless"
-hw:conveyor:motors:shooter:motor:canid                          8                          # CAN 8
-hw:conveyor:motors:shooter:motor:neutral_mode                   "brake"
-hw:conveyor:motors:shooter:encoder:quad:motor                   true
-hw:conveyor:motors:shooter:encoder:quad:m                       1
-hw:conveyor:motors:shooter:encoder:quad:b                       0
+hw:conveyor:motors:shooter:type                                 "sparkmax_brushless"
+hw:conveyor:motors:shooter:canid                                8                          # CAN 8
+hw:conveyor:motors:shooter:neutral_mode                         "brake"
 hw:conveyor:sensor:a                                            12
 hw:conveyor:sensor:b                                            11
 hw:conveyor:sensor:c                                            13
@@ -277,14 +274,6 @@ conveyor:motorstates:move_towards_shooter:shooter               1
 conveyor:motorstates:move_towards_intake:intake                 -1
 conveyor:motorstates:move_towards_intake:shooter                -1
 
-conveyor:motors:shooter:hold:p                                                   0.0006
-conveyor:motors:shooter:hold:i                                                  0
-conveyor:motors:shooter:hold:d                                                  0
-conveyor:motors:shooter:hold:f                                                   0
-conveyor:motors:shooter:hold:min                                                 -1
-conveyor:motors:shooter:hold:max                                                 1
-conveyor:motors:shooter:hold:imax                                                0
-
 ###################################################################################################
 # Variables for the driver gamepad
 ###################################################################################################
@@ -369,7 +358,7 @@ droidvision:camera_target_height                                68.0
 limelight:camera_latency                                        11.0
 limelight:network_latency                                       10.0
 
-gamepiecemanipulator:fire:max_drivebase_velocity                5
+gamepiecemanipulator:fire:max_drivebase_velocity                15
 gamepiecemanipulator:fire:max_camera_sample_age                 5.0
 
 ###################################################################################################

@@ -1,6 +1,5 @@
 #include "ConveyorReceiveAction.h"
 #include "Conveyor.h"
-#include <frc/smartdashboard/SmartDashboard.h>
 
 namespace xero {
     namespace droid {
@@ -59,7 +58,6 @@ namespace xero {
             reachedShooterSensor_ = false;
             collecting_ = false;
             setMotors(MotorState::Stopped);
-            //frc::SmartDashboard::PutBoolean("CollectAborted", false);
         }
 
         void ConveyorReceiveAction::conveyorActionRun() {
@@ -72,13 +70,6 @@ namespace xero {
                 reachedShooterSensor_ = false;
                 setStagedForFire(true);
             }
-
-            /*if (getSubsystem().isStagedForFire() && getSubsystem().readSensor(Sensor::D)) {
-                // Abort collect so we don't jam
-                frc::SmartDashboard::PutBoolean("CollectAborted", true);
-                setMotors(MotorState::Stopped);
-                setDone();
-            }*/
 
             if (collecting_) {
                 if (getSubsystem().isStagedForFire()) {
