@@ -85,6 +85,14 @@ namespace xero {
             stagedForFire_ = staged; 
         }
 
+        void Conveyor::setCollecting(bool collecting) { 
+            auto &logger = getRobot().getMessageLogger();
+            logger.startMessage(MessageLogger::MessageType::debug);
+            logger << "Conveyor: setCollecting(" << collecting << ")";
+            logger.endMessage();
+            collecting_ = collecting;
+        }
+
         void Conveyor::postHWInit() {
             setDefaultAction(std::make_shared<ConveyorStopAction>(*this));
             shooterMotorHold_ = std::make_shared<MotorEncoderHoldAction>(*shooterMotor_);

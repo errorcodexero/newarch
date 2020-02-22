@@ -21,12 +21,6 @@ namespace xero {
 
             int travid = parent->getRobot().getSettingsParser().getInteger("hw:climber:traverser:pwmid") ;
             traverser_ = std::make_shared<frc::PWMSparkMax>(travid) ;
-
-            int servo_r_id_ = getRobot().getSettingsParser().getInteger("hw:climber:servo:r:pwmid") ;
-            servo_r_ = std::make_shared<Servo>(servo_r_id_) ;
-
-            int servo_l_id_ = getRobot().getSettingsParser().getInteger("hw:climber:servo:l:pwmid") ;
-            servo_l_ = std::make_shared<Servo>(servo_l_id_) ;
         }
     }
 }

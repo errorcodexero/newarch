@@ -80,8 +80,7 @@ namespace xero {
             xero::base::ActionPtr down_ ;
             xero::base::ActionPtr left_ ;
             xero::base::ActionPtr right_ ;
-            xero::base::ActionPtr stop_ ;
-            xero::base::ActionPtr lock_climber_ ;                        
+            xero::base::ActionPtr stop_ ;                     
         } ;
     }
 }

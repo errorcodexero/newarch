@@ -30,11 +30,11 @@ namespace xero {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;            
             auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;   
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+            
+            started_ = false;
+            timeoutEnd_ = getSubsystem().getRobot().getTime() + 1;
 
             xero::base::Action::start() ;
-            auto collect_off_action = std::make_shared<CollectOffAction>(*intake) ;            
-            intake->setAction(collect_off_action, true) ;
-            conveyor->setAction(conveyor_stop_action_, true) ; 
         }
 
         void StopCollectAction::run() 
@@ -42,6 +42,14 @@ namespace xero {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;            
             auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+
+            if (!started_) {
+                started_ = true;
+                if (droid.getTime() < timeoutEnd_ && conveyor->isBusy()) return;
+                auto collect_off_action = std::make_shared<CollectOffAction>(*intake) ;            
+                intake->setAction(collect_off_action, true) ;
+                conveyor->setAction(conveyor_stop_action_, true) ; 
+            }
 
             if (!intake->isBusy())
                 setDone() ;            

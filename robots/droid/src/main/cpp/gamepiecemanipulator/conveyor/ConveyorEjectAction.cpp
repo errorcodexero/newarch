@@ -11,6 +11,7 @@ namespace xero {
                 setMotorState(MotorState::MoveTowardsIntake),
                 { [=]{
                     setStagedForCollect(false);
+                    setCollecting(false);
                     setStagedForFire(false);
                     getSubsystem().ballCount_ = 0;
                     return StateResult::Next;

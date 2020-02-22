@@ -21,8 +21,6 @@
 #include "gamepiecemanipulator/shooter/SetHoodAction.h"
 #include "gamepiecemanipulator/shooter/ShooterVelocityAction.h"
 #include "climber/ClimberUpDownAction.h"
-#include "climber/ExtendClimberAction.h"
-#include "climber/LockClimberAction.h"
 #include <Subsystem.h>
 #include <Robot.h>
 #include <TeleopController.h>
@@ -253,7 +251,7 @@ namespace xero {
                 // deploy the climber
                 //
                 if (getValue(climb_deploy_) && !climber->isBusy())
-                    seq.pushSubActionPair(climber, deploy_climber_) ;
+                    seq.pushSubActionPair(climber->getLifter(), deploy_climber_) ;
             }
             else
             {
@@ -263,11 +261,11 @@ namespace xero {
                     // If something did not go right, they may want to try and 
                     // deploy again.
                     //
-                    seq.pushSubActionPair(climber, deploy_climber_) ;
+                    seq.pushSubActionPair(climber->getLifter(), deploy_climber_) ;
                 }
                 else if (getValue(climb_secure_))
                 {
-                    seq.pushSubActionPair(climber, lock_climber_) ;
+                    
                 }
                 else if (getValue(climb_up_))
                 {
@@ -348,15 +346,13 @@ namespace xero {
             eject_action_ = std::make_shared<ConveyorEjectAction>(*conveyor);
             shooter_eject_action_ = std::make_shared<ShooterVelocityAction>(*shooter, -3000, true);
 
-            deploy_climber_ = std::make_shared<ExtendClimberAction>(*climber) ;
+            deploy_climber_ = std::make_shared<MotorEncoderGoToAction>(*climber->getLifter(), "climber:climb_height") ;
             up_ = std::make_shared<ClimberUpDownAction>(*climber, "climber:power:up", 0.0) ;
             down_ = std::make_shared<ClimberUpDownAction>(*climber, "climber:power:down", 0.0) ;
             stop_ = std::make_shared<ClimberUpDownAction>(*climber, 0.0, 0.0) ;
 
             left_ = std::make_shared<ClimberUpDownAction>(*climber, 0.0, "climber:power:left") ;
             right_ = std::make_shared<ClimberUpDownAction>(*climber, 0.0, "climber:power:right") ;
-
-            lock_climber_ = std::make_shared<LockClimberAction>(*climber) ;
         }
     }
 }

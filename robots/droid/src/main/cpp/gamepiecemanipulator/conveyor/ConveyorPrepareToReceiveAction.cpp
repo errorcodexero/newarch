@@ -25,6 +25,7 @@ namespace xero {
                 { setStaged, [=]{
                     setStagedForCollect(true);
                     setStagedForFire(false);
+                    setCollecting(false);
                     return StateResult::Next;
                 }},
                 

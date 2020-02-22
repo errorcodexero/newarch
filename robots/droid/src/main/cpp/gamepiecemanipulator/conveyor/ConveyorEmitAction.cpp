@@ -29,7 +29,11 @@ namespace xero {
                 ),
 
                 setMotorState(MotorState::MoveTowardsShooter),
-                { [=] { setStagedForCollect(false); return StateResult::Next; } },
+                { [=] { 
+                    setStagedForCollect(false); 
+                    setCollecting(false);
+                    return StateResult::Next; 
+                }},
 
                 branchState(notFiringLastBall, [=] { return getSubsystem().getBallCount() != 1; }),
                 

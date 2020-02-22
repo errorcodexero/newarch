@@ -37,6 +37,7 @@ namespace xero {
 
             bool isStagedForCollect() { return stagedForCollect_; }
             bool isStagedForFire() { return stagedForFire_; }
+            bool isCollecting() { return collecting_; }
 
             // A reference to a motor state defined in the config file.
             enum class MotorState {
@@ -79,6 +80,7 @@ namespace xero {
 
             void setStagedForCollect(bool staged);
             void setStagedForFire(bool staged);
+            void setCollecting(bool collecting);
             
         private:
 
@@ -104,6 +106,7 @@ namespace xero {
 
             bool stagedForCollect_;
             bool stagedForFire_;
+            bool collecting_;
         };
     }
 }

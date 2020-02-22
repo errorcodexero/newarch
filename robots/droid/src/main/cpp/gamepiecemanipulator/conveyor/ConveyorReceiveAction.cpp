@@ -14,6 +14,7 @@ namespace xero {
             const std::string fifth = "5th collect sequence";
             setStates({
                 { waitForBall, [=]{ collecting_ = false; return StateResult::Next; } },
+                { [=]() { setCollecting(false); return StateResult::Next; }},
                 // if full, stop
                 branchState(done, [=] { return getSubsystem().isFull(); } ),
 
@@ -22,7 +23,7 @@ namespace xero {
                                 "was ConveyorPrepareToReceiveAction run?"
                 ),
                 
-                { "wait for collect start sensor", waitForSensorState(Sensor::A, true) },
+                { "wait for collect start sensor", waitForSensorEdgeState(Sensor::A, true) },
                 
                 { "delay for ball to enter belt", delayState(0.01) },
                 
@@ -30,6 +31,7 @@ namespace xero {
                 incrementBallsState(),
                 // run the motors to collect
                 { [=]{ collecting_ = true; return StateResult::Next; } },
+                { [=]() { setCollecting(true); return StateResult::Next; }},
 
                 // if we're full, use a different sensor (we don't have enough space to move the ball all the way)
                 branchState(fifth, [=] { return getSubsystem().isFull(); } ),
@@ -44,6 +46,8 @@ namespace xero {
                 // if we're full, wait for the last ball to break sensor C
                 { fifth, waitForSensorState(Sensor::C, false) },
                 waitForSensorState(Sensor::C, true),
+
+                { [=]() { setCollecting(false); return StateResult::Next; }},
 
                 { done, setMotorState(MotorState::Stopped) },
             });
