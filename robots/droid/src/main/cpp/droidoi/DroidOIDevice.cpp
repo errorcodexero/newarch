@@ -277,29 +277,35 @@ namespace xero {
                     //
                     seq.pushSubActionPair(climber->getLifter(), deploy_climber_) ;
                 }
-                else if (getValue(climb_secure_))
+                else if (!getValue(climb_secure_))
                 {
-                    
-                }
-                else if (getValue(climb_up_))
-                {
-                    seq.pushSubActionPair(climber, up_) ;
-                }
-                else if (getValue(climb_down_))
-                {
-                    seq.pushSubActionPair(climber, down_) ;
-                }
-                else if (getValue(climb_left_))
-                {
-                    seq.pushSubActionPair(climber, left_) ;
-                }
-                else if (getValue(climb_right_))
-                {
-                    seq.pushSubActionPair(climber, right_) ;
-                }
-                else
-                {
-                    seq.pushSubActionPair(climber, stop_) ;
+                    bool up = getValue(climb_up_);
+                    bool down = getValue(climb_down_);
+                    bool left = getValue(climb_left_);
+                    bool right = getValue(climb_right_);
+                    ActionPtr action;
+                    if (up) {
+                        if (left) 
+                            action = std::make_shared<ClimberUpDownAction>(*climber, "climber:power:up", "climber:power:left");
+                        else if (right)
+                            action = std::make_shared<ClimberUpDownAction>(*climber, "climber:power:up", "climber:power:right");
+                        else
+                            action = std::make_shared<ClimberUpDownAction>(*climber, "climber:power:up", 0.0);
+                    } else if (down) {
+                        if (left) 
+                            action = std::make_shared<ClimberUpDownAction>(*climber, "climber:power:down", "climber:power:left");
+                        else if (right)
+                            action = std::make_shared<ClimberUpDownAction>(*climber, "climber:power:down", "climber:power:right");
+                        else
+                            action = std::make_shared<ClimberUpDownAction>(*climber, "climber:power:down", 0.0);
+                    } else if (left) {
+                        action = std::make_shared<ClimberUpDownAction>(*climber, 0.0, "climber:power:left");
+                    } else if (right) {
+                        action = std::make_shared<ClimberUpDownAction>(*climber, 0.0, "climber:power:right");
+                    } else {
+                        action = stop_;
+                    }
+                    seq.pushSubActionPair(climber, action, false);
                 }
                 
             }
@@ -361,12 +367,7 @@ namespace xero {
             shooter_eject_action_ = std::make_shared<ShooterVelocityAction>(*shooter, -3000, true);
 
             deploy_climber_ = std::make_shared<MotorEncoderGoToAction>(*climber->getLifter(), "climber:climb_height") ;
-            up_ = std::make_shared<ClimberUpDownAction>(*climber, "climber:power:up", 0.0) ;
-            down_ = std::make_shared<ClimberUpDownAction>(*climber, "climber:power:down", 0.0) ;
             stop_ = std::make_shared<ClimberUpDownAction>(*climber, 0.0, 0.0) ;
-
-            left_ = std::make_shared<ClimberUpDownAction>(*climber, 0.0, "climber:power:left") ;
-            right_ = std::make_shared<ClimberUpDownAction>(*climber, 0.0, "climber:power:right") ;
         }
     }
 }

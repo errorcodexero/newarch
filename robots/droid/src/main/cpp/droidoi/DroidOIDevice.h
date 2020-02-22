@@ -79,10 +79,6 @@ namespace xero {
     
 
             xero::base::ActionPtr deploy_climber_ ;
-            xero::base::ActionPtr up_ ;
-            xero::base::ActionPtr down_ ;
-            xero::base::ActionPtr left_ ;
-            xero::base::ActionPtr right_ ;
             xero::base::ActionPtr stop_ ;                     
         } ;
     }
