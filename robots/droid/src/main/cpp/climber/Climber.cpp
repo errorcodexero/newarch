@@ -18,6 +18,7 @@ namespace xero {
             lifter_->getMotorController()->setNeutralMode(MotorController::NeutralMode::Brake) ;
             lifter_->getMotorController()->resetEncoder() ;            
             lifter_->setSmartDashboardName("lifter") ;
+            addChild(lifter_);
 
             int travid = parent->getRobot().getSettingsParser().getInteger("hw:climber:traverser:pwmid") ;
             traverser_ = std::make_shared<frc::PWMSparkMax>(travid) ;
