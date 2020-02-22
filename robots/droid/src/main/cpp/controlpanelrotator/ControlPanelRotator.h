@@ -2,6 +2,7 @@
 
 #include <motorencodersubsystem/MotorEncoderSubsystem.h>
 #include <optional>
+#include <frc/Servo.h>
 
 namespace xero {
     namespace droid {
@@ -20,6 +21,9 @@ namespace xero {
             virtual ~ControlPanelRotator() {}
 
             void computeState() override;
+            
+            /// Returns a pointer to the servo which deploys the arm.
+            std::shared_ptr<frc::Servo> getArmServo() { return servo_; }
 
             // Returns true iff we received a valid color sample from the sensor this tick.
             bool hasNewData() { return hasNewData_; }
@@ -38,6 +42,7 @@ namespace xero {
 
         private:
             std::optional<Color> sampleSensor();
+            std::shared_ptr<frc::Servo> servo_;
 
             bool hasNewData_;
             Color lastColor_ = Color::Blue;

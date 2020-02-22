@@ -47,6 +47,9 @@ namespace xero {
             bool waitingForConveyorPrepShoot_;
 
             bool climber_deployed_ ;
+
+            bool controlPanelDeployed_;
+            bool controlPanelActive_;
             
             size_t automode_ ;
 
@@ -60,6 +63,10 @@ namespace xero {
             size_t climb_down_ ;
             size_t climb_left_ ;
             size_t climb_right_ ;
+
+            size_t control_panel_servo_;
+            size_t control_panel_rotation_;
+            size_t control_panel_position_;
 
             xero::base::ActionPtr queue_prep_collect_ ;
             xero::base::ActionPtr queue_prep_shoot_ ;
@@ -77,6 +84,10 @@ namespace xero {
             xero::base::ActionPtr shooter_eject_action_;
             xero::base::ActionPtr shooter_spinup_;
     
+            xero::base::ActionPtr control_panel_up_;
+            xero::base::ActionPtr control_panel_down_;
+            xero::base::ActionPtr control_panel_position_action_;
+            xero::base::ActionPtr control_panel_rotation_action_;
 
             xero::base::ActionPtr deploy_climber_ ;
             xero::base::ActionPtr stop_ ;                     

@@ -10,7 +10,7 @@ namespace xero {
                 RotateControlPanelAction(subsystem, "distance") { }
 
             virtual int getTotalWedges() { 
-                std::string configName = getSubsystem().getConfigName() + ":distance";
+                std::string configName = getSubsystem().getName() + ":distance";
                 return getSubsystem().getRobot().getSettingsParser().getDouble(configName);
             }
         };

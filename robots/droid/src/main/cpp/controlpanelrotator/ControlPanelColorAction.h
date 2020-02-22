@@ -18,7 +18,7 @@ namespace xero {
                 // make sure we turn at least 2 wedges so that we have time
                 // to slow down after the first color transition
                 if (dist < 2) {
-                    dist += ControlPanelRotator::Color::COUNT;
+                    dist += static_cast<int>(ControlPanelRotator::Color::COUNT);
                 }
 
                 return dist;

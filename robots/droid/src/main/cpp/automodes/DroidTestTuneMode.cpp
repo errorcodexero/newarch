@@ -192,7 +192,7 @@ namespace xero
                 //////////////////////////////////////////////////////////////////////////////////////////
 
             case 60:
-                pushSubActionPair(climber->getLifter(), std::make_shared<MotorEncoderPowerAction>(*climber->getLifter(), power, duration));
+                pushSubActionPair(climber->getLifter(), std::make_shared<MotorEncoderPowerAction>(*climber->getLifter(), power, 1.0));
                 break ;
 
             case 61:

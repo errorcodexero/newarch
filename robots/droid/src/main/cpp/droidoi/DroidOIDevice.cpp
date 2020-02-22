@@ -20,6 +20,9 @@
 #include "gamepiecemanipulator/GamePieceManipulator.h"
 #include "gamepiecemanipulator/shooter/SetHoodAction.h"
 #include "gamepiecemanipulator/shooter/ShooterVelocityAction.h"
+#include "controlpanelrotator/ControlPanelArmAction.h"
+#include "controlpanelrotator/ControlPanelColorAction.h"
+#include "controlpanelrotator/ControlPanelDistanceAction.h"
 #include "climber/ClimberUpDownAction.h"
 #include <Subsystem.h>
 #include <Robot.h>
