@@ -37,10 +37,18 @@ hw:conveyor:motors:intake:neutral_mode                          "brake"
 hw:conveyor:motors:shooter:type                                 "sparkmax_brushless"
 hw:conveyor:motors:shooter:canid                                8                          # CAN 8
 hw:conveyor:motors:shooter:neutral_mode                         "brake"
+if COMPETITION
 hw:conveyor:sensor:a                                            12
 hw:conveyor:sensor:b                                            11
 hw:conveyor:sensor:c                                            13
 hw:conveyor:sensor:d                                            10
+endif
+if PRACTICE
+hw:conveyor:sensor:a                                            10
+hw:conveyor:sensor:b                                            12
+hw:conveyor:sensor:c                                            11
+hw:conveyor:sensor:d                                            13
+endif
 
 hw:turret:motor:type                                            "sparkmax_brushless"
 hw:turret:motor:canid                                           9                          # CAN 9
