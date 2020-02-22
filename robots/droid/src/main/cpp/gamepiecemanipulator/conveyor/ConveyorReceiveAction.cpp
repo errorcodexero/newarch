@@ -23,7 +23,7 @@ namespace xero {
                                 "was ConveyorPrepareToReceiveAction run?"
                 ),
                 
-                { "wait for collect start sensor", waitForSensorEdgeState(Sensor::A, true) },
+                { "wait for collect start sensor", waitForSensorState(Sensor::A, true) },
                 
                 { "delay for ball to enter belt", delayState(0.01) },
                 
@@ -39,6 +39,8 @@ namespace xero {
                 { "wait for old ball to move out of collect finish sensor", waitForSensorState(Sensor::B, false) },
 
                 { "wait for ball to move into collect finish sensor", waitForSensorState(Sensor::B, true) },
+
+                { "delay before collecting next ball", delayState(0.01) },
 
                 // ball collected, now collect another
                 gotoState(waitForBall),

@@ -41,6 +41,9 @@ namespace xero {
             bool flag_collect_ ;
             bool flag_eject_;
 
+            bool waitingForConveyorFinishCollect_;
+            double conveyorTimeout_;
+
             bool waitingForConveyorPrepShoot_;
 
             bool climber_deployed_ ;

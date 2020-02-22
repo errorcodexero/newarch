@@ -20,8 +20,6 @@ namespace xero {
 
         private:
             xero::base::ActionPtr conveyor_stop_action_ ;
-            bool started_;
-            double timeoutEnd_;
         };
     }
 

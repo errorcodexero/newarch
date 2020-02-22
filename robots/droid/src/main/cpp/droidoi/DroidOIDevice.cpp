@@ -223,8 +223,23 @@ namespace xero {
                             //
                             // Button is up and we are collecting, assign stop collect action
                             //
-                            seq.pushSubActionPair(game_piece_manipulator, stop_collect_action_, false) ;
-                            flag_collect_ = false ;
+
+                            // If the conveyor is still collecting, wait for it to finish (with a timeout)
+                            if (waitingForConveyorFinishCollect_) {
+                                if (!conveyor->isCollecting() || droid.getTime() > conveyorTimeout_) {
+                                    waitingForConveyorFinishCollect_ = false;
+                                    flag_collect_ = false ;
+                                    seq.pushSubActionPair(game_piece_manipulator, stop_collect_action_, false) ;
+                                }
+                            } else {
+                                if (conveyor->isCollecting()) {
+                                    waitingForConveyorFinishCollect_ = true;
+                                    conveyorTimeout_ = droid.getTime() + 1;
+                                } else {
+                                    flag_collect_ = false ;
+                                    seq.pushSubActionPair(game_piece_manipulator, stop_collect_action_, false) ;
+                                }
+                            }
                         }
                     } else if (waitingForConveyorPrepShoot_ 
                                && queue_prep_shoot_->isDone()
