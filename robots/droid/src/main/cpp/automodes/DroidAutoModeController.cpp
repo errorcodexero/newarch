@@ -54,18 +54,22 @@ namespace xero {
                     break ;
 
                 case 2:
-                    mode = std::make_shared<DroidEightBallAutomode>(getRobot(), 0);                    
+                    // Start on wall near power port, score original three in robot, 
+                    // collect five more and score them
+                    mode = std::make_shared<DroidEightBallAutomode>(getRobot(), 0) ;
                     break ;
 
                 case 3:
+                    // Start on wall near power port, score original three in robot, 
+                    // collect five more and score them
+                    mode = std::make_shared<DroidEightBallAutomode>(getRobot(), 1);                 
                     break ;
 
                 case 4:
                     break ;
 
                 case 5:
-                    // Start center, score three in robot and move off line
-                    mode = std::make_shared<DroidEightBallAutomode>(getRobot(), 1);                    
+                   
                     break ;
 
                 case 6:

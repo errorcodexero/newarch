@@ -101,7 +101,7 @@ namespace xero
 
             case 11:     // Test the collector
                 pushSubActionPair(game->getIntake(), std::make_shared<CollectOnAction>(*game->getIntake())) ;
-                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 60.0));
+                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), duration));
                 //pushSubActionPair(game->getIntake(), std::make_shared<CollectOffAction>(*game->getIntake()));                
                 break;
 

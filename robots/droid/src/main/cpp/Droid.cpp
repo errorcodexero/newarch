@@ -21,21 +21,22 @@ using namespace xero::base ;
 namespace xero {
     namespace droid {
 
-        Droid::Droid() : xero::base::Robot("droid", 0.02) {
-            comp_bot_flag_set_ = false ;
+        std::array<uint8_t, 6> Droid::practice_bot_mac_addr_ = { 0x00, 0x80, 0x2F, 0x17, 0x89, 0x91 } ;
+
+        Droid::Droid() : xero::base::Robot("droid", 0.02) 
+        {
         }
 
         bool Droid::isCompBot() {
-            //
-            // For the practice bot, we have a jumper between digital IO 6 and ground.  For the
-            // competition bot we have nothing and the roborio pulls this value up to one.  In this
-            // way we detect the difference between the COMP bot and the PRACTICE bot.
-            //
-            if (!comp_bot_flag_set_) {
-                frc::DigitalInput input(6) ;
-                comp_bot_ = input.Get() ;
-            }
-            return comp_bot_ ;
+            auto mac = getAddr() ;
+
+            if (mac.size() != practice_bot_mac_addr_.size())
+                return true ;
+
+            if (memcmp(&mac[0], &practice_bot_mac_addr_[0], mac.size()) == 0)
+                return false ;
+
+            return true ;
         }
 
         void Droid::enableSpecificMessages() {
@@ -60,8 +61,6 @@ namespace xero {
             logger.enableSubsystem(MSG_GROUP_ACTIONS);  
             logger.enableSubsystem(MSG_GROUP_ACTIONS_VERBOSE);    
             logger.enableSubsystem(MSG_GROUP_OI) ;
-            logger.enableSubsystem(MSG_GROUP_TANKDRIVE); 
-            logger.enableSubsystem(MSG_GROUP_SHOOTER);
 
             //
             // This should stay on.  It will have no effect on the real robot
@@ -76,13 +75,10 @@ namespace xero {
 
 
             paths->setExtensions("_left.csv", "_right.csv") ;
-            paths->loadPath("test_test") ;
-            paths->loadPath("test_curve") ;
             paths->loadPath("eight_ball_auto_collect") ;
             paths->loadPath("eight_ball_auto_collect2") ;
             paths->loadPath("eight_ball_auto_fire") ;    
             paths->loadPath("eight_ball_auto_fire2") ;   
-            paths->loadPath("eight_ball_auto_fire3") ;   
             paths->loadPath("five_ball_auto_collect") ;  
             paths->loadPath("five_ball_auto_fire") ;  
             paths->loadPath("three_ball_auto_backup") ;    

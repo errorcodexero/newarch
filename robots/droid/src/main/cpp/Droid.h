@@ -45,8 +45,7 @@ namespace xero {
             virtual bool isCompBot() ;
 
         private:
-            bool comp_bot_flag_set_ ;
-            bool comp_bot_ ;
+            static std::array<uint8_t, 6> practice_bot_mac_addr_ ;
         } ;
     }
 }

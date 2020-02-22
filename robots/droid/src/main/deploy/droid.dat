@@ -34,15 +34,12 @@ hw:shooter:hood                                                 0
 hw:conveyor:motors:intake:type                                  "sparkmax_brushless"
 hw:conveyor:motors:intake:canid                                 7                          # CAN 7
 hw:conveyor:motors:intake:neutral_mode                          "brake"
-hw:conveyor:motors:shooter:motor:type                                 "sparkmax_brushless"
-hw:conveyor:motors:shooter:motor:canid                                8                          # CAN 8
-hw:conveyor:motors:shooter:motor:neutral_mode                         "brake"
+hw:conveyor:motors:shooter:motor:type                           "sparkmax_brushless"
+hw:conveyor:motors:shooter:motor:canid                          8                          # CAN 8
+hw:conveyor:motors:shooter:motor:neutral_mode                   "brake"
 hw:conveyor:motors:shooter:encoder:quad:motor                   true
 hw:conveyor:motors:shooter:encoder:quad:m                       1
 hw:conveyor:motors:shooter:encoder:quad:b                       0
-#hw:conveyor:motors:shooter:type                                 "sparkmax_brushless"
-#hw:conveyor:motors:shooter:canid                                8                          # CAN 8
-#hw:conveyor:motors:shooter:neutral_mode                         "brake"
 hw:conveyor:sensor:a                                            12
 hw:conveyor:sensor:b                                            11
 hw:conveyor:sensor:c                                            13
@@ -56,7 +53,15 @@ hw:turret:encoder:analog:rmin                                   -180.0
 hw:turret:encoder:analog:rmax                                   180.0
 hw:turret:encoder:analog:emin                                   5.0
 hw:turret:encoder:analog:emax                                   0.0
+
+if PRACTICE
+hw:turret:encoder:analog:ec                                     0.261
+endif
+
+if COMPETITION
 hw:turret:encoder:analog:ec                                     1.33
+endif
+
 hw:turret:encoder:analog:rc                                     0.0
 
 hw:intake:collect:motor:type                                   "sparkmax_brushless"
@@ -416,10 +421,10 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           34
+auto:testmode:which                                           11
 auto:testmode:distance                                        60
 auto:testmode:power                                           0.5
-auto:testmode:duration                                        10.0
+auto:testmode:duration                                        3.0
 
 #
 # Shoot test parameters

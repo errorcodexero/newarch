@@ -14,6 +14,7 @@
 #include <memory>
 #include <list>
 #include <string>
+#include <array>
 #include <fstream>
 
 /// \file
@@ -186,6 +187,10 @@ namespace xero {
 
             virtual bool isCompBot() = 0 ;
 
+            const std::array<uint8_t, 6> &getAddr() {
+                return macaddr_ ;
+            }
+
             /// \brief initialize the message logger subsystem
             virtual void initializeMessageLogger() ;
 
@@ -263,6 +268,7 @@ namespace xero {
             void displayAutoModeState() ;
             void updateAutoMode() ;
             void setupPaths() ;
+            void getMACAddress() ;
 
         private:
             // The time per robot loop in seconds
@@ -344,6 +350,8 @@ namespace xero {
 
             // If true, we are connected to the FMS
             bool fms_connection_ ;
+
+            std::array<uint8_t, 6> macaddr_ ;
         } ;
     }
 }

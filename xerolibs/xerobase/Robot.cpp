@@ -10,6 +10,8 @@
 #include <MessageDestDS.h>
 #include <frc/DriverStation.h>
 #include <frc/Filesystem.h>
+#include <sstream>
+#include <iomanip>
 
 #ifdef SIM2
 #include <SimulatorEngine.h>
@@ -17,6 +19,10 @@
 
 #include <iostream>
 #include <cassert>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <unistd.h>
 
 using namespace xero::misc ;
 
@@ -258,6 +264,21 @@ namespace xero {
             message_logger_.startMessage(MessageLogger::MessageType::info) ;
             message_logger_ << "Initializing robot " << name_  ;
             message_logger_.endMessage() ;
+
+            getMACAddress() ;
+            message_logger_.startMessage(MessageLogger::MessageType::info) ;
+            message_logger_ << "MAC Address: " ;
+            std::stringstream strm ;
+
+            for(size_t i = 0 ; i < macaddr_.size() ; i++)
+            {
+                strm << std::setfill('0') << std::setw(2) << std::hex ;                
+                if (i != 0)
+                    strm << ":" ;
+                strm << macaddr_[i] ;
+            }
+            message_logger_ << strm.str() ;
+            message_logger_.endMessage() ;            
 
             //
             // Read parameters from the parameters file
@@ -578,5 +599,31 @@ namespace xero {
                 message_logger_.endMessage() ;
             }            
         }        
+
+        void Robot::getMACAddress()
+        {
+        	int fd;
+	        struct ifreq ifr;
+	        const char *iface = "eth0" ;
+	
+        	fd = socket(AF_INET, SOCK_DGRAM, 0);
+            if (fd == -1)
+            {
+                memset(&macaddr_[0], 0xff, macaddr_.size()) ;
+                return ;
+            }
+
+        	ifr.ifr_addr.sa_family = AF_INET;
+	        strncpy(ifr.ifr_name , iface , IFNAMSIZ-1);
+        	if (ioctl(fd, SIOCGIFHWADDR, &ifr) == -1)
+            {
+                close(fd) ;
+                memset(&macaddr_[0], 0xff, macaddr_.size()) ;
+                return ;                
+            }
+
+        	close(fd);
+            memcpy(&macaddr_[0], ifr.ifr_hwaddr.sa_data, macaddr_.size()) ;
+        }
     }
 }

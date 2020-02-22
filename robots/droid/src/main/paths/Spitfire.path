@@ -106,12 +106,6 @@
                 },
                 {
                     "constraints": [
-                        {
-                            "after": 230,
-                            "before": 300,
-                            "type": "distance_velocity",
-                            "velocity": 20
-                        }
                     ],
                     "endangle": 0,
                     "endangledelay": 0,
@@ -120,61 +114,23 @@
                     ],
                     "maxacceleration": 300,
                     "maxjerk": 1500,
-                    "maxvelocity": 70,
+                    "maxvelocity": 150,
                     "name": "collect2",
                     "points": [
                         {
                             "heading": 180,
-                            "x": 503.1,
-                            "y": 17.1
+                            "x": 425.5,
+                            "y": 26.4
+                        },
+                        {
+                            "heading": 178.9,
+                            "x": 367.5,
+                            "y": 30.7
                         },
                         {
                             "heading": 180,
-                            "x": 369.1941056910569,
-                            "y": 34.958333333333314
-                        },
-                        {
-                            "heading": -180,
-                            "x": 241.2977642276423,
-                            "y": 35.8109756097561
-                        }
-                    ],
-                    "startangle": 0,
-                    "startangledelay": 0,
-                    "startvelocity": 0
-                },
-                {
-                    "constraints": [
-                    ],
-                    "endangle": 0,
-                    "endangledelay": 0,
-                    "endvelocity": 0,
-                    "flags": [
-                    ],
-                    "maxacceleration": 300,
-                    "maxjerk": 1500,
-                    "maxvelocity": 120,
-                    "name": "fire3",
-                    "points": [
-                        {
-                            "heading": 0,
-                            "x": 261.8,
-                            "y": 29.8
-                        },
-                        {
-                            "heading": 0,
-                            "x": 309.5091463414634,
-                            "y": 28.989837398373993
-                        },
-                        {
-                            "heading": 34.624155079948856,
-                            "x": 362.3729674796748,
-                            "y": 53.71646341463412
-                        },
-                        {
-                            "heading": -10.885527054658704,
-                            "x": 439.1107723577236,
-                            "y": 103.16971544715446
+                            "x": 311.214430894309,
+                            "y": 31.54776422764229
                         }
                     ],
                     "startangle": 0,
