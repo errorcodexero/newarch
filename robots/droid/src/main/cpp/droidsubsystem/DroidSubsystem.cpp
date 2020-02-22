@@ -35,11 +35,11 @@ namespace xero {
             turret_ = std::make_shared<Turret>(this);
             addChild(turret_);
 
-            //limelight_ = std::make_shared<DroidLimeLight>(this);
-            //addChild(limelight_);
+            limelight_ = std::make_shared<DroidLimeLight>(this);
+            addChild(limelight_);
 
-            //target_tracker_ = std::make_shared<TargetTracker>(this);
-            //addChild(target_tracker_);
+            target_tracker_ = std::make_shared<TargetTracker>(this);
+            addChild(target_tracker_);
         }
 
         DroidSubsystem::~DroidSubsystem() {

@@ -25,6 +25,7 @@ hw:shooter:motor:1:canid                                        5               
 hw:shooter:motor:2:type                                         "sparkmax_brushless"
 hw:shooter:motor:2:canid                                        6                          # CAN 6
 hw:shooter:motor:1:invert                                       true
+hw:shooter:motor:neutral_mode                                   "coast"
 hw:shooter:encoder:quad:motor                                   true                       # Use encoder in NEO motor
 hw:shooter:encoder:quad:m                                       1.94714                    # 1/42 * 3/2 * 60 (gives output in RPM)
 hw:shooter:encoder:quad:b                                       0
@@ -415,10 +416,10 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           30
+auto:testmode:which                                           34
 auto:testmode:distance                                        60
-auto:testmode:power                                           4000
-auto:testmode:duration                                        1.0
+auto:testmode:power                                           0.5
+auto:testmode:duration                                        10.0
 
 #
 # Shoot test parameters
