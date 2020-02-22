@@ -68,7 +68,16 @@ namespace xero
                 // is not true now so enforce that the model name (as in the SimulationModel constructor call) matches
                 // the factory name
                 //
-                assert(ret->getModelName() == getFactoryName()) ;
+                if (ret->getModelName() != getFactoryName())
+                {
+                    auto &logger = engine.getMessageOutput() ;
+                    logger.startMessage(SimulatorMessages::MessageType::Error) ;
+                    logger << "model name '" << ret->getModelName() << "'" ;
+                    logger << " did not match factor name '" << getFactoryName() << "'" ;
+                    logger.endMessage(engine.getSimulationTime()) ;
+                    std::runtime_error err("model use error - factory name model name mismatch") ;
+                    throw err ;
+                }
 
                 return ret ;
             };        

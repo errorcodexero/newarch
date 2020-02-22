@@ -263,7 +263,6 @@ namespace xero {
             void displayAutoModeState() ;
             void updateAutoMode() ;
             void setupPaths() ;
-            void publishLoopStats(LoopType ltype) ;
 
         private:
             // The time per robot loop in seconds

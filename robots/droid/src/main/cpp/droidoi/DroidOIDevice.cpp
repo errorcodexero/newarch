@@ -20,6 +20,9 @@
 #include "gamepiecemanipulator/GamePieceManipulator.h"
 #include "gamepiecemanipulator/shooter/SetHoodAction.h"
 #include "gamepiecemanipulator/shooter/ShooterVelocityAction.h"
+#include "climber/ClimberUpDownAction.h"
+#include "climber/ExtendClimberAction.h"
+#include "climber/LockClimberAction.h"
 #include <Subsystem.h>
 #include <Robot.h>
 #include <TeleopController.h>
@@ -50,6 +53,7 @@ namespace xero {
 
             flag_coll_v_shoot_ = CollectShootMode::InvalidMode ;
             flag_collect_ = false ;
+            climber_deployed_ = false ;
         }
 
         DroidOIDevice::~DroidOIDevice() 
@@ -64,19 +68,41 @@ namespace xero {
             log.endMessage() ;
 
             //
-            // Get button numbers
+            // Auto modes
+            //
+            size_t automode_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:automode") ;
+            std::vector<double> mapping = { -0.9, -0.75, -0.5, -0.25, 0, 0.2, 0.4, 0.6, 0.8, 1.0 } ;
+            automode_ = mapAxisScale(automode_b, mapping);
+
+            //
+            // Collect and shoot
             //
             size_t coll_v_shoot_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:shoot_collect_mode") ;      //collect or shoot mode
             size_t collect_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:collect_onoff") ;            //collect/no collect
             size_t eject_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:eject");
-            //size_t automode_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:automode") ;
-            
-            //
-            // Actions
-            //
-            coll_v_shoot_ = mapButton(coll_v_shoot_b, OIButton::ButtonType::Level) ;                // Toggle switch
-            collect_ = mapButton(collect_b, OIButton::ButtonType::Level) ;                          // Push button
+
+            coll_v_shoot_ = mapButton(coll_v_shoot_b, OIButton::ButtonType::Level) ;                    // Toggle switch
+            collect_ = mapButton(collect_b, OIButton::ButtonType::Level) ;                              // Push button
             eject_ = mapButton(eject_b, OIButton::ButtonType::Level);
+
+            //
+            // Climb
+            //
+            size_t climb_lock_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:climb_lock") ;
+            size_t climb_deploy_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:climb_deploy") ;
+            size_t climb_secure_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:climb_secure") ;
+            size_t climb_up_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:climb_up") ;
+            size_t climb_down_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:climb_down") ;
+            size_t climb_left_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:traverse_left") ;
+            size_t climb_right_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:traverse_right") ;
+
+            climb_lock_ = mapButton(climb_lock_b, OIButton::ButtonType::Level) ;
+            climb_deploy_ = mapButton(climb_deploy_b, OIButton::ButtonType::LowToHigh) ;
+            climb_secure_ = mapButton(climb_secure_b, OIButton::ButtonType::LowToHigh) ;
+            climb_up_ = mapButton(climb_up_b, OIButton::ButtonType::Level) ;
+            climb_down_ = mapButton(climb_down_b, OIButton::ButtonType::Level) ;
+            climb_left_ = mapButton(climb_left_b, OIButton::ButtonType::Level) ;
+            climb_right_ = mapButton(climb_right_b, OIButton::ButtonType::Level) ;                        
         }
         
         int DroidOIDevice::getAutoModeSelector() 
@@ -104,7 +130,7 @@ namespace xero {
             return false ;
         }
 
-        void DroidOIDevice::generateActions(xero::base::SequenceAction &seq)
+        void DroidOIDevice::generateCollectShootActions(xero::base::SequenceAction &seq)
         {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
@@ -212,6 +238,74 @@ namespace xero {
             }
         }
 
+        void DroidOIDevice::generateClimbActions(xero::base::SequenceAction &seq)
+        {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
+            auto climber = droid.getDroidSubsystem()->getClimber() ;
+
+            if (getValue(climb_lock_) == false)
+                return ;
+
+            if (!climber_deployed_)
+            {
+                //
+                // The climber is not deployed, the only thing we can do is
+                // deploy the climber
+                //
+                if (getValue(climb_deploy_) && !climber->isBusy())
+                    seq.pushSubActionPair(climber, deploy_climber_) ;
+            }
+            else
+            {
+                if (getValue(climb_deploy_) && !climber->isBusy())
+                {
+                    //
+                    // If something did not go right, they may want to try and 
+                    // deploy again.
+                    //
+                    seq.pushSubActionPair(climber, deploy_climber_) ;
+                }
+                else if (getValue(climb_secure_))
+                {
+                    seq.pushSubActionPair(climber, lock_climber_) ;
+                }
+                else if (getValue(climb_up_))
+                {
+                    seq.pushSubActionPair(climber, up_) ;
+                }
+                else if (getValue(climb_down_))
+                {
+                    seq.pushSubActionPair(climber, down_) ;
+                }
+                else if (getValue(climb_left_))
+                {
+                    seq.pushSubActionPair(climber, left_) ;
+                }
+                else if (getValue(climb_right_))
+                {
+                    seq.pushSubActionPair(climber, right_) ;
+                }
+                else
+                {
+                    seq.pushSubActionPair(climber, stop_) ;
+                }
+                
+            }
+            
+        }
+
+        void DroidOIDevice::generatePanelSpinnerActions(xero::base::SequenceAction &seq)
+        {
+
+        }
+
+        void DroidOIDevice::generateActions(xero::base::SequenceAction &seq)
+        {
+            generateCollectShootActions(seq) ;
+            generateClimbActions(seq) ;
+            generatePanelSpinnerActions(seq) ;
+        }
+
         void DroidOIDevice::init() 
         {
             MessageLogger &log = getSubsystem().getRobot().getMessageLogger() ;
@@ -226,6 +320,7 @@ namespace xero {
             auto target_tracker = droid.getDroidSubsystem()->getTargetTracker() ;
             auto game_piece_manipulator = droid.getDroidSubsystem()->getGamePieceManipulator() ;
             auto shooter = game_piece_manipulator->getShooter();
+            auto climber = droid.getDroidSubsystem()->getClimber() ;
             auto droid_robot_subsystem = droid.getDroidSubsystem() ;
 
             queue_prep_collect_ = std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor) ;
@@ -252,6 +347,16 @@ namespace xero {
             hood_down_ = std::make_shared<SetHoodAction>(*shooter, true);
             eject_action_ = std::make_shared<ConveyorEjectAction>(*conveyor);
             shooter_eject_action_ = std::make_shared<ShooterVelocityAction>(*shooter, -3000, true);
+
+            deploy_climber_ = std::make_shared<ExtendClimberAction>(*climber) ;
+            up_ = std::make_shared<ClimberUpDownAction>(*climber, "climber:power:up", 0.0) ;
+            down_ = std::make_shared<ClimberUpDownAction>(*climber, "climber:power:down", 0.0) ;
+            stop_ = std::make_shared<ClimberUpDownAction>(*climber, 0.0, 0.0) ;
+
+            left_ = std::make_shared<ClimberUpDownAction>(*climber, 0.0, "climber:power:left") ;
+            right_ = std::make_shared<ClimberUpDownAction>(*climber, 0.0, "climber:power:right") ;
+
+            lock_climber_ = std::make_shared<LockClimberAction>(*climber) ;
         }
     }
 }

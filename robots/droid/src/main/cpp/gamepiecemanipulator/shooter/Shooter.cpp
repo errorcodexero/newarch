@@ -8,6 +8,7 @@ using namespace xero::base;
 namespace xero {
     namespace droid {
         Shooter::Shooter(Subsystem *parent): MotorEncoderSubsystem(parent, "shooter", MSG_GROUP_SHOOTER) {
+            setSmartDashboardName("shooter") ;
             setReadyToFire(false);
 
             auto &settings = getRobot().getSettingsParser();
@@ -17,10 +18,6 @@ namespace xero {
             hoodUpPos_ = settings.getDouble(hoodConfig + "up");
             hoodDownPos_ = settings.getDouble(hoodConfig + "down");
 
-            //
-            // Currently the motors are current limited at 30 amps
-            //
-            
             getMotorController()->setCurrentLimit(40) ;
         }
 

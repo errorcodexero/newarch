@@ -76,20 +76,14 @@ hw:climber:lifter:motor:1:type                                  "sparkmax_brushl
 hw:climber:lifter:motor:1:canid                                 13                          # CAN 13
 hw:climber:lifter:motor:2:type                                  "sparkmax_brushless"
 hw:climber:lifter:motor:2:canid                                 14                          # CAN 14
-hw:climber:lifter:motor:2:invert                                true
+hw:climber:lifter:motor:1:invert                                true
 hw:climber:lifter:motor:release                                 -10
 hw:climber:lifter:motor:climb                                   10
 hw:climber:lifter:encoder:quad:motor                            true
 hw:climber:lifter:encoder:quad:m                                1
 hw:climber:lifter:encoder:quad:b                                0
 
-hw:climber:traverser:motor:type                                  "sparkmax_brushless"
-hw:climber:traverser:motor:canid                                 15                          # CAN 13
-hw:climber:traverser:motor:release                               -10
-hw:climber:traverser:motor:climb                                 10
-hw:climber:traverser:encoder:quad:motor                          true
-hw:climber:traverser:encoder:quad:m                              1
-hw:climber:traverser:encoder:quad:b                              0
+hw:climber:traverser:pwmid                                      4
 
 hw:climber:servo:l:pwmid                                        0                           # PWM 2
 hw:climber:servo:r:pwmid                                        1                           # PWM 1
@@ -304,14 +298,17 @@ driver:zerolevel                                                0.1
 # Climber
 ###################################################################################################
 
-climber:servo:l:angle_hold                                     -1
-climber:servo:l:angle_release                                  -1
-climber:servo:r:angle_hold                                     -1
-climber:servo:r:angle_release                                  -1
-climber:servo:r:climb                                          0
-climber:servo:l:climb                                          0
-climber:servo:r:release                                        0
-climber:servo:l:release                                        0
+climber:servo:r:climb                                                 0
+climber:servo:l:climb                                                 0
+climber:servo:r:release                                               0
+climber:servo:l:release                                               0
+climber:servo:delay                                                   1.0
+climber:climb_height                                                  1000
+climber:max_height                                                    1200
+climber:power:up                                                      0.4
+climber:power:down                                                    1.0
+climber:power:left                                                    -1.0
+climber:power:right                                                   1.0
 
 climber:lifter:motor:follower:up:maxkp                                0
 climber:lifter:motor:follower:up:maxki                                0
@@ -331,10 +328,10 @@ climber:lifter:motor:follower:down:min                                -1
 climber:lifter:motor:follower:down:max                                1
 cilmber:lifter:motor:follower:down:imax                               0
 
-climber:lifter:motor:goto:threshold                                   3.0
-climber:lifter:motor:goto:maxa                                        70
-climber:lifter:motor:goto:maxd                                        -70
-climber:lifter:motor:goto:maxv                                        70
+climber:lifter:goto:threshold                                   3.0
+climber:lifter:goto:maxa                                        70
+climber:lifter:goto:maxd                                        -70
+climber:lifter:goto:maxv                                        70
 
 ##----------------------
 
@@ -356,7 +353,7 @@ climber:traverser:motor:follower:down:min                                -1
 climber:traverser:motor:follower:down:max                                1
 climber:traverser:follower:down:imax                               0
 
-climber:traverser:motor:goto:threshold                                   3.0
+climber:traverser:motgoto:threshold                                   3.0
 climber:traverser:motor:goto:maxa                                        70
 climber:traverser:motor:goto:maxd                                        -70
 climber:traverser:motor:goto:maxv                                        70
@@ -378,9 +375,19 @@ gamepiecemanipulator:fire:max_camera_sample_age                 5.0
 # oi
 ###################################################################################################
 
+oi:automode                                                     0
+
 oi:shoot_collect_mode                                           11
 oi:eject                                                        8
 oi:collect_onoff                                                14
+
+oi:climb_lock                                                   0               # Toggle switch
+oi:climb_deploy                                                 0               # Push button
+oi:climb_secure                                                 0               # Push button
+oi:climb_up                                                     1               # Joystick axis
+oi:climb_down                                                   2               # Joystick axis
+oi:traverse_left                                                3               # Joystick axis
+oi:traverse_right                                               4               # Joystick axis
 
 ###################################################################################################
 # targettracker
@@ -412,11 +419,11 @@ plotting:enabled                                               true
 # These control test modes for the robot.  They are used by the DroidTestTuneMode automode.  Note
 # this active value below is ignored if we are connected to the field.
 #
-auto:testmode:active                                          false
-auto:testmode:which                                           100
+auto:testmode:active                                          true
+auto:testmode:which                                           30
 auto:testmode:distance                                        60
-auto:testmode:power                                           -0.4
-auto:testmode:duration                                        1800
+auto:testmode:power                                           4000
+auto:testmode:duration                                        1.0
 
 #
 # Shoot test parameters

@@ -10,7 +10,7 @@ AUTOMODES = \
 
 SUBSYSTEMS = \
 	src/main/cpp/phaserrobotsubsystem/PhaserRobotSubsystem.cpp\
-	src/main/cpp/phaserrobotsubsystem/ClimbAction.cpp\
+	src/main/cpp/phaserrobotsubsystem/ExtendClimberAction.cpp\
 	src/main/cpp/phaserrobotsubsystem/StrafeAction.cpp\
 	src/main/cpp/turntable/Turntable.cpp\
 	src/main/cpp/turntable/TurntableCalibrateAction.cpp\

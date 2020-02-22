@@ -17,14 +17,6 @@
                         "fms" : false,
                         "station" : "blue1"
                     }
-                },
-                {
-                    "model" : "droidoi",
-                    "instance" : "1",
-                    "values" :
-                    {
-                        "automode" : 0
-                    }
                 }
             ]
         }

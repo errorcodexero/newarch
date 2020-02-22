@@ -1,4 +1,4 @@
-#include "ClimbAction.h"
+#include "ExtendClimberAction.h"
 #include <tankdrive/TankDrive.h>
 #include <tankdrive/actions/TankDriveDistanceAction.h>
 #include <tankdrive/actions/TankDriveTimedPowerAction.h>
@@ -12,7 +12,7 @@ using namespace xero::base ;
 
 namespace xero {
     namespace phaser {
-        ClimbAction::ClimbAction(PhaserRobotSubsystem &subsystem, bool complete): subsystem_(subsystem)
+        ExtendClimberAction::ExtendClimberAction(PhaserRobotSubsystem &subsystem, bool complete): subsystem_(subsystem)
         {
             auto cargo_intake = subsystem_.getGameManipulator()->getCargoIntake() ;
             auto db = subsystem_.getTankDrive() ;
@@ -38,17 +38,17 @@ namespace xero {
         }
 
 
-        ClimbAction::~ClimbAction() {
+        ExtendClimberAction::~ExtendClimberAction() {
         }
 
-        void ClimbAction::start() {
+        void ExtendClimberAction::start() {
             auto climber = subsystem_.getClimber() ;
             climber->setAction(deploy_grasshopper_) ;
 
             state_ = State::ReleaseGrasshopper ;
         }
 
-        void ClimbAction::run() {
+        void ExtendClimberAction::run() {
             auto db = subsystem_.getTankDrive() ;
 
             switch(state_) {
@@ -100,19 +100,19 @@ namespace xero {
             }
         }
         
-        bool ClimbAction::isDone() {
+        bool ExtendClimberAction::isDone() {
             return state_ == State::Idle ;
         }
 
-        void ClimbAction::abort() {
+        void ExtendClimberAction::abort() {
             state_ = State::Idle ;
         }
 
-        void ClimbAction::cancel() {
+        void ExtendClimberAction::cancel() {
         }
 
-        std::string ClimbAction::toString() {
-            std::string ret("ClimbAction") ;
+        std::string ExtendClimberAction::toString() {
+            std::string ret("ExtendClimberAction") ;
             return ret ;
         }
     }

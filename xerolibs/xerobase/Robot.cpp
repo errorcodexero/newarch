@@ -70,35 +70,6 @@ namespace xero {
                 delete output_stream_ ;
         }
 
-        void Robot::publishLoopStats(LoopType ltype)
-        {
-#if defined(SIM2)
-            std::string lstr ;
-
-            switch(ltype)
-            {
-            case LoopType::Autonomous:
-                lstr = "auto" ;
-                break ;
-            case LoopType::OperatorControl:
-                lstr = "teleop" ;
-                break ;
-            case LoopType::Test:
-                lstr = "test" ;
-                break ;
-            case LoopType::Disabled:
-                lstr = "disabled" ;
-                break ;
-            case LoopType::MaxValue:
-                lstr = "illegal" ;
-                break ;
-            }
-            frc::SmartDashboard::PutString("loopmode", lstr) ;
-            frc::SmartDashboard::PutNumber("iterations", iterations_[static_cast<int>(ltype)]) ;
-            frc::SmartDashboard::PutNumber("sleep", sleep_time_[static_cast<int>(ltype)]) ;
-#endif            
-        }
-
         void Robot::setupPaths() {
 #if defined(SIMULATOR) || defined(SIM2)
             log_dir_ = "./logs/" ;
@@ -273,8 +244,6 @@ namespace xero {
                 message_logger_ << ", average sleep time " << avg ;
                 message_logger_.endMessage() ;
             }
-
-            publishLoopStats(type) ;
         }
 
         void Robot::RobotInit() {
@@ -608,7 +577,6 @@ namespace xero {
                 message_logger_ << ", Target time: " << target_loop_time_ ;
                 message_logger_.endMessage() ;
             }            
-            publishLoopStats(LoopType::Disabled) ;
         }        
     }
 }
