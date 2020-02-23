@@ -20,6 +20,7 @@ namespace xero {
             ControlPanelRotator(xero::base::Subsystem *parent);
             virtual ~ControlPanelRotator() {}
 
+            void init(xero::base::LoopType ltype) override;
             void computeState() override;
             
             /// Returns a pointer to the servo which deploys the arm.
@@ -40,9 +41,15 @@ namespace xero {
 
             static const int COLORS_PER_REVOLUTION = static_cast<int>(Color::COUNT) * 2;
 
+            double getArmUpPosition();
+            double getArmDownPosition();
+
         private:
             std::optional<Color> sampleSensor();
             std::shared_ptr<frc::Servo> servo_;
+
+            double armUp_;
+            double armDown_;
 
             bool hasNewData_;
             Color lastColor_ = Color::Blue;

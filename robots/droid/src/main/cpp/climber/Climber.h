@@ -26,12 +26,24 @@ namespace xero {
                 return max_height_ ;
             }
 
+            void init(xero::base::LoopType ltype);
+
+            /// Returns true if the robot is on the field (as opposed to in the pits.)
+            /// In pit mode, the downwards position limit is disabled and downwards
+            /// speed is capped at 10%.
+            ///
+            /// The climber is in field mode if the robot is connected to the FMS
+            /// or if the climber:force_field_mode parameter is set to true.
+            bool isInFieldMode() { return field_mode_; }
+
+            bool canAcceptAction(xero::base::ActionPtr action) override;
+
         private:
             std::shared_ptr<xero::base::MotorEncoderSubsystem> lifter_;
             std::shared_ptr<frc::PWMSparkMax> traverser_ ;
             uint64_t msg_id_;
             double max_height_ ;
-
+            bool field_mode_;
         };
     }
 }

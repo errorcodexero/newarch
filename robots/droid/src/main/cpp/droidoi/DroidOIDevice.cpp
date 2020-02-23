@@ -55,6 +55,7 @@ namespace xero {
             flag_coll_v_shoot_ = CollectShootMode::InvalidMode ;
             flag_collect_ = false ;
             climber_deployed_ = false ;
+            started_deploy_ = false;
         }
 
         DroidOIDevice::~DroidOIDevice() 
@@ -246,7 +247,7 @@ namespace xero {
                     } else if (waitingForConveyorPrepShoot_ 
                                && queue_prep_shoot_->isDone()
                                && intake_off_->isDone()) {
-                        seq.pushSubActionPair(game_piece_manipulator, fire_yes_);
+                        seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false);
                         waitingForConveyorPrepShoot_ = false;
                     }
                 }
@@ -258,7 +259,7 @@ namespace xero {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
             auto climber = droid.getDroidSubsystem()->getClimber() ;
 
-            if (getValue(climb_lock_) == false)
+            if (getValue(climb_lock_))
                 return ;
 
             if (!climber_deployed_)
@@ -267,20 +268,26 @@ namespace xero {
                 // The climber is not deployed, the only thing we can do is
                 // deploy the climber
                 //
-                if (getValue(climb_deploy_) && !climber->isBusy())
-                    seq.pushSubActionPair(climber->getLifter(), deploy_climber_) ;
+                if (getValue(climb_deploy_) && !climber->isBusy() && !climber->getLifter()->isBusy()) {
+                    seq.pushSubActionPair(climber->getLifter(), deploy_climber_, false) ;
+                    started_deploy_ = true;
+                } else if (started_deploy_ && !climber->isBusy() && !climber->getLifter()->isBusy()) {
+                    climber_deployed_ = true;
+                }
             }
             else
             {
-                if (getValue(climb_deploy_) && !climber->isBusy())
+                if (getValue(climb_deploy_) && !climber->isBusy() && !climber->getLifter()->isBusy())
                 {
                     //
                     // If something did not go right, they may want to try and 
                     // deploy again.
                     //
-                    seq.pushSubActionPair(climber->getLifter(), deploy_climber_) ;
+                    seq.pushSubActionPair(climber->getLifter(), deploy_climber_, false) ;
+                    started_deploy_ = true;
+                    climber_deployed_ = false;
                 }
-                else if (!getValue(climb_secure_))
+                else
                 {
                     bool up = getValue(climb_up_);
                     bool down = getValue(climb_down_);

@@ -16,6 +16,8 @@
 #include <turret/FollowTargetAction.h>
 #include <climber/Climber.h>
 
+#include "controlpanelrotator/ControlPanelArmAction.h"
+
 #include <gamepiecemanipulator/GamePieceManipulator.h>
 #include <gamepiecemanipulator/ShootTestingAction.h>
 #include <gamepiecemanipulator/FireAction.h>
@@ -52,6 +54,7 @@ namespace xero
             auto game = droid.getDroidSubsystem()->getGamePieceManipulator();
             auto conveyor = game->getConveyor() ;
             auto climber = droid.getDroidSubsystem()->getClimber() ;
+            auto controlpanel = droid.getDroidSubsystem()->getControlPanelRotator();
 
             int mode = robot.getSettingsParser().getInteger("auto:testmode:which");
             double dist = robot.getSettingsParser().getDouble("auto:testmode:distance");
@@ -184,6 +187,9 @@ namespace xero
                 // 50 - 59 control panel spinner related
                 //
                 //////////////////////////////////////////////////////////////////////////////////////////
+            case 50:    // put the arm up
+                pushSubActionPair(controlpanel, std::make_shared<ControlPanelArmAction>(*controlpanel, true));
+                break;
 
                 //////////////////////////////////////////////////////////////////////////////////////////
                 //
@@ -192,11 +198,13 @@ namespace xero
                 //////////////////////////////////////////////////////////////////////////////////////////
 
             case 60:
-                pushSubActionPair(climber->getLifter(), std::make_shared<MotorEncoderPowerAction>(*climber->getLifter(), power, 1.0));
+                pushSubActionPair(climber->getLifter(), std::make_shared<MotorEncoderPowerAction>(*climber->getLifter(), power, duration));
                 break ;
 
             case 61:
-                pushSubActionPair(climber->getLifter(), std::make_shared<MotorEncoderPowerAction>(*climber->getLifter(), power, duration));
+                pushSubActionPair(climber->getLifter(), std::make_shared<MotorEncoderGoToAction>(*climber->getLifter(), dist));
+                pushAction(std::make_shared<DelayAction>(logger, 1));
+                pushSubActionPair(climber->getLifter(), std::make_shared<MotorEncoderGoToAction>(*climber->getLifter(), 100));
                 break ;                
 
                 //////////////////////////////////////////////////////////////////////////////////////////

@@ -37,7 +37,7 @@ namespace xero
 
         void ClimberUpDownAction::start()
         {
-            getSubsystem().getLifter()->setAction(action_) ;
+            getSubsystem().getLifter()->setAction(action_, true) ;
             getSubsystem().setTraverserPower(traverse_) ;
         }
 

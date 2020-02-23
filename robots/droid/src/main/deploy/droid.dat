@@ -32,7 +32,12 @@ endif
 hw:shooter:encoder:quad:motor                                   true                       # Use encoder in NEO motor
 hw:shooter:encoder:quad:m                                       1.94714                    # 1/42 * 3/2 * 60 (gives output in RPM)
 hw:shooter:encoder:quad:b                                       0
+if PRACTICE
+hw:shooter:hood                                                 3
+endif
+if COMPETITION
 hw:shooter:hood                                                 0
+endif
 
 hw:conveyor:motors:intake:type                                  "sparkmax_brushless"
 hw:conveyor:motors:intake:canid                                 7                          # CAN 7
@@ -63,7 +68,7 @@ hw:turret:encoder:analog:emin                                   5.0
 hw:turret:encoder:analog:emax                                   0.0
 
 if PRACTICE
-hw:turret:encoder:analog:ec                                     0.261
+hw:turret:encoder:analog:ec                                     2.45
 endif
 
 if COMPETITION
@@ -85,6 +90,9 @@ hw:controlpanelrotator:motor:canid                              12              
 hw:controlpanelrotator:encoder:quad:motor                       true
 hw:controlpanelrotator:encoder:quad:m                           1
 hw:controlpanelrotator:encoder:quad:b                           0
+if PRACTICE
+hw:controlpanelrotator:servo                                    0
+endif
 
 hw:climber:lifter:motor:1:type                                  "sparkmax_brushless"
 hw:climber:lifter:motor:1:canid                                 13                          # CAN 13
@@ -190,8 +198,14 @@ shooter:hold:min                                                -1.0
 shooter:hold:max                                                1.0
 shooter:hold:imax                                               0.0
 
+if COMPETITION
 shooter:hood:down                                               1
 shooter:hood:up                                                 0.5
+endif
+if PRACTICE
+shooter:hood:down                                               0.7
+shooter:hood:up                                                 0.2
+endif
 
 shooter:aim:hood_up:a                                           0
 shooter:aim:hood_up:b                                           0
@@ -269,6 +283,9 @@ controlpanelrotator:hold:min                                    0
 controlpanelrotator:hold:max                                    1
 controlpanelrotator:hold:imax                                   1
 
+controlpanelrotator:arm:up                                      1
+controlpanelrotator:arm:down                                    0
+
 ###################################################################################################
 # conveyor
 ###################################################################################################
@@ -304,35 +321,50 @@ driver:zerolevel                                                0.1
 # Climber
 ###################################################################################################
 
-climber:climb_height                                                  1000
-climber:max_height                                                    1200
-climber:power:up                                                      0.4
-climber:power:down                                                    1.0
-climber:power:left                                                    -1.0
-climber:power:right                                                   1.0
+# Set to true to force the climber to always operate in field mode, even when not connected to FMS.
+# In field mode, the climber's max downward velocity is limited to 10% below 1000, and 0% below 0.
+# In pit mode, the climber's max downward velocity is always limited to 10%.
+climber:force_field_mode                                        false
 
-climber:lifter:motor:follower:up:maxkp                                0
-climber:lifter:motor:follower:up:maxki                                0
-climber:lifter:motor:follower:up:maxkd                                0
-climber:lifter:motor:follower:up:maxkv                                0.003521127
-climber:lifter:motor:follower:up:maxka                                0
-climber:lifter:motor:follower:up:min                                  -1
-climber:lifter:motor:follower:up:max                                  1
-climber:lifter:motor:follower:up:imax                                 0
+climber:climb_height                                            10000
+climber:max_height                                              12000
+climber:power:up                                                0.4
+climber:power:down                                              -1
+climber:power:left                                              -1.0
+climber:power:right                                             1.0
 
-climber:lifter:motor:follower:down:maxkp                              0
-climber:lifter:motor:follower:down:maxki                              0
-climber:lifter:motor:follower:down:maxkd                              0
-climber:lifter:motor:follower:down:maxkv                              0.003521127
-climber:lifter:motor:follower:down:maxka                              0
-climber:lifter:motor:follower:down:min                                -1
-climber:lifter:motor:follower:down:max                                1
-cilmber:lifter:motor:follower:down:imax                               0
+climber:lifter:follower:up:kp                                   0
+climber:lifter:follower:up:ki                                   0
+climber:lifter:follower:up:kd                                   0
+climber:lifter:follower:up:kv                                   0.0002536997886
+climber:lifter:follower:up:ka                                   0
+climber:lifter:follower:up:min                                  -1
+climber:lifter:follower:up:max                                  1
+climber:lifter:follower:up:imax                                 0
+
+climber:lifter:follower:down:ki                                 0
+climber:lifter:follower:down:kd                                 0
+climber:lifter:follower:down:kv                                 0.0002579535684
+climber:lifter:follower:down:kp                                 0
+climber:lifter:follower:down:kp                                 0
+climber:lifter:follower:down:kp                                 0
+climber:lifter:follower:down:ka                                 0
+climber:lifter:follower:down:min                                -1
+climber:lifter:follower:down:max                                1
+cilmber:lifter:follower:down:imax                               0
 
 climber:lifter:goto:threshold                                   3.0
-climber:lifter:goto:maxa                                        70
-climber:lifter:goto:maxd                                        -70
-climber:lifter:goto:maxv                                        70
+climber:lifter:goto:maxa                                        2300
+climber:lifter:goto:maxd                                        -2300
+climber:lifter:goto:maxv                                        2300
+
+climber:lifter:hold:p                                           0
+climber:lifter:hold:i                                                   0
+climber:lifter:hold:d                                                   0
+climber:lifter:hold:f                                                   0
+climber:lifter:hold:min                                                 0
+climber:lifter:hold:max                                                 0
+climber:lifter:hold:imax                                                0
 
 ##----------------------
 
@@ -421,10 +453,10 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           60
-auto:testmode:distance                                        60
-auto:testmode:power                                           0.2
-auto:testmode:duration                                        0.1
+auto:testmode:which                                           33
+auto:testmode:distance                                        10000
+auto:testmode:power                                           -0.1
+auto:testmode:duration                                        10
 
 #
 # Shoot test parameters

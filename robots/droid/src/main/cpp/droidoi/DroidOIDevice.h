@@ -46,6 +46,7 @@ namespace xero {
 
             bool waitingForConveyorPrepShoot_;
 
+            bool started_deploy_;
             bool climber_deployed_ ;
 
             bool controlPanelDeployed_;

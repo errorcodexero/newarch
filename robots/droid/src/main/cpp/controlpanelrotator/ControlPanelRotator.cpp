@@ -8,7 +8,14 @@ namespace xero {
     namespace droid {
         ControlPanelRotator::ControlPanelRotator(Subsystem *parent):
           MotorEncoderSubsystem(parent, "controlpanelrotator", MSG_GROUP_CONTROL_PANEL_ROTATOR) {
+              auto &settings = getRobot().getSettingsParser();
+              servo_ = std::make_shared<frc::Servo>(settings.getDouble("hw:controlpanelrotator:servo"));
+              armUp_ = settings.getDouble("controlpanelrotator:arm:up");
+              armDown_ = settings.getDouble("controlpanelrotator:arm:down");
+        }
 
+        void ControlPanelRotator::init(LoopType ltype) {
+            getArmServo()->Set(armDown_);
         }
 
         void ControlPanelRotator::computeState() {
