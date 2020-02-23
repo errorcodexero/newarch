@@ -29,13 +29,15 @@ hue_max:104
 hue_min:41
 image_flip:0
 image_source:0
-img_to_show:1
+img_to_show:0
 intersection_filter:0
 pipeline_led_enabled:1
 pipeline_led_power:100
 pipeline_res:0
 pipeline_type:0
-red_balance:1010
+red_balance:1731
+roi_x:0.000000
+roi_y:0.000000
 sat_max:255
 sat_min:44
 send_corners:0
