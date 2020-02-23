@@ -56,6 +56,8 @@ namespace xero {
             flag_collect_ = false ;
             climber_deployed_ = false ;
             started_deploy_ = false;
+
+            rumbled_ = false ;
         }
 
         DroidOIDevice::~DroidOIDevice() 
@@ -143,6 +145,16 @@ namespace xero {
             auto game_piece_manipulator = droid.getDroidSubsystem()->getGamePieceManipulator() ;
             auto droid_robot_subsystem = droid.getDroidSubsystem() ;
 
+            if (conveyor->getBallCount() == 5 && rumbled_ == false)
+            {
+                getSubsystem().getDriverGamepad()->rumble(true, 1.0, 1.0) ;
+                rumbled_ = true ;
+            }
+            else if (conveyor->getBallCount() < 5 && rumbled_ == true)
+            {
+                rumbled_ = false ;
+            }
+
             if (flag_eject_) {
                 if (!getValue(eject_)) {
                     flag_eject_ = false;   
@@ -213,7 +225,7 @@ namespace xero {
                         //
                         // We are in collect mode, check the collect button
                         //
-                        if (isCollectButtonPressed() && flag_collect_ == false)
+                        if (isCollectButtonPressed() && flag_collect_ == false && conveyor->isStagedForCollect())
                         {
                             //
                             // Button is down, but we are not collecting, assign start collect action

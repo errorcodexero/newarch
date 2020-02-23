@@ -65,6 +65,8 @@ namespace xero {
             size_t climb_left_ ;
             size_t climb_right_ ;
 
+            bool rumbled_ ;
+
             size_t control_panel_servo_;
             size_t control_panel_rotation_;
             size_t control_panel_position_;
