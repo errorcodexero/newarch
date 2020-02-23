@@ -40,7 +40,7 @@ namespace xero {
             }
             else
             {   
-                sel = 2 ;
+                sel = 2;
                              
                 switch(sel) 
                 {

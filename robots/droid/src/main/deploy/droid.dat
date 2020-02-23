@@ -210,9 +210,14 @@ endif
 shooter:aim:hood_up:a                                           0
 shooter:aim:hood_up:b                                           0
 shooter:aim:hood_up:c                                           3600
-shooter:aim:hood_down:a                                         0.035
-shooter:aim:hood_down:b                                         -8.4958
-shooter:aim:hood_down:c                                         4959.5    
+#shooter:aim:hood_down:a                                         0.035
+#shooter:aim:hood_down:b                                         -8.4958
+#shooter:aim:hood_down:c                                         4959.5    
+
+shooter:aim:hood_down:a                                         0.0195
+shooter:aim:hood_down:b                                         -7.0724
+shooter:aim:hood_down:c                                         5200.8
+
 
 shooter:aim:max_hood_up                                         120
 shooter:aim:min_hood_down                                       110
