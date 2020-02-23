@@ -23,6 +23,8 @@ namespace xero {
             {Sensor::D, "d"}
         };
 
+        const int Conveyor::MAX_BALLS = 1;
+
         Conveyor::Conveyor(Subsystem *parent): Subsystem(parent, "conveyor") {
             auto motorFactory = getRobot().getMotorFactory();
             intakeMotor_ = motorFactory->createMotor("hw:conveyor:motors:intake");

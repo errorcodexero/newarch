@@ -117,12 +117,12 @@ hw:climber:servo:r:climb                                        0.0
 intake:collector:motor:power                                    1
 intake:arm:collecton:pos                                        1225
 intake:arm:collectoff:pos                                       0
-intake:hold:p                                                   0.006
+intake:hold:p                                                   0.000006
 intake:hold:i                                                   0
 intake:hold:d                                                   0
 intake:hold:f                                                   0
-intake:hold:min                                                 0
-intake:hold:max                                                 0
+intake:hold:min                                                 -1
+intake:hold:max                                                 1
 intake:hold:imax                                                0
 intake:follower:down:kp                                       0.0
 intake:follower:down:kd                                       0.0
@@ -183,7 +183,7 @@ tankdrive:follower:angle_correction                             -0.03
 shooter:velocity:p                                              0
 shooter:velocity:i                                              0.0
 shooter:velocity:d                                              0.0
-shooter:velocity:f                                              0.000130571
+shooter:velocity:f                                              0.0001311853912
 shooter:velocity:min                                            -1.0
 shooter:velocity:max                                            1.0
 shooter:velocity:imax                                           0.0
@@ -209,10 +209,10 @@ endif
 
 shooter:aim:hood_up:a                                           0
 shooter:aim:hood_up:b                                           0
-shooter:aim:hood_up:c                                           4150
-shooter:aim:hood_down:a                                         0.0195
-shooter:aim:hood_down:b                                         -7.0724
-shooter:aim:hood_down:c                                         5495.8
+shooter:aim:hood_up:c                                           3600
+shooter:aim:hood_down:a                                         0.035
+shooter:aim:hood_down:b                                         -8.4958
+shooter:aim:hood_down:c                                         4959.5
 
 shooter:aim:max_hood_up                                         120
 shooter:aim:min_hood_down                                       110
@@ -453,9 +453,9 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           33
+auto:testmode:which                                           31
 auto:testmode:distance                                        10000
-auto:testmode:power                                           -0.1
+auto:testmode:power                                           0.5
 auto:testmode:duration                                        10
 
 #

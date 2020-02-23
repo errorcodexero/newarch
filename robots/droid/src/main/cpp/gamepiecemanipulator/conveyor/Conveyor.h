@@ -28,7 +28,7 @@ namespace xero {
 
             int getBallCount() { return ballCount_; }
 
-            static const int MAX_BALLS = 5;
+            static const int MAX_BALLS;
             bool isEmpty() { return ballCount_ == 0; }
             bool isFull() { return ballCount_ == MAX_BALLS; }
 

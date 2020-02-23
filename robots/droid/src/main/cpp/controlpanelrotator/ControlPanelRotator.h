@@ -41,8 +41,8 @@ namespace xero {
 
             static const int COLORS_PER_REVOLUTION = static_cast<int>(Color::COUNT) * 2;
 
-            double getArmUpPosition();
-            double getArmDownPosition();
+            double getArmUpPosition() { return armUp_; }
+            double getArmDownPosition() { return armDown_; }
 
         private:
             std::optional<Color> sampleSensor();
