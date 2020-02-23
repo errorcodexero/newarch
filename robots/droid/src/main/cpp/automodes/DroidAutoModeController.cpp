@@ -39,7 +39,9 @@ namespace xero {
                 logger.endMessage();
             }
             else
-            {                
+            {   
+                sel = 2 ;
+                             
                 switch(sel) 
                 {
                 case 0:

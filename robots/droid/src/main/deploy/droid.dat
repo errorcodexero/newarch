@@ -212,7 +212,7 @@ shooter:aim:hood_up:b                                           0
 shooter:aim:hood_up:c                                           3600
 shooter:aim:hood_down:a                                         0.035
 shooter:aim:hood_down:b                                         -8.4958
-shooter:aim:hood_down:c                                         4959.5
+shooter:aim:hood_down:c                                         4959.5    
 
 shooter:aim:max_hood_up                                         120
 shooter:aim:min_hood_down                                       110
@@ -324,10 +324,10 @@ driver:zerolevel                                                0.1
 # Set to true to force the climber to always operate in field mode, even when not connected to FMS.
 # In field mode, the climber's max downward velocity is limited to 10% below 1000, and 0% below 0.
 # In pit mode, the climber's max downward velocity is always limited to 10%.
-climber:force_field_mode                                        false
+climber:force_field_mode                                        true
 
-climber:climb_height                                            10000
-climber:max_height                                              12000
+climber:climb_height                                            21500
+climber:max_height                                              30000
 climber:power:up                                                0.4
 climber:power:down                                              -1
 climber:power:left                                              -1.0
@@ -354,9 +354,9 @@ climber:lifter:follower:down:max                                1
 cilmber:lifter:follower:down:imax                               0
 
 climber:lifter:goto:threshold                                   3.0
-climber:lifter:goto:maxa                                        2300
-climber:lifter:goto:maxd                                        -2300
-climber:lifter:goto:maxv                                        2300
+climber:lifter:goto:maxa                                        8000
+climber:lifter:goto:maxd                                        -8000
+climber:lifter:goto:maxv                                        8000
 
 climber:lifter:hold:p                                           0
 climber:lifter:hold:i                                                   0
@@ -434,7 +434,7 @@ targettracker:target:y                                          30  # placeholde
 targettracker:camera_targetting_max_angle                       45
 
 # Compensate for camera mounting variance by subtracting this value from the limelight yaw value.
-targettracker:camera_offset_angle                               2.5
+targettracker:camera_offset_angle                               -2.5
 
 ###################################################################################################
 #
@@ -452,10 +452,10 @@ plotting:enabled                                               true
 # These control test modes for the robot.  They are used by the DroidTestTuneMode automode.  Note
 # this active value below is ignored if we are connected to the field.
 #
-auto:testmode:active                                          true
-auto:testmode:which                                           31
+auto:testmode:active                                          false
+auto:testmode:which                                           60
 auto:testmode:distance                                        10000
-auto:testmode:power                                           0.5
+auto:testmode:power                                           -0.1
 auto:testmode:duration                                        10
 
 #

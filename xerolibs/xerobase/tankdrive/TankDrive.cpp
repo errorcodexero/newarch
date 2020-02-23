@@ -48,7 +48,7 @@ namespace xero {
             kin_ = std::make_shared<xero::misc::Kinematics>(width, scrub) ;
 
             automode_neutral_ = MotorController::NeutralMode::Brake ;
-            teleop_neutral_ = MotorController::NeutralMode::Brake ;
+            teleop_neutral_ = MotorController::NeutralMode::Coast ;
             reset_neutral_ = MotorController::NeutralMode::Coast ;
 
             SettingsParser &parser = getRobot().getSettingsParser() ;
