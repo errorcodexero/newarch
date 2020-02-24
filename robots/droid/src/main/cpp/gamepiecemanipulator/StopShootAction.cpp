@@ -26,7 +26,7 @@ namespace xero {
             auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter();
             
             conveyor_stop_action_ = std::make_shared<ConveyorStopAction>(*conveyor) ;
-            hood_down_action_ = std::make_shared<SetHoodAction>(*shooter, true);
+            hood_down_action_ = std::make_shared<SetHoodAction>(*shooter, Shooter::HoodPosition::Down);
             
             parallel_.addSubActionPair(conveyor, conveyor_stop_action_) ;
             parallel_.addSubActionPair(shooter, hood_down_action_);

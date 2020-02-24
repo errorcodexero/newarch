@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gamepiecemanipulator/shooter/Shooter.h"
 #include <motorencodersubsystem/MotorEncoderVelocityAction.h>
 #include <networktables/NetworkTableEntry.h>
 #include <frc/shuffleboard/Shuffleboard.h>
@@ -12,7 +13,7 @@ namespace xero {
 
         public:
 
-            ShooterVelocityAction(Shooter &sub, double target, bool hood) ;
+            ShooterVelocityAction(Shooter &sub, double target, Shooter::HoodPosition pos) ;
             virtual ~ShooterVelocityAction() ;
 
              Shooter &getSubsystem() {
@@ -25,15 +26,15 @@ namespace xero {
 
             virtual void setTarget(double target) override;
 
-            bool getHood() { return hood_; }
-            void setHood(bool hood) { hood_ = hood; }
+            Shooter::HoodPosition  getHood() { return hood_; }
+            void setHood(Shooter::HoodPosition  hood) { hood_ = hood; }
 
         private:
 
             Shooter &subsystem_;
             double ready_margin_percent_;
 
-            bool hood_;
+            Shooter::HoodPosition hood_;
 
             void updateReadyToFire();
         };

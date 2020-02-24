@@ -1,12 +1,13 @@
 #pragma once
 
 #include "ShooterAction.h"
+#include "Shooter.h"
 
 namespace xero {
     namespace droid {
         class SetHoodAction: public ShooterAction {
         public:
-            SetHoodAction(Shooter &sub, bool hood): ShooterAction(sub), hood_(hood) {}
+            SetHoodAction(Shooter &sub, Shooter::HoodPosition hood): ShooterAction(sub), hood_(hood) {}
 
             void start() override {
                 ShooterAction::start();
@@ -14,10 +15,19 @@ namespace xero {
                 setDone();
             }
 
-            std::string toString() override { return "SetHoodAction(" + std::to_string(hood_) + ")"; }
+            std::string toString() override 
+            { 
+                std::string ret = "SetHoodAction " ;
+                if (hood_ == Shooter::HoodPosition::Up)
+                    ret += "UP" ;
+                else
+                    ret += "DOWN" ;
+
+                return ret ;
+            }
             
         private:
-            bool hood_;
+            Shooter::HoodPosition hood_;
         };
     }
 }

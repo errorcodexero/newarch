@@ -3,7 +3,6 @@
 #include "gamepiecemanipulator/FireAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorSetBallCountAction.h"
 #include "gamepiecemanipulator/conveyor/ConveyorPrepareToEmitAction.h"
-#include "gamepiecemanipulator/shooter/SetHoodAction.h"
 #include "gamepiecemanipulator/shooter/ShooterVelocityAction.h"
 #include "turret/FollowTargetAction.h"
 
@@ -38,7 +37,7 @@ namespace xero
             pushAction(parallel);
 
             // Spin up the shooter
-            parallel->addSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4150, true), false) ;
+            parallel->addSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4150, Shooter::HoodPosition::Down), false) ;
 
             //     Prepare to emit
             parallel->addSubActionPair(conveyor, std::make_shared<ConveyorPrepareToEmitAction>(*conveyor));

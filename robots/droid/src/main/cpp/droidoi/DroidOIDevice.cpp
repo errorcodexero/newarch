@@ -426,7 +426,7 @@ namespace xero {
 
             queue_prep_collect_ = std::make_shared<ConveyorPrepareToReceiveAction>(*conveyor) ;
             queue_prep_shoot_ = std::make_shared<ConveyorPrepareToEmitAction>(*conveyor) ;
-            shooter_spinup_ = std::make_shared<ShooterVelocityAction>(*shooter, 4500, true);
+            shooter_spinup_ = std::make_shared<ShooterVelocityAction>(*shooter, 4500, Shooter::HoodPosition::Down) ;
             fire_yes_ = std::make_shared<FireAction>(*game_piece_manipulator);
             waitingForConveyorPrepShoot_ = false;
 
@@ -445,9 +445,9 @@ namespace xero {
             flag_coll_v_shoot_ = CollectShootMode::InvalidMode;
             flag_eject_ = false;
 
-            hood_down_ = std::make_shared<SetHoodAction>(*shooter, true);
+            hood_down_ = std::make_shared<SetHoodAction>(*shooter, Shooter::HoodPosition::Down);
             eject_action_ = std::make_shared<ConveyorEjectAction>(*conveyor);
-            shooter_eject_action_ = std::make_shared<ShooterVelocityAction>(*shooter, -3000, true);
+            shooter_eject_action_ = std::make_shared<ShooterVelocityAction>(*shooter, -3000, Shooter::HoodPosition::Down);
 
             deploy_climber_ = std::make_shared<MotorEncoderGoToAction>(*climber->getLifter(), "climber:climb_height") ;
             stop_ = std::make_shared<ClimberUpDownAction>(*climber, 0.0, 0.0) ;

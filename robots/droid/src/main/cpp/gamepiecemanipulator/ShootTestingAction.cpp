@@ -20,7 +20,7 @@ namespace xero {
         }
 
         ShootTestingAction::ShootTestingAction(GamePieceManipulator &subsystem) : GamePieceManipulatorAction(subsystem), widget_(makeWidget(subsystem)) {
-            fire_ = std::make_shared<ShooterVelocityAction>(*getSubsystem().getShooter(), 0.0, false);
+            fire_ = std::make_shared<ShooterVelocityAction>(*getSubsystem().getShooter(), 0.0, Shooter::HoodPosition::Down);
             shoot_delay_ = subsystem.getRobot().getSettingsParser().getDouble("shoottest:shoot_delay") ;
         }
 

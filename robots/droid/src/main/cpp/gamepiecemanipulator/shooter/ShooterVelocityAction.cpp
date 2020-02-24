@@ -15,7 +15,7 @@ using namespace xero::base;
 namespace xero {
     namespace droid {
       
-        ShooterVelocityAction::ShooterVelocityAction(Shooter &sub, double target, bool hood): 
+        ShooterVelocityAction::ShooterVelocityAction(Shooter &sub, double target, Shooter::HoodPosition hood): 
             xero::base::MotorEncoderVelocityAction(sub, 0), subsystem_(sub), hood_(hood)
         {
             const std::string configName("shooter:velocity:ready_margin_percent");

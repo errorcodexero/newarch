@@ -12,7 +12,6 @@
 #include <actions/DelayAction.h>
 #include <tankdrive/actions/TankDriveFollowPathAction.h>
 #include <motorencodersubsystem/MotorEncoderGoToAction.h>
-#include "gamepiecemanipulator/shooter/SetHoodAction.h"
 
 using namespace xero::base;
 using namespace xero::misc;
@@ -53,7 +52,7 @@ namespace xero
             parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "eight_ball_auto_fire"));
 
             // Spin up the shooter
-            parallel->addSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4150, true), false) ;
+            parallel->addSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4150, Shooter::HoodPosition::Down), false) ;
 
             // Add the game piece manipulator stuff
             pushAction(parallel) ;           
@@ -65,9 +64,6 @@ namespace xero
             parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
             pushAction(parallel);
 
-            // Put the hood down
-            parallel->addSubActionPair(shooter, std::make_shared<SetHoodAction>(*shooter, true), false);
-            
             // Drive to collect five balls
             if (variation == 0)
             {
@@ -104,7 +100,7 @@ namespace xero
             parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "eight_ball_auto_fire2", true));
 
             // Spin up shooter
-            parallel->addSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4150, true), false) ;
+            parallel->addSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4150, Shooter::HoodPosition::Down), false) ;
 
             // Then, fire all five balls
             pushSubActionPair(manip, std::make_shared<FireAction>(*manip));

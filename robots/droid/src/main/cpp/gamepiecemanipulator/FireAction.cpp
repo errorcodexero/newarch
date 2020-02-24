@@ -43,10 +43,10 @@ namespace xero {
 
             auto conveyor = getSubsystem().getConveyor();
             auto shooter = getSubsystem().getShooter();
-            shooterVelocityAction_ = std::make_shared<ShooterVelocityAction>(*shooter, 0, false);
+            shooterVelocityAction_ = std::make_shared<ShooterVelocityAction>(*shooter, 0, Shooter::HoodPosition::Up);
             conveyorEmitAction_ = std::make_shared<ConveyorEmitAction>(*conveyor);
 
-            hoodIsDown_ = false;
+            hoodIsDown_ = Shooter::HoodPosition::Up ;
             
             auto &settings = manip.getRobot().getSettingsParser();
             std::string drivebaseThresholdKey = "gamepiecemanipulator:fire:max_drivebase_velocity";
@@ -90,11 +90,11 @@ namespace xero {
             auto tracker = droidSubsystem_.getTargetTracker();
             double dist = tracker->getDistance();
 
-            if (dist > maxHoodUpDistance_) hoodIsDown_ = true;
-            else if (dist < minHoodDownDistance_) hoodIsDown_ = false;
+            if (dist > maxHoodUpDistance_) hoodIsDown_ = Shooter::HoodPosition::Down;
+            else if (dist < minHoodDownDistance_) hoodIsDown_ = Shooter::HoodPosition::Up ;
 
             double a, b, c;
-            if (hoodIsDown_) {
+            if (hoodIsDown_ == Shooter::HoodPosition::Down) {
                 a = hoodDown_a_;
                 b = hoodDown_b_;
                 c = hoodDown_c_;
@@ -191,7 +191,7 @@ namespace xero {
                 logger << "]; ";
                 
             }
-            logger << "hood: " << (hoodIsDown_ ? "down" : "up");
+            logger << "hood: " << ( (hoodIsDown_ == Shooter::HoodPosition::Down) ? "down" : "up");
             logger.endMessage();
 
             getSubsystem().getRobot().getPlotManager().addPlotData(plotid_, {

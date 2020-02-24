@@ -144,9 +144,9 @@ namespace xero
                 //
                 //////////////////////////////////////////////////////////////////////////////////////////
             case 30:     // Test the shooter
-                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), power, false));
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), power, Shooter::HoodPosition::Down));
                 pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 5.0)); 
-                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, false));                                
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Down));                                
                 break;
 
             case 31:     // Shoot balls
@@ -154,11 +154,11 @@ namespace xero
                 break;
 
             case 32:    // Test the hood (down)
-                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, true));
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Down));
                 break;
 
             case 33:    // Test the hood (up)
-                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, false));
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Up));
                 break;
 
             case 34:
