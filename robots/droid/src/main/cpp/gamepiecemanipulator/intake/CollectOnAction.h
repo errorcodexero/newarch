@@ -14,7 +14,7 @@ namespace xero {
         class CollectOnAction : public xero::base::MotorEncoderGoToAction {   
            
         public :
-            CollectOnAction(Intake &subsystem) ;
+            CollectOnAction(Intake &subsystem, bool spinner = true) ;
             virtual ~CollectOnAction() {}
 
             virtual void start() ;

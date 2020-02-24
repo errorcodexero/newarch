@@ -39,11 +39,6 @@ namespace xero {
             /// \param ds the drive station object to get joystick values
             /// \param index the index of the joystick to read
             virtual void setValue(frc::DriverStation &ds, int index) {
-                if (getItem() == 0)
-                {
-                    double d = ds.GetStickAxis(index, getItem()) ;
-                    frc::SmartDashboard::PutNumber("SWITCH", d) ;
-                }
                 setValue(ds.GetStickAxis(index, getItem())) ;
             }
 

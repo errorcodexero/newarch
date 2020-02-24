@@ -189,6 +189,8 @@ namespace xero
                 //////////////////////////////////////////////////////////////////////////////////////////
             case 50:    // put the arm up
                 pushSubActionPair(controlpanel, std::make_shared<ControlPanelArmAction>(*controlpanel, true));
+                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 3.0));
+                pushSubActionPair(controlpanel, std::make_shared<ControlPanelArmAction>(*controlpanel, false));                
                 break;
 
                 //////////////////////////////////////////////////////////////////////////////////////////

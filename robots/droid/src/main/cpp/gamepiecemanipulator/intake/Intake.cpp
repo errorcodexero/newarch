@@ -13,8 +13,9 @@ namespace xero {
             std::string collectparam = "intake:collect" ;
             std::string motorparam = HWPrefix + collectparam + ":motor" ;
             collector_ = getRobot().getMotorFactory()->createMotor(motorparam) ;
-
+#ifdef ALL_SMART_DASHBOARD
             setSmartDashboardName("intake") ;
+#endif
         }
 
         Intake::~Intake()

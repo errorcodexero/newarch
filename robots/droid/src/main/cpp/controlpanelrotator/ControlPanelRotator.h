@@ -2,6 +2,7 @@
 
 #include <motorencodersubsystem/MotorEncoderSubsystem.h>
 #include <optional>
+#include <rev/ColorSensorV3.h>
 #include <frc/Servo.h>
 
 namespace xero {
@@ -44,15 +45,20 @@ namespace xero {
             double getArmUpPosition() { return armUp_; }
             double getArmDownPosition() { return armDown_; }
 
+            virtual bool canAcceptAction(xero::base::ActionPtr action) ;
+
         private:
             std::optional<Color> sampleSensor();
             std::shared_ptr<frc::Servo> servo_;
+            std::shared_ptr<rev::ColorSensorV3> sensor_ ;
 
             double armUp_;
             double armDown_;
 
             bool hasNewData_;
             Color lastColor_ = Color::Blue;
+
+            uint64_t id_ ;
         };
     }
 }

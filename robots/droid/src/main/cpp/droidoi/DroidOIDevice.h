@@ -37,6 +37,17 @@ namespace xero {
             void generatePanelSpinnerActions(xero::base::SequenceAction &seq) ;
 
         private:
+            enum SpinnerState
+            {
+                Start,
+                WaitingForIntakeDown,
+                RaisingArm,
+                Raised,
+                LoweringArm,                
+                WaitingForIntakeUp
+            } ;
+
+        private:
             CollectShootMode flag_coll_v_shoot_ ;
             bool flag_collect_ ;
             bool flag_eject_;
@@ -64,6 +75,9 @@ namespace xero {
             size_t climb_down_ ;
             size_t climb_left_ ;
             size_t climb_right_ ;
+
+            size_t spin_deploy_ ;
+            double start_time_ ;
 
             bool rumbled_ ;
 
@@ -93,7 +107,9 @@ namespace xero {
             xero::base::ActionPtr control_panel_rotation_action_;
 
             xero::base::ActionPtr deploy_climber_ ;
-            xero::base::ActionPtr stop_ ;                     
+            xero::base::ActionPtr stop_ ;      
+
+            SpinnerState spinner_state_ ;               
         } ;
     }
 }

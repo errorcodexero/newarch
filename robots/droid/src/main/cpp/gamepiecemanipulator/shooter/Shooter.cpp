@@ -9,7 +9,9 @@ using namespace xero::base;
 namespace xero {
     namespace droid {
         Shooter::Shooter(Subsystem *parent): MotorEncoderSubsystem(parent, "shooter", MSG_GROUP_SHOOTER) {
+#ifdef ALL_SMART_DASHBOARD
             setSmartDashboardName("shooter") ;
+#endif
             setReadyToFire(false);
 
             auto &settings = getRobot().getSettingsParser();

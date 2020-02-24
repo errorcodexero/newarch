@@ -1,5 +1,8 @@
 #include "controlpanelrotator/ControlPanelRotator.h"
+#include "controlpanelrotator/ControlPanelAction.h"
 #include "droidids.h"
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <Robot.h>
 
 using namespace xero::misc;
 using namespace xero::base;
@@ -9,19 +12,54 @@ namespace xero {
         ControlPanelRotator::ControlPanelRotator(Subsystem *parent):
           MotorEncoderSubsystem(parent, "controlpanelrotator", MSG_GROUP_CONTROL_PANEL_ROTATOR) {
               auto &settings = getRobot().getSettingsParser();
+              sensor_ = std::make_shared<rev::ColorSensorV3>(frc::I2C::Port::kOnboard) ;
               servo_ = std::make_shared<frc::Servo>(settings.getDouble("hw:controlpanelrotator:servo"));
               armUp_ = settings.getDouble("controlpanelrotator:arm:up");
               armDown_ = settings.getDouble("controlpanelrotator:arm:down");
+
+              id_ = MSG_GROUP_CONTROL_PANEL_ROTATOR ;
         }
 
         void ControlPanelRotator::init(LoopType ltype) {
             getArmServo()->Set(armDown_);
         }
 
+        bool ControlPanelRotator::canAcceptAction(ActionPtr act)
+        {
+            auto inact = std::dynamic_pointer_cast<ControlPanelAction>(act) ;
+            return inact != nullptr ;
+        }        
+
         void ControlPanelRotator::computeState() {
             auto newColor = sampleSensor();
             hasNewData_ = newColor.has_value();
             if (newColor) lastColor_ = *newColor;
+
+            std::string ret = "unknown" ;
+
+            if (newColor)
+            {
+                switch(*newColor)
+                {
+                    case Color::Blue:
+                        ret = "Blue" ;
+                        break ;
+                    case Color::Green:
+                        ret = "Green" ;
+                        break ;
+                    case Color::Red:
+                        ret = "Red" ;
+                        break ;
+                    case Color::Yellow:
+                        ret = "Yellow" ;
+                        break ;
+                    case Color::COUNT:
+                        ret = "COUNT" ;
+                        break ;
+                }
+            }
+
+            frc::SmartDashboard::PutString("Color", ret) ;
         }
 
         ControlPanelRotator::Color ControlPanelRotator::colorAfter(Color color)  {
@@ -44,10 +82,20 @@ namespace xero {
             // TODO: actually sample the sensor
             // We can return null if we somehow detect we can't get a good reading
             float r = 0, g = 0, b = 0;
+            auto c = sensor_->GetColor() ;
+
+            r = c.red ;
+            g = c.green ;
+            b = c.blue ;
+
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, id_) ;
+            logger << "RGB " << r << " " << g << " " << b ;
+            logger.endMessage() ;
 
             // Find hue
             // https://en.wikipedia.org/wiki/HSL_and_HSV#From_RGB
-            float hue;
+            float hue = 0 ;
 
             float max = std::max(r, std::max(g, b));
             float min = std::min(r, std::min(g, b));

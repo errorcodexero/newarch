@@ -13,10 +13,13 @@ using namespace xero::base ;
 namespace xero {
     namespace droid {
         std::string CollectOnAction::action_name("CollectOnAction");
-        CollectOnAction::CollectOnAction(Intake &subsystem) : 
+        CollectOnAction::CollectOnAction(Intake &subsystem, bool spinner) : 
                 MotorEncoderGoToAction(subsystem, CollectOnAction::Target)
         {
-            collector_power_ = subsystem.getRobot().getSettingsParser().getDouble("intake:collector:motor:power") ;
+            collector_power_ = 0.0 ;
+
+            if (spinner)
+                collector_power_ = subsystem.getRobot().getSettingsParser().getDouble("intake:collector:motor:power") ;
         }     
         
         void CollectOnAction::start() {

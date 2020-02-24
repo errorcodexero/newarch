@@ -58,6 +58,7 @@ namespace xero {
             started_deploy_ = false;
 
             rumbled_ = false ;
+            spinner_state_ = SpinnerState::Start ;
         }
 
         DroidOIDevice::~DroidOIDevice() 
@@ -105,7 +106,14 @@ namespace xero {
             climb_up_ = mapButton(climb_up_b, OIButton::ButtonType::Level) ;
             climb_down_ = mapButton(climb_down_b, OIButton::ButtonType::Level) ;
             climb_left_ = mapButton(climb_left_b, OIButton::ButtonType::Level) ;
-            climb_right_ = mapButton(climb_right_b, OIButton::ButtonType::Level) ;                        
+            climb_right_ = mapButton(climb_right_b, OIButton::ButtonType::Level) ;  
+
+            //
+            // Spinning things
+            //
+            size_t spin_deploy_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:spin_deploy") ;
+
+            spin_deploy_ = mapButton(spin_deploy_b, OIButton::ButtonType::Level) ;                      
         }
         
         int DroidOIDevice::getAutoModeSelector() 
@@ -336,7 +344,60 @@ namespace xero {
 
         void DroidOIDevice::generatePanelSpinnerActions(xero::base::SequenceAction &seq)
         {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
+            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;
+            auto spinner = droid.getDroidSubsystem()->getControlPanelRotator() ;
 
+            switch(spinner_state_)
+            {
+            case SpinnerState::Start:
+                if (getValue(spin_deploy_))
+                {
+                    spinner_state_ = SpinnerState::WaitingForIntakeDown;
+                    seq.pushSubActionPair(intake, std::make_shared<CollectOnAction>(*intake, false), false) ;
+                }
+                break ;
+
+            case SpinnerState::WaitingForIntakeDown:
+                if (!intake->isBusy())
+                {
+                    spinner_state_ = SpinnerState::RaisingArm ;
+                    start_time_ = getSubsystem().getRobot().getTime() ;
+                    seq.pushSubActionPair(spinner, std::make_shared<ControlPanelArmAction>(*spinner, true), false) ;
+                }
+                break ;
+
+            case SpinnerState::RaisingArm:
+                if (getSubsystem().getRobot().getTime() - start_time_ > 2.0)
+                {
+                    spinner_state_ = SpinnerState::Raised ;
+                }
+                break ;
+
+            case SpinnerState::Raised:
+                if (getValue(spin_deploy_) == false)
+                {
+                    spinner_state_ = SpinnerState::LoweringArm ;
+                    start_time_ = getSubsystem().getRobot().getTime() ;
+                    seq.pushSubActionPair(spinner, std::make_shared<ControlPanelArmAction>(*spinner, false), false) ;
+                }
+                break ;
+
+            case SpinnerState::LoweringArm:
+                if (getSubsystem().getRobot().getTime() - start_time_ > 2.0)
+                {
+                    spinner_state_ = SpinnerState::WaitingForIntakeUp;
+                    seq.pushSubActionPair(intake, std::make_shared<CollectOffAction>(*intake), false) ;
+                }
+                break ;
+
+            case SpinnerState::WaitingForIntakeUp:
+                if (!intake->isBusy())
+                {
+                    spinner_state_ = SpinnerState::Start ;
+                }
+                break ;
+            }
         }
 
         void DroidOIDevice::generateActions(xero::base::SequenceAction &seq)
