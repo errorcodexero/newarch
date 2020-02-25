@@ -36,6 +36,7 @@ namespace xero {
 
             void setCamMode(camMode mode) ;
             void setLedMode(ledMode mode) ;
+            void setPipeline(int which) ;
             bool isLimeLightPresent(){
                 return present_ ;
             }
@@ -73,22 +74,23 @@ namespace xero {
 
             static std::string toString();
 
-            
-
         protected:
             std::shared_ptr<nt::NetworkTable> getNetworkTable() {
                 return table_ ;
             }
 
         private:
-            constexpr static const char *camModeName = "camera_mode" ;
-            constexpr static const char *ledModeName = "led_mode" ;
+            constexpr static const char *camModeName = "camMode" ;
+            constexpr static const char *ledModeName = "ledMode" ;
+            constexpr static const char *pipelineName = "pipeline" ;
+            constexpr static const char *streamName = "stream" ;
             
 
         private:
             std::shared_ptr<nt::NetworkTable> table_ ;
             camMode cam_mode_ ;
             ledMode led_mode_ ;
+            int pipeline_ ;
 
             double ta_ ;
             bool tv_ ;

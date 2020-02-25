@@ -12,11 +12,16 @@ namespace xero {
         {
             led_mode_ = ledMode::Invalid ;
             cam_mode_ = camMode::Invalid ;
+            pipeline_ = -1 ;
 
             table_ = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
 
             camera_latency_ = getRobot().getSettingsParser().getDouble("limelight:camera_latency") ;
-            network_latency_ = getRobot().getSettingsParser().getDouble("limelight:network_latency") ;
+            network_latency_ = getRobot().getSettingsParser().getDouble("limelight:network_latency")  ;
+
+            setLedMode(ledMode::ForceOn) ;
+            setCamMode(camMode::VisionProcessor) ;
+            setPipeline(0) ;
         }
 
         LimeLight::~LimeLight()
@@ -109,6 +114,15 @@ namespace xero {
                     case ledMode::Invalid:
                         break ;
                 }
+            }
+        }
+
+        void LimeLight::setPipeline(int which)
+        {
+            if (pipeline_ != which)
+            {
+                pipeline_ = which ;
+                table_->PutNumber(pipelineName, which) ;
             }
         }
 
