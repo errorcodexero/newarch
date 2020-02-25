@@ -166,11 +166,11 @@ namespace xero
                 break ;
 
             case 35:
-                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Down));
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Down), false);
                 pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 3.0));
-                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Up));
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Up), false);
                 pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 3.0));
-                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Down));
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Down), false);
                 break ;
 
                 //////////////////////////////////////////////////////////////////////////////////////////
@@ -200,6 +200,10 @@ namespace xero
                 pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 3.0));
                 pushSubActionPair(controlpanel, std::make_shared<ControlPanelArmAction>(*controlpanel, false));                
                 break;
+
+            case 51:
+                pushSubActionPair(controlpanel, std::make_shared<MotorEncoderPowerAction>(*controlpanel, power, duration));
+                break ;    
 
                 //////////////////////////////////////////////////////////////////////////////////////////
                 //

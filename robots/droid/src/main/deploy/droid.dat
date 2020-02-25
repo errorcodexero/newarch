@@ -222,6 +222,9 @@ shooter:aim:hood_down:c                                         5200.8
 shooter:aim:max_hood_up                                         120
 shooter:aim:min_hood_down                                       110
 
+shooter:down_speed                                              2.0
+shooter:down_delay                                              0.8
+
 ###################################################################################################
 # turret
 ###################################################################################################
@@ -461,9 +464,9 @@ plotting:enabled                                               true
 #
 auto:testmode:active                                          true
 auto:testmode:which                                           35
-auto:testmode:distance                                        10000
-auto:testmode:power                                           -0.1
-auto:testmode:duration                                        10
+auto:testmode:distance                                        0
+auto:testmode:power                                           -0.6
+auto:testmode:duration                                        5
 
 #
 # Shoot test parameters

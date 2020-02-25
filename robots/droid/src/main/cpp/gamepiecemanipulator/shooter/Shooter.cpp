@@ -17,8 +17,8 @@ namespace xero {
             setReadyToFire(false);
 
             auto &settings = getRobot().getSettingsParser();
-            hoodServo_ = std::make_shared<frc::Servo>(settings.getInteger("hw:shooter:hood"));
-
+            int which = settings.getInteger("hw:shooter:hood") ;
+            hoodServo_ = std::make_shared<frc::Servo>(which);
 
             std::string hoodConfig = "shooter:hood:";
             hoodUpPos_ = settings.getDouble(hoodConfig + "up");
@@ -26,8 +26,11 @@ namespace xero {
             getMotorController()->setCurrentLimit(40) ;
             getMotorController()->setNeutralMode(MotorController::NeutralMode::Coast) ;
 
-            hoodServo_->Set(hoodDownPos_) ;
-            actual_ = HoodPosition::Down ;            
+            hood_down_speed_ = settings.getDouble("shooter:down_speed") ;
+            hood_down_delay_ = settings.getDouble("shooter:down_delay") ;
+
+            actual_ = HoodPosition::Unknown ;
+            desired_ = HoodPosition::Down ;
         }
 
         void Shooter::run()
@@ -45,13 +48,18 @@ namespace xero {
             desired_ = pos ;
             updateHood() ;
         }
+
+        bool Shooter::isHoodReady()
+        {
+            return getRobot().getTime() - change_time_ > hood_down_delay_ ;
+        }
         
         void Shooter::updateHood()
         {
             Droid &droid = dynamic_cast<Droid &>(getRobot()) ;
             auto db = droid.getDriveBase() ;
 
-            if (db->getVelocity() > 2.0)
+            if (abs(db->getVelocity()) > hood_down_speed_ || actual_ == HoodPosition::Unknown)
             {
                 if (actual_ != HoodPosition::Down)
                 {
@@ -66,6 +74,7 @@ namespace xero {
                 else
                     hoodServo_->Set(hoodUpPos_) ;
 
+                change_time_ = getRobot().getTime() ;
                 actual_ = desired_ ;
             }
         }

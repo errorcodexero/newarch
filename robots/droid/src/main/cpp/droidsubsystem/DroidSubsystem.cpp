@@ -23,7 +23,7 @@ namespace xero {
 
             control_panel_rotator_ = std::make_shared<ControlPanelRotator>(this);
             addChild(control_panel_rotator_);
-
+            
             climber_ = std::make_shared<Climber>(this);
             addChild(climber_);
 

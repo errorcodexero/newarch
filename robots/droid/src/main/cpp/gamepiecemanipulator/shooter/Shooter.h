@@ -26,7 +26,7 @@ namespace xero {
             }
 
             bool isReadyToFire() const {
-                return ready_to_fire_;
+                return ready_to_fire_ && isHoodReady() ;
             }
 
             void setHood(HoodPosition pos);
@@ -38,6 +38,8 @@ namespace xero {
         private:
             void updateHood() ;
 
+            bool isHoodReady() ;
+
         private:
             std::shared_ptr<frc::Servo> hoodServo_;
 
@@ -46,6 +48,12 @@ namespace xero {
 
             HoodPosition desired_ ;
             HoodPosition actual_ ;
+
+            double change_time_ ;
+
+            double hood_down_speed_ ;
+
+            double hood_down_delay_ ;
 
             bool ready_to_fire_ ;      // Set to true when shooter at the required shooting velocity
         };
