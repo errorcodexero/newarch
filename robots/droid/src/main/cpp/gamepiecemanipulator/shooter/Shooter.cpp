@@ -59,8 +59,19 @@ namespace xero {
             Droid &droid = dynamic_cast<Droid &>(getRobot()) ;
             auto db = droid.getDriveBase() ;
 
+#ifdef NOTYET
+            auto &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SHOOTER) ;
+            logger << "updateHood: speed " << db->getVelocity() ;
+            logger.endMessage() ;
+#endif            
             if (abs(db->getVelocity()) > hood_down_speed_ || actual_ == HoodPosition::Unknown)
             {
+#ifdef NOTYET
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SHOOTER) ;
+                logger << "updateHood: lowering hood " ;
+                logger.endMessage() ;
+#endif
                 if (actual_ != HoodPosition::Down)
                 {
                     hoodServo_->Set(hoodDownPos_) ;
@@ -69,6 +80,12 @@ namespace xero {
             }
             else if (desired_ != actual_)
             {
+#ifdef NOTYET
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SHOOTER) ;
+                logger << "updateHood: ensuring desired state " ;
+                logger.endMessage() ;
+#endif
+
                 if (desired_ == HoodPosition::Down)
                     hoodServo_->Set(hoodDownPos_) ;
                 else

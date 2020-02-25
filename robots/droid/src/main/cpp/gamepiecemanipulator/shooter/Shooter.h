@@ -25,7 +25,7 @@ namespace xero {
                 ready_to_fire_ = ready_to_fire;
             }
 
-            bool isReadyToFire() const {
+            bool isReadyToFire() {
                 return ready_to_fire_ && isHoodReady() ;
             }
 

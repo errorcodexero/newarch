@@ -45,7 +45,7 @@ namespace xero {
             double hoodUp_b_;
             double hoodUp_c_;
 
-            Shooter::HoodPosition  hoodIsDown_;
+            Shooter::HoodPosition  hoodPos_;
             double maxHoodUpDistance_;
             double minHoodDownDistance_;
 

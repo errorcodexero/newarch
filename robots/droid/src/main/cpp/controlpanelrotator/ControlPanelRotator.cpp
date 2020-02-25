@@ -21,7 +21,7 @@ namespace xero {
         }
 
         void ControlPanelRotator::init(LoopType ltype) {
-            getArmServo()->Set(0.5);
+            getArmServo()->Set(armDown_);
         }
 
         bool ControlPanelRotator::canAcceptAction(ActionPtr act)

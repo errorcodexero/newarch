@@ -24,6 +24,8 @@
 #include "controlpanelrotator/ControlPanelColorAction.h"
 #include "controlpanelrotator/ControlPanelDistanceAction.h"
 #include "climber/ClimberUpDownAction.h"
+#include "limelight/DroidLimeLight.h"
+#include "cameratracker/LimeLight.h"
 #include <Subsystem.h>
 #include <Robot.h>
 #include <TeleopController.h>
@@ -182,7 +184,7 @@ namespace xero {
             if (flag_eject_) return;
 
             if (flag_coll_v_shoot_ == CollectShootMode::InvalidMode || getSwitchMode() != flag_coll_v_shoot_) {
-                if(getSwitchMode() == CollectShootMode::CollectMode) {
+                if (getSwitchMode() == CollectShootMode::CollectMode) {
                     // Setup the game piece manipulator to collect
                     if (game_piece_manipulator->isDone()  || waitingForConveyorPrepShoot_ ||
                             game_piece_manipulator->getAction() == start_collect_action_ || 
@@ -196,6 +198,7 @@ namespace xero {
                         flag_collect_ = false;
                         flag_coll_v_shoot_ = CollectShootMode::CollectMode ;                                   
                         frc::SmartDashboard::PutString("Mode", "Collect") ;
+                        limelight->setLedMode(LimeLight::ledMode::ForceOff) ;
                     }
                 }
                 else {
@@ -206,7 +209,8 @@ namespace xero {
                     seq.pushSubActionPair(intake,  intake_off_, false);
                     flag_coll_v_shoot_ = CollectShootMode::ShootMode ;      
                     waitingForConveyorPrepShoot_ = true;
-                    frc::SmartDashboard::PutString("Mode", "Shoot") ;                    
+                    frc::SmartDashboard::PutString("Mode", "Shoot") ;   
+                    limelight->setLedMode(LimeLight::ledMode::ForceOn) ;
                 }
             }
             else
