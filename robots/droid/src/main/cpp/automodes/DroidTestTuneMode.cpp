@@ -164,7 +164,15 @@ namespace xero
             case 34:
                 pushSubActionPair(game->getShooter(), std::make_shared<MotorEncoderPowerAction>(*game->getShooter(), power, duration));
                 break ;
-                
+
+            case 35:
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Down));
+                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 3.0));
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Up));
+                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 3.0));
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Down));
+                break ;
+
                 //////////////////////////////////////////////////////////////////////////////////////////
                 //
                 // 40 - 49 turret related

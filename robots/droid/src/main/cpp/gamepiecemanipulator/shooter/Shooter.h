@@ -12,7 +12,8 @@ namespace xero {
             enum class HoodPosition
             {
                 Up,
-                Down
+                Down,
+                Unknown
             } ;        
 
         public:

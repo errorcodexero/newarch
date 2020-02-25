@@ -19,11 +19,15 @@ namespace xero {
             auto &settings = getRobot().getSettingsParser();
             hoodServo_ = std::make_shared<frc::Servo>(settings.getInteger("hw:shooter:hood"));
 
+
             std::string hoodConfig = "shooter:hood:";
             hoodUpPos_ = settings.getDouble(hoodConfig + "up");
             hoodDownPos_ = settings.getDouble(hoodConfig + "down");
             getMotorController()->setCurrentLimit(40) ;
             getMotorController()->setNeutralMode(MotorController::NeutralMode::Coast) ;
+
+            hoodServo_->Set(hoodDownPos_) ;
+            actual_ = HoodPosition::Down ;            
         }
 
         void Shooter::run()

@@ -21,6 +21,8 @@ namespace xero {
             const std::string configName("shooter:velocity:ready_margin_percent");
             ready_margin_percent_ = getSubsystem().getRobot().getSettingsParser().getDouble(configName);
             setTarget(target) ;
+
+            hood_ = hood ;
         }
 
         ShooterVelocityAction::~ShooterVelocityAction()
@@ -52,6 +54,23 @@ namespace xero {
             } else {
                 getSubsystem().setReadyToFire(false);
             }
+        }
+
+        std::string ShooterVelocityAction::toString()
+        {
+            std::string ret ;
+
+            ret = "ShooterVelocityAction " ;
+            ret += std::to_string(getTarget()) ;
+            ret += " " ;
+            if (hood_ == Shooter::HoodPosition::Up)
+                ret += "Up" ;
+            else if (hood_ == Shooter::HoodPosition::Down)
+                ret += "Down" ;
+            else
+                ret += "????" ;
+            
+            return ret ;
         }
     }
 }

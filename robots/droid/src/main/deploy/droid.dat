@@ -460,7 +460,7 @@ plotting:enabled                                               true
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          true
-auto:testmode:which                                           50
+auto:testmode:which                                           35
 auto:testmode:distance                                        10000
 auto:testmode:power                                           -0.1
 auto:testmode:duration                                        10

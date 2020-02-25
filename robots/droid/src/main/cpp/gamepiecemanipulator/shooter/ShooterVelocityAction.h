@@ -26,6 +26,8 @@ namespace xero {
 
             virtual void setTarget(double target) override;
 
+            virtual std::string toString() ;
+
             Shooter::HoodPosition  getHood() { return hood_; }
             void setHood(Shooter::HoodPosition  hood) { hood_ = hood; }
 
