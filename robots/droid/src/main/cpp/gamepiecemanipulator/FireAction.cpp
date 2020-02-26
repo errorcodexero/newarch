@@ -80,7 +80,7 @@ namespace xero {
             GamePieceManipulatorAction::start();
             auto shooter = getSubsystem().getShooter();
             isFiring_ = false;
-            shooterVelocityAction_->setTarget(0);               // just set it to a known value,
+            shooterVelocityAction_->setTarget(4500);            // just set it to a known value,
             shooter->setAction(shooterVelocityAction_, true);   // we'll update it every tick
 
             startTime_ = getSubsystem().getRobot().getTime();
