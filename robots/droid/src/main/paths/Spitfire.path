@@ -304,6 +304,123 @@
                     "startvelocity": 0
                 }
             ]
+        },
+        {
+            "name": "ten_ball_auto",
+            "paths": [
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 300,
+                    "maxjerk": 1500,
+                    "maxvelocity": 150,
+                    "name": "collect2",
+                    "points": [
+                        {
+                            "heading": 180,
+                            "x": 512.0171178343949,
+                            "y": 17.033837579617796
+                        },
+                        {
+                            "heading": 113.70264595096621,
+                            "x": 388.2712977707006,
+                            "y": 105.70999203821651
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 300,
+                    "maxjerk": 1500,
+                    "maxvelocity": 150,
+                    "name": "ready1",
+                    "points": [
+                        {
+                            "heading": -66.3,
+                            "x": 388.3,
+                            "y": 105.7
+                        },
+                        {
+                            "heading": 0,
+                            "x": 459.4126194267516,
+                            "y": 25.04976114649679
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 300,
+                    "maxjerk": 1500,
+                    "maxvelocity": 150,
+                    "name": "collect5",
+                    "points": [
+                        {
+                            "heading": 180,
+                            "x": 459.4,
+                            "y": 25
+                        },
+                        {
+                            "heading": 178.35605795321507,
+                            "x": 254.50557324840761,
+                            "y": 29.55871815286622
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 300,
+                    "maxjerk": 1500,
+                    "maxvelocity": 150,
+                    "name": "fire",
+                    "points": [
+                        {
+                            "heading": -1.6,
+                            "x": 254.5,
+                            "y": 29.6
+                        },
+                        {
+                            "heading": 0,
+                            "x": 326.1478901273885,
+                            "y": 23.546775477707
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                }
+            ]
         }
     ],
     "outdir": "C:/cygwin64/home/bwg/rtools/master/robots/droid/src/main/deploy/output"
