@@ -366,9 +366,9 @@ climber:lifter:follower:down:max                                1
 cilmber:lifter:follower:down:imax                               0
 
 climber:lifter:goto:threshold                                   3.0
-climber:lifter:goto:maxa                                        8000
-climber:lifter:goto:maxd                                        -8000
-climber:lifter:goto:maxv                                        8000
+climber:lifter:goto:maxa                                        3900
+climber:lifter:goto:maxd                                        -3900
+climber:lifter:goto:maxv                                        3900
 
 climber:lifter:hold:p                                           0
 climber:lifter:hold:i                                                   0
