@@ -35,6 +35,7 @@ namespace xero {
             "tv",
             "shooter_velocity",
             "target_velocity",
+            "hood_ready",
         } ;
 
         FireAction::FireAction(GamePieceManipulator &manip): 
@@ -116,12 +117,13 @@ namespace xero {
             auto drivebase = droidSubsystem_.getTankDrive();
             auto conveyor = getSubsystem().getConveyor();
             auto shooter = getSubsystem().getShooter();
-
-            setTargetVelocity();
             
             double sampleAge = getSubsystem().getRobot().getTime() - tracker->getLastCameraSampleTime();
 
             bool trackerReady = sampleAge < cameraSampleAgeThreshold_;
+
+            if (trackerReady) setTargetVelocity();
+
             bool turretReady = turret->isReadyToFire();
             bool shooterReady = shooter->isReadyToFire();
             bool drivebaseReady = abs(drivebase->getVelocity()) < drivebaseVelocityThreshold_;
@@ -211,6 +213,7 @@ namespace xero {
                 (double)droidSubsystem_.getLimeLight()->isTargetPresent(),
                 shooter->getSpeedometer().getVelocity(),
                 shooterVelocityAction_->getTarget(),
+                (double)shooter->isHoodReady(),
             });
         }
 
