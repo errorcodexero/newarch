@@ -21,7 +21,7 @@ hw:tankdrive:motors:right:2:type                                "talon_fx"
 hw:tankdrive:invert:motors:right                                true                        # Invert the direction of the right motors
 
 hw:shooter:motor:1:type                                         "sparkmax_brushless"
-hw:shooter:motor:1:canid                                        22                          # CAN 5
+hw:shooter:motor:1:canid                                        5                          # CAN 5
 hw:shooter:motor:2:type                                         "sparkmax_brushless"
 hw:shooter:motor:2:canid                                        6                          # CAN 6
 hw:shooter:motor:1:invert                                       true
@@ -99,9 +99,9 @@ hw:controlpanelrotator:servo                                    0
 endif
 
 hw:climber:lifter:motor:1:type                                  "sparkmax_brushless"
-hw:climber:lifter:motor:1:canid                                 5                          # CAN 13
+hw:climber:lifter:motor:1:canid                                 13                          # CAN 13
 hw:climber:lifter:motor:2:type                                  "sparkmax_brushless"
-hw:climber:lifter:motor:2:canid                                 21                          # CAN 14
+hw:climber:lifter:motor:2:canid                                 14                          # CAN 14
 hw:climber:lifter:motor:1:invert                                true
 hw:climber:lifter:motor:release                                 -10
 hw:climber:lifter:motor:climb                                   10
