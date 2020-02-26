@@ -27,7 +27,13 @@ namespace xero {
             addChild(lifter_);
 
             int travid = parent->getRobot().getSettingsParser().getInteger("hw:climber:traverser:pwmid") ;
-            traverser_ = std::make_shared<frc::PWMSparkMax>(travid) ;
+            traverser_ = std::make_shared<rev::SparkMax>(travid) ;
+        }
+
+        void Climber::run()
+        {
+            Subsystem::run() ;
+            traverser_->Set(0.5) ;
         }
         
         void Climber::init(xero::base::LoopType ltype) {

@@ -3,7 +3,7 @@
 #include <Subsystem.h>
 #include <motorencodersubsystem/MotorEncoderSubsystem.h>
 #include <frc/Servo.h>
-#include <frc/PWMSparkMax.h>
+#include <rev/SparkMax.h>
 
 namespace xero {
     namespace droid {
@@ -13,6 +13,8 @@ namespace xero {
         public:
             Climber(xero::base::Subsystem *parent);
             virtual ~Climber() {}
+
+            virtual void run() ;
             
             std::shared_ptr<xero::base::MotorEncoderSubsystem> getLifter() {
                 return lifter_ ;
@@ -40,7 +42,7 @@ namespace xero {
 
         private:
             std::shared_ptr<xero::base::MotorEncoderSubsystem> lifter_;
-            std::shared_ptr<frc::PWMSparkMax> traverser_ ;
+            std::shared_ptr<rev::SparkMax> traverser_ ;
             uint64_t msg_id_;
             double max_height_ ;
             bool field_mode_;

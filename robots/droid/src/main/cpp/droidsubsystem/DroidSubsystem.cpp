@@ -24,7 +24,8 @@ namespace xero {
 #ifdef NOTYET
             control_panel_rotator_ = std::make_shared<ControlPanelRotator>(this);
             addChild(control_panel_rotator_);
-#endif            
+#endif
+
             climber_ = std::make_shared<Climber>(this);
             addChild(climber_);
 

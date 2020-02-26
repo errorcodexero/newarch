@@ -37,6 +37,8 @@
 #include <gamepiecemanipulator/shooter/Shooter.h>
 #include <gamepiecemanipulator/shooter/ShooterVelocityAction.h>
 
+#include <climber/ClimberUpDownAction.h>
+
 using namespace xero::base;
 using namespace xero::misc;
 
@@ -105,7 +107,7 @@ namespace xero
             case 11:     // Test the collector
                 pushSubActionPair(game->getIntake(), std::make_shared<CollectOnAction>(*game->getIntake())) ;
                 pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), duration));
-                //pushSubActionPair(game->getIntake(), std::make_shared<CollectOffAction>(*game->getIntake()));                
+                pushSubActionPair(game->getIntake(), std::make_shared<CollectOffAction>(*game->getIntake()));                
                 break;
 
                 //////////////////////////////////////////////////////////////////////////////////////////
@@ -144,9 +146,7 @@ namespace xero
                 //
                 //////////////////////////////////////////////////////////////////////////////////////////
             case 30:     // Test the shooter
-                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), power, Shooter::HoodPosition::Down));
-                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 5.0)); 
-                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Down));                                
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), power, Shooter::HoodPosition::Down), true);
                 break;
 
             case 31:     // Shoot balls
@@ -218,8 +218,14 @@ namespace xero
             case 61:
                 pushSubActionPair(climber->getLifter(), std::make_shared<MotorEncoderGoToAction>(*climber->getLifter(), dist));
                 pushAction(std::make_shared<DelayAction>(logger, 1));
-                pushSubActionPair(climber->getLifter(), std::make_shared<MotorEncoderGoToAction>(*climber->getLifter(), 100));
-                break ;                
+                //pushSubActionPair(climber->getLifter(), std::make_shared<MotorEncoderGoToAction>(*climber->getLifter(), 10));
+                break ;
+
+            case 62:
+                pushSubActionPair(climber, std::make_shared<ClimberUpDownAction>(*climber, 0, power), true) ;
+                pushAction(std::make_shared<DelayAction>(logger, 5));                
+                pushSubActionPair(climber, std::make_shared<ClimberUpDownAction>(*climber, 0, 0.0), true) ;                
+                break ;               
 
                 //////////////////////////////////////////////////////////////////////////////////////////
                 //
