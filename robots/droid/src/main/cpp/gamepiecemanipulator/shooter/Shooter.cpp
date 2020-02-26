@@ -29,6 +29,8 @@ namespace xero {
             hood_down_speed_ = settings.getDouble("shooter:down_speed") ;
             hood_down_delay_ = settings.getDouble("shooter:down_delay") ;
 
+            change_time_ = getRobot().getTime();
+
             actual_ = HoodPosition::Unknown ;
             desired_ = HoodPosition::Down ;
         }
@@ -49,6 +51,10 @@ namespace xero {
             updateHood() ;
         }
 
+        bool Shooter::isReadyToFire() {
+            return ready_to_fire_;
+        }
+
         bool Shooter::isHoodReady()
         {
             return getRobot().getTime() - change_time_ > hood_down_delay_ ;
@@ -59,32 +65,33 @@ namespace xero {
             Droid &droid = dynamic_cast<Droid &>(getRobot()) ;
             auto db = droid.getDriveBase() ;
 
-#ifdef NOTYET
             auto &logger = getRobot().getMessageLogger() ;
+#ifdef NOTYET
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SHOOTER) ;
             logger << "updateHood: speed " << db->getVelocity() ;
             logger.endMessage() ;
 #endif            
             if (abs(db->getVelocity()) > hood_down_speed_ || actual_ == HoodPosition::Unknown)
             {
-#ifdef NOTYET
+//#ifdef NOTYET
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SHOOTER) ;
                 logger << "updateHood: lowering hood " ;
                 logger.endMessage() ;
-#endif
+//#endif
                 if (actual_ != HoodPosition::Down)
                 {
                     hoodServo_->Set(hoodDownPos_) ;
+                    change_time_ = getRobot().getTime();
                     actual_ = HoodPosition::Down ;
                 }
             }
             else if (desired_ != actual_)
             {
-#ifdef NOTYET
+//#ifdef NOTYET
                 logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_SHOOTER) ;
                 logger << "updateHood: ensuring desired state " ;
                 logger.endMessage() ;
-#endif
+//#endif
 
                 if (desired_ == HoodPosition::Down)
                     hoodServo_->Set(hoodDownPos_) ;

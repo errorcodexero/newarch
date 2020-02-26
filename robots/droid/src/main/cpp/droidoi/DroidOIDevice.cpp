@@ -132,6 +132,12 @@ namespace xero {
 
         bool DroidOIDevice::isCollectButtonPressed()
         {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+
+            // Don't collect if the conveyor is full
+            if (conveyor->isFull()) return false;
+
             if (getValue(collect_))
                 return true ;
 

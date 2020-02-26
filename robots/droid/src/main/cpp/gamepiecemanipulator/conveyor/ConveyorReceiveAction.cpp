@@ -23,15 +23,16 @@ namespace xero {
                 ),
                 
                 { "wait for collect start sensor", waitForSensorState(Sensor::A, true) },
+
+                { [=]() { setCollecting(true); return StateResult::Next; }},
                 
                 { "delay for ball to enter belt", delayState(0.01) },
-                
+
                 // we've got a ball
                 incrementBallsState(),
+                
                 // run the motors to collect
                 { [=]{ collecting_ = true; return StateResult::Next; } },
-                { [=]() { setCollecting(true); return StateResult::Next; }},
-
                 // if we're full, use a different sensor (we don't have enough space to move the ball all the way)
                 branchState(fifth, [=] { return getSubsystem().isFull(); } ),
 

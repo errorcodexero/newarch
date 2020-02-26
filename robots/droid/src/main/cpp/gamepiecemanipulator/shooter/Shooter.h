@@ -25,9 +25,7 @@ namespace xero {
                 ready_to_fire_ = ready_to_fire;
             }
 
-            bool isReadyToFire() {
-                return ready_to_fire_ && isHoodReady() ;
-            }
+            bool isReadyToFire();
 
             void setHood(HoodPosition pos);
 
@@ -35,10 +33,10 @@ namespace xero {
 
             bool canAcceptAction(xero::base::ActionPtr action);
 
+            bool isHoodReady() ;
+
         private:
             void updateHood() ;
-
-            bool isHoodReady() ;
 
         private:
             std::shared_ptr<frc::Servo> hoodServo_;
