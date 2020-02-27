@@ -38,7 +38,7 @@ if PRACTICE
 hw:shooter:hood                                                 3
 endif
 if COMPETITION
-hw:shooter:hood                                                 0
+hw:shooter:hood                                                 4
 endif
 
 hw:conveyor:motors:intake:type                                  "sparkmax_brushless"
@@ -111,10 +111,8 @@ hw:climber:lifter:encoder:quad:motor                            true
 hw:climber:lifter:encoder:quad:m                                1
 hw:climber:lifter:encoder:quad:b                                0
 
-hw:climber:traverser:pwmid                                      4
+hw:climber:traverser:pwmid                                      2       # 1, 2, 3, 4
 
-hw:climber:servo:l:pwmid                                        0                           # PWM 2
-hw:climber:servo:r:pwmid                                        1                           # PWM 1
 hw:climber:servo:l:release                                      1.0
 hw:climber:servo:r:release                                      1.0
 hw:climber:servo:l:climb                                        0.0
@@ -215,10 +213,10 @@ endif
 
 shooter:aim:hood_up:a                                           0
 shooter:aim:hood_up:b                                           0
-shooter:aim:hood_up:c                                           3600
-shooter:aim:hood_down:a                                         0.035
-shooter:aim:hood_down:b                                         -8.4958
-shooter:aim:hood_down:c                                         4600    
+shooter:aim:hood_up:c                                           4000
+shooter:aim:hood_down:a                                         0.0204
+shooter:aim:hood_down:b                                         -7.4648
+shooter:aim:hood_down:c                                         5250
 
 #shooter:aim:hood_down:a                                         0.0195
 #shooter:aim:hood_down:b                                         -7.0724
@@ -341,8 +339,8 @@ driver:zerolevel                                                0.1
 
 climber:force_field_mode                                        true
 
-climber:climb_height                                            11000
-climber:max_height                                              12000
+climber:climb_height                                            9100
+climber:max_height                                              9100
 climber:power:up                                                0.4
 climber:power:down                                              -1
 climber:power:left                                              -1.0
@@ -451,7 +449,7 @@ targettracker:target:y                                          30  # placeholde
 targettracker:camera_targetting_max_angle                       45
 
 # Compensate for camera mounting variance by subtracting this value from the limelight yaw value.
-targettracker:camera_offset_angle                               0
+targettracker:camera_offset_angle                               2.5
 
 ###################################################################################################
 #
@@ -469,11 +467,11 @@ plotting:enabled                                               true
 # These control test modes for the robot.  They are used by the DroidTestTuneMode automode.  Note
 # this active value below is ignored if we are connected to the field.
 #
-auto:testmode:active                                          true
-auto:testmode:which                                           62
+auto:testmode:active                                          false
+auto:testmode:which                                           31
 auto:testmode:distance                                        9750
-auto:testmode:power                                           -0.1
-auto:testmode:duration                                        40.0
+auto:testmode:power                                           0.5
+auto:testmode:duration                                        5.0
 
 #
 # Shoot test parameters

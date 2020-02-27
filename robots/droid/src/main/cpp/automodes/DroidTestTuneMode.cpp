@@ -173,6 +173,14 @@ namespace xero
                 pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Down), false);
                 break ;
 
+            case 36:
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Up), false);
+                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 3.0));
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Down), false);
+                pushAction(std::make_shared<DelayAction>(droid.getMessageLogger(), 3.0));
+                pushSubActionPair(game->getShooter(), std::make_shared<ShooterVelocityAction>(*game->getShooter(), 0.0, Shooter::HoodPosition::Up), false);
+                break ;
+
                 //////////////////////////////////////////////////////////////////////////////////////////
                 //
                 // 40 - 49 turret related
@@ -223,7 +231,7 @@ namespace xero
 
             case 62:
                 pushSubActionPair(climber, std::make_shared<ClimberUpDownAction>(*climber, 0, power), true) ;
-                pushAction(std::make_shared<DelayAction>(logger, 5));                
+                pushAction(std::make_shared<DelayAction>(logger, duration));                
                 pushSubActionPair(climber, std::make_shared<ClimberUpDownAction>(*climber, 0, 0.0), true) ;                
                 break ;               
 

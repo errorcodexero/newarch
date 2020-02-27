@@ -3,7 +3,6 @@
 #include "Climber.h"
 #include "Lifter.h"
 #include "ClimberAction.h"
-
 #include <frc/DriverStation.h>
 
 using namespace xero::misc;
@@ -21,9 +20,7 @@ namespace xero {
             lifter_->getMotorController()->setCurrentLimit(40) ;
             lifter_->getMotorController()->setNeutralMode(MotorController::NeutralMode::Brake) ;
             lifter_->getMotorController()->resetEncoder() ;
-#ifdef ALL_SMART_DASHBOARD
-            lifter_->setSmartDashboardName("lifter") ;
-#endif
+            lifter_->setSmartDashboardName("climber") ;
             addChild(lifter_);
 
             int travid = parent->getRobot().getSettingsParser().getInteger("hw:climber:traverser:pwmid") ;
@@ -31,9 +28,8 @@ namespace xero {
         }
 
         void Climber::run()
-        {
+        {   
             Subsystem::run() ;
-            traverser_->Set(0.5) ;
         }
         
         void Climber::init(xero::base::LoopType ltype) {

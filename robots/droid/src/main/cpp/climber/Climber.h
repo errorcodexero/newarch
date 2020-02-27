@@ -4,6 +4,8 @@
 #include <motorencodersubsystem/MotorEncoderSubsystem.h>
 #include <frc/Servo.h>
 #include <rev/SparkMax.h>
+#include <frc/PWMSparkMax.h>
+#include <frc/Servo.h>
 
 namespace xero {
     namespace droid {
