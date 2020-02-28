@@ -463,13 +463,13 @@ targettracker:camera_offset_angle                               0
 # Enable plotting.  Plot data is stored in the network tables and display
 # programs read the data from the network tables
 #
-plotting:enabled                                               true
+plotting:enabled                                               false
 
 #
 # These control test modes for the robot.  They are used by the DroidTestTuneMode automode.  Note
 # this active value below is ignored if we are connected to the field.
 #
-auto:testmode:active                                          true
+auto:testmode:active                                          false
 auto:testmode:which                                           62
 auto:testmode:distance                                        9750
 auto:testmode:power                                           -0.1
