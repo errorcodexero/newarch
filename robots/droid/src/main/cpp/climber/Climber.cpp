@@ -33,7 +33,6 @@ namespace xero {
         void Climber::run()
         {
             Subsystem::run() ;
-            traverser_->Set(0.5) ;
         }
         
         void Climber::init(xero::base::LoopType ltype) {

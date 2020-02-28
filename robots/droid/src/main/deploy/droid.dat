@@ -38,7 +38,7 @@ if PRACTICE
 hw:shooter:hood                                                 3
 endif
 if COMPETITION
-hw:shooter:hood                                                 0
+hw:shooter:hood                                                 4
 endif
 
 hw:conveyor:motors:intake:type                                  "sparkmax_brushless"
@@ -111,7 +111,7 @@ hw:climber:lifter:encoder:quad:motor                            true
 hw:climber:lifter:encoder:quad:m                                1
 hw:climber:lifter:encoder:quad:b                                0
 
-hw:climber:traverser:pwmid                                      4
+hw:climber:traverser:pwmid                                      2
 
 hw:climber:servo:l:pwmid                                        0                           # PWM 2
 hw:climber:servo:r:pwmid                                        1                           # PWM 1
@@ -205,9 +205,10 @@ shooter:hold:max                                                1.0
 shooter:hold:imax                                               0.0
 
 if COMPETITION
-shooter:hood:down                                               0.7
-shooter:hood:up                                                 0.2
+shooter:hood:down                                               1.0
+shooter:hood:up                                                 0.5
 endif
+
 if PRACTICE
 shooter:hood:down                                               0.7
 shooter:hood:up                                                 0.2
@@ -470,7 +471,7 @@ plotting:enabled                                               false
 # this active value below is ignored if we are connected to the field.
 #
 auto:testmode:active                                          false
-auto:testmode:which                                           62
+auto:testmode:which                                           60
 auto:testmode:distance                                        9750
 auto:testmode:power                                           -0.1
 auto:testmode:duration                                        40.0
