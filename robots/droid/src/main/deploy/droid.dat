@@ -373,7 +373,7 @@ climber:lifter:goto:maxa                                        3700
 climber:lifter:goto:maxd                                        -3700
 climber:lifter:goto:maxv                                        3700
 
-climber:lifter:hold:p                                           0
+climber:lifter:hold:p                                                   0.001
 climber:lifter:hold:i                                                   0
 climber:lifter:hold:d                                                   0
 climber:lifter:hold:f                                                   0
