@@ -205,8 +205,8 @@ shooter:hold:max                                                1.0
 shooter:hold:imax                                               0.0
 
 if COMPETITION
-shooter:hood:down                                               1
-shooter:hood:up                                                 0.5
+shooter:hood:down                                               0.7
+shooter:hood:up                                                 0.2
 endif
 if PRACTICE
 shooter:hood:down                                               0.7
