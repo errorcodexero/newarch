@@ -55,7 +55,7 @@ model {
         frcUserProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
 			binaries.all {
-				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO", "-DALL_SMART_DASHBOARD"
+				cppCompiler.args "-Wall", "-Werror", "-std=c++11", "-g", "-DXEROROBORIO"
 				lib library: "xerobase", linkage: "static"
 				lib library: "xeromisc", linkage: "static"                
 			}            
