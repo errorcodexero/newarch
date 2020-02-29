@@ -110,6 +110,8 @@ namespace xero {
             climb_left_ = mapButton(climb_left_b, OIButton::ButtonType::Level) ;
             climb_right_ = mapButton(climb_right_b, OIButton::ButtonType::Level) ;  
 
+            manual_shoot_ = mapButton(7, OIButton::ButtonType::LowToHigh) ;
+
             //
             // Spinning things
             //
@@ -294,15 +296,20 @@ namespace xero {
 
             if (!climber_deployed_)
             {
-                //
-                // The climber is not deployed, the only thing we can do is
-                // deploy the climber
-                //
-                if (getValue(climb_deploy_) && !climber->isBusy() && !climber->getLifter()->isBusy()) {
-                    seq.pushSubActionPair(climber->getLifter(), deploy_climber_, false) ;
-                    started_deploy_ = true;
-                } else if (started_deploy_ && !climber->isBusy() && !climber->getLifter()->isBusy()) {
+                if (!climber->isInFieldMode() && !started_deploy_) {
                     climber_deployed_ = true;
+                    started_deploy_ = true;
+                } else {
+                    //
+                    // The climber is not deployed, the only thing we can do is
+                    // deploy the climber
+                    //
+                    if (getValue(climb_deploy_) && !climber->isBusy() && !climber->getLifter()->isBusy()) {
+                        seq.pushSubActionPair(climber->getLifter(), deploy_climber_, false) ;
+                        started_deploy_ = true;
+                    } else if (started_deploy_ && !climber->isBusy() && !climber->getLifter()->isBusy()) {
+                        climber_deployed_ = true;
+                    }
                 }
             }
             else
@@ -415,6 +422,20 @@ namespace xero {
             generateCollectShootActions(seq) ;
             generateClimbActions(seq) ;
             generatePanelSpinnerActions(seq) ;
+
+#ifdef NOTYET
+            if (getValue(manual_shoot_))
+            {
+                auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;                
+                auto turret = droid.getDroidSubsystem()->getTurret() ;
+                auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter();
+                auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+
+                seq.pushSubActionPair(turret, std::make_shared<MotorEncoderGoToAction>(*turret, 0.0), false);
+                seq.pushSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4886.0, Shooter::HoodPosition::Down), false) ;
+                seq.pushSubActionPair(conveyor, std::make_shared<ConveyorEmitAction>(*conveyor), false) ;
+            }
+#endif
         }
 
         void DroidOIDevice::init() 

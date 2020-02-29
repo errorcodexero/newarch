@@ -120,10 +120,10 @@ hw:climber:servo:r:release                                      1.0
 hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
-intake:collector:motor:power                                    1
+intake:collector:motor:power                                    0.7
 intake:arm:collecton:pos                                        1225
 intake:arm:collectoff:pos                                       0
-intake:hold:p                                                   0.000006
+intake:hold:p                                                   0.00004
 intake:hold:i                                                   0
 intake:hold:d                                                   0
 intake:hold:f                                                   0
@@ -219,12 +219,7 @@ shooter:aim:hood_up:b                                           0
 shooter:aim:hood_up:c                                           3600
 shooter:aim:hood_down:a                                         0.035
 shooter:aim:hood_down:b                                         -8.4958
-shooter:aim:hood_down:c                                         4600    
-
-#shooter:aim:hood_down:a                                         0.0195
-#shooter:aim:hood_down:b                                         -7.0724
-#shooter:aim:hood_down:c                                         5200.8
-
+shooter:aim:hood_down:c                                         5200.8
 
 shooter:aim:max_hood_up                                         120
 shooter:aim:min_hood_down                                       110
@@ -340,7 +335,7 @@ driver:zerolevel                                                0.1
 # In field mode, the climber's max downward velocity is limited to 10% below 1000, and 0% below 0.
 # In pit mode, the climber's max downward velocity is always limited to 10%.
 
-climber:force_field_mode                                        true
+climber:force_field_mode                                        false
 
 climber:climb_height                                            11000
 climber:max_height                                              12000
@@ -452,7 +447,7 @@ targettracker:target:y                                          30  # placeholde
 targettracker:camera_targetting_max_angle                       45
 
 # Compensate for camera mounting variance by subtracting this value from the limelight yaw value.
-targettracker:camera_offset_angle                               0
+targettracker:camera_offset_angle                              1.0
 
 ###################################################################################################
 #

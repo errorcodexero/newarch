@@ -85,7 +85,7 @@ model {
             targetPlatform wpi.platforms.roborio
 
 			binaries.all {
-                cppCompiler.args "-DXEROROBORIO", "-DALL_SMART_DASHBOARD"
+                cppCompiler.args "-DXEROROBORIO"
             }
 
 			binaries.withType(SharedLibraryBinarySpec) {

@@ -40,8 +40,6 @@ namespace xero {
             }
             else
             {   
-                sel = 2;
-                             
                 switch(sel) 
                 {
                 case 0:
