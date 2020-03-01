@@ -26,7 +26,7 @@ namespace xero {
 
                 { [=]() { setCollecting(true); return StateResult::Next; }},
                 
-                { "delay for ball to enter belt", delayState(0.01) },
+                { "delay for ball to enter belt", delayState(0.03) },
 
                 // we've got a ball
                 incrementBallsState(),

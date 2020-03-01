@@ -120,7 +120,7 @@ hw:climber:servo:r:release                                      1.0
 hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
-intake:collector:motor:power                                    0.7
+intake:collector:motor:power                                    1.0
 intake:arm:collecton:pos                                        1225
 intake:arm:collectoff:pos                                       0
 intake:hold:p                                                   0.00004
@@ -217,9 +217,9 @@ endif
 shooter:aim:hood_up:a                                           0
 shooter:aim:hood_up:b                                           0
 shooter:aim:hood_up:c                                           3600
-shooter:aim:hood_down:a                                         0.035
-shooter:aim:hood_down:b                                         -8.4958
-shooter:aim:hood_down:c                                         5200.8
+shooter:aim:hood_down:a                                         0.028
+shooter:aim:hood_down:b                                         -6.5
+shooter:aim:hood_down:c                                         5050
 
 shooter:aim:max_hood_up                                         120
 shooter:aim:min_hood_down                                       110
@@ -337,8 +337,8 @@ driver:zerolevel                                                0.1
 
 climber:force_field_mode                                        false
 
-climber:climb_height                                            11000
-climber:max_height                                              12000
+climber:climb_height                                            9373
+climber:max_height                                              10000
 climber:power:up                                                0.4
 climber:power:down                                              -1
 climber:power:left                                              -1.0
