@@ -42,7 +42,7 @@ namespace xero {
         void Droid::enableSpecificMessages() {
             MessageLogger& logger = getMessageLogger();
                         
-            paths->loadPath("eight_ball_two_back1") ;            //
+            //
             // Decide what message groups (incl. subsystems) you want to see
             //
             // logger.enableSubsystem(MSG_GROUP_TANKDRIVE);
@@ -86,11 +86,11 @@ namespace xero {
             paths->loadPath("three_ball_auto_backup") ;
             paths->loadPath("three_ball_auto_fire") ;
             paths->loadPath("eight_ball_two_back1") ;
+            paths->loadPath("eight_ball_two_fire1") ;
+            paths->loadPath("eight_ball_two_fire2") ;            
             paths->loadPath("eight_ball_two_collect1") ;
             paths->loadPath("eight_ball_two_collect2") ;
             paths->loadPath("eight_ball_two_collect3") ;
-            paths->loadPath("eight_ball_two_fire1") ;
-            paths->loadPath("eight_ball_two_fire2") ;
         }
         
         void Droid::RobotHardwareInit() {
