@@ -15,6 +15,7 @@ namespace xero {
 
             void start() override
             {
+                ConveyorAction::start();
                 getSubsystem().setBallCount(count_) ;
             }
 
