@@ -207,7 +207,7 @@ namespace xero {
                 (double)drivebaseReady,
 
                 (double)conveyorEmitAction_->getStateIndex(),
-                tracker->getRelativeAngle(),
+                tracker->getDesiredTurretAngle(),
                 (double)droidSubsystem_.getLimeLight()->isTargetPresent(),
                 shooter->getSpeedometer().getVelocity(),
                 shooterVelocityAction_->getTarget(),

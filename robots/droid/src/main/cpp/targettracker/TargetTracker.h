@@ -28,8 +28,10 @@ namespace xero {
                 return lastCameraSampleTime_;
             }
 
-            /// Returns the angle from the turret to the target.
-            double getRelativeAngle() {
+            /// Returns the angle from the front of the robot to the target.
+            /// If we're aimed at the target, this value should be equal to
+            /// the position reported by the turret encoder.
+            double getDesiredTurretAngle() {
                 return relativeAngle_;
             }
 
@@ -43,6 +45,7 @@ namespace xero {
         private:
             double lastCameraSampleTime_;
             Source source_;
+            double cameraYaw_;
             double relativeAngle_;
             double distance_;
 
@@ -51,6 +54,9 @@ namespace xero {
             // The location of the target on the field.
             double targetAbsX_;
             double targetAbsY_;
+
+            double lastAbsX_;
+            double lastAbsY_;
 
             // The maxmimum angle to attempt camera tracking.
             double maxCameraTrackingAngle_;
