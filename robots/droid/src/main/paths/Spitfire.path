@@ -304,7 +304,185 @@
                     "startvelocity": 0
                 }
             ]
+        },
+        {
+            "name": "eight_ball_two",
+            "paths": [
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 180,
+                    "maxjerk": 1800,
+                    "maxvelocity": 180,
+                    "name": "collect1",
+                    "points": [
+                        {
+                            "heading": -180,
+                            "x": 493.661,
+                            "y": 20.9482
+                        },
+                        {
+                            "heading": 140.09900000000002,
+                            "x": 430.989,
+                            "y": 47.168
+                        },
+                        {
+                            "heading": 111.57099999999998,
+                            "x": 375.991,
+                            "y": 99.6078
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 180,
+                    "maxjerk": 1800,
+                    "maxvelocity": 180,
+                    "name": "back1",
+                    "points": [
+                        {
+                            "heading": -68.42899999999999,
+                            "x": 375.991,
+                            "y": 99.6078
+                        },
+                        {
+                            "heading": -51.5463,
+                            "x": 409.885,
+                            "y": 62.5163
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 180,
+                    "maxjerk": 1800,
+                    "maxvelocity": 180,
+                    "name": "collect2",
+                    "points": [
+                        {
+                            "heading": 128.45399999999998,
+                            "x": 409.885,
+                            "y": 62.5163
+                        },
+                        {
+                            "heading": 112.06800000000001,
+                            "x": 390.06,
+                            "y": 103.445
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 180,
+                    "maxjerk": 1800,
+                    "maxvelocity": 180,
+                    "name": "fire1",
+                    "points": [
+                        {
+                            "heading": -67.932,
+                            "x": 391.339,
+                            "y": 104.724
+                        },
+                        {
+                            "heading": 0,
+                            "x": 446.976,
+                            "y": 42.052
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 180,
+                    "maxjerk": 1800,
+                    "maxvelocity": 180,
+                    "name": "collect3",
+                    "points": [
+                        {
+                            "heading": 180,
+                            "x": 446.976,
+                            "y": 42.052
+                        },
+                        {
+                            "heading": -180,
+                            "x": 328.028,
+                            "y": 29.2618
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                },
+                {
+                    "constraints": [
+                    ],
+                    "endangle": 0,
+                    "endangledelay": 0,
+                    "endvelocity": 0,
+                    "flags": [
+                    ],
+                    "maxacceleration": 180,
+                    "maxjerk": 1800,
+                    "maxvelocity": 180,
+                    "name": "fire2",
+                    "points": [
+                        {
+                            "heading": 0,
+                            "x": 328.028,
+                            "y": 29.2618
+                        },
+                        {
+                            "heading": 16.3895,
+                            "x": 390.06,
+                            "y": 38.8544
+                        }
+                    ],
+                    "startangle": 0,
+                    "startangledelay": 0,
+                    "startvelocity": 0
+                }
+            ]
         }
     ],
-    "outdir": "C:/cygwin64/home/bwg/rtools/master/robots/droid/src/main/deploy/output"
+    "outdir": "C:/cygwin64/home/ButchGriffin/rtools/master/robots/droid/src/main/deploy/output"
 }

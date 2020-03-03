@@ -75,16 +75,22 @@ namespace xero {
         void Droid::loadPaths() {
             auto paths = getPathManager() ;
 
-
             paths->setExtensions("_left.csv", "_right.csv") ;
+
             paths->loadPath("eight_ball_auto_collect") ;
             paths->loadPath("eight_ball_auto_collect2") ;
-            paths->loadPath("eight_ball_auto_fire") ;    
-            paths->loadPath("eight_ball_auto_fire2") ;   
-            paths->loadPath("five_ball_auto_collect") ;  
-            paths->loadPath("five_ball_auto_fire") ;  
-            paths->loadPath("three_ball_auto_backup") ;    
-            paths->loadPath("three_ball_auto_fire") ;                                                                     
+            paths->loadPath("eight_ball_auto_fire") ;
+            paths->loadPath("eight_ball_auto_fire2") ;
+            paths->loadPath("five_ball_auto_collect") ;
+            paths->loadPath("five_ball_auto_fire") ;
+            paths->loadPath("three_ball_auto_backup") ;
+            paths->loadPath("three_ball_auto_fire") ;
+            paths->loadPath("eight_ball_two_back1") ;
+            paths->loadPath("eight_ball_two_fire1") ;
+            paths->loadPath("eight_ball_two_fire2") ;            
+            paths->loadPath("eight_ball_two_collect1") ;
+            paths->loadPath("eight_ball_two_collect2") ;
+            paths->loadPath("eight_ball_two_collect3") ;
         }
         
         void Droid::RobotHardwareInit() {
