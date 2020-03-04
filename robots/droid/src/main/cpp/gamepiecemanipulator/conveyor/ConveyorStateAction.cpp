@@ -59,7 +59,7 @@ namespace xero {
         ConveyorStateAction::waitForSensorEdgeState(Conveyor::Sensor sensor, bool value) {
             return [=]() {
                 if (!readyForSensorEdge_) {
-                    // Waiting for opposite edge
+                    // Waiting for opposite level
                     if (getSubsystem().readSensor(sensor) != value) {
                         readyForSensorEdge_ = true;
                     }
@@ -71,6 +71,39 @@ namespace xero {
                     }
                 }
                 return StateResult::Continue;
+            };
+        }
+
+        
+
+        std::function<ConveyorStateAction::StateResult(void)> 
+        ConveyorStateAction::timeoutState(std::function<StateResult(void)> wrappedState,
+                                                std::string timeoutTarget, double timeout) {
+            return [=]() {
+                // Check for the timeout.
+                double currentTime = getSubsystem().getRobot().getTime();
+                if (delayEndTime_) {
+                    if (currentTime > *delayEndTime_) {
+                        delayEndTime_ = std::nullopt;
+
+                        auto &logger = getSubsystem().getRobot().getMessageLogger();
+                        logger.startMessage(MessageLogger::MessageType::info);
+                        logger << toString() << ": conveyor state timed out";
+                        logger.endMessage();
+
+                        return StateResult::Goto(timeoutTarget);
+                    }
+                } else {
+                    delayEndTime_ = currentTime + timeout;
+                }
+
+                // Run the wrapped state.
+                StateResult result = wrappedState();
+                if (!std::holds_alternative<StateResult::_Continue>(result.value_)) {
+                    delayEndTime_ = std::nullopt;   // We're done.
+                    readyForSensorEdge_ = false;
+                }
+                return result;
             };
         }
 

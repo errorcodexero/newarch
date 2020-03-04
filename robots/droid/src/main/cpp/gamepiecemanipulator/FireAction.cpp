@@ -107,7 +107,6 @@ namespace xero {
 
             shooterVelocityAction_->setHood(hoodPos_);
             shooterVelocityAction_->setTarget(a*dist*dist + b*dist + c);
-        
         }
 
         void FireAction::run() {
@@ -117,10 +116,8 @@ namespace xero {
             auto drivebase = droidSubsystem_.getTankDrive();
             auto conveyor = getSubsystem().getConveyor();
             auto shooter = getSubsystem().getShooter();
-            
-            double sampleAge = getSubsystem().getRobot().getTime() - tracker->getLastCameraSampleTime();
 
-            bool trackerReady = sampleAge < cameraSampleAgeThreshold_;
+            bool trackerReady = tracker->hasValidSample();
 
             if (trackerReady) setTargetVelocity();
 
@@ -133,7 +130,7 @@ namespace xero {
             frc::SmartDashboard::PutBoolean("DrivebaseReady", drivebaseReady) ;
             frc::SmartDashboard::PutBoolean("TrackerReady", trackerReady) ;
 
-            bool readyToFireExceptShooter = trackerReady && drivebaseReady && turretReady;
+            bool readyToFireExceptShooter = trackerReady && drivebaseReady;// && turretReady;
             bool readyToFire = trackerReady && drivebaseReady && turretReady && shooterReady;
 
             auto &logger = getMessageLogger();
@@ -209,7 +206,7 @@ namespace xero {
                 (double)drivebaseReady,
 
                 (double)conveyorEmitAction_->getStateIndex(),
-                tracker->getRelativeAngle(),
+                tracker->getDesiredTurretAngle(),
                 (double)droidSubsystem_.getLimeLight()->isTargetPresent(),
                 shooter->getSpeedometer().getVelocity(),
                 shooterVelocityAction_->getTarget(),
