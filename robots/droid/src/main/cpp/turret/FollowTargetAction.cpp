@@ -38,7 +38,7 @@ namespace xero {
             
             double target = tracker->getDesiredTurretAngle();
 
-            double out = pid_.getOutput(target, turret.getPosition(), turret.getRobot().getDeltaTime()) ; 
+            double out = pid_.getOutput(turret.getPosition(), target, turret.getRobot().getDeltaTime()) ; 
             if (abs(out) > 0.007 && abs(out) < 0.05) {
                 if (out > 0) out = 0.05;
                 else out = -0.05;
