@@ -158,7 +158,7 @@ namespace xero {
             auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;
             auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter();
             auto turret = droid.getDroidSubsystem()->getTurret() ;
-            auto limelight = droid.getDroidSubsystem()->getLimeLight() ;
+            // auto limelight = droid.getDroidSubsystem()->getLimeLight() ;
             auto target_tracker = droid.getDroidSubsystem()->getTargetTracker() ;
             auto game_piece_manipulator = droid.getDroidSubsystem()->getGamePieceManipulator() ;
             auto droid_robot_subsystem = droid.getDroidSubsystem() ;
@@ -206,7 +206,7 @@ namespace xero {
                         flag_collect_ = false;
                         flag_coll_v_shoot_ = CollectShootMode::CollectMode ;                                   
                         frc::SmartDashboard::PutString("Mode", "Collect") ;
-                        limelight->setLedMode(LimeLight::ledMode::ForceOff) ;
+                        // limelight->setLedMode(LimeLight::ledMode::ForceOff) ;
                     }
                 }
                 else {
@@ -218,7 +218,7 @@ namespace xero {
                     flag_coll_v_shoot_ = CollectShootMode::ShootMode ;      
                     waitingForConveyorPrepShoot_ = true;
                     frc::SmartDashboard::PutString("Mode", "Shoot") ;   
-                    limelight->setLedMode(LimeLight::ledMode::ForceOn) ;
+                    // limelight->setLedMode(LimeLight::ledMode::ForceOn) ;
                 }
             }
             else
