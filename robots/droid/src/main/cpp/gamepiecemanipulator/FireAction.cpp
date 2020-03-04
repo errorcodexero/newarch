@@ -107,7 +107,6 @@ namespace xero {
 
             shooterVelocityAction_->setHood(hoodPos_);
             shooterVelocityAction_->setTarget(a*dist*dist + b*dist + c);
-        
         }
 
         void FireAction::run() {
