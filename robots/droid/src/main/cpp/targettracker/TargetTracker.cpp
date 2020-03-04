@@ -153,7 +153,7 @@ namespace xero {
                 logger.startMessage(MessageLogger::MessageType::debug);
                 logger << "TargetTracker: has valid samples (count: " << valid << ", average: " << relativeAngle_ << "): ";
                 for (auto sample : samples_) {
-                    if (sample) logger << *sample->desiredTurretAngle << ",";
+                    if (sample) logger << sample->desiredTurretAngle << ",";
                     else logger << "null,";
                 }
                 logger.endMessage();
