@@ -111,12 +111,32 @@ namespace xero {
             /// \param value The value to wait for.
             std::function<StateResult(void)> waitForSensorState(Conveyor::Sensor sensor, bool value);
 
+            /// Creates a state that waits for a sensor to reach a specific value, with a timeout.
+            /// \param sensor The sensor to wait for.
+            /// \param value The value to wait for.
+            /// \param timeoutTarget The label to jump to if the timeout is exceeded.
+            /// \param timeout The duration of the timeout in seconds.
+            std::function<StateResult(void)> waitForSensorState(Conveyor::Sensor sensor, bool value,
+                                                                std::string timeoutTarget, double timeout) {
+                return timeoutState(waitForSensorState(sensor, value), timeoutTarget, timeout);
+            }
+
             /// Creates a state that waits for a rising or falling edge on a sensor.
             /// \param sensor The sensor to wait for.
             /// \param value The edge to wait for (true for rising, false for falling)
             /// Equivalent to waitForSensorState(sensor, !value)
-            ///  followed by  waitForSensorState(sensor, value)
+            ///  followed by waitForSensorState(sensor, value)
             std::function<StateResult(void)> waitForSensorEdgeState(Conveyor::Sensor sensor, bool value);
+
+            /// Creates a state that waits for a rising or falling edge on a sensor, with a timeout.
+            /// \param sensor The sensor to wait for.
+            /// \param value The edge to wait for.
+            /// \param timeoutTarget The label to jump to if the timeout is exceeded.
+            /// \param timeout The duration of the timeout in seconds.
+            std::function<StateResult(void)> waitForSensorEdgeState(Conveyor::Sensor sensor, bool value,
+                                                                    std::string timeoutTarget, double timeout) {
+                return timeoutState(waitForSensorEdgeState(sensor, value), timeoutTarget, timeout);
+            }
 
             /// A state that increments the number of collected balls.
             std::function<StateResult(void)> incrementBallsState();
@@ -172,6 +192,13 @@ namespace xero {
             bool readyForSensorEdge_;
 
             std::optional<double> delayEndTime_;
+
+            /// Creates a state that executes another state with a timeout.
+            /// \param state The state to execute.
+            /// \param timeoutTarget The state to jump to if the timeout is exceeded.
+            /// \param timeout The maximum duration to wait, in seconds.
+            std::function<StateResult(void)> timeoutState(std::function<StateResult(void)> wrappedState,
+                                                          std::string timeoutTarget, double timeout);
         } ;
     }
 }
