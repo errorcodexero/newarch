@@ -1,4 +1,5 @@
 #include <Subsystem.h>
+#include <optional>
 
 namespace xero {
     namespace droid {
@@ -28,8 +29,13 @@ namespace xero {
                 return lastCameraSampleTime_;
             }
 
+            /// Returns true if we have up-to-date valid data.
+            bool hasValidSample() {
+                return hasValidSample_;
+            }
+
             /// Returns the angle from the turret to the target.
-            double getRelativeAngle() {
+            double getDesiredTurretAngle() {
                 return relativeAngle_;
             }
 
@@ -59,6 +65,14 @@ namespace xero {
             double cameraOffsetAngle_;
 
             bool cameraTrackingEnabled_;
+            bool hasValidSample_;
+
+            struct Sample {
+                double desiredTurretAngle;
+                double distance;
+            };
+            std::array<std::optional<Sample>, 10> samples_;
+            int sampleIndex_;
         };
     }
 }

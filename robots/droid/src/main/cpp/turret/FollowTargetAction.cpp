@@ -36,12 +36,9 @@ namespace xero {
             auto tracker = static_cast<Droid&>(getTurret().getRobot()).getDroidSubsystem()->getTargetTracker();
             auto &logger = turret.getRobot().getMessageLogger() ;
             
-            double error = tracker->getRelativeAngle();
-            
-            // Check for limits.
-            double absTarget = turret.getPosition() - error;
+            double target = tracker->getDesiredTurretAngle();
 
-            double out = pid_.getOutput(error, 0, turret.getRobot().getDeltaTime()) ; 
+            double out = pid_.getOutput(target, turret.getPosition(), turret.getRobot().getDeltaTime()) ; 
             if (abs(out) > 0.007 && abs(out) < 0.05) {
                 if (out > 0) out = 0.05;
                 else out = -0.05;
@@ -51,12 +48,11 @@ namespace xero {
             logger.startMessage(MessageLogger::MessageType::debug, turret.getMsgID()) ;
             logger << "FollowTargetAction (" << turret.getName() << "):" ;
             logger << " abscurrent " << turret.getPosition();
-            logger << " abstarget " << absTarget;
-            logger << " error " << error;
+            logger << " abstarget " << target;
             logger << " output " << out ;
             logger.endMessage() ;
 
-            turret.readyToFire_ = (abs(error) < threshold_);
+            turret.readyToFire_ = (abs(turret.getPosition() - target) < threshold_);
         }
 
         void FollowTargetAction::cancel() {

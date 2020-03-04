@@ -116,10 +116,8 @@ namespace xero {
             auto drivebase = droidSubsystem_.getTankDrive();
             auto conveyor = getSubsystem().getConveyor();
             auto shooter = getSubsystem().getShooter();
-            
-            double sampleAge = getSubsystem().getRobot().getTime() - tracker->getLastCameraSampleTime();
 
-            bool trackerReady = sampleAge < cameraSampleAgeThreshold_;
+            bool trackerReady = tracker->hasValidSample();
 
             if (trackerReady) setTargetVelocity();
 
@@ -208,7 +206,7 @@ namespace xero {
                 (double)drivebaseReady,
 
                 (double)conveyorEmitAction_->getStateIndex(),
-                tracker->getRelativeAngle(),
+                tracker->getDesiredTurretAngle(),
                 (double)droidSubsystem_.getLimeLight()->isTargetPresent(),
                 shooter->getSpeedometer().getVelocity(),
                 shooterVelocityAction_->getTarget(),
