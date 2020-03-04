@@ -10,11 +10,11 @@ namespace xero {
             TurretStopAction(Turret &turret): SingleMotorPowerAction(turret, 0.0), turret_(turret) {}
 
             void start() override {
-                turret_.readyToFire_ = false;
-                
-                auto ll = static_cast<Droid&>(turret_.getRobot()).getDroidSubsystem();
-                ll->getLimeLight()->setLedMode(xero::base::LimeLight::ledMode::ForceOn) ;
                 SingleMotorPowerAction::start();
+
+                turret_.readyToFire_ = false;                
+                auto ll = static_cast<Droid&>(turret_.getRobot()).getDroidSubsystem();
+                ll->getLimeLight()->setLedMode(xero::base::LimeLight::ledMode::ForceOff) ;
             }
         private:
             Turret &turret_;

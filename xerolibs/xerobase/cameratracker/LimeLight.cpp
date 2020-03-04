@@ -19,7 +19,7 @@ namespace xero {
             camera_latency_ = getRobot().getSettingsParser().getDouble("limelight:camera_latency") ;
             network_latency_ = getRobot().getSettingsParser().getDouble("limelight:network_latency")  ;
 
-            setLedMode(ledMode::ForceOn) ;
+            setLedMode(ledMode::ForceOff) ;
             setCamMode(camMode::VisionProcessor) ;
             setPipeline(0) ;
         }
