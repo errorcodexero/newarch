@@ -121,7 +121,8 @@ hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
 intake:collector:motor:power                                    1.0
-intake:arm:collecton:pos                                        1225
+#intake:arm:collecton:pos                                        1225
+intake:arm:collecton:pos                                        0
 intake:arm:collectoff:pos                                       0
 intake:hold:p                                                   0.00004
 intake:hold:i                                                   0
@@ -217,9 +218,21 @@ endif
 shooter:aim:hood_up:a                                           0
 shooter:aim:hood_up:b                                           0
 shooter:aim:hood_up:c                                           3600
-shooter:aim:hood_down:a                                         0.028
-shooter:aim:hood_down:b                                         -6.5
-shooter:aim:hood_down:c                                         5050
+
+#
+# Bill
+#
+shooter:aim:hood_down:a                                         0.0324
+shooter:aim:hood_down:b                                         -12.516
+shooter:aim:hood_down:c                                         5803
+
+#
+# Amy
+#
+
+#
+# Carlos
+#
 
 shooter:aim:max_hood_up                                         120
 shooter:aim:min_hood_down                                       110
@@ -407,7 +420,20 @@ climber:traverser:motor:goto:maxv                                        70
 # droidvision
 ###################################################################################################
 
-droidvision:camera_angle                                        21.73
+#
+# Bill
+#
+droidvision:camera_angle                                        21.74
+
+#
+# Amy
+#
+
+# 
+# Carlos
+#
+
+
 droidvision:camera_target_height                                68.0
 limelight:camera_latency                                        11.0
 limelight:network_latency                                       10.0
@@ -465,8 +491,8 @@ plotting:enabled                                               false
 # These control test modes for the robot.  They are used by the DroidTestTuneMode automode.  Note
 # this active value below is ignored if we are connected to the field.
 #
-auto:testmode:active                                          false
-auto:testmode:which                                           60
+auto:testmode:active                                          true
+auto:testmode:which                                           31
 auto:testmode:distance                                        9750
 auto:testmode:power                                           -0.1
 auto:testmode:duration                                        40.0

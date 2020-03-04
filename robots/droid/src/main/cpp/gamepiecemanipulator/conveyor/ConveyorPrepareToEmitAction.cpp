@@ -12,8 +12,6 @@ namespace xero {
                 // if empty or already staged for fire, stop
                 branchState(done, [=] { return getSubsystem().isEmpty(); }),
                 branchState(done, [=] { return getSubsystem().isStagedForFire(); }),
-                branchState(setStaged, [=] { return getSubsystem().isFull(); }),
-
                 
                 // move balls in position towards shooter
                 setMotorState(MotorState::MoveTowardsShooter),
