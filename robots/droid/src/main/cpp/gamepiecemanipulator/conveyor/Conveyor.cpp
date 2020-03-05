@@ -69,7 +69,7 @@ namespace xero {
         }
         void Conveyor::setStagedForCollect(bool staged) { 
             auto &logger = getRobot().getMessageLogger();
-            logger.startMessage(MessageLogger::MessageType::debug);
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CONVEYOR);
             logger << "Conveyor: setStagedForCollect(" << staged << ")";
             logger.endMessage();
             stagedForCollect_ = staged; 
@@ -77,7 +77,7 @@ namespace xero {
 
         void Conveyor::setStagedForFire(bool staged) { 
             auto &logger = getRobot().getMessageLogger();
-            logger.startMessage(MessageLogger::MessageType::debug);
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CONVEYOR);
             logger << "Conveyor: setStagedForFire(" << staged << ")";
             logger.endMessage();
             stagedForFire_ = staged; 
@@ -85,7 +85,7 @@ namespace xero {
 
         void Conveyor::setCollecting(bool collecting) { 
             auto &logger = getRobot().getMessageLogger();
-            logger.startMessage(MessageLogger::MessageType::debug);
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CONVEYOR);
             logger << "Conveyor: setCollecting(" << collecting << ")";
             logger.endMessage();
             collecting_ = collecting;
@@ -110,7 +110,7 @@ namespace xero {
                 bool value = !getSensor(sensor)->Get();
                 if (value != sensors_[index].second) {
                     auto &logger = getRobot().getMessageLogger();
-                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CONVEYOR);
                     logger << "sensor " << pair.second << " transitioned: " << value;
                     logger.endMessage();
                 }

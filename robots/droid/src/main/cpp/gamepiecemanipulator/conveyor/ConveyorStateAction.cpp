@@ -1,6 +1,6 @@
 #include "ConveyorStateAction.h"
 #include "Conveyor.h"
-
+#include "droidids.h"
 #include <Robot.h>
 
 using namespace xero::misc;
@@ -122,7 +122,7 @@ namespace xero {
                     getSubsystem().ballCount_++;
 
                     auto &logger = getMessageLogger();
-                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CONVEYOR);
                     logger << actionName_ << ": Collected a ball; count: ";
                     logger << getSubsystem().ballCount_;
                     logger.endMessage();
@@ -143,7 +143,7 @@ namespace xero {
                     getSubsystem().ballCount_--;
 
                     auto &logger = getMessageLogger();
-                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CONVEYOR);
                     logger << actionName_ << ": Released a ball; count: ";
                     logger << getSubsystem().ballCount_;
                     logger.endMessage();
@@ -202,7 +202,7 @@ namespace xero {
             readyForSensorEdge_ = false;
 
             auto &logger = getMessageLogger();
-            logger.startMessage(MessageLogger::MessageType::debug);
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CONVEYOR);
             logger << actionName_ << ": starting in state 0; states: {\n";
             for (unsigned index = 0; index < states_.size(); index++) {
                 logger << "    " << describeState(index) << "\n";
@@ -219,7 +219,7 @@ namespace xero {
 
             bool updated = true;
             while (updated && !isDone()) {
-                logger.startMessage(MessageLogger::MessageType::debug);
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CONVEYOR);
                 logger << actionName_ << ": running state ";
                 logger << describeState(stateIndex_);
                 logger.endMessage();
@@ -233,7 +233,7 @@ namespace xero {
                 } else if (std::holds_alternative<StateResult::_Next>(result.value_)) {
                     // go to the next state
                     if (stateIndex_ == (int)(states_.size() - 1)) {
-                        logger.startMessage(MessageLogger::MessageType::debug);
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CONVEYOR);
                         logger << actionName_ << ": finished final state ";
                         logger << describeState(stateIndex_);
                         logger.endMessage();
@@ -243,7 +243,7 @@ namespace xero {
                         stateIndex_ = 0 ;
                         break;
                     } else {
-                        logger.startMessage(MessageLogger::MessageType::debug);
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CONVEYOR);
                         logger << actionName_ << ": finished state ";
                         logger << describeState(stateIndex_);
                         logger << "; transitioning to state " << describeState(stateIndex_ + 1);
@@ -258,7 +258,7 @@ namespace xero {
                     assert(it != namedStates_.end() && "state name not found");
 
 
-                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CONVEYOR);
                     logger << actionName_ << ": finished state ";
                     logger << describeState(stateIndex_);
                     logger << "; jumping to state " << describeState(it->second);

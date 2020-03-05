@@ -2,13 +2,18 @@ TOPDIR=../..
 
 include $(TOPDIR)/makefiles/defaults.mk
 
+NOTYET = \
+	src/main/cpp/controlpanelrotator/ControlPanelRotator.cpp\
+    src/main/cpp/controlpanelrotator/RotateControlPanelAction.cpp\
+
 AUTOMODES = \
 	src/main/cpp/automodes/DroidAutoModeController.cpp\
 	src/main/cpp/automodes/DroidAutoMode.cpp\
 	src/main/cpp/automodes/DroidTestTuneMode.cpp\
 	src/main/cpp/automodes/DroidEightBallAutomode.cpp\
 	src/main/cpp/automodes/DroidFiveBallAutomode.cpp\
-	src/main/cpp/automodes/DroidThreeBallAutomode.cpp
+	src/main/cpp/automodes/DroidThreeBallAutomode.cpp\
+	src/main/cpp/automodes/DroidEightTwoAutomode.cpp	
 
 SUBSYSTEMS = \
 	src/main/cpp/droidoi/DroidOIDevice.cpp\
@@ -36,12 +41,8 @@ SUBSYSTEMS = \
 	src/main/cpp/turret/Turret.cpp\
 	src/main/cpp/climber/Climber.cpp\
 	src/main/cpp/climber/ClimberUpDownAction.cpp\
-	src/main/cpp/climber/ExtendClimberAction.cpp\
-	src/main/cpp/climber/LockClimberAction.cpp\
-	src/main/cpp/controlpanelrotator/ControlPanelRotator.cpp\
-    src/main/cpp/controlpanelrotator/RotateControlPanelAction.cpp\
     src/main/cpp/limelight/DroidLimeLight.cpp\
-    src/main/cpp/targettracker/TargetTracker.cpp\
+    src/main/cpp/targettracker/TargetTracker.cpp
 
 MODELS = \
 	src/models/cpp/DroidOIModel.cpp\

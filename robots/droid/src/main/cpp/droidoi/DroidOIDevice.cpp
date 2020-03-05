@@ -101,6 +101,8 @@ namespace xero {
             size_t climb_down_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:climb_down") ;
             size_t climb_left_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:traverse_left") ;
             size_t climb_right_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:traverse_right") ;
+            size_t manual_mode_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:manual_shoot_mode") ;
+            size_t manual_fire_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:manual_shoot_fire") ;            
 
             climb_lock_ = mapButton(climb_lock_b, OIButton::ButtonType::Level) ;
             climb_deploy_ = mapButton(climb_deploy_b, OIButton::ButtonType::LowToHigh) ;
@@ -110,15 +112,16 @@ namespace xero {
             climb_left_ = mapButton(climb_left_b, OIButton::ButtonType::Level) ;
             climb_right_ = mapButton(climb_right_b, OIButton::ButtonType::Level) ;  
 
-            manual_shoot_ = mapButton(7, OIButton::ButtonType::LowToHigh) ;
-            manual_mode_ = mapButton(9, OIButton::ButtonType::Level) ;
+            manual_shoot_ = mapButton(manual_fire_b, OIButton::ButtonType::LowToHigh) ;
+            manual_mode_ = mapButton(manual_mode_b, OIButton::ButtonType::Level) ;
 
+#ifdef NOTYET
             //
             // Spinning things
             //
             size_t spin_deploy_b = getSubsystem().getRobot().getSettingsParser().getInteger("oi:spin_deploy") ;
-
-            spin_deploy_ = mapButton(spin_deploy_b, OIButton::ButtonType::Level) ;                      
+            spin_deploy_ = mapButton(spin_deploy_b, OIButton::ButtonType::Level) ;
+#endif
         }
         
         int DroidOIDevice::getAutoModeSelector() 
@@ -213,8 +216,21 @@ namespace xero {
                 }
                 else {
                     // Queue the conveyor to prepare to fire.
-                    if (!getValue(manual_mode_))
+                    if (getValue(manual_mode_))
+                    {
+                        //
+                        // In manual shoot mode, turn turret to zero degrees
+                        //
+                        seq.pushSubActionPair(turret, turret_goto_zero_, false) ;                        
+                    }
+                    else
+                    {
+                        //
+                        // In auto shoot mode, have turret follow limelight
+                        //
                         seq.pushSubActionPair(turret, turret_follow_, false) ;
+                    }
+
                     seq.pushSubActionPair(conveyor, queue_prep_shoot_, false);
                     seq.pushSubActionPair(shooter, shooter_spinup_, false) ;
                     seq.pushSubActionPair(intake,  intake_off_, false);
@@ -278,11 +294,24 @@ namespace xero {
                                 }
                             }
                         }
-                    } else if (waitingForConveyorPrepShoot_ 
-                               && queue_prep_shoot_->isDone()
-                               && intake_off_->isDone()) {
-                        if (!getValue(manual_mode_))
+                    } 
+                    else if (waitingForConveyorPrepShoot_ && queue_prep_shoot_->isDone() && intake_off_->isDone()) 
+                    {
+                        if (getValue(manual_mode_))
+                        {
+                            //
+                            // In manual mode, we do nothing here, but rather wait for the
+                            // actual manual fire button before we shoot
+                            //
+                        }
+                        else
+                        {
+                            //
+                            // In auto mode, assign the fire action so we shoot as soon as
+                            // conditions allow
+                            //
                             seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false);
+                        }
                         waitingForConveyorPrepShoot_ = false;
                     }
                 }
@@ -422,7 +451,7 @@ namespace xero {
         {
             generateCollectShootActions(seq) ;
             generateClimbActions(seq) ;
-            generatePanelSpinnerActions(seq) ;
+            // generatePanelSpinnerActions(seq) ;
 
             if (getValue(manual_shoot_) && getValue(manual_mode_))
             {

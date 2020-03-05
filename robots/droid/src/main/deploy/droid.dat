@@ -458,7 +458,8 @@ oi:climb_down                                                   2               
 oi:traverse_left                                                3               # Joystick axis
 oi:traverse_right                                               4               # Joystick axis
 
-oi:spin_deploy                                                  9               # Spin deploy button
+oi:manual_shoot_mode                                            9               # Switch to manual shoot mode
+oi:manual_shoot_fire                                            7               # Shoot in manual mode
 
 ###################################################################################################
 # targettracker

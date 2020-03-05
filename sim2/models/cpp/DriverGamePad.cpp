@@ -269,6 +269,8 @@ namespace xero
 
                 for(int i = 0 ; i < axis_.count ; i++)
                     axis_.axes[i] = 0.0 ;
+
+                HALSIM_SetJoystickAxes(index_, &axis_) ;
             }
 
             if (hasProperty("buttons"))
@@ -288,6 +290,8 @@ namespace xero
                 desc_.buttonCount = value.getInteger() ;
                 buttons_.count = value.getInteger() ;
                 buttons_.buttons = 0 ;
+
+                HALSIM_SetJoystickButtons(index_, &buttons_) ;
             }
 
             if (hasProperty("povs"))
@@ -307,7 +311,9 @@ namespace xero
                 desc_.povCount = value.getInteger() ;
                 povs_.count = value.getInteger() ;
                 for(int i = 0 ; i < povs_.count ; i++)
-                    povs_.povs[i] = 0 ;
+                    povs_.povs[i] = -1 ;
+
+                HALSIM_SetJoystickPOVs(index_, &povs_) ;                    
             }
 
             HALSIM_SetJoystickDescriptor(index_, &desc_) ;
