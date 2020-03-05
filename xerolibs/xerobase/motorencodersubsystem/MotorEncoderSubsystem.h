@@ -44,7 +44,11 @@ namespace xero {
 
             void reset() override;
 
-            void setSmartDashboardName(const std::string &name) { smartDashboardName_ = name ; }
+            void setSmartDashboardName(const std::string &name, bool whendisabled = true) 
+            { 
+                smartDashboardName_ = name ; 
+                smart_dashboard_when_disabled_ = whendisabled ;
+            }
 
             virtual void postHWInit() ;
             virtual void run();
@@ -57,6 +61,8 @@ namespace xero {
             std::string smartDashboardName_ ;
             
             uint64_t msg_id_;
+
+            bool smart_dashboard_when_disabled_ ;
         };
     }
 }

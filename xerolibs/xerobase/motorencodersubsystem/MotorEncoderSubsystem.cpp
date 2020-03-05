@@ -58,7 +58,10 @@ namespace xero {
             
             speedometer_.update(getRobot().getDeltaTime(), pos) ;
             if (smartDashboardName_.length() > 0)
-                frc::SmartDashboard::PutNumber(smartDashboardName_, pos) ;
+            {
+                if (!smart_dashboard_when_disabled_ || getRobot().IsDisabled())
+                    frc::SmartDashboard::PutNumber(smartDashboardName_, pos) ;
+            }
 
             MessageLogger &logger = getRobot().getMessageLogger() ;
             logger.startMessage(xero::misc::MessageLogger::MessageType::debug, msg_id_) ;
