@@ -121,15 +121,14 @@ hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
 intake:collector:motor:power                                    1.0
-#intake:arm:collecton:pos                                        1225
-intake:arm:collecton:pos                                        0
+intake:arm:collecton:pos                                        1350
 intake:arm:collectoff:pos                                       0
-intake:hold:p                                                   0.00004
+intake:hold:p                                                   0.001
 intake:hold:i                                                   0
 intake:hold:d                                                   0
 intake:hold:f                                                   0
-intake:hold:min                                                 -1
-intake:hold:max                                                 1
+intake:hold:min                                                 -0.1
+intake:hold:max                                                 0.1
 intake:hold:imax                                                0
 intake:follower:down:kp                                       0.0
 intake:follower:down:kd                                       0.0
@@ -491,7 +490,7 @@ plotting:enabled                                               false
 # These control test modes for the robot.  They are used by the DroidTestTuneMode automode.  Note
 # this active value below is ignored if we are connected to the field.
 #
-auto:testmode:active                                          true
+auto:testmode:active                                          false
 auto:testmode:which                                           31
 auto:testmode:distance                                        9750
 auto:testmode:power                                           -0.1

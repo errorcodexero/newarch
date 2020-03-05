@@ -26,8 +26,7 @@ namespace xero {
                 "turret:follow",
                 sub.isAngular()
             );
-
-            ll_->setLedMode(LimeLight::ledMode::ForceOn) ;
+            ll_->setLedMode(LimeLight::ledMode::ForceOn) ;   
         }
 
         void FollowTargetAction::run() {

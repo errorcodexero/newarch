@@ -35,10 +35,10 @@
                 {
                     "constraints": [
                         {
-                            "after": 140,
+                            "after": 160,
                             "before": 200,
                             "type": "distance_velocity",
-                            "velocity": 15
+                            "velocity": 10
                         }
                     ],
                     "endangle": 0,
@@ -63,8 +63,8 @@
                         },
                         {
                             "heading": -180,
-                            "x": 237.03455284552845,
-                            "y": 31.54776422764229
+                            "x": 243.8953488372093,
+                            "y": 31.70639534883719
                         }
                     ],
                     "startangle": 0,
@@ -318,7 +318,7 @@
                     ],
                     "maxacceleration": 180,
                     "maxjerk": 1800,
-                    "maxvelocity": 180,
+                    "maxvelocity": 60,
                     "name": "collect1",
                     "points": [
                         {
@@ -327,14 +327,9 @@
                             "y": 20.9482
                         },
                         {
-                            "heading": 140.09900000000002,
-                            "x": 430.989,
-                            "y": 47.168
-                        },
-                        {
                             "heading": 111.57099999999998,
-                            "x": 375.991,
-                            "y": 99.6078
+                            "x": 386.1676356589147,
+                            "y": 95.11918604651163
                         }
                     ],
                     "startangle": 0,
@@ -351,7 +346,7 @@
                     ],
                     "maxacceleration": 180,
                     "maxjerk": 1800,
-                    "maxvelocity": 180,
+                    "maxvelocity": 60,
                     "name": "back1",
                     "points": [
                         {
@@ -360,9 +355,9 @@
                             "y": 99.6078
                         },
                         {
-                            "heading": -51.5463,
-                            "x": 409.885,
-                            "y": 62.5163
+                            "heading": -67.9,
+                            "x": 408.9312015503876,
+                            "y": 63.41279069767441
                         }
                     ],
                     "startangle": 0,
@@ -379,18 +374,18 @@
                     ],
                     "maxacceleration": 180,
                     "maxjerk": 1800,
-                    "maxvelocity": 180,
+                    "maxvelocity": 60,
                     "name": "collect2",
                     "points": [
                         {
-                            "heading": 128.45399999999998,
-                            "x": 409.885,
-                            "y": 62.5163
+                            "heading": 112.1,
+                            "x": 412.1831395348837,
+                            "y": 65.03875968992247
                         },
                         {
                             "heading": 112.06800000000001,
-                            "x": 390.06,
-                            "y": 103.445
+                            "x": 392.67151162790697,
+                            "y": 109.75290697674419
                         }
                     ],
                     "startangle": 0,
@@ -405,9 +400,9 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 180,
+                    "maxacceleration": 40,
                     "maxjerk": 1800,
-                    "maxvelocity": 180,
+                    "maxvelocity": 40,
                     "name": "fire1",
                     "points": [
                         {
@@ -416,9 +411,9 @@
                             "y": 104.724
                         },
                         {
-                            "heading": 0,
-                            "x": 446.976,
-                            "y": 42.052
+                            "heading": -65.22485943116804,
+                            "x": 404.0532945736434,
+                            "y": 80.48546511627907
                         }
                     ],
                     "startangle": 0,
@@ -440,13 +435,13 @@
                     "points": [
                         {
                             "heading": 180,
-                            "x": 446.976,
-                            "y": 42.052
+                            "x": 456.1,
+                            "y": 57.7
                         },
                         {
                             "heading": -180,
-                            "x": 328.028,
-                            "y": 29.2618
+                            "x": 308.12112403100775,
+                            "y": 39.02325581395348
                         }
                     ],
                     "startangle": 0,
@@ -468,13 +463,13 @@
                     "points": [
                         {
                             "heading": 0,
-                            "x": 328.028,
-                            "y": 29.2618
+                            "x": 321.12887596899225,
+                            "y": 39.83624031007753
                         },
                         {
-                            "heading": 16.3895,
-                            "x": 390.06,
-                            "y": 38.8544
+                            "heading": 12.804266065286779,
+                            "x": 443.88953488372096,
+                            "y": 46.340116279069775
                         }
                     ],
                     "startangle": 0,
@@ -484,5 +479,5 @@
             ]
         }
     ],
-    "outdir": "C:/cygwin64/home/ButchGriffin/rtools/master/robots/droid/src/main/deploy/output"
+    "outdir": "C:/cygwin64/home/bwg/rtools/master/robots/droid/src/main/deploy/output"
 }

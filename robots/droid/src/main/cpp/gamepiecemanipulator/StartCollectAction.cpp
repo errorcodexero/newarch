@@ -16,7 +16,6 @@ namespace xero {
             auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;   
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
 
-
             conveyor_receive_action_ = std::make_shared<ConveyorReceiveAction>(*conveyor) ;
         }
 

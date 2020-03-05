@@ -50,6 +50,9 @@ namespace xero {
                 { fifth, waitForSensorState(Sensor::C, false) },
                 waitForSensorState(Sensor::C, true),
 
+                // we've got a ball
+                incrementBallsState(),                      
+
                 { [=]() { setCollecting(false); return StateResult::Next; }},
 
                 { done, setMotorState(MotorState::Stopped) },

@@ -19,3 +19,5 @@
 #define MSG_GROUP_ARM                               (1ull << 37)
 #define MSG_GROUP_LIFTERS                           (1ull << 38)
 #define MSG_GROUP_DROID_OI                          (1ull << 39)
+#define MSG_GROUP_TURRET_TRACKER                    (1ull << 40)
+#define MSG_GROUP_FIRE_ACTION                       (1ull << 41)

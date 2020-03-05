@@ -3,6 +3,7 @@
 #include "automodes/DroidEightBallAutomode.h"
 #include "automodes/DroidFiveBallAutomode.h"
 #include "automodes/DroidThreeBallAutomode.h"
+#include "automodes/DroidEightTwoAutomode.h"
 #include "Droid.h"
 #include <tankdrive/modes/FollowPathAutomode.h>
 #include <MessageLogger.h>
@@ -66,6 +67,8 @@ namespace xero {
                     break ;
 
                 case 4:
+                    // Start center, score three in robot and move off line
+                    mode = std::make_shared<DroidEightTwoAutomode>(getRobot());     
                     break ;
 
                 case 5:
@@ -79,8 +82,7 @@ namespace xero {
                     break ;
 
                 case 8:
-                    // Start center, score three in robot and move off line
-                    mode = std::make_shared<DroidEightBallAutomode>(getRobot(), 2);                    
+               
                     break ;
 
                 case 9:

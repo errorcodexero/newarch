@@ -3,6 +3,7 @@
 #include "droidsubsystem/DroidSubsystem.h"
 #include "limelight/DroidLimeLight.h"
 #include "turret/Turret.h"
+#include "droidids.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
@@ -33,12 +34,6 @@ namespace xero {
 
         void TargetTracker::setCameraTrackingEnabled(bool enabled) {
             cameraTrackingEnabled_ = enabled;
-            auto limelight = static_cast<Droid&>(getRobot()).getDroidSubsystem()->getLimeLight();
-            if (enabled) {
-                limelight->setLedMode(LimeLight::ledMode::UseLED);
-            } else {
-                limelight->setLedMode(LimeLight::ledMode::ForceOff);
-            }
         }
 
         void TargetTracker::computeState() {
@@ -58,7 +53,7 @@ namespace xero {
 
                 // Compute the desired turret angle.
                 double relativeAngle = -(limelight->getYaw() - cameraOffsetAngle_) + turret->getPosition();
-                logger.startMessage(MessageLogger::MessageType::debug);
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TURRET_TRACKER);
                 logger << "TargetTracker: yaw " << limelight->getYaw();
                 logger.endMessage();
 
@@ -140,7 +135,7 @@ namespace xero {
                     distance_ = distSum/(valid - 2);
                     relativeAngle_ = angleSum/(valid - 2);
 
-                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TURRET_TRACKER);
                     logger << "TargetTracker: has valid samples (count: " << valid << ", average: " << distance_ << "): ";
                     for (auto sample : samples_) {
                         if (sample) logger << sample->distance << ",";
@@ -148,7 +143,7 @@ namespace xero {
                     }
                     logger.endMessage();
                 } else {
-                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TURRET_TRACKER);
                     logger << "TargetTracker: does not have valid samples (count: " << valid << ") ";
                     for (auto sample : samples_) {
                         if (sample) logger << sample->distance << ",";

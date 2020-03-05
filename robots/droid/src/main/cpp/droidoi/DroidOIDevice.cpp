@@ -111,6 +111,7 @@ namespace xero {
             climb_right_ = mapButton(climb_right_b, OIButton::ButtonType::Level) ;  
 
             manual_shoot_ = mapButton(7, OIButton::ButtonType::LowToHigh) ;
+            manual_mode_ = mapButton(9, OIButton::ButtonType::Level) ;
 
             //
             // Spinning things
@@ -161,6 +162,7 @@ namespace xero {
             auto target_tracker = droid.getDroidSubsystem()->getTargetTracker() ;
             auto game_piece_manipulator = droid.getDroidSubsystem()->getGamePieceManipulator() ;
             auto droid_robot_subsystem = droid.getDroidSubsystem() ;
+            auto ll = droid.getDroidSubsystem()->getLimeLight() ;
 
             if (conveyor->getBallCount() == 5 && rumbled_ == false)
             {
@@ -205,11 +207,14 @@ namespace xero {
                         flag_collect_ = false;
                         flag_coll_v_shoot_ = CollectShootMode::CollectMode ;                                   
                         frc::SmartDashboard::PutString("Mode", "Collect") ;
+
+                        ll->setLedMode(LimeLight::ledMode::ForceOff) ;
                     }
                 }
                 else {
                     // Queue the conveyor to prepare to fire.
-                    seq.pushSubActionPair(turret, turret_follow_, false) ;
+                    if (!getValue(manual_mode_))
+                        seq.pushSubActionPair(turret, turret_follow_, false) ;
                     seq.pushSubActionPair(conveyor, queue_prep_shoot_, false);
                     seq.pushSubActionPair(shooter, shooter_spinup_, false) ;
                     seq.pushSubActionPair(intake,  intake_off_, false);
@@ -276,7 +281,8 @@ namespace xero {
                     } else if (waitingForConveyorPrepShoot_ 
                                && queue_prep_shoot_->isDone()
                                && intake_off_->isDone()) {
-                        seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false);
+                        if (!getValue(manual_mode_))
+                            seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false);
                         waitingForConveyorPrepShoot_ = false;
                     }
                 }
@@ -350,10 +356,8 @@ namespace xero {
                         action = stop_;
                     }
                     seq.pushSubActionPair(climber, action, false);
-                }
-                
-            }
-            
+                }   
+            }            
         }
 
         void DroidOIDevice::generatePanelSpinnerActions(xero::base::SequenceAction &seq)
@@ -420,8 +424,7 @@ namespace xero {
             generateClimbActions(seq) ;
             generatePanelSpinnerActions(seq) ;
 
-#ifdef NOTYET
-            if (getValue(manual_shoot_))
+            if (getValue(manual_shoot_) && getValue(manual_mode_))
             {
                 auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;                
                 auto turret = droid.getDroidSubsystem()->getTurret() ;
@@ -432,7 +435,6 @@ namespace xero {
                 seq.pushSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4886.0, Shooter::HoodPosition::Down), false) ;
                 seq.pushSubActionPair(conveyor, std::make_shared<ConveyorEmitAction>(*conveyor), false) ;
             }
-#endif
         }
 
         void DroidOIDevice::init() 

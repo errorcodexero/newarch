@@ -24,21 +24,16 @@ namespace xero {
             sample_time_ = 0;
 
             setCamMode(LimeLight::camMode::VisionProcessor);
+            setLedMode(LimeLight::ledMode::ForceOff);
         }
 
         DroidLimeLight::~DroidLimeLight() {            
         }
+        
         void DroidLimeLight::init(LoopType lt) {
-#ifdef PLOT_LIMELIGHT
-            if (lt == LoopType::Autonomous)
-                startPlot(plotid_, cols_) ;
-#endif
         }
 
         void DroidLimeLight::reset() {
-#ifdef PLOT_LIMELIGHT            
-            endPlot(plotid_) ;
-#endif
         }
 
         void DroidLimeLight::computeState() {

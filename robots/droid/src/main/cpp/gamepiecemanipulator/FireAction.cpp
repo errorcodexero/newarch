@@ -12,6 +12,7 @@
 #include "shooter/ShooterVelocityAction.h"
 #include "targettracker/TargetTracker.h"
 #include "turret/Turret.h"
+#include "droidids.h"
 
 using namespace xero::base;
 using namespace xero::misc;
@@ -138,7 +139,7 @@ namespace xero {
             if (isFiring_) {
                 // If we're out of balls, stop firing
                 if (conveyor->isEmpty()) {
-                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_FIRE_ACTION);
                     logger << "FireAction: Out of balls; done firing.";
                     logger.endMessage();
                     getSubsystem().getRobot().getPlotManager().endPlot(plotid_);
@@ -151,7 +152,7 @@ namespace xero {
                 // fire. The shooter should stabalize between shots. If it doesn't, then
                 // we should add a delay between shots in ConveyorEmitAction.
                 if (!readyToFireExceptShooter) {
-                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_FIRE_ACTION);
                     logger << "FireAction: Lost target; waiting.";
                     logger.endMessage();
                     conveyorEmitAction_->stopFiring();
@@ -160,7 +161,7 @@ namespace xero {
             } else { // We're not currently firing.
                 // If we're out of balls, stop trying to fire
                 if (conveyor->isEmpty()) {
-                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_FIRE_ACTION);
                     logger << "FireAction: Out of balls; done trying to fire.";
                     logger.endMessage();
                     getSubsystem().getRobot().getPlotManager().endPlot(plotid_);
@@ -169,7 +170,7 @@ namespace xero {
                 }
                 else if (readyToFire && !conveyor->isBusy()) {
                     // fire!
-                    logger.startMessage(MessageLogger::MessageType::debug);
+                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_FIRE_ACTION);
                     logger << "FireAction: Firing!";
                     logger.endMessage();
                     conveyor->setAction(conveyorEmitAction_, true);
@@ -178,7 +179,7 @@ namespace xero {
             }
 
             // Print a debug message
-            logger.startMessage(MessageLogger::MessageType::debug);
+            logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_FIRE_ACTION);
             logger << "FireAction: isFiring: " << isFiring_ << "; ";
             if (readyToFire) logger << "ready to fire; ";
             else { 

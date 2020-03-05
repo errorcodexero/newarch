@@ -56,12 +56,12 @@ namespace xero
             pushAction(parallel) ;
 
             // Backup to collect ready to collect the second ball
-            pushSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "eight_ball_two_back1"));
+            pushSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "eight_ball_two_back1", true));
 
             // Backup to collect ready to collect the second ball
             pushSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "eight_ball_two_collect2"));
 
-            // Create the next fire action to ready to fire and drive to first firing spot
+            // Move to a spot and fire
             parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
             pushAction(parallel) ;
 
@@ -78,6 +78,7 @@ namespace xero
             // Then, fire all five balls
             pushSubActionPair(manip, std::make_shared<FireAction>(*manip));
 
+#ifdef NOTYET
             series = std::make_shared<SequenceAction>(robot.getMessageLogger()) ;
 
             // Get the balls ready
@@ -103,6 +104,7 @@ namespace xero
 
             // Then, fire all five balls
             pushSubActionPair(manip, std::make_shared<FireAction>(*manip));
+#endif
         }
 
         DroidEightTwoAutomode::~DroidEightTwoAutomode()

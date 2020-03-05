@@ -76,6 +76,7 @@ namespace xero {
             size_t climb_left_ ;
             size_t climb_right_ ;
             size_t manual_shoot_ ;
+            size_t manual_mode_ ;
 
             size_t spin_deploy_ ;
             double start_time_ ;
