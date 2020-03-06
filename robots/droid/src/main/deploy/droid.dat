@@ -327,8 +327,8 @@ conveyor:motorstates:move_towards_shooter:shooter               1
 conveyor:motorstates:move_towards_intake:intake                 -1
 conveyor:motorstates:move_towards_intake:shooter                -1
 
-conveyor:receive:timeout                                        0.4
-conveyor:prepare_receive:timeout                                0.8
+conveyor:receive:timeout                                        0.5
+conveyor:prepare_receive:timeout                                0.8 # TODO
 
 ###################################################################################################
 # Variables for the driver gamepad
@@ -491,7 +491,7 @@ targettracker:camera_offset_angle                              1.0
 # Enable plotting.  Plot data is stored in the network tables and display
 # programs read the data from the network tables
 #
-plotting:enabled                                               false
+plotting:enabled                                               true
 
 #
 # These control test modes for the robot.  They are used by the DroidTestTuneMode automode.  Note

@@ -65,9 +65,9 @@ namespace xero {
                 { [=]() { setCollecting(false); return StateResult::Next; }},
 
                 // Run motors backwards for a bit to clear up jams
-                { [=]() { finishing_ = true; return StateResult::Next; }},
+                { [=]() { finishing_ = true; collecting_ = false; return StateResult::Next; }},
 
-                delayState(0.2),
+                delayState(0.05),
 
                 incrementBallsState(),                      
 
@@ -75,7 +75,7 @@ namespace xero {
 
 
                 // Timeout handling
-                { timeout, [=]() { setCollecting(false); return StateResult::Next; }},
+                { timeout, [=]() { setCollecting(false); collecting_ = false; return StateResult::Next; }},
 
                 // If empty, just try again
                 gotoState(waitForBall),

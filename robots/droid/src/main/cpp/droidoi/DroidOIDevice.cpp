@@ -461,7 +461,8 @@ namespace xero {
                 auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
 
                 seq.pushSubActionPair(turret, std::make_shared<MotorEncoderGoToAction>(*turret, 0.0), false);
-                seq.pushSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4886.0, Shooter::HoodPosition::Down), false) ;
+                //seq.pushSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4886.0, Shooter::HoodPosition::Down), false) ;
+                seq.pushSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 2500.0, Shooter::HoodPosition::Down), false) ;
                 seq.pushSubActionPair(conveyor, std::make_shared<ConveyorEmitAction>(*conveyor), false) ;
             }
         }

@@ -130,29 +130,31 @@ namespace xero {
                     distSum += dist;
                 }
 
-                if (valid > 5) {
-                    hasValidSample_ = true;
+                if (!locked_) {
+                    if (valid > 5) {
+                        hasValidSample_ = true;
 
-                    // Set the result distance and angle to the average excluding outliers.
-                    distance_ = distSum/valid;
-                    relativeAngle_ = angleSum/valid;
+                        // Set the result distance and angle to the average excluding outliers.
+                        distance_ = distSum/valid;
+                        relativeAngle_ = angleSum/valid;
 
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TURRET_TRACKER);
-                    logger << "TargetTracker: has valid samples (count: " << valid << ", average: " << relativeAngle_ << "): ";
-                    for (auto sample : samples_) {
-                        if (sample) logger << sample->desiredTurretAngle << ",";
-                        else logger << "null,";
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TURRET_TRACKER);
+                        logger << "TargetTracker: has valid samples (count: " << valid << ", average: " << distance_ << "): ";
+                        for (auto sample : samples_) {
+                            if (sample) logger << sample->distance << ",";
+                            else logger << "null,";
+                        }
+                        logger.endMessage();
+                    } else {
+                        logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TURRET_TRACKER);
+                        logger << "TargetTracker: does not have valid samples (count: " << valid << ") ";
+                        for (auto sample : samples_) {
+                            if (sample) logger << sample->distance << ",";
+                            else logger << "null,";
+                        }
+                        logger.endMessage();
+                        hasValidSample_ = false;
                     }
-                    logger.endMessage();
-                } else {
-                    logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TURRET_TRACKER);
-                    logger << "TargetTracker: does not have valid samples (count: " << valid << ") ";
-                    for (auto sample : samples_) {
-                        if (sample) logger << sample->desiredTurretAngle << ",";
-                        else logger << "null,";
-                    }
-                    logger.endMessage();
-                    hasValidSample_ = false;
                 }
             }
         }

@@ -44,6 +44,8 @@ namespace xero {
                 return distance_;
             }
 
+            void setLocked(bool locked) { locked_ = locked; }
+
             void setCameraTrackingEnabled(bool enabled);
 
         private:
@@ -66,6 +68,7 @@ namespace xero {
 
             bool cameraTrackingEnabled_;
             bool hasValidSample_;
+            bool locked_;
 
             struct Sample {
                 double desiredTurretAngle;
