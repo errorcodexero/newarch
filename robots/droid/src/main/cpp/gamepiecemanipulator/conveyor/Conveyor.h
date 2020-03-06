@@ -42,6 +42,7 @@ namespace xero {
                 MoveTowardsShooter,
                 MoveTowardsIntake,
                 MoveCollectMotorOnly,
+                ReverseCollectMotorOnly,
             };
 
             typedef std::shared_ptr<frc::DigitalInput> SensorPtr;

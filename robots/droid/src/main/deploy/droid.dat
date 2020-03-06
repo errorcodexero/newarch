@@ -318,11 +318,17 @@ conveyor:motorstates:stopped:shooter                            0
 conveyor:motorstates:collect_motor_only:intake                  1
 conveyor:motorstates:collect_motor_only:shooter                 0
 
+conveyor:motorstates:rev_collect_motor_only:intake              1
+conveyor:motorstates:rev_collect_motor_only:shooter             0
+
 conveyor:motorstates:move_towards_shooter:intake                1
 conveyor:motorstates:move_towards_shooter:shooter               1
 
 conveyor:motorstates:move_towards_intake:intake                 -1
 conveyor:motorstates:move_towards_intake:shooter                -1
+
+conveyor:receive:timeout                                        0.4
+conveyor:prepare_receive:timeout                                0.8
 
 ###################################################################################################
 # Variables for the driver gamepad

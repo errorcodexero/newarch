@@ -45,6 +45,7 @@ namespace xero {
                 {MotorState::MoveTowardsShooter, "move_towards_shooter"},
                 {MotorState::MoveTowardsIntake, "move_towards_intake"},
                 {MotorState::MoveCollectMotorOnly, "collect_motor_only"},
+                {MotorState::ReverseCollectMotorOnly, "rev_collect_motor_only"},
             };
 
             for (auto state : motorStates) {

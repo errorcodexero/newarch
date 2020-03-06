@@ -13,6 +13,7 @@ namespace xero {
             void conveyorActionRun() override;
         private:
             bool collecting_;
+            bool finishing_;
             bool reachedShooterSensor_;
         } ;
     }

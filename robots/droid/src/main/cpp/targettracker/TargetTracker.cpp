@@ -82,10 +82,10 @@ namespace xero {
 
                 // Only trust the limelight if it saw the target 60% of the time.
                 // Then, take the average, throwing out the high and low samples.
-                std::optional<double> highAngle = std::nullopt;
-                std::optional<double> lowAngle = std::nullopt;
-                std::optional<double> highDist = std::nullopt;
-                std::optional<double> lowDist = std::nullopt;
+                //std::optional<double> highAngle = std::nullopt;
+                //std::optional<double> lowAngle = std::nullopt;
+                //std::optional<double> highDist = std::nullopt;
+                //std::optional<double> lowDist = std::nullopt;
                 double angleSum = 0;
                 double distSum = 0;
                 int valid = 0;
@@ -97,7 +97,7 @@ namespace xero {
 
                     valid++;
                     
-                    // Check if this sample is a high or low.
+                    /*// Check if this sample is a high or low.
                     bool angleOutlier = false;
                     if (!highAngle || angle > highAngle) {
                         // If we previously had a high angle, it's not the high angle anymore. Keep it.
@@ -125,20 +125,22 @@ namespace xero {
                         lowDist = dist;
                         distOutlier = true;
                     }
-                    if (!distOutlier) distSum += dist;
+                    if (!distOutlier) distSum += dist;*/
+                    angleSum += angle;
+                    distSum += dist;
                 }
 
                 if (valid > 5) {
                     hasValidSample_ = true;
 
                     // Set the result distance and angle to the average excluding outliers.
-                    distance_ = distSum/(valid - 2);
-                    relativeAngle_ = angleSum/(valid - 2);
+                    distance_ = distSum/valid;
+                    relativeAngle_ = angleSum/valid;
 
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TURRET_TRACKER);
-                    logger << "TargetTracker: has valid samples (count: " << valid << ", average: " << distance_ << "): ";
+                    logger << "TargetTracker: has valid samples (count: " << valid << ", average: " << relativeAngle_ << "): ";
                     for (auto sample : samples_) {
-                        if (sample) logger << sample->distance << ",";
+                        if (sample) logger << sample->desiredTurretAngle << ",";
                         else logger << "null,";
                     }
                     logger.endMessage();
@@ -146,7 +148,7 @@ namespace xero {
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TURRET_TRACKER);
                     logger << "TargetTracker: does not have valid samples (count: " << valid << ") ";
                     for (auto sample : samples_) {
-                        if (sample) logger << sample->distance << ",";
+                        if (sample) logger << sample->desiredTurretAngle << ",";
                         else logger << "null,";
                     }
                     logger.endMessage();

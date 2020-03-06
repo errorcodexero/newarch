@@ -43,6 +43,7 @@ namespace xero {
             void setStagedForCollect(bool staged) { getSubsystem().setStagedForCollect(staged); }
             void setStagedForFire(bool staged) { getSubsystem().setStagedForFire(staged); }
             void setCollecting(bool collecting) { getSubsystem().setCollecting(collecting); }
+            void setBallCount(int count) { getSubsystem().ballCount_ = count; }
 
             /// The result of executing a single tick of a state.
             struct StateResult {
