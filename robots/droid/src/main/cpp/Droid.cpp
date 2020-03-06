@@ -101,6 +101,9 @@ namespace xero {
         void Droid::RobotHardwareInit() {
             auto sub_p = std::make_shared<DroidSubsystem>(*this) ;
             setRobotSubsystem(sub_p, sub_p->getOI(), sub_p->getTankDrive()) ;
+
+            // Buzz the gamepad when there are 30 seconds to go in teleop
+            sub_p->getAlarms()->setAlarm(LoopType::OperatorControl, 30.0) ;
         }
 
         std::shared_ptr<ControllerBase> Droid::createAutoController() {

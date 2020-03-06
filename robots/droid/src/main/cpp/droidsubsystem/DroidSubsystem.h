@@ -3,6 +3,7 @@
 #include "droidoi/DroidOISubsystem.h"
 #include <tankdrive/TankDrive.h>
 #include <RobotSubsystem.h>
+#include <AlarmSubsystem.h>
 
 namespace xero {
     namespace droid {
@@ -54,10 +55,13 @@ namespace xero {
                 return climber_ ;
             }
 
+            std::shared_ptr<xero::base::AlarmSubsystem> getAlarms() {
+                return alarms_ ;
+            }
+
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
             
         private:
-            ////%% Start DefineChildSubsystems        
             std::shared_ptr<DroidOISubsystem> oi_ ;
             std::shared_ptr<ControlPanelRotator> control_panel_rotator_;
             std::shared_ptr<Climber> climber_;
@@ -65,7 +69,7 @@ namespace xero {
             std::shared_ptr<Turret> turret_;
             std::shared_ptr<DroidLimeLight> limelight_;
             std::shared_ptr<TargetTracker> target_tracker_;
-            ////%% End DefineChildSubsystems
+            std::shared_ptr<xero::base::AlarmSubsystem> alarms_ ;
         } ;
     }
 }

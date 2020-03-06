@@ -24,6 +24,7 @@ SOURCES = \
 	TCS34725ColorSensor.cpp\
 	TeleopController.cpp\
 	DetectAutoSequence.cpp\
+	AlarmSubsystem.cpp\
 	oi/DriverGamepad.cpp\
 	oi/DriverGamepadRumbleAction.cpp\
 	oi/OIDevice.cpp\
@@ -46,7 +47,7 @@ SOURCES = \
 	motors/VictorSPMotorController.cpp\
 	motorencodersubsystem/MotorEncoderSubsystem.cpp\
 	motorencodersubsystem/MotorEncoderGoToAction.cpp\
-        motorencodersubsystem/MotorEncoderHoldAction.cpp\
+    motorencodersubsystem/MotorEncoderHoldAction.cpp\
 	motorencodersubsystem/MotorEncoderPowerAction.cpp\
 	motorencodersubsystem/MotorEncoderVelocityAction.cpp\
 	motorencodersubsystem/XeroEncoder.cpp\

@@ -19,7 +19,10 @@ namespace xero {
             addTankDrive() ;
 
             oi_ = std::make_shared<DroidOISubsystem>(this) ;
-            addChild(oi_) ;            
+            addChild(oi_) ;
+
+            alarms_ = std::make_shared<AlarmSubsystem>(this) ;
+            addChild(alarms_) ;
 
 #ifdef NOTYET
             control_panel_rotator_ = std::make_shared<ControlPanelRotator>(this);
