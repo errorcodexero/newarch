@@ -43,6 +43,7 @@ namespace xero {
                 { "delay for last ball to clear shooter", delayState(0.5) },
                 decrementBallsState(),
                 { [=] { setStagedForFire(false); return StateResult::Next; } },
+                { "delay in case we picked up extra balls", delayState(1.5) },
                 gotoState(done),
                 // ----------------------------
 
