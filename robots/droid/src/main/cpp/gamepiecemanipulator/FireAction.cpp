@@ -84,8 +84,6 @@ namespace xero {
             shooterVelocityAction_->setTarget(4500);            // just set it to a known value,
             shooter->setAction(shooterVelocityAction_, true);   // we'll update it every tick
 
-            droidSubsystem_.getTargetTracker()->setLocked(false);
-
             startTime_ = getSubsystem().getRobot().getTime();
             getSubsystem().getRobot().getPlotManager().startPlot(plotid_, columns_);
         }
@@ -137,8 +135,7 @@ namespace xero {
             bool readyToFire = trackerReady && drivebaseReady && turretReady && shooterReady;
 
             auto &logger = getMessageLogger();
-            
-            tracker->setLocked(isFiring_);
+
             if (isFiring_) {
                 // If we're out of balls, stop firing
                 if (conveyor->isEmpty()) {

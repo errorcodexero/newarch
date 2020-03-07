@@ -34,6 +34,7 @@ namespace xero {
                     setCollecting(false);
                     return StateResult::Next; 
                 }},
+                { "wait for current ball to move out of sensor", waitForSensorState(Sensor::D, false) },
 
                 branchState(notFiringLastBall, [=] { return getSubsystem().getBallCount() != 1; }),
                 
@@ -48,7 +49,7 @@ namespace xero {
                 // We're not firing the last ball.
                 // Wait for the next ball to get into position.
                 { notFiringLastBall, waitForSensorState(Sensor::D, true) },
-                waitForSensorState(Sensor::D, false),
+                { "waiting for next ball to move out of sensor", waitForSensorState(Sensor::D, false) },
                 
                 decrementBallsState(),
 

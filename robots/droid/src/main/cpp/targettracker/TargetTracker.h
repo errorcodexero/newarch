@@ -31,7 +31,7 @@ namespace xero {
 
             /// Returns true if we have up-to-date valid data.
             bool hasValidSample() {
-                return hasValidSample_;
+                return locked_;
             }
 
             /// Returns the angle from the turret to the target.
@@ -43,8 +43,6 @@ namespace xero {
             double getDistance() {
                 return distance_;
             }
-
-            void setLocked(bool locked) { locked_ = locked; }
 
             void setCameraTrackingEnabled(bool enabled);
 
@@ -69,13 +67,7 @@ namespace xero {
             bool cameraTrackingEnabled_;
             bool hasValidSample_;
             bool locked_;
-
-            struct Sample {
-                double desiredTurretAngle;
-                double distance;
-            };
-            std::array<std::optional<Sample>, 10> samples_;
-            int sampleIndex_;
+            double drivebaseVelocityThreshold_;
         };
     }
 }
