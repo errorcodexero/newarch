@@ -84,7 +84,7 @@ namespace xero
                 break;
 
             case 2:     // Drive base rotate characterization (note duration is total angle)
-                pushSubActionPair(tankdrive, std::make_shared<TankDriveFollowPathAction>(*tankdrive, "test_curve"));
+                pushSubActionPair(tankdrive, std::make_shared<TankDriveFollowPathAction>(*tankdrive, "eight_ball_two_fire1"));
                 break;
 
             case 3:     // Drive base rotate characterization (note duration is total angle)
