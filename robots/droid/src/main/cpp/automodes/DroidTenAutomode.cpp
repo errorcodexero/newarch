@@ -28,6 +28,8 @@ namespace xero
             auto conveyor = manip->getConveyor() ;
             auto turret = droid->getTurret() ;
             auto shooter = manip->getShooter() ;
+
+            /////////////////////////////////////////////////////////////////////////////////////
             auto parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
             auto series = std::make_shared<SequenceAction>(robot.getMessageLogger()) ;
 
@@ -40,27 +42,31 @@ namespace xero
             // Collect all five balls
             series->pushSubActionPair(manip, std::make_shared<StartCollectAction>(*manip), false);
 
-            // Add the series ball collect actions
-            parallel->addAction(series) ;
-
-            // Drive to the get other two balls
-            parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "ten_ball_auto_collect1"));
-
             // Move the turret to the front position
             parallel->addSubActionPair(turret, std::make_shared<MotorEncoderGoToAction>(*turret, 0.0, "goto", false), true);
 
             // Crank up the shooter wheel so its ready
-            parallel->addSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4150, Shooter::HoodPosition::Down), false) ;            
+            parallel->addSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4150, Shooter::HoodPosition::Down), false) ;    
+
+            // Add the series ball collect actions
+            parallel->addAction(series) ;
+
+            // Drive to the get other two balls
+            parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "ten_ball_auto_collect1"));        
 
             // Do this parallel (and series) set of actions
             pushAction(parallel) ;
 
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
             // Move to a spot and fire
             parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
-            pushAction(parallel) ;
+            series = std::make_shared<SequenceAction>(robot.getMessageLogger());            
+
 
             // Now get ready to fire
-            series = std::make_shared<SequenceAction>(robot.getMessageLogger());
+
             series->pushSubActionPair(turret, std::make_shared<FollowTargetAction>(*turret), false);
             series->pushSubActionPair(manip, std::make_shared<StopCollectAction>(*manip)); 
             series->pushSubActionPair(conveyor, std::make_shared<ConveyorPrepareToEmitAction>(*conveyor)); 
@@ -69,11 +75,14 @@ namespace xero
             // Drive to the target
             parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "ten_ball_auto_fire1", true));
 
+            pushAction(parallel) ;            
+
             // Then, fire all five balls
             pushSubActionPair(manip, std::make_shared<FireAction>(*manip));
 
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
-            pushAction(parallel) ;
             series = std::make_shared<SequenceAction>(robot.getMessageLogger()) ;
 
             // Get the balls ready
@@ -88,17 +97,21 @@ namespace xero
             // Drive to the get other two balls
             parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "ten_ball_auto_collect2"));
 
-            // Now get ready to fire
-            series = std::make_shared<SequenceAction>(robot.getMessageLogger());
-            series->pushSubActionPair(manip, std::make_shared<StopCollectAction>(*manip)); 
-            series->pushSubActionPair(conveyor, std::make_shared<ConveyorPrepareToEmitAction>(*conveyor)); 
-            parallel->addAction(series);
+            pushAction(parallel) ;
+
+            ///////////////////////////////////////////////////////////////////////////////////////
 
             parallel = std::make_shared<ParallelAction>(robot.getMessageLogger());
-            pushAction(parallel) ;            
+            series = std::make_shared<SequenceAction>(robot.getMessageLogger()) ;
+
+            series->pushSubActionPair(turret, std::make_shared<FollowTargetAction>(*turret), false);
+            series->pushSubActionPair(manip, std::make_shared<StopCollectAction>(*manip)); 
+            series->pushSubActionPair(conveyor, std::make_shared<ConveyorPrepareToEmitAction>(*conveyor));        
 
             // Drive to the target
             parallel->addSubActionPair(db, std::make_shared<TankDriveFollowPathAction>(*db, "ten_ball_auto_fire2", true));
+
+            pushAction(parallel) ;                
 
             // Then, fire all five balls
             pushSubActionPair(manip, std::make_shared<FireAction>(*manip));

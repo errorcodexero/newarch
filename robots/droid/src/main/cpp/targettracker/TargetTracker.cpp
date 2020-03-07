@@ -75,6 +75,7 @@ namespace xero {
                     }
                 } else {
                     hasValidSample_ = false;
+                    relativeAngle_ = 0;
                 }
             }
         }
