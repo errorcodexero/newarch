@@ -90,12 +90,10 @@ namespace xero {
             paths->loadPath("five_ball_auto_fire") ;
             paths->loadPath("three_ball_auto_backup") ;
             paths->loadPath("three_ball_auto_fire") ;
-            paths->loadPath("eight_ball_two_back1") ;
-            paths->loadPath("eight_ball_two_fire1") ;
-            paths->loadPath("eight_ball_two_fire2") ;            
-            paths->loadPath("eight_ball_two_collect1") ;
-            paths->loadPath("eight_ball_two_collect2") ;
-            paths->loadPath("eight_ball_two_collect3") ;
+            paths->loadPath("ten_ball_auto_collect1") ;
+            paths->loadPath("ten_ball_auto_fire1") ;
+            paths->loadPath("ten_ball_auto_collect2") ;
+            paths->loadPath("ten_ball_auto_fire2") ;            
         }
         
         void Droid::RobotHardwareInit() {

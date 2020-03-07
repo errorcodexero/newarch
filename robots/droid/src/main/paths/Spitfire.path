@@ -216,6 +216,12 @@
             "paths": [
                 {
                     "constraints": [
+                        {
+                            "after": 125,
+                            "before": 200,
+                            "type": "distance_velocity",
+                            "velocity": 10
+                        }
                     ],
                     "endangle": 0,
                     "endangledelay": 0,
@@ -234,8 +240,8 @@
                         },
                         {
                             "heading": 111.57099999999998,
-                            "x": 391.30496231155774,
-                            "y": 101.9764447236181
+                            "x": 388.5010359116022,
+                            "y": 114.72513812154696
                         }
                     ],
                     "startangle": 0,
@@ -250,15 +256,15 @@
                     "endvelocity": 0,
                     "flags": [
                     ],
-                    "maxacceleration": 40,
+                    "maxacceleration": 60,
                     "maxjerk": 1800,
-                    "maxvelocity": 40,
+                    "maxvelocity": 60,
                     "name": "fire1",
                     "points": [
                         {
                             "heading": -68.39999999999999,
-                            "x": 391.339,
-                            "y": 102
+                            "x": 395.3,
+                            "y": 105.9
                         },
                         {
                             "heading": 19.65382405805332,
@@ -272,6 +278,12 @@
                 },
                 {
                     "constraints": [
+                        {
+                            "after": 195,
+                            "before": 500,
+                            "type": "distance_velocity",
+                            "velocity": 10
+                        }
                     ],
                     "endangle": 0,
                     "endangledelay": 0,
@@ -280,7 +292,7 @@
                     ],
                     "maxacceleration": 180,
                     "maxjerk": 1800,
-                    "maxvelocity": 180,
+                    "maxvelocity": 90,
                     "name": "collect2",
                     "points": [
                         {
@@ -289,9 +301,14 @@
                             "y": 42.7
                         },
                         {
+                            "heading": 176.86799325640877,
+                            "x": 370.24930939226516,
+                            "y": 50.40953038674036
+                        },
+                        {
                             "heading": -180,
-                            "x": 259.2889447236181,
-                            "y": 29.249057788944754
+                            "x": 257.2624309392265,
+                            "y": 49.54040055248623
                         }
                     ],
                     "startangle": 0,
