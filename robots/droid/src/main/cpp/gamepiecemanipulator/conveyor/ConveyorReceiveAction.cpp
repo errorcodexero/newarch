@@ -61,15 +61,18 @@ namespace xero {
                 { fifth, waitForSensorState(Sensor::C, false) },
                 waitForSensorState(Sensor::C, true, timeout, timeoutDuration),
 
-                // we've got the fifth ball; we're done.
-                { [=]() { setCollecting(false); return StateResult::Next; }},
-
                 // Run motors backwards for a bit to clear up jams
                 { [=]() { finishing_ = true; collecting_ = false; return StateResult::Next; }},
 
                 delayState(0.05),
 
-                incrementBallsState(),                      
+                incrementBallsState(),                
+
+                // we've got the fifth ball; we're done.
+                // NOTE: setCollecting is different from collecting_
+                // setCollecting tells the OI whether or not we're busy, while
+                // collecting_ tells the motors whether to start or stop
+                { [=]() { setCollecting(false); return StateResult::Next; }},      
 
                 gotoState(done),
 

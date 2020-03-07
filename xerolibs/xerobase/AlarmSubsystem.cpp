@@ -41,7 +41,6 @@ namespace xero {
                     // This alarm needs to go off
                     //
                     alarms_.erase(alarms_.begin() + i) ;
-                    gamepad->rumble(true, 1.0, 5.0) ;
                     gamepad->rumble(false, 1.0, 5.0) ;
                 }
                 else
