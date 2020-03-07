@@ -138,7 +138,7 @@ namespace xero {
 
             if (isFiring_) {
                 // If we're out of balls, stop firing
-                if (conveyor->isEmpty()) {
+                if (conveyor->isEmpty() && !conveyor->isBusy()) {
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_FIRE_ACTION);
                     logger << "FireAction: Out of balls; done firing.";
                     logger.endMessage();

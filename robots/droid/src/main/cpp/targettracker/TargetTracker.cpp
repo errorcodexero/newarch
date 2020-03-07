@@ -70,7 +70,7 @@ namespace xero {
                     logger.endMessage();
                     hasValidSample_ = true;
                     
-                    if (abs(droid->getTankDrive()->getVelocity()) > drivebaseVelocityThreshold_) {
+                    if (abs(droid->getTankDrive()->getVelocity()) < drivebaseVelocityThreshold_) {
                         locked_ = true;
                     }
                 } else {
