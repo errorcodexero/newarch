@@ -73,6 +73,7 @@ namespace xero {
         }
 
         void MotorEncoderSubsystem::reset() {
+            encoder_->reset() ;
             SingleMotorSubsystem::reset() ;
         }
 

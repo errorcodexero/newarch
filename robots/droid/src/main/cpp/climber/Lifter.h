@@ -26,7 +26,6 @@ namespace xero {
                     // If we're above the max height, don't allow movement at all. 
                     if (getPosition() > climber_->getMaxHeight()) power = 0;
                 }
-
                 MotorEncoderSubsystem::setMotor(power);
             }
 

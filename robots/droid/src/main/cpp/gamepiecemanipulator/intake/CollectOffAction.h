@@ -26,6 +26,7 @@ namespace xero {
                          
         private :
             static std::string action_name ;
+            double rev_power_ ;
         } ;
     }
 }

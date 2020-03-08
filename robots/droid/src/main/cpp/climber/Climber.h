@@ -9,6 +9,7 @@ namespace xero {
     namespace droid {
         class Climber : public xero::base::Subsystem {
             friend class ClimberTraverseAction ;
+            friend class CalibrateClimberAction ;
             
         public:
             Climber(xero::base::Subsystem *parent);
@@ -40,12 +41,18 @@ namespace xero {
 
             bool canAcceptAction(xero::base::ActionPtr action) override;
 
+            bool canAcceptDefaultAction(xero::base::ActionPtr action) override
+            {
+                return canAcceptAction(action) ;
+            }
+
         private:
             std::shared_ptr<xero::base::MotorEncoderSubsystem> lifter_;
             std::shared_ptr<rev::SparkMax> traverser_ ;
             uint64_t msg_id_;
             double max_height_ ;
             bool field_mode_;
+            bool calibrated_ ;
         };
     }
 }

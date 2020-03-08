@@ -38,6 +38,7 @@
 #include <gamepiecemanipulator/shooter/ShooterVelocityAction.h>
 
 #include <climber/ClimberUpDownAction.h>
+#include <climber/CalibrateClimberAction.h>
 
 using namespace xero::base;
 using namespace xero::misc;
@@ -225,6 +226,10 @@ namespace xero
                 pushSubActionPair(climber, std::make_shared<ClimberUpDownAction>(*climber, 0, power), true) ;
                 pushAction(std::make_shared<DelayAction>(logger, 5));                
                 pushSubActionPair(climber, std::make_shared<ClimberUpDownAction>(*climber, 0, 0.0), true) ;                
+                break ;       
+
+            case 63:
+                pushSubActionPair(climber, std::make_shared<CalibrateClimberAction>(*climber)) ;
                 break ;               
 
                 //////////////////////////////////////////////////////////////////////////////////////////

@@ -121,7 +121,7 @@ hw:climber:servo:l:climb                                        0.0
 hw:climber:servo:r:climb                                        0.0
 
 intake:collector:motor:power                                    1.0
-intake:arm:collecton:pos                                        1350
+intake:arm:collecton:pos                                        1550
 intake:arm:collectoff:pos                                       0
 intake:hold:p                                                   0.001
 intake:hold:i                                                   0
@@ -130,17 +130,17 @@ intake:hold:f                                                   0
 intake:hold:min                                                 -0.1
 intake:hold:max                                                 0.1
 intake:hold:imax                                                0
-intake:follower:down:kp                                       0.0
+intake:follower:down:kp                                       0.001
 intake:follower:down:kd                                       0.0
-intake:follower:down:kv                                       0.000125984252
+intake:follower:down:kv                                       0.00012407
 intake:follower:down:ka                                       0.0
-intake:follower:up:kp                                         0.0
+intake:follower:up:kp                                         0.001
 intake:follower:up:kd                                         0.0
-intake:follower:up:kv                                         0.0001346499102
+intake:follower:up:kv                                         0.000147929
 intake:follower:up:ka                                         0.0
 intake:goto:threshold                                       10.0       # Within three degrees
-intake:goto:maxd                                            -21000.0     # maximum deceleration
-intake:goto:maxa                                            21000.0     # maximum acceleration
+intake:goto:maxd                                            -14000.0     # maximum deceleration
+intake:goto:maxa                                            14000.0     # maximum acceleration
 intake:goto:maxv                                            14000.0     # maximum velocity
 
 #
@@ -218,21 +218,6 @@ shooter:aim:hood_up:a                                           0
 shooter:aim:hood_up:b                                           0
 shooter:aim:hood_up:c                                           3600
 
-#
-# Bill
-#
-shooter:aim:hood_down:a                                         0.0324
-shooter:aim:hood_down:b                                         -12.516
-shooter:aim:hood_down:c                                         5803
-
-#
-# Amy
-#
-
-#
-# Carlos
-#
-
 shooter:aim:max_hood_up                                         120
 shooter:aim:min_hood_down                                       110
 
@@ -290,8 +275,6 @@ turret:max                                                      40  # The maximu
 turret:safety_threshold_time                                    1
 turret:safety_threshold_power                                   0.1
 turret:safety_threshold_dist                                    2
-
-
 
 ###################################################################################################
 # controlpanelrotator
@@ -353,10 +336,10 @@ driver:zerolevel                                                0.1
 # In field mode, the climber's max downward velocity is limited to 10% below 1000, and 0% below 0.
 # In pit mode, the climber's max downward velocity is always limited to 10%.
 
-climber:force_field_mode                                        false
+climber:force_field_mode                                        true
 
-climber:climb_height                                            9373
-climber:max_height                                              10000
+climber:climb_height                                            9450
+climber:max_height                                              9600
 climber:power:up                                                0.4
 climber:power:down                                              -1
 climber:power:left                                              -1.0
@@ -365,22 +348,14 @@ climber:power:right                                             1.0
 climber:lifter:follower:up:kp                                   0.00001
 climber:lifter:follower:up:ki                                   0
 climber:lifter:follower:up:kd                                   0
-climber:lifter:follower:up:kv                                   0.000260417
+climber:lifter:follower:up:kv                                   0.00026455
 climber:lifter:follower:up:ka                                   0
-#climber:lifter:follower:up:min                                  -1
-#climber:lifter:follower:up:max                                  1
-#climber:lifter:follower:up:imax                                 0
 
 climber:lifter:follower:down:ki                                 0
 climber:lifter:follower:down:kd                                 0
-climber:lifter:follower:down:kv                                 0.000260417
-climber:lifter:follower:down:kp                                 0
-climber:lifter:follower:down:kp                                 0
+climber:lifter:follower:down:kv                                 0.000268673
 climber:lifter:follower:down:kp                                 0
 climber:lifter:follower:down:ka                                 0
-#climber:lifter:follower:down:min                                -1
-#climber:lifter:follower:down:max                                1
-#climber:lifter:follower:down:imax                               0
 
 climber:lifter:goto:threshold                                   3.0
 climber:lifter:goto:maxa                                        3700
@@ -397,47 +372,36 @@ climber:lifter:hold:imax                                                0
 
 ##----------------------
 
-climber:traverser:motor:follower:up:maxkp                                0
-climber:traverser:motor:follower:up:maxki                                0
-climber:traverser:motor:follower:up:maxkd                                0
-climber:traverser:motor:follower:up:maxkv                                0.003521127
-climber:traverser:motor:follower:up:maxka                                0
-climber:traverser:motor:follower:up:min                                  -1
-climber:traverser:motor:follower:up:max                                  1
-cilmber:traverser:motor:follower:up:imax                                 0
-
-climber:traverser:motor:follower:down:maxkp                              0
-climber:traverser:motor:follower:down:maxki                              0
-climber:traverser:motor:follower:down:maxkd                              0
-climber:traverser:motor:follower:down:maxkv                              0.003521127
-climber:traverser:motor:follower:down:maxka                              0
-climber:traverser:motor:follower:down:min                                -1
-climber:traverser:motor:follower:down:max                                1
-climber:traverser:follower:down:imax                               0
-
-climber:traverser:motgoto:threshold                                   3.0
-climber:traverser:motor:goto:maxa                                        70
-climber:traverser:motor:goto:maxd                                        -70
-climber:traverser:motor:goto:maxv                                        70
-
-
 ###################################################################################################
 # droidvision
 ###################################################################################################
 
+# 
+# Amy
+#
+droidvision:camera_angle                                        20.08
+shooter:aim:hood_down:a                                         0.0324
+shooter:aim:hood_down:b                                         -12.516
+shooter:aim:hood_down:c                                         5900
+targettracker:camera_offset_angle                               -2.0
+
 #
 # Bill
 #
-droidvision:camera_angle                                        21.74
+# droidvision:camera_angle                                        21.74
+# shooter:aim:hood_down:a                                         0.0324
+# shooter:aim:hood_down:b                                         -12.516
+# shooter:aim:hood_down:c                                         5803
+# targettracker:camera_offset_angle                              1.0
 
 #
-# Amy
+# Cladio
 #
-
-# 
-# Carlos
-#
-
+# droidvision:camera_angle                                        21.54
+# shooter:aim:hood_down:a                                         0.0348
+# shooter:aim:hood_down:b                                         -13.359
+# shooter:aim:hood_down:c                                         5875
+# targettracker:camera_offset_angle                               -1.0
 
 droidvision:camera_target_height                                68.0
 limelight:camera_latency                                        11.0
@@ -478,9 +442,6 @@ targettracker:target:y                                          30  # placeholde
 # This helps prevent us from trying to track the wrong target
 targettracker:camera_targetting_max_angle                       45
 
-# Compensate for camera mounting variance by subtracting this value from the limelight yaw value.
-targettracker:camera_offset_angle                              1.0
-
 targettracker:turret_lock_threshold                             1.0
 
 ###################################################################################################
@@ -502,8 +463,8 @@ plotting:enabled                                               true
 auto:testmode:active                                          false
 auto:testmode:which                                           31
 auto:testmode:distance                                        9750
-auto:testmode:power                                           -0.1
-auto:testmode:duration                                        40.0
+auto:testmode:power                                           0.2
+auto:testmode:duration                                        1.0
 
 #
 # Shoot test parameters

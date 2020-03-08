@@ -16,18 +16,25 @@ namespace xero {
         CollectOffAction::CollectOffAction(Intake &subsystem) : 
                     MotorEncoderGoToAction(subsystem, CollectOffAction::Target)
         {
+            rev_power_ = -1.0 ;
         }
         
         void CollectOffAction::start() 
         {
             Intake &intake = dynamic_cast<Intake &>(getSubsystem()) ;            
             MotorEncoderGoToAction::start() ;
-            intake.collector_->set(0.0) ;
+
+            if (!isDone())
+                intake.collector_->set(rev_power_) ;
         }
 
         void CollectOffAction::run() 
         {
+            Intake &intake = dynamic_cast<Intake &>(getSubsystem()) ; 
             MotorEncoderGoToAction::run() ;
+
+            if (isDone())
+                intake.collector_.get()->set(0.0) ;
         }
 
         void CollectOffAction::cancel() {

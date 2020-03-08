@@ -26,12 +26,12 @@ namespace xero {
 
         void StopCollectAction::start() 
         {
-            xero::base::Action::start() ;            
+            xero::base::Action::start() ;     
+                   
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;            
             auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;   
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
 
-            xero::base::Action::start() ;
             auto collect_off_action = std::make_shared<CollectOffAction>(*intake) ;            
             intake->setAction(collect_off_action, true) ;
             conveyor->setAction(conveyor_stop_action_, true) ; 

@@ -3,6 +3,7 @@
 #include "Climber.h"
 #include "Lifter.h"
 #include "ClimberAction.h"
+#include "CalibrateClimberAction.h"
 
 #include <frc/DriverStation.h>
 
@@ -22,12 +23,14 @@ namespace xero {
             lifter_->getMotorController()->setNeutralMode(MotorController::NeutralMode::Brake) ;
             lifter_->getMotorController()->resetEncoder() ;
 #ifdef ALL_SMART_DASHBOARD
-            lifter_->setSmartDashboardName("lifter") ;
+            lifter_->setSmartDashboardName("lifter", false) ;
 #endif
             addChild(lifter_);
 
             int travid = parent->getRobot().getSettingsParser().getInteger("hw:climber:traverser:pwmid") ;
             traverser_ = std::make_shared<rev::SparkMax>(travid) ;
+
+            calibrated_ = false ;
         }
 
         void Climber::run()
@@ -41,6 +44,8 @@ namespace xero {
 
             field_mode_ = frc::DriverStation::GetInstance().IsFMSAttached() ||
                 (settings.isDefined(param) && settings.getBoolean(param));
+
+            // setDefaultAction(std::make_shared<CalibrateClimberAction>(*this)) ;
         }
 
         bool Climber::canAcceptAction(ActionPtr action) {

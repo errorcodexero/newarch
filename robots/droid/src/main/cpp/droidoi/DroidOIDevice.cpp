@@ -337,6 +337,8 @@ namespace xero {
                     // deploy the climber
                     //
                     if (getValue(climb_deploy_) && !climber->isBusy() && !climber->getLifter()->isBusy()) {
+                        climber->setDefaultAction(nullptr) ;
+                        climber->setAction(nullptr) ;
                         seq.pushSubActionPair(climber->getLifter(), deploy_climber_, false) ;
                         started_deploy_ = true;
                     } else if (started_deploy_ && !climber->isBusy() && !climber->getLifter()->isBusy()) {
