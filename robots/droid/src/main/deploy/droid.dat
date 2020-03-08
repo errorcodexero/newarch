@@ -481,6 +481,8 @@ targettracker:camera_targetting_max_angle                       45
 # Compensate for camera mounting variance by subtracting this value from the limelight yaw value.
 targettracker:camera_offset_angle                              1.0
 
+targettracker:turret_lock_threshold                             1.0
+
 ###################################################################################################
 #
 # The sections below defines the bahavior of variour misc robot capabilities

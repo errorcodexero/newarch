@@ -25,6 +25,8 @@ namespace xero {
             maxCameraTrackingAngle_ = settings.getDouble("targettracker:camera_targetting_max_angle");
             cameraOffsetAngle_ = settings.getDouble("targettracker:camera_offset_angle");
 
+            lockThreshold_ = settings.getDouble("targettracker:turret_lock_threshold");
+
             std::string drivebaseThresholdKey = "gamepiecemanipulator:fire:max_drivebase_velocity";
             assert(settings.isDefined(drivebaseThresholdKey) &&
                    "gamepiecemanipulator:fire:max_drivebase_velocity must be defined");
@@ -64,13 +66,15 @@ namespace xero {
                     distance_ = limelight->getDistance();
 
                     // Compute the desired turret angle.
-                    relativeAngle_ = -(limelight->getYaw() - cameraOffsetAngle_) + turret->getPosition();
+                    double yaw = limelight->getYaw() - cameraOffsetAngle_;
+                    relativeAngle_ = -yaw + turret->getPosition();
                     logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_TURRET_TRACKER);
-                    logger << "TargetTracker: yaw " << limelight->getYaw() << "; distance: " << distance_;
+                    logger << "TargetTracker: yaw " << yaw << "; distance: "  << distance_;
                     logger.endMessage();
                     hasValidSample_ = true;
                     
-                    if (abs(droid->getTankDrive()->getVelocity()) < drivebaseVelocityThreshold_) {
+                    if (abs(droid->getTankDrive()->getVelocity()) < drivebaseVelocityThreshold_ &&
+                        abs(yaw) < lockThreshold_) {
                         locked_ = true;
                     }
                 } else {

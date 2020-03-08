@@ -68,6 +68,7 @@ namespace xero {
             bool hasValidSample_;
             bool locked_;
             double drivebaseVelocityThreshold_;
+            double lockThreshold_;
         };
     }
 }
