@@ -1,4 +1,5 @@
-#include "CalibrateClimberAction.h"
+#include "LifterCalibrateAction.h"
+#include "Lifter.h"
 #include <droidids.h>
 
 using namespace xero::base ;
@@ -8,48 +9,46 @@ namespace xero
 {
     namespace droid
     {
-        CalibrateClimberAction::CalibrateClimberAction(Climber &subsystem) : ClimberAction(subsystem)
+        LifterCalibrateAction::LifterCalibrateAction(Lifter &subsystem) : MotorEncoderSubsystemAction(subsystem)
         {
             down_power_ = -0.20 ;
             samples_ = 5 ;
             threshold_ = 2.0 ;
-
-            holdpid_.initFromSettingsExtended(subsystem.getRobot().getSettingsParser(), "climber:lifter:hold") ;
         }
 
-        CalibrateClimberAction::~CalibrateClimberAction()
+        LifterCalibrateAction::~LifterCalibrateAction()
         {            
         }
 
-        void CalibrateClimberAction::start()
+        void LifterCalibrateAction::start()
         {
-            ClimberAction::start() ;
+            Lifter &lifter = dynamic_cast<Lifter &>(getSubsystem()) ;
+            MotorEncoderSubsystemAction::start() ;
 
-            if (getSubsystem().calibrated_)
+            if (lifter.isCalibrated())
                 state_ = State::Holding ;
             else
             {
                 state_ = State::DownSlowly ;
-                getSubsystem().getLifter()->getMotorController()->set(down_power_) ;
-                getSubsystem().getLifter()->setDefaultAction(nullptr) ;
+                lifter.getMotorController()->set(down_power_) ;
             }
         }
 
-        void CalibrateClimberAction::run()
+        void LifterCalibrateAction::run()
         {
-            ClimberAction::run() ;
+            Lifter &lifter = dynamic_cast<Lifter &>(getSubsystem()) ;
 
             switch(state_)
             {
                 case State::DownSlowly:
-                    encoders_.push_back(getSubsystem().getLifter()->getPosition()) ;
+                    encoders_.push_back(lifter.getPosition()) ;
                     if (encoders_.size() > samples_)
                         encoders_.erase(encoders_.begin()) ;
 
                     if (isStopped())
                     {
-                        getSubsystem().calibrated_ = true ;
-                        getSubsystem().getLifter()->reset() ;
+                        lifter.setCalibrated() ;
+                        lifter.reset() ;
                         state_ = State::Holding ;
                     }
                     break ;
@@ -57,11 +56,11 @@ namespace xero
                 case State::Holding:
                     {
                         double out = -0.05 ;
-                        getSubsystem().getLifter()->getMotorController()->set(out) ;
+                        lifter.getMotorController()->set(out) ;
 
                         auto &logger = getSubsystem().getRobot().getMessageLogger() ;
                         logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CLIMBER) ;
-                        logger << "Climber holding at " << out ;
+                        logger << "Lifter holding at " << out ;
                         logger.endMessage() ;
 
                     }
@@ -69,7 +68,7 @@ namespace xero
             }
         }
 
-        bool CalibrateClimberAction::isStopped()
+        bool LifterCalibrateAction::isStopped()
         {
             if (encoders_.size() < samples_)
                 return false ;
@@ -88,7 +87,7 @@ namespace xero
 
             auto &logger = getSubsystem().getRobot().getMessageLogger() ;
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CLIMBER) ;
-            logger << "Climber calibration, delta " << vmax - vmin << " vs threshold " << threshold_ ;
+            logger << "Lifter calibration, delta " << vmax - vmin << " vs threshold " << threshold_ ;
             logger << " data" ;
             for(auto &d : encoders_)
                 logger << " " << d ;
@@ -97,9 +96,9 @@ namespace xero
             return vmax - vmin < threshold_ ;
         }
 
-        std::string CalibrateClimberAction::toString()
+        std::string LifterCalibrateAction::toString()
         {
-            std::string ret = "CalibrateClimberAction " ;
+            std::string ret = "LifterCalibrateAction " ;
             return ret ;
         }
     }

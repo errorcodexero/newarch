@@ -3,7 +3,6 @@
 #include "Climber.h"
 #include "Lifter.h"
 #include "ClimberAction.h"
-#include "CalibrateClimberAction.h"
 
 #include <frc/DriverStation.h>
 
@@ -29,8 +28,6 @@ namespace xero {
 
             int travid = parent->getRobot().getSettingsParser().getInteger("hw:climber:traverser:pwmid") ;
             traverser_ = std::make_shared<rev::SparkMax>(travid) ;
-
-            calibrated_ = false ;
         }
 
         void Climber::run()
@@ -44,8 +41,6 @@ namespace xero {
 
             field_mode_ = frc::DriverStation::GetInstance().IsFMSAttached() ||
                 (settings.isDefined(param) && settings.getBoolean(param));
-
-            // setDefaultAction(std::make_shared<CalibrateClimberAction>(*this)) ;
         }
 
         bool Climber::canAcceptAction(ActionPtr action) {

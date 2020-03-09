@@ -8,7 +8,18 @@ namespace xero {
         class Lifter: public xero::base::MotorEncoderSubsystem {
         public:
             Lifter(Climber *parent, const std::string &name, uint64_t id, int samples = 2, bool angular = false ):
-                MotorEncoderSubsystem(parent, name, id, samples, angular), climber_(parent) {}
+                MotorEncoderSubsystem(parent, name, id, samples, angular), climber_(parent) 
+            {
+                calibrated_ = false ;
+            }
+
+            bool isCalibrated() {
+                return calibrated_ ;
+            }
+
+            void setCalibrated() {
+                calibrated_ = true ;
+            }
 
         protected:
             void setMotor(double power) override {
@@ -31,6 +42,7 @@ namespace xero {
 
         private:
             Climber *climber_;
+            bool calibrated_ ;
         };
     }
 }

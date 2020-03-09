@@ -1,19 +1,18 @@
 #pragma once
 
-#include "ClimberAction.h"
-#include <singlemotorsubsystem/SingleMotorPowerAction.h>
-#include <PIDCtrl.h>
+#include "Lifter.h"
+#include <motorencodersubsystem/MotorEncoderSubsystemAction.h>
 #include <vector>
 
 namespace xero
 {
     namespace droid
     {
-        class CalibrateClimberAction : public ClimberAction
+        class LifterCalibrateAction : public xero::base::MotorEncoderSubsystemAction
         {
         public:
-            CalibrateClimberAction(Climber &subsystem) ;
-            virtual ~CalibrateClimberAction() ;
+            LifterCalibrateAction(Lifter &subsystem) ;
+            virtual ~LifterCalibrateAction() ;
             virtual void start() ;
             virtual void run() ;
             virtual std::string toString() ;
@@ -34,7 +33,6 @@ namespace xero
             double threshold_ ;
             std::vector<double> encoders_ ;
             size_t samples_ ;
-            xero::misc::PIDCtrl holdpid_ ;
         } ;
     }
 }
