@@ -193,9 +193,13 @@ namespace xero {
                 seq.pushSubActionPair(shooter, shooter_eject_action_, false);
             }
 
-            if (flag_eject_) return;
+            if (flag_eject_) 
+                return;
 
             if (flag_coll_v_shoot_ == CollectShootMode::InvalidMode || getSwitchMode() != flag_coll_v_shoot_) {
+                //
+                // The mode is wrong, make it right first before processing any specific actions
+                //
                 if (getSwitchMode() == CollectShootMode::CollectMode) {
                     // Setup the game piece manipulator to collect
                     if (game_piece_manipulator->isDone()  || waitingForConveyorPrepShoot_ ||
@@ -215,28 +219,35 @@ namespace xero {
                     }
                 }
                 else {
-                    // Queue the conveyor to prepare to fire.
-                    if (getValue(manual_mode_))
+                    //
+                    // If the receiver is still collecting, don't switch modes yet as we need the
+                    // previous collect operation to finish
+                    //
+                    if (!conveyor->isCollecting())
                     {
-                        //
-                        // In manual shoot mode, turn turret to zero degrees
-                        //
-                        seq.pushSubActionPair(turret, turret_goto_zero_, false) ;                        
-                    }
-                    else
-                    {
-                        //
-                        // In auto shoot mode, have turret follow limelight
-                        //
-                        seq.pushSubActionPair(turret, turret_follow_, false) ;
-                    }
+                        // Queue the conveyor to prepare to fire.
+                        if (getValue(manual_mode_))
+                        {
+                            //
+                            // In manual shoot mode, turn turret to zero degrees
+                            //
+                            seq.pushSubActionPair(turret, turret_goto_zero_, false) ;                        
+                        }
+                        else
+                        {
+                            //
+                            // In auto shoot mode, have turret follow limelight
+                            //
+                            seq.pushSubActionPair(turret, turret_follow_, false) ;
+                        }
 
-                    seq.pushSubActionPair(conveyor, queue_prep_shoot_, false);
-                    seq.pushSubActionPair(shooter, shooter_spinup_, false) ;
-                    seq.pushSubActionPair(intake,  intake_off_, false);
-                    flag_coll_v_shoot_ = CollectShootMode::ShootMode ;      
-                    waitingForConveyorPrepShoot_ = true;
-                    frc::SmartDashboard::PutString("Mode", "Shoot") ;   
+                        seq.pushSubActionPair(conveyor, queue_prep_shoot_, false);
+                        seq.pushSubActionPair(shooter, shooter_spinup_, false) ;
+                        seq.pushSubActionPair(intake,  intake_off_, false);
+                        flag_coll_v_shoot_ = CollectShootMode::ShootMode ;      
+                        waitingForConveyorPrepShoot_ = true;
+                        frc::SmartDashboard::PutString("Mode", "Shoot") ;   
+                    }
                 }
             }
             else
