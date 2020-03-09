@@ -85,7 +85,7 @@
                 "xbox" : false,
                 "name" : "Error Code Xero Custom OI",
                 "axes" : 8,
-                "buttons" : 10,
+                "buttons" : 16,
                 "povs" : 1,
                 "automode" : 6
             }

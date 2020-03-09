@@ -13,7 +13,7 @@ AUTOMODES = \
 	src/main/cpp/automodes/DroidEightBallAutomode.cpp\
 	src/main/cpp/automodes/DroidFiveBallAutomode.cpp\
 	src/main/cpp/automodes/DroidThreeBallAutomode.cpp\
-	src/main/cpp/automodes/DroidEightTwoAutomode.cpp	
+	src/main/cpp/automodes/DroidTenAutomode.cpp	
 
 SUBSYSTEMS = \
 	src/main/cpp/droidoi/DroidOIDevice.cpp\
