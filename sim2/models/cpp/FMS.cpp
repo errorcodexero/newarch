@@ -18,6 +18,7 @@ namespace xero
             auto_time_ = 0.0 ;
             teleop_time_ = 0.0 ;
             between_time_ = 0.0 ;
+            closing_time_ = 0.0 ;
         }
 
         FMS::~FMS()
@@ -129,7 +130,10 @@ namespace xero
                 between_time_ = setProperty("between", getProperty("between"), between_time_) ;
 
             if (hasProperty("teleop"))
-                teleop_time_ = setProperty("teleop", getProperty("teleop"), teleop_time_) ;                                                
+                teleop_time_ = setProperty("teleop", getProperty("teleop"), teleop_time_) ;      
+
+            if (hasProperty("closing"))
+                closing_time_ = setProperty("closing", getProperty("closing"), closing_time_) ;                                                               
 
             return true ;
         }
@@ -190,15 +194,30 @@ namespace xero
                 if (elapsed > teleop_time_)
                 {
                     HALSIM_SetDriverStationEnabled(false) ;
+                    state_ = FMSState::Closing ;
+                    period_start_time_ = HAL_GetFPGATime(&status) / 1e6 ;
+
+                    msg.startMessage(SimulatorMessages::MessageType::Debug, 4) ;
+                    msg << "model " << getModelName() << " instance " << getInstanceName() ;
+                    msg << " - transitioning to CLOSING" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;                                          
+                }               
+                break ;
+
+            case FMSState::Closing:
+                if (elapsed > closing_time_)
+                {
                     state_ = FMSState::Done ;
                     period_start_time_ = HAL_GetFPGATime(&status) / 1e6 ;
 
                     msg.startMessage(SimulatorMessages::MessageType::Debug, 4) ;
                     msg << "model " << getModelName() << " instance " << getInstanceName() ;
                     msg << " - transitioning to DONE" ;
-                    msg.endMessage(getEngine().getSimulationTime()) ;                                          
+                    msg.endMessage(getEngine().getSimulationTime()) ;
+
+                    exit(0) ;
                 }               
-                break ;
+                break ;            
 
             case FMSState::Done:
                 break ;                                              

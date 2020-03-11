@@ -10,9 +10,7 @@ using namespace xero::base;
 namespace xero {
     namespace droid {
         Turret::Turret(Subsystem *parent): MotorEncoderSubsystem(parent, "turret", MSG_GROUP_TURRET) {
-#ifdef ALL_SMART_DASHBOARD            
             setSmartDashboardName("turret") ;
-#endif            
             auto &settings = getRobot().getSettingsParser();
             minSafeAngle_ = settings.getDouble("turret:min");
             maxSafeAngle_ = settings.getDouble("turret:max");

@@ -22,7 +22,9 @@ namespace xero
 
         private:
             std::shared_ptr<xero::sim2::SimulatedMotor> intake_up_down_ ;
-            std::shared_ptr<xero::sim2::SimulatedMotor> intake_spin_ ;     
+            std::shared_ptr<xero::sim2::SimulatedMotor> intake_spin_ ;
+            double ticks_ ;
+            double ticks_per_second_per_volt_ ;            
         };
     }
 }

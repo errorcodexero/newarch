@@ -69,6 +69,7 @@ namespace xero {
             logger << " pos " << pos ;
             logger << " vel " << speedometer_.getVelocity() ;
             logger << " accel " << speedometer_.getAcceleration() ;
+            logger << " power " << getMotor() ;
             logger.endMessage() ;
         }
 

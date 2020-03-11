@@ -21,9 +21,7 @@ namespace xero {
             lifter_->getMotorController()->setCurrentLimit(40) ;
             lifter_->getMotorController()->setNeutralMode(MotorController::NeutralMode::Brake) ;
             lifter_->getMotorController()->resetEncoder() ;
-#ifdef ALL_SMART_DASHBOARD
             lifter_->setSmartDashboardName("lifter", false) ;
-#endif
             addChild(lifter_);
 
             int travid = parent->getRobot().getSettingsParser().getInteger("hw:climber:traverser:pwmid") ;

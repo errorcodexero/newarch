@@ -1,0 +1,116 @@
+{
+    "stimulus" :
+    [
+        {
+            "time" : 0.0,
+            "events" :
+            [
+                {
+                    "model" : "fms",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "start" : 1.0,
+                        "autonomous" : 0.0,
+                        "between" : 0.0,
+                        "teleop" : 30.0
+                    }
+                },
+                {
+                    "model" : "driodoi",
+                    "instance" : "1",
+                    "values" :
+                    {
+                        "button11" : 0
+                    }
+                }
+            ]
+        },
+        {
+            "time" : 1.0,
+            "events" :
+            [
+                {
+                    "model" : "limelight",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "tv" : 1.0,
+                        "tx" : 30.0,
+                        "ty" : 8.0
+                    }
+                }
+            ]
+        },        
+        {
+            "time" : 2.5,
+            "events" :
+            [
+                {
+                    "model" : "droidoi",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "button14" : true
+                    }
+                }
+            ]
+        },          
+        {
+            "time" : 3.0,
+            "events" :
+            [
+                {
+                    "model" : "conveyor",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "ball" : true
+                    }
+                }               
+            ]
+        },
+        {
+            "time" : 3.02,
+            "events" :
+            [
+                {
+                    "model" : "conveyor",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "print" : true
+                    }
+                }               
+            ]
+        },        
+        {
+            "time" : 3.1,
+            "events" :
+            [
+                {
+                    "model" : "droidoi",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "button14" : false
+                    }
+                }
+            ]
+        },          
+        {
+            "time" : 3.25,
+            "events" :
+            [
+                {
+                    "model" : "conveyor",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "print" : true
+                    }
+                }               
+            ]
+        }     
+    ]
+}

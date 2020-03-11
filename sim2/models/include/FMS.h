@@ -29,6 +29,7 @@ namespace xero
                 Auto,           // Automode for 15 seconds
                 Between,        // Disabled for 2 seconds
                 Teleop,         // Teleop for 135 seconds
+                Closing,        // Disabled for 2 seconds
                 Done,           // Done and disabled
             } ;
 
@@ -40,6 +41,7 @@ namespace xero
             double auto_time_ ;
             double between_time_ ;
             double teleop_time_ ;
+            double closing_time_ ;
         };
     }
 }

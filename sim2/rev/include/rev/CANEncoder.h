@@ -12,7 +12,6 @@ class CANSparkMaxLowLevel;
 
         double GetPosition();
         void SetPosition(double pos) ;
-        void SimulatorSetPosition(double pos);
 
         void SetPositionConversionFactor(double mult) {
             pos_mult_ = mult;
@@ -38,7 +37,6 @@ class CANSparkMaxLowLevel;
         CANSparkMaxLowLevel *motor_;
         double pos_mult_;
         double vel_mult_;
-        double pos_;
         bool reverse_;
     };
 }

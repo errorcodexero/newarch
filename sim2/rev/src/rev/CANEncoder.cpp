@@ -1,11 +1,12 @@
 #include "CANEncoder.h"
+#include "CANSparkMaxLowLevel.h"
+#include <REVManager.h>
 
 namespace rev
 {
     CANEncoder::CANEncoder(CANSparkMaxLowLevel &motor) 
     {
         motor_ = &motor;
-        pos_ = 0.0;
         reverse_ = false;
     }
 
@@ -15,19 +16,20 @@ namespace rev
 
     double CANEncoder::GetPosition()
     {
-        return pos_;
-    }
+        double v ;
 
-    void CANEncoder::SimulatorSetPosition(double pos)
-    {
-        if (reverse_)
-            pos_ = -pos ;
-        else
-            pos_ = pos ;
+        xero::sim2::SimulatorEngine &engine = xero::sim2::SimulatorEngine::getEngine();
+        auto mgr = engine.getREVManager();
+        if (!mgr->getEncoder(motor_->GetDeviceID(), v))
+            v = 0.0 ;
+
+        return v ;
     }
 
     void CANEncoder::SetPosition(double pos)
     {
-        pos_ = pos ;
+        xero::sim2::SimulatorEngine &engine = xero::sim2::SimulatorEngine::getEngine();
+        auto mgr = engine.getREVManager();
+        mgr->setEncoder(motor_->GetDeviceID(), pos) ;
     }
 }

@@ -135,7 +135,7 @@
                 "spin:motor:type" : "sparkmax"
             },
             "behavior" : {
-                "kv" : 0.000130571
+                "ticks_per_second_per_volt" : 1000.0
             }
         }        
     ]

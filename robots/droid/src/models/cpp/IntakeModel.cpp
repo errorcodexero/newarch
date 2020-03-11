@@ -27,13 +27,21 @@ namespace xero
         bool IntakeModel::create()
         {
             intake_up_down_ = std::make_shared<SimulatedMotor>(*this, "hw:updown:motor") ;
-            intake_spin_ = std::make_shared<SimulatedMotor>(*this, "hw:spin:motor") ;   
+            intake_spin_ = std::make_shared<SimulatedMotor>(*this, "hw:spin:motor") ;
+            ticks_per_second_per_volt_ = getDouble("ticks_per_second_per_volt") ;
+            ticks_ = 0 ;
 
             return true ;
         }
 
         void IntakeModel::run(uint64_t microdt) 
         {
+            double tm = microdt / 1.0e6 ;
+            double dist = intake_up_down_->get() * ticks_per_second_per_volt_ * tm ;
+
+            ticks_ += dist ;
+            int32_t value = static_cast<int32_t>(ticks_) ;
+            intake_up_down_->setEncoder(value) ;
         }
     }
 }
