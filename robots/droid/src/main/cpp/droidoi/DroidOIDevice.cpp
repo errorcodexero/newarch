@@ -54,8 +54,7 @@ namespace xero {
         {
             initialize() ;
 
-            flag_coll_v_shoot_ = CollectShootMode::InvalidMode ;
-            flag_collect_ = false ;
+            shoot_collect_state_ = CollectShootState::InvalidMode ;
             climber_deployed_ = false ;
             started_deploy_ = false;
 
@@ -130,19 +129,14 @@ namespace xero {
             return getValue(automode_) ;    
         }
 
-        DroidOIDevice::CollectShootMode DroidOIDevice::getSwitchMode()
-        {
-            int sw = getValue(coll_v_shoot_) ;
-            return sw ? CollectShootMode::ShootMode : CollectShootMode::CollectMode ;
-        }
-
         bool DroidOIDevice::isCollectButtonPressed()
         {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
 
             // Don't collect if the conveyor is full
-            if (conveyor->isFull()) return false;
+            if (conveyor->isFull()) 
+                return false;
 
             if (getValue(collect_))
                 return true ;
@@ -155,7 +149,257 @@ namespace xero {
             return false ;
         }
 
-        void DroidOIDevice::generateCollectShootActions(xero::base::SequenceAction &seq)
+        void DroidOIDevice::startEject(SequenceAction &seq)
+        {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;  
+            auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter();
+            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;            
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+            auto turret = droid.getDroidSubsystem()->getTurret() ;
+
+            shoot_collect_state_ = CollectShootState::Ejecting ;            
+            seq.pushSubActionPair(intake,  intake_off_, false);
+            seq.pushSubActionPair(turret, turret_goto_zero_, false);
+            seq.pushSubActionPair(conveyor, eject_action_, false);
+            seq.pushSubActionPair(intake, intake_off_, false);
+            seq.pushSubActionPair(shooter, shooter_eject_action_, false);
+        }
+
+        void DroidOIDevice::stopEject(SequenceAction &seq)
+        {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;  
+            auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter();                      
+            shoot_collect_state_ = CollectShootState::InvalidMode ;
+            seq.pushSubActionPair(shooter, shooter_stop_, false) ;
+        }
+
+        void DroidOIDevice::collectMode(SequenceAction &seq)
+        {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;  
+            auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter();
+            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;            
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+            auto turret = droid.getDroidSubsystem()->getTurret() ;
+
+            shoot_collect_state_ = CollectShootState::PreparingForCollect ;
+            seq.pushSubActionPair(conveyor, queue_prep_collect_, false) ;
+            seq.pushSubActionPair(turret, turret_goto_zero_, false) ;    
+            seq.pushSubActionPair(shooter, hood_down_, false);
+            frc::SmartDashboard::PutString("Mode", "Collect") ;
+        }
+
+        void DroidOIDevice::shootMode(SequenceAction &seq)
+        {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;  
+            auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter();
+            auto intake = droid.getDroidSubsystem()->getGamePieceManipulator()->getIntake() ;            
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+            auto turret = droid.getDroidSubsystem()->getTurret() ;
+
+            shoot_collect_state_ = CollectShootState::PreparingForShoot ;
+
+            // Queue the conveyor to prepare to fire.
+            if (getValue(manual_mode_))
+            {
+                //
+                // In manual shoot mode, turn turret to zero degrees
+                //
+                seq.pushSubActionPair(turret, turret_goto_zero_, false) ;      
+                seq.pushSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4886.0, Shooter::HoodPosition::Down), false) ;                                  
+            }
+            else
+            {
+                //
+                // In auto shoot mode, have turret follow limelight
+                //
+                seq.pushSubActionPair(turret, turret_follow_, false) ;
+            }
+
+            seq.pushSubActionPair(conveyor, queue_prep_shoot_, false);
+            seq.pushSubActionPair(shooter, shooter_spinup_, false) ;
+            seq.pushSubActionPair(intake,  intake_off_, false);
+            frc::SmartDashboard::PutString("Mode", "Shoot") ;               
+        }
+
+        void DroidOIDevice::processPreparingForCollect(SequenceAction &seq)
+        {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+
+            if (conveyor->isStagedForCollect())
+                shoot_collect_state_ = CollectShootState::CollectReady ;
+            else
+            {
+                assert(conveyor->getAction() == queue_prep_collect_) ;
+                assert(queue_prep_collect_->isDone() == false) ;
+            }
+        }
+
+        void DroidOIDevice::processFinishingCollect(SequenceAction &seq)
+        {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+            auto manip = droid.getDroidSubsystem()->getGamePieceManipulator() ;
+
+            if (!conveyor->isCollecting())
+            {
+                seq.pushSubActionPair(droid.getDroidSubsystem()->getGamePieceManipulator(), stop_collect_action_, false) ;
+                shoot_collect_state_ = CollectShootState::WaitForIntake ;
+            }
+        }
+
+        void DroidOIDevice::processWaitingForIntake(SequenceAction &seq)
+        {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
+            auto manip = droid.getDroidSubsystem()->getGamePieceManipulator() ;
+
+            if (!manip->isBusy())
+                shoot_collect_state_ = CollectShootState::CollectReady ;
+        }
+
+        void DroidOIDevice::processCollectReady(SequenceAction &seq)
+        {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
+            auto game_piece_manipulator = droid.getDroidSubsystem()->getGamePieceManipulator() ;
+
+            if (getValue(coll_v_shoot_))
+            {
+                //
+                // The toggle switch has been switched to shoot mode, we switch to shoot mode
+                //
+                shootMode(seq) ;
+            }
+            else if (isCollectButtonPressed())
+            {
+                seq.pushSubActionPair(game_piece_manipulator, start_collect_action_, false) ;
+                shoot_collect_state_ = CollectShootState::Collecting ;
+            }
+        }
+
+        void DroidOIDevice::processCollecting(SequenceAction &seq)
+        {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;   
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+
+            if (!isCollectButtonPressed())
+            {
+                //
+                // The user let off the collect button
+                //
+                if (conveyor->isCollecting())
+                {
+                    //
+                    // The conveyor is still in the process of collecting, let it finish before we
+                    // stop collecting
+                    //
+                    shoot_collect_state_ = CollectShootState::FinishingCollect ;
+                }
+                else
+                {
+                    //
+                    // The collect operation is done, we probably collected five balls
+                    //
+                    shoot_collect_state_ = CollectShootState::CollectReady ;
+                    seq.pushSubActionPair(droid.getDroidSubsystem()->getGamePieceManipulator(), stop_collect_action_) ;
+                }
+            }
+        }
+
+        void DroidOIDevice::processPrepareForShoot(SequenceAction &seq)
+        {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;   
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+            auto game_piece_manipulator = droid.getDroidSubsystem()->getGamePieceManipulator() ;
+
+            if (conveyor->isStagedForFire())
+            {
+                shoot_collect_state_ = CollectShootState::ShootReady ;
+                if (!getValue(manual_mode_))
+                {
+                    //
+                    // In auto mode, assign the fire action so we shoot as soon as
+                    // conditions allow
+                    //
+                    seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false);                    
+                }
+            }
+        }
+
+        void DroidOIDevice::processShootReady(SequenceAction &seq)
+        {
+            auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
+            auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
+
+            if (!getValue(coll_v_shoot_))
+            {
+                //
+                // This is a question,  once we start firing, how do we stop it if the switch 
+                // gets flipped to collect
+                //
+                collectMode(seq) ;
+            }
+            else if (getValue(manual_mode_) && getValue(manual_shoot_))
+            {
+                seq.pushSubActionPair(conveyor, std::make_shared<ConveyorEmitAction>(*conveyor), false) ;
+            }
+        }
+
+        void DroidOIDevice::processEjecting(SequenceAction &seq)
+        {
+            //
+            // The eject buttons has been released
+            //
+            if (!getValue(eject_))
+                stopEject(seq) ;            
+        }
+
+        void DroidOIDevice::processInvalidMode(SequenceAction &seq)
+        {
+            if (getValue(coll_v_shoot_))
+                shootMode(seq) ;
+            else
+                collectMode(seq) ;
+        }
+
+        std::string DroidOIDevice::toString(DroidOIDevice::CollectShootState st)
+        {
+            std::string ret = "???" ;
+
+            switch(st)
+            {
+                case CollectShootState::PreparingForCollect:
+                    ret = "PreparingForCollect" ;
+                    break ;
+                case CollectShootState::FinishingCollect:
+                    ret = "FinishingCollect" ;                
+                    break ;
+                case CollectShootState::WaitForIntake:
+                    ret = "WaitForIntake" ;
+                    break ;
+                case CollectShootState::CollectReady:
+                    ret = "CollectReady" ;                
+                    break ;
+                case CollectShootState::Collecting:
+                    ret = "Collecting" ;                
+                    break ;
+                case CollectShootState::PreparingForShoot:
+                    ret = "PreparingForShoot" ;                
+                    break ;
+                case CollectShootState::ShootReady:
+                    ret = "ShootReady" ;                
+                    break ;
+                case CollectShootState::Ejecting:
+                    ret = "Ejecting" ;                
+                    break ;
+                case CollectShootState::InvalidMode:
+                    ret = "InvalidMode" ;                
+                    break ;
+            }
+
+            return ret ;
+        }
+
+        void DroidOIDevice::generateCollectShootActions(SequenceAction &seq)
         {
             auto &droid = dynamic_cast<Droid &>(getSubsystem().getRobot()) ;
             auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
@@ -167,165 +411,67 @@ namespace xero {
             auto droid_robot_subsystem = droid.getDroidSubsystem() ;
             auto ll = droid.getDroidSubsystem()->getLimeLight() ;
 
-            if (conveyor->getBallCount() == 5 && rumbled_ == false)
+            if (conveyor->getBallCount() == Conveyor::MAX_BALLS && rumbled_ == false)
             {
                 getSubsystem().getDriverGamepad()->rumble(true, 1.0, 1.0) ;
                 rumbled_ = true ;
             }
-            else if (conveyor->getBallCount() < 5 && rumbled_ == true)
+            else if (conveyor->getBallCount() < Conveyor::MAX_BALLS && rumbled_ == true)
             {
                 rumbled_ = false ;
             }
 
-            if (flag_eject_) {
-                if (!getValue(eject_)) {
-                    flag_eject_ = false;   
-                    waitingForConveyorPrepShoot_ = false;
-                    flag_coll_v_shoot_ = CollectShootMode::InvalidMode;
-                    shooter->setAction(nullptr);
-                }
-            } else if (getValue(eject_)) {
-                flag_eject_ = true;
-                seq.pushSubActionPair(intake,  intake_off_, false);
-                seq.pushSubActionPair(turret, turret_goto_zero_, false);
-                seq.pushSubActionPair(conveyor, eject_action_, false);
-                seq.pushSubActionPair(intake, intake_off_, false);
-                seq.pushSubActionPair(shooter, shooter_eject_action_, false);
-            }
+            CollectShootState prev = shoot_collect_state_ ;            
 
-            if (flag_eject_) 
-                return;
-
-            if (flag_coll_v_shoot_ == CollectShootMode::InvalidMode || getSwitchMode() != flag_coll_v_shoot_) {
+            if (getValue(eject_))
+            {
                 //
-                // The mode is wrong, make it right first before processing any specific actions
+                // Eject is valid in all modes and takes precedence over anything else.  In addition
+                // to ejecting balls, it reset the conveyor in case the state is off.
                 //
-                if (getSwitchMode() == CollectShootMode::CollectMode) {
-                    // Setup the game piece manipulator to collect
-                    if (game_piece_manipulator->isDone()  || waitingForConveyorPrepShoot_ ||
-                            game_piece_manipulator->getAction() == start_collect_action_ || 
-                            game_piece_manipulator->getAction() == stop_collect_action_ ||
-                            game_piece_manipulator->getAction() == fire_yes_ ||
-                            game_piece_manipulator->getAction() == stop_shoot_action_) 
-                    {
-                        seq.pushSubActionPair(conveyor, queue_prep_collect_, false) ;
-                        seq.pushSubActionPair(turret, turret_goto_zero_, false) ;    
-                        seq.pushSubActionPair(shooter, hood_down_, false);
-                        flag_collect_ = false;
-                        flag_coll_v_shoot_ = CollectShootMode::CollectMode ;                                   
-                        frc::SmartDashboard::PutString("Mode", "Collect") ;
-
-                        ll->setLedMode(LimeLight::ledMode::ForceOff) ;
-                    }
-                }
-                else {
-                    //
-                    // If the receiver is still collecting, don't switch modes yet as we need the
-                    // previous collect operation to finish
-                    //
-                    if (!conveyor->isCollecting())
-                    {
-                        // Queue the conveyor to prepare to fire.
-                        if (getValue(manual_mode_))
-                        {
-                            //
-                            // In manual shoot mode, turn turret to zero degrees
-                            //
-                            seq.pushSubActionPair(turret, turret_goto_zero_, false) ;                        
-                        }
-                        else
-                        {
-                            //
-                            // In auto shoot mode, have turret follow limelight
-                            //
-                            seq.pushSubActionPair(turret, turret_follow_, false) ;
-                        }
-
-                        seq.pushSubActionPair(conveyor, queue_prep_shoot_, false);
-                        seq.pushSubActionPair(shooter, shooter_spinup_, false) ;
-                        seq.pushSubActionPair(intake,  intake_off_, false);
-                        flag_coll_v_shoot_ = CollectShootMode::ShootMode ;      
-                        waitingForConveyorPrepShoot_ = true;
-                        frc::SmartDashboard::PutString("Mode", "Shoot") ;   
-                    }
-                }
+                startEject(seq) ;
             }
             else
             {
-                //
-                // If the mode is not setup, but we want a different mode, we should never
-                // actually shoot or collect, so this is in an else clause
-                //
 
-                //
-                // Check to see that the game piece manipulator can actually accept new actions
-                //           
-                if (game_piece_manipulator->isDone() || waitingForConveyorPrepShoot_ ||
-                            game_piece_manipulator->getAction() == start_collect_action_ || 
-                            game_piece_manipulator->getAction() == stop_collect_action_ ||
-                            game_piece_manipulator->getAction() == fire_yes_ ||
-                            game_piece_manipulator->getAction() == stop_shoot_action_)                                                        
+                switch(shoot_collect_state_)
                 {
-                    //
-                    // Check to see if we are in collect or shoot mode
-                    // 
-                    if (flag_coll_v_shoot_ == CollectShootMode::CollectMode)
-                    {
-                        //
-                        // We are in collect mode, check the collect button
-                        //
-                        if (isCollectButtonPressed() && flag_collect_ == false && conveyor->isStagedForCollect())
-                        {
-                            //
-                            // Button is down, but we are not collecting, assign start collect action
-                            //
-                            seq.pushSubActionPair(game_piece_manipulator, start_collect_action_, false) ;
-                            flag_collect_ = true ;
-                        }
-                        else if (!isCollectButtonPressed() && flag_collect_ == true) 
-                        {
-                            //
-                            // Button is up and we are collecting, assign stop collect action
-                            //
-
-                            // If the conveyor is still collecting, wait for it to finish (with a timeout)
-                            if (waitingForConveyorFinishCollect_) {
-                                if (!conveyor->isCollecting() || droid.getTime() > conveyorTimeout_) {
-                                    waitingForConveyorFinishCollect_ = false;
-                                    flag_collect_ = false ;
-                                    seq.pushSubActionPair(game_piece_manipulator, stop_collect_action_, false) ;
-                                }
-                            } else {
-                                if (conveyor->isCollecting()) {
-                                    waitingForConveyorFinishCollect_ = true;
-                                    conveyorTimeout_ = droid.getTime() + 1;
-                                } else {
-                                    flag_collect_ = false ;
-                                    seq.pushSubActionPair(game_piece_manipulator, stop_collect_action_, false) ;
-                                }
-                            }
-                        }
-                    } 
-                    else if (waitingForConveyorPrepShoot_ && queue_prep_shoot_->isDone() && intake_off_->isDone()) 
-                    {
-                        if (getValue(manual_mode_))
-                        {
-                            //
-                            // In manual mode, we do nothing here, but rather wait for the
-                            // actual manual fire button before we shoot
-                            //
-                        }
-                        else
-                        {
-                            //
-                            // In auto mode, assign the fire action so we shoot as soon as
-                            // conditions allow
-                            //
-                            seq.pushSubActionPair(game_piece_manipulator, fire_yes_, false);
-                        }
-                        waitingForConveyorPrepShoot_ = false;
-                    }
+                    case CollectShootState::PreparingForCollect:
+                        processPreparingForCollect(seq) ;
+                        break ;                
+                    case CollectShootState::FinishingCollect:
+                        processFinishingCollect(seq) ;
+                        break ;
+                    case CollectShootState::WaitForIntake:                    
+                        processWaitingForIntake(seq) ;
+                        break ;
+                    case CollectShootState::CollectReady:
+                        processCollectReady(seq) ;
+                        break ;                
+                    case CollectShootState::Collecting:
+                        processCollecting(seq) ;
+                        break ;                
+                    case CollectShootState::PreparingForShoot:
+                        processPrepareForShoot(seq) ;
+                        break ;                
+                    case CollectShootState::ShootReady:
+                        processShootReady(seq) ;
+                        break ;                
+                    case CollectShootState::Ejecting:  
+                        processEjecting(seq) ;
+                        break ;
+                    case CollectShootState::InvalidMode:
+                        processInvalidMode(seq) ;
+                        break ;
                 }
+            }
+
+            if (prev != shoot_collect_state_)
+            {
+                auto &logger = getSubsystem().getRobot().getMessageLogger() ;
+                logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_DROID_OI) ;
+                logger << "OI shoot/collect: " << toString(prev) << " --> " << toString(shoot_collect_state_) ;
+                logger.endMessage() ;
             }
         }
 
@@ -473,9 +619,8 @@ namespace xero {
                 auto shooter = droid.getDroidSubsystem()->getGamePieceManipulator()->getShooter();
                 auto conveyor = droid.getDroidSubsystem()->getGamePieceManipulator()->getConveyor() ;
 
-                seq.pushSubActionPair(turret, std::make_shared<MotorEncoderGoToAction>(*turret, 0.0), false);
-                seq.pushSubActionPair(shooter, std::make_shared<ShooterVelocityAction>(*shooter, 4886.0, Shooter::HoodPosition::Down), false) ;
-                seq.pushSubActionPair(conveyor, std::make_shared<ConveyorEmitAction>(*conveyor), false) ;
+
+
             }
         }
 
@@ -500,7 +645,6 @@ namespace xero {
             queue_prep_shoot_ = std::make_shared<ConveyorPrepareToEmitAction>(*conveyor) ;
             shooter_spinup_ = std::make_shared<ShooterVelocityAction>(*shooter, 4500, Shooter::HoodPosition::Down) ;
             fire_yes_ = std::make_shared<FireAction>(*game_piece_manipulator);
-            waitingForConveyorPrepShoot_ = false;
 
             conveyor_receive_ = std::make_shared<ConveyorReceiveAction>(*conveyor) ;
             intake_on_ = std::make_shared<CollectOnAction>(*intake) ;
@@ -514,12 +658,10 @@ namespace xero {
 
             turret_goto_zero_ = std::make_shared<MotorEncoderGoToAction>(*turret, 0.0) ;
 
-            flag_coll_v_shoot_ = CollectShootMode::InvalidMode;
-            flag_eject_ = false;
-
             hood_down_ = std::make_shared<SetHoodAction>(*shooter, Shooter::HoodPosition::Down);
             eject_action_ = std::make_shared<ConveyorEjectAction>(*conveyor);
             shooter_eject_action_ = std::make_shared<ShooterVelocityAction>(*shooter, -3000, Shooter::HoodPosition::Down);
+            shooter_stop_ = std::make_shared<ShooterVelocityAction>(*shooter, 0, Shooter::HoodPosition::Down);
 
             deploy_climber_ = std::make_shared<MotorEncoderGoToAction>(*climber->getLifter(), "climber:climb_height") ;
             stop_ = std::make_shared<ClimberUpDownAction>(*climber, 0.0, 0.0) ;

@@ -28,10 +28,11 @@ namespace xero
             {
                 double position_ ;
                 bool present_ ;
+                bool drop_ ;
             } ;
 
         private:
-            void insertBallFromIntake() ;
+            void insertBallFromIntake(bool drop) ;
             void deleteBallFromIntake() ;
             void deleteBallFromShooter() ;
             int countBalls() ;
@@ -41,12 +42,20 @@ namespace xero
             std::shared_ptr<xero::sim2::SimulatedMotor> belt_ ;
             std::shared_ptr<xero::sim2::SimulatedMotor> turret_ ;            
             int number_of_balls_ ;
-            int sensor1_ ;
-            int sensor2_ ;
-            int sensor3_ ;
+            int sensorA_ ;
+            int sensorB_ ;
+            int sensorC_ ;
+            int sensorD_ ;
             double dist_per_second_per_volt_ ;
 
+            double sensorAPos_ ;
+            double sensorBPos_ ;
+            double sensorCPos_ ;
+            double sensorDPos_ ;
+
             BallStatus balls_[MaxBalls] ;
+
+            bool printall_ ;
         };
     }
 }

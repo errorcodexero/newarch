@@ -34,7 +34,7 @@ namespace xero {
 
             auto collect_off_action = std::make_shared<CollectOffAction>(*intake) ;            
             intake->setAction(collect_off_action, true) ;
-            conveyor->setAction(conveyor_stop_action_, true) ; 
+            conveyor->setAction(conveyor_stop_action_, true) ;
         }
 
         void StopCollectAction::run() 

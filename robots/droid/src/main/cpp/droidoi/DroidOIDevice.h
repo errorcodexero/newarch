@@ -21,20 +21,44 @@ namespace xero {
             virtual void generateActions(xero::base::SequenceAction &seq) ;
 
         private:
-            enum class CollectShootMode
+            enum class CollectShootState
             {
-                CollectMode,
-                ShootMode,
+                PreparingForCollect,
+                FinishingCollect,
+                WaitForIntake,
+                CollectReady,
+                Collecting,
+                PreparingForShoot,
+                ShootReady,
+                Ejecting,  
                 InvalidMode
             } ;
 
             void initialize() ;
-            CollectShootMode getSwitchMode() ;
             bool isCollectButtonPressed() ;
 
             void generateCollectShootActions(xero::base::SequenceAction &seq) ;
             void generateClimbActions(xero::base::SequenceAction &seq) ;
             void generatePanelSpinnerActions(xero::base::SequenceAction &seq) ;
+
+
+            void shootMode(xero::base::SequenceAction &seq) ;
+            void collectMode(xero::base::SequenceAction &seq) ;
+            void startEject(xero::base::SequenceAction &seq) ;
+            void stopEject(xero::base::SequenceAction &seq) ;
+
+            void processPreparingForCollect(xero::base::SequenceAction &seq) ;
+            void processFinishingCollect(xero::base::SequenceAction &seq) ;
+            void processWaitingForIntake(xero::base::SequenceAction &seq) ;
+            void processCollectReady(xero::base::SequenceAction &seq) ;            
+            void processCollecting(xero::base::SequenceAction &seq) ;
+            void processPrepareForShoot(xero::base::SequenceAction &seq) ;
+            void processShootReady(xero::base::SequenceAction &seq) ;
+            void processShooting(xero::base::SequenceAction &seq) ;
+            void processEjecting(xero::base::SequenceAction &seq) ;
+            void processInvalidMode(xero::base::SequenceAction &seq) ;
+
+            std::string toString(CollectShootState v) ;
 
         private:
             enum SpinnerState
@@ -48,14 +72,7 @@ namespace xero {
             } ;
 
         private:
-            CollectShootMode flag_coll_v_shoot_ ;
-            bool flag_collect_ ;
-            bool flag_eject_;
-
-            bool waitingForConveyorFinishCollect_;
-            double conveyorTimeout_;
-
-            bool waitingForConveyorPrepShoot_;
+            CollectShootState shoot_collect_state_ ;
 
             bool started_deploy_;
             bool climber_deployed_ ;
@@ -102,6 +119,7 @@ namespace xero {
             xero::base::ActionPtr eject_action_;
             xero::base::ActionPtr shooter_eject_action_;
             xero::base::ActionPtr shooter_spinup_;
+            xero::base::ActionPtr shooter_stop_ ;
     
             xero::base::ActionPtr control_panel_up_;
             xero::base::ActionPtr control_panel_down_;

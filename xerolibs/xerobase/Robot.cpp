@@ -272,10 +272,9 @@ namespace xero {
 
             for(size_t i = 0 ; i < macaddr_.size() ; i++)
             {
-                strm << std::setfill('0') << std::setw(2) << std::hex ;                
                 if (i != 0)
                     strm << ":" ;
-                strm << (int)macaddr_[i] ;
+                strm << std::setfill('0') << std::setw(2) << std::hex << (int)macaddr_[i] ;
             }
             message_logger_ << strm.str() ;
             message_logger_.endMessage() ;            

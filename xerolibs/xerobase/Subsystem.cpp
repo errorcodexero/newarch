@@ -63,7 +63,10 @@ namespace xero {
 
         void Subsystem::cancelAction() {
             if (action_ != nullptr)
-                setAction(nullptr) ;
+            {
+                action_->cancel() ;
+                action_ = nullptr ;
+            }
         }
 
         bool Subsystem::_canAcceptAction(ActionPtr action, bool isDefault) {
@@ -126,7 +129,8 @@ namespace xero {
             }
 
             // Don't replace a null action with another null
-            if (action_ == nullptr && action == nullptr) return SetActionResult::Accepted;
+            if (action_ == nullptr && action == nullptr) 
+                return SetActionResult::Accepted;
 
             if (action != nullptr && !_canAcceptAction(action, isRunningDefaultAction_)) {
                 MessageLogger &logger = getRobot().getMessageLogger() ;
@@ -156,6 +160,7 @@ namespace xero {
                 logger << "Actions: subsystem '" << getName() << "' was assigned NULL action" ;
             else
                 logger << "Actions: subsystem '" << getName() << "' was assigned action '" << action->toString() << "'" ;    
+
             if (isRunningDefaultAction_) 
             {
                 logger << " (default)";
@@ -164,14 +169,12 @@ namespace xero {
 
             // Cancel any currently-running actions
             SetActionResult result;
-            bool isDefault = isRunningDefaultAction_ ;
-            if (action_ != nullptr && cancelActionsAndChildActions(action)) 
+            if (action_ != nullptr && cancelActionsAndChildActions(action))
                 result = SetActionResult::PreviousCanceled;
-            else 
+            else
                 result = SetActionResult::Accepted;
-                
-            isRunningDefaultAction_ = isDefault ;
 
+            //
             // And now start the Action
             //
             action_ = action ;
@@ -209,7 +212,12 @@ namespace xero {
                     logger.endMessage() ;
                 }
             }
-            for (auto child : children_) canceled = child->cancelActionsAndChildActions(nullptr) || canceled;
+
+            for (auto child : children_) 
+            {
+                canceled = child->cancelActionsAndChildActions(nullptr) || canceled;
+            }
+            
             return canceled;
         }
 
