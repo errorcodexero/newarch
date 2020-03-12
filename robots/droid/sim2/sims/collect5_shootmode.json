@@ -13,7 +13,7 @@
                         "start" : 1.0,
                         "autonomous" : 0.0,
                         "between" : 0.0,
-                        "teleop" : 10.0
+                        "teleop" : 14.0
                     }
                 },
                 {
@@ -21,6 +21,7 @@
                     "instance" : "1",
                     "values" :
                     {
+                        "comment" : "%%%% Collect/shoot mode switch set to collect",                             
                         "button11" : 0
                     }
                 }
@@ -41,6 +42,24 @@
                     }
                 }
             ]
+        },
+        {
+            "time" : 2.0,
+            "asserts" :
+            [
+                {
+                    "subsystem" : "conveyor",
+                    "property" : "stagedToCollect",
+                    "type" : "boolean",
+                    "value" : true
+                },
+                {
+                    "subsystem" : "conveyor",
+                    "property" : "stagedToFire",
+                    "type" : "boolean",
+                    "value" : false
+                }                
+            ]
         },        
         {
             "time" : 2.5,
@@ -51,6 +70,7 @@
                     "instance" : "1",
                     "values" : 
                     {
+                        "comment" : "%%%% Press the collect button",                               
                         "button14" : true
                     }
                 }
@@ -71,33 +91,17 @@
             ]
         },
         {
-            "time" : 3.25,
-            "events" :
+            "time" : 3.95,
+            "asserts" :
             [
                 {
-                    "model" : "conveyor",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "print" : true
-                    }
+                    "subsystem" : "conveyor",
+                    "property" : "ballcount",
+                    "type" : "integer",
+                    "value" : 1
                 }               
             ]
-        },        
-        {
-            "time" : 3.75,
-            "events" :
-            [
-                {
-                    "model" : "conveyor",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "print" : true
-                    }
-                }               
-            ]
-        },        
+        },
         {
             "time" : 4.0,
             "events" :
@@ -113,33 +117,17 @@
             ]
         },
         {
-            "time" : 4.25,
-            "events" :
+            "time" : 4.95,
+            "asserts" :
             [
                 {
-                    "model" : "conveyor",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "print" : true
-                    }
+                    "subsystem" : "conveyor",
+                    "property" : "ballcount",
+                    "type" : "integer",
+                    "value" : 2
                 }               
             ]
-        },         
-        {
-            "time" : 4.75,
-            "events" :
-            [
-                {
-                    "model" : "conveyor",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "print" : true
-                    }
-                }               
-            ]
-        }, 
+        },        
         {
             "time" : 5.0,
             "events" :
@@ -155,33 +143,17 @@
             ]
         },
         {
-            "time" : 5.25,
-            "events" :
+            "time" : 5.95,
+            "asserts" :
             [
                 {
-                    "model" : "conveyor",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "print" : true
-                    }
+                    "subsystem" : "conveyor",
+                    "property" : "ballcount",
+                    "type" : "integer",
+                    "value" : 3
                 }               
             ]
-        },         
-        {
-            "time" : 5.75,
-            "events" :
-            [
-                {
-                    "model" : "conveyor",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "print" : true
-                    }
-                }               
-            ]
-        },     
+        },           
         {
             "time" : 6.0,
             "events" :
@@ -197,33 +169,17 @@
             ]
         },
         {
-            "time" : 6.25,
-            "events" :
+            "time" : 6.95,
+            "asserts" :
             [
                 {
-                    "model" : "conveyor",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "print" : true
-                    }
+                    "subsystem" : "conveyor",
+                    "property" : "ballcount",
+                    "type" : "integer",
+                    "value" : 4
                 }               
             ]
         },          
-        {
-            "time" : 6.75,
-            "events" :
-            [
-                {
-                    "model" : "conveyor",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "print" : true
-                    }
-                }               
-            ]
-        },     
         {
             "time" : 7.0,
             "events" :
@@ -237,36 +193,19 @@
                     }
                 }  
             ]     
-        },        
-   
-        {
-            "time" : 7.25,
-            "events" :
-            [
-                {
-                    "model" : "conveyor",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "print" : true
-                    }
-                }               
-            ]
-        },        
-        {
-            "time" : 7.75,
-            "events" :
-            [
-                {
-                    "model" : "conveyor",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "print" : true
-                    }
-                }               
-            ]
         },
+        {
+            "time" : 7.95,
+            "asserts" :
+            [
+                {
+                    "subsystem" : "conveyor",
+                    "property" : "ballcount",
+                    "type" : "integer",
+                    "value" : 5
+                }               
+            ]
+        },         
         {
             "time" : 8.0,
             "events" :
@@ -294,6 +233,24 @@
                     }
                 }
             ]
-        }
+        },
+        {
+            "time" : 9.0,
+            "asserts" :
+            [
+                {
+                    "subsystem" : "conveyor",
+                    "property" : "stagedToCollect",
+                    "type" : "boolean",
+                    "value" : true
+                },
+                {
+                    "subsystem" : "conveyor",
+                    "property" : "stagedToFire",
+                    "type" : "boolean",
+                    "value" : true
+                }                
+            ]
+        }        
     ]
 }
