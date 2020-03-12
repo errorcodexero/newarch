@@ -42,6 +42,26 @@ namespace xero {
                 return name_ ;
             }
 
+            /// \brief return the value of a property
+            virtual bool getDoubleProperty(const std::string &name, double &value) {
+                return false ;
+            }
+
+            /// \brief return the value of a property
+            virtual bool getIntegerProperty(const std::string &name, int &value) {
+                return false ;
+            }     
+
+            /// \brief return the value of a property
+            virtual bool getBooleanProperty(const std::string &name, bool &value) {
+                return false ;
+            }       
+
+            /// \brief return the value of a property
+            virtual bool getStringProperty(const std::string &name, std::string &value) {
+                return false ;
+            }                           
+
             /// \brief add a subsystem as a child of the current subsystem
             /// \param child the subsystem to add as a child to the current subsystem
             void addChild(std::shared_ptr<Subsystem> child) {
@@ -185,6 +205,9 @@ namespace xero {
 
             /// \return true if the subsystem or one if its children is currently executing an action
             bool isBusyOrChildBusy();
+
+            /// \return the list of child subsytems
+            std::list<std::shared_ptr<Subsystem>> getChildren() { return children_ ;}
 
         protected:
             /// \brief check that a Action is valid for a subsystem

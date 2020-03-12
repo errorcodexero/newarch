@@ -20,6 +20,8 @@ NEED_WPIUTIL=true
 NEED_NTCORE=true
 NEED_WPILIB=true
 NEED_HAL=true
+NEED_XEROBASE=true
+NEED_XEROMISC=true
 
 LOCAL_CFLAGS += -Iinclude -Iinclude/ctre
 

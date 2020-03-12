@@ -66,8 +66,9 @@ namespace xero {
             SensorPtr getSensor(Sensor sensor) { return sensors_[static_cast<int>(sensor)].first; }
             bool readSensor(Sensor sensor) { return sensors_[static_cast<int>(sensor)].second; }
 
+            bool getIntegerProperty(const std::string &name, int &value) override ;
 
-
+            bool getBooleanProperty(const std::string &name, bool &value) override ;
 
         protected:
             /// Runs the motors in the specified direction, or stops them if direction is Stopped.

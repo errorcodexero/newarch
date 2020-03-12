@@ -68,6 +68,38 @@ namespace xero {
                 });
             }
         }
+
+        bool Conveyor::getIntegerProperty(const std::string &name, int &value)
+        {
+            bool ret = false ;
+
+            if (name == "ballcount")
+            {
+                ret = true ;
+                value = ballCount_ ;
+            }
+
+            return ret ;
+        }
+
+        bool Conveyor::getBooleanProperty(const std::string &name, bool &value)
+        {
+            bool ret = false ;
+
+            if (name == "stagedToCollect")
+            {
+                ret = true ;
+                value = stagedForCollect_ ;
+            }
+            else if (name == "stagedToFire")
+            {
+                ret = true ;
+                value = stagedForFire_ ;                
+            }
+
+            return ret ;
+        }        
+
         void Conveyor::setStagedForCollect(bool staged) { 
             auto &logger = getRobot().getMessageLogger();
             logger.startMessage(MessageLogger::MessageType::debug, MSG_GROUP_CONVEYOR);

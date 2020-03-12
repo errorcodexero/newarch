@@ -71,6 +71,9 @@ namespace xero {
             /// \brief destroy the robot object
             virtual ~Robot() ;
 
+            /// \brief return the single isntance of the robot
+            static Robot *getTheRobot() ;
+
             /// \brief called to initialize the robot.
             /// This method will be overridden by the derived class that is a
             /// concrete robot class.  This method will assert if called.
@@ -183,7 +186,15 @@ namespace xero {
                 switch_to_teleop_ = true ;
             }
 
+            SubsystemPtr getSubsystemByName(const std::string &name) {
+                return getSubsystemByName(getRobotSubsystem(), name) ;
+            }
+
         protected:
+
+            /// \brief return the subsystem with the name given.
+            /// \return the subsystem with the given name, or nullptr if none with that name exists
+            SubsystemPtr getSubsystemByName(SubsystemPtr sub, const std::string &name) ; 
 
             virtual bool isCompBot() = 0 ;
 
@@ -263,6 +274,7 @@ namespace xero {
             /// \brief return the auto mode selection
             virtual int getAutoModeSelection() ;
 
+
         private:
             void logAutoModeState() ;
             void displayAutoModeState() ;
@@ -271,6 +283,8 @@ namespace xero {
             void getMACAddress() ;
 
         private:
+            static Robot *theOne ;
+
             // The time per robot loop in seconds
             double target_loop_time_;
 

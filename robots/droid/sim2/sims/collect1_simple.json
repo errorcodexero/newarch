@@ -13,15 +13,16 @@
                         "start" : 1.0,
                         "autonomous" : 0.0,
                         "between" : 0.0,
-                        "teleop" : 30.0
+                        "teleop" : 6.0
                     }
                 },
                 {
-                    "model" : "driodoi",
+                    "model" : "droidoi",
                     "instance" : "1",
                     "values" :
                     {
-                        "button11" : 0
+                        "comment" : "%%%% Collect/shoot mode switch set to collect",                        
+                        "button11" : 1
                     }
                 }
             ]
@@ -51,6 +52,7 @@
                     "instance" : "1",
                     "values" : 
                     {
+                        "comment" : "%%%% Collect button pressed",
                         "button14" : true
                     }
                 }
@@ -65,25 +67,12 @@
                     "instance" : "1",
                     "values" : 
                     {
+                        "comment" : "%%%% Ball present at entrance to conveyor",                        
                         "ball" : true
                     }
                 }               
             ]
         },
-        {
-            "time" : 3.02,
-            "events" :
-            [
-                {
-                    "model" : "conveyor",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "print" : true
-                    }
-                }               
-            ]
-        },        
         {
             "time" : 3.1,
             "events" :
@@ -93,24 +82,29 @@
                     "instance" : "1",
                     "values" : 
                     {
+                        "comment" : "%%%% Collect button released",
                         "button14" : false
                     }
                 }
             ]
-        },          
+        },
         {
-            "time" : 3.25,
-            "events" :
+            "time" : 4.0,
+            "asserts" :
             [
                 {
-                    "model" : "conveyor",
-                    "instance" : "1",
-                    "values" : 
-                    {
-                        "print" : true
-                    }
-                }               
+                    "subsystem" : "conveyor",
+                    "property" : "ballcount",
+                    "type" : "integer",
+                    "value" : 1
+                },
+                {
+                    "subsystem" : "conveyor",
+                    "property" : "readyToCollect",
+                    "type" : "boolean",
+                    "value" : true
+                }            
             ]
-        }     
+        }           
     ]
 }

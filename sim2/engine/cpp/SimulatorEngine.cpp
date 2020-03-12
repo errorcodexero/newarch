@@ -2,10 +2,13 @@
 #include <SimulationEvent.h>
 #include <SimulationModel.h>
 #include <SimulationModelEvent.h>
+#include <SimulationAssert.h>
 #include <ModelFactory.h>
 #include <SimulatorStreamMessageSink.h>
 #include <CTREManager.h>
 #include <REVManager.h>
+#include <Robot.h>
+#include <Subsystem.h>
 #include <json.h>
 #include <hal/HALBase.h>
 #include <hal/Ports.h>
@@ -183,7 +186,7 @@ namespace xero
                 return ErrorCode::PropertyFileError;
 
             // Read the event file
-            if (!events_->loadEvents(simfile_))
+            if (!events_->loadTimeline(simfile_))
                 return ErrorCode::EventFileError;
 
             // Register to proces interesting hal events
@@ -255,9 +258,19 @@ namespace xero
                             msg_ << "model '" << simev->modelName() << "' instance '" << simev->instance() ;
                             msg_ << "' processing event [" << simev->toString() << "]" ;
                             msg_ << " at time " << now ;
-                            msg_.endMessage(sim_time_);     
+                            msg_.endMessage(sim_time_);  
 
-                            inst->processEvent(simev->name(), simev->value()) ;
+                            if (simev->name() == "comment")
+                            {
+                                msg_.startMessage(SimulatorMessages::MessageType::Debug, 0);
+                                if (simev->value().isString())
+                                    msg_ << simev->value().getString() ;
+                                msg_.endMessage(sim_time_);    
+                            }
+                            else
+                            {
+                                inst->processEvent(simev->name(), simev->value()) ;
+                            }
                         }
                         else
                         {
@@ -266,6 +279,134 @@ namespace xero
                             msg_ << "' event [" << simev->toString() << "]" ;
                             msg_ << " at time " << now << " with invalid target" ;
                             msg_.endMessage(sim_time_);                            
+                        }
+                    }
+
+                    auto simassert = std::dynamic_pointer_cast<SimulationAssert>(ev) ;
+                    if (simassert != nullptr)
+                    {
+                        xero::base::Robot *theRobot = xero::base::Robot::getTheRobot() ;
+                        std::shared_ptr<xero::base::Subsystem> sub = theRobot->getSubsystemByName(simassert->getSubsystemName()) ;
+                        if (sub != nullptr)
+                        {
+                            if (simassert->getType() == SimulationAssert::PropType::Double)
+                            {
+                                double pval ;
+
+                                if (sub->getDoubleProperty(simassert->getPropertyName(), pval))
+                                {
+                                    if (std::fabs(pval - simassert->getDoubleValue()) > simassert->getDelta())
+                                    {
+                                        msg_.startMessage(SimulatorMessages::MessageType::Error);
+                                        msg_ << "assert: subsystem '" << simassert->getSubsystemName() << "'" ;
+                                        msg_ << " property '" << simassert->getPropertyName() << "'" ;
+                                        msg_ << " at time " << now << " assert failed" ;
+                                        msg_ << ", expected " << simassert->getDoubleValue() ;
+                                        msg_ << ", got " << pval ;
+                                        msg_ << ", delta " << std::fabs(pval - simassert->getDoubleValue()) ;
+                                        msg_ << ", allowed delta " << simassert->getDelta() ;
+                                        msg_.endMessage(sim_time_);  
+                                        exit(1) ;
+                                    }
+                                }
+                                else
+                                {
+                                    msg_.startMessage(SimulatorMessages::MessageType::Warning);
+                                    msg_ << "assert: subsystem '" << simassert->getSubsystemName() << "'" ;
+                                    msg_ << " property '" << simassert->getPropertyName() << "'" ;
+                                    msg_ << " at time " << now << " has invalid property name" ;
+                                    msg_.endMessage(sim_time_);   
+                                }
+                            }
+                            else if (simassert->getType() == SimulationAssert::PropType::Integer)
+                            {
+                                int ival ;
+
+                                if (sub->getIntegerProperty(simassert->getPropertyName(), ival))
+                                {
+                                    if (ival != simassert->getIntegerValue())
+                                    {
+                                        msg_.startMessage(SimulatorMessages::MessageType::Error);
+                                        msg_ << "assert: subsystem '" << simassert->getSubsystemName() << "'" ;
+                                        msg_ << " property '" << simassert->getPropertyName() << "'" ;
+                                        msg_ << " at time " << now << " assert failed" ;
+                                        msg_ << ", expected " << simassert->getIntegerValue() ;
+                                        msg_ << ", got " << ival ;
+                                        msg_.endMessage(sim_time_);                                             
+                                        exit(1) ;
+                                    }
+                                }
+                                else
+                                {
+                                    msg_.startMessage(SimulatorMessages::MessageType::Warning);
+                                    msg_ << "assert: subsystem '" << simassert->getSubsystemName() << "'" ;
+                                    msg_ << " property '" << simassert->getPropertyName() << "'" ;
+                                    msg_ << " at time " << now << " has invalid property name" ;
+                                    msg_.endMessage(sim_time_);   
+                                }
+                            }
+                            else if (simassert->getType() == SimulationAssert::PropType::Boolean)
+                            {
+                                bool bval ;
+
+                                if (sub->getBooleanProperty(simassert->getPropertyName(), bval))
+                                {
+                                    if (bval != simassert->getBoolValue())
+                                    {
+                                        msg_.startMessage(SimulatorMessages::MessageType::Error);
+                                        msg_ << "assert: subsystem '" << simassert->getSubsystemName() << "'" ;
+                                        msg_ << " property '" << simassert->getPropertyName() << "'" ;
+                                        msg_ << " at time " << now << " assert failed" ;
+                                        msg_ << ", expected " << (simassert->getIntegerValue() ? "true" : "false") ;
+                                        msg_ << ", got " << (bval ? "true" : "false") ;
+                                        msg_.endMessage(sim_time_);                                             
+                                        exit(1) ;
+                                    }
+                                }
+                                else
+                                {
+                                    msg_.startMessage(SimulatorMessages::MessageType::Warning);
+                                    msg_ << "assert: subsystem '" << simassert->getSubsystemName() << "'" ;
+                                    msg_ << " property '" << simassert->getPropertyName() << "'" ;
+                                    msg_ << " at time " << now << " has invalid property name" ;
+                                    msg_.endMessage(sim_time_);   
+                                }
+                            }
+                            else if (simassert->getType() == SimulationAssert::PropType::String)
+                            {
+                                std::string sval ;
+
+                                if (sub->getStringProperty(simassert->getPropertyName(), sval))
+                                {
+                                    if (sval != simassert->getStringValue())
+                                    {
+                                        msg_.startMessage(SimulatorMessages::MessageType::Error);
+                                        msg_ << "assert: subsystem '" << simassert->getSubsystemName() << "'" ;
+                                        msg_ << " property '" << simassert->getPropertyName() << "'" ;
+                                        msg_ << " at time " << now << " assert failed" ;
+                                        msg_ << ", expected " << simassert->getStringValue() ;
+                                        msg_ << ", got " << sval ;
+                                        msg_.endMessage(sim_time_);                                           
+                                        exit(1) ;
+                                    }
+                                }
+                                else
+                                {
+                                    msg_.startMessage(SimulatorMessages::MessageType::Warning);
+                                    msg_ << "assert: subsystem '" << simassert->getSubsystemName() << "'" ;
+                                    msg_ << " property '" << simassert->getPropertyName() << "'" ;
+                                    msg_ << " at time " << now << " has invalid property name" ;
+                                    msg_.endMessage(sim_time_);   
+                                }
+                            }                            
+                        }
+                        else
+                        {
+                            msg_.startMessage(SimulatorMessages::MessageType::Warning);
+                            msg_ << "assert: subsystem '" << simassert->getSubsystemName() << "'" ;
+                            msg_ << " property '" << simassert->getPropertyName() << "'" ;
+                            msg_ << " at time " << now << " has invalid subsystem name" ;
+                            msg_.endMessage(sim_time_);                              
                         }
                     }
                 }

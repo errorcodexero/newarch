@@ -42,7 +42,7 @@ SUBSYSTEMS = \
 	src/main/cpp/climber/Climber.cpp\
 	src/main/cpp/climber/ClimberUpDownAction.cpp\
     src/main/cpp/limelight/DroidLimeLight.cpp\
-    src/main/cpp/targettracker/TargetTracker.cpp
+    src/main/cpp/targettracker/TargetTracker.cpp\
 	src/main/cpp/blinky/BlinkySubsystem.cpp\
 	src/main/cpp/blinky/BlinkyAction.cpp
 

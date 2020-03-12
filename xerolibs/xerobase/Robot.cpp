@@ -29,12 +29,19 @@ using namespace xero::misc ;
 namespace xero {
     namespace base {
 
-        static Robot *theOne = nullptr ;
+        Robot *Robot::theOne = nullptr ;
+
+        Robot *Robot::getTheRobot() {
+            assert(theOne != nullptr) ;
+            return theOne ;
+        }
+
         static double getTimeFunc() {
-            if (theOne == nullptr)
+            Robot *robot = Robot::getTheRobot() ;
+            if (robot == nullptr)
                 return 0.0 ;
 
-            return theOne->getTime() ;
+            return robot->getTime() ;
         }
         
         Robot::Robot(const std::string &name, double looptime) : TimedRobot(static_cast<units::second_t>(looptime)) {
@@ -69,11 +76,28 @@ namespace xero {
         }
 
         Robot::~Robot() {
+            assert(theOne == this) ;
             theOne = nullptr ;
+            
             delete parser_ ;
             message_logger_.clear() ;
             if (output_stream_ != nullptr)
                 delete output_stream_ ;
+        }
+
+        SubsystemPtr Robot::getSubsystemByName(SubsystemPtr sub, const std::string &name)
+        {
+            if (sub->getName() == name)
+                return sub ;
+
+            for(auto child : sub->getChildren())
+            {
+                auto ret = getSubsystemByName(child, name) ;
+                if (ret != nullptr)
+                    return ret ;
+            }
+
+            return nullptr ;
         }
 
         void Robot::setupPaths() {

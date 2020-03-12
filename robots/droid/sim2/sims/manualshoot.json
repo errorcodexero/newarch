@@ -19,11 +19,12 @@
                     }
                 },
                 {
-                    "model" : "droidoi",
+                    "model" : "driodoi",
                     "instance" : "1",
                     "values" :
                     {
-                        "automode" : 8
+                        "comment" : "%%%% Collect mode switch to collect",
+                        "button11" : 0
                     }
                 }
             ]
@@ -45,7 +46,7 @@
             ]
         },
         {
-            "time" : 4.0,
+            "time" : 2.5,
             "events" :
             [
                 {
@@ -53,13 +54,29 @@
                     "instance" : "1",
                     "values" : 
                     {
-                        "button9" : true
+                        "comment" : "%%%% Collect button pressed",                        
+                        "button14" : true
                     }
                 }
             ]
         },
         {
-            "time" : 5.0,
+            "time" : 3.0,
+            "events" :
+            [
+                {
+                    "model" : "conveyor",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "comment" : "%%%% ball at start of conveyor (sensor A)",                            
+                        "ball" : true
+                    }
+                }               
+            ]
+        },     
+        {
+            "time" : 3.1,
             "events" :
             [
                 {
@@ -67,6 +84,52 @@
                     "instance" : "1",
                     "values" : 
                     {
+                        "comment" : "%%%% Collect button released",                        
+                        "button14" : true
+                    }
+                }
+            ]
+        },        
+        {
+            "time" : 3.2,
+            "events" :
+            [
+                {
+                    "model" : "droidoi",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "comment" : "%%%% Shoot mode button set to manual",
+                        "button9" : true
+                    }
+                }
+            ]
+        },        
+        {
+            "time" : 3.3,
+            "events" :
+            [
+                {
+                    "model" : "droidoi",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "comment" : "%%%% Collect mode switch to shoot",
+                        "button11" : true
+                    }
+                }
+            ]
+        },
+        {
+            "time" : 6.0,
+            "events" :
+            [
+                {
+                    "model" : "droidoi",
+                    "instance" : "1",
+                    "values" : 
+                    {
+                        "comment" : "%%%% Manual shoot button pressed",
                         "button7" : true
                     }
                 }
@@ -81,6 +144,7 @@
                     "instance" : "1",
                     "values" : 
                     {
+                        "comment" : "%%%% Manual shoot button released",
                         "button7" : false
                     }
                 }

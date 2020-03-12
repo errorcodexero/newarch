@@ -65,6 +65,7 @@
                     "instance" : "1",
                     "values" : 
                     {
+                        "comment" : "%%%%% first ball at conveyor entrance",
                         "ball" : true
                     }
                 }               
@@ -107,6 +108,7 @@
                     "instance" : "1",
                     "values" : 
                     {
+                        "comment" : "%%%%% second ball at conveyor entrance",                        
                         "ball" : true
                     }
                 }               
@@ -149,6 +151,7 @@
                     "instance" : "1",
                     "values" : 
                     {
+                        "comment" : "%%%%% third ball at conveyor entrance",                          
                         "ball" : true
                     }
                 }               
@@ -191,6 +194,7 @@
                     "instance" : "1",
                     "values" : 
                     {
+                        "comment" : "%%%%% fourth ball at conveyor entrance",                         
                         "ball" : true
                     }
                 }               
@@ -233,6 +237,7 @@
                     "instance" : "1",
                     "values" : 
                     {
+                        "comment" : "%%%%% fifth ball at conveyor entrance",                         
                         "ball" : true
                     }
                 }  

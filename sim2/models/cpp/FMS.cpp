@@ -215,6 +215,10 @@ namespace xero
                     msg << " - transitioning to DONE" ;
                     msg.endMessage(getEngine().getSimulationTime()) ;
 
+                    msg.startMessage(SimulatorMessages::MessageType::Info) ;
+                    msg << "%%%% Simulation completed sucessfully" ;
+                    msg.endMessage(getEngine().getSimulationTime()) ;                    
+
                     exit(0) ;
                 }               
                 break ;            
