@@ -59,6 +59,7 @@ namespace xero {
             /// \brief Returns true if set has been called on this model.
             /// Intended for determining whether we have been calibrated
             /// to an absolute position on the field.
+            /// \returns true if the positoin has been set
             bool hasBeenSet() { return set_; }
 
             /// \brief called to tell the object the robot has moved

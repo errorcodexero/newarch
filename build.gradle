@@ -82,7 +82,7 @@ model {
         }        
 
 		xeromisc(NativeLibrarySpec) {
-            targetPlatform wpi.platforms.roborio
+            targetPlatform wpi.platforms.roborio     
 
 			binaries.all {
                 cppCompiler.args "-DXEROROBORIO"
@@ -107,7 +107,6 @@ model {
 
 		xerobase(NativeLibrarySpec) {
             targetPlatform wpi.platforms.roborio
-
 			binaries.all {
                 cppCompiler.args "-DXEROROBORIO"
 			}

@@ -71,11 +71,10 @@ namespace xero {
             /// the class.\n 
             /// This class supports calibration is the act of ensuring that the position returned from the
             /// encoder matches the position of the mechanism being monitored on the robot.  Calibration 
-            /// @param logger The robot.
+            /// @param robot The robot.
             /// @param configName The name of the encoder in the configuration file.
             /// @param angular Whether the encoder measures an angle.
             /// @param motor If non-null, a reference to a MotorController with an embedded encoder.
-            /// \param motor will only be used if configName:quad:motor is set to true.
             XeroEncoder(Robot &robot, const std::string &configName, 
                         bool angular = false, std::shared_ptr<MotorController> motor = nullptr);
 
@@ -83,6 +82,7 @@ namespace xero {
             /// @param robot The robot.
             /// @param name The name of the encoder (displayed on the smart dashboard for characterization)
             /// @param quadratureEncoder an FRC quadrature encoder object
+            /// @param angular if true, this encoder is measuring an angle that can wrap            
             XeroEncoder(Robot &robot, std::string name,
                         std::shared_ptr<frc::Encoder> quadratureEncoder, bool angular = false)
                         : robot_(robot), name_(name), quad_(quadratureEncoder) 
@@ -94,6 +94,7 @@ namespace xero {
             /// @param robot The robot.
             /// @param name The name of the encoder (displayed on the smart dashboard for characterization)
             /// @param motor A motor controller with an embedded encoder.
+            /// @param angular if true, this encoder is measuring an angle that can wrap            
             XeroEncoder(Robot &robot, std::string name,
                         std::shared_ptr<MotorController> motor, bool angular = false)
                         : robot_(robot), name_(name), motor_(motor) 
@@ -107,6 +108,7 @@ namespace xero {
             /// @param name The name of the encoder (displayed on the smart dashboard for characterization)
             /// @param analogEncoder The analog input to which the encoder is connected.
             /// @param quadratureEncoder The quadrature encoder object, or \c nullptr to use just an analog encoder.
+            /// @param angular if true, this encoder is measuring an angle that can wrap            
             XeroEncoder(Robot &robot, std::string name,
                         std::shared_ptr<frc::AnalogInput> analogEncoder,
                         std::shared_ptr<frc::Encoder> quadratureEncoder = nullptr, bool angular = false):  
@@ -121,6 +123,7 @@ namespace xero {
             /// @param name The name of the encoder (displayed on the smart dashboard for characterization)
             /// @param analogEncoder The analog input to which the encoder is connected.
             /// @param motor A motor controller with an embedded encoder.
+            /// @param angular if true, this encoder is measuring an angle that can wrap
             XeroEncoder(Robot &robot, std::string name,
                         std::shared_ptr<frc::AnalogInput> analogEncoder,
                         std::shared_ptr<MotorController> motor, bool angular = false):  
@@ -232,6 +235,8 @@ namespace xero {
                 quadB_ = b;
             }
 
+            /// @brief returns true if the encoder is tracking an angle
+            /// @returns true if the encoder is tracking an angle
             bool isAngular() const {
                 return angular_;
             }

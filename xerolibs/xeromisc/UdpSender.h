@@ -105,6 +105,9 @@ namespace xero
                 return true;
             }
 
+            /// \brief send a string via UDP
+            /// \param str the string to send
+            /// \returns true if sent sucessfully, otherwise false
             bool send(const std::string &str) {
                 ssize_t ret = ::sendto(getSocket(), str.c_str(), str.length(), 0, (struct sockaddr *)&m_saddr, sizeof(m_saddr));
                 if (ret == -1 || static_cast<size_t>(ret) != str.length())
