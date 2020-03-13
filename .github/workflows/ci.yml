@@ -42,11 +42,17 @@ jobs:
       working-directory: robots/${{ matrix.robot }}
       run: make CONFIG=${{ matrix.configuration }} PLATFORM=SIM2 deploy
 
-#     - name: Run simulator (auto)
-#       run: ./runsim2 ${{ matrix.robot }} automode7
+    - name: Run simulator (collect1_simple)
+      run: ./runsim2 ${{ matrix.robot }} collect1_simple
 
-#     - name: Run simulator (teleop)
-#       run: ./runsim2 ${{ matrix.robot }} teleop
+    - name: Run simulator (collect3_shootmode)
+      run: ./runsim2 ${{ matrix.robot }} collect3_shootmode
+
+    - name: Run simulator (collect5_shootmode)
+      run: ./runsim2 ${{ matrix.robot }} collect5_shootmode      
+
+    - name: Run simulator (manualshoot)
+      run: ./runsim2 ${{ matrix.robot }} manualshoot          
 
 
   test:
