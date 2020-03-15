@@ -24,6 +24,7 @@ namespace xero {
                 distances_.resize(samples) ;
                 velocities_.resize(samples) ;
                 accel_ = 0.0 ;
+                acquired_samples_ = 0 ;
             }
 
             /// \brief return the latest distance value
