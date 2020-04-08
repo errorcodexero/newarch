@@ -11,7 +11,7 @@ namespace xero
             ColorSensorSubsystem(Subsystem *parent) ;
             virtual ~ColorSensorSubsystem() ;
             
-            virtual void computeState() ;
+            virtual void computeMyState() ;
             
         private:
             frc::Color color_ ;

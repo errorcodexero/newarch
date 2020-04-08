@@ -19,7 +19,7 @@ namespace xero {
             Lifter(xero::base::Subsystem *parent) ;
             virtual ~Lifter() ;
 
-            virtual void computeState();
+            virtual void computeMyState();
             virtual void run();
             virtual void init(xero::base::LoopType ltype);
             virtual bool canAcceptAction(xero::base::ActionPtr action);

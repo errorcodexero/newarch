@@ -32,7 +32,7 @@ namespace xero {
                 return encoder_->isAngular();
             }
             bool canAcceptAction(xero::base::ActionPtr action) override;
-            void computeState() override;
+            void computeMyState() override;
             bool canAcceptDefaultAction(xero::base::ActionPtr action) override;
 
             double getPosition() { return speedometer_.getDistance(); }

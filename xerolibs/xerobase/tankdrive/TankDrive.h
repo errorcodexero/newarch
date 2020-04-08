@@ -182,7 +182,7 @@ namespace xero {
             /// calculates the current state of the drivebase, including the distance traveled,
             /// speed and acceleration of the robot.  This method is generally called once per
             /// robot loop before any robot controller gets a chance to run.
-            virtual void computeState();
+            virtual void computeMyState();
 
             /// \brief Run the subsystem
             virtual void run() ;

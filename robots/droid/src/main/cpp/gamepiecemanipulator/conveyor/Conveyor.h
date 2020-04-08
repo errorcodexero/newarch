@@ -24,7 +24,7 @@ namespace xero {
             bool canAcceptAction(xero::base::ActionPtr) override;
             bool canAcceptDefaultAction(xero::base::ActionPtr) override;
 
-            void computeState() override;
+            void computeMyState() override;
 
             int getBallCount() { return ballCount_; }
 

@@ -19,7 +19,7 @@ namespace xero {
             
             Shooter(xero::base::Robot& robot);
             virtual ~Shooter(); 
-            virtual void computeState();
+            virtual void computeMyState();
             virtual bool canAcceptAction(xero::base::ActionPtr action);
 
             void clearBallIsStaged() {

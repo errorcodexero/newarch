@@ -18,7 +18,7 @@ namespace xero {
         Intake::~Intake(){
         }
 
-        void Intake::computeState() {
+        void Intake::computeMyState() {
         }
     
         bool Intake::canAcceptAction(ActionPtr action) {

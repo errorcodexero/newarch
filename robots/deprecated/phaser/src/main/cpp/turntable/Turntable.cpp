@@ -122,7 +122,7 @@ namespace xero{
             return true ;
         }
 
-        void Turntable::computeState(){
+        void Turntable::computeMyState(){
             encoder_value_ = encoder_->Get() ;
             if (is_calibrated_) {
                 angle_ = xero::math::normalizeAngleDegrees((encoder_value_ + encoder_base_) * degrees_per_tick_ + turntable_offset_) ;

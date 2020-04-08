@@ -16,7 +16,7 @@ namespace xero
 
             void init(xero::base::LoopType ltype) override ;            
 
-            void computeState() override ;
+            void computeMyState() override ;
             void run() override ;
 
             bool canAcceptAction(xero::base::ActionPtr action) override ;

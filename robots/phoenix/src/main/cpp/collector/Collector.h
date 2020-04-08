@@ -17,7 +17,7 @@ namespace xero {
             virtual ~Collector() ;
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
-            virtual void computeState() ;
+            virtual void computeMyState() ;
 
             std::shared_ptr<Grabber> getGrabber() {
                 return grabber_ ;

@@ -24,9 +24,9 @@ namespace xero {
             return true ;
         }
 
-        void LiftingCollector::computeState() {
-            lifter_->computeState() ;
-            collector_->computeState() ;
+        void LiftingCollector::computeMyState() {
+            lifter_->computeMyState() ;
+            collector_->computeMyState() ;
         }
     }
 }

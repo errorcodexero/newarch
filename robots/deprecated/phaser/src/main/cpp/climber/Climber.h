@@ -15,7 +15,7 @@ namespace xero {
 
             virtual ~Climber() ;
 
-            virtual void computeState() ;
+            virtual void computeMyState() ;
 
         protected:
             virtual bool canAcceptAction(xero::base::ActionPtr Action) ;

@@ -21,7 +21,7 @@ namespace xero {
              virtual ~Turntable() ;
 
              virtual bool canAcceptAction(xero::base::ActionPtr action) ;
-             virtual void computeState() ;    
+             virtual void computeMyState() ;    
 
              int getEncoderValue() const {
                 return encoder_value_ ;

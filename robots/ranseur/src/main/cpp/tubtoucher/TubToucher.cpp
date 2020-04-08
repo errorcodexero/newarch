@@ -42,7 +42,7 @@ namespace xero {
             }
         }
 
-        void TubToucher::computeState() {
+        void TubToucher::computeMyState() {
         }
 
         bool TubToucher::canAcceptAction(xero::base::ActionPtr action) {

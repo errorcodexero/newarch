@@ -17,8 +17,8 @@ namespace xero {
             emergencyStop_ = false;
         }
 
-        void Turret::computeState() {
-            MotorEncoderSubsystem::computeState();
+        void Turret::computeMyState() {
+            MotorEncoderSubsystem::computeMyState();
             
         }
 

@@ -11,7 +11,7 @@ namespace xero {
 
             virtual ~DroidLimeLight()  ;
 
-            virtual void computeState() ; 
+            virtual void computeMyState() ; 
 
             double getDistance(){
                 return distance_ ;

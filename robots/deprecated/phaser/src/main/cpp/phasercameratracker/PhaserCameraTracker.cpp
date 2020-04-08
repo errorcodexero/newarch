@@ -26,9 +26,9 @@ namespace xero {
             return act != nullptr ;
         }
 
-        void PhaserCameraTracker::computeState() {
+        void PhaserCameraTracker::computeMyState() {
             rect_ratio_ = getNetworkTable()->GetNumber(TargetRectRatio, 0.0) ;
-            CameraTracker::computeState() ;
+            CameraTracker::computeMyState() ;
         }
 
         bool PhaserCameraTracker::shouldTerminate() {

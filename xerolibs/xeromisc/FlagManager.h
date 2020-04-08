@@ -11,7 +11,7 @@ namespace xero {
         /// To use a flag, pass it to a FlagManager:
         ///     if (robot.getFlagManager().isSet(SomeSubystem::myFlag)) { /* flag is set */ }
         /// @note To ensure deterministic behavior, subsystems should (by convention)
-        ///    update flags in \c computeState and check them in \c run.
+        ///    update flags in \c computeMyState and check them in \c run.
         ///    By convention, the subsystem that owns a flag should be responsible
         ///    for setting and clearing it.
         /// @ref FlagManager

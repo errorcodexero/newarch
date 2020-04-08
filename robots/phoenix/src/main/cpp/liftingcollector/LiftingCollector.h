@@ -17,7 +17,7 @@ namespace xero {
             virtual ~LiftingCollector() ;
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
-            virtual void computeState() ;
+            virtual void computeMyState() ;
 
             std::shared_ptr<Lifter> getLifter() {
                 return lifter_ ;

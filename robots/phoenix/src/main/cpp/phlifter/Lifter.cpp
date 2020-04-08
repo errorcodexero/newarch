@@ -60,9 +60,9 @@ namespace xero {
                 calibrate(floor_);
         }
 
-        void Lifter::computeState() 
+        void Lifter::computeMyState() 
         {
-            MotorEncoderSubsystem::computeState();
+            MotorEncoderSubsystem::computeMyState();
 
             bottom_limit_hit_ = !bottom_limit_->Get();
             top_limit_hit_ = !top_limit_->Get();

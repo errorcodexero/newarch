@@ -127,7 +127,7 @@ namespace xero {
             return axis * (baseduty - slowdown) ;
         }        
 
-        void DriverGamepad::computeState() {
+        void DriverGamepad::computeMyState() {
             if (rumbling_) {
                 if (getSubsystem().getRobot().getTime() - start_ > duration_) {
                     //

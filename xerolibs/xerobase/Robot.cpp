@@ -409,7 +409,6 @@ namespace xero {
             // your robot specific derived class.
             //
             if (oi_subsystem_ != nullptr) {
-                oi_subsystem_->computeState() ;         
                 sel = oi_subsystem_->getAutoModeSelector() ;
             }
             return sel ;
@@ -595,6 +594,9 @@ namespace xero {
             robot_subsystem_->init(LoopType::Disabled) ;
         }
 
+
+        static int cnt = 0 ;
+        
         void Robot::DisabledPeriodic() {
             int index = static_cast<int>(LoopType::Disabled) ;
 
@@ -620,8 +622,13 @@ namespace xero {
                 message_logger_ << "Loop time: " << elapsed_time ;
                 message_logger_ << ", Target time: " << target_loop_time_ ;
                 message_logger_.endMessage() ;
-            }            
+            }
+
+            cnt++ ;
+            if ((cnt % 500) == 0)
+                robot_subsystem_->printTimes() ;
         }        
+
 
         void Robot::getMACAddress()
         {

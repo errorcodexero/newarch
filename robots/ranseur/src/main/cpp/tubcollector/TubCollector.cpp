@@ -54,8 +54,8 @@ namespace xero {
             return true ;
         }
 
-        void TubCollector::computeState() {
-            Subsystem::computeState() ;
+        void TubCollector::computeMyState() {
+            Subsystem::computeMyState() ;
 
             collect_power_ = (pdp_.GetCurrent(collector_motor_pdp_1_) + pdp_.GetCurrent(collector_motor_pdp_2_)) / 2.0 ;
 

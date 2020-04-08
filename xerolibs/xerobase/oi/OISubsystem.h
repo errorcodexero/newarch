@@ -11,7 +11,7 @@ namespace xero {
     namespace base {
         /// \brief This is the base class for the OI subsystem
         /// This class manages the OI by calling each of HID Devices that are part
-        /// of this subsystem during computeState() and allow them to add actions to
+        /// of this subsystem during computeMyState() and allow them to add actions to
         /// the internal sequence list.  During the run() call each of these actions
         /// are run.
         class OISubsystem : public Subsystem {
@@ -28,13 +28,13 @@ namespace xero {
             /// \brief compute the state of the subsystem
             /// If the OI is enabled, this will generate a series of actions to be executed based on
             /// the state of the OI
-            virtual void computeState()  ;
+            virtual void computeMyState()  ;
 
             /// \brief generate actions from the OI
             /// \param seq the action sequenced used to store the generated actions
             virtual void generateActions(SequenceActionPtr seq) ;
 
-            /// \brief run the action generated in the computeState above
+            /// \brief run the action generated in the computeMyState above
             virtual void run() ;
 
             virtual bool canAcceptAction(ActionPtr act) ;

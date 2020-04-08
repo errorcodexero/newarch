@@ -25,7 +25,7 @@ namespace xero {
             virtual ~TubCollector() ;
 
             virtual bool canAcceptAction(xero::base::ActionPtr action) ;
-            virtual void computeState() ;
+            virtual void computeMyState() ;
 
             virtual bool shouldTerminate() {
                 return has_tub_ ;

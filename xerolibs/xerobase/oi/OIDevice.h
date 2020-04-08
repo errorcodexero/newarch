@@ -26,7 +26,7 @@ namespace xero {
             virtual ~OIDevice() ;
 
             /// \brief compute the state of the gamepad
-            virtual void computeState() ;
+            virtual void computeMyState() ;
 
         protected:
             /// \brief map a joystick button to an OIButton of the given type

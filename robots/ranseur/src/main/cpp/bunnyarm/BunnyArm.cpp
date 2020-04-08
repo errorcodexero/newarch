@@ -18,7 +18,7 @@ namespace xero {
         BunnyArm::~BunnyArm() {
         }
 
-        void BunnyArm::computeState() {
+        void BunnyArm::computeMyState() {
         }
 
         bool BunnyArm::canAcceptAction(xero::base::ActionPtr action) {

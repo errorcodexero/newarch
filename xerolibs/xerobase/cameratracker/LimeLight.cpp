@@ -28,7 +28,7 @@ namespace xero {
         {            
         }
 
-        void LimeLight::computeState()
+        void LimeLight::computeMyState()
         {            
             if(cam_mode_ == camMode::VisionProcessor)
             {

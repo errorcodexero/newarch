@@ -49,8 +49,8 @@ namespace xero {
 #endif
         }
 
-        void RanseurLimeLight::computeState() {
-            LimeLight::computeState() ;
+        void RanseurLimeLight::computeMyState() {
+            LimeLight::computeMyState() ;
 
             if (isLimeLightPresent() && isTargetPresent()) 
             {

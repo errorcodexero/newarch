@@ -20,7 +20,7 @@ namespace xero {
             // Returns true if the turret is aligned for a shot.
             bool isReadyToFire() { return readyToFire_; }
 
-            void computeState() override;
+            void computeMyState() override;
 
         protected:
             // Sets the motor power, unless doing so would take us

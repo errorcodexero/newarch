@@ -50,9 +50,9 @@ namespace xero {
             return std::dynamic_pointer_cast<MotorEncoderHoldAction>(action) != nullptr;
         }
 
-        void MotorEncoderSubsystem::computeState() 
+        void MotorEncoderSubsystem::computeMyState() 
         {
-            SingleMotorSubsystem::computeState();
+            SingleMotorSubsystem::computeMyState();
 
             double pos = encoder_->getPosition() ;
             

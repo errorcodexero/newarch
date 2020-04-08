@@ -20,7 +20,7 @@ namespace xero {
         Climber::~Climber() {
         }
 
-        void Climber::computeState() {
+        void Climber::computeMyState() {
             if (solenoid_->Get())
                 deployed_ = true ;
             else

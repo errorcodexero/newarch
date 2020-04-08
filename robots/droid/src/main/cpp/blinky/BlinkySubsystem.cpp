@@ -26,7 +26,7 @@ namespace xero
             setPattern(0) ;
         }
 
-        void BlinkySubsystem::computeState() 
+        void BlinkySubsystem::computeMyState() 
         {            
         }
 

@@ -41,7 +41,7 @@ namespace xero {
             locked_ = false;
         }
 
-        void TargetTracker::computeState() {
+        void TargetTracker::computeMyState() {
             auto droid = static_cast<Droid&>(getRobot()).getDroidSubsystem();
             auto limelight = droid->getLimeLight();
             auto turret = droid->getTurret();

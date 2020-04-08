@@ -23,7 +23,7 @@ namespace xero {
         Shooter::~Shooter(){
         }
 
-        void Shooter::computeState() {
+        void Shooter::computeMyState() {
             if (ball_sensor_->Get()) {
                 ball_is_staged_ = true ;
                 frc::SmartDashboard::PutBoolean("Staged", true) ;

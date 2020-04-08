@@ -73,6 +73,10 @@ namespace xero {
             /// computes a state that is meaningful to users of the subsystem.
             virtual void computeState() ;
 
+            virtual void computeMyState() {
+                assert(false) ;
+            }
+
             /// \brief the return status from a setAction call
             enum class SetActionResult {
                 Accepted,           ///< the action was accepted
@@ -209,6 +213,8 @@ namespace xero {
             /// \return the list of child subsytems
             std::list<std::shared_ptr<Subsystem>> getChildren() { return children_ ;}
 
+            void printTimes() ;
+
         protected:
             /// \brief check that a Action is valid for a subsystem
             /// \param Action the Action to check for a subsystem
@@ -270,6 +276,9 @@ namespace xero {
             // The set of child subsystems
             //
             std::list<std::shared_ptr<Subsystem>> children_ ;
+
+            int compute_state_cnt_ ;
+            double compute_state_time_ ;
         } ;
     }
 }

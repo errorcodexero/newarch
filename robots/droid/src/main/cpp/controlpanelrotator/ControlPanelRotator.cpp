@@ -30,7 +30,7 @@ namespace xero {
             return inact != nullptr ;
         }        
 
-        void ControlPanelRotator::computeState() {
+        void ControlPanelRotator::computeMyState() {
             auto newColor = sampleSensor();
             hasNewData_ = newColor.has_value();
             if (newColor) lastColor_ = *newColor;

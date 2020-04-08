@@ -60,7 +60,7 @@ namespace xero {
             virtual ~DriverGamepad() ;
 
             /// \brief compute the state of the gamepad
-            virtual void computeState() ;
+            virtual void computeMyState() ;
 
             /// \brief genreation actions based on the HID device
             /// \param seq the action sequence for storing created actions

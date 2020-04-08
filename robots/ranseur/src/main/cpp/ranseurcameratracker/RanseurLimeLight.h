@@ -13,7 +13,7 @@ namespace xero {
 
             virtual ~RanseurLimeLight()  ;
 
-            virtual void computeState() ;
+            virtual void computeMyState() ;
 
             virtual bool shouldTerminate() ;   
 

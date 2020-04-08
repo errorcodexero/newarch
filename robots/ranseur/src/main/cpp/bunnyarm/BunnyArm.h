@@ -15,7 +15,7 @@ namespace xero {
 
             virtual ~BunnyArm() ;
 
-            virtual void computeState() ;
+            virtual void computeMyState() ;
 
             bool isRaised() {
                 return raised_ ;

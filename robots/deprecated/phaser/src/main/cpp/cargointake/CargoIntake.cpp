@@ -38,7 +38,7 @@ namespace xero {
             return cargoact != nullptr || SingleMotorSubsystem::canAcceptAction(act) ;
         }
 
-        void CargoIntake::computeState() {
+        void CargoIntake::computeMyState() {
             has_cargo_ = !sensor_->Get() ;
 
             auto &logger = getRobot().getMessageLogger() ;

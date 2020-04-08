@@ -13,8 +13,8 @@ namespace xero {
             auto &settings = robot.getSettingsParser() ;
 
             // Register message listener *before* any sub-system like the drive base which needs vision information.
-            // The vision info received will only be present during 1 robot loop so ML's computeState()
-            // must be called before other dependent sub-systems call their computeState() to access vision results.
+            // The vision info received will only be present during 1 robot loop so ML's computeMyState()
+            // must be called before other dependent sub-systems call their computeMyState() to access vision results.
             int socket_port_number = settings.getInteger("messagelistener:port") ;
             ml_ = std::make_shared<MessageListener>(robot, socket_port_number) ;
             addChild(ml_) ;

@@ -14,7 +14,7 @@ namespace xero {
             
             Intake(xero::base::Robot& robot);
             virtual ~Intake(); 
-            virtual void computeState();
+            virtual void computeMyState();
             virtual bool canAcceptAction(xero::base::ActionPtr action);
 
         private:

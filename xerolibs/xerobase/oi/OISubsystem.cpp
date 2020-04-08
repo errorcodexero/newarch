@@ -48,7 +48,7 @@ namespace xero {
             return -1 ;
         }
 
-        void OISubsystem::computeState() {
+        void OISubsystem::computeMyState() {
             if (!inited_) {
                 auto sub = getRobot().getDriveBase() ;
                 std::shared_ptr<TankDrive> db = std::dynamic_pointer_cast<TankDrive>(sub) ;
@@ -58,7 +58,7 @@ namespace xero {
                 }
             }
             for(auto dev: hiddevices_)
-                dev->computeState() ;
+                dev->computeMyState() ;
         }
 
         void OISubsystem::generateActions(SequenceActionPtr seq) {

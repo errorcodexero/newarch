@@ -29,7 +29,7 @@ namespace xero {
         Wings::~Wings() {
         }
 
-        void Wings::computeState() {
+        void Wings::computeMyState() {
             //
             // If we ever see the solenoid set, we mark the wings as deployed.  In general
             // the code here should look at any of the robot subsystem hardware to compute

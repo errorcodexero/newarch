@@ -172,7 +172,7 @@ namespace xero {
             right_motors_->setInverted(true);
         }       
 
-        void TankDrive::computeState() {
+        void TankDrive::computeMyState() {
             double angle = 0.0 ;
 
             if (left_enc_ != nullptr) {

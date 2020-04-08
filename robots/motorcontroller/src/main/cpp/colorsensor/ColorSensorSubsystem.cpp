@@ -20,7 +20,7 @@ namespace xero
 
         }
 
-        void ColorSensorSubsystem::computeState()
+        void ColorSensorSubsystem::computeMyState()
         {
             auto &logger = getRobot().getMessageLogger() ;
             color_ = sensor_->GetColor() ;

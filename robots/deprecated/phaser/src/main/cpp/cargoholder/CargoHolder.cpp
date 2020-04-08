@@ -17,7 +17,7 @@ namespace xero {
         CargoHolder::~CargoHolder() {
         }   
 
-        void CargoHolder::computeState() {
+        void CargoHolder::computeMyState() {
             has_cargo_ = sensor_->Get() ;
 
             auto &logger = getRobot().getMessageLogger() ;

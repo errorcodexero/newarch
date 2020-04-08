@@ -18,7 +18,7 @@ namespace xero {
             CargoHolder(xero::base::Robot &robot, uint64_t id) ;
             virtual ~CargoHolder() ;
             
-            virtual void computeState() ;
+            virtual void computeMyState() ;
 
             bool hasCargo() const {
                 return has_cargo_ ;

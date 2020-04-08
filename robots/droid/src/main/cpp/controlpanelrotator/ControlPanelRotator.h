@@ -22,7 +22,7 @@ namespace xero {
             virtual ~ControlPanelRotator() {}
 
             void init(xero::base::LoopType ltype) override;
-            void computeState() override;
+            void computeMyState() override;
             
             /// Returns a pointer to the servo which deploys the arm.
             std::shared_ptr<frc::Servo> getArmServo() { return servo_; }

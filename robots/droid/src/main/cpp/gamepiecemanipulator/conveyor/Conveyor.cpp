@@ -136,7 +136,7 @@ namespace xero {
             return std::dynamic_pointer_cast<ConveyorStopAction>(action) != nullptr;
         }
 
-        void Conveyor::computeState() {
+        void Conveyor::computeMyState() {
             for (auto pair : sensorNames_) {
                 Sensor sensor = pair.first;
                 int index = static_cast<int>(pair.first);

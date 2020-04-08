@@ -9,7 +9,7 @@ namespace xero {
         OIDevice::~OIDevice() {            
         }
 
-        void OIDevice::computeState() {
+        void OIDevice::computeMyState() {
             frc::DriverStation &ds = frc::DriverStation::GetInstance() ;
 
             for(size_t i = 0 ; i < items_.size() ; i++) {

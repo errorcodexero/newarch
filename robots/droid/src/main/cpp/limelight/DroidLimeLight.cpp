@@ -36,8 +36,8 @@ namespace xero {
         void DroidLimeLight::reset() {
         }
 
-        void DroidLimeLight::computeState() {
-            LimeLight::computeState() ;
+        void DroidLimeLight::computeMyState() {
+            LimeLight::computeMyState() ;
 
             if (isLimeLightPresent() && isTargetPresent()) 
             {

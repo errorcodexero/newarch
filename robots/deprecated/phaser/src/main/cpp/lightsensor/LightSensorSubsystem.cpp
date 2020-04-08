@@ -30,7 +30,7 @@ namespace xero {
             is_detected_ = false ;
         }        
 
-        void LightSensorSubsystem::computeState() { 
+        void LightSensorSubsystem::computeMyState() { 
             angle_ = 0 ;
             int sensors_on = 0;
 

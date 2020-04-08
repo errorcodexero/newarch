@@ -46,7 +46,7 @@ namespace xero {
             return coll != nullptr ;            
         }  
 
-        void CarlosHatch::computeState() {
+        void CarlosHatch::computeMyState() {
             double now = getRobot().getTime() ;
             bool hatchpres = false ;
             bool impactval ;

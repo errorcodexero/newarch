@@ -17,7 +17,7 @@ namespace xero {
             void deployCollector();
             void retractCollector();
             virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
-            virtual void computeState() ;
+            virtual void computeMyState() ;
 
             bool isDeployed() const {
                 return is_deployed_ ;

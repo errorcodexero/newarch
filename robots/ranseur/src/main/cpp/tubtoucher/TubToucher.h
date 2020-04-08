@@ -15,7 +15,7 @@ namespace xero {
 
             virtual ~TubToucher() ;
 
-            virtual void computeState() ;
+            virtual void computeMyState() ;
 
             bool isDeployed() {
                 return deployed_ ;

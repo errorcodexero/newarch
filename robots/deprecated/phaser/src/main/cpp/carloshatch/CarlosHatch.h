@@ -18,7 +18,7 @@ namespace xero {
             virtual ~CarlosHatch() ;
             
             virtual bool canAcceptAction(xero::base::ActionPtr Action) ;
-            virtual void computeState() ;
+            virtual void computeMyState() ;
             virtual void run() ;
 
             void extendArm() ;

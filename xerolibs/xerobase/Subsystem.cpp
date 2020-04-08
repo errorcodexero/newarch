@@ -14,6 +14,8 @@ namespace xero {
 
         Subsystem::Subsystem(Subsystem *parent, const std::string &name): Subsystem(parent->getRobot(), name) {
             parent_ = parent;
+            compute_state_cnt_ = 0 ;
+            compute_state_time_ = 0.0 ;
         }
 
         Subsystem::Subsystem(Robot &robot, const std::string &name) : 
@@ -55,8 +57,20 @@ namespace xero {
                 setAction(nullptr);
             }
         }
+
+        void Subsystem::printTimes() {
+            MessageLogger &logger = getRobot().getMessageLogger() ;
+            logger.startMessage(MessageLogger::MessageType::info) ;
+            logger << getName() << ": time " << (compute_state_time_ / compute_state_cnt_) ;
+            logger.endMessage() ;
+        }
         
         void Subsystem::computeState() {
+            double start = getRobot().getTime() ;
+            computeMyState() ;
+            compute_state_time_ += getRobot().getTime() - start ;
+            compute_state_cnt_++ ;
+
             for(auto sub: children_)
                 sub->computeState() ;   
         }

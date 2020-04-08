@@ -30,7 +30,7 @@ namespace xero {
             LimeLight(Subsystem *parent) ;
             virtual ~LimeLight() ;
 
-            virtual void computeState() ;
+            virtual void computeMyState() ;
             virtual void run() ;
             virtual bool canAcceptAction(ActionPtr action) ;
 

@@ -7,7 +7,7 @@ namespace xero {
         public:
             TargetTracker(xero::base::Subsystem *parent);
 
-            void computeState() override;
+            void computeMyState() override;
 
             /// The source of a sample.
             enum class Source {
